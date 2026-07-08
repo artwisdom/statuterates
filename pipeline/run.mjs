@@ -20,7 +20,7 @@ export const DATASET_META = {
   update_cadence: 'IRS quarterly; Treasury/post-judgment weekly (H.15 is daily).',
   attribution: 'Source values are U.S. federal government works (public domain). Compiled by StatuteRates.',
   license: 'Compiled dataset offered for reference; values trace to official public-domain sources (see each record).',
-  sample_query: 'united',
+  sample_query: 'irs',
   disclaimer:
     'Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.',
 };

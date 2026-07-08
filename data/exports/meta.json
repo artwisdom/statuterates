@@ -5,9 +5,9 @@
   "update_cadence": "IRS quarterly; Treasury/post-judgment weekly (H.15 is daily).",
   "attribution": "Source values are U.S. federal government works (public domain). Compiled by StatuteRates.",
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
-  "sample_query": "united",
+  "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-08T05:30:32.946Z",
+  "generated_at": "2026-07-08T05:41:01.704Z",
   "entity_count": 8,
   "observation_count": 444,
   "metrics": [
