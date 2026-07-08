@@ -26,6 +26,7 @@ data/db.sqlite-wal
 data/db.sqlite-shm
 
 # Build output
+site/.astro/
 site/dist/
 machine/mcp-server/dist/
 machine/mcp-server/build/
