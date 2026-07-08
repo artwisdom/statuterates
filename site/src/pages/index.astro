@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { getMeta, groupedEntities, latestOf, prettyDate } from '../lib/data.mjs';
+import { copyFor } from '../lib/content.mjs';
+
+const meta = getMeta();
+const groups = groupedEntities();
+const title = `${meta.title} — Statutory, Judgment & Tax Interest Rates (current + historical)`;
+const description = `Current and historical U.S. statutory interest rates: IRS §6621 quarterly rates, the federal post-judgment rate (28 U.S.C. §1961), and the 1-year Treasury yield. Each value with its effective date, official source, and a free JSON API. Updated ${prettyDate(meta.generated_at)}.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: `${meta.title} — statutory, judgment & tax interest rates`,
+  description: meta.description,
+  url: new URL('/', Astro.site).href,
+  isAccessibleForFree: true,
+  creator: { '@type': 'Organization', name: meta.title },
+  dateModified: meta.generated_at,
+  keywords: ['IRS interest rate', 'post-judgment interest rate', 'statutory interest', 'underpayment rate', 'Treasury 1-year CMT'],
+  distribution: {
+    '@type': 'DataDownload',
+    encodingFormat: 'application/json',
+    contentUrl: new URL('/api/v1/entities.json', Astro.site).href,
+  },
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <h1>Statutory, judgment &amp; tax interest rates — kept current</h1>
+  <p class="lead">
+    The interest rates the law and the IRS actually charge change every quarter or every week, so a
+    figure you remember is usually already wrong. {meta.title} tracks each one with its effective date,
+    a link to the official source, and a free JSON API for people and machines.
+  </p>
+
+  <AdSlot id="home-top" />
+
+  {groups.map((g) => (
+    <section>
+      <h2>{g.title}</h2>
+      {g.blurb && <p class="source-note" style="margin-top:-2px">{g.blurb}</p>}
+      <div class="grid">
+        {g.entities.map((e) => {
+          const l = latestOf(e);
+          return (
+            <a class="card" href={`/rates/${e.slug}/`} style="display:block;color:inherit">
+              <h3>{e.name}</h3>
+              <div class="cval">{l?.value_text}</div>
+              <div class="cmeta">
+                effective {prettyDate(l?.effective_date)} ·
+                {l?.confidence === 'high' ? ' published' : ' derived'}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  ))}
+
+  <AdSlot id="home-bottom" />
+
+  <h2>Why this exists</h2>
+  <p>
+    These values are public and official, but scattered across quarterly IRS bulletins, a Federal
+    Reserve data feed, and a statute that defines the post-judgment rate as a <em>formula</em> rather
+    than a number. {meta.title} assembles them into one normalized, provenance-tracked, as-of-date
+    dataset — the thing neither a single government page nor a language model gives you in one place.
+    See <a href="/methodology/">methodology &amp; sources</a> and
+    <a href="/about/">how this data is collected</a>.
+  </p>
+</BaseLayout>

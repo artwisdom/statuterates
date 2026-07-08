@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta, getAllEntities, latestOf, prettyDate } from '../lib/data.mjs';
+const meta = getMeta();
+const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
+const title = `Methodology & sources — ${meta.title}`;
+const description = `The formulas and official sources behind each rate series in ${meta.title}, plus how the post-judgment rate is derived from the Federal Reserve H.15 1-year Treasury yield.`;
+---
+<BaseLayout title={title} description={description}>
+  <h1>Methodology &amp; sources</h1>
+  <p class="lead">Each series below shows its authority, how the value is obtained, and its confidence.</p>
+
+  <h2>The rate series</h2>
+  <div class="scroll-x">
+    <table>
+      <thead>
+        <tr><th>Series</th><th>Latest</th><th>Effective</th><th>Basis</th></tr>
+      </thead>
+      <tbody>
+        {entities.map((e) => {
+          const l = latestOf(e);
+          return (
+            <tr>
+              <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>
+              <td class="num">{l?.value_text}</td>
+              <td>{prettyDate(l?.effective_date)}</td>
+              <td class="source-note">{l?.confidence === 'high' ? 'Published' : 'Derived'}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>IRS §6621 rates</h2>
+  <p>The IRS sets its interest rates each quarter as the <em>federal short-term rate</em> plus a fixed
+    spread that depends on the category: +3 points for underpayments and non-corporate overpayments,
+    +2 for corporate overpayments, +5 for large corporate underpayments, and +0.5 for the GATT portion
+    of large corporate overpayments. We read the published quarterly figures directly from the IRS and
+    record each with its effective quarter — these are <strong>published</strong> values.</p>
+
+  <h2>The federal post-judgment rate (28 U.S.C. §1961)</h2>
+  <p>Federal law defines this rate as the <em>weekly average 1-year Treasury constant maturity yield</em>
+    for the calendar week preceding the date of judgment. The U.S. Courts publish that <em>rule</em> but
+    not the number. We compute it from the Federal Reserve's official H.15 1-year Treasury series (daily),
+    averaged by week, and label it a <strong>derived</strong> value with medium confidence. Always confirm
+    the exact applicable week against your district court's own published table before relying on it.</p>
+
+  <h2>Data sources</h2>
+  <ul class="clean">
+    {meta.sources.map((s) => (
+      <li><strong>{s.publisher}</strong> — {s.name}. <a href={s.home_url} rel="nofollow noopener" target="_blank">{s.home_url}</a>. {s.license}</li>
+    ))}
+  </ul>
+
+  <h2>Coverage &amp; roadmap</h2>
+  <p>Today's dataset covers U.S. federal statutory, judgment, and tax interest rates. Planned expansion
+    (documented, not yet live): U.K. statutory late-commercial-payment interest (Bank of England base
+    rate + 8 points), the EU Late Payment Directive reference rate and per-country margins, and U.S.
+    state judgment/legal interest rates.</p>
+
+  <div class="disclaimer">Reference data, not legal, tax, or financial advice.</div>
+</BaseLayout>

@@ -1,0 +1,10 @@
+---
+// Reserved ad slot. Intentionally renders NOTHING but an HTML comment marker until the owner is
+// approved by an ad network. No ad code, no publisher IDs, no external scripts ship today.
+// Activation steps are in docs/DEPLOYMENT_GUIDE.md (§ "Ad network application").
+const { id = 'ad' } = Astro.props;
+---
+<div class="ad-slot" data-ad-slot={id}>
+  {/* AD_SLOT: activate after ad network approval — see docs/DEPLOYMENT_GUIDE.md.
+      Do NOT add publisher IDs or ad scripts here until the account is approved. */}
+</div>

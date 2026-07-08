@@ -1,0 +1,136 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime } from '../../lib/data.mjs';
+import { copyFor } from '../../lib/content.mjs';
+
+export function getStaticPaths() {
+  return getAllEntities().map((e) => ({ params: { slug: e.slug } }));
+}
+
+const { slug } = Astro.params;
+const entity = getEntity(slug);
+const meta = getMeta();
+const copy = copyFor(slug);
+const latest = latestOf(entity);
+const history = (entity.history?.annual_rate || []).slice(0, 40); // recent history for the table
+const totalPoints = (entity.history?.annual_rate || []).length;
+
+const isDerived = latest?.confidence !== 'high';
+const unitLabel = 'per year';
+const title = `${entity.name} — Current & Historical | ${meta.title}`;
+const description = `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history, updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: entity.name,
+    description: copy.body.replace(/\s+/g, ' ').trim(),
+    url: canonical,
+    isAccessibleForFree: true,
+    creator: { '@type': 'Organization', name: meta.title },
+    dateModified: meta.generated_at,
+    variableMeasured: {
+      '@type': 'PropertyValue',
+      name: entity.name,
+      unitText: 'percent per annum',
+      value: latest?.value,
+    },
+    distribution: {
+      '@type': 'DataDownload',
+      encodingFormat: 'application/json',
+      contentUrl: new URL(`/api/v1/entity/${slug}.json`, Astro.site).href,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: copy.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `As of ${prettyDate(latest?.effective_date)}, ${entity.name} is ${latest?.value_text} ${unitLabel}. ${copy.tagline}`,
+        },
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Rates', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: entity.name, item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/">Rates</a> &rsaquo; <span>{entity.name}</span>
+  </nav>
+  <h1>{entity.name}</h1>
+  <p class="lead">{copy.tagline}</p>
+
+  <div class="rate-hero">
+    <span class="value">{latest?.value_text}</span>
+    <span class="asof">
+      {unitLabel}, effective {prettyDate(latest?.effective_date)}
+      <br />
+      <span class={`badge ${latest?.confidence === 'high' ? 'high' : 'medium'}`}>
+        {latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
+      </span>
+    </span>
+  </div>
+
+  <p>{copy.body}</p>
+
+  {isDerived && (
+    <div class="disclaimer">
+      <strong>How this value is derived.</strong> {latest?.notes}
+    </div>
+  )}
+
+  <AdSlot id="rate-top" />
+
+  <h2>Effective-date history</h2>
+  <div class="scroll-x">
+    <table>
+      <caption>
+        {totalPoints} data point{totalPoints === 1 ? '' : 's'} on record{totalPoints > history.length ? ` (showing the most recent ${history.length})` : ''}.
+        Full history in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.
+      </caption>
+      <thead>
+        <tr><th>Effective date</th><th>Rate</th><th>Basis</th></tr>
+      </thead>
+      <tbody>
+        {history.map((o) => (
+          <tr>
+            <td>{prettyDate(o.effective_date)}</td>
+            <td class="num">{o.value_text}</td>
+            <td class="source-note">{o.confidence === 'high' ? 'Published' : 'Derived'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Source &amp; provenance</h2>
+  <p class="source-note">
+    Latest value retrieved {prettyDateTime(latest?.retrieved_at)} from the official source:
+    <br />
+    <a href={latest?.source_url} rel="nofollow noopener" target="_blank">{latest?.source_url}</a>
+  </p>
+
+  <AdSlot id="rate-bottom" />
+
+  <div class="disclaimer">
+    Reference data only — not legal, tax, or financial advice. Always confirm the controlling value
+    against the official source and, where applicable, the governing statute or court before relying on it.
+  </div>
+</BaseLayout>

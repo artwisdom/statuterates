@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta, prettyDate } from '../lib/data.mjs';
+const meta = getMeta();
+const title = `How this data is collected — ${meta.title}`;
+const description = `How ${meta.title} collects statutory, judgment and tax interest rates: official public-domain sources, an automated refresh pipeline, effective-date provenance on every value, and an honest statement of limits.`;
+---
+<BaseLayout title={title} description={description}>
+  <h1>How this data is collected</h1>
+  <p class="lead">Trust comes from provenance. Here is exactly where every number comes from, how
+    often it refreshes, and what we do and don't guarantee.</p>
+
+  <h2>Sources — official and public-domain</h2>
+  <p>Every value traces to a primary U.S. government source, which are federal government works in the
+    public domain:</p>
+  <ul class="clean">
+    {meta.sources.map((s) => (
+      <li><strong>{s.name}</strong> — {s.publisher}. <a href={s.home_url} rel="nofollow noopener" target="_blank">{s.home_url}</a></li>
+    ))}
+  </ul>
+  <p>We store the extracted <em>values</em> and their provenance (source URL, effective date, retrieval
+    time) — never the source's prose. All site copy is written by us.</p>
+
+  <h2>How the pipeline works</h2>
+  <ol class="clean">
+    <li>A polite fetcher retrieves each official page/feed (honest user-agent, rate-limited, robots.txt
+      respected, responses cached so we never re-hit a server needlessly).</li>
+    <li>Values are parsed into a normalized schema and loaded into a database, with each observation
+      keyed to its effective date so history is preserved, never overwritten.</li>
+    <li>A validation suite checks types, sane ranges, source freshness, and cross-value consistency.
+      If anything fails, the dataset is <strong>not</strong> published — stale or broken data never ships.</li>
+    <li>Validated data is exported to versioned JSON that powers this site and the API.</li>
+  </ol>
+
+  <h2>How fresh it is</h2>
+  <p>{meta.update_cadence} The dataset was last compiled on <strong>{prettyDate(meta.generated_at)}</strong>;
+    every page shows the effective date of the value it displays.</p>
+
+  <h2>Published vs. derived values</h2>
+  <p>Most values are <strong>published</strong> directly by the source (marked "Published value").
+    A few — notably the federal post-judgment rate — are <strong>derived</strong> from an official
+    series using the governing statutory formula (marked "Derived value"), and each such page shows the
+    exact formula and a reminder to confirm the controlling figure. We never present a computed number
+    as authoritative without its formula and source.</p>
+
+  <h2>What we don't do</h2>
+  <ul class="clean">
+    <li>We don't collect any personal data.</li>
+    <li>We don't give legal, tax, or financial advice — these are reference values.</li>
+    <li>We don't paywall the data or the API.</li>
+  </ul>
+
+  <div class="disclaimer">
+    Corrections welcome. If a value looks wrong, check the linked official source (it may have changed
+    since our last compile) and let us know — accuracy is the entire point of this project.
+  </div>
+</BaseLayout>

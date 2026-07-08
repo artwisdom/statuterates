@@ -30,6 +30,10 @@ site/dist/
 machine/mcp-server/dist/
 machine/mcp-server/build/
 
+# Static API is generated from data/exports/ by machine/build-api.mjs at build time
+# (the deploy workflow runs it before `astro build`). Regenerable => not tracked.
+site/public/api/
+
 # OS / editor
 .DS_Store
 Thumbs.db

@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta } from '../lib/data.mjs';
+const meta = getMeta();
+---
+<BaseLayout title={`Page not found — ${meta.title}`} description="That page doesn't exist." noindex={true}>
+  <h1>Page not found</h1>
+  <p class="lead">That page doesn't exist — but the rates you're after probably do.</p>
+  <p><a href="/">Browse all rate series &rsaquo;</a></p>
+</BaseLayout>
