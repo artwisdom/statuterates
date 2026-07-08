@@ -12,6 +12,7 @@ const { slug } = Astro.params;
 const entity = getEntity(slug);
 const meta = getMeta();
 const copy = copyFor(slug);
+const JUR = { US: 'United States', GB: 'United Kingdom', EU: 'European Union' };
 const latest = latestOf(entity);
 const history = (entity.history?.annual_rate || []).slice(0, 40); // recent history for the table
 const totalPoints = (entity.history?.annual_rate || []).length;
@@ -75,7 +76,7 @@ const jsonLd = [
     <a href="/">Rates</a> &rsaquo; <span>{entity.name}</span>
   </nav>
   <h1>{entity.name}</h1>
-  <p class="lead">{copy.tagline}</p>
+  <p class="lead"><span class="chip">{JUR[entity.jurisdiction] || entity.jurisdiction}</span> &nbsp;{copy.tagline}</p>
 
   <div class="rate-hero">
     <span class="value">{latest?.value_text}</span>

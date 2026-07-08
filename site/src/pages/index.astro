@@ -1,11 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { getMeta, groupedEntities, latestOf, prettyDate } from '../lib/data.mjs';
+import { getMeta, getEntity, groupedEntities, latestOf, prettyDate } from '../lib/data.mjs';
 import { copyFor } from '../lib/content.mjs';
 
 const meta = getMeta();
 const groups = groupedEntities();
+
+// A featured strip of the most-searched current rates, one per jurisdiction where possible.
+const FEATURED = ['irs-underpayment', 'us-federal-post-judgment', 'uk-late-payment-commercial', 'eu-late-payment-reference'];
+const featured = FEATURED.map((slug) => {
+  const e = getEntity(slug);
+  return e ? { slug, name: e.name, latest: latestOf(e), jurisdiction: e.jurisdiction } : null;
+}).filter(Boolean);
+const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
 const title = `${meta.title} — Statutory, Judgment & Tax Interest Rates (current + historical)`;
 const description = `Current and historical U.S. statutory interest rates: IRS §6621 quarterly rates, the federal post-judgment rate (28 U.S.C. §1961), and the 1-year Treasury yield. Each value with its effective date, official source, and a free JSON API. Updated ${prettyDate(meta.generated_at)}.`;
 
@@ -32,8 +40,19 @@ const jsonLd = {
   <p class="lead">
     The interest rates the law and the IRS actually charge change every quarter or every week, so a
     figure you remember is usually already wrong. {meta.title} tracks each one with its effective date,
-    a link to the official source, and a free JSON API for people and machines.
+    a link to the official source, and a free JSON API for people and machines — across the US, UK, and EU.
   </p>
+
+  <div class="featured">
+    {featured.map((f) => (
+      <a href={`/rates/${f.slug}/`}>
+        <span class="chip">{JUR[f.jurisdiction] || f.jurisdiction}</span>
+        <div class="fv">{f.latest?.value_text}</div>
+        <div class="fn">{f.name}</div>
+        <div class="fm">effective {prettyDate(f.latest?.effective_date)}</div>
+      </a>
+    ))}
+  </div>
 
   <AdSlot id="home-top" />
 
@@ -46,7 +65,8 @@ const jsonLd = {
           const l = latestOf(e);
           return (
             <a class="card" href={`/rates/${e.slug}/`} style="display:block;color:inherit">
-              <h3>{e.name}</h3>
+              <span class="chip">{JUR[e.jurisdiction] || e.jurisdiction}</span>
+              <h3 style="margin-top:6px">{e.name}</h3>
               <div class="cval">{l?.value_text}</div>
               <div class="cmeta">
                 effective {prettyDate(l?.effective_date)} ·

@@ -31,9 +31,12 @@ Anchor sources (verified fetchable by our pipeline): IRS §6621 quarterly rates 
 - [x] **Phase 7 — QA gauntlet.** All green — `docs/QA_REPORT.md`.
 - [x] **Phase 8 — Deliverables.** EXECUTION_REPORT, DEPLOYMENT_GUIDE, RISK_REGISTER, MAINTENANCE_RUNBOOK.
 
-## BUILD COMPLETE
-All 8 phases done + all Section-8 docs written. QA green. Committed through `phase-8`. No remote, no
-deploys, no accounts, no spend, no leftover processes.
+## BUILD COMPLETE (+ owner-requested improvement pass)
+All 8 phases done + all Section-8 docs written. QA green. No remote, no deploys, no accounts, no spend.
+**Improvement pass (2026-07-08):** expanded to **UK + EU** — now **536 records, 12 series, 4 sources,
+3 jurisdictions (US/UK/EU), 16 pages**. Added BoE + ECB fetchers, correct semi-annual UK/EU statutory
+modeling (unit-tested), cadence-aware validation, and site polish (featured strip, jurisdiction
+grouping/chips, favicon, manifest). Full gauntlet re-run from empty cache: green.
 
 ## Next action (OWNER)
 Push to GitHub + enable Pages — `docs/DEPLOYMENT_GUIDE.md` steps 1–2 (~7 min). That activates free

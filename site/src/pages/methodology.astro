@@ -46,6 +46,20 @@ const description = `The formulas and official sources behind each rate series i
     averaged by week, and label it a <strong>derived</strong> value with medium confidence. Always confirm
     the exact applicable week against your district court's own published table before relying on it.</p>
 
+  <h2>UK statutory late-payment interest (Late Payment Act 1998)</h2>
+  <p>UK statutory interest on late commercial (B2B) debts is the Bank of England base rate plus 8
+    percentage points — but it is <em>fixed for six-month periods</em> using the base rate in force on the
+    reference date: 31 December (for debts falling due Jan–Jun) or 30 June (for Jul–Dec). We track the
+    Bank of England base rate directly (published) and compute the semi-annual statutory rate from it
+    (derived), applying the correct reference date for each period.</p>
+
+  <h2>EU Late Payment Directive reference rate (2011/7/EU)</h2>
+  <p>The Directive's reference rate is the ECB main refinancing rate in force on the first calendar day of
+    each half-year (1 January / 1 July); a member state's statutory rate is that reference plus at least 8
+    percentage points (the floor most states use; some add more). We track the ECB main refinancing rate
+    directly (published) and compute the semi-annual reference (derived). Apply your member state's margin
+    to get the statutory rate.</p>
+
   <h2>Data sources</h2>
   <ul class="clean">
     {meta.sources.map((s) => (
@@ -54,10 +68,10 @@ const description = `The formulas and official sources behind each rate series i
   </ul>
 
   <h2>Coverage &amp; roadmap</h2>
-  <p>Today's dataset covers U.S. federal statutory, judgment, and tax interest rates. Planned expansion
-    (documented, not yet live): U.K. statutory late-commercial-payment interest (Bank of England base
-    rate + 8 points), the EU Late Payment Directive reference rate and per-country margins, and U.S.
-    state judgment/legal interest rates.</p>
+  <p>The dataset covers U.S. federal statutory, judgment, and tax interest rates; U.K. statutory
+    late-commercial-payment interest and the Bank of England base rate; and the EU Late Payment Directive
+    reference rate and ECB main refinancing rate. Planned expansion (documented, not yet live): per-EU-country
+    late-payment margins and U.S. state judgment/legal interest rates.</p>
 
   <div class="disclaimer">Reference data, not legal, tax, or financial advice.</div>
 </BaseLayout>

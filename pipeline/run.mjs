@@ -8,16 +8,19 @@
 import { openDb, upsertSource, upsertEntity, upsertObservation, startRun, finishRun } from './lib/db.mjs';
 import { fetchIrs } from './fetchers/irs.mjs';
 import { fetchH15 } from './fetchers/fed-h15.mjs';
+import { fetchBoe, BOE_ENTITY } from './fetchers/boe.mjs';
+import { fetchEcb, ECB_ENTITY } from './fetchers/ecb.mjs';
 import { buildWeeklyAverages, buildCmtRecords, buildPostJudgmentRecords } from './lib/normalize.mjs';
+import { buildPublishedSeries, buildUkLatePayment, buildEuReference } from './lib/rates-intl.mjs';
 import { validate } from './lib/validate.mjs';
 import { exportAll } from './lib/exporter.mjs';
 
 export const DATASET_META = {
   title: 'StatuteRates',
   description:
-    'The canonical, provenance-tracked database of statutory, judgment and tax interest rates — IRS §6621 quarterly rates, the U.S. federal post-judgment rate (28 U.S.C. §1961), and the 1-year Treasury CMT that drives it — each value stamped with its effective date and official source.',
-  version: '0.1.0',
-  update_cadence: 'IRS quarterly; Treasury/post-judgment weekly (H.15 is daily).',
+    'The canonical, provenance-tracked database of statutory, judgment and tax interest rates across the US, UK and EU — IRS §6621 quarterly rates, the US federal post-judgment rate (28 U.S.C. §1961), UK late-commercial-payment interest (Late Payment Act 1998), and the EU Late Payment Directive reference rate — each value stamped with its effective date and official source.',
+  version: '0.2.0',
+  update_cadence: 'IRS quarterly; US Treasury/post-judgment weekly; UK/EU statutory rates semi-annual; BoE/ECB policy rates on decision. Refreshed weekly.',
   attribution: 'Source values are U.S. federal government works (public domain). Compiled by StatuteRates.',
   license: 'Compiled dataset offered for reference; values trace to official public-domain sources (see each record).',
   sample_query: 'irs',
@@ -44,25 +47,40 @@ async function runAll() {
   const db = openDb();
   const runId = startRun(db);
   try {
-    // 1) FETCH
+    const today = new Date().toISOString().slice(0, 10);
+
+    // 1) FETCH — US (IRS + Fed H.15), UK (BoE), EU (ECB)
     const irs = await fetchIrs({ log: console.log });
     const h15 = await fetchH15({ log: console.log });
+    const boe = await fetchBoe({ log: console.log });
+    const ecb = await fetchEcb({ log: console.log });
 
-    // 2) NORMALIZE the H.15 daily series into weekly CMT + derived post-judgment
+    // 2) NORMALIZE
+    // US: H.15 daily -> weekly CMT + derived post-judgment
     const weeks = buildWeeklyAverages(h15.daily);
     const cmt = buildCmtRecords(weeks, { source_id: h15.source.id, source_url: h15.source_url, retrieved_at: h15.retrieved_at });
     const pj = buildPostJudgmentRecords(weeks, { source_id: h15.source.id, source_url: h15.source_url, retrieved_at: h15.retrieved_at });
-    const h15Bundle = {
-      source: h15.source,
-      entities: [cmt.entity, pj.entity],
-      observations: [...cmt.observations, ...pj.observations],
-    };
+    const h15Bundle = { source: h15.source, entities: [cmt.entity, pj.entity], observations: [...cmt.observations, ...pj.observations] };
+
+    // UK: BoE base rate (published) + statutory late-payment (derived, semi-annual)
+    const boeSrc = { source_id: boe.source.id, source_url: boe.source_url, retrieved_at: boe.retrieved_at };
+    const boePub = buildPublishedSeries(boe.changePoints, BOE_ENTITY, { ...boeSrc, label: 'Bank of England Bank Rate' });
+    const ukLpa = buildUkLatePayment(boe.changePoints, { ...boeSrc, today });
+    const boeBundle = { source: boe.source, entities: [boePub.entity, ukLpa.entity], observations: [...boePub.observations, ...ukLpa.observations] };
+
+    // EU: ECB MRO (published) + Late Payment Directive reference (derived, semi-annual)
+    const ecbSrc = { source_id: ecb.source.id, source_url: ecb.source_url, retrieved_at: ecb.retrieved_at };
+    const ecbPub = buildPublishedSeries(ecb.changePoints, ECB_ENTITY, { ...ecbSrc, label: 'ECB Main Refinancing Operations rate' });
+    const euRef = buildEuReference(ecb.changePoints, { ...ecbSrc, today });
+    const ecbBundle = { source: ecb.source, entities: [ecbPub.entity, euRef.entity], observations: [...ecbPub.observations, ...euRef.observations] };
 
     // 3) LOAD into SQLite (source of truth)
     let records = 0;
     const tx = db.transaction(() => {
       records += loadBundleIntoDb(db, irs);
       records += loadBundleIntoDb(db, h15Bundle);
+      records += loadBundleIntoDb(db, boeBundle);
+      records += loadBundleIntoDb(db, ecbBundle);
     });
     tx();
     console.log(`Loaded ${records} observations into SQLite.`);

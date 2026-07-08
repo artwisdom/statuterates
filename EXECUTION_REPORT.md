@@ -16,10 +16,11 @@ A working **data business foundation** for **StatuteRates** — U.S. statutory, 
 rates:
 - **Pipeline** (`pipeline/`): polite, robots-respecting fetchers → normalizer → fail-loud validation →
   SQLite source-of-truth → versioned JSON exports. Two live sources; runs empty-cache→green in ~6 s.
-- **Human skin** (`site/`, Astro): 12 static pages — one indexable page per rate series (current value,
-  freshness stamp, effective-date history, provenance link), homepage, an honest "how the data is
-  collected" page, methodology, 404, `robots.txt`, `sitemap.xml`. Every page < 14 KB, zero external
-  requests, full JSON-LD (Dataset + FAQPage + BreadcrumbList). Two reserved (empty) ad slots per page.
+- **Human skin** (`site/`, Astro): 16 static pages — one indexable page per rate series (current value,
+  freshness stamp, effective-date history, provenance link), homepage (with a featured current-rates
+  strip + jurisdiction grouping), an honest "how the data is collected" page, methodology, 404,
+  `robots.txt`, `sitemap.xml`, SVG favicon + web manifest. Every page < 14 KB, zero external requests,
+  full JSON-LD (Dataset + FAQPage + BreadcrumbList). Two reserved (empty) ad slots per page.
 - **Machine skin** (`machine/`): a **static JSON API** (prebuilt files, zero server cost) + an **OpenAPI
   3.1 spec** + an **MCP server** (5 tools) so AI agents can query it + `llms.txt`.
 - **Automation** (`.github/workflows/`, INACTIVE): weekly refresh (fetch→validate→commit-if-green,
@@ -46,23 +47,24 @@ central-bank rates (BIS/TradingEconomics), minimum wages (WageIndicator), public
 (timeanddate/Nager), fuel prices (GlobalPetrolPrices).
 
 ## Dataset stats
-- **444 observations**, **8 rate series**, **2 official sources**, history back to **2017** (IRS) /
-  **2 years weekly** (Treasury/post-judgment).
-- Sources: **IRS §6621 quarterly interest rates** (234 published records, 6 categories) and the
-  **Federal Reserve H.15 1-year Treasury CMT** (published). From H.15 the pipeline derives the weekly
-  CMT series (105) and the **U.S. federal post-judgment rate** under 28 U.S.C. §1961 (105).
+- **536 observations**, **12 rate series**, **4 official sources**, **3 jurisdictions (US / UK / EU)**.
+- **US:** IRS §6621 quarterly rates (234 published, 6 categories); Fed H.15 1-year Treasury CMT
+  (published weekly); derived US federal post-judgment rate (28 U.S.C. §1961). **UK:** Bank of England
+  Bank Rate (published) + derived statutory late-commercial-payment interest (Late Payment Act 1998).
+  **EU:** ECB main refinancing rate (published) + derived EU Late Payment Directive reference rate.
+- The UK & EU statutory rates are correctly modeled as **semi-annual** (fixed on the 31 Dec/30 Jun
+  reference dates for the UK; 1 Jan/1 Jul for the EU) rather than a naive "live base + 8pp" — the exact
+  domain rigor generic aggregators miss, and it's unit-tested.
 - Every value carries `effective_date`, `source_url`, `retrieved_at`, and `confidence`. **Published**
-  values are `high` confidence; the **derived** post-judgment rate is `medium`, and every derived record
-  stores the exact statutory formula plus a "verify against the controlling court; not legal advice"
-  note. The published core alone (IRS + CMT = 339) clears the 300-record bar with genuinely distinct
-  values.
+  values are `high` confidence; **derived** values are `medium` and store the exact statutory formula
+  plus a "verify against the controlling statute/court; not legal advice" note.
 
 ## How it was verified (all green — [docs/QA_REPORT.md](docs/QA_REPORT.md))
-Full pipeline from an empty cache → validation green (incl. 105 post-judgment↔CMT consistency checks);
-13 unit tests (robots logic + derivation invariants); site build with 25 valid JSON-LD blocks and a
-10-page spot check; static API conformance to the OpenAPI spec (452 observations); MCP smoke test
-exercising all 5 tools; a secret/placeholder sweep (clean); and containment checks (no remote, no
-leftover processes, nothing outside the project dir).
+Full pipeline from an empty cache → validation green (536 records, incl. 105 post-judgment↔CMT
+consistency checks); 17 unit tests (robots logic + US and UK/EU derivation invariants); 16-page site
+build with valid JSON-LD and a spot check; static API conformance to the OpenAPI spec (12 endpoints);
+MCP smoke test exercising all 5 tools; a secret/placeholder sweep (clean); and containment checks (no
+remote, no leftover processes, nothing outside the project dir).
 
 ## What is intentionally NOT done (and why)
 - **Anything requiring an account, deploy, credential, purchase, or remote** — forbidden by Section 0.
@@ -70,16 +72,18 @@ leftover processes, nothing outside the project dir).
 - **The bot-hostile state/court sources** (some return 403 to bots) — not scraped, because spoofing a
   browser UA to defeat anti-bot measures is against the data-ethics rules. They're documented as
   formula-derivable expansion in the runbook instead.
-- **UK/EU jurisdictions** — designed into the schema and roadmap but not fetched tonight; the committed
-  scope is the rock-solid US core. Adding them is a documented next step (BoE + ECB feeds).
+- **Per-EU-country late-payment margins and US state judgment rates** — the next expansion layer
+  (documented in the runbook). The US core plus UK + EU jurisdictions are built and live in the dataset.
 - **Ad code, pay-per-crawl, per-call billing, licensing** — placeholders/optionality only; activate on
   real demand (see DEPLOYMENT_GUIDE steps 6–8 and RISK_REGISTER).
 
 ## Honest first-90-days plan
 - **Week 1:** push + Pages + custom domain (optional ~$10/yr); confirm `refresh-data` runs; apply to
   Ezoic/AdSense; submit the MCP server to PulseMCP/mcp.so/Glama/Smithery.
-- **Weeks 2–6:** expand coverage where it widens the keyword surface cheaply — UK (BoE + 8pp), then the
-  top-search US states' judgment rates (many are CMT-derivable). Each new series is a new indexable page.
+- **Weeks 2–6:** expand coverage where it widens the keyword surface cheaply — per-EU-country
+  late-payment margins (a small maintained table over the ECB reference) and the top-search US states'
+  judgment rates (many are CMT-derivable). Each new series is a new indexable page. (US + UK + EU are
+  already live.)
 - **Weeks 6–12:** watch Search Console indexing and sessions against the RISK_REGISTER pivot thresholds.
   Add ad code once a network approves. Do **not** add features to a site with no traffic.
 

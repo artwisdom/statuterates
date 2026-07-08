@@ -86,8 +86,16 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     const oldest = arr[0].effective_date;
     coverage[slug] = { count: arr.length, oldest, latest };
     const age = daysBetween(today, latest);
-    // IRS is quarterly (allow ~200 days); weekly series should be within ~30 days.
-    const isWeekly = slug === 'treasury-1-year-cmt' || slug === 'us-federal-post-judgment';
+    // Cadence buckets decide staleness thresholds:
+    //  - weekly series (CMT/post-judgment) should be within ~30 days;
+    //  - periodic series (IRS quarterly, semi-annual UK/EU statutory) a new period appears <=~183 days;
+    //  - pure POLICY change-point series (BoE/ECB) can legitimately hold the same value for years, so
+    //    an "old" latest change is NOT staleness — skip the effective_date age error for them (a broken
+    //    fetch throws an HTTP error and fails the run anyway).
+    const WEEKLY = new Set(['treasury-1-year-cmt', 'us-federal-post-judgment']);
+    const POLICY_CHANGEPOINT = new Set(['boe-bank-rate', 'ecb-main-refinancing-rate']);
+    if (POLICY_CHANGEPOINT.has(slug)) continue;
+    const isWeekly = WEEKLY.has(slug);
     const warnAge = isWeekly ? 30 : 200;
     const errAge = isWeekly ? 120 : 400;
     if (age > errAge) errors.push(`${slug}: freshest observation ${latest} is ${age} days old (> ${errAge}) — likely broken fetch`);

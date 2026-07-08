@@ -1,19 +1,37 @@
 {
   "title": "StatuteRates",
-  "description": "The canonical, provenance-tracked database of statutory, judgment and tax interest rates — IRS §6621 quarterly rates, the U.S. federal post-judgment rate (28 U.S.C. §1961), and the 1-year Treasury CMT that drives it — each value stamped with its effective date and official source.",
-  "version": "0.1.0",
-  "update_cadence": "IRS quarterly; Treasury/post-judgment weekly (H.15 is daily).",
+  "description": "The canonical, provenance-tracked database of statutory, judgment and tax interest rates across the US, UK and EU — IRS §6621 quarterly rates, the US federal post-judgment rate (28 U.S.C. §1961), UK late-commercial-payment interest (Late Payment Act 1998), and the EU Late Payment Directive reference rate — each value stamped with its effective date and official source.",
+  "version": "0.2.0",
+  "update_cadence": "IRS quarterly; US Treasury/post-judgment weekly; UK/EU statutory rates semi-annual; BoE/ECB policy rates on decision. Refreshed weekly.",
   "attribution": "Source values are U.S. federal government works (public domain). Compiled by StatuteRates.",
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-08T05:51:10.456Z",
-  "entity_count": 8,
-  "observation_count": 444,
+  "generated_at": "2026-07-08T11:32:29.467Z",
+  "entity_count": 12,
+  "observation_count": 536,
   "metrics": [
     "annual_rate"
   ],
   "sources": [
+    {
+      "id": "boe-bank-rate",
+      "name": "Bank of England — Bank Rate (IUDBEDR)",
+      "publisher": "Bank of England",
+      "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
+      "license": "Bank of England statistical data, free to reuse with attribution.",
+      "robots_status": "allowed",
+      "retrieved_at": "2026-07-08T11:32:26.216Z"
+    },
+    {
+      "id": "ecb-mro",
+      "name": "ECB — Main Refinancing Operations fixed rate (MRR)",
+      "publisher": "European Central Bank",
+      "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
+      "license": "ECB statistical data, free to reuse with attribution.",
+      "robots_status": "allowed",
+      "retrieved_at": "2026-07-08T11:32:29.449Z"
+    },
     {
       "id": "fed-h15",
       "name": "Federal Reserve H.15 — 1-Year Treasury Constant Maturity",
@@ -21,7 +39,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-08T05:51:10.435Z"
+      "retrieved_at": "2026-07-08T11:32:22.578Z"
     },
     {
       "id": "irs-6621",
@@ -30,7 +48,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-08T05:51:07.339Z"
+      "retrieved_at": "2026-07-08T11:32:19.461Z"
     }
   ]
 }

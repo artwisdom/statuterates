@@ -1,6 +1,9 @@
-# QA_REPORT.md — Phase 7 gauntlet
+# QA_REPORT.md — QA gauntlet
 
 **Date:** 2026-07-08. All checks run locally on the owner's machine. Result: **all green.**
+**Re-run after the UK/EU expansion:** 536 observations · 12 series · 4 sources · 3 jurisdictions ·
+17 unit tests · 16 pages · API 12 endpoints. The numbers below reflect the expanded dataset (the
+original US-only run was 444/8/2/13/12); every check was re-run from an empty cache and stayed green.
 
 ## 1. Full pipeline from empty cache → validation green ✅
 Cleared `data/cache/` and `data/db.sqlite`, then `node run.mjs all`:
@@ -60,13 +63,13 @@ entity by its own token), `get_latest_value` (value + `source_url` + `effective_
   build were removed at QA time (going forward, the session scratchpad is the correct location).
 - DB state: 2 sources, 8 entities, 444 observations, 1 successful run in `run_log`.
 
-## Summary
+## Summary (expanded US+UK+EU dataset)
 | Check | Result |
 |---|---|
-| Pipeline from empty cache + validation | ✅ 444 records, green |
-| Unit tests | ✅ 13/13 |
-| Site build + SEO/JSON-LD/sitemap | ✅ 12 pages, 25 valid JSON-LD blocks |
-| API conformance | ✅ 452 observations |
+| Pipeline from empty cache + validation | ✅ 536 records, 12 series, 4 sources, green |
+| Unit tests | ✅ 17/17 (incl. UK/EU semi-annual derivation) |
+| Site build + SEO/JSON-LD/sitemap | ✅ 16 pages, all JSON-LD valid |
+| API conformance | ✅ 12 endpoints, 548 observations |
 | MCP smoke (5 tools) | ✅ passed |
 | Secret/placeholder sweep | ✅ clean |
 | Containment (remote/processes/files) | ✅ clean |

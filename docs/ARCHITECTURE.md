@@ -34,9 +34,17 @@ All rate observations use `metric = 'annual_rate'`, `unit = 'percent_per_annum'`
 | `irs-6603-federal-short-term` | IRC §6603 deposit / federal short-term | US | IRS quarterly page | high |
 | `treasury-1-year-cmt` | 1-yr Treasury constant-maturity yield (weekly avg) | US | Fed H.15 CSV | high (published) |
 | `us-federal-post-judgment` | Federal post-judgment rate (28 U.S.C. §1961) | US | derived from H.15 | **medium (derived)** |
+| `boe-bank-rate` | Bank of England Bank Rate | GB | BoE IADB CSV | high (published) |
+| `uk-late-payment-commercial` | UK late-payment interest (LPA 1998, semi-annual) | GB | derived from BoE | **medium (derived)** |
+| `ecb-main-refinancing-rate` | ECB main refinancing rate | EU | ECB Data Portal CSV | high (published) |
+| `eu-late-payment-reference` | EU Late Payment Directive reference (semi-annual) | EU | derived from ECB | **medium (derived)** |
 
-Designed-in expansion (documented, built if time permits): `uk-late-payment-commercial`
-(BoE base + 8pp), `eu-late-payment-reference` (ECB + margins), US state judgment/legal rates.
+**12 series across 3 jurisdictions (US/UK/EU), 4 official sources, 536 records.** The UK/EU statutory
+series are correctly modeled as SEMI-ANNUAL (fixed on 31 Dec/30 Jun for the UK; 1 Jan/1 Jul for the EU),
+not "live base + 8" — see `pipeline/lib/rates-intl.mjs` and its tests.
+
+Designed-in further expansion (documented, not yet built): per-EU-country late-payment margins, US state
+judgment/legal rates.
 
 ## 4. Provenance & honesty rules (baked into the pipeline)
 - Every observation stores the exact `source_url` and `retrieved_at`.

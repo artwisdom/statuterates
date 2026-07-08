@@ -39,9 +39,21 @@ export const GROUPS = [
   },
   {
     id: 'judgment',
-    title: 'Judgment & Treasury rates',
+    title: 'US judgment & Treasury rates',
     blurb: 'The federal post-judgment interest rate and the 1-year Treasury yield that sets it.',
     match: (e) => e.slug === 'us-federal-post-judgment' || e.slug === 'treasury-1-year-cmt',
+  },
+  {
+    id: 'uk',
+    title: 'United Kingdom',
+    blurb: 'The Bank of England base rate and the statutory interest on late commercial payments.',
+    match: (e) => e.jurisdiction === 'GB',
+  },
+  {
+    id: 'eu',
+    title: 'European Union',
+    blurb: 'The ECB main refinancing rate and the EU Late Payment Directive reference rate.',
+    match: (e) => e.jurisdiction === 'EU',
   },
 ];
 

@@ -1,0 +1,12 @@
+{
+  "name": "StatuteRates",
+  "short_name": "StatuteRates",
+  "description": "Statutory, judgment & tax interest rates (US, UK, EU) with effective dates and a free API.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#0b1f3a",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" }
+  ]
+}

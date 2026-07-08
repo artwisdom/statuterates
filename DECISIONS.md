@@ -33,3 +33,15 @@ One line per judgment call made during the autonomous build, with rationale. New
   they are distinct legal concepts with distinct search intent; uscourts.gov publishes only the
   formula, so presenting the computed answer IS the product. Disclosed transparently (medium
   confidence + formula + caveat) so it is not hidden record-padding.
+
+### Post-review improvement pass (owner-requested "improve + advance")
+- **Expanded coverage to UK + EU** (BoE Bank Rate + UK late-payment; ECB MRO + EU Directive reference).
+  Rationale: cross-jurisdiction coverage IS the moat; both sources verified fetchable + robots-permitting
+  through our pipeline. Now 12 series, 3 jurisdictions, 4 sources, 536 records.
+- **Modeled UK & EU statutory rates as SEMI-ANNUAL, not "live base + 8".** Rationale: correctness —
+  the UK Act fixes the rate on 31 Dec / 30 Jun reference dates, and the EU Directive uses the ECB rate
+  on 1 Jan / 1 Jul. Getting this right is exactly the domain rigor generic aggregators lack; unit-tested.
+- **Made validation cadence-aware** so pure policy change-point series (BoE/ECB) aren't wrongly failed
+  for an "old" latest value (a held rate is not stale data).
+- **Site polish:** featured current-rates strip, jurisdiction grouping + chips, SVG favicon, web
+  manifest. Rationale: premium-aesthetic directive; all self-contained (no external requests).
