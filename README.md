@@ -1,0 +1,36 @@
+# Data Moat Engine
+
+A zero-capital, solo-operable **data business foundation**: one canonical, constantly-changing,
+provenance-tracked dataset in a narrow global niche, monetized through three interfaces ("skins")
+over a single data asset:
+
+1. **Human skin** — a fast static reference website (display-ad monetization later).
+2. **Machine skin** — the same data as a static JSON API + an MCP server for AI agents, plus `llms.txt`.
+3. **Licensing skin** — bulk licensing if the dataset becomes canonical (documented, not built).
+
+The interface code is disposable. The asset is the **normalized, provenance-tracked dataset and its
+automated refresh pipeline**.
+
+## Status
+
+See [`STATE.md`](STATE.md) for the live build state and [`EXECUTION_REPORT.md`](EXECUTION_REPORT.md)
+(once written) for the full report. The chosen niche and rationale are in
+[`research/NICHE_DECISION.md`](research/NICHE_DECISION.md).
+
+## Layout
+
+| Path | Purpose |
+|---|---|
+| `research/` | Research log + niche decision |
+| `pipeline/` | Node.js fetchers, politeness layer, normalizer, validation |
+| `data/` | SQLite source of truth (`db.sqlite`) + versioned JSON exports |
+| `site/` | Astro static site (human skin) |
+| `machine/` | Static JSON API build + MCP server + `llms.txt` (machine skin) |
+| `docs/` | Architecture, QA report, deployment guide, runbook, risk register |
+| `.github/workflows/` | INACTIVE automation blueprints (activate only on owner push) |
+
+## Local-only
+
+This repository has **no git remote**, is **not deployed anywhere**, and requires **no accounts or
+spend** to build. Every step that would need a credential, deployment, or account is a documented
+manual step in `docs/DEPLOYMENT_GUIDE.md`, marked with an `<<OWNER_PROVIDES>>` placeholder.
