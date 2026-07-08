@@ -71,10 +71,10 @@ CREATE TABLE IF NOT EXISTS run_log (
 );
 `;
 
-export function openDb({ create = true } = {}) {
-  mkdirSync(dirname(DB_PATH), { recursive: true });
-  const db = new Database(DB_PATH);
-  db.pragma('journal_mode = WAL');
+export function openDb({ create = true, path = DB_PATH } = {}) {
+  if (path !== ':memory:') mkdirSync(dirname(path), { recursive: true });
+  const db = new Database(path);
+  if (path !== ':memory:') db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
   if (create) db.exec(SCHEMA);
   return db;

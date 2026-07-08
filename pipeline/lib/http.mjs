@@ -230,10 +230,26 @@ export async function politeGet(url, { sourceId = 'default', force = false } = {
   }
   perSourceCount.set(sourceId, count + 1);
 
-  // 4) Throttle + fetch.
-  await throttleHost(host);
-  const res = await fetchWithTimeout(url);
-  const body = await res.text();
+  // 4) Throttle + fetch, with retry-with-backoff on transient failures (network error, 429, 5xx).
+  //    Permanent 4xx (except 429) fail fast. This keeps the automated weekly refresh resilient to
+  //    blips without hammering a source.
+  const MAX_ATTEMPTS = 3;
+  const BACKOFF_MS = [2000, 5000];
+  let res, body, lastErr;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+    await throttleHost(host);
+    try {
+      res = await fetchWithTimeout(url);
+      body = await res.text();
+    } catch (e) {
+      lastErr = e; // network/timeout error -> retry
+      if (attempt < MAX_ATTEMPTS) { await sleep(BACKOFF_MS[attempt - 1]); continue; }
+      throw new Error(`NETWORK: ${url} failed after ${MAX_ATTEMPTS} attempts (${e.message})`);
+    }
+    const transient = res.status === 429 || res.status >= 500;
+    if (transient && attempt < MAX_ATTEMPTS) { await sleep(BACKOFF_MS[attempt - 1]); continue; }
+    break;
+  }
   const entry = {
     url,
     status: res.status,

@@ -61,7 +61,8 @@ central-bank rates (BIS/TradingEconomics), minimum wages (WageIndicator), public
 
 ## How it was verified (all green — [docs/QA_REPORT.md](docs/QA_REPORT.md))
 Full pipeline from an empty cache → validation green (536 records, incl. 105 post-judgment↔CMT
-consistency checks); 17 unit tests (robots logic + US and UK/EU derivation invariants); 16-page site
+consistency checks + 195 IRS §6621-spread integrity checks); 22 unit tests (robots logic, US and UK/EU
+derivation invariants, and validator fail-loud behavior); 16-page site
 build with valid JSON-LD and a spot check; static API conformance to the OpenAPI spec (12 endpoints);
 MCP smoke test exercising all 5 tools; a secret/placeholder sweep (clean); and containment checks (no
 remote, no leftover processes, nothing outside the project dir).

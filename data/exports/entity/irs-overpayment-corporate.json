@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T11:32:29.467Z",
+  "generated_at": "2026-07-08T11:38:08.913Z",
   "slug": "irs-overpayment-corporate",
   "name": "IRS Overpayment Interest Rate — Corporate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (Corporate overpayment)."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2026 (Corporate overpayment)."
@@ -52,7 +52,7 @@
         "effective_date": "2026-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2026 (Corporate overpayment)."
@@ -65,7 +65,7 @@
         "effective_date": "2026-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2026 (Corporate overpayment)."
@@ -78,7 +78,7 @@
         "effective_date": "2025-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2025 (Corporate overpayment)."
@@ -91,7 +91,7 @@
         "effective_date": "2025-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2025 (Corporate overpayment)."
@@ -104,7 +104,7 @@
         "effective_date": "2025-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2025 (Corporate overpayment)."
@@ -117,7 +117,7 @@
         "effective_date": "2025-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2025 (Corporate overpayment)."
@@ -130,7 +130,7 @@
         "effective_date": "2024-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2024 (Corporate overpayment)."
@@ -143,7 +143,7 @@
         "effective_date": "2024-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2024 (Corporate overpayment)."
@@ -156,7 +156,7 @@
         "effective_date": "2024-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2024 (Corporate overpayment)."
@@ -169,7 +169,7 @@
         "effective_date": "2024-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2024 (Corporate overpayment)."
@@ -182,7 +182,7 @@
         "effective_date": "2023-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2023 (Corporate overpayment)."
@@ -195,7 +195,7 @@
         "effective_date": "2023-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2023 (Corporate overpayment)."
@@ -208,7 +208,7 @@
         "effective_date": "2023-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2023 (Corporate overpayment)."
@@ -221,7 +221,7 @@
         "effective_date": "2023-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2023 (Corporate overpayment)."
@@ -234,7 +234,7 @@
         "effective_date": "2022-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2022 (Corporate overpayment)."
@@ -247,7 +247,7 @@
         "effective_date": "2022-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2022 (Corporate overpayment)."
@@ -260,7 +260,7 @@
         "effective_date": "2022-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2022 (Corporate overpayment)."
@@ -273,7 +273,7 @@
         "effective_date": "2022-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2022 (Corporate overpayment)."
@@ -286,7 +286,7 @@
         "effective_date": "2021-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2021 (Corporate overpayment)."
@@ -299,7 +299,7 @@
         "effective_date": "2021-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2021 (Corporate overpayment)."
@@ -312,7 +312,7 @@
         "effective_date": "2021-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2021 (Corporate overpayment)."
@@ -325,7 +325,7 @@
         "effective_date": "2021-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2021 (Corporate overpayment)."
@@ -338,7 +338,7 @@
         "effective_date": "2020-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2020 (Corporate overpayment)."
@@ -351,7 +351,7 @@
         "effective_date": "2020-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2020 (Corporate overpayment)."
@@ -364,7 +364,7 @@
         "effective_date": "2020-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2020 (Corporate overpayment)."
@@ -377,7 +377,7 @@
         "effective_date": "2020-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2020 (Corporate overpayment)."
@@ -390,7 +390,7 @@
         "effective_date": "2019-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2019 (Corporate overpayment)."
@@ -403,7 +403,7 @@
         "effective_date": "2019-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2019 (Corporate overpayment)."
@@ -416,7 +416,7 @@
         "effective_date": "2019-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2019 (Corporate overpayment)."
@@ -429,7 +429,7 @@
         "effective_date": "2019-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2019 (Corporate overpayment)."
@@ -442,7 +442,7 @@
         "effective_date": "2018-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2018 (Corporate overpayment)."
@@ -455,7 +455,7 @@
         "effective_date": "2018-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2018 (Corporate overpayment)."
@@ -468,7 +468,7 @@
         "effective_date": "2018-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2018 (Corporate overpayment)."
@@ -481,7 +481,7 @@
         "effective_date": "2018-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2018 (Corporate overpayment)."
@@ -494,7 +494,7 @@
         "effective_date": "2017-10-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 4Q2017 (Corporate overpayment)."
@@ -507,7 +507,7 @@
         "effective_date": "2017-07-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 3Q2017 (Corporate overpayment)."
@@ -520,7 +520,7 @@
         "effective_date": "2017-04-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 2Q2017 (Corporate overpayment)."
@@ -533,7 +533,7 @@
         "effective_date": "2017-01-01",
         "source_id": "irs-6621",
         "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-        "retrieved_at": "2026-07-08T11:32:19.461Z",
+        "retrieved_at": "2026-07-08T11:38:08.892Z",
         "confidence": "high",
         "method": "html-table",
         "notes": "IRS §6621 1Q2017 (Corporate overpayment)."

@@ -97,7 +97,7 @@ async function runAll() {
       db.close();
       process.exit(1);
     }
-    console.log(`validation OK — ${report.totals.observations} observations, ${report.totals.series} series, ${report.totals.pjConsistencyChecked} post-judgment consistency checks passed`);
+    console.log(`validation OK — ${report.totals.observations} observations, ${report.totals.series} series, ${report.totals.pjConsistencyChecked} post-judgment + ${report.totals.irsSpreadChecked} IRS §6621-spread consistency checks passed`);
 
     // 5) EXPORT versioned JSON snapshots
     const ex = exportAll({ datasetMeta: DATASET_META });

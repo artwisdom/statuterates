@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T11:32:29.467Z",
+  "generated_at": "2026-07-08T11:38:08.913Z",
   "count": 12,
   "observations": [
     {
@@ -12,7 +12,7 @@
       "effective_date": "2026-07-06",
       "source_id": "fed-h15",
       "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-      "retrieved_at": "2026-07-08T11:32:22.578Z",
+      "retrieved_at": "2026-07-08T11:38:08.895Z",
       "confidence": "high",
       "method": "weekly-avg-of-daily-h15",
       "notes": "Weekly average of 1 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-06."
@@ -27,7 +27,7 @@
       "effective_date": "2025-12-18",
       "source_id": "boe-bank-rate",
       "source_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2015&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-      "retrieved_at": "2026-07-08T11:32:26.216Z",
+      "retrieved_at": "2026-07-08T11:38:08.898Z",
       "confidence": "high",
       "method": "official-csv-changepoint",
       "notes": "Bank of England Bank Rate effective 2025-12-18 (official published value)."
@@ -42,7 +42,7 @@
       "effective_date": "2026-06-17",
       "source_id": "ecb-mro",
       "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-      "retrieved_at": "2026-07-08T11:32:29.449Z",
+      "retrieved_at": "2026-07-08T11:38:08.900Z",
       "confidence": "high",
       "method": "official-csv-changepoint",
       "notes": "ECB Main Refinancing Operations rate effective 2026-06-17 (official published value)."
@@ -57,7 +57,7 @@
       "effective_date": "2026-07-01",
       "source_id": "ecb-mro",
       "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-      "retrieved_at": "2026-07-08T11:32:29.449Z",
+      "retrieved_at": "2026-07-08T11:38:08.900Z",
       "confidence": "medium",
       "method": "derived_eu_directive_2011_7_reference",
       "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-07-01: 2.4%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.4% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
@@ -72,7 +72,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (Internal Revenue Code (IRC) 6603 deposit (federal short-term rate))."
@@ -87,7 +87,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (GATT (part of a corporate overpayment exceeding $10,000))."
@@ -102,7 +102,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (Large corporate underpayment (LCU))."
@@ -117,7 +117,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (Corporate overpayment)."
@@ -132,7 +132,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (Non-corporate overpayment (for example, individual))."
@@ -147,7 +147,7 @@
       "effective_date": "2026-07-01",
       "source_id": "irs-6621",
       "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-      "retrieved_at": "2026-07-08T11:32:19.461Z",
+      "retrieved_at": "2026-07-08T11:38:08.892Z",
       "confidence": "high",
       "method": "html-table",
       "notes": "IRS §6621 3Q2026 (Underpayment (corporate and non-corporate))."
@@ -162,7 +162,7 @@
       "effective_date": "2026-07-06",
       "source_id": "fed-h15",
       "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-      "retrieved_at": "2026-07-08T11:32:22.578Z",
+      "retrieved_at": "2026-07-08T11:38:08.895Z",
       "confidence": "medium",
       "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
       "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."
@@ -177,7 +177,7 @@
       "effective_date": "2026-07-01",
       "source_id": "boe-bank-rate",
       "source_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2015&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-      "retrieved_at": "2026-07-08T11:32:26.216Z",
+      "retrieved_at": "2026-07-08T11:38:08.898Z",
       "confidence": "medium",
       "method": "derived_uk_lpa1998_baserate_plus_8",
       "notes": "Derived: UK statutory interest on late commercial (B2B) debts = the Bank of England base rate in force on the reference date (2026-06-30: 3.75%) + 8 percentage points, fixed for this six-month period under the Late Payment of Commercial Debts (Interest) Act 1998. Reference, not legal advice."

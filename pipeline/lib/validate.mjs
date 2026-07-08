@@ -76,6 +76,32 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     }
   }
 
+  // Cross-field integrity: every IRS §6621 category is the federal short-term rate + a fixed statutory
+  // spread. If a parse grabbed the wrong cell, this catches it. Exact by statute -> hard error on mismatch.
+  const IRS_SPREAD = {
+    'irs-underpayment': 3,
+    'irs-overpayment-noncorporate': 3,
+    'irs-overpayment-corporate': 2,
+    'irs-large-corporate-underpayment': 5,
+    'irs-gatt': 0.5,
+  };
+  const shortTermByQuarter = new Map(
+    rows.filter((r) => r.entity_slug === 'irs-6603-federal-short-term').map((r) => [r.effective_date, r.value_numeric])
+  );
+  let irsChecked = 0;
+  for (const r of rows) {
+    const spread = IRS_SPREAD[r.entity_slug];
+    if (spread === undefined) continue;
+    const s = shortTermByQuarter.get(r.effective_date);
+    if (s === undefined) continue;
+    irsChecked++;
+    if (Math.abs(s + spread - r.value_numeric) > 1e-9) {
+      errors.push(
+        `${r.entity_slug}@${r.effective_date}: ${r.value_numeric}% != federal short-term ${s}% + ${spread} (§6621) — parse error?`
+      );
+    }
+  }
+
   // Coverage + staleness per series.
   const coverage = {};
   const bySeries = {};
@@ -103,5 +129,5 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
   }
 
   const ok = errors.length === 0;
-  return { ok, errors, warnings, coverage, totals: { observations: rows.length, series: Object.keys(coverage).length, pjConsistencyChecked: pjChecked } };
+  return { ok, errors, warnings, coverage, totals: { observations: rows.length, series: Object.keys(coverage).length, pjConsistencyChecked: pjChecked, irsSpreadChecked: irsChecked } };
 }

@@ -1,9 +1,11 @@
 # QA_REPORT.md — QA gauntlet
 
 **Date:** 2026-07-08. All checks run locally on the owner's machine. Result: **all green.**
-**Re-run after the UK/EU expansion:** 536 observations · 12 series · 4 sources · 3 jurisdictions ·
-17 unit tests · 16 pages · API 12 endpoints. The numbers below reflect the expanded dataset (the
-original US-only run was 444/8/2/13/12); every check was re-run from an empty cache and stayed green.
+**Re-run after the UK/EU expansion + hardening:** 536 observations · 12 series · 4 sources ·
+3 jurisdictions · **22 unit tests** · 16 pages · API 12 endpoints. Added data-integrity checks:
+**195 IRS §6621-spread consistency checks** (every category = federal short-term rate + statutory
+spread) and 105 post-judgment↔CMT checks, plus validator fail-loud tests and fetch retry-with-backoff.
+The original US-only run was 444/8/2/13/12; every check was re-run from an empty cache and stayed green.
 
 ## 1. Full pipeline from empty cache → validation green ✅
 Cleared `data/cache/` and `data/db.sqlite`, then `node run.mjs all`:

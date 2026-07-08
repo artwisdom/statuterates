@@ -13,9 +13,20 @@ automated refresh pipeline**.
 
 ## Status
 
-See [`STATE.md`](STATE.md) for the live build state and [`EXECUTION_REPORT.md`](EXECUTION_REPORT.md)
-(once written) for the full report. The chosen niche and rationale are in
-[`research/NICHE_DECISION.md`](research/NICHE_DECISION.md).
+**Niche:** StatuteRates — statutory, judgment & tax interest rates across the **US, UK and EU**.
+**Dataset:** 536 provenance-tracked records · 12 rate series · 4 official sources · 3 jurisdictions.
+Code-complete and QA-green (22 unit tests, MCP smoke, API conformance all pass). **Nothing is deployed
+yet** — deploying is a ~7-minute owner action (push + enable GitHub Pages).
+
+See [`STATE.md`](STATE.md) for live build state, [`EXECUTION_REPORT.md`](EXECUTION_REPORT.md) for the
+full report, [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) to go live, and
+[`research/NICHE_DECISION.md`](research/NICHE_DECISION.md) for why this niche.
+
+## Quickstart
+```bash
+./setup.sh          # install deps, run pipeline, build API + site, verify MCP (one command)
+```
+Or step by step — see the "Local dev quickstart" in [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md).
 
 ## Layout
 
