@@ -7,3 +7,19 @@ One line per judgment call made during the autonomous build, with rationale. New
 - **SQLite via `better-sqlite3` (local install), CLI `sqlite3` as fallback.** Rationale: brief mandates
   SQLite as source of truth; `better-sqlite3` is synchronous, dependency-light, and installs locally.
 - **Git init but no remote, ever.** Rationale: Section 0.1 hard rule.
+- **Built the niche-agnostic engine core (politeness layer, SQLite schema, exporter, static-API
+  generator, MCP server, OpenAPI) during Phase 1** while the research workflow ran, since that shape
+  fits every finalist. Rationale: parallelize; no rework risk (the schema is generic observations).
+- **Research run as a 3-phase multi-agent workflow** (generate → incumbent-scan → deep-audit), 23
+  agents. Rationale: incumbent-scanning is embarrassingly parallel; ultracode is on.
+- **Winner = Statutory/Judgment/Tax Interest Rates; runner-up = Passport Fees.** Rationale: genuine
+  37–37 rubric tie, broken toward interest rates on *verified* tonight-buildability (both anchor
+  sources fetch+parse through our pipeline), sharpest volatility moat, and lowest maintenance. Full
+  reasoning in [research/NICHE_DECISION.md].
+- **Anchor the seed on PUBLISHED IRS values (high confidence); mark the derived US federal
+  post-judgment rate `confidence=medium` with the 28 U.S.C. §1961 formula cited.** Rationale: keep a
+  legal-money niche honest and safe for hands-off operation; no un-provenanced or computed value is
+  presented as authoritative without its formula + source.
+- **Do NOT scrape the bot-hostile state/court hosts (403/503).** Rationale: a 403 WAF is not a robots
+  disallow, but spoofing a browser UA to defeat anti-bot measures is against the spirit of Section 0.3;
+  use only the clean official feeds (IRS, Fed H.15) and document the rest as expansion.
