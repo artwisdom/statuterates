@@ -85,6 +85,49 @@ history so you can pick the right rate for the period your debt fell due.`,
 It is the reference from which the EU Late Payment Directive statutory interest rate is built. This page
 tracks the official MRO rate and every change, straight from the ECB Data Portal.`,
   },
+  'california-judgment-rate': {
+    tagline: 'Interest on money judgments in California courts.',
+    q: 'What is the current California post-judgment interest rate?',
+    body: `California money judgments accrue simple interest at 10% per year on unpaid principal under Code of
+Civil Procedure §685.010 — but the right rate depends on the case: judgments entered or renewed since
+January 1, 2023 against individuals accrue only 5% when the debt is medical (under $200,000) or personal
+(under $50,000), and judgments against state or local government entities accrue 7%. Interest accrues
+daily (annual rate ÷ 365) from entry of judgment.`,
+  },
+  'new-york-judgment-rate': {
+    tagline: 'The default interest rate on New York judgments.',
+    q: 'What is the current New York judgment interest rate?',
+    body: `New York judgments generally accrue interest at 9% per year under CPLR 5004 — one of the highest
+statutory rates in the country. The major exception: since April 30, 2022, judgments arising out of
+consumer debt against individuals accrue only 2% (see the companion consumer-debt series). Other
+statutes can set different rates for specific defendants, so always check the governing provision.`,
+  },
+  'new-york-consumer-debt-judgment-rate': {
+    tagline: 'The reduced rate on NY consumer-debt judgments since 2022.',
+    q: 'What is the interest rate on consumer debt judgments in New York?',
+    body: `Since April 30, 2022 (the Fair Consumer Judgment Interest Act), New York judgments arising out of
+consumer debt against a natural person accrue interest at 2% per year instead of the general 9% —
+"consumer debt" meaning obligations from transactions primarily for personal, family, or household
+purposes. The 2% rate also applies from that date forward to the unpaid portion of consumer-debt
+judgments entered earlier. LLMs and older guides routinely still quote 9% for these cases.`,
+  },
+  'massachusetts-judgment-rate': {
+    tagline: 'Interest on Massachusetts tort and contract judgments.',
+    q: 'What is the current Massachusetts judgment interest rate?',
+    body: `Massachusetts adds interest at 12% per year to damages in tort actions (M.G.L. c.231 §6B, from
+commencement of the action) and contract actions (§6C, from breach or demand) — among the highest
+statutory rates in the U.S. In contract cases an established contract rate displaces the 12% default,
+and judgments against the commonwealth instead bear interest at a Treasury-linked rate capped at 10%.`,
+  },
+  'iowa-judgment-rate': {
+    tagline: 'Iowa’s market-linked judgment interest rate.',
+    q: 'What is the current Iowa judgment interest rate?',
+    body: `Unlike fixed-rate states, Iowa ties judgment interest to the market: Iowa Code §668.13 sets it at
+the 1-year Treasury constant maturity yield (Federal Reserve H.15) published immediately before the
+judgment, plus 2 percentage points, computed daily. That means the rate changes every week — this page
+computes it from the same official H.15 series that drives the federal post-judgment rate. A contract
+rate governs instead if the judgment is on a contract that fixes one.`,
+  },
   'eu-late-payment-reference': {
     tagline: 'The EU reference rate for late-payment interest.',
     q: 'What is the current EU Late Payment Directive reference rate?',

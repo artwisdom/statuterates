@@ -31,12 +31,26 @@ Anchor sources (verified fetchable by our pipeline): IRS §6621 quarterly rates 
 - [x] **Phase 7 — QA gauntlet.** All green — `docs/QA_REPORT.md`.
 - [x] **Phase 8 — Deliverables.** EXECUTION_REPORT, DEPLOYMENT_GUIDE, RISK_REGISTER, MAINTENANCE_RUNBOOK.
 
-## BUILD COMPLETE (+ owner-requested improvement pass)
-All 8 phases done + all Section-8 docs written. QA green. No remote, no deploys, no accounts, no spend.
-**Improvement pass (2026-07-08):** expanded to **UK + EU** — now **536 records, 12 series, 4 sources,
-3 jurisdictions (US/UK/EU), 16 pages**. Added BoE + ECB fetchers, correct semi-annual UK/EU statutory
-modeling (unit-tested), cadence-aware validation, and site polish (featured strip, jurisdiction
-grouping/chips, favicon, manifest). Full gauntlet re-run from empty cache: green.
+## BUILD COMPLETE (after two owner-requested improvement passes)
+All 8 phases + improvement passes done. QA green. No remote, no deploys, no accounts, no spend.
+
+**Pass 1 (UK/EU expansion):** BoE + ECB fetchers, semi-annual UK/EU statutory modeling, cadence-aware
+validation, site polish.
+
+**Pass 2 (final grand-scale pass):** now **~650 records, 17 series, 8 sources, US(fed+4 states)/UK/EU,
+28 pages**. Added:
+- **4 calculator pages** (federal §1961, IRS §6621/§6622, state judgment CA/NY/MA/IA, UK+EU late
+  payment) powered by a shared unit-tested engine (`shared/interest-calc.mjs`, 9 tests) — verified
+  in a real browser; federal result cross-matches a district-court table.
+- **US state rates** verified by a 7-agent pass against official statute texts (citations + carve-outs
+  in every record); quarterly re-verification playbook in the runbook.
+- **Machine skin:** MCP `calculate_interest` tool (6 tools now), `latest.json`, CSV downloads,
+  `/api/` docs+licensing page, `llms-full.txt`, RSS changes feed + `/changes/` page.
+- **DEPLOYMENT_GUIDE** now includes Search Console/Bing indexing as step 5.
+
+Key file map for a resuming session: shared/interest-calc.mjs (calc engine, used by site+MCP);
+pipeline/fetchers/us-states.mjs (curated statute values — VERIFIED_ON quarterly bump);
+site/src/components/InterestCalculator.astro (calculator UI); site/src/lib/changes.mjs (feed).
 
 ## Next action (OWNER)
 Push to GitHub + enable Pages — `docs/DEPLOYMENT_GUIDE.md` steps 1–2 (~7 min). That activates free

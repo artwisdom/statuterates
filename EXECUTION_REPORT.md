@@ -15,14 +15,20 @@ is optional/growth.
 A working **data business foundation** for **StatuteRates** — U.S. statutory, judgment & tax interest
 rates:
 - **Pipeline** (`pipeline/`): polite, robots-respecting fetchers → normalizer → fail-loud validation →
-  SQLite source-of-truth → versioned JSON exports. Two live sources; runs empty-cache→green in ~6 s.
-- **Human skin** (`site/`, Astro): 16 static pages — one indexable page per rate series (current value,
-  freshness stamp, effective-date history, provenance link), homepage (with a featured current-rates
-  strip + jurisdiction grouping), an honest "how the data is collected" page, methodology, 404,
+  SQLite source-of-truth → versioned JSON exports. Four live official feeds (IRS, Fed H.15, Bank of
+  England, ECB) + four curated statute sources verified against official texts; empty-cache→green in ~10 s.
+- **Human skin** (`site/`, Astro): 28 static pages — one indexable page per rate series (current value,
+  freshness stamp, effective-date history, provenance link), homepage (featured current-rates
+  strip + jurisdiction grouping), **four statutory-interest calculators** (the utility layer paid
+  incumbents charge $75–199/yr for — each implements the statute's actual computation method via a
+  shared, unit-tested engine), an honest "how the data is collected" page, methodology, a rate-changes
+  page + RSS feed, an API/licensing page, 404,
   `robots.txt`, `sitemap.xml`, SVG favicon + web manifest. Every page < 14 KB, zero external requests,
   full JSON-LD (Dataset + FAQPage + BreadcrumbList). Two reserved (empty) ad slots per page.
-- **Machine skin** (`machine/`): a **static JSON API** (prebuilt files, zero server cost) + an **OpenAPI
-  3.1 spec** + an **MCP server** (5 tools) so AI agents can query it + `llms.txt`.
+- **Machine skin** (`machine/`): a **static JSON API** (prebuilt files, zero server cost, incl. a
+  one-call `latest.json` and per-series CSV downloads) + an **OpenAPI 3.1 spec** + an **MCP server**
+  (6 tools — including `calculate_interest`, which computes accrued statutory interest so agents get
+  the amount, not just the rate) + `llms.txt` and `llms-full.txt`.
 - **Automation** (`.github/workflows/`, INACTIVE): weekly refresh (fetch→validate→commit-if-green,
   ~13 min/month) and deploy, with self-healing failure diagnostics and a maintenance runbook.
 
@@ -47,11 +53,13 @@ central-bank rates (BIS/TradingEconomics), minimum wages (WageIndicator), public
 (timeanddate/Nager), fuel prices (GlobalPetrolPrices).
 
 ## Dataset stats
-- **536 observations**, **12 rate series**, **4 official sources**, **3 jurisdictions (US / UK / EU)**.
+- **645 observations**, **17 rate series**, **8 official sources**, **US federal + 4 US states + UK + EU**.
 - **US:** IRS §6621 quarterly rates (234 published, 6 categories); Fed H.15 1-year Treasury CMT
   (published weekly); derived US federal post-judgment rate (28 U.S.C. §1961). **UK:** Bank of England
   Bank Rate (published) + derived statutory late-commercial-payment interest (Late Payment Act 1998).
   **EU:** ECB main refinancing rate (published) + derived EU Late Payment Directive reference rate.
+  **US states:** CA 10%, NY 9% + 2% consumer-debt, MA 12% (statute-fixed, verified against the official
+  texts with citations and carve-outs) and Iowa (1-yr CMT + 2pp, derived weekly per §668.13(3)).
 - The UK & EU statutory rates are correctly modeled as **semi-annual** (fixed on the 31 Dec/30 Jun
   reference dates for the UK; 1 Jan/1 Jul for the EU) rather than a naive "live base + 8pp" — the exact
   domain rigor generic aggregators miss, and it's unit-tested.
@@ -60,12 +68,15 @@ central-bank rates (BIS/TradingEconomics), minimum wages (WageIndicator), public
   plus a "verify against the controlling statute/court; not legal advice" note.
 
 ## How it was verified (all green — [docs/QA_REPORT.md](docs/QA_REPORT.md))
-Full pipeline from an empty cache → validation green (536 records, incl. 105 post-judgment↔CMT
-consistency checks + 195 IRS §6621-spread integrity checks); 22 unit tests (robots logic, US and UK/EU
-derivation invariants, and validator fail-loud behavior); 16-page site
-build with valid JSON-LD and a spot check; static API conformance to the OpenAPI spec (12 endpoints);
-MCP smoke test exercising all 5 tools; a secret/placeholder sweep (clean); and containment checks (no
-remote, no leftover processes, nothing outside the project dir).
+Full pipeline from an empty cache → validation green (645 records, incl. 105 post-judgment↔CMT
+consistency checks + 195 IRS §6621-spread integrity checks); 31 unit tests (robots logic, derivation
+invariants, validator fail-loud behavior, and the shared interest engine); every statute and
+computation rule verified against OFFICIAL sources by a 7-agent pass before implementation; all four
+calculators exercised in a real browser with zero console errors — the federal result cross-matching a
+real district-court table; 28-page site
+build with valid JSON-LD and a spot check; static API conformance to the OpenAPI spec (17 endpoints,
+JSON + CSV + latest.json); MCP smoke test exercising all 6 tools; a secret/placeholder sweep (clean);
+and containment checks (no remote, no leftover processes, nothing outside the project dir).
 
 ## What is intentionally NOT done (and why)
 - **Anything requiring an account, deploy, credential, purchase, or remote** — forbidden by Section 0.
@@ -73,18 +84,18 @@ remote, no leftover processes, nothing outside the project dir).
 - **The bot-hostile state/court sources** (some return 403 to bots) — not scraped, because spoofing a
   browser UA to defeat anti-bot measures is against the data-ethics rules. They're documented as
   formula-derivable expansion in the runbook instead.
-- **Per-EU-country late-payment margins and US state judgment rates** — the next expansion layer
-  (documented in the runbook). The US core plus UK + EU jurisdictions are built and live in the dataset.
+- **Per-EU-country late-payment margins and further US states (TX, FL, WA…)** — the next expansion
+  layer (roadmap in the runbook). US federal + CA/NY/MA/IA + UK + EU are built and in the dataset.
 - **Ad code, pay-per-crawl, per-call billing, licensing** — placeholders/optionality only; activate on
   real demand (see DEPLOYMENT_GUIDE steps 6–8 and RISK_REGISTER).
 
 ## Honest first-90-days plan
-- **Week 1:** push + Pages + custom domain (optional ~$10/yr); confirm `refresh-data` runs; apply to
-  Ezoic/AdSense; submit the MCP server to PulseMCP/mcp.so/Glama/Smithery.
-- **Weeks 2–6:** expand coverage where it widens the keyword surface cheaply — per-EU-country
-  late-payment margins (a small maintained table over the ECB reference) and the top-search US states'
-  judgment rates (many are CMT-derivable). Each new series is a new indexable page. (US + UK + EU are
-  already live.)
+- **Week 1:** push + Pages + **Search Console/Bing sitemap submission** + custom domain (optional
+  ~$10/yr); confirm `refresh-data` runs; apply to Ezoic/AdSense; submit the MCP server to
+  PulseMCP/mcp.so/Glama/Smithery.
+- **Weeks 2–6:** expand coverage where it widens the keyword surface cheaply — more US states (TX, FL,
+  WA) and per-EU-country late-payment margins (27 country pages over the existing ECB series). Each new
+  series is a new indexable page + a new calculator option.
 - **Weeks 6–12:** watch Search Console indexing and sessions against the RISK_REGISTER pivot thresholds.
   Add ad code once a network approves. Do **not** add features to a site with no traffic.
 

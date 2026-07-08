@@ -13,10 +13,13 @@ automated refresh pipeline**.
 
 ## Status
 
-**Niche:** StatuteRates — statutory, judgment & tax interest rates across the **US, UK and EU**.
-**Dataset:** 536 provenance-tracked records · 12 rate series · 4 official sources · 3 jurisdictions.
-Code-complete and QA-green (22 unit tests, MCP smoke, API conformance all pass). **Nothing is deployed
-yet** — deploying is a ~7-minute owner action (push + enable GitHub Pages).
+**Niche:** StatuteRates — statutory, judgment & tax interest rates across the **US (federal + states),
+UK and EU**, plus **statutory-interest calculators** (federal §1961, IRS, state judgment, UK/EU late
+payment) and a free JSON/CSV API + MCP server for AI agents.
+**Dataset:** ~650 provenance-tracked records · 17 rate series · 8 official sources · 28 pages.
+Code-complete and QA-green (31 unit tests, browser-verified calculators, MCP smoke incl.
+`calculate_interest`, API conformance). **Nothing is deployed yet** — going live is a ~15-minute owner
+action (push + Pages + Search Console).
 
 See [`STATE.md`](STATE.md) for live build state, [`EXECUTION_REPORT.md`](EXECUTION_REPORT.md) for the
 full report, [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) to go live, and

@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import InterestCalculator from '../../components/InterestCalculator.astro';
+import { getMeta, historyFor, getEntity, latestOf, prettyDate } from '../../lib/data.mjs';
+
+const meta = getMeta();
+// Calculation histories. For CA/NY/MA the statutory rates have been stable for decades (verified
+// against the official texts), so the CALCULATOR extends them back to 1990 to accept older judgment
+// dates — the dataset itself keeps the strictly-documented effective dates. The NY consumer series
+// models the statutory 9% -> 2% transition of Apr 30, 2022 (the 2% applies prospectively from that
+// date to the unpaid portion), so it accrues segment-by-segment (floating), per the session law.
+const histories = {
+  california: [{ effective_date: '1990-01-01', value: 10 }],
+  'new-york': [{ effective_date: '1990-01-01', value: 9 }],
+  'new-york-consumer': [
+    { effective_date: '1990-01-01', value: 9 },
+    { effective_date: '2022-04-30', value: 2 },
+  ],
+  massachusetts: [{ effective_date: '1990-01-01', value: 12 }],
+  iowa: historyFor('iowa-judgment-rate'),
+};
+const kinds = { 'new-york-consumer': 'floating-simple' };
+const seriesOptions = [
+  { key: 'california', label: 'California — 10% (CCP §685.010)' },
+  { key: 'new-york', label: 'New York — 9% general (CPLR 5004)' },
+  { key: 'new-york-consumer', label: 'New York — 2% consumer debt (CPLR 5004)' },
+  { key: 'massachusetts', label: 'Massachusetts — 12% (c.231 §§6B–6C)' },
+  { key: 'iowa', label: 'Iowa — 1-yr Treasury + 2% (§668.13, weekly)' },
+];
+const caLatest = latestOf(getEntity('california-judgment-rate'));
+const iaLatest = latestOf(getEntity('iowa-judgment-rate'));
+
+const title = `State Judgment Interest Calculator — CA, NY, MA, IA | ${meta.title}`;
+const description = `Free state judgment interest calculator with verified statutory rates: California 10%, New York 9% (2% consumer debt), Massachusetts 12%, Iowa ${iaLatest?.value_text} (Treasury-linked, changes weekly). Simple daily interest per each statute. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'State Judgment Interest Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: canonical,
+    description: 'Computes post-judgment interest for California, New York, Massachusetts and Iowa at each state’s statutory rate.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What interest rate applies to a court judgment in my state?',
+        acceptedAnswer: { '@type': 'Answer', text: 'It varies by state statute: California 10% (5% for certain medical/personal debt against individuals), New York 9% (2% for consumer debt), Massachusetts 12%, and Iowa uses the 1-year Treasury yield + 2%, which changes weekly. Each state page on this site cites the statute.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is judgment interest simple or compound?',
+        acceptedAnswer: { '@type': 'Answer', text: 'In these states it is applied as simple interest on the unpaid judgment (accruing daily, annual rate ÷ 365). Federal judgments differ: 28 U.S.C. §1961 compounds annually — use the federal calculator for those.' },
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'State judgment interest', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>State judgment interest</span>
+  </nav>
+  <h1>State judgment interest calculator</h1>
+  <p class="lead">Simple daily interest on a money judgment at your state's statutory rate — each rate
+    verified against the official statute text and cited on its own page.</p>
+
+  <InterestCalculator
+    kind="fixed-simple"
+    kinds={kinds}
+    histories={histories}
+    defaultSeries="california"
+    seriesOptions={seriesOptions}
+    principalLabel="Judgment amount"
+    startLabel="Date interest begins (e.g. entry of judgment)"
+    endLabel="Calculated through (e.g. payment date)"
+  />
+  <p class="source-note">Assumptions: CA/NY/MA statutory rates have been stable for decades, so this
+    calculator accepts start dates back to 1990 at the current rate. The NY consumer series applies 9%
+    before April 30, 2022 and 2% from that date (the statutory transition). Iowa requires a judgment
+    date within our weekly data (mid-2024 onward).</p>
+
+  <AdSlot id="calc-top" />
+
+  <h2>Know the carve-outs</h2>
+  <ul class="clean">
+    <li><strong><a href="/rates/california-judgment-rate/">California</a>:</strong> 10% default — but 5%
+      for judgments entered/renewed since 2023 against individuals on medical debt (&lt;$200k) or
+      personal debt (&lt;$50k), and 7% against government entities. Rate applies to unpaid principal
+      from {caLatest ? 'entry of judgment' : 'entry of judgment'}.</li>
+    <li><strong><a href="/rates/new-york-judgment-rate/">New York</a>:</strong> 9% general; select the
+      2% series for consumer-debt judgments against individuals (since Apr 30, 2022).</li>
+    <li><strong><a href="/rates/massachusetts-judgment-rate/">Massachusetts</a>:</strong> 12% for tort
+      and contract — an agreed contract rate displaces the contract default; the commonwealth pays a
+      Treasury-linked rate capped at 10%.</li>
+    <li><strong><a href="/rates/iowa-judgment-rate/">Iowa</a>:</strong> market-linked (1-yr Treasury + 2%),
+      fixed per judgment from the H.15 value published just before it — pick the judgment date and this
+      calculator applies that week's rate.</li>
+  </ul>
+  <p class="source-note">Federal-court judgments use a different statute and compounding —
+    use the <a href="/calculators/post-judgment-interest/">federal post-judgment calculator</a>.</p>
+
+  <AdSlot id="calc-bottom" />
+</BaseLayout>

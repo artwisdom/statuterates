@@ -45,3 +45,26 @@ One line per judgment call made during the autonomous build, with rationale. New
   for an "old" latest value (a held rate is not stale data).
 - **Site polish:** featured current-rates strip, jurisdiction grouping + chips, SVG favicon, web
   manifest. Rationale: premium-aesthetic directive; all self-contained (no external requests).
+
+### Final "grand-scale" pass (owner-requested: discoverability + monetization)
+- **Built CALCULATORS as the flagship utility layer** (federal post-judgment, IRS, state judgment,
+  UK/EU late-payment). Rationale: the paid incumbents are calculator-first — the calculator IS what
+  people search for and pay for; ours implement each statute's ACTUAL method (verified: §1961 daily/
+  annual-compound, §6622 daily compounding, UK fixed-at-overdue-date) via one shared, unit-tested
+  engine used by both the site and the MCP server. Browser-verified end-to-end; the §1961 result
+  cross-matches a real district-court table (3.84% for week of 2026-06-08).
+- **Added US state judgment rates (CA, NY, NY-consumer, MA, IA)** after a 7-agent verification pass
+  against OFFICIAL statute texts (leginfo, nysenate.gov, malegislature.gov, legis.iowa.gov).
+  Statute-fixed values carry citations + carve-outs (CA 5% medical/personal-debt; NY 2% consumer;
+  MA contract-rate displacement) and are exempt from date-staleness (quarterly re-verification
+  playbook added instead). Iowa derives weekly from H.15 (+2pp) per §668.13(3).
+- **State calculator embeds documented backfilled histories (1990+) for CA/NY/MA** since the rates
+  are decades-stable, and models NY-consumer's 2022 transition as segment accrual. Rationale: reject
+  older judgment dates and you lose the user; the assumption is disclosed on-page. Dataset keeps
+  strictly-documented effective dates.
+- **Machine skin upgrades:** `calculate_interest` MCP tool (agents get the accrued AMOUNT, not just
+  the rate — no incumbent does this), flat `latest.json`, per-series CSV downloads, `/api/` human
+  docs page with a licensing flag ("bulk/commercial licensing — contact"), `llms-full.txt` (full
+  current values in one fetch), RSS changes feed + `/changes/` page.
+- **MA effective_date = verification date** (official pages show no amendment history); the site
+  labels statute-fixed values "official text verified {date}" instead of pretending an effective date.

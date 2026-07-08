@@ -26,6 +26,8 @@ License: ${meta.license}
 ${meta.disclaimer ? `Note: ${meta.disclaimer}` : ''}
 
 ## Machine access (free, no key, static JSON on a CDN)
+- FULL current values inline (one fetch answers current-rate questions): ${base}/llms-full.txt
+- Every current value, one call: ${base}/api/v1/latest.json
 - Service index: ${base}/api/v1/index.json
 - Dataset metadata + sources: ${base}/api/v1/meta.json
 - All entities + latest values: ${base}/api/v1/entities.json

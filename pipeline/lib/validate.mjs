@@ -118,9 +118,12 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     //  - pure POLICY change-point series (BoE/ECB) can legitimately hold the same value for years, so
     //    an "old" latest change is NOT staleness — skip the effective_date age error for them (a broken
     //    fetch throws an HTTP error and fails the run anyway).
-    const WEEKLY = new Set(['treasury-1-year-cmt', 'us-federal-post-judgment']);
+    const WEEKLY = new Set(['treasury-1-year-cmt', 'us-federal-post-judgment', 'iowa-judgment-rate']);
     const POLICY_CHANGEPOINT = new Set(['boe-bank-rate', 'ecb-main-refinancing-rate']);
     if (POLICY_CHANGEPOINT.has(slug)) continue;
+    // Statute-fixed values change only by legislation; an old effective_date is not staleness.
+    // (Freshness for these is the quarterly re-verification in the MAINTENANCE_RUNBOOK.)
+    if (arr.at(-1).method === 'statute-fixed') continue;
     const isWeekly = WEEKLY.has(slug);
     const warnAge = isWeekly ? 30 : 200;
     const errAge = isWeekly ? 120 : 400;

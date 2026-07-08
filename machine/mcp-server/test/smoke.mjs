@@ -26,7 +26,7 @@ async function main() {
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name).sort();
   console.log('tools:', names.join(', '));
-  for (const expected of ['compare_values', 'dataset_info', 'get_entity', 'get_latest_value', 'search_entities']) {
+  for (const expected of ['calculate_interest', 'compare_values', 'dataset_info', 'get_entity', 'get_latest_value', 'search_entities']) {
     assert.ok(names.includes(expected), `tool ${expected} registered`);
   }
 
@@ -73,6 +73,23 @@ async function main() {
     const vals = cmp.comparison.map((r) => r.value ?? -Infinity);
     for (let i = 1; i < vals.length; i++) assert.ok(vals[i - 1] >= vals[i], 'comparison sorted descending');
     console.log(`compare_values OK: ${cmp.comparison.map((r) => `${r.slug}=${r.value}`).join(', ')}`);
+  }
+
+  // 6) calculate_interest applies a statute end-to-end (federal §1961 on a recent judgment)
+  const pjEntity = parse(await client.callTool({ name: 'get_entity', arguments: { slug: 'us-federal-post-judgment' } }));
+  const weeks = pjEntity.history.annual_rate;
+  if (weeks.length >= 10) {
+    const judgment = weeks[4].effective_date; // a judgment date safely inside the data range
+    const through = weeks[0].effective_date;
+    const calc = parse(await client.callTool({
+      name: 'calculate_interest',
+      arguments: { slug: 'us-federal-post-judgment', principal: 100000, start_date: judgment, end_date: through },
+    }));
+    assert.ok(calc.interest > 0, 'calculated interest > 0');
+    assert.ok(calc.rate_percent > 0, 'reports the rate used');
+    assert.ok(calc.total > 100000, 'total exceeds principal');
+    assert.match(calc.statute, /1961/);
+    console.log(`calculate_interest OK: $100k from ${judgment} to ${through} -> $${calc.interest} at ${calc.rate_percent}%`);
   }
 
   await client.close();

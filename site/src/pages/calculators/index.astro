@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getMeta, getEntity, latestOf } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const title = `Statutory Interest Calculators — Judgment, IRS & Late Payment | ${meta.title}`;
+const description = `Free calculators that apply each statute's real method: federal post-judgment interest (§1961), IRS underpayment/refund interest (§6621/§6622 daily compounding), UK & EU late-payment interest, and state judgment interest (CA, NY, MA, IA).`;
+
+const CALCS = [
+  { href: '/calculators/post-judgment-interest/', name: 'Federal post-judgment interest', desc: 'The §1961 method: H.15 weekly rate for the week before judgment, daily accrual, compounded annually.', slug: 'us-federal-post-judgment' },
+  { href: '/calculators/irs-interest/', name: 'IRS interest (underpayment & refund)', desc: 'Quarterly §6621 rates compounded daily per §6622, across every rate change since 2017.', slug: 'irs-underpayment' },
+  { href: '/calculators/state-judgment-interest/', name: 'State judgment interest', desc: 'California, New York (incl. the 2% consumer rate), Massachusetts, and Treasury-linked Iowa.', slug: 'california-judgment-rate' },
+  { href: '/calculators/late-payment-interest/', name: 'Late payment interest (UK & EU)', desc: 'UK Late Payment Act 1998 (base + 8pp, fixed at overdue date) and the EU Directive rate.', slug: 'uk-late-payment-commercial' },
+];
+const withRates = CALCS.map((c) => ({ ...c, latest: latestOf(getEntity(c.slug)) }));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Statutory interest calculators',
+  url: new URL('/calculators/', Astro.site).href,
+  hasPart: CALCS.map((c) => ({ '@type': 'WebApplication', name: c.name, url: new URL(c.href, Astro.site).href, applicationCategory: 'FinanceApplication' })),
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <h1>Statutory interest calculators</h1>
+  <p class="lead">Every calculator applies the governing statute's actual method — the right rate for
+    the right period, the right compounding rule, with the source cited. Powered by the same dataset
+    behind our <a href="/api/">free API</a>.</p>
+
+  <div class="grid">
+    {withRates.map((c) => (
+      <a class="card" href={c.href} style="display:block;color:inherit">
+        <h3>{c.name}</h3>
+        <div class="cval">{c.latest?.value_text}</div>
+        <div class="cmeta">{c.desc}</div>
+      </a>
+    ))}
+  </div>
+
+  <h2>Why these are different</h2>
+  <p>Most online calculators hardcode a rate that quietly goes stale. These pull from a dataset that
+    re-verifies against official sources on a schedule, keep the full effective-date history (so a
+    2024 judgment gets 2024's rate, not today's), and implement the statutory computation — daily
+    compounding for the IRS, annual compounding for federal judgments, fixed-at-overdue-date for UK
+    late payment — rather than a generic percentage formula.</p>
+</BaseLayout>

@@ -7,7 +7,11 @@ export function GET({ site }) {
   const meta = getMeta();
   const lastmod = (meta.generated_at || '').slice(0, 10);
 
-  const staticPaths = ['/', '/about/', '/methodology/'];
+  const staticPaths = [
+    '/', '/about/', '/methodology/', '/api/', '/changes/',
+    '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
+    '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
+  ];
   const entityPaths = getAllEntities().map((e) => `/rates/${e.slug}/`);
   const all = [...staticPaths, ...entityPaths];
 

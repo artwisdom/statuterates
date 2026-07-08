@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import InterestCalculator from '../../components/InterestCalculator.astro';
+import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const under = getEntity('irs-underpayment');
+const latest = latestOf(under);
+
+const histories = {
+  underpayment: historyFor('irs-underpayment'),
+  'overpayment-individual': historyFor('irs-overpayment-noncorporate'),
+  'overpayment-corporate': historyFor('irs-overpayment-corporate'),
+  'large-corporate-underpayment': historyFor('irs-large-corporate-underpayment'),
+};
+const seriesOptions = [
+  { key: 'underpayment', label: 'Underpayment (what the IRS charges you)' },
+  { key: 'overpayment-individual', label: 'Overpayment — individual (what the IRS pays you)' },
+  { key: 'overpayment-corporate', label: 'Overpayment — corporate' },
+  { key: 'large-corporate-underpayment', label: 'Large corporate underpayment (LCU)' },
+];
+
+const title = `IRS Interest Calculator — Underpayment & Refund Interest (§6621) | ${meta.title}`;
+const description = `Free IRS interest calculator using the real method: quarterly §6621 rates (currently ${latest?.value_text} for underpayments) compounded DAILY per §6622, across every rate change since 2017. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'IRS Interest Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: canonical,
+    description: 'Estimates IRS underpayment/overpayment interest with quarterly §6621 rates and §6622 daily compounding.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How does the IRS calculate interest on unpaid taxes?',
+        acceptedAnswer: { '@type': 'Answer', text: 'The IRS applies the §6621 rate for each calendar quarter (federal short-term rate plus 3 points for most taxpayers) and compounds it DAILY under §6622. Because the rate resets quarterly, a balance that spans several quarters accrues at several different rates.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Does the IRS pay interest on refunds?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Yes — overpayments accrue interest at the §6621 overpayment rate (same as the underpayment rate for individuals; one point lower for corporations), also compounded daily.' },
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'IRS interest', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>IRS interest</span>
+  </nav>
+  <h1>IRS interest calculator</h1>
+  <p class="lead">Estimates the interest the IRS charges on late/underpaid tax — or pays on your
+    refund — using the real method: the quarterly §6621 rate in force each day, compounded daily
+    under §6622, across every rate change on record (back to 2017).</p>
+
+  <InterestCalculator
+    kind="irs"
+    histories={histories}
+    defaultSeries="underpayment"
+    seriesOptions={seriesOptions}
+    principalLabel="Tax amount owed (or overpaid)"
+    startLabel="Start date (e.g. return due date)"
+    endLabel="Calculated through (e.g. payment date)"
+  />
+
+  <AdSlot id="calc-top" />
+
+  <h2>How it works</h2>
+  <p>IRS interest rates reset every calendar quarter — the underpayment rate is currently
+    <a href="/rates/irs-underpayment/">{latest?.value_text}</a> — and interest compounds
+    <em>daily</em>: each day's interest is added to the balance before the next day's is computed.
+    This calculator walks day-by-day through your date range, applying the correct quarter's rate
+    (365- or 366-day years handled), which matters whenever a balance spans a rate change.</p>
+  <p class="source-note">Not covered here: penalties (failure-to-file, failure-to-pay — separate from
+    interest), and the estimated-tax additions under §§6654/6655, which use the underpayment rate but as
+    simple interest. The IRS computes official amounts with its Rev. Proc. 95-17 factor tables; small
+    rounding differences are possible.</p>
+
+  <AdSlot id="calc-bottom" />
+</BaseLayout>

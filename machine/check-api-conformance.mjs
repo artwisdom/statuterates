@@ -42,11 +42,24 @@ const entities = readJson('entities.json').data.entities;
 if (!Array.isArray(entities) || entities.length < 1) fail('entities.json: data.entities must be a non-empty array');
 for (const e of entities) has(e, ['slug', 'name', 'entity_type'], `entities.json entity "${e.slug}"`);
 
+// flat latest endpoint
+const latest = readJson('latest.json');
+has(latest, ['api_version', 'generated_at', 'data'], 'latest.json');
+if (!Array.isArray(latest.data.observations) || latest.data.observations.length < 1) fail('latest.json: data.observations must be non-empty');
+for (const o of latest.data.observations) {
+  if (!o.entity || !o.effective_date || !o.source_url) { fail(`latest.json: observation missing entity/effective_date/source_url (${JSON.stringify(o).slice(0, 80)})`); break; }
+}
+
 // per-entity endpoints
 const OBS_KEYS = ['metric', 'value', 'unit', 'effective_date', 'source_url', 'retrieved_at', 'confidence'];
 const entityDir = join(API, 'entity');
 const files = existsSync(entityDir) ? readdirSync(entityDir).filter((f) => f.endsWith('.json')) : [];
 if (files.length !== entities.length) fail(`entity endpoints (${files.length}) != entities.json count (${entities.length})`);
+// every JSON endpoint must have a CSV sibling
+const csvs = existsSync(entityDir) ? new Set(readdirSync(entityDir).filter((f) => f.endsWith('.csv'))) : new Set();
+for (const f of files) {
+  if (!csvs.has(f.replace(/\.json$/, '.csv'))) fail(`entity/${f}: missing CSV sibling`);
+}
 
 let obsChecked = 0;
 for (const f of files) {

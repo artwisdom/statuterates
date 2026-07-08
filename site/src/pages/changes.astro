@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta, prettyDate } from '../lib/data.mjs';
+import { recentChanges } from '../lib/changes.mjs';
+
+const meta = getMeta();
+const changes = recentChanges(30);
+const title = `Recent Rate Changes — ${meta.title}`;
+const description = `The most recent statutory, judgment and tax interest-rate changes across the US, UK and EU, newest first. Subscribe via RSS to get every change. Updated ${prettyDate(meta.generated_at)}.`;
+const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
+---
+
+<BaseLayout title={title} description={description}>
+  <h1>Recent rate changes</h1>
+  <p class="lead">Every new effective value across the dataset, newest first.
+    Subscribe: <a href="/changes.xml">RSS feed</a> — one item per change, as the pipeline publishes it.</p>
+
+  <div class="scroll-x">
+    <table>
+      <caption>Latest {changes.length} effective values across all series.</caption>
+      <thead>
+        <tr><th scope="col">Effective</th><th scope="col">Series</th><th scope="col">Rate</th><th scope="col"></th></tr>
+      </thead>
+      <tbody>
+        {changes.map((c) => (
+          <tr>
+            <td>{prettyDate(c.effective_date)}</td>
+            <td><span class="chip">{JUR[c.jurisdiction] || c.jurisdiction}</span> <a href={`/rates/${c.slug}/`}>{c.name}</a></td>
+            <td class="num">{c.value_text}</td>
+            <td class="source-note">{c.method === 'statute-fixed' ? 'Statute' : c.confidence === 'high' ? 'Published' : 'Derived'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <p class="source-note">Weekly series (federal post-judgment, 1-yr Treasury, Iowa) produce a new value
+    most weeks; the IRS resets quarterly; UK/EU statutory rates semi-annually; policy rates on decision
+    dates. Machine consumers: the same data is in the <a href="/api/">JSON API</a>.</p>
+</BaseLayout>

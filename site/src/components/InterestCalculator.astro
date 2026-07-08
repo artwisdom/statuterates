@@ -1,0 +1,148 @@
+---
+// Reusable statutory-interest calculator. Rate histories are embedded at build time as JSON; the
+// math runs client-side via the shared, unit-tested engine (shared/interest-calc.mjs). No framework,
+// no external requests — just a small bundled module.
+//
+// Props:
+//   kind           'post-judgment' | 'irs' | 'fixed-simple' | 'floating-simple'
+//   histories      { seriesKey: [{effective_date, value}, ...] }
+//   defaultSeries  key into histories
+//   seriesOptions  optional [{key, label}] -> renders a series <select>
+//   marginPercent  for floating-simple (EU margin)
+//   currency       display symbol, default '$'
+//   principalLabel/startLabel/endLabel  input labels
+const {
+  kind,
+  kinds = null, // optional per-series override: { seriesKey: kind }
+  histories,
+  defaultSeries,
+  seriesOptions = null,
+  marginPercent = 0,
+  currency = '$',
+  principalLabel = 'Amount',
+  startLabel = 'Start date',
+  endLabel = 'End date (e.g. payment date)',
+} = Astro.props;
+
+const config = { kind, kinds, histories, defaultSeries, marginPercent, currency };
+const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div class="calc" data-calc id={uid}>
+  <script type="application/json" data-calc-config set:html={JSON.stringify(config)} />
+  <form data-calc-form novalidate>
+    {seriesOptions && (
+      <label class="calc-field">
+        <span>Rate series</span>
+        <select data-calc-series>
+          {seriesOptions.map((o) => (
+            <option value={o.key} selected={o.key === defaultSeries}>{o.label}</option>
+          ))}
+        </select>
+      </label>
+    )}
+    <label class="calc-field">
+      <span>{principalLabel} ({currency})</span>
+      <input type="number" data-calc-principal min="0.01" step="0.01" placeholder="10000" required />
+    </label>
+    <div class="calc-row">
+      <label class="calc-field">
+        <span>{startLabel}</span>
+        <input type="date" data-calc-start required />
+      </label>
+      <label class="calc-field">
+        <span>{endLabel}</span>
+        <input type="date" data-calc-end required />
+      </label>
+    </div>
+    <button type="submit" class="calc-btn">Calculate interest</button>
+  </form>
+  <div class="calc-result" data-calc-result hidden></div>
+  <p class="calc-fineprint">Estimate for reference only — courts, agencies and creditors may apply
+    different rounding or conventions. Not legal, tax, or financial advice.</p>
+</div>
+
+<style>
+  .calc { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 18px 20px; margin: 18px 0; background: linear-gradient(180deg, #fbfcfe, #fff); }
+  .calc-field { display: block; margin: 10px 0; }
+  .calc-field span { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
+  .calc-field input, .calc-field select { width: 100%; box-sizing: border-box; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
+  .calc-field input:focus, .calc-field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .calc-row { grid-template-columns: 1fr; } }
+  .calc-btn { margin-top: 8px; font-size: 1rem; font-weight: 600; color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 11px 20px; cursor: pointer; }
+  .calc-btn:hover { filter: brightness(1.08); }
+  .calc-result { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+  .calc-result .big { font-size: 1.7rem; font-weight: 700; color: var(--navy); }
+  .calc-result .crow { font-size: 0.92rem; color: var(--muted); margin-top: 3px; }
+  .calc-result .err { color: #a3232f; font-weight: 600; }
+  .calc-fineprint { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
+</style>
+
+<script>
+  import {
+    federalPostJudgment,
+    irsInterest,
+    fixedSimpleInterest,
+    floatingSimpleInterest,
+  } from '../../../shared/interest-calc.mjs';
+
+  function fmt(n, cur) {
+    return cur + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function run(cfg, seriesKey, principal, start, end) {
+    const history = cfg.histories[seriesKey];
+    const kind = (cfg.kinds && cfg.kinds[seriesKey]) || cfg.kind;
+    if (kind === 'post-judgment') {
+      return federalPostJudgment({ principal, judgmentDate: start, endDate: end, weeklyHistory: history });
+    }
+    if (kind === 'irs') {
+      return irsInterest({ principal, startDate: start, endDate: end, quarterlyHistory: history });
+    }
+    if (kind === 'floating-simple') {
+      return floatingSimpleInterest({ principal, startDate: start, endDate: end, history, marginPercent: cfg.marginPercent || 0 });
+    }
+    return fixedSimpleInterest({ principal, startDate: start, endDate: end, history });
+  }
+
+  for (const root of document.querySelectorAll('[data-calc]')) {
+    const cfg = JSON.parse(root.querySelector('[data-calc-config]').textContent);
+    const form = root.querySelector('[data-calc-form]');
+    const out = root.querySelector('[data-calc-result]');
+    const endInput = root.querySelector('[data-calc-end]');
+    if (endInput && !endInput.value) endInput.value = new Date().toISOString().slice(0, 10);
+
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      out.hidden = false;
+      const principal = Number(root.querySelector('[data-calc-principal]').value);
+      const start = root.querySelector('[data-calc-start]').value;
+      const end = root.querySelector('[data-calc-end]').value;
+      const seriesSel = root.querySelector('[data-calc-series]');
+      const seriesKey = seriesSel ? seriesSel.value : cfg.defaultSeries;
+      try {
+        const r = run(cfg, seriesKey, principal, start, end);
+        const cur = cfg.currency || '$';
+        const rateLine = r.rate_percent !== undefined
+          ? `Rate applied: ${r.rate_percent}%` +
+            (r.rate_week_monday ? ` (H.15 weekly average for the week beginning ${r.rate_week_monday})` : '') +
+            (r.rate_effective_date ? ` (in force since ${r.rate_effective_date})` : '')
+          : r.rates_used
+            ? `Rates applied: ${r.rates_used.map((x) => `${x.value}% from ${x.effective_date}`).join(' · ')}`
+            : r.segments
+              ? `Segments: ${r.segments.map((s) => `${s.rate_percent}% × ${s.days}d`).join(' · ')}`
+              : '';
+        out.innerHTML =
+          `<div class="big">Interest: ${fmt(r.interest, cur)}</div>` +
+          `<div class="crow"><strong>Total due: ${fmt(r.total, cur)}</strong> over ${r.days} day${r.days === 1 ? '' : 's'}` +
+          (r.daily_amount !== undefined ? ` · accruing ${fmt(r.daily_amount, cur)}/day` : '') +
+          `</div>` +
+          `<div class="crow">${rateLine}</div>` +
+          `<div class="crow">Method: ${r.method}</div>`;
+      } catch (e) {
+        out.innerHTML = `<div class="err">${e.message}</div>`;
+      }
+    });
+  }
+</script>

@@ -65,13 +65,27 @@ entity by its own token), `get_latest_value` (value + `source_url` + `effective_
   build were removed at QA time (going forward, the session scratchpad is the correct location).
 - DB state: 2 sources, 8 entities, 444 observations, 1 successful run in `run_log`.
 
-## Summary (expanded US+UK+EU dataset)
+## Summary (final: US federal + 4 states + UK + EU, with calculators)
 | Check | Result |
 |---|---|
-| Pipeline from empty cache + validation | ✅ 536 records, 12 series, 4 sources, green |
-| Unit tests | ✅ 17/17 (incl. UK/EU semi-annual derivation) |
-| Site build + SEO/JSON-LD/sitemap | ✅ 16 pages, all JSON-LD valid |
-| API conformance | ✅ 12 endpoints, 548 observations |
-| MCP smoke (5 tools) | ✅ passed |
+| Pipeline from empty cache + validation | ✅ 645 records, 17 series, 8 sources, green |
+| Unit tests | ✅ 22 pipeline + 9 shared-engine (31 total) |
+| Site build + SEO/JSON-LD/sitemap | ✅ 28 pages, all JSON-LD valid, sitemap 27 URLs |
+| API conformance | ✅ 17 endpoints (JSON+CSV), 662 observations, latest.json |
+| MCP smoke (6 tools incl. calculate_interest) | ✅ passed |
+| **Browser verification of calculators** | ✅ all 4 pages, zero console errors |
 | Secret/placeholder sweep | ✅ clean |
 | Containment (remote/processes/files) | ✅ clean |
+
+### Calculator verification detail (real browser, Chrome DevTools)
+- **Federal §1961:** $100,000 judgment 2026-06-08 → 2026-07-06 = **$294.58 at 3.84%** — the 3.84%
+  **exactly matches the Southern District of California's published table** for the week of
+  2026-06-08 (independent cross-validation of data + derivation + engine).
+- **IRS §6621/§6622:** correctly spans the Q1→Q2 2026 rate change (7% → 6%) with daily compounding.
+- **State:** CA returns exactly $10,000 on a $100k 1-year judgment (10% simple); NY consumer-debt
+  correctly splits 9%×60d + 2%×60d across the 2022-04-30 statutory transition; Iowa applies 5.87%
+  (that week's CMT 3.87 + 2).
+- **UK/EU:** UK fixed-at-overdue-date (11.75%); EU segments 10.15% → 10.4% across the semester boundary.
+- Legal-rule verification: 7 agents confirmed every statute/computation rule against OFFICIAL sources
+  (leginfo.legislature.ca.gov, nysenate.gov, malegislature.gov, legis.iowa.gov, uscode.house.gov,
+  legislation.gov.uk) before implementation.

@@ -50,6 +50,19 @@ only when a run goes red.
 - Astro error: run `cd site && npm run build` locally to reproduce; fix the reported file.
 - API conformance fail: `node machine/build-api.mjs && node machine/check-api-conformance.mjs` locally.
 
+### E. Quarterly statute re-verification (statute-fixed state rates)
+**Cadence:** once a quarter (~20 min), or immediately if a rate-change bill makes news.
+The CA/NY/MA rates are curated values in `pipeline/fetchers/us-states.mjs`, verified against the
+official statute texts on the date in `VERIFIED_ON`. To re-verify:
+1. Open each `official_url` in the source list (leginfo.legislature.ca.gov CCP §685.010;
+   nysenate.gov CPLR 5004; malegislature.gov c.231 §6B) and confirm the rate text is unchanged.
+2. If unchanged: bump `VERIFIED_ON` in `us-states.mjs`, run `node run.mjs all`, commit.
+3. If changed: update the value + `effective_date` + notes with the new session-law citation, run
+   the pipeline, and consider a `/changes/` announcement — a statutory rate change is exactly the
+   news moment this site exists for.
+Watch items known today: Massachusetts has seen bills to peg its 12% to market rates (none enacted);
+California's SB 1200 thresholds ($200k/$50k) could be amended.
+
 ## How to add a new source / rate series
 1. Create `pipeline/fetchers/<name>.mjs` exporting an async function that returns
    `{ source, entities, observations }` (copy `irs.mjs` as a template). Use `politeGet` from
@@ -60,13 +73,18 @@ only when a run goes red.
 5. `node run.mjs all` → green; the site/API/MCP pick up the new series automatically (they read exports).
 
 ## How to expand coverage (roadmap, in priority order)
-1. **UK statutory late-payment** — Bank of England Bank Rate (official database/CSV) + 8pp. Add
-   `fetchers/boe.mjs` and a `uk-late-payment-commercial` derived series (medium confidence, formula note).
-2. **EU Late Payment Directive** — ECB main refinancing rate via the ECB Data Portal REST API
-   (`data-api.ecb.europa.eu`) + per-country statutory margins (a small static table with citations).
-3. **US state judgment/legal rates** — start with the highest-search states (CA, NY, FL, TX). Many are
-   `1-yr CMT + X%` (derivable from H.15) or fixed by statute (a small maintained table). Avoid the
-   bot-hostile court hosts (see DECISIONS.md); prefer the clean CMT-derived formula where the statute allows.
+UK, EU, and the first four US states (CA, NY, MA, IA) are BUILT. Next, in order of search value:
+1. **Texas** post-judgment — floating: the consumer-credit commissioner publishes it monthly off the
+   prime rate (floor 5%, cap 15%); prime is also in Fed H.15 (a different series id than our current
+   CSV bundle — build a second H.15 download URL from federalreserve.gov/datadownload).
+2. **Florida** — quarterly rate set by the CFO (§55.03); needs a myfloridacfo.com fetcher (check its
+   bot-friendliness first; if hostile, the statutory formula is prime + 400bp set quarterly — derive
+   and cite, per the same pattern as Iowa).
+3. **Washington, New Jersey, Illinois** — mix of T-bill-linked formulas and fixed rates; same
+   verify-then-curate pattern as CA/NY/MA (use a multi-agent official-source verification pass).
+4. **Per-EU-country late-payment margins** — a small curated table (margin + national implementing
+   law citation per member state) over the existing ECB reference series; unlocks 27 country pages.
+5. **Prejudgment vs post-judgment split per state** — a second metric on existing entities.
 
 ## Do-not-touch rules (carried from the build)
 - Honest User-Agent + robots.txt compliance are enforced in `lib/http.mjs`. Do not disable them.

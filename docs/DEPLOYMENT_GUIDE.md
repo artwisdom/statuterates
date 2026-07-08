@@ -30,7 +30,7 @@ Repo → **Actions → deploy-site → Run workflow**. Your site goes live at
 
 ## 3. Set your site URL (2 min) — correct canonical/sitemap/API links
 Repo → **Settings → Secrets and variables → Actions → Variables → New variable**:
-`SITE_URL = https://<your-username>.github.io/statuterates` (or your custom domain from step 5).
+`SITE_URL = https://<your-username>.github.io/statuterates` (or your custom domain from step 6).
 Re-run `deploy-site`. Verify: visit `/`, `/rates/us-federal-post-judgment/`, `/robots.txt`,
 `/sitemap.xml`, `/llms.txt`, `/api/v1/index.json`.
 
@@ -40,7 +40,18 @@ only if green — commits any changed values, which triggers `deploy-site`. From
 with no input from you. If it ever goes red, the run summary tells you exactly which source broke; see
 `docs/MAINTENANCE_RUNBOOK.md`.
 
-## 5. OPTIONAL — custom domain (~$10–12/yr) — recommended for SEO
+## 5. Google Search Console + Bing Webmaster Tools (10 min) — how people FIND this
+Nothing ranks until it's indexed; don't skip this.
+1. Go to search.google.com/search-console → Add property → URL prefix → your site URL → verify via
+   the HTML-tag method (paste the meta tag into `site/src/layouts/BaseLayout.astro` head, redeploy)
+   or DNS if you did step 6.
+2. Submit the sitemap: `https://<your-site>/sitemap.xml`.
+3. Repeat at bing.com/webmasters (it can import from Search Console in two clicks). Bing also feeds
+   DuckDuckGo and ChatGPT browsing.
+4. Over the first weeks, watch Coverage → indexed pages; use "Request indexing" on the homepage,
+   `/calculators/post-judgment-interest/`, and the state pages to prime the pump.
+
+## 6. OPTIONAL — custom domain (~$10–12/yr) — recommended for SEO
 A short root domain (e.g. `statuterates.com`) beats a `github.io` subpath for ranking, trust, and
 future Cloudflare pay-per-crawl. **This is the only recommended spend and it is optional.**
 1. Buy the domain (Cloudflare Registrar / Namecheap / Porkbun — at-cost, ~$10/yr).
@@ -48,7 +59,7 @@ future Cloudflare pay-per-crawl. **This is the only recommended spend and it is 
 3. Update `SITE_URL` (step 3) to the new domain and re-run `deploy-site`.
 *(The build was forbidden from purchasing or registering anything — hence manual.)*
 
-## 6. Ad monetization — apply on the right timeline (5 min to apply)
+## 7. Ad monetization — apply on the right timeline (5 min to apply)
 Reserved, empty ad slots already exist on every page (`site/src/components/AdSlot.astro`). No ad code
 ships until you activate it.
 - **Now / early (any traffic):** apply to **Google AdSense** and/or **Ezoic** (Ezoic has no traffic
@@ -59,7 +70,7 @@ ships until you activate it.
   higher RPMs; switch the slot code then.
 Keep it to **two slots per page** (already scaffolded) to protect page speed and Core Web Vitals.
 
-## 7. Machine-distribution — submit the MCP server + API (10 min total)
+## 8. Machine-distribution — submit the MCP server + API (10 min total)
 Get the dataset in front of AI agents:
 - **MCP directories** — submit `machine/mcp-server` (README has the registration snippets) to:
   PulseMCP (pulsemcp.com), mcp.so, Glama (glama.ai/mcp), and Smithery (smithery.ai). Each is a short
@@ -68,26 +79,28 @@ Get the dataset in front of AI agents:
 - **API discoverability** — add the site to any "free API" lists you like; the OpenAPI spec is
   `machine/openapi.yaml`.
 
-## 8. OPTIONAL — Cloudflare pay-per-crawl (later, demand-triggered)
-Requires the site to be behind a Cloudflare-proxied domain (do step 5 via Cloudflare first). Then in
+## 9. OPTIONAL — Cloudflare pay-per-crawl (later, demand-triggered)
+Requires the site to be behind a Cloudflare-proxied domain (do step 6 via Cloudflare first). Then in
 the Cloudflare dashboard enable **AI Audit → pay-per-crawl** and set a price. This is **free optionality**
 — machine-side revenue is unproven for solo sites, so treat it as a lottery ticket, not the plan. Do not
 build per-call billing (Stripe usage-based / x402) until you see real agent demand in your logs.
 
-## 9. Blocked-by-rules summary (what you must do because the build could not)
+## 10. Blocked-by-rules summary (what you must do because the build could not)
 | Blocked step | Why (hard rule) | Your action |
 |---|---|---|
 | Add git remote / push | 0.1 no remote | Step 1 |
 | Deploy the site | 0.2 no deploys | Steps 2–4 |
-| Buy a domain | 0.2 no purchases | Step 5 (optional) |
-| Create ad-network accounts | 0.2 no accounts | Step 6 |
-| Submit to MCP directories | 0.2 no account/forms | Step 7 |
-| Enable pay-per-crawl | 0.2 no accounts | Step 8 (optional) |
+| Search-engine indexing | 0.2 no accounts | Step 5 |
+| Buy a domain | 0.2 no purchases | Step 6 (optional) |
+| Create ad-network accounts | 0.2 no accounts | Step 7 |
+| Submit to MCP directories | 0.2 no account/forms | Step 8 |
+| Enable pay-per-crawl | 0.2 no accounts | Step 9 (optional) |
 | Set contact in crawler UA | 0.4 no owner data | `STATUTERATES_CONTACT` env (optional, polite) |
 
 ## Local dev quickstart (for your own edits)
+One command: `./setup.sh` (installs, runs the pipeline, builds API + site, verifies MCP). Or stepwise:
 ```bash
-cd pipeline && npm install && node run.mjs all      # fetch + validate + export (444 records)
+cd pipeline && npm install && node run.mjs all      # fetch + validate + export (~650 records)
 cd ../machine && node build-api.mjs                 # generate the static API from exports
 cd ../site && npm install && npm run build          # build the site (reads exports + api)
 cd ../machine/mcp-server && npm install && npm run smoke   # verify the MCP server

@@ -44,6 +44,12 @@ export const GROUPS = [
     match: (e) => e.slug === 'us-federal-post-judgment' || e.slug === 'treasury-1-year-cmt',
   },
   {
+    id: 'states',
+    title: 'US state judgment rates',
+    blurb: 'Statutory interest on money judgments, state by state — fixed by statute or market-linked.',
+    match: (e) => e.region === 'US States',
+  },
+  {
     id: 'uk',
     title: 'United Kingdom',
     blurb: 'The Bank of England base rate and the statutory interest on late commercial payments.',
@@ -68,6 +74,14 @@ export function groupedEntities() {
 
 export function latestOf(entity) {
   return entity.latest?.annual_rate || null;
+}
+
+// Compact {effective_date, value} history for embedding into calculator pages.
+export function historyFor(slug) {
+  const e = getEntity(slug);
+  return (e.history?.annual_rate || [])
+    .map((o) => ({ effective_date: o.effective_date, value: o.value }))
+    .filter((o) => Number.isFinite(o.value));
 }
 
 // Human-friendly date, e.g. "July 1, 2026". Deterministic (UTC), no locale surprises at build time.

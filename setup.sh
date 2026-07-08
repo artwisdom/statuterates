@@ -22,7 +22,8 @@ node machine/check-api-conformance.mjs
 echo "==> 4/5  Building the site"
 ( cd site && npm run build )
 
-echo "==> 5/5  Verifying the MCP server"
+echo "==> 5/5  Verifying the MCP server + shared interest engine"
+( cd shared && node --test . )
 ( cd machine/mcp-server && node test/smoke.mjs )
 
 echo ""

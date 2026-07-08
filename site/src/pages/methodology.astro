@@ -67,11 +67,19 @@ const description = `The formulas and official sources behind each rate series i
     ))}
   </ul>
 
+  <h2>US state judgment rates</h2>
+  <p>State rates come in two kinds, and we treat them differently. <strong>Statute-fixed</strong> rates
+    (California 10%, New York 9%/2%, Massachusetts 12%) are written into the law; we verify them against
+    the official statute text (the legislature's own site), cite the section, record the carve-outs, and
+    re-verify on a schedule — the page shows the verification date. <strong>Market-linked</strong> rates
+    (Iowa: 1-yr Treasury + 2%) are computed weekly from the same official H.15 series as the federal
+    rate, with the statutory formula cited.</p>
+
   <h2>Coverage &amp; roadmap</h2>
-  <p>The dataset covers U.S. federal statutory, judgment, and tax interest rates; U.K. statutory
-    late-commercial-payment interest and the Bank of England base rate; and the EU Late Payment Directive
-    reference rate and ECB main refinancing rate. Planned expansion (documented, not yet live): per-EU-country
-    late-payment margins and U.S. state judgment/legal interest rates.</p>
+  <p>The dataset covers U.S. federal statutory, judgment, and tax interest rates; U.S. state judgment
+    rates (CA, NY, MA, IA to start); U.K. statutory late-commercial-payment interest and the Bank of
+    England base rate; and the EU Late Payment Directive reference rate and ECB main refinancing rate.
+    Planned expansion: more U.S. states (TX, FL, WA next), and per-EU-country late-payment margins.</p>
 
   <div class="disclaimer">Reference data, not legal, tax, or financial advice.</div>
 </BaseLayout>

@@ -18,7 +18,28 @@ const history = (entity.history?.annual_rate || []).slice(0, 40); // recent hist
 const totalPoints = (entity.history?.annual_rate || []).length;
 
 const isDerived = latest?.confidence !== 'high';
+const isStatuteFixed = latest?.method === 'statute-fixed';
 const unitLabel = 'per year';
+
+// Which calculator (if any) uses this series — internal linking both helps users and SEO.
+const CALC_FOR = {
+  'irs-underpayment': '/calculators/irs-interest/',
+  'irs-overpayment-noncorporate': '/calculators/irs-interest/',
+  'irs-overpayment-corporate': '/calculators/irs-interest/',
+  'irs-large-corporate-underpayment': '/calculators/irs-interest/',
+  'us-federal-post-judgment': '/calculators/post-judgment-interest/',
+  'treasury-1-year-cmt': '/calculators/post-judgment-interest/',
+  'uk-late-payment-commercial': '/calculators/late-payment-interest/',
+  'boe-bank-rate': '/calculators/late-payment-interest/',
+  'eu-late-payment-reference': '/calculators/late-payment-interest/',
+  'ecb-main-refinancing-rate': '/calculators/late-payment-interest/',
+  'california-judgment-rate': '/calculators/state-judgment-interest/',
+  'new-york-judgment-rate': '/calculators/state-judgment-interest/',
+  'new-york-consumer-debt-judgment-rate': '/calculators/state-judgment-interest/',
+  'massachusetts-judgment-rate': '/calculators/state-judgment-interest/',
+  'iowa-judgment-rate': '/calculators/state-judgment-interest/',
+};
+const calcHref = CALC_FOR[slug] || null;
 const title = `${entity.name} — Current & Historical | ${meta.title}`;
 const description = `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history, updated ${prettyDate(meta.generated_at)}.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -81,19 +102,25 @@ const jsonLd = [
   <div class="rate-hero">
     <span class="value">{latest?.value_text}</span>
     <span class="asof">
-      {unitLabel}, effective {prettyDate(latest?.effective_date)}
+      {isStatuteFixed
+        ? <>per year — current statutory rate (official text verified {prettyDate(latest?.retrieved_at)})</>
+        : <>{unitLabel}, effective {prettyDate(latest?.effective_date)}</>}
       <br />
       <span class={`badge ${latest?.confidence === 'high' ? 'high' : 'medium'}`}>
-        {latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
+        {isStatuteFixed ? 'Set by statute' : latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
       </span>
     </span>
   </div>
 
   <p>{copy.body}</p>
 
-  {isDerived && (
+  {calcHref && (
+    <p><a href={calcHref}><strong>→ Calculate interest at this rate</strong></a></p>
+  )}
+
+  {(isDerived || isStatuteFixed) && (
     <div class="disclaimer">
-      <strong>How this value is derived.</strong> {latest?.notes}
+      <strong>{isStatuteFixed ? 'Statutory basis & carve-outs.' : 'How this value is derived.'}</strong> {latest?.notes}
     </div>
   )}
 
@@ -107,14 +134,14 @@ const jsonLd = [
         Full history in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.
       </caption>
       <thead>
-        <tr><th>Effective date</th><th>Rate</th><th>Basis</th></tr>
+        <tr><th scope="col">Effective date</th><th scope="col">Rate</th><th scope="col">Basis</th></tr>
       </thead>
       <tbody>
         {history.map((o) => (
           <tr>
             <td>{prettyDate(o.effective_date)}</td>
             <td class="num">{o.value_text}</td>
-            <td class="source-note">{o.confidence === 'high' ? 'Published' : 'Derived'}</td>
+            <td class="source-note">{o.method === 'statute-fixed' ? 'Statute' : o.confidence === 'high' ? 'Published' : 'Derived'}</td>
           </tr>
         ))}
       </tbody>

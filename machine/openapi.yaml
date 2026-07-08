@@ -65,6 +65,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Envelope"
+  /api/v1/latest.json:
+    get:
+      operationId: getLatest
+      summary: Flat list of every entity's current value — the one-call integration
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope"
   /api/v1/entity/{slug}.json:
     get:
       operationId: getEntity
@@ -84,6 +95,23 @@ paths:
                 $ref: "#/components/schemas/Envelope"
         "404":
           description: No such entity (the file does not exist on the CDN)
+  /api/v1/entity/{slug}.csv:
+    get:
+      operationId: getEntityCsv
+      summary: One entity's full history as CSV (spreadsheet-ready, provenance columns included)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            text/csv:
+              schema: { type: string }
+        "404":
+          description: No such entity
 components:
   schemas:
     Observation:

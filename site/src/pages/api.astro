@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta, getAllEntities, prettyDate } from '../lib/data.mjs';
+
+const meta = getMeta();
+const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
+const title = `Free Statutory Interest Rate API & Data Licensing — ${meta.title}`;
+const description = `Free JSON API for statutory, judgment and tax interest rates (US, UK, EU): ${meta.entity_count} series, ${meta.observation_count} observations, every value with effective date + official source. No key required. MCP server for AI agents. Bulk/commercial licensing available.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: `${meta.title} — statutory interest rates dataset & API`,
+  description: meta.description,
+  url: canonical,
+  isAccessibleForFree: true,
+  creator: { '@type': 'Organization', name: meta.title },
+  dateModified: meta.generated_at,
+  distribution: [
+    { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: new URL('/api/v1/entities.json', Astro.site).href },
+    { '@type': 'DataDownload', encodingFormat: 'text/csv', contentUrl: new URL('/api/v1/entity/us-federal-post-judgment.csv', Astro.site).href },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <h1>The statutory interest rate API</h1>
+  <p class="lead">Everything on this site is available as data — free, no key, no rate cards to scrape.
+    Static JSON on a CDN, so it's fast everywhere and never goes down with a backend.</p>
+
+  <h2>Endpoints</h2>
+  <div class="scroll-x">
+    <table>
+      <thead><tr><th scope="col">Endpoint</th><th scope="col">Returns</th></tr></thead>
+      <tbody>
+        <tr><td><a href="/api/v1/index.json"><code>/api/v1/index.json</code></a></td><td>Service index — links + counts</td></tr>
+        <tr><td><a href="/api/v1/meta.json"><code>/api/v1/meta.json</code></a></td><td>Dataset metadata, freshness, sources</td></tr>
+        <tr><td><a href="/api/v1/entities.json"><code>/api/v1/entities.json</code></a></td><td>All series with latest values</td></tr>
+        <tr><td><a href="/api/v1/latest.json"><code>/api/v1/latest.json</code></a></td><td>Flat list of every current value (one call)</td></tr>
+        <tr><td><code>/api/v1/entity/&#123;slug&#125;.json</code></td><td>One series — latest + full history + provenance</td></tr>
+        <tr><td><code>/api/v1/entity/&#123;slug&#125;.csv</code></td><td>Same history as CSV (spreadsheet-ready)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="source-note">Every observation carries <code>value</code>, <code>unit</code>,
+    <code>effective_date</code>, <code>source_url</code>, <code>retrieved_at</code>,
+    <code>confidence</code> (high = published by the source; medium = derived, with the formula in
+    <code>notes</code>). OpenAPI 3.1 spec ships in the repository (<code>machine/openapi.yaml</code>).</p>
+
+  <h2>For AI agents (MCP)</h2>
+  <p>An MCP server exposes the same dataset with tools for search, lookup, comparison, and
+    statutory-interest <em>computation</em> (<code>calculate_interest</code>) — so an agent can answer
+    "how much interest has accrued on this judgment" with a citable, current figure instead of a stale
+    guess. See the repository's <code>machine/mcp-server/README.md</code> for one-line registration in
+    Claude Desktop / Claude Code, and <a href="/llms.txt">/llms.txt</a> for a machine-readable summary.</p>
+
+  <h2>Fair use &amp; licensing</h2>
+  <ul class="clean">
+    <li><strong>Free</strong> for apps, research, and internal tools — attribution appreciated
+      (link to the series page you used).</li>
+    <li>The underlying values are U.S./UK/EU government works; this compiled, normalized,
+      effective-dated dataset is maintained by {meta.title}.</li>
+    <li><strong>Bulk exports, redistribution, SLAs, or commercial licensing</strong> (including AI
+      training use): contact the maintainer — see the <a href="/about/">About page</a>.</li>
+  </ul>
+
+  <h2>Series directory</h2>
+  <ul class="clean">
+    {entities.map((e) => (
+      <li>
+        <a href={`/rates/${e.slug}/`}>{e.name}</a> —
+        <a href={`/api/v1/entity/${e.slug}.json`}>JSON</a> ·
+        <a href={`/api/v1/entity/${e.slug}.csv`}>CSV</a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="source-note">Dataset last compiled {prettyDate(meta.generated_at)}. {meta.update_cadence}</p>
+</BaseLayout>

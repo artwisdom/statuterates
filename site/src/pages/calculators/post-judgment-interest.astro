@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import InterestCalculator from '../../components/InterestCalculator.astro';
+import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const entity = getEntity('us-federal-post-judgment');
+const latest = latestOf(entity);
+const weekly = historyFor('us-federal-post-judgment');
+
+const title = `Federal Post-Judgment Interest Calculator (28 U.S.C. §1961) | ${meta.title}`;
+const description = `Free federal post-judgment interest calculator. Applies the statutory method exactly: the H.15 weekly-average 1-year Treasury yield for the week preceding your judgment (currently ${latest?.value_text}), computed daily and compounded annually. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Federal Post-Judgment Interest Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: canonical,
+    description: 'Computes interest on U.S. federal court money judgments per 28 U.S.C. §1961.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How is federal post-judgment interest calculated?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Under 28 U.S.C. §1961, the rate is the weekly-average 1-year Treasury constant maturity yield (Fed H.15) for the calendar week preceding the judgment. Interest is computed daily on the judgment amount and compounded annually on each anniversary of the judgment.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'What is the current federal post-judgment interest rate?',
+        acceptedAnswer: { '@type': 'Answer', text: `The most recent weekly value is ${latest?.value_text} (week beginning ${prettyDate(latest?.effective_date)}). The rate applied to a specific judgment is the one for the week preceding that judgment's date.` },
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Federal post-judgment interest', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>Federal post-judgment interest</span>
+  </nav>
+  <h1>Federal post-judgment interest calculator</h1>
+  <p class="lead">Computes interest on a U.S. federal court money judgment exactly as
+    28 U.S.C. §1961 prescribes: the H.15 weekly-average 1-year Treasury yield for the calendar week
+    preceding your judgment date, accrued daily and compounded annually.</p>
+
+  <InterestCalculator
+    kind="post-judgment"
+    histories={{ pj: weekly }}
+    defaultSeries="pj"
+    principalLabel="Judgment amount"
+    startLabel="Date of judgment"
+    endLabel="Calculated through (e.g. payment date)"
+  />
+
+  <AdSlot id="calc-top" />
+
+  <h2>How it works</h2>
+  <p>The statute sets the rate once, at judgment: the weekly-average 1-year Treasury constant maturity
+    yield for the calendar week <em>preceding</em> the judgment date. That single rate then applies for
+    the life of the judgment — computed daily (annual rate ÷ 365) and compounded each year on the
+    judgment anniversary. The current weekly value is
+    <a href={`/rates/us-federal-post-judgment/`}>{latest?.value_text} (week beginning {prettyDate(latest?.effective_date)})</a>;
+    our data reaches back {weekly.length} weeks, so you can compute judgments entered up to about two years ago.</p>
+  <p class="source-note">Exceptions written into §1961: certain Court of Federal Claims judgments
+    (§2516(b)), Judgment Fund payments (31 U.S.C. §1304(b)), and internal-revenue tax cases (§1961(c)).
+    Some districts publish their own tables — confirm against your district court's table before filing.</p>
+
+  <AdSlot id="calc-bottom" />
+</BaseLayout>

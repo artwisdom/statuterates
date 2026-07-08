@@ -12,6 +12,7 @@ import { fetchBoe, BOE_ENTITY } from './fetchers/boe.mjs';
 import { fetchEcb, ECB_ENTITY } from './fetchers/ecb.mjs';
 import { buildWeeklyAverages, buildCmtRecords, buildPostJudgmentRecords } from './lib/normalize.mjs';
 import { buildPublishedSeries, buildUkLatePayment, buildEuReference } from './lib/rates-intl.mjs';
+import { STATE_SOURCES, buildStateFixed, buildIowa } from './fetchers/us-states.mjs';
 import { validate } from './lib/validate.mjs';
 import { exportAll } from './lib/exporter.mjs';
 
@@ -74,6 +75,23 @@ async function runAll() {
     const euRef = buildEuReference(ecb.changePoints, { ...ecbSrc, today });
     const ecbBundle = { source: ecb.source, entities: [ecbPub.entity, euRef.entity], observations: [...ecbPub.observations, ...euRef.observations] };
 
+    // US states: statute-fixed values (CA/NY/MA, verified against official texts) + Iowa derived
+    // weekly from the same H.15 weeks as the federal series (Iowa Code §668.13(3) = CMT + 2pp).
+    // Each state's entities/observations load under ITS OWN source bundle so the source row exists
+    // before any observation references it (FK integrity).
+    const nowIso = new Date().toISOString();
+    const stateFixed = buildStateFixed({ retrieved_at: nowIso });
+    const iowa = buildIowa(weeks, { retrieved_at: nowIso });
+    const entityToSource = new Map(stateFixed.observations.map((o) => [o.entitySlug, o.source_id]));
+    const stateBundles = STATE_SOURCES.map((source) => ({
+      source,
+      entities: stateFixed.entities.filter((e) => entityToSource.get(e.slug) === source.id),
+      observations: stateFixed.observations.filter((o) => o.source_id === source.id),
+    }));
+    const iaBundle = stateBundles.find((b) => b.source.id === 'ia-legis');
+    iaBundle.entities.push(iowa.entity);
+    iaBundle.observations.push(...iowa.observations);
+
     // 3) LOAD into SQLite (source of truth)
     let records = 0;
     const tx = db.transaction(() => {
@@ -81,6 +99,7 @@ async function runAll() {
       records += loadBundleIntoDb(db, h15Bundle);
       records += loadBundleIntoDb(db, boeBundle);
       records += loadBundleIntoDb(db, ecbBundle);
+      for (const b of stateBundles) records += loadBundleIntoDb(db, b);
     });
     tx();
     console.log(`Loaded ${records} observations into SQLite.`);

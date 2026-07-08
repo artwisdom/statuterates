@@ -23,6 +23,12 @@ import {
   defaultMetric,
   entitiesIndex,
 } from './data.mjs';
+import {
+  federalPostJudgment,
+  irsInterest,
+  fixedSimpleInterest,
+  floatingSimpleInterest,
+} from '../../../shared/interest-calc.mjs';
 
 const M = meta();
 const DATASET_TITLE = M.title || 'Data Moat Engine dataset';
@@ -150,6 +156,69 @@ server.registerTool(
     }
     rows.sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity));
     return json({ metric: m, count: rows.length, comparison: rows });
+  }
+);
+
+// Which statutory computation applies to each series (mirrors the site's calculators; the shared
+// engine implements the statutes' actual methods).
+const CALC_RULES = {
+  'us-federal-post-judgment': { kind: 'post-judgment', label: '28 U.S.C. §1961 (daily accrual, compounded annually)' },
+  'irs-underpayment': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
+  'irs-overpayment-noncorporate': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
+  'irs-overpayment-corporate': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
+  'irs-large-corporate-underpayment': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
+  'uk-late-payment-commercial': { kind: 'fixed-simple', label: 'UK Late Payment Act 1998 (simple, fixed at overdue date)' },
+  'eu-late-payment-reference': { kind: 'floating-simple', label: 'EU Directive 2011/7/EU (simple, semester re-fixing; add your member-state margin — 8pp floor applied unless specified)', defaultMargin: 8 },
+  'california-judgment-rate': { kind: 'fixed-simple', label: 'CCP §685.010 (simple, daily /365)' },
+  'new-york-judgment-rate': { kind: 'fixed-simple', label: 'CPLR 5004 (simple)' },
+  'new-york-consumer-debt-judgment-rate': { kind: 'fixed-simple', label: 'CPLR 5004 consumer-debt rate (simple)' },
+  'massachusetts-judgment-rate': { kind: 'fixed-simple', label: 'M.G.L. c.231 §§6B–6C (simple)' },
+  'iowa-judgment-rate': { kind: 'fixed-simple', label: 'Iowa Code §668.13 (rate fixed at judgment, computed daily)' },
+};
+
+server.registerTool(
+  'calculate_interest',
+  {
+    title: 'Calculate statutory interest',
+    description:
+      `Compute accrued statutory interest for a series in the ${DATASET_TITLE}, applying the governing statute's ACTUAL method (daily compounding for IRS, annual compounding for federal judgments, simple interest for UK/state rules) with the correct historical rate for each period. Returns the amount, the rate(s) used, and the method — cite it with the series' source_url. Supported slugs: ${Object.keys(CALC_RULES).join(', ')}.`,
+    inputSchema: {
+      slug: z.enum(Object.keys(CALC_RULES)).describe('Which rate series/statute to apply.'),
+      principal: z.number().positive().describe('The principal amount (judgment, tax, or invoice).'),
+      start_date: z.string().describe('ISO date interest starts (judgment date / due date / overdue date).'),
+      end_date: z.string().describe('ISO date to calculate through (e.g. today or payment date).'),
+      margin_percent: z.number().min(0).max(15).optional().describe('EU only: your member state\'s margin over the reference rate (floor 8; e.g. France 10, Germany 9).'),
+    },
+  },
+  async ({ slug, principal, start_date, end_date, margin_percent }) => {
+    const rule = CALC_RULES[slug];
+    const rec = getEntity(slug);
+    if (!rec) return notFound(`No entity "${slug}".`);
+    const history = (rec.history?.annual_rate || []).map((o) => ({ effective_date: o.effective_date, value: o.value }));
+    try {
+      let result;
+      if (rule.kind === 'post-judgment') {
+        result = federalPostJudgment({ principal, judgmentDate: start_date, endDate: end_date, weeklyHistory: history });
+      } else if (rule.kind === 'irs') {
+        result = irsInterest({ principal, startDate: start_date, endDate: end_date, quarterlyHistory: history });
+      } else if (rule.kind === 'floating-simple') {
+        result = floatingSimpleInterest({ principal, startDate: start_date, endDate: end_date, history, marginPercent: margin_percent ?? rule.defaultMargin ?? 0 });
+      } else {
+        result = fixedSimpleInterest({ principal, startDate: start_date, endDate: end_date, history });
+      }
+      return json({
+        series: rec.name,
+        statute: rule.label,
+        principal,
+        start_date,
+        end_date,
+        ...result,
+        source_url: rec.latest?.annual_rate?.source_url || null,
+        disclaimer: 'Estimate for reference; official computations may differ in rounding/conventions. Not legal, tax, or financial advice.',
+      });
+    } catch (e) {
+      return notFound(`Cannot compute: ${e.message}`);
+    }
   }
 );
 

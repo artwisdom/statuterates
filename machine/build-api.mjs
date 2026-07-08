@@ -29,6 +29,24 @@ function write(rel, obj) {
   writeFileSync(p, JSON.stringify(obj, null, 2) + '\n');
 }
 
+function csvEscape(v) {
+  const s = v === null || v === undefined ? '' : String(v);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+// Spreadsheet-ready history for one entity: one row per observation, provenance included.
+function writeCsv(path, rec) {
+  const header = ['series', 'metric', 'effective_date', 'value_percent', 'unit', 'confidence', 'method', 'source_url', 'retrieved_at'];
+  const rows = [header.join(',')];
+  for (const [metric, arr] of Object.entries(rec.history || {})) {
+    for (const o of arr) {
+      rows.push([rec.slug, metric, o.effective_date, o.value, o.unit, o.confidence, o.method, o.source_url, o.retrieved_at].map(csvEscape).join(','));
+    }
+  }
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, rows.join('\n') + '\n');
+}
+
 function main() {
   if (!existsSync(join(EXPORTS, 'meta.json'))) {
     console.error('No exports found. Run the pipeline export step first (npm run export in pipeline/).');
@@ -59,8 +77,10 @@ function main() {
     endpoints: {
       meta: 'api/v1/meta.json',
       entities: 'api/v1/entities.json',
+      latest: 'api/v1/latest.json',
       metrics: 'api/v1/metrics.json',
       entity: 'api/v1/entity/{slug}.json',
+      entity_csv: 'api/v1/entity/{slug}.csv',
     },
     counts: { entities: meta.entity_count, observations: meta.observation_count },
   });
@@ -69,7 +89,11 @@ function main() {
   write('metrics.json', envelope({ metrics: meta.metrics || [] }));
   write('entities.json', envelope({ count: entities.count, entities: entities.entities }));
 
-  // Per-entity endpoints (copied from exports/entity/*.json)
+  // Flat "every current value in one call" endpoint — the cheapest possible agent integration.
+  const latest = readJson(join(EXPORTS, 'latest.json'));
+  write('latest.json', envelope({ count: latest.count, observations: latest.observations }));
+
+  // Per-entity endpoints (copied from exports/entity/*.json) + CSV history downloads.
   const entityDir = join(EXPORTS, 'entity');
   let n = 0;
   if (existsSync(entityDir)) {
@@ -77,11 +101,12 @@ function main() {
       if (!f.endsWith('.json')) continue;
       const rec = readJson(join(entityDir, f));
       write(join('entity', f), envelope(rec));
+      writeCsv(join(API_DIR, 'entity', f.replace(/\.json$/, '.csv')), rec);
       n++;
     }
   }
 
-  console.log(`Static API built: ${n} entity endpoints + index/meta/metrics/entities under ${API_DIR}`);
+  console.log(`Static API built: ${n} entity endpoints (JSON+CSV) + index/meta/metrics/entities/latest under ${API_DIR}`);
   return n;
 }
 
