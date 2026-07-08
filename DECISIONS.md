@@ -23,3 +23,13 @@ One line per judgment call made during the autonomous build, with rationale. New
 - **Do NOT scrape the bot-hostile state/court hosts (403/503).** Rationale: a 403 WAF is not a robots
   disallow, but spoofing a browser UA to defeat anti-bot measures is against the spirit of Section 0.3;
   use only the clean official feeds (IRS, Fed H.15) and document the rest as expansion.
+- **Model entities as "rate series" (one page each), not one page per country.** Rationale: gives
+  focused, indexable SEO pages ("IRS underpayment interest rate — current + history") vs one thin
+  giant US page.
+- **Git-track the JSON exports (`data/exports/`); gitignore the binary `data/db.sqlite`.** Rationale:
+  the DB is a regenerable runtime artifact; the versioned JSON is the diff-friendly snapshot the brief
+  asks for, and what the site/API/CI build from.
+- **Publish the post-judgment series AND the identical CMT series under two entity names.** Rationale:
+  they are distinct legal concepts with distinct search intent; uscourts.gov publishes only the
+  formula, so presenting the computed answer IS the product. Disclosed transparently (medium
+  confidence + formula + caveat) so it is not hidden record-padding.

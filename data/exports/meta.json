@@ -1,0 +1,36 @@
+{
+  "title": "StatuteRates",
+  "description": "The canonical, provenance-tracked database of statutory, judgment and tax interest rates — IRS §6621 quarterly rates, the U.S. federal post-judgment rate (28 U.S.C. §1961), and the 1-year Treasury CMT that drives it — each value stamped with its effective date and official source.",
+  "version": "0.1.0",
+  "update_cadence": "IRS quarterly; Treasury/post-judgment weekly (H.15 is daily).",
+  "attribution": "Source values are U.S. federal government works (public domain). Compiled by StatuteRates.",
+  "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
+  "sample_query": "united",
+  "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
+  "generated_at": "2026-07-08T05:30:32.946Z",
+  "entity_count": 8,
+  "observation_count": 444,
+  "metrics": [
+    "annual_rate"
+  ],
+  "sources": [
+    {
+      "id": "fed-h15",
+      "name": "Federal Reserve H.15 — 1-Year Treasury Constant Maturity",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "home_url": "https://www.federalreserve.gov/releases/h15/",
+      "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
+      "robots_status": "allowed",
+      "retrieved_at": "2026-07-08T05:30:32.934Z"
+    },
+    {
+      "id": "irs-6621",
+      "name": "IRS quarterly interest rates (§6621)",
+      "publisher": "U.S. Internal Revenue Service",
+      "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
+      "license": "U.S. federal government work — not subject to copyright (public domain).",
+      "robots_status": "allowed",
+      "retrieved_at": "2026-07-08T05:30:32.931Z"
+    }
+  ]
+}
