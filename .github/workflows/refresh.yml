@@ -1,0 +1,79 @@
+# ============================================================================================
+# INACTIVE until this repo is pushed to GitHub by the owner. GitHub Actions only runs on GitHub;
+# nothing here executes locally. See docs/DEPLOYMENT_GUIDE.md to activate.
+#
+# Estimated usage: weekly run × ~3 min = ~13 min/month (GitHub free tier is 2,000 min/month).
+# Well under the 300 min/month budget.
+# ============================================================================================
+name: refresh-data
+
+on:
+  schedule:
+    # Weekly, Monday 12:00 UTC. The most volatile series (Treasury/post-judgment) updates weekly;
+    # IRS updates quarterly. Weekly is comfortably inside cadence.
+    - cron: "0 12 * * 1"
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+permissions:
+  contents: write # to commit refreshed data/exports back to the repo
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install pipeline dependencies
+        working-directory: pipeline
+        run: npm ci || npm install
+
+      - name: Run pipeline (fetch → validate → export)
+        id: pipeline
+        working-directory: pipeline
+        # `node run.mjs all` FAILS LOUD: a validation error exits non-zero and does NOT export,
+        # so broken/stale data can never be committed or deployed.
+        run: node run.mjs all
+
+      - name: Commit refreshed data (only if exports changed)
+        if: success()
+        run: |
+          git config user.name "statuterates-bot"
+          git config user.email "bot@users.noreply.github.com"
+          if [ -n "$(git status --porcelain data/exports)" ]; then
+            git add data/exports
+            git commit -m "data: weekly refresh $(date -u +%Y-%m-%d)"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No data changes this run."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ---- Self-healing / diagnostics ----------------------------------------------------------
+      - name: Failure diagnostics
+        if: failure()
+        run: |
+          {
+            echo "## ❌ Data refresh failed"
+            echo ""
+            echo "The pipeline exited non-zero. Most likely a source changed its HTML/CSV layout or is"
+            echo "temporarily blocking requests. NO data was committed or deployed (fail-loud by design)."
+            echo ""
+            echo "**Next steps** (see docs/MAINTENANCE_RUNBOOK.md):"
+            echo "1. Open the 'Run pipeline' step log above and find the failing source id + error."
+            echo "2. If a source layout changed, update its fetcher in \`pipeline/fetchers/\`."
+            echo "3. If a source is temporarily down/rate-limiting, just re-run this workflow."
+            echo "4. Re-run \`node run.mjs all\` locally to confirm green before pushing the fix."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Trigger deploy on data change
+        if: success() && steps.pipeline.outcome == 'success'
+        run: echo "Data pushed; the deploy workflow runs on push to data/exports."

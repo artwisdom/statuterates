@@ -1,0 +1,81 @@
+# ============================================================================================
+# INACTIVE until this repo is pushed to GitHub by the owner AND GitHub Pages is enabled
+# (Settings → Pages → Source: GitHub Actions). See docs/DEPLOYMENT_GUIDE.md.
+#
+# Estimated usage: runs on data/site changes (≈ weekly) × ~2 min = ~9 min/month. Free tier: 2,000.
+# ============================================================================================
+name: deploy-site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/exports/**"
+      - "site/**"
+      - "machine/build-api.mjs"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: deploy-site
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install site dependencies
+        working-directory: site
+        run: npm ci || npm install
+
+      - name: Build the static JSON API from the committed exports
+        # Regenerate site/public/api/ (git-ignored) from data/exports before building the site.
+        run: node machine/build-api.mjs
+
+      - name: Build the site
+        working-directory: site
+        env:
+          # The owner sets their real domain here (repository variable). Falls back to the Pages URL.
+          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
+        run: npm run build
+
+      - name: Verify API conformance (fail the deploy if the API drifted)
+        run: node machine/check-api-conformance.mjs
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+# --------------------------------------------------------------------------------------------
+# ALTERNATIVE: Cloudflare Pages (better for pay-per-crawl + edge performance). To use instead of
+# GitHub Pages, disable the `deploy` job above and use Cloudflare's Git integration, or:
+#
+#   - name: Publish to Cloudflare Pages
+#     uses: cloudflare/pages-action@v1
+#     with:
+#       apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}   # owner adds this secret
+#       accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }} # owner adds this secret
+#       projectName: statuterates
+#       directory: site/dist
+# --------------------------------------------------------------------------------------------
