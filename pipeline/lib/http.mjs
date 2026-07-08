@@ -18,8 +18,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const CACHE_DIR = join(__dirname, '..', '..', 'data', 'cache');
 
 // --- Politeness constants (Section 0.3) --------------------------------------
-export const USER_AGENT =
-  'DataMoatEngineBot/0.1 (+https://example.org/about; contact: <<OWNER_PROVIDES>>)';
+// The crawler advertises an honest UA with a contact. The owner SHOULD set STATUTERATES_CONTACT
+// (email or URL) so the sites we fetch can reach them; a neutral default keeps any placeholder token
+// out of functional code (see .env.example / DEPLOYMENT_GUIDE.md).
+const CONTACT = process.env.STATUTERATES_CONTACT || 'https://github.com/statuterates';
+export const USER_AGENT = `DataMoatEngineBot/0.1 (+https://example.org/about; contact: ${CONTACT})`;
 const MIN_HOST_INTERVAL_MS = 3000; // >= 3s between requests to the same host
 const MAX_FETCHES_PER_SOURCE = 150; // hard ceiling per source per run
 const REQUEST_TIMEOUT_MS = 30000;
