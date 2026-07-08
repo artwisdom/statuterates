@@ -1,0 +1,94 @@
+# DEPLOYMENT_GUIDE.md
+
+Everything the autonomous build could **not** do (Section 0 hard rules: no accounts, no deploys, no
+spend, no credentials) is a numbered manual step below. Each is ≤ 5 minutes. Steps 1–4 get you live
+for free; 5+ are growth/monetization, do them in order over the following weeks.
+
+> Placeholders written into the repo for you to fill: `STATUTERATES_CONTACT` (env), `SITE_URL` (env or
+> repo variable), and `<<OWNER_DOMAIN>>` in `machine/openapi.yaml`. There are **no API keys or secrets**
+> anywhere — nothing to rotate.
+
+## Prerequisite (2 min) — pick a name/brand
+The working brand is **StatuteRates**. If you want a different name, do a find-and-replace of
+`StatuteRates` in `pipeline/run.mjs` (the `DATASET_META` block) and re-run `cd pipeline && node run.mjs
+export`; everything else reads from there.
+
+## 1. Create the GitHub repo and push (5 min) — activates the automation
+The Actions in `.github/workflows/` are INACTIVE until the repo lives on GitHub.
+```bash
+cd data-moat-engine
+gh repo create statuterates --private --source=. --remote=origin   # or use github.com UI
+git push -u origin main
+```
+Pushing turns on `refresh-data` (weekly) and makes `deploy-site` available.
+*(The autonomous build was forbidden from adding a remote or pushing — this is the first owner action.)*
+
+## 2. Enable GitHub Pages (2 min) — free hosting
+Repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**. Then run the deploy once:
+Repo → **Actions → deploy-site → Run workflow**. Your site goes live at
+`https://<your-username>.github.io/statuterates/`.
+
+## 3. Set your site URL (2 min) — correct canonical/sitemap/API links
+Repo → **Settings → Secrets and variables → Actions → Variables → New variable**:
+`SITE_URL = https://<your-username>.github.io/statuterates` (or your custom domain from step 5).
+Re-run `deploy-site`. Verify: visit `/`, `/rates/us-federal-post-judgment/`, `/robots.txt`,
+`/sitemap.xml`, `/llms.txt`, `/api/v1/index.json`.
+
+## 4. Confirm the data refreshes itself (2 min)
+Repo → **Actions → refresh-data → Run workflow** (don't wait for Monday). It fetches, validates, and —
+only if green — commits any changed values, which triggers `deploy-site`. From now on it runs weekly
+with no input from you. If it ever goes red, the run summary tells you exactly which source broke; see
+`docs/MAINTENANCE_RUNBOOK.md`.
+
+## 5. OPTIONAL — custom domain (~$10–12/yr) — recommended for SEO
+A short root domain (e.g. `statuterates.com`) beats a `github.io` subpath for ranking, trust, and
+future Cloudflare pay-per-crawl. **This is the only recommended spend and it is optional.**
+1. Buy the domain (Cloudflare Registrar / Namecheap / Porkbun — at-cost, ~$10/yr).
+2. Point it at Pages: Repo → Settings → Pages → Custom domain; add the DNS records it shows.
+3. Update `SITE_URL` (step 3) to the new domain and re-run `deploy-site`.
+*(The build was forbidden from purchasing or registering anything — hence manual.)*
+
+## 6. Ad monetization — apply on the right timeline (5 min to apply)
+Reserved, empty ad slots already exist on every page (`site/src/components/AdSlot.astro`). No ad code
+ships until you activate it.
+- **Now / early (any traffic):** apply to **Google AdSense** and/or **Ezoic** (Ezoic has no traffic
+  minimum and pairs well with a reference site). On approval, paste the network's snippet into
+  `AdSlot.astro` (replace the comment) and set the publisher ID; redeploy.
+- **At ~10k sessions/mo:** revisit Ezoic's higher tiers.
+- **At 50k+ sessions/mo:** apply to **Mediavine** (Journey tier ~10k) or **Raptive** (~100k) for much
+  higher RPMs; switch the slot code then.
+Keep it to **two slots per page** (already scaffolded) to protect page speed and Core Web Vitals.
+
+## 7. Machine-distribution — submit the MCP server + API (10 min total)
+Get the dataset in front of AI agents:
+- **MCP directories** — submit `machine/mcp-server` (README has the registration snippets) to:
+  PulseMCP (pulsemcp.com), mcp.so, Glama (glama.ai/mcp), and Smithery (smithery.ai). Each is a short
+  form; link the repo.
+- **llms.txt** — already served at `/llms.txt`; once live, confirm it loads and lists the API endpoints.
+- **API discoverability** — add the site to any "free API" lists you like; the OpenAPI spec is
+  `machine/openapi.yaml`.
+
+## 8. OPTIONAL — Cloudflare pay-per-crawl (later, demand-triggered)
+Requires the site to be behind a Cloudflare-proxied domain (do step 5 via Cloudflare first). Then in
+the Cloudflare dashboard enable **AI Audit → pay-per-crawl** and set a price. This is **free optionality**
+— machine-side revenue is unproven for solo sites, so treat it as a lottery ticket, not the plan. Do not
+build per-call billing (Stripe usage-based / x402) until you see real agent demand in your logs.
+
+## 9. Blocked-by-rules summary (what you must do because the build could not)
+| Blocked step | Why (hard rule) | Your action |
+|---|---|---|
+| Add git remote / push | 0.1 no remote | Step 1 |
+| Deploy the site | 0.2 no deploys | Steps 2–4 |
+| Buy a domain | 0.2 no purchases | Step 5 (optional) |
+| Create ad-network accounts | 0.2 no accounts | Step 6 |
+| Submit to MCP directories | 0.2 no account/forms | Step 7 |
+| Enable pay-per-crawl | 0.2 no accounts | Step 8 (optional) |
+| Set contact in crawler UA | 0.4 no owner data | `STATUTERATES_CONTACT` env (optional, polite) |
+
+## Local dev quickstart (for your own edits)
+```bash
+cd pipeline && npm install && node run.mjs all      # fetch + validate + export (444 records)
+cd ../machine && node build-api.mjs                 # generate the static API from exports
+cd ../site && npm install && npm run build          # build the site (reads exports + api)
+cd ../machine/mcp-server && npm install && npm run smoke   # verify the MCP server
+```

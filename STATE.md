@@ -3,7 +3,7 @@
 > Resume file. A future session should read this first. It records what is complete, what is next,
 > and any open threads, so work can continue with zero prior context.
 
-**Last updated:** 2026-07-08 (Phase 2 complete)
+**Last updated:** 2026-07-08 (Phase 8 complete — BUILD DONE, ready for owner review)
 **Session mode:** Autonomous, sandboxed to `./data-moat-engine`. Section 0 hard rules in force
 (no writes outside this dir; no remotes/deploys/accounts/spend; polite robots-respecting fetches only).
 
@@ -24,20 +24,20 @@ Anchor sources (verified fetchable by our pipeline): IRS §6621 quarterly rates 
 - [x] **Phase 0 — Workspace setup.** `phase-0` committed.
 - [x] **Phase 1 — Research round.** 32 candidates, 14 scanned, 4 deep-audited. `research/RESEARCH_LOG.md`.
 - [x] **Phase 2 — Niche selection.** 11 scored; winner 37/39, zero kills. `research/NICHE_DECISION.md`.
-- [~] **Reusable engine core built early** (during Phase 1): `pipeline/lib/{http,db,exporter}.mjs`
-  (+9 passing robots tests), `machine/build-api.mjs`, `machine/mcp-server/` (5 tools + smoke test),
-  `machine/openapi.yaml`, Astro installed + configured. Not yet committed (goes in phase-3/4/5).
-- [ ] **Phase 3 — Data pipeline.** Build fetchers (IRS, H.15), normalizer, validation; run to ≥300 records.
-- [ ] **Phase 4 — Human skin (static site).** Astro pages generated from the dataset.
-- [ ] **Phase 5 — Machine skin.** Wire build-api + MCP + llms.txt to real data; run smoke test.
-- [ ] **Phase 6 — Automation blueprints** → `.github/workflows/`
-- [ ] **Phase 7 — QA gauntlet** → `docs/QA_REPORT.md`
-- [ ] **Phase 8 — Deliverables + final report**
+- [x] **Phase 3 — Data pipeline.** IRS + H.15 fetchers, normalizer, fail-loud validation; **444 records**.
+- [x] **Phase 4 — Human skin.** Astro site, 12 pages, SEO + JSON-LD + freshness, ad placeholders.
+- [x] **Phase 5 — Machine skin.** Static JSON API + OpenAPI + MCP server (5 tools, smoke passes) + llms.txt.
+- [x] **Phase 6 — Automation blueprints.** `.github/workflows/refresh.yml` + `deploy.yml` (INACTIVE) + runbook.
+- [x] **Phase 7 — QA gauntlet.** All green — `docs/QA_REPORT.md`.
+- [x] **Phase 8 — Deliverables.** EXECUTION_REPORT, DEPLOYMENT_GUIDE, RISK_REGISTER, MAINTENANCE_RUNBOOK.
 
-## Next action
-Phase 3: write `pipeline/fetchers/irs.mjs` (parse the 12 year-tables) + `pipeline/fetchers/fed-h15.mjs`
-(parse 1-yr CMT CSV), a normalizer that derives the post-judgment rate, `pipeline/run.mjs`
-(fetch→build→validate→export orchestrator), and a validation suite. Target 300–2,000 records.
+## BUILD COMPLETE
+All 8 phases done + all Section-8 docs written. QA green. Committed through `phase-8`. No remote, no
+deploys, no accounts, no spend, no leftover processes.
+
+## Next action (OWNER)
+Push to GitHub + enable Pages — `docs/DEPLOYMENT_GUIDE.md` steps 1–2 (~7 min). That activates free
+hosting + the weekly self-updating pipeline. Everything else is optional/growth.
 
 ## Environment notes for a resuming session
 - Local deps installed: `pipeline/node_modules` (better-sqlite3), `machine/mcp-server/node_modules`
