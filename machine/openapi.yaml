@@ -12,8 +12,8 @@ info:
     name: See attribution in meta.json
     url: https://example.org/about
 servers:
-  - url: https://<<OWNER_DOMAIN>>
-    description: Production CDN (owner sets the domain at deploy time)
+  - url: https://statuterates.com
+    description: Production CDN
 paths:
   /api/v1/index.json:
     get:
