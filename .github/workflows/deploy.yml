@@ -50,6 +50,15 @@ jobs:
           SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
         run: npm run build
 
+      - name: Apply base path for GitHub Pages project subpath
+        working-directory: site
+        # No-op at a domain root. For a project site (github.io/<repo>) it rewrites internal links to
+        # the /<repo>/ subpath. If a custom domain is set (vars.SITE_URL), BASE_PATH defaults to '/'.
+        env:
+          SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
+          BASE_PATH: ${{ vars.BASE_PATH || (vars.SITE_URL && '/' || format('/{0}', github.event.repository.name)) }}
+        run: node scripts/fix-base.mjs
+
       - name: Verify API conformance (fail the deploy if the API drifted)
         run: node machine/check-api-conformance.mjs
 
