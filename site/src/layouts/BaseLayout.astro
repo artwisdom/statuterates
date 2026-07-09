@@ -1,12 +1,14 @@
 ---
-// Site-wide layout: SEO head, freshness stamp, header/footer, and a tiny inline stylesheet.
-// No client-side framework, no web fonts, no external requests -> fast on emerging-market connections.
+// Site-wide layout: SEO head, editorial masthead, freshness stamp, and the design system.
+// Aesthetic: "The Statutory Almanac" — warm paper & ink, a self-hosted display serif (Fraunces),
+// deep pine-green + antique-gold accents, ledger-rule details, tabular almanac figures.
+// Self-hosted font -> no external requests at runtime.
 import { getMeta, prettyDate } from '../lib/data.mjs';
 
 const {
   title,
   description,
-  jsonLd = null, // object or array of schema.org JSON-LD objects
+  jsonLd = null,
   noindex = false,
 } = Astro.props;
 
@@ -14,6 +16,14 @@ const meta = getMeta();
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const generatedDate = prettyDate(meta.generated_at);
 const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+const NAV = [
+  { href: '/', label: 'Rates' },
+  { href: '/calculators/', label: 'Calculators' },
+  { href: '/changes/', label: 'Changes' },
+  { href: '/api/', label: 'Data & API' },
+  { href: '/about/', label: 'About' },
+];
 ---
 
 <!doctype html>
@@ -25,11 +35,10 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex,follow" />}
-    <meta name="theme-color" content="#0b1f3a" />
+    <meta name="theme-color" content="#123a2e" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <!-- Open Graph / Twitter (text-only; no external image dependency) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={meta.title} />
     <meta property="og:title" content={title} />
@@ -42,101 +51,173 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     ))}
 
     <style is:global>
-      :root {
-        --navy: #0b1f3a;
-        --navy-2: #12294a;
-        --accent: #1f6feb;
-        --ink: #1a1f29;
-        --muted: #5b6472;
-        --line: #e4e8ee;
-        --bg: #ffffff;
-        --bg-soft: #f6f8fb;
-        --good: #0f7b4f;
-        --radius: 10px;
-        --max: 940px;
+      @font-face {
+        font-family: 'Fraunces';
+        src: url('/fonts/fraunces-latin.woff2') format('woff2-variations');
+        font-weight: 400 900;
+        font-style: normal;
+        font-display: swap;
       }
+      @font-face {
+        font-family: 'Fraunces';
+        src: url('/fonts/fraunces-latin-italic.woff2') format('woff2-variations');
+        font-weight: 400 600;
+        font-style: italic;
+        font-display: swap;
+      }
+
+      :root {
+        --paper: #f6f2e9;      /* warm off-white page */
+        --paper-2: #efe8da;    /* deeper panel */
+        --paper-3: #e9e0cf;    /* zebra / wash */
+        --ink: #211d17;        /* warm near-black */
+        --ink-soft: #6a6153;   /* muted warm gray */
+        --line: #d9cfba;       /* warm hairline */
+        --line-strong: #c3b79c;
+        --green: #16463a;      /* deep pine */
+        --green-2: #1d5c4a;
+        --green-wash: #e5ede7;
+        --gold: #9c7b2e;       /* antique gold — hairlines, eyebrows, § marks */
+        --gold-2: #b8933c;
+        --amber-bg: #f4ead2;
+        --amber-ink: #8a6a1e;
+        --serif: 'Fraunces', 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, 'Times New Roman', serif;
+        --sans: 'Söhne', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        --measure: 940px;
+        --nums: 'Fraunces', Georgia, serif;
+      }
+
       * { box-sizing: border-box; }
       html { -webkit-text-size-adjust: 100%; }
       body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: var(--sans);
         color: var(--ink);
-        background: var(--bg);
-        line-height: 1.55;
+        background-color: var(--paper);
+        background-image:
+          radial-gradient(1200px 600px at 100% -10%, rgba(28,92,74,0.05), transparent 60%),
+          radial-gradient(900px 500px at -10% 0%, rgba(156,123,46,0.05), transparent 55%);
+        background-attachment: fixed;
+        line-height: 1.65;
         font-size: 17px;
+        font-feature-settings: 'kern' 1, 'liga' 1;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
       }
-      a { color: var(--accent); text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
-      header.site {
-        background: var(--navy);
-        color: #fff;
-        border-bottom: 3px solid var(--accent);
-      }
-      header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; flex-wrap: wrap; }
-      header.site a.brand { color: #fff; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; }
-      header.site nav a { color: #cfe0f5; margin-left: 18px; font-size: 0.95rem; }
-      header.site nav a:hover { color: #fff; }
-      main { padding: 28px 0 8px; }
-      h1 { font-size: 1.9rem; line-height: 1.2; letter-spacing: -0.02em; margin: 0 0 10px; }
-      h2 { font-size: 1.3rem; margin: 32px 0 10px; letter-spacing: -0.01em; }
-      p.lead { font-size: 1.08rem; color: var(--muted); margin-top: 0; }
-      .rate-hero {
-        display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
-        background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 18px 20px; margin: 18px 0;
-      }
-      .rate-hero .value { font-size: 2.6rem; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; }
-      .rate-hero .asof { color: var(--muted); font-size: 0.95rem; }
-      .badge { display: inline-block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; }
-      .badge.high { background: #e4f5ec; color: var(--good); }
-      .badge.medium { background: #fff3e0; color: #a15c00; }
-      .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin: 10px 0; background: #fff; }
-      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-      .card h3 { margin: 0 0 4px; font-size: 1.05rem; }
-      .card .cval { font-size: 1.5rem; font-weight: 700; color: var(--navy); }
-      .card .cmeta { color: var(--muted); font-size: 0.85rem; }
-      .chip { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 1px 7px; border-radius: 999px; background: #eef3fb; color: var(--accent); vertical-align: middle; }
-      .featured { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 20px 0 8px; }
-      .featured a { display: block; color: inherit; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 14px 16px; background: linear-gradient(180deg, #fbfcfe, #fff); }
-      .featured a:hover { text-decoration: none; border-color: var(--accent); box-shadow: 0 2px 10px rgba(11,31,58,0.06); }
-      .featured .fv { font-size: 1.9rem; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; line-height: 1.1; }
-      .featured .fn { font-size: 0.9rem; color: var(--ink); margin-top: 2px; }
-      .featured .fm { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
-      table { border-collapse: collapse; width: 100%; font-size: 0.95rem; margin: 10px 0 4px; }
-      caption { text-align: left; color: var(--muted); font-size: 0.85rem; padding-bottom: 6px; }
-      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
-      th { background: var(--bg-soft); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--muted); }
-      td.num { font-variant-numeric: tabular-nums; font-weight: 600; }
+      ::selection { background: rgba(22,70,58,0.16); }
+      a { color: var(--green); text-decoration: none; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+      a:hover { text-decoration: underline; text-decoration-color: var(--gold); }
+      .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 24px; }
+
+      /* ---- Masthead ---------------------------------------------------------- */
+      .headband { height: 5px; background: linear-gradient(90deg, var(--green), var(--green-2) 45%, var(--gold) 100%); }
+      header.site { background: transparent; border-bottom: 1px solid var(--line); }
+      header.site .rule { height: 2px; background: var(--gold); opacity: 0.5; }
+      header.site .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 78px; flex-wrap: wrap; }
+      .brand { display: inline-flex; align-items: baseline; gap: 10px; color: var(--ink); }
+      .brand:hover { text-decoration: none; }
+      .brand .mark { font-family: var(--serif); font-weight: 600; color: var(--gold); font-size: 1.5rem; line-height: 1; transform: translateY(2px); }
+      .brand .name { font-family: var(--serif); font-weight: 600; font-size: 1.5rem; letter-spacing: -0.01em; font-variation-settings: 'opsz' 40; }
+      .brand .name b { font-weight: 600; }
+      .brand .name i { font-style: italic; font-weight: 500; color: var(--green); }
+      header.site nav { display: flex; gap: 22px; flex-wrap: wrap; }
+      header.site nav a { color: var(--ink-soft); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.13em; font-weight: 600; padding: 4px 0; border-bottom: 1.5px solid transparent; }
+      header.site nav a:hover { color: var(--green); border-bottom-color: var(--gold); text-decoration: none; }
+
+      main { padding: 40px 0 8px; }
+
+      /* ---- Typography -------------------------------------------------------- */
+      h1 { font-family: var(--serif); font-weight: 540; font-size: clamp(2rem, 4.4vw, 2.9rem); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 14px; font-variation-settings: 'opsz' 144; }
+      h2 { font-family: var(--serif); font-weight: 560; font-size: 1.5rem; line-height: 1.2; letter-spacing: -0.01em; margin: 40px 0 12px; font-variation-settings: 'opsz' 72; }
+      h3 { font-family: var(--serif); font-weight: 560; font-size: 1.12rem; margin: 0 0 6px; font-variation-settings: 'opsz' 32; }
+      p { margin: 0 0 16px; }
+      p.lead { font-size: 1.2rem; line-height: 1.55; color: var(--ink); max-width: 46rem; }
+      .eyebrow { font-family: var(--sans); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold); margin-bottom: 10px; }
+
+      /* ---- Rate hero (ledger entry) ----------------------------------------- */
+      .rate-hero { margin: 22px 0 26px; padding: 22px 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line); }
+      .rate-hero .value { font-family: var(--nums); font-weight: 620; font-size: clamp(3rem, 9vw, 4.6rem); line-height: 0.95; color: var(--green); letter-spacing: -0.02em; font-variant-numeric: tabular-nums lining-nums; font-variation-settings: 'opsz' 144; display: block; }
+      .rate-hero .asof { display: block; margin-top: 12px; color: var(--ink-soft); font-size: 0.98rem; }
+
+      .badge { display: inline-block; font-family: var(--sans); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 2px; border: 1px solid; }
+      .badge.high { color: var(--green); border-color: rgba(22,70,58,0.3); background: var(--green-wash); }
+      .badge.medium { color: var(--amber-ink); border-color: rgba(138,106,30,0.35); background: var(--amber-bg); }
+
+      /* ---- Cards / grids ----------------------------------------------------- */
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 0; border-top: 1px solid var(--line); }
+      .card { position: relative; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); padding: 18px 20px; background: transparent; transition: background 120ms ease; }
+      .grid .card:nth-child(3n) { border-right: none; }
+      .card:hover { background: rgba(255,255,255,0.5); text-decoration: none; }
+      .card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: transparent; transition: background 120ms ease; }
+      .card:hover::before { background: var(--gold); }
+      .card h3 { margin: 6px 0 8px; }
+      .card .cval { font-family: var(--nums); font-size: 1.9rem; font-weight: 600; color: var(--ink); line-height: 1; font-variant-numeric: tabular-nums lining-nums; font-variation-settings: 'opsz' 80; }
+      .card .cmeta { color: var(--ink-soft); font-size: 0.82rem; margin-top: 6px; }
+
+      /* ---- Featured almanac strip ------------------------------------------- */
+      .featured { display: grid; grid-template-columns: repeat(auto-fit, minmax(196px, 1fr)); gap: 0; margin: 26px 0 8px; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; background: var(--paper-2); }
+      .featured a { display: block; color: inherit; padding: 18px 20px; border-right: 1px solid var(--line); }
+      .featured a:last-child { border-right: none; }
+      .featured a:hover { background: rgba(255,255,255,0.55); text-decoration: none; }
+      .featured .fv { font-family: var(--nums); font-size: 2.3rem; font-weight: 640; color: var(--green); letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums lining-nums; font-variation-settings: 'opsz' 110; margin-top: 8px; }
+      .featured .fn { font-size: 0.9rem; color: var(--ink); margin-top: 8px; line-height: 1.35; }
+      .featured .fm { font-size: 0.74rem; color: var(--ink-soft); margin-top: 6px; }
+
+      .chip { display: inline-block; font-family: var(--sans); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; background: var(--green); color: var(--paper); vertical-align: middle; }
+
+      /* ---- Tables (ledger) --------------------------------------------------- */
+      table { border-collapse: collapse; width: 100%; font-size: 0.95rem; margin: 12px 0 6px; }
+      caption { text-align: left; color: var(--ink-soft); font-size: 0.85rem; padding-bottom: 8px; font-style: italic; font-family: var(--serif); }
+      thead th { border-bottom: 2px solid var(--ink); }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+      th { font-family: var(--sans); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-soft); font-weight: 700; }
+      tbody tr:nth-child(even) { background: rgba(233,224,207,0.4); }
+      td.num { font-family: var(--nums); font-variant-numeric: tabular-nums lining-nums; font-weight: 600; font-size: 1.02rem; color: var(--ink); }
       .scroll-x { overflow-x: auto; }
-      .source-note { font-size: 0.88rem; color: var(--muted); }
-      .disclaimer { background: #fffbef; border: 1px solid #f0e3b8; border-radius: var(--radius); padding: 12px 15px; font-size: 0.9rem; color: #5f5326; margin: 18px 0; }
-      footer.site { margin-top: 40px; border-top: 1px solid var(--line); background: var(--bg-soft); }
-      footer.site .wrap { padding: 22px 20px; color: var(--muted); font-size: 0.88rem; }
-      footer.site a { color: var(--muted); text-decoration: underline; }
-      .freshness { color: var(--muted); font-size: 0.85rem; }
-      .ad-slot { margin: 20px 0; min-height: 0; }
+
+      .source-note { font-size: 0.88rem; color: var(--ink-soft); }
+      code { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.86em; background: var(--paper-2); padding: 1px 5px; border-radius: 3px; border: 1px solid var(--line); }
+
+      .disclaimer { background: var(--amber-bg); border: 1px solid var(--line-strong); border-left: 3px solid var(--gold); border-radius: 2px; padding: 14px 17px; font-size: 0.9rem; color: #5c4c26; margin: 20px 0; }
       ul.clean { padding-left: 20px; }
-      ul.clean li { margin: 4px 0; }
-      @media (max-width: 520px) {
+      ul.clean li { margin: 6px 0; }
+
+      /* thematic § divider */
+      .sec-mark { text-align: center; color: var(--gold); font-family: var(--serif); font-size: 1.4rem; margin: 34px 0; letter-spacing: 0.4em; }
+      .sec-mark::before { content: '§ § §'; }
+
+      /* ---- Footer ------------------------------------------------------------ */
+      footer.site { margin-top: 56px; border-top: 2px solid var(--ink); background: var(--paper-2); }
+      footer.site .goldrule { height: 1px; background: var(--gold); opacity: 0.5; }
+      footer.site .wrap { padding: 26px 24px 30px; color: var(--ink-soft); font-size: 0.88rem; }
+      footer.site .fbrand { font-family: var(--serif); font-size: 1.15rem; color: var(--ink); font-weight: 560; }
+      footer.site a { color: var(--ink-soft); text-decoration: underline; text-decoration-color: var(--line-strong); }
+      footer.site a:hover { color: var(--green); }
+      .freshness { color: var(--ink-soft); font-size: 0.85rem; }
+      .ad-slot { margin: 24px 0; }
+
+      @media (max-width: 560px) {
         body { font-size: 16px; }
-        h1 { font-size: 1.55rem; }
-        .rate-hero .value { font-size: 2.1rem; }
+        header.site .wrap { min-height: 64px; }
+        .grid { grid-template-columns: 1fr; }
+        .grid .card { border-right: none; }
+        p.lead { font-size: 1.08rem; }
       }
     </style>
   </head>
   <body>
+    <div class="headband"></div>
     <header class="site">
       <div class="wrap">
-        <a class="brand" href="/">{meta.title}</a>
+        <a class="brand" href="/">
+          <span class="mark">§</span>
+          <span class="name"><b>Statute</b><i>Rates</i></span>
+        </a>
         <nav>
-          <a href="/">Rates</a>
-          <a href="/calculators/">Calculators</a>
-          <a href="/changes/">Changes</a>
-          <a href="/api/">API</a>
-          <a href="/about/">About</a>
+          {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
         </nav>
       </div>
+      <div class="rule"></div>
     </header>
     <main>
       <div class="wrap">
@@ -144,10 +225,11 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
       </div>
     </main>
     <footer class="site">
+      <div class="goldrule"></div>
       <div class="wrap">
-        <p class="freshness">Data last compiled {generatedDate}. Every value links to its official source and effective date.</p>
+        <p><span class="fbrand">§ StatuteRates</span> — the statutory, judgment &amp; tax interest-rate almanac.</p>
+        <p class="freshness">Compiled {generatedDate}. Every value carries its effective date and official source.</p>
         <p>
-          {meta.title} — reference data, not legal, tax, or financial advice.
           <a href="/about/">How this data is collected</a> ·
           <a href="/methodology/">Methodology &amp; sources</a> ·
           <a href="/calculators/">Calculators</a> ·
@@ -155,7 +237,7 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
           <a href="/api/">JSON API</a> ·
           <a href="/llms.txt">llms.txt</a>
         </p>
-        <p>Source values are U.S. federal government works (public domain). Compiled dataset © {meta.title}.</p>
+        <p>Source values are US, UK &amp; EU government works. Reference data — not legal, tax, or financial advice.</p>
       </div>
     </footer>
   </body>

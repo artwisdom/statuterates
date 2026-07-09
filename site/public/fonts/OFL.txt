@@ -1,0 +1,1 @@
+Fraunces — SIL Open Font License 1.1 (https://github.com/undercasetype/Fraunces). Free to self-host and bundle. Latin subset, variable (opsz 9-144, wght 400-900), from Google Fonts.

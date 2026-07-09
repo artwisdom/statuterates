@@ -63,20 +63,22 @@ const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
 </div>
 
 <style>
-  .calc { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: var(--radius); padding: 18px 20px; margin: 18px 0; background: linear-gradient(180deg, #fbfcfe, #fff); }
-  .calc-field { display: block; margin: 10px 0; }
-  .calc-field span { display: block; font-size: 0.82rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 4px; }
-  .calc-field input, .calc-field select { width: 100%; box-sizing: border-box; font-size: 1rem; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
-  .calc-field input:focus, .calc-field select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .calc { border: 1px solid var(--line-strong); border-top: 2px solid var(--green); border-radius: 3px; padding: 22px 22px 20px; margin: 20px 0; background: var(--paper-2); }
+  .calc-field { display: block; margin: 12px 0; }
+  .calc-field span { display: block; font-family: var(--sans); font-size: 0.7rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+  .calc-field input, .calc-field select { width: 100%; box-sizing: border-box; font-size: 1rem; font-family: var(--sans); padding: 11px 12px; border: 1px solid var(--line-strong); border-radius: 3px; background: var(--paper); color: var(--ink); }
+  .calc-field input:focus, .calc-field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--green); }
+  .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 520px) { .calc-row { grid-template-columns: 1fr; } }
-  .calc-btn { margin-top: 8px; font-size: 1rem; font-weight: 600; color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 11px 20px; cursor: pointer; }
-  .calc-btn:hover { filter: brightness(1.08); }
-  .calc-result { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
-  .calc-result .big { font-size: 1.7rem; font-weight: 700; color: var(--navy); }
-  .calc-result .crow { font-size: 0.92rem; color: var(--muted); margin-top: 3px; }
-  .calc-result .err { color: #a3232f; font-weight: 600; }
-  .calc-fineprint { font-size: 0.8rem; color: var(--muted); margin: 12px 0 0; }
+  .calc-btn { margin-top: 12px; font-family: var(--sans); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--paper); background: var(--green); border: 0; border-radius: 3px; padding: 13px 26px; cursor: pointer; transition: background 120ms ease; }
+  .calc-btn:hover { background: var(--green-2); }
+  .calc-result { margin-top: 18px; border-top: 2px solid var(--ink); padding-top: 14px; }
+  /* result content is injected at runtime -> style its children globally (scoped selectors miss them) */
+  .calc-result :global(.big) { font-family: var(--nums); font-size: 2.1rem; font-weight: 640; color: var(--green); font-variant-numeric: tabular-nums lining-nums; font-variation-settings: 'opsz' 100; letter-spacing: -0.01em; line-height: 1.1; }
+  .calc-result :global(.crow) { font-size: 0.92rem; color: var(--ink-soft); margin-top: 5px; }
+  .calc-result :global(.crow strong) { color: var(--ink); }
+  .calc-result :global(.err) { color: #9a2b26; font-weight: 600; }
+  .calc-fineprint { font-size: 0.8rem; color: var(--ink-soft); margin: 14px 0 0; font-style: italic; font-family: var(--serif); }
 </style>
 
 <script>

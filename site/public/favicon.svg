@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="StatuteRates">
-  <rect width="64" height="64" rx="13" fill="#0b1f3a"/>
-  <rect x="3" y="3" width="58" height="58" rx="11" fill="none" stroke="#1f6feb" stroke-width="2"/>
-  <text x="32" y="45" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif"
-        font-size="38" font-weight="700" text-anchor="middle" fill="#ffffff">%</text>
+  <rect width="64" height="64" rx="12" fill="#16463a"/>
+  <rect x="4.5" y="4.5" width="55" height="55" rx="9" fill="none" stroke="#b8933c" stroke-width="1.5" opacity="0.85"/>
+  <text x="32" y="46" font-family="Iowan Old Style, Palatino, Georgia, 'Times New Roman', serif"
+        font-size="42" font-weight="600" text-anchor="middle" fill="#f6f2e9">§</text>
 </svg>

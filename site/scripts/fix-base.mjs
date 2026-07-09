@@ -49,6 +49,12 @@ function rewriteHtml(s) {
     if (after.startsWith(BASE + '/') || after === BASE + '"') return m;
     return `${pre}${BASE}/`;
   });
+  // 1b) CSS url(/…) inside inlined <style> blocks (fonts, backgrounds) — not data:, not //, not http
+  s = s.replace(/url\((['"]?)\/(?!\/)/g, (m, q, off, str) => {
+    const after = str.slice(off + m.length - 1); // char after the leading slash region
+    if (after.startsWith(BASE.slice(1) + '/')) return m;
+    return `url(${q}${BASE}/`;
+  });
   // 2) full-origin absolute URLs (canonical, og:url, JSON-LD contentUrl/url/item)
   if (origin) {
     const re = new RegExp(escapeRe(origin) + '/(?!' + escapeRe(BASE.slice(1)) + '/)', 'g');
@@ -69,6 +75,14 @@ function rewriteManifest(s) {
   return s.replace(/("(?:start_url|src)"\s*:\s*")\/(?!\/)/g, `$1${BASE}/`);
 }
 
+function rewriteCss(s) {
+  // url(/…) references (fonts, backgrounds) in externalized stylesheets
+  return s.replace(/url\((['"]?)\/(?!\/)/g, (m, q, off, str) => {
+    if (str.slice(off + m.length - 1).startsWith(BASE.slice(1) + '/')) return m;
+    return `url(${q}${BASE}/`;
+  });
+}
+
 function escapeRe(x) {
   return x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -83,6 +97,7 @@ for (const file of walk(DIST)) {
   }
   let out = s;
   if (file.endsWith('.html')) out = rewriteHtml(s);
+  else if (file.endsWith('.css')) out = rewriteCss(s);
   else if (/\.(xml|txt)$/.test(file)) out = rewriteText(s);
   else if (file.endsWith('.webmanifest')) out = rewriteManifest(s);
   else continue;

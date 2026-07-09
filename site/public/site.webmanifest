@@ -4,8 +4,8 @@
   "description": "Statutory, judgment & tax interest rates (US, UK, EU) with effective dates and a free API.",
   "start_url": "/",
   "display": "browser",
-  "background_color": "#ffffff",
-  "theme_color": "#0b1f3a",
+  "background_color": "#f6f2e9",
+  "theme_color": "#16463a",
   "icons": [
     { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" }
   ]
