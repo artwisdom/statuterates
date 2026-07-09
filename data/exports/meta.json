@@ -7,7 +7,7 @@
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-08T12:17:12.650Z",
+  "generated_at": "2026-07-09T02:10:15.931Z",
   "entity_count": 17,
   "observation_count": 645,
   "metrics": [
@@ -21,7 +21,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-08T12:17:08.956Z"
+      "retrieved_at": "2026-07-09T02:10:12.530Z"
     },
     {
       "id": "ca-leginfo",
@@ -39,7 +39,7 @@
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-08T12:17:12.623Z"
+      "retrieved_at": "2026-07-09T02:10:15.886Z"
     },
     {
       "id": "fed-h15",
@@ -48,7 +48,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-08T12:17:05.470Z"
+      "retrieved_at": "2026-07-09T02:10:09.081Z"
     },
     {
       "id": "ia-legis",
@@ -66,7 +66,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-08T12:17:02.358Z"
+      "retrieved_at": "2026-07-09T02:10:02.883Z"
     },
     {
       "id": "ma-legislature",

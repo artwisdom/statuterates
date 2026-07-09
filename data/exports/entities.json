@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T12:17:12.650Z",
+  "generated_at": "2026-07-09T02:10:15.931Z",
   "count": 17,
   "entities": [
     {
@@ -11,16 +11,16 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 3.95,
-          "value_text": "3.95%",
+          "value": 4.01,
+          "value_text": "4.01%",
           "unit": "percent_per_annum",
           "effective_date": "2026-07-06",
           "source_id": "fed-h15",
           "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-          "retrieved_at": "2026-07-08T12:17:05.470Z",
+          "retrieved_at": "2026-07-09T02:10:09.081Z",
           "confidence": "high",
           "method": "weekly-avg-of-daily-h15",
-          "notes": "Weekly average of 1 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-06."
+          "notes": "Weekly average of 2 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-06."
         }
       }
     },
@@ -39,7 +39,7 @@
           "effective_date": "2025-12-18",
           "source_id": "boe-bank-rate",
           "source_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2015&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-          "retrieved_at": "2026-07-08T12:17:08.956Z",
+          "retrieved_at": "2026-07-09T02:10:12.530Z",
           "confidence": "high",
           "method": "official-csv-changepoint",
           "notes": "Bank of England Bank Rate effective 2025-12-18 (official published value)."
@@ -61,7 +61,7 @@
           "effective_date": "2024-01-01",
           "source_id": "ca-leginfo",
           "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010",
-          "retrieved_at": "2026-07-08T12:17:12.627Z",
+          "retrieved_at": "2026-07-09T02:10:15.891Z",
           "confidence": "high",
           "method": "statute-fixed",
           "notes": "Default rate on money judgments under CCP §685.010(a)(1); simple interest, accruing daily (/365) on unpaid principal from entry of judgment. Carve-outs: 5% under §685.010(a)(2) for judgments entered/renewed on or after Jan 1, 2023 against a natural person on medical debt (principal < $200,000) or personal debt (< $50,000) — SB 1200 (2022); 7% where the judgment debtor is a state or local government entity (Cal. Const. art. XV §1). Effective date shown is the current statutory text (amended eff. Jan 1, 2024); the 10% default has applied since the early 1980s. Verify against the statute; not legal advice."
@@ -83,7 +83,7 @@
           "effective_date": "2026-06-17",
           "source_id": "ecb-mro",
           "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-          "retrieved_at": "2026-07-08T12:17:12.623Z",
+          "retrieved_at": "2026-07-09T02:10:15.886Z",
           "confidence": "high",
           "method": "official-csv-changepoint",
           "notes": "ECB Main Refinancing Operations rate effective 2026-06-17 (official published value)."
@@ -105,7 +105,7 @@
           "effective_date": "2026-07-01",
           "source_id": "ecb-mro",
           "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-          "retrieved_at": "2026-07-08T12:17:12.623Z",
+          "retrieved_at": "2026-07-09T02:10:15.886Z",
           "confidence": "medium",
           "method": "derived_eu_directive_2011_7_reference",
           "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-07-01: 2.4%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.4% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
@@ -127,7 +127,7 @@
           "effective_date": "2026-07-01",
           "source_id": "irs-6621",
           "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-          "retrieved_at": "2026-07-08T12:17:02.358Z",
+          "retrieved_at": "2026-07-09T02:10:02.883Z",
           "confidence": "high",
           "method": "html-table",
           "notes": "IRS §6621 3Q2026 (Internal Revenue Code (IRC) 6603 deposit (federal short-term rate))."
@@ -149,7 +149,7 @@
           "effective_date": "2026-07-01",
           "source_id": "irs-6621",
           "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-          "retrieved_at": "2026-07-08T12:17:02.358Z",
+          "retrieved_at": "2026-07-09T02:10:02.883Z",
           "confidence": "high",
           "method": "html-table",
           "notes": "IRS §6621 3Q2026 (GATT (part of a corporate overpayment exceeding $10,000))."
@@ -171,7 +171,7 @@
           "effective_date": "2026-07-01",
           "source_id": "irs-6621",
           "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-          "retrieved_at": "2026-07-08T12:17:02.358Z",
+          "retrieved_at": "2026-07-09T02:10:02.883Z",
           "confidence": "high",
           "method": "html-table",
           "notes": "IRS §6621 3Q2026 (Large corporate underpayment (LCU))."
@@ -193,7 +193,7 @@
           "effective_date": "2026-07-01",
           "source_id": "irs-6621",
           "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-          "retrieved_at": "2026-07-08T12:17:02.358Z",
+          "retrieved_at": "2026-07-09T02:10:02.883Z",
           "confidence": "high",
           "method": "html-table",
           "notes": "IRS §6621 3Q2026 (Corporate overpayment)."
@@ -215,7 +215,7 @@
           "effective_date": "2026-07-01",
           "source_id": "irs-6621",
           "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-          "retrieved_at": "2026-07-08T12:17:02.358Z",
+          "retrieved_at": "2026-07-09T02:10:02.883Z",
           "confidence": "high",
           "method": "html-table",
           "notes": "IRS §6621 3Q2026 (Non-corporate overpayment (for example, individual))."
@@ -237,7 +237,7 @@
           "effective_date": "2026-07-01",
           "source_id": "irs-6621",
           "source_url": "https://www.irs.gov/payments/quarterly-interest-rates",
-          "retrieved_at": "2026-07-08T12:17:02.358Z",
+          "retrieved_at": "2026-07-09T02:10:02.883Z",
           "confidence": "high",
           "method": "html-table",
           "notes": "IRS §6621 3Q2026 (Underpayment (corporate and non-corporate))."
@@ -253,13 +253,13 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 5.95,
-          "value_text": "5.95%",
+          "value": 6.01,
+          "value_text": "6.01%",
           "unit": "percent_per_annum",
           "effective_date": "2026-07-06",
           "source_id": "ia-legis",
           "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-          "retrieved_at": "2026-07-08T12:17:12.627Z",
+          "retrieved_at": "2026-07-09T02:10:15.891Z",
           "confidence": "medium",
           "method": "derived_ia_668_13_weekly_cmt_plus_2",
           "notes": "Derived: Iowa Code §668.13(3) sets judgment interest at the 1-year Treasury constant maturity (Fed H.15) \"settled immediately prior to the date of the judgment\" + 2 percentage points, computed daily (§668.13(5)). This series applies the weekly-average H.15 value + 2pp for each week. A contract rate governs if the judgment is on a contract that fixes one (§668.13(2)). Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -281,7 +281,7 @@
           "effective_date": "2026-07-08",
           "source_id": "ma-legislature",
           "source_url": "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6B",
-          "retrieved_at": "2026-07-08T12:17:12.627Z",
+          "retrieved_at": "2026-07-09T02:10:15.891Z",
           "confidence": "high",
           "method": "statute-fixed",
           "notes": "12% per annum under both M.G.L. c.231 §6B (tort; from commencement of the action) and §6C (contract; from breach/demand, or commencement if not established). Applied as simple interest in MA practice. Carve-outs: an established contract rate displaces the §6C default; judgments against the commonwealth bear interest per §6I (weekly-average 1-yr Treasury CMT, capped at 10%). The official statute pages show no amendment history; the 12% figure has been stable since the early 1980s. Date shown is when the current text was verified (2026-07-08). Verify against the statute; not legal advice."
@@ -303,7 +303,7 @@
           "effective_date": "2022-04-30",
           "source_id": "ny-senate",
           "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-          "retrieved_at": "2026-07-08T12:17:12.627Z",
+          "retrieved_at": "2026-07-09T02:10:15.891Z",
           "confidence": "high",
           "method": "statute-fixed",
           "notes": "CPLR 5004 as amended by the Fair Consumer Judgment Interest Act (L.2021 ch.831, eff. Apr 30, 2022): 2% per annum where a natural person is a defendant in an action arising out of consumer debt (obligations from transactions primarily for personal, family or household purposes). Also applies from Apr 30, 2022 forward to the unpaid portion of earlier consumer-debt judgments. Verify against the statute; not legal advice."
@@ -325,7 +325,7 @@
           "effective_date": "2022-04-30",
           "source_id": "ny-senate",
           "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-          "retrieved_at": "2026-07-08T12:17:12.627Z",
+          "retrieved_at": "2026-07-09T02:10:15.891Z",
           "confidence": "high",
           "method": "statute-fixed",
           "notes": "General rate under CPLR 5004(a): 9% per annum \"except where otherwise provided by statute\". Treated as simple interest in NY practice. For judgments arising out of CONSUMER DEBT against a natural person the rate is 2% (see the companion consumer-debt series). Effective date shown is when the current statutory scheme took effect (L.2021 ch.831, eff. Apr 30, 2022); the 9% general rate long predates it. Verify against the statute; not legal advice."
@@ -341,13 +341,13 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 3.95,
-          "value_text": "3.95%",
+          "value": 4.01,
+          "value_text": "4.01%",
           "unit": "percent_per_annum",
           "effective_date": "2026-07-06",
           "source_id": "fed-h15",
           "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-          "retrieved_at": "2026-07-08T12:17:05.470Z",
+          "retrieved_at": "2026-07-09T02:10:09.081Z",
           "confidence": "medium",
           "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
           "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."
@@ -369,7 +369,7 @@
           "effective_date": "2026-07-01",
           "source_id": "boe-bank-rate",
           "source_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2015&Dateto=now&SeriesCodes=IUDBEDR&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
-          "retrieved_at": "2026-07-08T12:17:08.956Z",
+          "retrieved_at": "2026-07-09T02:10:12.530Z",
           "confidence": "medium",
           "method": "derived_uk_lpa1998_baserate_plus_8",
           "notes": "Derived: UK statutory interest on late commercial (B2B) debts = the Bank of England base rate in force on the reference date (2026-06-30: 3.75%) + 8 percentage points, fixed for this six-month period under the Late Payment of Commercial Debts (Interest) Act 1998. Reference, not legal advice."

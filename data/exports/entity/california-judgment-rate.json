@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T12:17:12.650Z",
+  "generated_at": "2026-07-09T02:10:15.931Z",
   "slug": "california-judgment-rate",
   "name": "California Post-Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2024-01-01",
       "source_id": "ca-leginfo",
       "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010",
-      "retrieved_at": "2026-07-08T12:17:12.627Z",
+      "retrieved_at": "2026-07-09T02:10:15.891Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Default rate on money judgments under CCP §685.010(a)(1); simple interest, accruing daily (/365) on unpaid principal from entry of judgment. Carve-outs: 5% under §685.010(a)(2) for judgments entered/renewed on or after Jan 1, 2023 against a natural person on medical debt (principal < $200,000) or personal debt (< $50,000) — SB 1200 (2022); 7% where the judgment debtor is a state or local government entity (Cal. Const. art. XV §1). Effective date shown is the current statutory text (amended eff. Jan 1, 2024); the 10% default has applied since the early 1980s. Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2024-01-01",
         "source_id": "ca-leginfo",
         "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010",
-        "retrieved_at": "2026-07-08T12:17:12.627Z",
+        "retrieved_at": "2026-07-09T02:10:15.891Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Default rate on money judgments under CCP §685.010(a)(1); simple interest, accruing daily (/365) on unpaid principal from entry of judgment. Carve-outs: 5% under §685.010(a)(2) for judgments entered/renewed on or after Jan 1, 2023 against a natural person on medical debt (principal < $200,000) or personal debt (< $50,000) — SB 1200 (2022); 7% where the judgment debtor is a state or local government entity (Cal. Const. art. XV §1). Effective date shown is the current statutory text (amended eff. Jan 1, 2024); the 10% default has applied since the early 1980s. Verify against the statute; not legal advice."
