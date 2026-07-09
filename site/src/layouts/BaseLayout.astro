@@ -17,6 +17,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const generatedDate = prettyDate(meta.generated_at);
 const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
+// ONE-SWITCH MONETIZATION: set the repo variable ADSENSE_CLIENT = ca-pub-XXXXXXXX (after AdSense
+// approval) and redeploy — that turns on Google Auto Ads site-wide. Empty by default = no ad code
+// ships. Nothing else to touch. (See docs/DEPLOYMENT_GUIDE.md.)
+const adsenseClient = process.env.ADSENSE_CLIENT || '';
+
 const NAV = [
   { href: '/', label: 'Rates' },
   { href: '/calculators/', label: 'Calculators' },
@@ -38,6 +43,10 @@ const NAV = [
     <meta name="theme-color" content="#123a2e" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    {adsenseClient && (
+      <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossorigin="anonymous"></script>
+    )}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={meta.title} />

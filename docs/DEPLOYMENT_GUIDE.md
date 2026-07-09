@@ -63,8 +63,12 @@ future Cloudflare pay-per-crawl. **This is the only recommended spend and it is 
 Reserved, empty ad slots already exist on every page (`site/src/components/AdSlot.astro`). No ad code
 ships until you activate it.
 - **Now / early (any traffic):** apply to **Google AdSense** and/or **Ezoic** (Ezoic has no traffic
-  minimum and pairs well with a reference site). On approval, paste the network's snippet into
-  `AdSlot.astro` (replace the comment) and set the publisher ID; redeploy.
+  minimum and pairs well with a reference site).
+- **ONE-SWITCH ACTIVATION (AdSense):** once approved, just add a repo variable — Settings → Secrets and
+  variables → Actions → Variables → New variable: `ADSENSE_CLIENT = ca-pub-XXXXXXXXXXXXXXXX` — then
+  re-run `deploy-site`. That injects Google Auto Ads site-wide; zero code edits. Delete the variable to
+  turn ads off. (Ezoic uses its own site-wide script — paste it into `BaseLayout.astro`'s head, guarded
+  the same way.)
 - **At ~10k sessions/mo:** revisit Ezoic's higher tiers.
 - **At 50k+ sessions/mo:** apply to **Mediavine** (Journey tier ~10k) or **Raptive** (~100k) for much
   higher RPMs; switch the slot code then.
