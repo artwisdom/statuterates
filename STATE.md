@@ -52,9 +52,18 @@ Key file map for a resuming session: shared/interest-calc.mjs (calc engine, used
 pipeline/fetchers/us-states.mjs (curated statute values — VERIFIED_ON quarterly bump);
 site/src/components/InterestCalculator.astro (calculator UI); site/src/lib/changes.mjs (feed).
 
-## Next action (OWNER)
-Push to GitHub + enable Pages — `docs/DEPLOYMENT_GUIDE.md` steps 1–2 (~7 min). That activates free
-hosting + the weekly self-updating pipeline. Everything else is optional/growth.
+## 🚀 LIVE (2026-07-08)
+- **Site:** https://artwisdom.github.io/statuterates/ (GitHub Pages, Actions build)
+- **Repo:** https://github.com/artwisdom/statuterates (public)
+- **Auto-updater:** `refresh-data` workflow confirmed running on GitHub (weekly cron) — pipeline green.
+- **Base path:** served under `/statuterates/`; `site/scripts/fix-base.mjs` handles it. ⚠️ Do NOT set a
+  `SITE_URL` repo variable for the github.io project site — it makes fix-base skip the subpath rewrite.
+  For a custom domain later: set BOTH `vars.SITE_URL=https://yourdomain` AND `vars.BASE_PATH=/`.
+
+## Next action (OWNER — the only remaining step)
+**Google Search Console + Bing** (needs your Google login): verify https://artwisdom.github.io/statuterates/,
+submit `sitemap.xml`. This is what starts organic traffic. Optional growth: custom domain (~$10/yr),
+Ezoic/AdSense, MCP directory submissions — all in `docs/DEPLOYMENT_GUIDE.md`.
 
 ## Environment notes for a resuming session
 - Local deps installed: `pipeline/node_modules` (better-sqlite3), `machine/mcp-server/node_modules`
