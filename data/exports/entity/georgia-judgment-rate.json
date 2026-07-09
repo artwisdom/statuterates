@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-09T22:24:25.971Z",
+  "slug": "georgia-judgment-rate",
+  "name": "Georgia Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "GA",
+    "statute": "O.C.G.A. §7-4-12",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 9.75,
+      "value_text": "9.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-08",
+      "source_id": "ga-code",
+      "source_url": "http://ga.elaws.us/law/section7-4-12",
+      "retrieved_at": "2026-07-09T22:24:25.955Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under O.C.G.A. §7-4-12: the Federal Reserve prime rate (published in Fed release H.15) on the day of judgment + 3 percentage points, fixed for the life of the judgment — currently about 9.75% (prime ~6.75% + 3). Simple interest. A judgment on a written contract that specifies a rate carries the contract rate instead (§7-4-12(b)). Verify against the current prime rate; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 9.75,
+        "value_text": "9.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-08",
+        "source_id": "ga-code",
+        "source_url": "http://ga.elaws.us/law/section7-4-12",
+        "retrieved_at": "2026-07-09T22:24:25.955Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under O.C.G.A. §7-4-12: the Federal Reserve prime rate (published in Fed release H.15) on the day of judgment + 3 percentage points, fixed for the life of the judgment — currently about 9.75% (prime ~6.75% + 3). Simple interest. A judgment on a written contract that specifies a rate carries the contract rate instead (§7-4-12(b)). Verify against the current prime rate; not legal advice."
+      }
+    ]
+  }
+}

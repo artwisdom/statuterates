@@ -18,6 +18,10 @@ const histories = {
     { effective_date: '2022-04-30', value: 2 },
   ],
   massachusetts: [{ effective_date: '1990-01-01', value: 12 }],
+  pennsylvania: [{ effective_date: '1990-01-01', value: 6 }],
+  illinois: [{ effective_date: '1990-01-01', value: 9 }],
+  'north-carolina': [{ effective_date: '1990-01-01', value: 8 }],
+  virginia: [{ effective_date: '1990-01-01', value: 6 }],
   iowa: historyFor('iowa-judgment-rate'),
 };
 const kinds = { 'new-york-consumer': 'floating-simple' };
@@ -26,6 +30,10 @@ const seriesOptions = [
   { key: 'new-york', label: 'New York — 9% general (CPLR 5004)' },
   { key: 'new-york-consumer', label: 'New York — 2% consumer debt (CPLR 5004)' },
   { key: 'massachusetts', label: 'Massachusetts — 12% (c.231 §§6B–6C)' },
+  { key: 'pennsylvania', label: 'Pennsylvania — 6% (42 Pa.C.S. §8101)' },
+  { key: 'illinois', label: 'Illinois — 9% (735 ILCS 5/2-1303)' },
+  { key: 'north-carolina', label: 'North Carolina — 8% (N.C.G.S. §24-5)' },
+  { key: 'virginia', label: 'Virginia — 6% (Va. Code §6.2-302)' },
   { key: 'iowa', label: 'Iowa — 1-yr Treasury + 2% (§668.13, weekly)' },
 ];
 const caLatest = latestOf(getEntity('california-judgment-rate'));

@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-09T22:24:25.971Z",
+  "slug": "tennessee-judgment-rate",
+  "name": "Tennessee Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "TN",
+    "statute": "Tenn. Code §47-14-121",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8.75,
+      "value_text": "8.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-01",
+      "source_id": "tn-courts",
+      "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
+      "retrieved_at": "2026-07-09T22:24:25.955Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under Tenn. Code §47-14-121: the \"formula rate\" (the weekly-average prime loan rate published by the Fed, announced by the TN Commissioner of Financial Institutions) minus 2 percentage points, fixed at judgment — currently 8.75% (judgments entered in the quarter beginning July 1, 2026). Simple interest. Verify the current rate at tncourts.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8.75,
+        "value_text": "8.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-01",
+        "source_id": "tn-courts",
+        "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
+        "retrieved_at": "2026-07-09T22:24:25.955Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under Tenn. Code §47-14-121: the \"formula rate\" (the weekly-average prime loan rate published by the Fed, announced by the TN Commissioner of Financial Institutions) minus 2 percentage points, fixed at judgment — currently 8.75% (judgments entered in the quarter beginning July 1, 2026). Simple interest. Verify the current rate at tncourts.gov; not legal advice."
+      }
+    ]
+  }
+}

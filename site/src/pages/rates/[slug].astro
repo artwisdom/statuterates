@@ -19,6 +19,7 @@ const totalPoints = (entity.history?.annual_rate || []).length;
 
 const isDerived = latest?.confidence !== 'high';
 const isStatuteFixed = latest?.method === 'statute-fixed';
+const isStatutory = (latest?.method || '').startsWith('statute'); // fixed OR agency-set variable
 const unitLabel = 'per year';
 
 // Which calculator (if any) uses this series — internal linking both helps users and SEO.
@@ -37,6 +38,10 @@ const CALC_FOR = {
   'new-york-judgment-rate': '/calculators/state-judgment-interest/',
   'new-york-consumer-debt-judgment-rate': '/calculators/state-judgment-interest/',
   'massachusetts-judgment-rate': '/calculators/state-judgment-interest/',
+  'pennsylvania-judgment-rate': '/calculators/state-judgment-interest/',
+  'illinois-judgment-rate': '/calculators/state-judgment-interest/',
+  'north-carolina-judgment-rate': '/calculators/state-judgment-interest/',
+  'virginia-judgment-rate': '/calculators/state-judgment-interest/',
   'iowa-judgment-rate': '/calculators/state-judgment-interest/',
 };
 const calcHref = CALC_FOR[slug] || null;
@@ -108,7 +113,7 @@ const jsonLd = [
         : <>{unitLabel}, effective {prettyDate(latest?.effective_date)}</>}
       <br />
       <span class={`badge ${latest?.confidence === 'high' ? 'high' : 'medium'}`}>
-        {isStatuteFixed ? 'Set by statute' : latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
+        {isStatutory ? 'Set by statute' : latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
       </span>
     </span>
   </div>
@@ -119,9 +124,9 @@ const jsonLd = [
     <p><a href={calcHref}><strong>→ Calculate interest at this rate</strong></a></p>
   )}
 
-  {(isDerived || isStatuteFixed) && (
+  {(isDerived || isStatutory) && (
     <div class="disclaimer">
-      <strong>{isStatuteFixed ? 'Statutory basis & carve-outs.' : 'How this value is derived.'}</strong> {latest?.notes}
+      <strong>{isStatutory ? 'Statutory basis & carve-outs.' : 'How this value is derived.'}</strong> {latest?.notes}
     </div>
   )}
 
@@ -142,7 +147,7 @@ const jsonLd = [
           <tr>
             <td>{prettyDate(o.effective_date)}</td>
             <td class="num">{o.value_text}</td>
-            <td class="source-note">{o.method === 'statute-fixed' ? 'Statute' : o.confidence === 'high' ? 'Published' : 'Derived'}</td>
+            <td class="source-note">{(o.method || '').startsWith('statute') ? 'Statute' : o.confidence === 'high' ? 'Published' : 'Derived'}</td>
           </tr>
         ))}
       </tbody>

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T02:10:15.931Z",
+  "generated_at": "2026-07-09T22:24:25.971Z",
   "slug": "new-york-judgment-rate",
   "name": "New York Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2022-04-30",
       "source_id": "ny-senate",
       "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-      "retrieved_at": "2026-07-09T02:10:15.891Z",
+      "retrieved_at": "2026-07-09T22:24:25.955Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "General rate under CPLR 5004(a): 9% per annum \"except where otherwise provided by statute\". Treated as simple interest in NY practice. For judgments arising out of CONSUMER DEBT against a natural person the rate is 2% (see the companion consumer-debt series). Effective date shown is when the current statutory scheme took effect (L.2021 ch.831, eff. Apr 30, 2022); the 9% general rate long predates it. Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2022-04-30",
         "source_id": "ny-senate",
         "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-        "retrieved_at": "2026-07-09T02:10:15.891Z",
+        "retrieved_at": "2026-07-09T22:24:25.955Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "General rate under CPLR 5004(a): 9% per annum \"except where otherwise provided by statute\". Treated as simple interest in NY practice. For judgments arising out of CONSUMER DEBT against a natural person the rate is 2% (see the companion consumer-debt series). Effective date shown is when the current statutory scheme took effect (L.2021 ch.831, eff. Apr 30, 2022); the 9% general rate long predates it. Verify against the statute; not legal advice."

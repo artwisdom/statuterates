@@ -7,13 +7,22 @@
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-09T02:10:15.931Z",
-  "entity_count": 17,
-  "observation_count": 645,
+  "generated_at": "2026-07-09T22:24:25.971Z",
+  "entity_count": 31,
+  "observation_count": 659,
   "metrics": [
     "annual_rate"
   ],
   "sources": [
+    {
+      "id": "az-ars",
+      "name": "Arizona judgment interest (A.R.S. §44-1201)",
+      "publisher": "Arizona State Legislature (official)",
+      "home_url": "https://www.azleg.gov/ars/44/01201.htm",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
     {
       "id": "boe-bank-rate",
       "name": "Bank of England — Bank Rate (IUDBEDR)",
@@ -21,7 +30,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T02:10:12.530Z"
+      "retrieved_at": "2026-07-09T22:24:25.951Z"
     },
     {
       "id": "ca-leginfo",
@@ -33,13 +42,22 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
+      "id": "co-sos",
+      "name": "Colorado judgment interest (C.R.S. §5-12-102 / §13-21-101)",
+      "publisher": "Colorado Secretary of State (official rate certification)",
+      "home_url": "https://www.coloradosos.gov/pubs/info_center/files/interest_rates.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ecb-mro",
       "name": "ECB — Main Refinancing Operations fixed rate (MRR)",
       "publisher": "European Central Bank",
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T02:10:15.886Z"
+      "retrieved_at": "2026-07-09T22:24:25.954Z"
     },
     {
       "id": "fed-h15",
@@ -48,7 +66,25 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T02:10:09.081Z"
+      "retrieved_at": "2026-07-09T22:24:25.948Z"
+    },
+    {
+      "id": "fl-cfo",
+      "name": "Florida judgment interest rate (Fla. Stat. §55.03)",
+      "publisher": "Florida Chief Financial Officer (official)",
+      "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ga-code",
+      "name": "Georgia judgment interest (O.C.G.A. §7-4-12)",
+      "publisher": "Official Code of Georgia Annotated",
+      "home_url": "http://ga.elaws.us/law/section7-4-12",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
       "id": "ia-legis",
@@ -60,13 +96,22 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
+      "id": "il-ilcs",
+      "name": "Illinois judgment interest (735 ILCS 5/2-1303)",
+      "publisher": "Illinois General Assembly (official)",
+      "home_url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=073500050K2-1303",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "irs-6621",
       "name": "IRS quarterly interest rates (§6621)",
       "publisher": "U.S. Internal Revenue Service",
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T02:10:02.883Z"
+      "retrieved_at": "2026-07-09T22:24:25.944Z"
     },
     {
       "id": "ma-legislature",
@@ -78,6 +123,33 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
+      "id": "mi-legislature",
+      "name": "Michigan judgment interest (MCL §600.6013)",
+      "publisher": "Michigan Legislature (official)",
+      "home_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nc-ncleg",
+      "name": "North Carolina judgment interest (N.C.G.S. §24-5 / §24-1)",
+      "publisher": "North Carolina General Assembly (official)",
+      "home_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nj-courts",
+      "name": "New Jersey post-judgment interest (R. 4:42-11)",
+      "publisher": "New Jersey Courts (official)",
+      "home_url": "https://www.njcourts.gov/notices/notice-post-judgment-interest-rate-calendar-year-2026-rule-442-11",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ny-senate",
       "name": "New York CPLR 5004",
       "publisher": "New York State Senate (official statute text)",
@@ -85,6 +157,60 @@
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated statutory value; official text verified 2026-07-08",
       "retrieved_at": "2026-07-08T00:00:00Z"
+    },
+    {
+      "id": "oh-tax",
+      "name": "Ohio judgment interest (R.C. §1343.03 / §5703.47)",
+      "publisher": "Ohio Department of Taxation (official)",
+      "home_url": "https://tax.ohio.gov/individual/resources/annual-interest-rates",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "pa-statutes",
+      "name": "Pennsylvania judgment interest (42 Pa.C.S. §8101; 41 P.S. §202)",
+      "publisher": "Pennsylvania General Assembly (official)",
+      "home_url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/42/00.081.001.000..HTM",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "tn-courts",
+      "name": "Tennessee post-judgment interest (Tenn. Code §47-14-121)",
+      "publisher": "Tennessee Courts / Dept. of Financial Institutions (official)",
+      "home_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "tx-occc",
+      "name": "Texas post-judgment interest rate (Fin. Code §304.003)",
+      "publisher": "Texas Office of Consumer Credit Commissioner (official)",
+      "home_url": "https://occc.texas.gov/publications/interest-rates/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "va-code",
+      "name": "Virginia judgment interest (Va. Code §6.2-302)",
+      "publisher": "Virginia General Assembly (official)",
+      "home_url": "https://law.lis.virginia.gov/vacode/title6.2/chapter3/section6.2-302/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "wa-rcw",
+      "name": "Washington post-judgment interest (RCW 4.56.110)",
+      "publisher": "Washington State Legislature (official)",
+      "home_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
     }
   ]
 }

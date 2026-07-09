@@ -128,6 +128,105 @@ judgment, plus 2 percentage points, computed daily. That means the rate changes 
 computes it from the same official H.15 series that drives the federal post-judgment rate. A contract
 rate governs instead if the judgment is on a contract that fixes one.`,
   },
+  'texas-judgment-rate': {
+    tagline: 'Interest on Texas money judgments — tied to the prime rate.',
+    q: 'What is the current Texas post-judgment interest rate?',
+    body: `Texas post-judgment interest on most money judgments is the Federal Reserve prime rate, held within a
+5% floor and 15% ceiling under Texas Finance Code §304.003 — currently 6.75%. The rate locks in when the
+judgment is entered and, unusually, compounds annually. Judgments on a contract that sets its own interest
+rate follow §304.002 instead (the contract rate, capped at 18%).`,
+  },
+  'florida-judgment-rate': {
+    tagline: 'Florida’s quarterly judgment rate, set by the CFO.',
+    q: 'What is the current Florida judgment interest rate?',
+    body: `Florida’s post-judgment interest rate is reset every quarter by the state Chief Financial Officer
+under Fla. Stat. §55.03 — the 12-month average of the New York Fed’s discount rate plus 4 points — currently
+8.06% for the quarter beginning July 1, 2026. It’s simple interest, and a judgment’s rate re-adjusts each
+January 1. Many sites still quote last quarter’s number; this page tracks the current one.`,
+  },
+  'georgia-judgment-rate': {
+    tagline: 'Georgia judgment interest — prime rate plus 3 points.',
+    q: 'What is the current Georgia post-judgment interest rate?',
+    body: `Under O.C.G.A. §7-4-12, interest on a Georgia money judgment is the Federal Reserve prime rate on the
+day of judgment plus 3 percentage points — about 9.75% today — fixed for the life of that judgment, as simple
+interest. A judgment on a written contract that specifies a rate carries the contract rate instead.`,
+  },
+  'pennsylvania-judgment-rate': {
+    tagline: 'Pennsylvania’s flat 6% legal judgment rate.',
+    q: 'What is the Pennsylvania judgment interest rate?',
+    body: `Pennsylvania judgments carry interest at the state’s legal rate of 6% per year — 42 Pa.C.S. §8101 sets
+judgment interest at "the lawful rate," which 41 P.S. §202 fixes at 6%. It’s simple interest and has been 6%
+for decades. A judgment on a loan or contract can carry a higher lawful contract rate where the documents set one.`,
+  },
+  'ohio-judgment-rate': {
+    tagline: 'Ohio’s judgment rate, reset annually by the Tax Commissioner.',
+    q: 'What is the current Ohio judgment interest rate?',
+    body: `Ohio sets its judgment interest rate once a year: under R.C. §1343.03(B) and §5703.47 it’s the federal
+short-term rate plus 3 points, rounded — currently 7% for 2026 — computed as simple interest. A written contract
+that specifies a different rate controls instead.`,
+  },
+  'illinois-judgment-rate': {
+    tagline: 'Illinois’ 9% statutory judgment rate.',
+    q: 'What is the Illinois post-judgment interest rate?',
+    body: `Illinois judgments accrue interest at 9% per year under 735 ILCS 5/2-1303 — a flat statutory rate,
+simple interest, charged only on the unpaid portion of the judgment. The main exception: judgments against a
+unit of local government accrue 6%.`,
+  },
+  'north-carolina-judgment-rate': {
+    tagline: 'North Carolina’s 8% legal judgment rate.',
+    q: 'What is the North Carolina judgment interest rate?',
+    body: `North Carolina judgments carry interest at the state’s legal rate of 8% per year — N.C.G.S. §24-5 ties
+judgment interest to the §24-1 legal rate — or the contract rate for a judgment on a contract. It’s a fixed
+statutory rate applied as simple interest.`,
+  },
+  'michigan-judgment-rate': {
+    tagline: 'Michigan’s judgment rate — 5-year Treasury + 1 point, compounded.',
+    q: 'What is the current Michigan judgment interest rate?',
+    body: `Michigan is unusual: interest runs from the day you file the complaint, not just after judgment. Under
+MCL §600.6013 the general rate is 1 point above the six-month average of 5-year Treasury auctions, reset every
+January 1 and July 1 and compounded annually — currently 4.725%. Judgments on a written instrument use a separate
+rate capped at 13%.`,
+  },
+  'new-jersey-judgment-rate': {
+    tagline: 'New Jersey’s two-tier judgment rate, set yearly by the courts.',
+    q: 'What is the current New Jersey post-judgment interest rate?',
+    body: `New Jersey’s post-judgment interest is set annually by the Judiciary under Court Rule R. 4:42-11, based
+on the State Cash Management Fund’s prior-year return. For 2026 it’s 4.5% on judgments up to $20,000 and 6.5%
+(the base plus 2 points) on judgments over $20,000 — simple interest.`,
+  },
+  'virginia-judgment-rate': {
+    tagline: 'Virginia’s flat 6% judgment rate.',
+    q: 'What is the Virginia judgment interest rate?',
+    body: `Virginia judgments carry 6% per year by default under Va. Code §6.2-302 (applied via §8.01-382), as
+simple interest. A judgment on a contract carries the higher of the lawful contract rate or 6%.`,
+  },
+  'washington-judgment-rate': {
+    tagline: 'Washington judgment interest — prime-linked since 2019.',
+    q: 'What is the current Washington post-judgment interest rate?',
+    body: `Since a 2019 amendment to RCW 4.56.110, Washington ties tort and general judgment interest to the
+federal prime rate — currently about 8.75% — while judgments on a written contract carry the contract’s own rate.
+It’s simple interest.`,
+  },
+  'arizona-judgment-rate': {
+    tagline: 'Arizona judgment interest — lesser of 10% or prime + 1.',
+    q: 'What is the current Arizona judgment interest rate?',
+    body: `Arizona post-judgment interest under A.R.S. §44-1201 is the lesser of 10% per year or the Federal
+Reserve prime rate plus 1 point — currently 7.75% — as simple interest. A written agreement can set a different rate.`,
+  },
+  'colorado-judgment-rate': {
+    tagline: 'Colorado’s 8% compounded judgment rate.',
+    q: 'What is the Colorado judgment interest rate?',
+    body: `Colorado money judgments accrue 8% per year, compounded annually, under C.R.S. §5-12-102(4)(b) when no
+contract rate applies. Personal-injury judgments use a separate rate (§13-21-101), and judgments on appeal use a
+variable rate certified each January by the Secretary of State.`,
+  },
+  'tennessee-judgment-rate': {
+    tagline: 'Tennessee judgment interest — the formula rate minus 2 points.',
+    q: 'What is the current Tennessee post-judgment interest rate?',
+    body: `Tennessee post-judgment interest under Tenn. Code §47-14-121 is the "formula rate" (the weekly-average
+prime rate announced by the state Commissioner of Financial Institutions) minus 2 percentage points, fixed when
+the judgment is entered — currently 8.75%, as simple interest.`,
+  },
   'eu-late-payment-reference': {
     tagline: 'The EU reference rate for late-payment interest.',
     q: 'What is the current EU Late Payment Directive reference rate?',

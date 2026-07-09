@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-09T22:24:25.971Z",
+  "slug": "colorado-judgment-rate",
+  "name": "Colorado Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "CO",
+    "statute": "C.R.S. §5-12-102(4)(b)",
+    "basis": "statute-fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8,
+      "value_text": "8%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-01-01",
+      "source_id": "co-sos",
+      "source_url": "https://www.coloradosos.gov/pubs/info_center/files/interest_rates.pdf",
+      "retrieved_at": "2026-07-09T22:24:25.955Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Post-judgment interest under C.R.S. §5-12-102(4)(b): 8% per annum COMPOUNDED ANNUALLY on general money judgments absent a contract rate. Personal-injury/tort judgments use a separate rate under §13-21-101, and appealed money judgments a variable rate under §5-12-106 (certified each January 1 by the Colorado Secretary of State). Verify the current variable rates at coloradosos.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8,
+        "value_text": "8%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-01-01",
+        "source_id": "co-sos",
+        "source_url": "https://www.coloradosos.gov/pubs/info_center/files/interest_rates.pdf",
+        "retrieved_at": "2026-07-09T22:24:25.955Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Post-judgment interest under C.R.S. §5-12-102(4)(b): 8% per annum COMPOUNDED ANNUALLY on general money judgments absent a contract rate. Personal-injury/tort judgments use a separate rate under §13-21-101, and appealed money judgments a variable rate under §5-12-106 (certified each January 1 by the Colorado Secretary of State). Verify the current variable rates at coloradosos.gov; not legal advice."
+      }
+    ]
+  }
+}
