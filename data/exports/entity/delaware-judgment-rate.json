@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "delaware-judgment-rate",
+  "name": "Delaware Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "DE",
+    "statute": "6 Del. C. § 2301",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8.75,
+      "value_text": "8.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-08",
+      "source_id": "de-jud",
+      "source_url": "https://delcode.delaware.gov/title6/c023/",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Legal/post-judgment rate = Federal Reserve discount rate (in practice the Fed's \"primary credit rate,\" which replaced the old adjustment-credit discount rate in Jan 2003) + 5… Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the… Verify the current value at delcode.delaware.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8.75,
+        "value_text": "8.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-08",
+        "source_id": "de-jud",
+        "source_url": "https://delcode.delaware.gov/title6/c023/",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Legal/post-judgment rate = Federal Reserve discount rate (in practice the Fed's \"primary credit rate,\" which replaced the old adjustment-credit discount rate in Jan 2003) + 5… Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the… Verify the current value at delcode.delaware.gov; not legal advice."
+      }
+    ]
+  }
+}

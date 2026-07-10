@@ -22,6 +22,16 @@ const histories = {
   illinois: [{ effective_date: '1990-01-01', value: 9 }],
   'north-carolina': [{ effective_date: '1990-01-01', value: 8 }],
   virginia: [{ effective_date: '1990-01-01', value: 6 }],
+  'alabama': [{ effective_date: '2011-09-01', value: 7.5 }],
+  'hawaii': [{ effective_date: '1990-01-01', value: 10 }],
+  'indiana': [{ effective_date: '1990-01-01', value: 8 }],
+  'maryland': [{ effective_date: '1990-01-01', value: 10 }],
+  'new-mexico': [{ effective_date: '1990-01-01', value: 8.75 }],
+  'oregon': [{ effective_date: '1990-01-01', value: 9 }],
+  'rhode-island': [{ effective_date: '1990-01-01', value: 12 }],
+  'south-dakota': [{ effective_date: '1990-01-01', value: 10 }],
+  'vermont': [{ effective_date: '1990-01-01', value: 12 }],
+  'wyoming': [{ effective_date: '1990-01-01', value: 10 }],
   iowa: historyFor('iowa-judgment-rate'),
 };
 const kinds = { 'new-york-consumer': 'floating-simple' };
@@ -34,6 +44,16 @@ const seriesOptions = [
   { key: 'illinois', label: 'Illinois — 9% (735 ILCS 5/2-1303)' },
   { key: 'north-carolina', label: 'North Carolina — 8% (N.C.G.S. §24-5)' },
   { key: 'virginia', label: 'Virginia — 6% (Va. Code §6.2-302)' },
+  { key: 'alabama', label: "Alabama — 7.5% (Ala. Code § 8-8-10(a))" },
+  { key: 'hawaii', label: "Hawaii — 10% (Haw. Rev. Stat. 478-3. Related: 478-2)" },
+  { key: 'indiana', label: "Indiana — 8% (Ind. Code § 24-4.6-1-101)" },
+  { key: 'maryland', label: "Maryland — 10% (Md. Code, Courts & Judicial Proceedings Section 11-107(a))" },
+  { key: 'new-mexico', label: "New Mexico — 8.75% (N.M. Stat. Ann. § 56-8-4)" },
+  { key: 'oregon', label: "Oregon — 9% (ORS 82.010(2))" },
+  { key: 'rhode-island', label: "Rhode Island — 12% (R.I. Gen. Laws § 9-21-10)" },
+  { key: 'south-dakota', label: "South Dakota — 10% (SDCL § 54-3-5.1)" },
+  { key: 'vermont', label: "Vermont — 12% (9 V.S.A. § 41a(a))" },
+  { key: 'wyoming', label: "Wyoming — 10% (Wyo. Stat. Ann. 1-16-102)" },
   { key: 'iowa', label: 'Iowa — 1-yr Treasury + 2% (§668.13, weekly)' },
 ];
 const caLatest = latestOf(getEntity('california-judgment-rate'));

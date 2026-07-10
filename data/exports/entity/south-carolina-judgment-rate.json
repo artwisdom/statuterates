@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "south-carolina-judgment-rate",
+  "name": "South Carolina Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "SC",
+    "statute": "S.C. Code Ann. § 34-31-20(B)",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10.75,
+      "value_text": "10.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-01-15",
+      "source_id": "sc-jud",
+      "source_url": "https://www.scstatehouse.gov/code/t34c031.php",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under S.C. Code Ann. § 34-31-20(B), currently 10.75% (as of January 15, 2026). Legal rate = (prime rate as listed in the first edition of the Wall Street Journal published for the calendar year for which damages are awarded) + 4 percentage points,… Compounded annually. This is the rate on money decrees and judgments under § 34-31-20(B), applicable to all judgments entered on or after July 1, 2005. TRANSITIONAL: for… Verify the current value at scstatehouse.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10.75,
+        "value_text": "10.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-01-15",
+        "source_id": "sc-jud",
+        "source_url": "https://www.scstatehouse.gov/code/t34c031.php",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under S.C. Code Ann. § 34-31-20(B), currently 10.75% (as of January 15, 2026). Legal rate = (prime rate as listed in the first edition of the Wall Street Journal published for the calendar year for which damages are awarded) + 4 percentage points,… Compounded annually. This is the rate on money decrees and judgments under § 34-31-20(B), applicable to all judgments entered on or after July 1, 2005. TRANSITIONAL: for… Verify the current value at scstatehouse.gov; not legal advice."
+      }
+    ]
+  }
+}

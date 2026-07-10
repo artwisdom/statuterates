@@ -52,7 +52,9 @@ only when a run goes red.
 
 ### E. Quarterly statute re-verification (statute-fixed state rates)
 **Cadence:** once a quarter (~20 min), or immediately if a rate-change bill makes news.
-The state rates are curated values in `pipeline/fetchers/us-states.mjs` (18 states as of 2026-07-09),
+The state rates are curated values in `pipeline/fetchers/us-states.mjs` (49 states + D.C. as of 2026-07-09;
+Mississippi omitted — no fixed statutory default. Batch 1/2 are hand-written; batch 3 was generated from the
+verified JSON by a one-off script — to re-verify batch 3, re-run the verification workflow and regenerate),
 split into fixed-by-statute (high confidence) and variable/agency-set (medium, method `statute-variable`,
 `VERIFIED_ON`/`EXP_VERIFIED_ON` date stamps). Re-verify the VARIABLE ones more often (TX/FL/GA/OH/MI/NJ/WA/AZ/TN/CO
 change quarterly–annually via prime/Treasury/agency resets); fixed ones (PA/IL/NC/VA + CA/NY/MA) only on amendment.

@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "wisconsin-judgment-rate",
+  "name": "Wisconsin Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "WI",
+    "statute": "Wis. Stat. § 815.05(8)",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 7.75,
+      "value_text": "7.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "wi-jud",
+      "source_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Prime rate is the bank prime loan rate published by the Federal Reserve Board in statistical release H.15… Simple interest. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which… Verify the current value at docs.legis.wisconsin.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 7.75,
+        "value_text": "7.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "wi-jud",
+        "source_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Prime rate is the bank prime loan rate published by the Federal Reserve Board in statistical release H.15… Simple interest. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which… Verify the current value at docs.legis.wisconsin.gov; not legal advice."
+      }
+    ]
+  }
+}

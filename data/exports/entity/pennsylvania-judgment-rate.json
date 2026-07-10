@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T22:24:25.971Z",
+  "generated_at": "2026-07-10T02:13:37.696Z",
   "slug": "pennsylvania-judgment-rate",
   "name": "Pennsylvania Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "pa-statutes",
       "source_url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/42/00.081.001.000..HTM",
-      "retrieved_at": "2026-07-09T22:24:25.955Z",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest at Pennsylvania’s legal rate of 6% per annum — 42 Pa.C.S. §8101 sets judgment interest at \"the lawful rate,\" which 41 P.S. §202 fixes at 6%. Simple interest; written into statute and unchanged for decades. A contract judgment can carry a higher lawful contract rate if the documents set one. Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "pa-statutes",
         "source_url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/42/00.081.001.000..HTM",
-        "retrieved_at": "2026-07-09T22:24:25.955Z",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest at Pennsylvania’s legal rate of 6% per annum — 42 Pa.C.S. §8101 sets judgment interest at \"the lawful rate,\" which 41 P.S. §202 fixes at 6%. Simple interest; written into statute and unchanged for decades. A contract judgment can carry a higher lawful contract rate if the documents set one. Verify against the statute; not legal advice."

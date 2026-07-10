@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T22:24:25.971Z",
+  "generated_at": "2026-07-10T02:13:37.696Z",
   "slug": "massachusetts-judgment-rate",
   "name": "Massachusetts Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-08",
       "source_id": "ma-legislature",
       "source_url": "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6B",
-      "retrieved_at": "2026-07-09T22:24:25.955Z",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "12% per annum under both M.G.L. c.231 §6B (tort; from commencement of the action) and §6C (contract; from breach/demand, or commencement if not established). Applied as simple interest in MA practice. Carve-outs: an established contract rate displaces the §6C default; judgments against the commonwealth bear interest per §6I (weekly-average 1-yr Treasury CMT, capped at 10%). The official statute pages show no amendment history; the 12% figure has been stable since the early 1980s. Date shown is when the current text was verified (2026-07-08). Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-08",
         "source_id": "ma-legislature",
         "source_url": "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6B",
-        "retrieved_at": "2026-07-09T22:24:25.955Z",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "12% per annum under both M.G.L. c.231 §6B (tort; from commencement of the action) and §6C (contract; from breach/demand, or commencement if not established). Applied as simple interest in MA practice. Carve-outs: an established contract rate displaces the §6C default; judgments against the commonwealth bear interest per §6I (weekly-average 1-yr Treasury CMT, capped at 10%). The official statute pages show no amendment history; the 12% figure has been stable since the early 1980s. Date shown is when the current text was verified (2026-07-08). Verify against the statute; not legal advice."

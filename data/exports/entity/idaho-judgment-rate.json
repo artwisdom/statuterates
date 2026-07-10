@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "idaho-judgment-rate",
+  "name": "Idaho Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "ID",
+    "statute": "Idaho Code § 28-22-104(2)",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8.875,
+      "value_text": "8.875%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-01",
+      "source_id": "id-jud",
+      "source_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Treasury securities adjusted to a constant maturity of one (1)… Simple interest. § 28-22-104(2) applies \"unless the judgment is rendered on a written contract or agreement providing for a different rate of interest, in which case… Verify the current value at sto.idaho.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8.875,
+        "value_text": "8.875%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-01",
+        "source_id": "id-jud",
+        "source_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Treasury securities adjusted to a constant maturity of one (1)… Simple interest. § 28-22-104(2) applies \"unless the judgment is rendered on a written contract or agreement providing for a different rate of interest, in which case… Verify the current value at sto.idaho.gov; not legal advice."
+      }
+    ]
+  }
+}

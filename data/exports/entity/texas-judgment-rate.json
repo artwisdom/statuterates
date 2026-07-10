@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-09T22:24:25.971Z",
+  "generated_at": "2026-07-10T02:13:37.696Z",
   "slug": "texas-judgment-rate",
   "name": "Texas Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-01",
       "source_id": "tx-occc",
       "source_url": "https://occc.texas.gov/publications/interest-rates/",
-      "retrieved_at": "2026-07-09T22:24:25.955Z",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest on money judgments not on an interest-bearing contract, under Tex. Fin. Code §304.003: the Federal Reserve prime rate with a 5% floor and 15% cap — currently 6.75% (July 2026, published by the Texas OCCC). The rate is fixed at entry for the life of the judgment and COMPOUNDS ANNUALLY (§304.006). Judgments on a contract that sets interest instead use §304.002 (lesser of the contract rate or 18%). Verify the current period at occc.texas.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-01",
         "source_id": "tx-occc",
         "source_url": "https://occc.texas.gov/publications/interest-rates/",
-        "retrieved_at": "2026-07-09T22:24:25.955Z",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest on money judgments not on an interest-bearing contract, under Tex. Fin. Code §304.003: the Federal Reserve prime rate with a 5% floor and 15% cap — currently 6.75% (July 2026, published by the Texas OCCC). The rate is fixed at entry for the life of the judgment and COMPOUNDS ANNUALLY (§304.006). Judgments on a contract that sets interest instead use §304.002 (lesser of the contract rate or 18%). Verify the current period at occc.texas.gov; not legal advice."

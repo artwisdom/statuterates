@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "missouri-judgment-rate",
+  "name": "Missouri Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "MO",
+    "statute": "Mo. Rev. Stat. §408.040",
+    "basis": "statute-variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 9,
+      "value_text": "9%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "mo-jud",
+      "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Post-judgment interest under Mo. Rev. Stat. §408.040, currently 9% (as of July 9, 2026). 040: - NON-TORT judgments: fixed by statute at 9% per annum; but \"judgments and orders for money upon contracts bearing more than nine percent interest shall bear the same… Simple interest. NON-TORT (contract and all other non-tort money judgments) = 9% flat, or the contract rate if the contract bears more than 9%. TORT = Fed Funds… Verify the current value at revisor.mo.gov; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 9,
+        "value_text": "9%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "mo-jud",
+        "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Post-judgment interest under Mo. Rev. Stat. §408.040, currently 9% (as of July 9, 2026). 040: - NON-TORT judgments: fixed by statute at 9% per annum; but \"judgments and orders for money upon contracts bearing more than nine percent interest shall bear the same… Simple interest. NON-TORT (contract and all other non-tort money judgments) = 9% flat, or the contract rate if the contract bears more than 9%. TORT = Fed Funds… Verify the current value at revisor.mo.gov; not legal advice."
+      }
+    ]
+  }
+}

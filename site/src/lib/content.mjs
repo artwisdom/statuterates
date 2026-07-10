@@ -227,6 +227,166 @@ variable rate certified each January by the Secretary of State.`,
 prime rate announced by the state Commissioner of Financial Institutions) minus 2 percentage points, fixed when
 the judgment is entered — currently 8.75%, as simple interest.`,
   },
+  "alabama-judgment-rate": {
+    tagline: "Alabama’s statutory judgment interest rate.",
+    q: "What is the current Alabama post-judgment interest rate?",
+    body: "Alabama money judgments carry a fixed statutory rate of 7.5% per year under Ala. Code § 8-8-10(a), as simple interest. For a judgment \"based upon a contract action,\" interest runs \"at the same rate of interest as stated in the contract\" (the contract rate governs, not…",
+  },
+  "alaska-judgment-rate": {
+    tagline: "Alaska judgment interest — a formula rate, reset twice a year.",
+    q: "What is the current Alaska post-judgment interest rate?",
+    body: "Alaska post-judgment interest is currently 6.75% — a statutory formula rate under Alaska Stat. 09.30.070(a) that resets twice a year. A judgment founded on a written contract that specifies an interest rate (not exceeding the legal maximum) bears the contract rate if that rate is…",
+  },
+  "arkansas-judgment-rate": {
+    tagline: "Arkansas judgment interest — a formula rate, reset periodically.",
+    q: "What is the current Arkansas post-judgment interest rate?",
+    body: "Arkansas post-judgment interest is currently 5.75% — a statutory formula rate under Ark. Code Ann. § 16-65-114(a) that resets periodically. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current…",
+  },
+  "connecticut-judgment-rate": {
+    tagline: "Connecticut’s statutory judgment interest rate.",
+    q: "What is the current Connecticut post-judgment interest rate?",
+    body: "Connecticut money judgments carry a fixed statutory rate of 10% per year under Conn. Gen. Stat. §37-3a, as simple interest. §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20…",
+  },
+  "delaware-judgment-rate": {
+    tagline: "Delaware judgment interest — a formula rate, reset twice a year.",
+    q: "What is the current Delaware post-judgment interest rate?",
+    body: "Delaware post-judgment interest is currently 8.75% — a statutory formula rate under 6 Del. C. § 2301 that resets twice a year. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the…",
+  },
+  "dc-judgment-rate": {
+    tagline: "District of Columbia judgment interest — a formula rate, reset each quarter.",
+    q: "What is the current District of Columbia (D.C.) post-judgment interest rate?",
+    body: "District of Columbia (D.C.) post-judgment interest is currently 5% — a statutory formula rate under D.C. Code § 28-3302(c) that resets each quarter. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per…",
+  },
+  "hawaii-judgment-rate": {
+    tagline: "Hawaii’s statutory judgment interest rate.",
+    q: "What is the current Hawaii post-judgment interest rate?",
+    body: "Hawaii money judgments carry a fixed statutory rate of 10% per year under Haw. Rev. Stat. 478-3. Related: 478-2, as simple interest. 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the…",
+  },
+  "idaho-judgment-rate": {
+    tagline: "Idaho judgment interest — a formula rate, reset each year.",
+    q: "What is the current Idaho post-judgment interest rate?",
+    body: "Idaho post-judgment interest is currently 8.875% — a statutory formula rate under Idaho Code § 28-22-104(2) that resets each year. § 28-22-104(2) applies \"unless the judgment is rendered on a written contract or agreement providing for a different rate of interest, in which case…",
+  },
+  "indiana-judgment-rate": {
+    tagline: "Indiana’s statutory judgment interest rate.",
+    q: "What is the current Indiana post-judgment interest rate?",
+    body: "Indiana money judgments carry a fixed statutory rate of 8% per year under Ind. Code § 24-4.6-1-101, as simple interest. This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind.…",
+  },
+  "kansas-judgment-rate": {
+    tagline: "Kansas judgment interest — a formula rate, reset each year.",
+    q: "What is the current Kansas post-judgment interest rate?",
+    body: "Kansas post-judgment interest is currently 7.75% — a statutory formula rate under Kan. Stat. Ann. 16-204 that resets each year. This 16-204 rate is POST-judgment. Prejudgment interest is governed separately by K.S.A. 16-201 (10% per annum when no other rate agreed). CONTRACT:…",
+  },
+  "kentucky-judgment-rate": {
+    tagline: "Kentucky’s statutory judgment interest rate.",
+    q: "What is the current Kentucky post-judgment interest rate?",
+    body: "Kentucky money judgments carry a fixed statutory rate of 6% per year under KRS 360.040, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD…",
+  },
+  "louisiana-judgment-rate": {
+    tagline: "Louisiana judgment interest — a formula rate, reset each year.",
+    q: "What is the current Louisiana post-judgment interest rate?",
+    body: "Louisiana post-judgment interest is currently 7.5% — a statutory formula rate under La. R.S. 13:4202(B) that resets each year. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. 13:4203 provides interest attaches from the date of judicial…",
+  },
+  "maryland-judgment-rate": {
+    tagline: "Maryland’s statutory judgment interest rate.",
+    q: "What is the current Maryland post-judgment interest rate?",
+    body: "Maryland money judgments carry a fixed statutory rate of 10% per year under Md. Code, Courts & Judicial Proceedings Section 11-107(a), as simple interest. Under the \"except as provided in Section 11-106\" clause, a money judgment on a contract for a loan of money carries interest at the RATE CHARGED IN…",
+  },
+  "minnesota-judgment-rate": {
+    tagline: "Minnesota judgment interest — a formula rate, reset each year.",
+    q: "What is the current Minnesota post-judgment interest rate?",
+    body: "Minnesota post-judgment interest is currently 4% / 10% — a statutory formula rate under Minn. Stat. § 549.09, subd. 1(c) that resets each year. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the…",
+  },
+  "missouri-judgment-rate": {
+    tagline: "Missouri judgment interest — a formula rate, reset periodically.",
+    q: "What is the current Missouri post-judgment interest rate?",
+    body: "Missouri post-judgment interest is currently 9% — a statutory formula rate under Mo. Rev. Stat. §408.040 that resets periodically. NON-TORT (contract and all other non-tort money judgments) = 9% flat, or the contract rate if the contract bears more than 9%. TORT = Fed Funds…",
+  },
+  "montana-judgment-rate": {
+    tagline: "Montana judgment interest — a formula rate, reset periodically.",
+    q: "What is the current Montana post-judgment interest rate?",
+    body: "Montana post-judgment interest is currently 9.75% — a statutory formula rate under Mont. Code Ann. § 25-9-205 that resets periodically. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the…",
+  },
+  "nebraska-judgment-rate": {
+    tagline: "Nebraska judgment interest — a formula rate, reset each quarter.",
+    q: "What is the current Nebraska post-judgment interest rate?",
+    body: "Nebraska post-judgment interest is currently 5.97% — a statutory formula rate under Neb. Rev. Stat. § 45-103 that resets each quarter. Statutory rate does NOT apply where (1) the interest rate is specifically provided by other law, or (2) the action is founded on an oral or written…",
+  },
+  "nevada-judgment-rate": {
+    tagline: "Nevada judgment interest — a formula rate, reset twice a year.",
+    q: "What is the current Nevada post-judgment interest rate?",
+    body: "Nevada post-judgment interest is currently 8.75% — a statutory formula rate under Nev. Rev. Stat. 17.130(2) that resets twice a year. Interest runs from time of SERVICE of the summons and complaint until satisfied, EXCEPT amounts representing FUTURE damages, which draw interest only…",
+  },
+  "new-hampshire-judgment-rate": {
+    tagline: "New Hampshire judgment interest — a formula rate, reset each year.",
+    q: "What is the current New Hampshire post-judgment interest rate?",
+    body: "New Hampshire post-judgment interest is currently 5.7% — a statutory formula rate under N.H. Rev. Stat. Ann. 336:1, II that resets each year. RSA 336:1, II applies the SAME rate to \"judgments, including prejudgment interest\" — one unified statutory rate covers both; no tort/contract…",
+  },
+  "new-mexico-judgment-rate": {
+    tagline: "New Mexico’s statutory judgment interest rate.",
+    q: "What is the current New Mexico post-judgment interest rate?",
+    body: "New Mexico money judgments carry a fixed statutory rate of 8.75% per year under N.M. Stat. Ann. § 56-8-4, as simple interest. If the judgment is based on tortious conduct, bad faith, or intentional or willful acts, post-judgment interest is 15% (not 8.75%); plaintiff…",
+  },
+  "north-dakota-judgment-rate": {
+    tagline: "North Dakota judgment interest — a formula rate, reset each year.",
+    q: "What is the current North Dakota post-judgment interest rate?",
+    body: "North Dakota post-judgment interest is currently 10% — a statutory formula rate under N.D.C.C. § 28-20-34 that resets each year. Contract rate governs first — if the original instrument on which the action was based specifies an interest rate, judgment interest accrues at THAT…",
+  },
+  "oklahoma-judgment-rate": {
+    tagline: "Oklahoma judgment interest — a formula rate, reset each year.",
+    q: "What is the current Oklahoma post-judgment interest rate?",
+    body: "Oklahoma post-judgment interest is currently 8.75% — a statutory formula rate under 12 O.S. Sec. 727.1 that resets each year. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Treasury Bill rate of the preceding calendar year,…",
+  },
+  "oregon-judgment-rate": {
+    tagline: "Oregon’s statutory judgment interest rate.",
+    q: "What is the current Oregon post-judgment interest rate?",
+    body: "Oregon money judgments carry a fixed statutory rate of 9% per year under ORS 82.010(2), as simple interest. 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees…",
+  },
+  "rhode-island-judgment-rate": {
+    tagline: "Rhode Island’s statutory judgment interest rate.",
+    q: "What is the current Rhode Island post-judgment interest rate?",
+    body: "Rhode Island money judgments carry a fixed statutory rate of 12% per year under R.I. Gen. Laws § 9-21-10, as simple interest. Carve-outs affect scope/accrual date, not the rate. (1) Pre- vs post-judgment: § 9-21-10(a) provides prejudgment interest at 12% from the date the…",
+  },
+  "south-carolina-judgment-rate": {
+    tagline: "South Carolina judgment interest — a formula rate, reset twice a year.",
+    q: "What is the current South Carolina post-judgment interest rate?",
+    body: "South Carolina post-judgment interest is currently 10.75% — a statutory formula rate under S.C. Code Ann. § 34-31-20(B) that resets twice a year. This is the rate on money decrees and judgments under § 34-31-20(B), applicable to all judgments entered on or after July 1, 2005. TRANSITIONAL: for…",
+  },
+  "south-dakota-judgment-rate": {
+    tagline: "South Dakota’s statutory judgment interest rate.",
+    q: "What is the current South Dakota post-judgment interest rate?",
+    body: "South Dakota money judgments carry a fixed statutory rate of 10% per year under SDCL § 54-3-5.1, as simple interest. Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)…",
+  },
+  "utah-judgment-rate": {
+    tagline: "Utah judgment interest — a formula rate, reset each year.",
+    q: "What is the current Utah post-judgment interest rate?",
+    body: "Utah post-judgment interest is currently 5.51% — a statutory formula rate under Utah Code Ann. Sec. 15-1-4 that resets each year. Contract judgments (Sec. 15-1-4(2)(a)): a judgment rendered on a lawful contract conforms to the contract and bears the interest rate agreed by the…",
+  },
+  "vermont-judgment-rate": {
+    tagline: "Vermont’s statutory judgment interest rate.",
+    q: "What is the current Vermont post-judgment interest rate?",
+    body: "Vermont money judgments carry a fixed statutory rate of 12% per year under 9 V.S.A. § 41a(a), as simple interest. No pre- vs post-judgment split in the rate itself: Vermont applies the same 12% legal rate to prejudgment interest (as of right on…",
+  },
+  "west-virginia-judgment-rate": {
+    tagline: "West Virginia judgment interest — a formula rate, reset twice a year.",
+    q: "What is the current West Virginia post-judgment interest rate?",
+    body: "West Virginia post-judgment interest is currently 6.25% — a statutory formula rate under W. Va. Code § 56-6-31 that resets twice a year. Formula and rate apply to both (unified by 2017 amendment eff. Jan 1, 2018) — pre-judgment keyed to the rate on Jan 2 of the year the CAUSE OF ACTION…",
+  },
+  "wisconsin-judgment-rate": {
+    tagline: "Wisconsin judgment interest — a formula rate, reset twice a year.",
+    q: "What is the current Wisconsin post-judgment interest rate?",
+    body: "Wisconsin post-judgment interest is currently 7.75% — a statutory formula rate under Wis. Stat. § 815.05(8) that resets twice a year. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which…",
+  },
+  "wyoming-judgment-rate": {
+    tagline: "Wyoming’s statutory judgment interest rate.",
+    q: "What is the current Wyoming post-judgment interest rate?",
+    body: "Wyoming money judgments carry a fixed statutory rate of 10% per year under Wyo. Stat. Ann. 1-16-102, as simple interest. POST-judgment only (this statute governs interest on decrees/judgments from date of rendition; prejudgment interest is a separate common-law/contract…",
+  },
+  "maine-judgment-rate": {
+    tagline: "Maine judgment interest — a formula rate, reset each year.",
+    q: "What is the current Maine post-judgment interest rate?",
+    body: "Maine post-judgment interest is currently 9.51% — a statutory formula rate under 14 M.R.S. §1602-C that resets each year. Contract or note actions with an interest provision use the greater of the contract rate or the statutory Treasury-plus-6 rate; all other actions use…",
+  },
   'eu-late-payment-reference': {
     tagline: 'The EU reference rate for late-payment interest.',
     q: 'What is the current EU Late Payment Directive reference rate?',

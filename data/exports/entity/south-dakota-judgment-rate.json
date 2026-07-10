@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "south-dakota-judgment-rate",
+  "name": "South Dakota Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "SD",
+    "statute": "SDCL § 54-3-5.1",
+    "basis": "statute-fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "sd-jud",
+      "source_url": "https://sdlegislature.gov/Statutes/54-3-5.1",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)… Verify against the statute; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "sd-jud",
+        "source_url": "https://sdlegislature.gov/Statutes/54-3-5.1",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)… Verify against the statute; not legal advice."
+      }
+    ]
+  }
+}

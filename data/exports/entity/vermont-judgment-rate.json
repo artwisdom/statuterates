@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "slug": "vermont-judgment-rate",
+  "name": "Vermont Judgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States",
+  "locale": null,
+  "metadata": {
+    "state": "VT",
+    "statute": "9 V.S.A. § 41a(a)",
+    "basis": "statute-fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 12,
+      "value_text": "12%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "vt-jud",
+      "source_url": "https://legislature.vermont.gov/statutes/section/09/004/00041a",
+      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Post-judgment interest under 9 V.S.A. § 41a(a) — 12% per year, fixed by statute (simple interest). No pre- vs post-judgment split in the rate itself: Vermont applies the same 12% legal rate to prejudgment interest (as of right on… Verify against the statute; not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 12,
+        "value_text": "12%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "vt-jud",
+        "source_url": "https://legislature.vermont.gov/statutes/section/09/004/00041a",
+        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Post-judgment interest under 9 V.S.A. § 41a(a) — 12% per year, fixed by statute (simple interest). No pre- vs post-judgment split in the rate itself: Vermont applies the same 12% legal rate to prejudgment interest (as of right on… Verify against the statute; not legal advice."
+      }
+    ]
+  }
+}

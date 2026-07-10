@@ -7,13 +7,40 @@
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-09T22:24:25.971Z",
-  "entity_count": 31,
-  "observation_count": 659,
+  "generated_at": "2026-07-10T02:13:37.696Z",
+  "entity_count": 63,
+  "observation_count": 691,
   "metrics": [
     "annual_rate"
   ],
   "sources": [
+    {
+      "id": "ak-jud",
+      "name": "Alaska judgment interest (Alaska Stat. 09.30.070(a))",
+      "publisher": "Alaska — public.courts.alaska.gov",
+      "home_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "al-jud",
+      "name": "Alabama judgment interest (Ala. Code § 8-8-10(a))",
+      "publisher": "Alabama — alison.legislature.state.al.us",
+      "home_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ar-jud",
+      "name": "Arkansas judgment interest (Ark. Code Ann. § 16-65-114(a))",
+      "publisher": "Arkansas — federalreserve.gov",
+      "home_url": "https://www.federalreserve.gov/releases/h15/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
     {
       "id": "az-ars",
       "name": "Arizona judgment interest (A.R.S. §44-1201)",
@@ -30,7 +57,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T22:24:25.951Z"
+      "retrieved_at": "2026-07-10T02:13:37.676Z"
     },
     {
       "id": "ca-leginfo",
@@ -51,13 +78,40 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ct-jud",
+      "name": "Connecticut judgment interest (Conn. Gen. Stat. §37-3a)",
+      "publisher": "Connecticut — cga.ct.gov",
+      "home_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "dc-jud",
+      "name": "District of Columbia judgment interest (D.C. Code § 28-3302(c))",
+      "publisher": "District of Columbia — code.dccouncil.gov",
+      "home_url": "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "de-jud",
+      "name": "Delaware judgment interest (6 Del. C. § 2301)",
+      "publisher": "Delaware — delcode.delaware.gov",
+      "home_url": "https://delcode.delaware.gov/title6/c023/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ecb-mro",
       "name": "ECB — Main Refinancing Operations fixed rate (MRR)",
       "publisher": "European Central Bank",
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T22:24:25.954Z"
+      "retrieved_at": "2026-07-10T02:13:37.678Z"
     },
     {
       "id": "fed-h15",
@@ -66,7 +120,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T22:24:25.948Z"
+      "retrieved_at": "2026-07-10T02:13:37.673Z"
     },
     {
       "id": "fl-cfo",
@@ -87,6 +141,15 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "hi-jud",
+      "name": "Hawaii judgment interest (Haw. Rev. Stat. 478-3. Related: 478-2)",
+      "publisher": "Hawaii — capitol.hawaii.gov",
+      "home_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ia-legis",
       "name": "Iowa Code §668.13",
       "publisher": "Iowa Legislature (official)",
@@ -94,6 +157,15 @@
       "license": "Government edict — not subject to copyright.",
       "robots_status": "formula from official text verified 2026-07-08; values derived from Fed H.15",
       "retrieved_at": "2026-07-08T00:00:00Z"
+    },
+    {
+      "id": "id-jud",
+      "name": "Idaho judgment interest (Idaho Code § 28-22-104(2))",
+      "publisher": "Idaho — sto.idaho.gov",
+      "home_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
       "id": "il-ilcs",
@@ -105,13 +177,49 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "in-jud",
+      "name": "Indiana judgment interest (Ind. Code § 24-4.6-1-101)",
+      "publisher": "Indiana — iga.in.gov",
+      "home_url": "https://iga.in.gov/laws/2025/ic/titles/24",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "irs-6621",
       "name": "IRS quarterly interest rates (§6621)",
       "publisher": "U.S. Internal Revenue Service",
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-09T22:24:25.944Z"
+      "retrieved_at": "2026-07-10T02:13:37.669Z"
+    },
+    {
+      "id": "ks-jud",
+      "name": "Kansas judgment interest (Kan. Stat. Ann. 16-204)",
+      "publisher": "Kansas — sos.ks.gov",
+      "home_url": "https://sos.ks.gov/general-services/finance-rates.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ky-jud",
+      "name": "Kentucky judgment interest (KRS 360.040)",
+      "publisher": "Kentucky — apps.legislature.ky.gov",
+      "home_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "la-jud",
+      "name": "Louisiana judgment interest (La. R.S. 13:4202(B))",
+      "publisher": "Louisiana — ofi.la.gov",
+      "home_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
       "id": "ma-legislature",
@@ -123,10 +231,55 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
+      "id": "md-jud",
+      "name": "Maryland judgment interest (Md. Code, Courts & Judicial Proceedings Section 11-107(a))",
+      "publisher": "Maryland — mgaleg.maryland.gov",
+      "home_url": "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "me-jud",
+      "name": "Maine judgment interest (14 M.R.S. §1602-C)",
+      "publisher": "Maine — legislature.maine.gov",
+      "home_url": "https://legislature.maine.gov/statutes/14/title14sec1602-C.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "mi-legislature",
       "name": "Michigan judgment interest (MCL §600.6013)",
       "publisher": "Michigan Legislature (official)",
       "home_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "mn-jud",
+      "name": "Minnesota judgment interest (Minn. Stat. § 549.09, subd. 1(c))",
+      "publisher": "Minnesota — revisor.mn.gov",
+      "home_url": "https://www.revisor.mn.gov/court_rules/rule/msinte/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "mo-jud",
+      "name": "Missouri judgment interest (Mo. Rev. Stat. §408.040)",
+      "publisher": "Missouri — revisor.mo.gov",
+      "home_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "mt-jud",
+      "name": "Montana judgment interest (Mont. Code Ann. § 25-9-205)",
+      "publisher": "Montana — mca.legmt.gov",
+      "home_url": "https://mca.legmt.gov/bills/mca/title_0250/chapter_0090/part_0020/section_0050/0250-0090-0020-0050.html",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -141,10 +294,55 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "nd-jud",
+      "name": "North Dakota judgment interest (N.D.C.C. § 28-20-34)",
+      "publisher": "North Dakota — ndcourts.gov",
+      "home_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ne-jud",
+      "name": "Nebraska judgment interest (Neb. Rev. Stat. § 45-103)",
+      "publisher": "Nebraska — nebraskajudicial.gov",
+      "home_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nh-jud",
+      "name": "New Hampshire judgment interest (N.H. Rev. Stat. Ann. 336:1, II)",
+      "publisher": "New Hampshire — courts.nh.gov",
+      "home_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "nj-courts",
       "name": "New Jersey post-judgment interest (R. 4:42-11)",
       "publisher": "New Jersey Courts (official)",
       "home_url": "https://www.njcourts.gov/notices/notice-post-judgment-interest-rate-calendar-year-2026-rule-442-11",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nm-jud",
+      "name": "New Mexico judgment interest (N.M. Stat. Ann. § 56-8-4)",
+      "publisher": "New Mexico — law.justia.com",
+      "home_url": "https://law.justia.com/codes/new-mexico/chapter-56/article-8/section-56-8-4/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nv-jud",
+      "name": "Nevada judgment interest (Nev. Rev. Stat. 17.130(2))",
+      "publisher": "Nevada — fid.nv.gov",
+      "home_url": "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201,%202026.pdf",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -168,10 +366,55 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ok-jud",
+      "name": "Oklahoma judgment interest (12 O.S. Sec. 727.1)",
+      "publisher": "Oklahoma — oscn.net",
+      "home_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "or-jud",
+      "name": "Oregon judgment interest (ORS 82.010(2))",
+      "publisher": "Oregon — oregonlegislature.gov",
+      "home_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "pa-statutes",
       "name": "Pennsylvania judgment interest (42 Pa.C.S. §8101; 41 P.S. §202)",
       "publisher": "Pennsylvania General Assembly (official)",
       "home_url": "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/42/00.081.001.000..HTM",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ri-jud",
+      "name": "Rhode Island judgment interest (R.I. Gen. Laws § 9-21-10)",
+      "publisher": "Rhode Island — webserver.rilegislature.gov",
+      "home_url": "https://webserver.rilegislature.gov/Statutes/TITLE9/9-21/9-21-10.HTM",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "sc-jud",
+      "name": "South Carolina judgment interest (S.C. Code Ann. § 34-31-20(B))",
+      "publisher": "South Carolina — scstatehouse.gov",
+      "home_url": "https://www.scstatehouse.gov/code/t34c031.php",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "sd-jud",
+      "name": "South Dakota judgment interest (SDCL § 54-3-5.1)",
+      "publisher": "South Dakota — sdlegislature.gov",
+      "home_url": "https://sdlegislature.gov/Statutes/54-3-5.1",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -195,10 +438,28 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ut-jud",
+      "name": "Utah judgment interest (Utah Code Ann. Sec. 15-1-4)",
+      "publisher": "Utah — utcourts.gov",
+      "home_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "va-code",
       "name": "Virginia judgment interest (Va. Code §6.2-302)",
       "publisher": "Virginia General Assembly (official)",
       "home_url": "https://law.lis.virginia.gov/vacode/title6.2/chapter3/section6.2-302/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "vt-jud",
+      "name": "Vermont judgment interest (9 V.S.A. § 41a(a))",
+      "publisher": "Vermont — legislature.vermont.gov",
+      "home_url": "https://legislature.vermont.gov/statutes/section/09/004/00041a",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -210,6 +471,33 @@
       "home_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "wi-jud",
+      "name": "Wisconsin judgment interest (Wis. Stat. § 815.05(8))",
+      "publisher": "Wisconsin — docs.legis.wisconsin.gov",
+      "home_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "wv-jud",
+      "name": "West Virginia judgment interest (W. Va. Code § 56-6-31)",
+      "publisher": "West Virginia — courtswv.gov",
+      "home_url": "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "wy-jud",
+      "name": "Wyoming judgment interest (Wyo. Stat. Ann. 1-16-102)",
+      "publisher": "Wyoming — wyoleg.gov",
+      "home_url": "https://wyoleg.gov/statutes/compress/title01.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     }
   ]
