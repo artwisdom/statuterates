@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "hawaii-prejudgment-rate",
+  "name": "Hawaii Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "HI",
+    "statute": "HRS 636-16",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "discretionary-with-default"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "hi-prejud",
+      "source_url": "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under HRS 636-16 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Hawaii’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "hi-prejud",
+        "source_url": "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under HRS 636-16 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Hawaii’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

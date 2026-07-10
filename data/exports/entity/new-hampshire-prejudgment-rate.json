@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "new-hampshire-prejudgment-rate",
+  "name": "New Hampshire Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "NH",
+    "statute": "RSA 336:1, II",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 5.7,
+      "value_text": "5.7%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-01-01",
+      "source_id": "nh-prejud",
+      "source_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under RSA 336:1, II — 5.7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Hampshire’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at courts.nh.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 5.7,
+        "value_text": "5.7%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-01-01",
+        "source_id": "nh-prejud",
+        "source_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under RSA 336:1, II — 5.7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Hampshire’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at courts.nh.gov. Not legal advice."
+      }
+    ]
+  }
+}

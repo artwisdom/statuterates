@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "north-carolina-prejudgment-rate",
+  "name": "North Carolina Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "NC",
+    "statute": "N.C. Gen. Stat. 24-5",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8,
+      "value_text": "8%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "nc-prejud",
+      "source_url": "https://www.ncleg.net/EnactedLegislation/Statutes/PDF/BySection/Chapter_24/GS_24-5.pdf",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under N.C. Gen. Stat. 24-5 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from North Carolina’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8,
+        "value_text": "8%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "nc-prejud",
+        "source_url": "https://www.ncleg.net/EnactedLegislation/Statutes/PDF/BySection/Chapter_24/GS_24-5.pdf",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under N.C. Gen. Stat. 24-5 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from North Carolina’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

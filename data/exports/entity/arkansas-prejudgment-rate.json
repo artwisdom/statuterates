@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "arkansas-prejudgment-rate",
+  "name": "Arkansas Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "AR",
+    "statute": "Ark. Code Ann. § 16-65-114(a)(1)",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 5.75,
+      "value_text": "5.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "ar-prejud",
+      "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 5.75,
+        "value_text": "5.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "ar-prejud",
+        "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."
+      }
+    ]
+  }
+}

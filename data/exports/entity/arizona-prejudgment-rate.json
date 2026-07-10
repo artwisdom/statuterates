@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "arizona-prejudgment-rate",
+  "name": "Arizona Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "AZ",
+    "statute": "A.R.S. § 44-1201(A), &",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 7.75,
+      "value_text": "7.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-08",
+      "source_id": "az-prejud",
+      "source_url": "https://www.azleg.gov/ars/44/01201.htm",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under A.R.S. § 44-1201(A), & — 7.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arizona’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-08; verify at azleg.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 7.75,
+        "value_text": "7.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-08",
+        "source_id": "az-prejud",
+        "source_url": "https://www.azleg.gov/ars/44/01201.htm",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under A.R.S. § 44-1201(A), & — 7.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arizona’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-08; verify at azleg.gov. Not legal advice."
+      }
+    ]
+  }
+}

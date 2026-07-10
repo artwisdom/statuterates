@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime } from '../../lib/data.mjs';
+import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -55,8 +55,27 @@ const CALC_FOR = {
   'iowa-judgment-rate': '/calculators/state-judgment-interest/',
 };
 const calcHref = CALC_FOR[slug] || null;
-const title = `${entity.name} — Current & Historical | ${meta.title}`;
-const description = `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history, updated ${prettyDate(meta.generated_at)}.`;
+
+// Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
+// two-way cross-links to the state's post-judgment page.
+const pj = isPrejudgment(entity);
+const stateName = entity.name.replace(/ (Pre)?[Jj]udgment Interest Rate$/, '');
+const allSlugs = new Set(getAllEntities().map((e) => e.slug));
+let postSibling = null, preSibling = null;
+if (pj) {
+  const ps = copy.postSlug || slug.replace('-prejudgment-rate', '-judgment-rate');
+  if (allSlugs.has(ps)) postSibling = ps;
+} else if (slug.endsWith('-judgment-rate')) {
+  const prs = slug.replace('-judgment-rate', '-prejudgment-rate');
+  if (allSlugs.has(prs)) preSibling = prs;
+}
+
+const title = pj
+  ? `${stateName} Prejudgment Interest Rate — When It Applies & Current Rate | ${meta.title}`
+  : `${entity.name} — Current & Historical | ${meta.title}`;
+const description = pj
+  ? `${copy.q} ${latest?.value_text} ${unitLabel} (${copy.kindLabel?.toLowerCase()}). When prejudgment interest applies in ${stateName}, how it accrues, the statute, and how it differs from post-judgment interest. Updated ${prettyDate(meta.generated_at)}.`
+  : `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history, updated ${prettyDate(meta.generated_at)}.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 // JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
@@ -118,13 +137,22 @@ const jsonLd = [
     <div class="eyebrow">Current rate</div>
     <span class="value">{latest?.value_text}</span>
     <span class="asof">
-      {isStatuteFixed
-        ? <>per year — current statutory rate (official text verified {prettyDate(latest?.retrieved_at)})</>
-        : <>{unitLabel}, effective {prettyDate(latest?.effective_date)}</>}
+      {pj
+        ? (copy.kind === 'discretionary-with-default'
+            ? <>per year — the rate courts apply <em>when</em> prejudgment interest is awarded</>
+            : copy.kind === 'variable'
+              ? <>per year — current formula value, effective {prettyDate(latest?.effective_date)}</>
+              : copy.kind === 'same-as-postjudgment'
+                ? <>per year — the same rate as post-judgment interest, effective {prettyDate(latest?.effective_date)}</>
+                : <>per year — statutory prejudgment rate (statute verified {prettyDate(latest?.retrieved_at)})</>)
+        : isStatuteFixed
+          ? <>per year — current statutory rate (official text verified {prettyDate(latest?.retrieved_at)})</>
+          : <>{unitLabel}, effective {prettyDate(latest?.effective_date)}</>}
       <br />
       <span class={`badge ${latest?.confidence === 'high' ? 'high' : 'medium'}`}>
         {isStatutory ? 'Set by statute' : latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
       </span>
+      {pj && copy.kindLabel && <span class="kind-chip">{copy.kindLabel}</span>}
     </span>
   </div>
 
@@ -134,7 +162,36 @@ const jsonLd = [
     <p><a href={calcHref}><strong>→ Calculate interest at this rate</strong></a></p>
   )}
 
-  {(isDerived || isStatutory) && (
+  {preSibling && (
+    <p class="xlink"><a href={`/rates/${preSibling}/`}>→ See {stateName}’s <strong>prejudgment</strong> interest rate (interest <em>before</em> judgment — different rules)</a></p>
+  )}
+
+  {pj ? (
+    <section class="applies">
+      <h2>When {stateName} prejudgment interest applies</h2>
+      <p class="applies-lead">{copy.applies}</p>
+      <div class="applies-grid">
+        <div>
+          <h3>When it starts accruing</h3>
+          <p>{copy.accrual}</p>
+        </div>
+        <div>
+          <h3>Simple or compound</h3>
+          <p>{copy.compound}</p>
+        </div>
+        {copy.formula && (
+          <div>
+            <h3>How the rate is set</h3>
+            <p>{copy.formula}</p>
+          </div>
+        )}
+      </div>
+      {postSibling && (
+        <p class="xlink"><a href={`/rates/${postSibling}/`}>→ Compare with the {stateName} <strong>post-judgment</strong> interest rate (interest <em>after</em> judgment)</a></p>
+      )}
+      <p class="fineprint">{latest?.notes}</p>
+    </section>
+  ) : (isDerived || isStatutory) && (
     <div class="disclaimer">
       <strong>{isStatutory ? 'Statutory basis & carve-outs.' : 'How this value is derived.'}</strong> {latest?.notes}
     </div>
@@ -177,4 +234,25 @@ const jsonLd = [
     Reference data only — not legal, tax, or financial advice. Always confirm the controlling value
     against the official source and, where applicable, the governing statute or court before relying on it.
   </div>
+
+  <style>
+    /* Prejudgment "when it applies" callout — the restrictions are the point, so they lead. */
+    .applies { margin: 22px 0 6px; padding: 20px 22px; background: var(--green-wash);
+      border: 1px solid var(--line-strong); border-left: 3px solid var(--green); border-radius: 2px; }
+    .applies h2 { margin: 0 0 10px; font-size: 1.35rem; }
+    .applies-lead { font-size: 1.03rem; color: var(--ink); margin: 0 0 4px; }
+    .applies-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px 26px; margin: 18px 0 4px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .applies-grid h3 { font-family: var(--sans); font-size: 0.68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin: 0 0 5px; }
+    .applies-grid p { margin: 0; font-size: 0.92rem; color: var(--ink-soft); }
+    .applies .fineprint { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line);
+      font-size: 0.82rem; color: var(--ink-soft); }
+    .xlink { margin: 14px 0; }
+    .xlink a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+    .xlink a:hover { border-bottom-color: var(--green); }
+    .kind-chip { display: inline-block; margin-left: 8px; font-family: var(--sans); font-size: 0.66rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px;
+      border-radius: 2px; border: 1px solid var(--line-strong); color: var(--ink-soft); vertical-align: baseline; }
+  </style>
 </BaseLayout>

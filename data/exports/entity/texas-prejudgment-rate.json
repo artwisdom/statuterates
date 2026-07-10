@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "texas-prejudgment-rate",
+  "name": "Texas Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "TX",
+    "statute": "Tex. Fin. Code Sec. 304.102",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "same-as-postjudgment"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 6.75,
+      "value_text": "6.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "tx-prejud",
+      "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under Tex. Fin. Code Sec. 304.102 — 6.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Texas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at statutes.capitol.texas.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6.75,
+        "value_text": "6.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "tx-prejud",
+        "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under Tex. Fin. Code Sec. 304.102 — 6.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Texas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at statutes.capitol.texas.gov. Not legal advice."
+      }
+    ]
+  }
+}

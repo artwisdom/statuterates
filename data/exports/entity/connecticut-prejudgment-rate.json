@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "connecticut-prejudgment-rate",
+  "name": "Connecticut Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "CT",
+    "statute": "Conn. Gen. Stat. § 37-3a(a)",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "discretionary-with-default"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "ct-prejud",
+      "source_url": "https://portal.ct.gov/wcc/statutes-and-regulations/do-not-use-related-statutes/2021-related-statutes/37-3a",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under Conn. Gen. Stat. § 37-3a(a) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Connecticut’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "ct-prejud",
+        "source_url": "https://portal.ct.gov/wcc/statutes-and-regulations/do-not-use-related-statutes/2021-related-statutes/37-3a",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under Conn. Gen. Stat. § 37-3a(a) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Connecticut’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

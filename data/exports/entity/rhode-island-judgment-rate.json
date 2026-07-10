@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:13:37.696Z",
+  "generated_at": "2026-07-10T02:55:46.441Z",
   "slug": "rhode-island-judgment-rate",
   "name": "Rhode Island Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "ri-jud",
       "source_url": "https://webserver.rilegislature.gov/Statutes/TITLE9/9-21/9-21-10.HTM",
-      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under R.I. Gen. Laws § 9-21-10 — 12% per year, fixed by statute (simple interest). Carve-outs affect scope/accrual date, not the rate. (1) Pre- vs post-judgment: § 9-21-10(a) provides prejudgment interest at 12% from the date the… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ri-jud",
         "source_url": "https://webserver.rilegislature.gov/Statutes/TITLE9/9-21/9-21-10.HTM",
-        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under R.I. Gen. Laws § 9-21-10 — 12% per year, fixed by statute (simple interest). Carve-outs affect scope/accrual date, not the rate. (1) Pre- vs post-judgment: § 9-21-10(a) provides prejudgment interest at 12% from the date the… Verify against the statute; not legal advice."

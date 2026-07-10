@@ -75,12 +75,26 @@ const description = `The formulas and official sources behind each rate series i
     (Iowa: 1-yr Treasury + 2%) are computed weekly from the same official H.15 series as the federal
     rate, with the statutory formula cited.</p>
 
+  <h2>US state prejudgment rates</h2>
+  <p>Prejudgment interest — the interest that accrues <em>before</em> judgment, compensating for the
+    time between the loss or breach and the judgment — is tracked as a <strong>separate metric</strong>
+    from post-judgment interest, for all 50 states and D.C. (<a href="/prejudgment/">browse the table</a>).
+    It is treated differently for a reason: unlike the post-judgment rate, prejudgment interest usually
+    turns on <em>claim type</em>. Most states allow it only on <strong>liquidated or readily
+    ascertainable</strong> amounts and bar it on unliquidated damages (pain and suffering, most general
+    tort damages); several make it <strong>discretionary</strong>; a few apply the <strong>same rate as
+    post-judgment</strong>. Each state's page states the rate, the controlling statute or high-court
+    rule, the accrual date, whether it is simple or compound, and the carve-outs — each verified against
+    the official source on the date shown. Fixed statutory rates are high confidence; formula rates that
+    reset off a benchmark are medium confidence and re-verified on a schedule.</p>
+
   <h2>Coverage &amp; roadmap</h2>
   <p>The dataset covers U.S. federal statutory, judgment, and tax interest rates; U.S. state judgment
     rates (49 states + D.C. — every jurisdiction except Mississippi, which sets judgment interest case
-    by case rather than by a fixed statutory default); U.K. statutory late-commercial-payment interest and the Bank of
-    England base rate; and the EU Late Payment Directive reference rate and ECB main refinancing rate.
-    Planned expansion: more U.S. states (TX, FL, WA next), and per-EU-country late-payment margins.</p>
+    by case rather than by a fixed statutory default); U.S. state <a href="/prejudgment/">prejudgment
+    interest rates</a> (all 50 states + D.C.); U.K. statutory late-commercial-payment interest and the
+    Bank of England base rate; and the EU Late Payment Directive reference rate and ECB main refinancing
+    rate. Planned expansion: per-EU-country late-payment margins, and a prejudgment interest calculator.</p>
 
   <div class="disclaimer">Reference data, not legal, tax, or financial advice.</div>
 </BaseLayout>

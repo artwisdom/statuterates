@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "virginia-prejudgment-rate",
+  "name": "Virginia Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "VA",
+    "statute": "Va. Code Ann. § 8.01-382",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "discretionary-with-default"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 6,
+      "value_text": "6%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "va-prejud",
+      "source_url": "https://law.lis.virginia.gov/vacode/title8.01/chapter13/section8.01-382/",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under Va. Code Ann. § 8.01-382 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Virginia’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6,
+        "value_text": "6%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "va-prejud",
+        "source_url": "https://law.lis.virginia.gov/vacode/title8.01/chapter13/section8.01-382/",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under Va. Code Ann. § 8.01-382 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Virginia’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

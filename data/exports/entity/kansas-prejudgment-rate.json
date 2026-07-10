@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "kansas-prejudgment-rate",
+  "name": "Kansas Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "KS",
+    "statute": "K.S.A. 16-201",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "ks-prejud",
+      "source_url": "https://ksrevisor.gov/statutes/chapters/ch16/016_002_0001.html",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under K.S.A. 16-201 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kansas’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "ks-prejud",
+        "source_url": "https://ksrevisor.gov/statutes/chapters/ch16/016_002_0001.html",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under K.S.A. 16-201 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kansas’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

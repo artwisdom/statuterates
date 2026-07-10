@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "florida-prejudgment-rate",
+  "name": "Florida Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "FL",
+    "statute": "Fla. Stat. § 55.03",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8.06,
+      "value_text": "8.06%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "fl-prejud",
+      "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under Fla. Stat. § 55.03 — 8.06% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Florida’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at myfloridacfo.com. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8.06,
+        "value_text": "8.06%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "fl-prejud",
+        "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under Fla. Stat. § 55.03 — 8.06% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Florida’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at myfloridacfo.com. Not legal advice."
+      }
+    ]
+  }
+}

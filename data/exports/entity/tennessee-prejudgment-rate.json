@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "tennessee-prejudgment-rate",
+  "name": "Tennessee Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "TN",
+    "statute": "Tenn. Code Ann. § 47-14-123",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "discretionary-with-default"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "tn-prejud",
+      "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "tn-prejud",
+        "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

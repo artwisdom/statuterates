@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:13:37.696Z",
+  "generated_at": "2026-07-10T02:55:46.441Z",
   "slug": "nebraska-judgment-rate",
   "name": "Nebraska Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-16",
       "source_id": "ne-jud",
       "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
-      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Neb. Rev. Stat. § 45-103, currently 5.97% (as of July 16, 2026). Rate = (bond investment yield of the average accepted auction price for the first auction of each annual quarter of the 26-week U.S. Treasury bill, as published by the U.S.… Simple interest. Statutory rate does NOT apply where (1) the interest rate is specifically provided by other law, or (2) the action is founded on an oral or written… Verify the current value at nebraskajudicial.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-16",
         "source_id": "ne-jud",
         "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
-        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Neb. Rev. Stat. § 45-103, currently 5.97% (as of July 16, 2026). Rate = (bond investment yield of the average accepted auction price for the first auction of each annual quarter of the 26-week U.S. Treasury bill, as published by the U.S.… Simple interest. Statutory rate does NOT apply where (1) the interest rate is specifically provided by other law, or (2) the action is founded on an oral or written… Verify the current value at nebraskajudicial.gov; not legal advice."

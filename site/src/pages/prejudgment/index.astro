@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getMeta, prejudgmentEntities, latestOf, prettyDate } from '../../lib/data.mjs';
+import { copyFor } from '../../lib/content.mjs';
+
+const meta = getMeta();
+const rows = prejudgmentEntities().map((e) => {
+  const copy = copyFor(e.slug);
+  const stateName = e.name.replace(/ Prejudgment Interest Rate$/, '');
+  return {
+    slug: e.slug,
+    state: stateName,
+    value_text: latestOf(e)?.value_text,
+    kind: copy.kind,
+    kindLabel: copy.kindLabel,
+    applies: copy.appliesShort || copy.tagline,
+  };
+});
+
+// Small legend so readers understand the four categories at a glance.
+const KINDS = [
+  { key: 'fixed', label: 'Fixed by statute', note: 'a set statutory rate' },
+  { key: 'variable', label: 'Formula rate', note: 'indexed to a benchmark; resets periodically' },
+  { key: 'same-as-postjudgment', label: 'Same as post-judgment', note: 'same rate as after judgment' },
+  { key: 'discretionary-with-default', label: 'Discretionary', note: 'a court may award it; this is the rate it applies' },
+];
+const counts = Object.fromEntries(KINDS.map((k) => [k.key, rows.filter((r) => r.kind === k.key).length]));
+
+const title = `Prejudgment Interest Rates by State (all 50 states + D.C.) | ${meta.title}`;
+const description = `Prejudgment interest rate for every U.S. state and D.C., with the one thing that matters most: when it actually applies. Prejudgment interest usually attaches only to liquidated or ascertainable amounts and is often barred on unliquidated tort damages — this table shows each state's rate, statute, and claim-type limits. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'U.S. prejudgment interest rates by state',
+    description: 'The prejudgment interest rate and claim-type restrictions for all 50 states and the District of Columbia, each verified against its official statute, agency, or court source.',
+    url: canonical,
+    isAccessibleForFree: true,
+    creator: { '@type': 'Organization', name: meta.title },
+    dateModified: meta.generated_at,
+    distribution: {
+      '@type': 'DataDownload',
+      encodingFormat: 'application/json',
+      contentUrl: new URL('/api/v1/entities.json', Astro.site).href,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'What is prejudgment interest?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Prejudgment interest compensates a plaintiff for the loss of use of money between the date of loss or breach and the date judgment is entered. It is separate from post-judgment interest (which runs after judgment) and, in most states, is available only on liquidated or readily ascertainable amounts — not on unliquidated damages such as pain and suffering.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Is prejudgment interest the same rate as post-judgment interest?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Sometimes, but not always. A handful of states apply the same statutory rate to both; many set a different prejudgment rate; and several make prejudgment interest discretionary. Each state page here cites the controlling statute and states the rate and restrictions.' },
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Rates', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Prejudgment interest by state', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/">Rates</a> &rsaquo; <span>Prejudgment interest by state</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · Prejudgment</div>
+  <h1>Prejudgment interest rates by state</h1>
+  <p class="lead">The interest that accrues <em>before</em> a judgment is entered — for all 50 states and
+    D.C. Unlike post-judgment interest, the rate is often the <em>second</em> question. The first is
+    <strong>whether prejudgment interest applies at all</strong>: most states allow it only on
+    liquidated or readily ascertainable amounts and bar it on unliquidated damages (like pain and
+    suffering). Each rate below is verified against the state's own statute, agency, or high-court rule.</p>
+
+  <div class="legend">
+    {KINDS.map((k) => (
+      <span class="legend-item"><span class={`dot ${k.key}`}></span><strong>{k.label}</strong> ({counts[k.key]}) — {k.note}</span>
+    ))}
+  </div>
+
+  <AdSlot id="prejudgment-top" />
+
+  <div class="scroll-x">
+    <table class="pj-table">
+      <thead>
+        <tr><th scope="col">State</th><th scope="col">Rate</th><th scope="col">Type</th><th scope="col">When it applies</th></tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td class="st"><a href={`/rates/${r.slug}/`}>{r.state}</a></td>
+            <td class="num">{r.value_text}</td>
+            <td><span class={`tag ${r.kind}`}>{r.kindLabel}</span></td>
+            <td class="applies-cell">{r.applies}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <AdSlot id="prejudgment-bottom" />
+
+  <h2>Prejudgment vs. post-judgment interest</h2>
+  <p><strong>Post-judgment interest</strong> is the (usually automatic) interest on a money judgment
+    from the day it is entered until it is paid. <strong>Prejudgment interest</strong> reaches
+    backwards — it compensates for the time between the loss or breach and the judgment. Because it
+    covers a period when the amount owed was still being litigated, states hedge it with rules that
+    post-judgment interest doesn't have:</p>
+  <ul class="clean">
+    <li><strong>Liquidated vs. unliquidated.</strong> Most states allow prejudgment interest only where
+      the amount was fixed or readily calculable (a contract sum, an invoice) — and deny it on
+      unliquidated damages a jury has to set (pain and suffering, most general tort damages).</li>
+    <li><strong>Contract vs. tort.</strong> Several states grant it as of right on contract/liquidated
+      claims but withhold it (or leave it to the jury) on tort claims.</li>
+    <li><strong>Discretionary in some states.</strong> A number of states leave both <em>whether</em> to
+      award prejudgment interest and <em>when</em> it starts to the factfinder's discretion.</li>
+    <li><strong>Future damages &amp; punitives.</strong> Even where allowed, many states bar prejudgment
+      interest on future damages and on punitive damages.</li>
+  </ul>
+  <p class="source-note">See each state's page for its exact statute, accrual date, and carve-outs, and
+    the <a href="/methodology/">methodology</a> for how each rate is sourced. Reference data only —
+    not legal advice.</p>
+
+  <style>
+    .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 6px 0 20px; font-size: 0.86rem; color: var(--ink-soft); }
+    .legend-item { display: inline-flex; align-items: baseline; gap: 7px; }
+    .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; transform: translateY(1px); }
+    .dot.fixed { background: var(--green); }
+    .dot.variable { background: var(--gold); }
+    .dot.same-as-postjudgment { background: #4a6d8c; }
+    .dot.discretionary-with-default { background: #a05a2c; }
+    .pj-table { width: 100%; }
+    .pj-table td.st a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
+    .pj-table td.st a:hover { border-bottom-color: var(--green); }
+    .pj-table td.num { font-family: var(--nums); white-space: nowrap; }
+    .pj-table td.applies-cell { font-size: 0.86rem; color: var(--ink-soft); max-width: 46ch; }
+    .tag { display: inline-block; font-family: var(--sans); font-size: 0.6rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 2px;
+      white-space: nowrap; border: 1px solid var(--line-strong); color: var(--ink-soft); }
+    .tag.fixed { background: var(--green-wash); color: var(--green); border-color: rgba(22,70,58,0.3); }
+    .tag.variable { background: var(--amber-bg); color: var(--amber-ink); border-color: rgba(138,106,30,0.35); }
+  </style>
+</BaseLayout>

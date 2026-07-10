@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:13:37.696Z",
+  "generated_at": "2026-07-10T02:55:46.441Z",
   "slug": "minnesota-judgment-rate",
   "name": "Minnesota Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "mn-jud",
       "source_url": "https://www.revisor.mn.gov/court_rules/rule/msinte/",
-      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026). , set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Rate = the secondary market yield / one-year constant maturity… Simple interest. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the… Verify the current value at revisor.mn.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "mn-jud",
         "source_url": "https://www.revisor.mn.gov/court_rules/rule/msinte/",
-        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026). , set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Rate = the secondary market yield / one-year constant maturity… Simple interest. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the… Verify the current value at revisor.mn.gov; not legal advice."

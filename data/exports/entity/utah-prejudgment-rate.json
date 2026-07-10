@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "utah-prejudgment-rate",
+  "name": "Utah Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "UT",
+    "statute": "Utah Code Ann. 15-1-1(2)",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "ut-prejud",
+      "source_url": "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S1.html",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under Utah Code Ann. 15-1-1(2) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Utah’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "ut-prejud",
+        "source_url": "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S1.html",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under Utah Code Ann. 15-1-1(2) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Utah’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

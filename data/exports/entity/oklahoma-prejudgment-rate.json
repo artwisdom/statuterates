@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "oklahoma-prejudgment-rate",
+  "name": "Oklahoma Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "OK",
+    "statute": "12 O.S. Sec. 727.1",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 4.13,
+      "value_text": "4.13%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-01-02",
+      "source_id": "ok-prejud",
+      "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under 12 O.S. Sec. 727.1 — 4.13% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oklahoma’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-02; verify at oscn.net. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 4.13,
+        "value_text": "4.13%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-01-02",
+        "source_id": "ok-prejud",
+        "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under 12 O.S. Sec. 727.1 — 4.13% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oklahoma’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-02; verify at oscn.net. Not legal advice."
+      }
+    ]
+  }
+}

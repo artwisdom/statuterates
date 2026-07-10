@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "wyoming-prejudgment-rate",
+  "name": "Wyoming Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "WY",
+    "statute": "Wyo. Stat. Ann. Sec. 40-14-106(e)",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 7,
+      "value_text": "7%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "wy-prejud",
+      "source_url": "https://wyoleg.gov/statutes/compress/title40.pdf",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under Wyo. Stat. Ann. Sec. 40-14-106(e) — 7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Wyoming’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "wy-prejud",
+        "source_url": "https://wyoleg.gov/statutes/compress/title40.pdf",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under Wyo. Stat. Ann. Sec. 40-14-106(e) — 7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Wyoming’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

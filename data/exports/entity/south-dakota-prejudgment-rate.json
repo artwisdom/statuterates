@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "south-dakota-prejudgment-rate",
+  "name": "South Dakota Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "SD",
+    "statute": "SDCL 21-1-13.1",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "sd-prejud",
+      "source_url": "https://sdlegislature.gov/Statutes/21-1-13.1",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under SDCL 21-1-13.1 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from South Dakota’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at sdlegislature.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "sd-prejud",
+        "source_url": "https://sdlegislature.gov/Statutes/21-1-13.1",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under SDCL 21-1-13.1 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from South Dakota’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at sdlegislature.gov. Not legal advice."
+      }
+    ]
+  }
+}

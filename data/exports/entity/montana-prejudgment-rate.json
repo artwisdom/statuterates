@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "montana-prejudgment-rate",
+  "name": "Montana Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "MT",
+    "statute": "MCA 27-1-211",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 10,
+      "value_text": "10%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "mt-prejud",
+      "source_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under MCA 27-1-211 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Montana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "mt-prejud",
+        "source_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under MCA 27-1-211 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Montana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

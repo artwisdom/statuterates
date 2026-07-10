@@ -7,9 +7,9 @@
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-10T02:13:37.696Z",
-  "entity_count": 63,
-  "observation_count": 691,
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "entity_count": 114,
+  "observation_count": 742,
   "metrics": [
     "annual_rate"
   ],
@@ -24,12 +24,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ak-prejud",
+      "name": "Alaska prejudgment interest (AS 09.30.070)",
+      "publisher": "Alaska — public.courts.alaska.gov",
+      "home_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "al-jud",
       "name": "Alabama judgment interest (Ala. Code § 8-8-10(a))",
       "publisher": "Alabama — alison.legislature.state.al.us",
       "home_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "al-prejud",
+      "name": "Alabama prejudgment interest (Ala. Code § 8-8-1)",
+      "publisher": "Alabama — alison.legislature.state.al.us",
+      "home_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-1",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -42,6 +60,15 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ar-prejud",
+      "name": "Arkansas prejudgment interest (Ark. Code Ann. § 16-65-114(a)(1))",
+      "publisher": "Arkansas — codes.findlaw.com",
+      "home_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "az-ars",
       "name": "Arizona judgment interest (A.R.S. §44-1201)",
       "publisher": "Arizona State Legislature (official)",
@@ -51,13 +78,22 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "az-prejud",
+      "name": "Arizona prejudgment interest (A.R.S. § 44-1201(A), &)",
+      "publisher": "Arizona — azleg.gov",
+      "home_url": "https://www.azleg.gov/ars/44/01201.htm",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "boe-bank-rate",
       "name": "Bank of England — Bank Rate (IUDBEDR)",
       "publisher": "Bank of England",
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:13:37.676Z"
+      "retrieved_at": "2026-07-10T02:55:46.415Z"
     },
     {
       "id": "ca-leginfo",
@@ -67,6 +103,24 @@
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated statutory value; official text verified 2026-07-08",
       "retrieved_at": "2026-07-08T00:00:00Z"
+    },
+    {
+      "id": "ca-prejud",
+      "name": "California prejudgment interest (Cal. Civ. Code sec. 3287)",
+      "publisher": "California — leginfo.legislature.ca.gov",
+      "home_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "co-prejud",
+      "name": "Colorado prejudgment interest (C.R.S. 5-12-102)",
+      "publisher": "Colorado — colorado.public.law",
+      "home_url": "https://colorado.public.law/statutes/crs_5-12-102",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
       "id": "co-sos",
@@ -87,12 +141,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ct-prejud",
+      "name": "Connecticut prejudgment interest (Conn. Gen. Stat. § 37-3a(a))",
+      "publisher": "Connecticut — portal.ct.gov",
+      "home_url": "https://portal.ct.gov/wcc/statutes-and-regulations/do-not-use-related-statutes/2021-related-statutes/37-3a",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "dc-jud",
       "name": "District of Columbia judgment interest (D.C. Code § 28-3302(c))",
       "publisher": "District of Columbia — code.dccouncil.gov",
       "home_url": "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "dc-prejud",
+      "name": "D.C. prejudgment interest (D.C. Code § 15-108)",
+      "publisher": "D.C. — code.dccouncil.gov",
+      "home_url": "https://code.dccouncil.gov/us/dc/council/code/sections/15-108",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -105,13 +177,22 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "de-prejud",
+      "name": "Delaware prejudgment interest (6 Del. C. § 2301(a))",
+      "publisher": "Delaware — delcode.delaware.gov",
+      "home_url": "https://delcode.delaware.gov/title6/c023/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ecb-mro",
       "name": "ECB — Main Refinancing Operations fixed rate (MRR)",
       "publisher": "European Central Bank",
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:13:37.678Z"
+      "retrieved_at": "2026-07-10T02:55:46.418Z"
     },
     {
       "id": "fed-h15",
@@ -120,7 +201,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:13:37.673Z"
+      "retrieved_at": "2026-07-10T02:55:46.412Z"
     },
     {
       "id": "fl-cfo",
@@ -129,6 +210,15 @@
       "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "fl-prejud",
+      "name": "Florida prejudgment interest (Fla. Stat. § 55.03)",
+      "publisher": "Florida — myfloridacfo.com",
+      "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -141,12 +231,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ga-prejud",
+      "name": "Georgia prejudgment interest (O.C.G.A. § 7-4-15)",
+      "publisher": "Georgia — ga.elaws.us",
+      "home_url": "http://ga.elaws.us/law/section7-4-2",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "hi-jud",
       "name": "Hawaii judgment interest (Haw. Rev. Stat. 478-3. Related: 478-2)",
       "publisher": "Hawaii — capitol.hawaii.gov",
       "home_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "hi-prejud",
+      "name": "Hawaii prejudgment interest (HRS 636-16)",
+      "publisher": "Hawaii — data.capitol.hawaii.gov",
+      "home_url": "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -159,12 +267,30 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
+      "id": "ia-prejud",
+      "name": "Iowa prejudgment interest (Iowa Code § 668.13)",
+      "publisher": "Iowa — legis.iowa.gov",
+      "home_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "id-jud",
       "name": "Idaho judgment interest (Idaho Code § 28-22-104(2))",
       "publisher": "Idaho — sto.idaho.gov",
       "home_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "id-prejud",
+      "name": "Idaho prejudgment interest (Idaho Code 28-22-104(1))",
+      "publisher": "Idaho — legislature.idaho.gov",
+      "home_url": "https://legislature.idaho.gov/statutesrules/idstat/title28/t28ch22/sect28-22-104/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -177,6 +303,15 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "il-prejud",
+      "name": "Illinois prejudgment interest (735 ILCS 5/2-1303(c))",
+      "publisher": "Illinois — ilga.gov",
+      "home_url": "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "in-jud",
       "name": "Indiana judgment interest (Ind. Code § 24-4.6-1-101)",
       "publisher": "Indiana — iga.in.gov",
@@ -186,13 +321,22 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "in-prejud",
+      "name": "Indiana prejudgment interest (Contract/liquidated: IC 24-4.6-1-103)",
+      "publisher": "Indiana — iga.in.gov",
+      "home_url": "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "irs-6621",
       "name": "IRS quarterly interest rates (§6621)",
       "publisher": "U.S. Internal Revenue Service",
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:13:37.669Z"
+      "retrieved_at": "2026-07-10T02:55:46.408Z"
     },
     {
       "id": "ks-jud",
@@ -201,6 +345,15 @@
       "home_url": "https://sos.ks.gov/general-services/finance-rates.html",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ks-prejud",
+      "name": "Kansas prejudgment interest (K.S.A. 16-201)",
+      "publisher": "Kansas — ksrevisor.gov",
+      "home_url": "https://ksrevisor.gov/statutes/chapters/ch16/016_002_0001.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -213,12 +366,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ky-prejud",
+      "name": "Kentucky prejudgment interest (KRS 360.010(1))",
+      "publisher": "Kentucky — apps.legislature.ky.gov",
+      "home_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "la-jud",
       "name": "Louisiana judgment interest (La. R.S. 13:4202(B))",
       "publisher": "Louisiana — ofi.la.gov",
       "home_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "la-prejud",
+      "name": "Louisiana prejudgment interest (La. R.S. 13:4202)",
+      "publisher": "Louisiana — ofi.la.gov",
+      "home_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated same-as-postjudgment prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -231,12 +402,30 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
+      "id": "ma-prejud",
+      "name": "Massachusetts prejudgment interest (M.G.L. c. 231, § 6B)",
+      "publisher": "Massachusetts — malegislature.gov",
+      "home_url": "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6B",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "md-jud",
       "name": "Maryland judgment interest (Md. Code, Courts & Judicial Proceedings Section 11-107(a))",
       "publisher": "Maryland — mgaleg.maryland.gov",
       "home_url": "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "md-prejud",
+      "name": "Maryland prejudgment interest (Md. Const. Art. III, sec. 57)",
+      "publisher": "Maryland — mgaleg.maryland.gov",
+      "home_url": "https://mgaleg.maryland.gov/Pubs/LegisLegal/2025-constitution-maryland-us.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -249,12 +438,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "me-prejud",
+      "name": "Maine prejudgment interest (14 M.R.S. § 1602-B)",
+      "publisher": "Maine — legislature.maine.gov",
+      "home_url": "https://legislature.maine.gov/statutes/14/title14sec1602-B.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "mi-legislature",
       "name": "Michigan judgment interest (MCL §600.6013)",
       "publisher": "Michigan Legislature (official)",
       "home_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "mi-prejud",
+      "name": "Michigan prejudgment interest (MCL 600.6013)",
+      "publisher": "Michigan — legislature.mi.gov",
+      "home_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -267,12 +474,39 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "mn-prejud",
+      "name": "Minnesota prejudgment interest (Minn. Stat. § 549.09, subd. 1(b))",
+      "publisher": "Minnesota — revisor.mn.gov",
+      "home_url": "https://www.revisor.mn.gov/statutes/cite/549.09",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "mo-jud",
       "name": "Missouri judgment interest (Mo. Rev. Stat. §408.040)",
       "publisher": "Missouri — revisor.mo.gov",
       "home_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "mo-prejud",
+      "name": "Missouri prejudgment interest (Mo. Rev. Stat. § 408.040)",
+      "publisher": "Missouri — revisor.mo.gov",
+      "home_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ms-prejud",
+      "name": "Mississippi prejudgment interest (Miss. Code Ann. § 75-17-7)",
+      "publisher": "Mississippi — law.justia.com",
+      "home_url": "https://law.justia.com/codes/mississippi/title-75/chapter-17/general-provisions/section-75-17-7/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -285,12 +519,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "mt-prejud",
+      "name": "Montana prejudgment interest (MCA 27-1-211)",
+      "publisher": "Montana — mca.legmt.gov",
+      "home_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "nc-ncleg",
       "name": "North Carolina judgment interest (N.C.G.S. §24-5 / §24-1)",
       "publisher": "North Carolina General Assembly (official)",
       "home_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nc-prejud",
+      "name": "North Carolina prejudgment interest (N.C. Gen. Stat. 24-5)",
+      "publisher": "North Carolina — ncleg.net",
+      "home_url": "https://www.ncleg.net/EnactedLegislation/Statutes/PDF/BySection/Chapter_24/GS_24-5.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -303,12 +555,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "nd-prejud",
+      "name": "North Dakota prejudgment interest (N.D.C.C. § 32-03-04)",
+      "publisher": "North Dakota — ndlegis.gov",
+      "home_url": "https://ndlegis.gov/cencode/t32c03.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ne-jud",
       "name": "Nebraska judgment interest (Neb. Rev. Stat. § 45-103)",
       "publisher": "Nebraska — nebraskajudicial.gov",
       "home_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ne-prejud",
+      "name": "Nebraska prejudgment interest (Neb. Rev. Stat. sec. 45-104)",
+      "publisher": "Nebraska — nebraskalegislature.gov",
+      "home_url": "https://nebraskalegislature.gov/laws/statutes.php?statute=45-104",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -321,12 +591,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "nh-prejud",
+      "name": "New Hampshire prejudgment interest (RSA 336:1, II)",
+      "publisher": "New Hampshire — courts.nh.gov",
+      "home_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "nj-courts",
       "name": "New Jersey post-judgment interest (R. 4:42-11)",
       "publisher": "New Jersey Courts (official)",
       "home_url": "https://www.njcourts.gov/notices/notice-post-judgment-interest-rate-calendar-year-2026-rule-442-11",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nj-prejud",
+      "name": "New Jersey prejudgment interest (N.J. Ct. R. 4:42-11(b))",
+      "publisher": "New Jersey — njcourts.gov",
+      "home_url": "https://www.njcourts.gov/sites/default/files/courts/civil/postprejudgmentrates.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated same-as-postjudgment prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -339,12 +627,39 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "nm-prejud",
+      "name": "New Mexico prejudgment interest (NMSA 1978, Sec. 56-8-4(B))",
+      "publisher": "New Mexico — codes.findlaw.com",
+      "home_url": "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "nv-jud",
       "name": "Nevada judgment interest (Nev. Rev. Stat. 17.130(2))",
       "publisher": "Nevada — fid.nv.gov",
       "home_url": "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201,%202026.pdf",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "nv-prejud",
+      "name": "Nevada prejudgment interest (NRS 99.040)",
+      "publisher": "Nevada — leg.state.nv.us",
+      "home_url": "https://www.leg.state.nv.us/NRS/NRS-099.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ny-prejud",
+      "name": "New York prejudgment interest (N.Y. C.P.L.R. 5004)",
+      "publisher": "New York — nysenate.gov",
+      "home_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -355,6 +670,15 @@
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated statutory value; official text verified 2026-07-08",
       "retrieved_at": "2026-07-08T00:00:00Z"
+    },
+    {
+      "id": "oh-prejud",
+      "name": "Ohio prejudgment interest (Ohio Rev. Code 1343.03)",
+      "publisher": "Ohio — codes.ohio.gov",
+      "home_url": "https://codes.ohio.gov/ohio-revised-code/section-1343.03",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated same-as-postjudgment prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
       "id": "oh-tax",
@@ -375,12 +699,39 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ok-prejud",
+      "name": "Oklahoma prejudgment interest (12 O.S. Sec. 727.1)",
+      "publisher": "Oklahoma — oscn.net",
+      "home_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "or-jud",
       "name": "Oregon judgment interest (ORS 82.010(2))",
       "publisher": "Oregon — oregonlegislature.gov",
       "home_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "or-prejud",
+      "name": "Oregon prejudgment interest (ORS 82.010(1)(a))",
+      "publisher": "Oregon — oregon.public.law",
+      "home_url": "https://oregon.public.law/statutes/ors_82.010",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "pa-prejud",
+      "name": "Pennsylvania prejudgment interest (41 P.S. Sec. 202)",
+      "publisher": "Pennsylvania — pacodeandbulletin.gov",
+      "home_url": "https://www.pacodeandbulletin.gov/secure/pacode/data/231/chapter200/s238.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -402,12 +753,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "ri-prejud",
+      "name": "Rhode Island prejudgment interest (R.I. Gen. Laws § 9-21-10)",
+      "publisher": "Rhode Island — webserver.rilegislature.gov",
+      "home_url": "https://webserver.rilegislature.gov/Statutes/TITLE9/9-21/9-21-10.HTM",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "sc-jud",
       "name": "South Carolina judgment interest (S.C. Code Ann. § 34-31-20(B))",
       "publisher": "South Carolina — scstatehouse.gov",
       "home_url": "https://www.scstatehouse.gov/code/t34c031.php",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "sc-prejud",
+      "name": "South Carolina prejudgment interest (S.C. Code Ann. § 34-31-20(A))",
+      "publisher": "South Carolina — scstatehouse.gov",
+      "home_url": "https://www.scstatehouse.gov/code/t34c031.php",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -420,12 +789,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "sd-prejud",
+      "name": "South Dakota prejudgment interest (SDCL 21-1-13.1)",
+      "publisher": "South Dakota — sdlegislature.gov",
+      "home_url": "https://sdlegislature.gov/Statutes/21-1-13.1",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "tn-courts",
       "name": "Tennessee post-judgment interest (Tenn. Code §47-14-121)",
       "publisher": "Tennessee Courts / Dept. of Financial Institutions (official)",
       "home_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "tn-prejud",
+      "name": "Tennessee prejudgment interest (Tenn. Code Ann. § 47-14-123)",
+      "publisher": "Tennessee — codes.findlaw.com",
+      "home_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -438,12 +825,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "tx-prejud",
+      "name": "Texas prejudgment interest (Tex. Fin. Code Sec. 304.102)",
+      "publisher": "Texas — statutes.capitol.texas.gov",
+      "home_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated same-as-postjudgment prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "ut-jud",
       "name": "Utah judgment interest (Utah Code Ann. Sec. 15-1-4)",
       "publisher": "Utah — utcourts.gov",
       "home_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "ut-prejud",
+      "name": "Utah prejudgment interest (Utah Code Ann. 15-1-1(2))",
+      "publisher": "Utah — le.utah.gov",
+      "home_url": "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S1.html",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -456,12 +861,39 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "va-prejud",
+      "name": "Virginia prejudgment interest (Va. Code Ann. § 8.01-382)",
+      "publisher": "Virginia — law.lis.virginia.gov",
+      "home_url": "https://law.lis.virginia.gov/vacode/title8.01/chapter13/section8.01-382/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "vt-jud",
       "name": "Vermont judgment interest (9 V.S.A. § 41a(a))",
       "publisher": "Vermont — legislature.vermont.gov",
       "home_url": "https://legislature.vermont.gov/statutes/section/09/004/00041a",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "vt-prejud",
+      "name": "Vermont prejudgment interest (9 V.S.A. § 41a(a))",
+      "publisher": "Vermont — legislature.vermont.gov",
+      "home_url": "https://legislature.vermont.gov/statutes/section/09/004/00041a",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated discretionary-with-default prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "wa-prejud",
+      "name": "Washington prejudgment interest (RCW 19.52.010(1))",
+      "publisher": "Washington — app.leg.wa.gov",
+      "home_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=19.52.010",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
@@ -483,6 +915,15 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "wi-prejud",
+      "name": "Wisconsin prejudgment interest (Wis. Stat. 138.04)",
+      "publisher": "Wisconsin — docs.legis.wisconsin.gov",
+      "home_url": "https://docs.legis.wisconsin.gov/statutes/statutes/138/04",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "wv-jud",
       "name": "West Virginia judgment interest (W. Va. Code § 56-6-31)",
       "publisher": "West Virginia — courtswv.gov",
@@ -492,12 +933,30 @@
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
+      "id": "wv-prejud",
+      "name": "West Virginia prejudgment interest (W. Va. Code § 56-6-31(b))",
+      "publisher": "West Virginia — code.wvlegislature.gov",
+      "home_url": "https://code.wvlegislature.gov/56-6-31/",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
       "id": "wy-jud",
       "name": "Wyoming judgment interest (Wyo. Stat. Ann. 1-16-102)",
       "publisher": "Wyoming — wyoleg.gov",
       "home_url": "https://wyoleg.gov/statutes/compress/title01.pdf",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source verified 2026-07-09",
+      "retrieved_at": "2026-07-09T00:00:00Z"
+    },
+    {
+      "id": "wy-prejud",
+      "name": "Wyoming prejudgment interest (Wyo. Stat. Ann. Sec. 40-14-106(e))",
+      "publisher": "Wyoming — wyoleg.gov",
+      "home_url": "https://wyoleg.gov/statutes/compress/title40.pdf",
+      "license": "Government edict — not subject to copyright.",
+      "robots_status": "curated fixed prejudgment value; official source verified 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     }
   ]

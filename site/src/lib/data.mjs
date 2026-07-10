@@ -29,6 +29,17 @@ export function getAllEntities() {
     .map((f) => readJson(join('entity', f)));
 }
 
+// Per-state prejudgment rates are a distinct metric with their own index page; they are kept out
+// of the homepage state grid (so it doesn't double) but remain first-class entities (own pages,
+// JSON API, methodology table, JSON-LD).
+export function isPrejudgment(e) {
+  return e.region === 'US States — Prejudgment' || e.metadata?.metric === 'prejudgment';
+}
+
+export function prejudgmentEntities() {
+  return getAllEntities().filter(isPrejudgment).sort((a, b) => a.name.localeCompare(b.name));
+}
+
 // Grouping for the homepage / browse. Keeps the site organized as it grows.
 export const GROUPS = [
   {
@@ -64,7 +75,7 @@ export const GROUPS = [
 ];
 
 export function groupedEntities() {
-  const all = getAllEntities();
+  const all = getAllEntities().filter((e) => !isPrejudgment(e));
   const groups = GROUPS.map((g) => ({ ...g, entities: all.filter(g.match) }));
   const claimed = new Set(groups.flatMap((g) => g.entities.map((e) => e.slug)));
   const rest = all.filter((e) => !claimed.has(e.slug));

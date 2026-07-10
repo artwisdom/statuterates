@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "illinois-prejudgment-rate",
+  "name": "Illinois Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "IL",
+    "statute": "735 ILCS 5/2-1303(c)",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 6,
+      "value_text": "6% / 5%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "il-prejud",
+      "source_url": "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under 735 ILCS 5/2-1303(c) — 6% / 5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Illinois’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6,
+        "value_text": "6% / 5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "il-prejud",
+        "source_url": "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under 735 ILCS 5/2-1303(c) — 6% / 5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Illinois’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

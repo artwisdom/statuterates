@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:13:37.696Z",
+  "generated_at": "2026-07-10T02:55:46.441Z",
   "slug": "illinois-judgment-rate",
   "name": "Illinois Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2021-07-01",
       "source_id": "il-ilcs",
       "source_url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=073500050K2-1303",
-      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest at 9% per annum under 735 ILCS 5/2-1303 for general judgments — fixed by statute, computed as simple interest on the unsatisfied portion of the judgment. Carve-out: 6% per annum where the judgment debtor is a unit of local government. Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2021-07-01",
         "source_id": "il-ilcs",
         "source_url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=073500050K2-1303",
-        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest at 9% per annum under 735 ILCS 5/2-1303 for general judgments — fixed by statute, computed as simple interest on the unsatisfied portion of the judgment. Carve-out: 6% per annum where the judgment debtor is a unit of local government. Verify against the statute; not legal advice."

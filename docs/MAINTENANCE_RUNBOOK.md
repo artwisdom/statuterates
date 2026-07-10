@@ -69,6 +69,18 @@ official statute texts on the date in `VERIFIED_ON`. To re-verify:
 Watch items known today: Massachusetts has seen bills to peg its 12% to market rates (none enacted);
 California's SB 1200 thresholds ($200k/$50k) could be amended.
 
+### F. Prejudgment interest rates (per-state, second metric)
+Per-state PREjudgment rates live in the same `us-states.mjs` file as a `PREJUDG` array (all 50 states +
+D.C., verified 2026-07-09), pushed into `FIXED` alongside the post-judgment rates. They were generated
+from a verified multi-agent JSON pass by `scratchpad/gen-prejudgment.mjs` (editorial copy incl. the
+`applies`/`accrual`/`compound` fields lands in `site/src/lib/content.mjs`; the `/prejudgment/` index and
+the restrictions-first layout in `rates/[slug].astro` read those). Kinds: `fixed`/`discretionary-with-default`
+=> `statute-fixed` (high); `variable`/`same-as-postjudgment` => `statute-variable` (medium). Re-verify the
+variable/same-as-post ones (AK, AZ, AR, CA, DE, FL, IA, ME, MI, MN, MO, NV, NH, OK, SD, WV + LA/NJ/OH/TX)
+on the same quarterly cadence as the post-judgment variable rates; fixed/discretionary defaults only on
+statutory amendment. The critical field to preserve on any edit is `restrictions` (liquidated-vs-unliquidated,
+claim-type, discretionary, future-damages carve-outs) — it is the whole value of the metric.
+
 ## How to add a new source / rate series
 1. Create `pipeline/fetchers/<name>.mjs` exporting an async function that returns
    `{ source, entities, observations }` (copy `irs.mjs` as a template). Use `politeGet` from

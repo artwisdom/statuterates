@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "michigan-prejudgment-rate",
+  "name": "Michigan Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "MI",
+    "statute": "MCL 600.6013",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 4.725,
+      "value_text": "4.725%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-01-01",
+      "source_id": "mi-prejud",
+      "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under MCL 600.6013 — 4.725%, compounded annually. This is PREjudgment interest (accruing before entry of judgment) and is separate from Michigan’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at legislature.mi.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 4.725,
+        "value_text": "4.725%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-01-01",
+        "source_id": "mi-prejud",
+        "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under MCL 600.6013 — 4.725%, compounded annually. This is PREjudgment interest (accruing before entry of judgment) and is separate from Michigan’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at legislature.mi.gov. Not legal advice."
+      }
+    ]
+  }
+}

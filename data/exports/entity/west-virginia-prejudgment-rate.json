@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "west-virginia-prejudgment-rate",
+  "name": "West Virginia Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "WV",
+    "statute": "W. Va. Code § 56-6-31(b)",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 6.25,
+      "value_text": "6.25%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "wv-prejud",
+      "source_url": "https://code.wvlegislature.gov/56-6-31/",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under W. Va. Code § 56-6-31(b) — 6.25% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from West Virginia’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at code.wvlegislature.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6.25,
+        "value_text": "6.25%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "wv-prejud",
+        "source_url": "https://code.wvlegislature.gov/56-6-31/",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under W. Va. Code § 56-6-31(b) — 6.25% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from West Virginia’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at code.wvlegislature.gov. Not legal advice."
+      }
+    ]
+  }
+}

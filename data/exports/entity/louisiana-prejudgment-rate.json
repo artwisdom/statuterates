@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "louisiana-prejudgment-rate",
+  "name": "Louisiana Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "LA",
+    "statute": "La. R.S. 13:4202",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "same-as-postjudgment"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 7.5,
+      "value_text": "7.5%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-01-01",
+      "source_id": "la-prejud",
+      "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under La. R.S. 13:4202 — 7.5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Louisiana’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at ofi.la.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 7.5,
+        "value_text": "7.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-01-01",
+        "source_id": "la-prejud",
+        "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under La. R.S. 13:4202 — 7.5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Louisiana’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at ofi.la.gov. Not legal advice."
+      }
+    ]
+  }
+}

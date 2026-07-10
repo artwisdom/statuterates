@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:13:37.696Z",
+  "generated_at": "2026-07-10T02:55:46.441Z",
   "slug": "washington-judgment-rate",
   "name": "Washington Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-08",
       "source_id": "wa-rcw",
       "source_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
-      "retrieved_at": "2026-07-10T02:13:37.679Z",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under RCW 4.56.110 (amended 2019): judgments on a written contract carry the contract’s rate; tort judgments and the general catch-all carry a rate tied to the federal prime rate (Fed H.15) — currently about 8.75%. Simple interest. Verify the current rate at app.leg.wa.gov and the Fed H.15 prime; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-08",
         "source_id": "wa-rcw",
         "source_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
-        "retrieved_at": "2026-07-10T02:13:37.679Z",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under RCW 4.56.110 (amended 2019): judgments on a written contract carry the contract’s rate; tort judgments and the general catch-all carry a rate tied to the federal prime rate (Fed H.15) — currently about 8.75%. Simple interest. Verify the current rate at app.leg.wa.gov and the Fed H.15 prime; not legal advice."

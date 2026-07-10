@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "kentucky-prejudgment-rate",
+  "name": "Kentucky Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "KY",
+    "statute": "KRS 360.010(1)",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "discretionary-with-default"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8,
+      "value_text": "8%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "ky-prejud",
+      "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under KRS 360.010(1) — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kentucky’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8,
+        "value_text": "8%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "ky-prejud",
+        "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under KRS 360.010(1) — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kentucky’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}

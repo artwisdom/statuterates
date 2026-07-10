@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "missouri-prejudgment-rate",
+  "name": "Missouri Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "MO",
+    "statute": "Mo. Rev. Stat. § 408.040",
+    "basis": "statute-variable",
+    "metric": "prejudgment",
+    "kind": "variable"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 8.75,
+      "value_text": "8.75%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "mo-prejud",
+      "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "medium",
+      "method": "statute-variable",
+      "notes": "Prejudgment interest under Mo. Rev. Stat. § 408.040 — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Missouri’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at revisor.mo.gov. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8.75,
+        "value_text": "8.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "mo-prejud",
+        "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under Mo. Rev. Stat. § 408.040 — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Missouri’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at revisor.mo.gov. Not legal advice."
+      }
+    ]
+  }
+}

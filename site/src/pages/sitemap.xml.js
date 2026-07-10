@@ -8,7 +8,7 @@ export function GET({ site }) {
   const lastmod = (meta.generated_at || '').slice(0, 10);
 
   const staticPaths = [
-    '/', '/about/', '/methodology/', '/api/', '/changes/',
+    '/', '/about/', '/methodology/', '/api/', '/changes/', '/prejudgment/',
     '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
     '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
   ];

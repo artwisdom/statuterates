@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-10T02:55:46.441Z",
+  "slug": "north-dakota-prejudgment-rate",
+  "name": "North Dakota Prejudgment Interest Rate",
+  "entity_type": "rate_series",
+  "jurisdiction": "US",
+  "region": "US States — Prejudgment",
+  "locale": null,
+  "metadata": {
+    "state": "ND",
+    "statute": "N.D.C.C. § 32-03-04",
+    "basis": "statute-fixed",
+    "metric": "prejudgment",
+    "kind": "fixed"
+  },
+  "metrics": [
+    "annual_rate"
+  ],
+  "latest": {
+    "annual_rate": {
+      "metric": "annual_rate",
+      "value": 6,
+      "value_text": "6%",
+      "unit": "percent_per_annum",
+      "effective_date": "2026-07-09",
+      "source_id": "nd-prejud",
+      "source_url": "https://ndlegis.gov/cencode/t32c03.pdf",
+      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "Prejudgment interest under N.D.C.C. § 32-03-04 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from North Dakota’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+    }
+  },
+  "history": {
+    "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6,
+        "value_text": "6%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-09",
+        "source_id": "nd-prejud",
+        "source_url": "https://ndlegis.gov/cencode/t32c03.pdf",
+        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "Prejudgment interest under N.D.C.C. § 32-03-04 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from North Dakota’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      }
+    ]
+  }
+}
