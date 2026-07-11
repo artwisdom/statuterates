@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "georgia-prejudgment-rate",
   "name": "Georgia Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "ga-prejud",
       "source_url": "http://ga.elaws.us/law/section7-4-2",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under O.C.G.A. § 7-4-15 — 7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Georgia’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ga-prejud",
         "source_url": "http://ga.elaws.us/law/section7-4-2",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under O.C.G.A. § 7-4-15 — 7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Georgia’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

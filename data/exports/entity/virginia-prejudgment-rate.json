@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "virginia-prejudgment-rate",
   "name": "Virginia Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "va-prejud",
       "source_url": "https://law.lis.virginia.gov/vacode/title8.01/chapter13/section8.01-382/",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under Va. Code Ann. § 8.01-382 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Virginia’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "va-prejud",
         "source_url": "https://law.lis.virginia.gov/vacode/title8.01/chapter13/section8.01-382/",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under Va. Code Ann. § 8.01-382 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Virginia’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "wyoming-judgment-rate",
   "name": "Wyoming Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "wy-jud",
       "source_url": "https://wyoleg.gov/statutes/compress/title01.pdf",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under Wyo. Stat. Ann. 1-16-102 — 10% per year, fixed by statute (simple interest). POST-judgment only (this statute governs interest on decrees/judgments from date of rendition; prejudgment interest is a separate common-law/contract… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "wy-jud",
         "source_url": "https://wyoleg.gov/statutes/compress/title01.pdf",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under Wyo. Stat. Ann. 1-16-102 — 10% per year, fixed by statute (simple interest). POST-judgment only (this statute governs interest on decrees/judgments from date of rendition; prejudgment interest is a separate common-law/contract… Verify against the statute; not legal advice."

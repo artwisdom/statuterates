@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "west-virginia-judgment-rate",
   "name": "West Virginia Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "wv-jud",
       "source_url": "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under W. Va. Code § 56-6-31, currently 6.25% (as of January 1, 2026). 2 percentage points above the Fifth Federal Reserve District SECONDARY DISCOUNT rate in effect on January 2 of the year the judgment/decree is entered, with a statutory floor… Simple interest. Formula and rate apply to both (unified by 2017 amendment eff. Jan 1, 2018) — pre-judgment keyed to the rate on Jan 2 of the year the CAUSE OF ACTION… Verify the current value at courtswv.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "wv-jud",
         "source_url": "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under W. Va. Code § 56-6-31, currently 6.25% (as of January 1, 2026). 2 percentage points above the Fifth Federal Reserve District SECONDARY DISCOUNT rate in effect on January 2 of the year the judgment/decree is entered, with a statutory floor… Simple interest. Formula and rate apply to both (unified by 2017 amendment eff. Jan 1, 2018) — pre-judgment keyed to the rate on Jan 2 of the year the CAUSE OF ACTION… Verify the current value at courtswv.gov; not legal advice."

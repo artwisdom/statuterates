@@ -1,6 +1,6 @@
 // Self-contained sitemap.xml — enumerates every indexable page from the dataset at build time.
 // No integration dependency; the loc URLs use the configured Astro `site` domain.
-import { getAllEntities, getMeta } from '../lib/data.mjs';
+import { getAllEntities, getMeta, stateHubs } from '../lib/data.mjs';
 
 export function GET({ site }) {
   const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
@@ -8,13 +8,14 @@ export function GET({ site }) {
   const lastmod = (meta.generated_at || '').slice(0, 10);
 
   const staticPaths = [
-    '/', '/about/', '/methodology/', '/api/', '/changes/', '/prejudgment/',
+    '/', '/about/', '/methodology/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
     '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
     '/calculators/prejudgment-interest/',
   ];
   const entityPaths = getAllEntities().map((e) => `/rates/${e.slug}/`);
-  const all = [...staticPaths, ...entityPaths];
+  const hubPaths = stateHubs().map((h) => `/states/${h.base}/`);
+  const all = [...staticPaths, ...entityPaths, ...hubPaths];
 
   const urls = all
     .map(

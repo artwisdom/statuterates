@@ -14,8 +14,16 @@ const {
 
 const meta = getMeta();
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const origin = new URL('/', Astro.site).href;
 const generatedDate = prettyDate(meta.generated_at);
 const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+
+// Site-wide entity schema on every page — establishes the publisher and site as a recognizable entity
+// (durable SEO signal, enables richer knowledge-graph treatment). Per-page jsonLd is layered on top.
+const siteJsonLd = [
+  { '@context': 'https://schema.org', '@type': 'Organization', name: meta.title, url: origin, description: meta.description, logo: `${origin}favicon.svg` },
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: meta.title, url: origin, description: meta.description },
+];
 
 // ONE-SWITCH MONETIZATION: set the repo variable ADSENSE_CLIENT = ca-pub-XXXXXXXX (after AdSense
 // approval) and redeploy — that turns on Google Auto Ads site-wide. Empty by default = no ad code
@@ -24,6 +32,7 @@ const adsenseClient = process.env.ADSENSE_CLIENT || '';
 
 const NAV = [
   { href: '/', label: 'Rates' },
+  { href: '/states/', label: 'States' },
   { href: '/calculators/', label: 'Calculators' },
   { href: '/changes/', label: 'Changes' },
   { href: '/api/', label: 'Data & API' },
@@ -55,7 +64,7 @@ const NAV = [
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
 
-    {jsonLdArray.map((obj) => (
+    {[...siteJsonLd, ...jsonLdArray].map((obj) => (
       <script type="application/ld+json" set:html={JSON.stringify(obj)} />
     ))}
 

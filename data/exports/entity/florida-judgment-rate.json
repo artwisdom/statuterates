@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "florida-judgment-rate",
   "name": "Florida Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-01",
       "source_id": "fl-cfo",
       "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest on judgments and decrees, set quarterly by the Florida Chief Financial Officer under Fla. Stat. §55.03 (12-month average of the New York Fed discount/primary-credit rate + 4 percentage points) — currently 8.06% for the quarter beginning July 1, 2026. Simple interest; a judgment’s rate re-adjusts each January 1 to the then-current CFO rate (§55.03(3)). Verify the current quarter at myfloridacfo.com; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest on judgments and decrees, set quarterly by the Florida Chief Financial Officer under Fla. Stat. §55.03 (12-month average of the New York Fed discount/primary-credit rate + 4 percentage points) — currently 8.06% for the quarter beginning July 1, 2026. Simple interest; a judgment’s rate re-adjusts each January 1 to the then-current CFO rate (§55.03(3)). Verify the current quarter at myfloridacfo.com; not legal advice."

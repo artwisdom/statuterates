@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "dc-judgment-rate",
   "name": "District of Columbia Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-04-01",
       "source_id": "dc-jud",
       "source_url": "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (as of April 1, 2026). . Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC section 6621 (26 U.S.C. § 6621) for underpayments of tax, rounded to the nearest full percent (if… Simple interest. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per… Verify the current value at code.dccouncil.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-04-01",
         "source_id": "dc-jud",
         "source_url": "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (as of April 1, 2026). . Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC section 6621 (26 U.S.C. § 6621) for underpayments of tax, rounded to the nearest full percent (if… Simple interest. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per… Verify the current value at code.dccouncil.gov; not legal advice."

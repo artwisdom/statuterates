@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "hawaii-judgment-rate",
   "name": "Hawaii Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "hi-jud",
       "source_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "hi-jud",
         "source_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice."

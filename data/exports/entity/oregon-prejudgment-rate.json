@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "oregon-prejudgment-rate",
   "name": "Oregon Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "or-prejud",
       "source_url": "https://oregon.public.law/statutes/ors_82.010",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under ORS 82.010(1)(a) — 9% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oregon’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "or-prejud",
         "source_url": "https://oregon.public.law/statutes/ors_82.010",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under ORS 82.010(1)(a) — 9% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oregon’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

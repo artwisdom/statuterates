@@ -75,6 +75,11 @@ if (pj) {
   if (allSlugs.has(prs)) preSibling = prs;
 }
 
+// Link up to the state hub (topical cluster) when this rate belongs to a state that has one.
+const hubBases = new Set([...allSlugs].filter((s) => s.endsWith('-prejudgment-rate')).map((s) => s.replace('-prejudgment-rate', '')));
+const rateBase = slug.replace(/-(?:pre)?judgment-rate$/, '');
+const hubHref = hubBases.has(rateBase) ? `/states/${rateBase}/` : null;
+
 const title = pj
   ? `${stateName} Prejudgment Interest Rate — When It Applies & Current Rate | ${meta.title}`
   : `${entity.name} — Current & Historical | ${meta.title}`;
@@ -137,6 +142,9 @@ const jsonLd = [
   </nav>
   <h1>{entity.name}</h1>
   <p class="lead"><span class="chip">{JUR[entity.jurisdiction] || entity.jurisdiction}</span> &nbsp;{copy.tagline}</p>
+  {hubHref && (
+    <p class="hublink"><a href={hubHref}>→ All {stateName} judgment &amp; prejudgment interest rates</a></p>
+  )}
 
   <div class="rate-hero">
     <div class="eyebrow">Current rate</div>
@@ -256,6 +264,9 @@ const jsonLd = [
     .xlink { margin: 14px 0; }
     .xlink a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
     .xlink a:hover { border-bottom-color: var(--green); }
+    .hublink { margin: -6px 0 0; font-size: 0.92rem; }
+    .hublink a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+    .hublink a:hover { border-bottom-color: var(--green); }
     .kind-chip { display: inline-block; margin-left: 8px; font-family: var(--sans); font-size: 0.66rem;
       font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px;
       border-radius: 2px; border: 1px solid var(--line-strong); color: var(--ink-soft); vertical-align: baseline; }

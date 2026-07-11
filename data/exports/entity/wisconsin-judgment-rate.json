@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "wisconsin-judgment-rate",
   "name": "Wisconsin Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "wi-jud",
       "source_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Prime rate is the bank prime loan rate published by the Federal Reserve Board in statistical release H.15… Simple interest. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which… Verify the current value at docs.legis.wisconsin.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "wi-jud",
         "source_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Prime rate is the bank prime loan rate published by the Federal Reserve Board in statistical release H.15… Simple interest. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which… Verify the current value at docs.legis.wisconsin.gov; not legal advice."

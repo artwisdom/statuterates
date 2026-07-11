@@ -7,7 +7,7 @@
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "entity_count": 114,
   "observation_count": 742,
   "metrics": [
@@ -93,7 +93,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:55:46.415Z"
+      "retrieved_at": "2026-07-11T11:51:06.684Z"
     },
     {
       "id": "ca-leginfo",
@@ -115,7 +115,7 @@
     },
     {
       "id": "co-prejud",
-      "name": "Colorado prejudgment interest (C.R.S. 5-12-102)",
+      "name": "Colorado prejudgment interest (C.R.S. §5-12-102, §13-21-101)",
       "publisher": "Colorado — colorado.public.law",
       "home_url": "https://colorado.public.law/statutes/crs_5-12-102",
       "license": "Government edict — not subject to copyright.",
@@ -192,7 +192,7 @@
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:55:46.418Z"
+      "retrieved_at": "2026-07-11T11:51:06.686Z"
     },
     {
       "id": "fed-h15",
@@ -201,7 +201,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:55:46.412Z"
+      "retrieved_at": "2026-07-11T11:51:06.680Z"
     },
     {
       "id": "fl-cfo",
@@ -336,7 +336,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-10T02:55:46.408Z"
+      "retrieved_at": "2026-07-11T11:51:06.674Z"
     },
     {
       "id": "ks-jud",

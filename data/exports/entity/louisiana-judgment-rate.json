@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "louisiana-judgment-rate",
   "name": "Louisiana Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "la-jud",
       "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under La. R.S. 13:4202(B), currently 7.5% (as of January 1, 2026). . Formula: Federal Reserve Board of Governors approved \"discount rate\" (published daily in the Wall Street Journal), ascertained by the Commissioner on the first business day… Simple interest. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. 13:4203 provides interest attaches from the date of judicial… Verify the current value at ofi.la.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "la-jud",
         "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under La. R.S. 13:4202(B), currently 7.5% (as of January 1, 2026). . Formula: Federal Reserve Board of Governors approved \"discount rate\" (published daily in the Wall Street Journal), ascertained by the Commissioner on the first business day… Simple interest. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. 13:4203 provides interest attaches from the date of judicial… Verify the current value at ofi.la.gov; not legal advice."

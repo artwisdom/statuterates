@@ -40,6 +40,24 @@ export function prejudgmentEntities() {
   return getAllEntities().filter(isPrejudgment).sort((a, b) => a.name.localeCompare(b.name));
 }
 
+// State hubs (/states/<base>/): one per state that has a prejudgment entry (all 50 + D.C.), each
+// pairing that state's post-judgment and prejudgment rates into a single topical cluster page. The
+// hub links to both spoke pages + calculators, and the spokes link back — a compounding-SEO mesh.
+const STATE_NAME_OVERRIDE = { dc: 'District of Columbia' };
+export function stateHubs() {
+  const all = getAllEntities();
+  const bySlug = new Map(all.map((e) => [e.slug, e]));
+  return all
+    .filter(isPrejudgment)
+    .map((pre) => {
+      const base = pre.slug.replace('-prejudgment-rate', '');
+      const post = bySlug.get(`${base}-judgment-rate`) || null;
+      const name = STATE_NAME_OVERRIDE[base] || pre.name.replace(/ Prejudgment Interest Rate$/, '');
+      return { base, name, pre, post };
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
 // Prejudgment states the calculator can honestly compute: a FIXED statutory rate with a deterministic
 // method — simple interest, or (Colorado) compounded annually. Single unambiguous rate. Excludes
 // formula/VARIABLE rates whose value floated over the accrual window (incl. Michigan, which also

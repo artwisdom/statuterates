@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "georgia-judgment-rate",
   "name": "Georgia Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-08",
       "source_id": "ga-code",
       "source_url": "http://ga.elaws.us/law/section7-4-12",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under O.C.G.A. §7-4-12: the Federal Reserve prime rate (published in Fed release H.15) on the day of judgment + 3 percentage points, fixed for the life of the judgment — currently about 9.75% (prime ~6.75% + 3). Simple interest. A judgment on a written contract that specifies a rate carries the contract rate instead (§7-4-12(b)). Verify against the current prime rate; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-08",
         "source_id": "ga-code",
         "source_url": "http://ga.elaws.us/law/section7-4-12",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under O.C.G.A. §7-4-12: the Federal Reserve prime rate (published in Fed release H.15) on the day of judgment + 3 percentage points, fixed for the life of the judgment — currently about 9.75% (prime ~6.75% + 3). Simple interest. A judgment on a written contract that specifies a rate carries the contract rate instead (§7-4-12(b)). Verify against the current prime rate; not legal advice."

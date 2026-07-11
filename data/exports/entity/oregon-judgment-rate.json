@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "oregon-judgment-rate",
   "name": "Oregon Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "or-jud",
       "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "or-jud",
         "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees… Verify against the statute; not legal advice."

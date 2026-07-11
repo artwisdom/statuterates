@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T02:55:46.441Z",
+  "generated_at": "2026-07-11T11:51:06.710Z",
   "slug": "tennessee-prejudgment-rate",
   "name": "Tennessee Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "tn-prejud",
       "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
-      "retrieved_at": "2026-07-10T02:55:46.419Z",
+      "retrieved_at": "2026-07-11T11:51:06.687Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "tn-prejud",
         "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
-        "retrieved_at": "2026-07-10T02:55:46.419Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getMeta, latestOf, prettyDate, stateHubs, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
+import { copyFor } from '../../lib/content.mjs';
+
+export function getStaticPaths() {
+  return stateHubs().map((h) => ({ params: { state: h.base }, props: { hub: h } }));
+}
+
+const { hub } = Astro.props;
+const { base, name, pre, post } = hub;
+const meta = getMeta();
+
+const preLatest = latestOf(pre);
+const postLatest = post ? latestOf(post) : null;
+const preCopy = copyFor(pre.slug);
+const postCopy = post ? copyFor(post.slug) : null;
+const preSafe = PREJUDGMENT_CALC_SAFE.includes(base);
+const theName = base === 'dc' ? 'the District of Columbia' : name;
+
+// Post-judgment basis line (statute-fixed vs derived/formula) for the at-a-glance row.
+const postBasis = post
+  ? ((postLatest?.method || '').startsWith('statute') ? 'Set by statute' : 'Derived / formula')
+  : 'No fixed statutory rate';
+
+const title = `${name} Judgment & Prejudgment Interest Rates (current) | ${meta.title}`;
+const description = `${name}'s interest rates on court judgments and debts, in one place: ${post ? `post-judgment ${postLatest?.value_text}` : 'post-judgment (case-by-case)'} and prejudgment ${preLatest?.value_text} (${preCopy.kindLabel?.toLowerCase()}). Each rate verified against the statute, with when it applies and how it's calculated. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const faq = [
+  post && {
+    q: `What is the post-judgment interest rate in ${name}?`,
+    a: `As of ${prettyDate(postLatest?.effective_date)}, the ${name} post-judgment interest rate is ${postLatest?.value_text} per year. ${postCopy.tagline}`,
+  },
+  {
+    q: `What is the prejudgment interest rate in ${name}?`,
+    a: `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}). ${preCopy.appliesShort || preCopy.tagline}`,
+  },
+  {
+    q: `Is ${name} judgment interest simple or compound, and when does it start?`,
+    a: `See each rate's page for the exact compounding rule, accrual date, and statutory carve-outs — ${name} prejudgment interest in particular turns on the type of claim.`,
+  },
+].filter(Boolean);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `${name} judgment & prejudgment interest rates`,
+    url: canonical,
+    description,
+    isPartOf: { '@type': 'WebSite', name: meta.title, url: new URL('/', Astro.site).href },
+    dateModified: meta.generated_at,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Rates', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'States', item: new URL('/states/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name, item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/">Rates</a> &rsaquo; <a href="/states/">States</a> &rsaquo; <span>{name}</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · {name}</div>
+  <h1>{name} judgment &amp; prejudgment interest rates</h1>
+  <p class="lead">Everything {theName} charges in interest on a money judgment or an overdue debt, in one
+    place — the rate <em>after</em> judgment and the rate <em>before</em> it, each verified against the
+    statute and linked to its full page with sources, history, and carve-outs.</p>
+
+  <div class="scroll-x">
+    <table class="glance">
+      <thead><tr><th scope="col">Metric</th><th scope="col">Rate</th><th scope="col">Basis</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href={post ? `/rates/${post.slug}/` : '/methodology/'}>Post-judgment interest</a></td>
+          <td class="num">{post ? postLatest?.value_text : '—'}</td>
+          <td class="source-note">{postBasis}</td>
+        </tr>
+        <tr>
+          <td><a href={`/rates/${pre.slug}/`}>Prejudgment interest</a></td>
+          <td class="num">{preLatest?.value_text}</td>
+          <td class="source-note">{preCopy.kindLabel}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <AdSlot id="state-top" />
+
+  <h2>Post-judgment interest{post ? '' : ' — case by case'}</h2>
+  {post ? (
+    <>
+      <p><strong>{name}'s post-judgment interest rate is {postLatest?.value_text} per year.</strong> {postCopy.body}</p>
+      <p class="xlink"><a href={`/rates/${post.slug}/`}>→ Full {name} post-judgment page</a> — statute, effective-date history, and source.</p>
+    </>
+  ) : (
+    <p>{name} does not set a single fixed statutory post-judgment rate; interest on a judgment is
+      determined case by case rather than by a uniform default. See the
+      <a href="/methodology/">methodology</a> for how this is handled, and the prejudgment rate below.</p>
+  )}
+
+  <h2>Prejudgment interest</h2>
+  <p><strong>{name}'s prejudgment interest rate is {preLatest?.value_text} per year ({preCopy.kindLabel?.toLowerCase()}).</strong> {preCopy.body}</p>
+  <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — when it applies, accrual, compounding, and carve-outs.</p>
+  {preSafe && (
+    <p class="xlink"><a href="/calculators/prejudgment-interest/">→ Calculate {name} prejudgment interest</a></p>
+  )}
+
+  <AdSlot id="state-bottom" />
+
+  <h2>Frequently asked</h2>
+  <div class="faq">
+    {faq.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </div>
+
+  <p class="source-note" style="margin-top:22px">Compare every state on the
+    <a href="/states/">state interest-rate index</a> and the
+    <a href="/prejudgment/">prejudgment interest index</a>, or run the numbers with our
+    <a href="/calculators/">interest calculators</a>. Reference data only — not legal advice.</p>
+
+  <style>
+    .glance td.num { font-family: var(--nums); white-space: nowrap; }
+    .glance td a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
+    .glance td a:hover { border-bottom-color: var(--green); }
+    .xlink { margin: 12px 0; }
+    .xlink a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+    .xlink a:hover { border-bottom-color: var(--green); }
+    .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
+    .faq summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
+    .faq p { margin: 8px 0 0; color: var(--ink-soft); }
+  </style>
+</BaseLayout>

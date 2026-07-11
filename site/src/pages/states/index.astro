@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getMeta, latestOf, prettyDate, stateHubs } from '../../lib/data.mjs';
+import { copyFor } from '../../lib/content.mjs';
+
+const meta = getMeta();
+const rows = stateHubs().map((h) => ({
+  base: h.base,
+  name: h.name,
+  post: h.post ? latestOf(h.post)?.value_text : null,
+  pre: latestOf(h.pre)?.value_text,
+  preKind: copyFor(h.pre.slug).kindLabel,
+}));
+
+const title = `Judgment Interest Rates by State — All 50 States + D.C. | ${meta.title}`;
+const description = `Interest rates on court judgments for every U.S. state and D.C., post-judgment and prejudgment side by side, each verified against the statute. Compare rates or open a state for its full detail, sources, and calculators. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Judgment interest rates by state',
+    url: canonical,
+    description,
+    isPartOf: { '@type': 'WebSite', name: meta.title, url: new URL('/', Astro.site).href },
+    dateModified: meta.generated_at,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: rows.map((r, i) => ({
+      '@type': 'ListItem', position: i + 1, name: `${r.name} judgment interest`, url: new URL(`/states/${r.base}/`, Astro.site).href,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Rates', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'States', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/">Rates</a> &rsaquo; <span>States</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · By state</div>
+  <h1>Judgment interest rates by state</h1>
+  <p class="lead">Interest on a money judgment differs in every state — and the rate that runs
+    <em>before</em> judgment is a different number with different rules than the one that runs
+    <em>after</em>. Here they are side by side for all 50 states and D.C., each verified against the
+    statute. Open any state for the full detail, sources, history, and calculators.</p>
+
+  <AdSlot id="states-top" />
+
+  <div class="scroll-x">
+    <table class="states">
+      <thead>
+        <tr><th scope="col">State</th><th scope="col">Post-judgment</th><th scope="col">Prejudgment</th><th scope="col">Prejudgment type</th></tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <td class="st"><a href={`/states/${r.base}/`}>{r.name}</a></td>
+            <td class="num">{r.post || '—'}</td>
+            <td class="num">{r.pre}</td>
+            <td class="source-note">{r.preKind}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <AdSlot id="states-bottom" />
+
+  <h2>Post-judgment vs. prejudgment — why two numbers?</h2>
+  <p><strong>Post-judgment interest</strong> accrues on a money judgment from the day it is entered
+    until it is paid; it is usually automatic. <strong>Prejudgment interest</strong> reaches back to
+    compensate for the time between the loss or breach and the judgment — and it comes with rules
+    post-judgment interest doesn't have (it's often limited to liquidated amounts, sometimes
+    discretionary, and the rate can differ). That's why each state shows two figures here.</p>
+  <p class="source-note">Dig into the mechanics on the <a href="/prejudgment/">prejudgment interest
+    index</a>, the <a href="/methodology/">methodology</a>, or the
+    <a href="/calculators/">calculators</a>. One state missing a post-judgment figure (Mississippi)
+    sets it case by case rather than by a fixed statutory default. Reference data — not legal advice.</p>
+
+  <style>
+    .states td.st a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
+    .states td.st a:hover { border-bottom-color: var(--green); }
+    .states td.num { font-family: var(--nums); white-space: nowrap; }
+  </style>
+</BaseLayout>
