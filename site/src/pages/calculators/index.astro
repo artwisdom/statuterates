@@ -10,6 +10,7 @@ const CALCS = [
   { href: '/calculators/post-judgment-interest/', name: 'Federal post-judgment interest', desc: 'The §1961 method: H.15 weekly rate for the week before judgment, daily accrual, compounded annually.', slug: 'us-federal-post-judgment' },
   { href: '/calculators/irs-interest/', name: 'IRS interest (underpayment & refund)', desc: 'Quarterly §6621 rates compounded daily per §6622, across every rate change since 2017.', slug: 'irs-underpayment' },
   { href: '/calculators/state-judgment-interest/', name: 'State judgment interest', desc: 'California, New York (incl. the 2% consumer rate), Massachusetts, and Treasury-linked Iowa.', slug: 'california-judgment-rate' },
+  { href: '/calculators/prejudgment-interest/', name: 'Prejudgment interest (fixed-rate states)', desc: 'Interest before judgment for the 19 states + D.C. with a fixed statutory rate applied as simple interest.', slug: 'new-york-prejudgment-rate' },
   { href: '/calculators/late-payment-interest/', name: 'Late payment interest (UK & EU)', desc: 'UK Late Payment Act 1998 (base + 8pp, fixed at overdue date) and the EU Directive rate.', slug: 'uk-late-payment-commercial' },
 ];
 const withRates = CALCS.map((c) => ({ ...c, latest: latestOf(getEntity(c.slug)) }));

@@ -11,6 +11,7 @@ export function GET({ site }) {
     '/', '/about/', '/methodology/', '/api/', '/changes/', '/prejudgment/',
     '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
     '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
+    '/calculators/prejudgment-interest/',
   ];
   const entityPaths = getAllEntities().map((e) => `/rates/${e.slug}/`);
   const all = [...staticPaths, ...entityPaths];

@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import InterestCalculator from '../../components/InterestCalculator.astro';
+import { getMeta, getEntity, latestOf, prettyDate, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
+
+const meta = getMeta();
+
+// Safe set (a FIXED statutory rate applied as SIMPLE interest, single unambiguous rate) is defined
+// once in data.mjs and reused by the cross-links; see it for what's excluded and why.
+// Build rate histories + labels straight from the dataset so they never drift from the state pages.
+// These are long-stable statutory rates, so the calculator extends the single current value back to
+// 1990 to accept older accrual dates (the dataset itself keeps the strict effective date).
+const entities = PREJUDGMENT_CALC_SAFE.map((key) => {
+  const e = getEntity(`${key}-prejudgment-rate`);
+  const l = latestOf(e);
+  return {
+    key,
+    name: e.name.replace(/ Prejudgment Interest Rate$/, ''),
+    slug: `${key}-prejudgment-rate`,
+    value: l?.value,
+    value_text: l?.value_text,
+    cite: e.metadata?.statute,
+  };
+}).sort((a, b) => a.name.localeCompare(b.name));
+
+const histories = Object.fromEntries(entities.map((e) => [e.key, [{ effective_date: '1990-01-01', value: e.value }]]));
+const seriesOptions = entities.map((e) => ({ key: e.key, label: `${e.name} — ${e.value_text} (${e.cite})` }));
+const defaultSeries = 'new-york';
+const stateCount = entities.filter((e) => e.key !== 'dc').length; // D.C. counted separately in copy
+
+const title = `Prejudgment Interest Calculator — Fixed-Rate States | ${meta.title}`;
+const description = `Free prejudgment interest calculator for the ${stateCount} states + D.C. with a fixed statutory rate applied as simple interest (AL, GA, MA, NY, WA, and more). Enter the amount, the date interest began accruing, and the judgment date. Excludes formula, compounding, and discretionary states — see each state's page. Updated ${prettyDate(meta.generated_at)}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Prejudgment Interest Calculator (fixed-rate states)',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: canonical,
+    description: `Computes prejudgment interest for the ${stateCount} U.S. states and D.C. that apply a fixed statutory rate as simple interest, from the accrual date to the date of judgment.`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'How is prejudgment interest calculated?',
+        acceptedAnswer: { '@type': 'Answer', text: 'In the states covered here it is simple interest on the principal from the date interest begins accruing (the date of loss, breach, or demand, depending on the claim) to the date judgment is entered: principal × annual rate × days ÷ 365. It applies only where the claim qualifies — generally a liquidated or readily ascertainable amount.' },
+      },
+      {
+        '@type': 'Question',
+        name: 'Why are only some states in this calculator?',
+        acceptedAnswer: { '@type': 'Answer', text: 'A calculator is only honest where the rate is fixed by statute and applied as simple interest. States with a formula rate that changes over the accrual period, states that compound, and states where prejudgment interest is discretionary are excluded — computing a single number for those would mislead. Each of those states has its own page explaining the method.' },
+      },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Prejudgment interest', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>Prejudgment interest</span>
+  </nav>
+  <h1>Prejudgment interest calculator</h1>
+  <p class="lead">Simple interest on a liquidated claim from the date it began accruing to the date of
+    judgment, at each state's fixed statutory rate — verified against the statute and cited on its own
+    page. Covers the <strong>{stateCount} states and D.C. where the rate is fixed and simple</strong>,
+    so the arithmetic is exact.</p>
+
+  <div class="notice">
+    <strong>Read this first.</strong> Prejudgment interest is not automatic. This calculator does the
+    <em>arithmetic</em>; it does not decide the two things that actually govern an award:
+    <ul>
+      <li><strong>Whether it applies.</strong> Most of these states allow prejudgment interest only on
+        <em>liquidated or readily ascertainable</em> amounts (a contract sum, an invoice) — and bar it
+        on unliquidated damages (pain and suffering, most general tort damages). Confirm your claim
+        qualifies on the <a href="/prejudgment/">state's page</a>.</li>
+      <li><strong>When it starts.</strong> The accrual date is claim-dependent — date of loss, breach,
+        demand, or filing. You set it below; each state's page states the rule.</li>
+    </ul>
+  </div>
+
+  <InterestCalculator
+    kind="fixed-simple"
+    histories={histories}
+    defaultSeries={defaultSeries}
+    seriesOptions={seriesOptions}
+    principalLabel="Claim amount (principal)"
+    startLabel="Date interest begins accruing (claim-dependent)"
+    endLabel="Date of judgment"
+  />
+  <p class="source-note">The rate for each state is pulled from the same dataset as its
+    <a href="/prejudgment/">prejudgment rate page</a> and applied as simple interest
+    (annual rate ÷ 365 per day). These statutory rates have been stable for years, so the calculator
+    accepts accrual dates back to 1990 at the current rate.</p>
+
+  <AdSlot id="calc-top" />
+
+  <h2>States covered</h2>
+  <p>Each of these applies a <strong>fixed statutory prejudgment rate as simple interest</strong>:</p>
+  <div class="scroll-x">
+    <table>
+      <thead><tr><th scope="col">State</th><th scope="col">Rate</th><th scope="col">Statute</th></tr></thead>
+      <tbody>
+        {entities.map((e) => (
+          <tr>
+            <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>
+            <td class="num">{e.value_text}</td>
+            <td class="source-note">{e.cite}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Why other states aren't here</h2>
+  <p>A prejudgment calculator is only honest when the rate is fixed and the interest is simple. We leave
+    out three groups on purpose, because a single computed number would be misleading:</p>
+  <ul class="clean">
+    <li><strong>Formula / variable-rate states</strong> (e.g. Florida, California, Michigan, Texas) — the
+      rate <em>changed</em> over the years the interest accrued, so the correct figure stitches together
+      each period's rate. See the state page for the current rate and formula.</li>
+    <li><strong>Compounding states</strong> (Colorado, Michigan) — interest is added to principal
+      periodically, not applied as flat simple interest.</li>
+    <li><strong>Discretionary states</strong> (e.g. Virginia, Connecticut, Tennessee) — a court decides
+      whether to award prejudgment interest and when it starts, so there is no automatic amount to compute.</li>
+  </ul>
+  <p class="source-note">Federal-court judgments use a different statute and compound annually — use the
+    <a href="/calculators/post-judgment-interest/">federal post-judgment calculator</a>. Browse every
+    state's rate and rules on the <a href="/prejudgment/">prejudgment interest index</a>.</p>
+
+  <AdSlot id="calc-bottom" />
+
+  <style>
+    .notice { background: var(--amber-bg); border: 1px solid var(--line-strong); border-left: 3px solid var(--gold);
+      border-radius: 2px; padding: 15px 18px; margin: 18px 0 6px; color: #5c4c26; font-size: 0.95rem; }
+    .notice ul { margin: 8px 0 0; padding-left: 20px; }
+    .notice li { margin: 6px 0; }
+    .notice a { color: var(--green); }
+  </style>
+</BaseLayout>

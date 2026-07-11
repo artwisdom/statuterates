@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment } from '../../lib/data.mjs';
+import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -54,7 +54,12 @@ const CALC_FOR = {
   'wyoming-judgment-rate': '/calculators/state-judgment-interest/',
   'iowa-judgment-rate': '/calculators/state-judgment-interest/',
 };
-const calcHref = CALC_FOR[slug] || null;
+// Prejudgment slugs get the calculator link only for the fixed-simple "safe" states (single source
+// of truth in data.mjs); everything else uses the explicit CALC_FOR map.
+const calcHref = CALC_FOR[slug]
+  || (slug.endsWith('-prejudgment-rate') && PREJUDGMENT_CALC_SAFE.includes(slug.replace('-prejudgment-rate', ''))
+        ? '/calculators/prejudgment-interest/'
+        : null);
 
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.

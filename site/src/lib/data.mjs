@@ -40,6 +40,16 @@ export function prejudgmentEntities() {
   return getAllEntities().filter(isPrejudgment).sort((a, b) => a.name.localeCompare(b.name));
 }
 
+// Prejudgment states the calculator can honestly compute: a FIXED statutory rate applied as SIMPLE
+// interest, single unambiguous rate. Excludes formula/variable rates (rate floated over the accrual
+// window), compounding states (CO, MI), discretionary states, and IL (dual 6%/5% + 5-yr cap). The
+// slug base ('<key>-prejudgment-rate'). Single source of truth for the calculator + its cross-links.
+export const PREJUDGMENT_CALC_SAFE = [
+  'alabama', 'dc', 'georgia', 'idaho', 'kansas', 'massachusetts', 'montana', 'nebraska',
+  'new-york', 'north-carolina', 'north-dakota', 'oregon', 'pennsylvania', 'rhode-island',
+  'south-carolina', 'utah', 'washington', 'wisconsin', 'wyoming',
+];
+
 // Grouping for the homepage / browse. Keeps the site organized as it grows.
 export const GROUPS = [
   {

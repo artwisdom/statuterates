@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getMeta, prejudgmentEntities, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getMeta, prejudgmentEntities, latestOf, prettyDate, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
+
+const calcStateCount = PREJUDGMENT_CALC_SAFE.filter((k) => k !== 'dc').length;
 
 const meta = getMeta();
 const rows = prejudgmentEntities().map((e) => {
@@ -92,6 +94,10 @@ const jsonLd = [
     ))}
   </div>
 
+  <p class="calc-link"><a href="/calculators/prejudgment-interest/">→ Prejudgment interest calculator</a>
+    — for the {calcStateCount} states + D.C. with a fixed statutory rate applied as simple interest
+    (the ones where the arithmetic is exact).</p>
+
   <AdSlot id="prejudgment-top" />
 
   <div class="scroll-x">
@@ -136,6 +142,9 @@ const jsonLd = [
     not legal advice.</p>
 
   <style>
+    .calc-link { margin: 4px 0 18px; font-size: 0.95rem; }
+    .calc-link a { color: var(--green); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+    .calc-link a:hover { border-bottom-color: var(--green); }
     .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 6px 0 20px; font-size: 0.86rem; color: var(--ink-soft); }
     .legend-item { display: inline-flex; align-items: baseline; gap: 7px; }
     .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; transform: translateY(1px); }
