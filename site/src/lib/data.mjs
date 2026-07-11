@@ -40,15 +40,20 @@ export function prejudgmentEntities() {
   return getAllEntities().filter(isPrejudgment).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// Prejudgment states the calculator can honestly compute: a FIXED statutory rate applied as SIMPLE
-// interest, single unambiguous rate. Excludes formula/variable rates (rate floated over the accrual
-// window), compounding states (CO, MI), discretionary states, and IL (dual 6%/5% + 5-yr cap). The
-// slug base ('<key>-prejudgment-rate'). Single source of truth for the calculator + its cross-links.
+// Prejudgment states the calculator can honestly compute: a FIXED statutory rate with a deterministic
+// method — simple interest, or (Colorado) compounded annually. Single unambiguous rate. Excludes
+// formula/VARIABLE rates whose value floated over the accrual window (incl. Michigan, which also
+// compounds but is variable and we hold only the current value), discretionary states, and Illinois
+// (dual 6%/5% + 5-yr cap). Slug base is '<key>-prejudgment-rate'. Single source of truth for the
+// calculator series AND the "Calculate interest" cross-links on the rate pages.
 export const PREJUDGMENT_CALC_SAFE = [
-  'alabama', 'dc', 'georgia', 'idaho', 'kansas', 'massachusetts', 'montana', 'nebraska',
+  'alabama', 'colorado', 'dc', 'georgia', 'idaho', 'kansas', 'massachusetts', 'montana', 'nebraska',
   'new-york', 'north-carolina', 'north-dakota', 'oregon', 'pennsylvania', 'rhode-island',
   'south-carolina', 'utah', 'washington', 'wisconsin', 'wyoming',
 ];
+
+// Of the safe set, these compound annually (everything else is simple interest).
+export const PREJUDGMENT_CALC_COMPOUND = ['colorado'];
 
 // Grouping for the homepage / browse. Keeps the site organized as it grows.
 export const GROUPS = [

@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   rateOn, mondayOf, daysBetween,
-  federalPostJudgment, irsInterest, fixedSimpleInterest, floatingSimpleInterest,
+  federalPostJudgment, irsInterest, fixedSimpleInterest, floatingSimpleInterest, fixedCompoundInterest,
 } from './interest-calc.mjs';
 
 test('rateOn picks the value in force on a date', () => {
@@ -78,6 +78,19 @@ test('fixed simple interest (UK LPA style)', () => {
   assert.equal(r.interest, 321.92);
   assert.equal(r.daily_amount, 3.22);
   assert.equal(r.rate_effective_date, '2026-01-01');
+});
+
+test('fixed compound interest compounds annually (Colorado style)', () => {
+  const h = [{ effective_date: '1990-01-01', value: 8 }];
+  // 8% on $10,000 over exactly 2 non-leap anniversary years: 10000*(1.08^2)-10000 = 1664.00
+  const r = fixedCompoundInterest({ principal: 10000, startDate: '2022-01-01', endDate: '2024-01-01', history: h });
+  assert.equal(r.rate_percent, 8);
+  assert.equal(r.days, 730);
+  assert.equal(r.interest, 1664);
+  assert.equal(r.total, 11664);
+  // Under one year it matches simple interest (no anniversary reached): 10000*8%*90/365 = 197.26
+  const r2 = fixedCompoundInterest({ principal: 10000, startDate: '2023-01-01', endDate: '2023-04-01', history: h });
+  assert.equal(r2.interest, fixedSimpleInterest({ principal: 10000, startDate: '2023-01-01', endDate: '2023-04-01', history: h }).interest);
 });
 
 test('floating simple interest re-fixes across segments (EU style)', () => {

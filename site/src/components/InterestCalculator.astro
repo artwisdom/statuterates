@@ -87,6 +87,7 @@ const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
     irsInterest,
     fixedSimpleInterest,
     floatingSimpleInterest,
+    fixedCompoundInterest,
   } from '../../../shared/interest-calc.mjs';
 
   function fmt(n, cur) {
@@ -104,6 +105,9 @@ const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
     }
     if (kind === 'floating-simple') {
       return floatingSimpleInterest({ principal, startDate: start, endDate: end, history, marginPercent: cfg.marginPercent || 0 });
+    }
+    if (kind === 'fixed-compound') {
+      return fixedCompoundInterest({ principal, startDate: start, endDate: end, history });
     }
     return fixedSimpleInterest({ principal, startDate: start, endDate: end, history });
   }

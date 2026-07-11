@@ -176,6 +176,44 @@ export function fixedSimpleInterest({ principal, startDate, endDate, history }) 
 }
 
 /**
+ * Interest at a FIXED rate COMPOUNDED ANNUALLY (e.g. Colorado prejudgment, C.R.S. §5-12-102: 8%
+ * compounded annually). Daily accrual (actual/365) within each anniversary year; compounds on each
+ * anniversary of the start date. Uses the rate applicable on the start date for the whole period.
+ * (Same anniversary-compounding mechanism as the federal §1961 calculator, with a fixed rate.)
+ */
+export function fixedCompoundInterest({ principal, startDate, endDate, history }) {
+  if (!(principal > 0)) throw new Error('Principal must be > 0');
+  const days = daysBetween(startDate, endDate);
+  if (days < 0) throw new Error('End date is before the start date');
+  const rEntry = rateOn(history, startDate);
+  if (!rEntry) throw new Error(`No rate on record for ${startDate}`);
+  const r = rEntry.value / 100;
+
+  let base = principal;
+  let interest = 0;
+  let cursor = startDate;
+  let anniversary = nextAnniversary(startDate, startDate);
+  while (daysBetween(cursor, endDate) > 0) {
+    const segEnd = anniversary <= endDate ? anniversary : endDate;
+    const segDays = daysBetween(cursor, segEnd);
+    interest += base * r * (segDays / 365);
+    if (segEnd === anniversary && segEnd !== endDate) {
+      base = principal + interest; // compounded annually
+      anniversary = nextAnniversary(startDate, segEnd);
+    }
+    cursor = segEnd;
+  }
+  return {
+    method: 'Fixed rate: daily accrual (actual/365), compounded annually',
+    rate_percent: rEntry.value,
+    rate_effective_date: rEntry.effective_date,
+    days,
+    interest: round2(interest),
+    total: round2(principal + interest),
+  };
+}
+
+/**
  * Simple interest where the underlying rate RE-FIXES over time (EU Directive semesters): accrues
  * segment-by-segment at (reference in force that day + margin). actual/365.
  */

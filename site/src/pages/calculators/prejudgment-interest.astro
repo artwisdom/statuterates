@@ -2,15 +2,16 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, getEntity, latestOf, prettyDate, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
+import { getMeta, getEntity, latestOf, prettyDate, PREJUDGMENT_CALC_SAFE, PREJUDGMENT_CALC_COMPOUND } from '../../lib/data.mjs';
 
 const meta = getMeta();
 
-// Safe set (a FIXED statutory rate applied as SIMPLE interest, single unambiguous rate) is defined
-// once in data.mjs and reused by the cross-links; see it for what's excluded and why.
+// Safe set (a FIXED statutory rate with a deterministic method — simple, or annually compounded for
+// Colorado) is defined once in data.mjs and reused by the cross-links; see it for what's excluded.
 // Build rate histories + labels straight from the dataset so they never drift from the state pages.
 // These are long-stable statutory rates, so the calculator extends the single current value back to
 // 1990 to accept older accrual dates (the dataset itself keeps the strict effective date).
+const COMPOUND = new Set(PREJUDGMENT_CALC_COMPOUND);
 const entities = PREJUDGMENT_CALC_SAFE.map((key) => {
   const e = getEntity(`${key}-prejudgment-rate`);
   const l = latestOf(e);
@@ -21,16 +22,18 @@ const entities = PREJUDGMENT_CALC_SAFE.map((key) => {
     value: l?.value,
     value_text: l?.value_text,
     cite: e.metadata?.statute,
+    compound: COMPOUND.has(key),
   };
 }).sort((a, b) => a.name.localeCompare(b.name));
 
 const histories = Object.fromEntries(entities.map((e) => [e.key, [{ effective_date: '1990-01-01', value: e.value }]]));
-const seriesOptions = entities.map((e) => ({ key: e.key, label: `${e.name} — ${e.value_text} (${e.cite})` }));
+const kinds = Object.fromEntries(entities.filter((e) => e.compound).map((e) => [e.key, 'fixed-compound']));
+const seriesOptions = entities.map((e) => ({ key: e.key, label: `${e.name} — ${e.value_text} (${e.cite})${e.compound ? ' · compounded annually' : ''}` }));
 const defaultSeries = 'new-york';
 const stateCount = entities.filter((e) => e.key !== 'dc').length; // D.C. counted separately in copy
 
-const title = `Prejudgment Interest Calculator — Fixed-Rate States | ${meta.title}`;
-const description = `Free prejudgment interest calculator for the ${stateCount} states + D.C. with a fixed statutory rate applied as simple interest (AL, GA, MA, NY, WA, and more). Enter the amount, the date interest began accruing, and the judgment date. Excludes formula, compounding, and discretionary states — see each state's page. Updated ${prettyDate(meta.generated_at)}.`;
+const title = `Prejudgment Interest Calculator by State | ${meta.title}`;
+const description = `Free prejudgment interest calculator for the ${stateCount} states + D.C. with a fixed statutory rate (simple interest, plus Colorado's annual compounding). Enter the amount, the date interest began accruing, and the judgment date. Excludes formula-rate and discretionary states — see each state's page. Updated ${prettyDate(meta.generated_at)}.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [
@@ -42,7 +45,7 @@ const jsonLd = [
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     url: canonical,
-    description: `Computes prejudgment interest for the ${stateCount} U.S. states and D.C. that apply a fixed statutory rate as simple interest, from the accrual date to the date of judgment.`,
+    description: `Computes prejudgment interest for the ${stateCount} U.S. states and D.C. that apply a fixed statutory rate (simple interest, or annual compounding in Colorado), from the accrual date to the date of judgment.`,
   },
   {
     '@context': 'https://schema.org',
@@ -56,7 +59,7 @@ const jsonLd = [
       {
         '@type': 'Question',
         name: 'Why are only some states in this calculator?',
-        acceptedAnswer: { '@type': 'Answer', text: 'A calculator is only honest where the rate is fixed by statute and applied as simple interest. States with a formula rate that changes over the accrual period, states that compound, and states where prejudgment interest is discretionary are excluded — computing a single number for those would mislead. Each of those states has its own page explaining the method.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'A calculator is only honest where the rate is fixed by statute and the compounding rule is deterministic (simple interest, or fixed-rate annual compounding as in Colorado). States with a formula rate that changed over the accrual period, and states where prejudgment interest is discretionary, are excluded — computing a single number for those would mislead. Each has its own page explaining the method.' },
       },
     ],
   },
@@ -76,10 +79,10 @@ const jsonLd = [
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Prejudgment interest</span>
   </nav>
   <h1>Prejudgment interest calculator</h1>
-  <p class="lead">Simple interest on a liquidated claim from the date it began accruing to the date of
+  <p class="lead">Interest on a liquidated claim from the date it began accruing to the date of
     judgment, at each state's fixed statutory rate — verified against the statute and cited on its own
-    page. Covers the <strong>{stateCount} states and D.C. where the rate is fixed and simple</strong>,
-    so the arithmetic is exact.</p>
+    page. Covers the <strong>{stateCount} states and D.C. where the rate is fixed</strong> (simple
+    interest, plus Colorado's annual compounding), so the arithmetic is exact.</p>
 
   <div class="notice">
     <strong>Read this first.</strong> Prejudgment interest is not automatic. This calculator does the
@@ -96,6 +99,7 @@ const jsonLd = [
 
   <InterestCalculator
     kind="fixed-simple"
+    kinds={kinds}
     histories={histories}
     defaultSeries={defaultSeries}
     seriesOptions={seriesOptions}
@@ -104,22 +108,24 @@ const jsonLd = [
     endLabel="Date of judgment"
   />
   <p class="source-note">The rate for each state is pulled from the same dataset as its
-    <a href="/prejudgment/">prejudgment rate page</a> and applied as simple interest
-    (annual rate ÷ 365 per day). These statutory rates have been stable for years, so the calculator
-    accepts accrual dates back to 1990 at the current rate.</p>
+    <a href="/prejudgment/">prejudgment rate page</a> and applied as simple interest, actual/365
+    (Colorado compounds annually per C.R.S. §5-12-102). These statutory rates have been stable for
+    years, so the calculator accepts accrual dates back to 1990 at the current rate.</p>
 
   <AdSlot id="calc-top" />
 
   <h2>States covered</h2>
-  <p>Each of these applies a <strong>fixed statutory prejudgment rate as simple interest</strong>:</p>
+  <p>Each of these applies a <strong>fixed statutory prejudgment rate</strong> — as simple interest,
+    except Colorado, which compounds annually:</p>
   <div class="scroll-x">
     <table>
-      <thead><tr><th scope="col">State</th><th scope="col">Rate</th><th scope="col">Statute</th></tr></thead>
+      <thead><tr><th scope="col">State</th><th scope="col">Rate</th><th scope="col">Method</th><th scope="col">Statute</th></tr></thead>
       <tbody>
         {entities.map((e) => (
           <tr>
             <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>
             <td class="num">{e.value_text}</td>
+            <td>{e.compound ? 'Compounded annually' : 'Simple'}</td>
             <td class="source-note">{e.cite}</td>
           </tr>
         ))}
@@ -128,14 +134,14 @@ const jsonLd = [
   </div>
 
   <h2>Why other states aren't here</h2>
-  <p>A prejudgment calculator is only honest when the rate is fixed and the interest is simple. We leave
-    out three groups on purpose, because a single computed number would be misleading:</p>
+  <p>A prejudgment calculator is only honest when the rate is fixed and the compounding rule is
+    deterministic. We leave out two groups on purpose, because a single computed number would be
+    misleading:</p>
   <ul class="clean">
-    <li><strong>Formula / variable-rate states</strong> (e.g. Florida, California, Michigan, Texas) — the
-      rate <em>changed</em> over the years the interest accrued, so the correct figure stitches together
-      each period's rate. See the state page for the current rate and formula.</li>
-    <li><strong>Compounding states</strong> (Colorado, Michigan) — interest is added to principal
-      periodically, not applied as flat simple interest.</li>
+    <li><strong>Formula / variable-rate states</strong> (e.g. Florida, California, Texas — and Michigan,
+      whose rate resets twice a year and <em>also</em> compounds) — the rate <em>changed</em> over the
+      years the interest accrued, so the correct figure stitches together each period's rate. See the
+      state page for the current rate and formula.</li>
     <li><strong>Discretionary states</strong> (e.g. Virginia, Connecticut, Tennessee) — a court decides
       whether to award prejudgment interest and when it starts, so there is no automatic amount to compute.</li>
   </ul>
