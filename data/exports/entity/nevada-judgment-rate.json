@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T11:51:06.710Z",
+  "generated_at": "2026-07-13T14:27:24.644Z",
   "slug": "nevada-judgment-rate",
   "name": "Nevada Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-01",
       "source_id": "nv-jud",
       "source_url": "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201,%202026.pdf",
-      "retrieved_at": "2026-07-11T11:51:06.687Z",
+      "retrieved_at": "2026-07-13T14:27:24.599Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Nev. Rev. Stat. 17.130(2), currently 8.75% (as of July 1, 2026). Post-judgment rate = (prime rate at the largest bank in Nevada as ascertained by the Commissioner of Financial Institutions on the Jan 1 or Jul 1 immediately preceding the… Simple interest. Interest runs from time of SERVICE of the summons and complaint until satisfied, EXCEPT amounts representing FUTURE damages, which draw interest only… Verify the current value at fid.nv.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-01",
         "source_id": "nv-jud",
         "source_url": "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201,%202026.pdf",
-        "retrieved_at": "2026-07-11T11:51:06.687Z",
+        "retrieved_at": "2026-07-13T14:27:24.599Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Nev. Rev. Stat. 17.130(2), currently 8.75% (as of July 1, 2026). Post-judgment rate = (prime rate at the largest bank in Nevada as ascertained by the Commissioner of Financial Institutions on the Jan 1 or Jul 1 immediately preceding the… Simple interest. Interest runs from time of SERVICE of the summons and complaint until satisfied, EXCEPT amounts representing FUTURE damages, which draw interest only… Verify the current value at fid.nv.gov; not legal advice."

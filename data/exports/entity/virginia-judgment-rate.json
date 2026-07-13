@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T11:51:06.710Z",
+  "generated_at": "2026-07-13T14:27:24.644Z",
   "slug": "virginia-judgment-rate",
   "name": "Virginia Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "va-code",
       "source_url": "https://law.lis.virginia.gov/vacode/title6.2/chapter3/section6.2-302/",
-      "retrieved_at": "2026-07-11T11:51:06.687Z",
+      "retrieved_at": "2026-07-13T14:27:24.599Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest at Virginia’s judgment rate of 6% per annum — Va. Code §6.2-302 (with §8.01-382) fixes 6% for judgments that do not specify a rate. Simple interest. A judgment on a contract carries the higher of the lawful contract rate or 6%. Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "va-code",
         "source_url": "https://law.lis.virginia.gov/vacode/title6.2/chapter3/section6.2-302/",
-        "retrieved_at": "2026-07-11T11:51:06.687Z",
+        "retrieved_at": "2026-07-13T14:27:24.599Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest at Virginia’s judgment rate of 6% per annum — Va. Code §6.2-302 (with §8.01-382) fixes 6% for judgments that do not specify a rate. Simple interest. A judgment on a contract carries the higher of the lawful contract rate or 6%. Verify against the statute; not legal advice."

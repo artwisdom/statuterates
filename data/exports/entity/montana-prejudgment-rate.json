@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T11:51:06.710Z",
+  "generated_at": "2026-07-13T14:27:24.644Z",
   "slug": "montana-prejudgment-rate",
   "name": "Montana Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "mt-prejud",
       "source_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
-      "retrieved_at": "2026-07-11T11:51:06.687Z",
+      "retrieved_at": "2026-07-13T14:27:24.599Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under MCA 27-1-211 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Montana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "mt-prejud",
         "source_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
-        "retrieved_at": "2026-07-11T11:51:06.687Z",
+        "retrieved_at": "2026-07-13T14:27:24.599Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under MCA 27-1-211 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Montana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

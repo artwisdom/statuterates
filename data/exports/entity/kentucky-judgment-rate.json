@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T11:51:06.710Z",
+  "generated_at": "2026-07-13T14:27:24.644Z",
   "slug": "kentucky-judgment-rate",
   "name": "Kentucky Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "ky-jud",
       "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719",
-      "retrieved_at": "2026-07-11T11:51:06.687Z",
+      "retrieved_at": "2026-07-13T14:27:24.599Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under KRS 360.040 — 6% per year, fixed by statute, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ky-jud",
         "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719",
-        "retrieved_at": "2026-07-11T11:51:06.687Z",
+        "retrieved_at": "2026-07-13T14:27:24.599Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under KRS 360.040 — 6% per year, fixed by statute, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD… Verify against the statute; not legal advice."

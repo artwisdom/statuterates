@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T11:51:06.710Z",
+  "generated_at": "2026-07-13T14:27:24.644Z",
   "slug": "maine-judgment-rate",
   "name": "Maine Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "me-jud",
       "source_url": "https://legislature.maine.gov/statutes/14/title14sec1602-C.html",
-      "retrieved_at": "2026-07-11T11:51:06.687Z",
+      "retrieved_at": "2026-07-13T14:27:24.599Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under 14 M.R.S. §1602-C, currently 9.51% (as of January 1, 2026). The weekly-average one-year Treasury constant maturity yield (Fed H.15) for the last full week of the prior calendar year, plus 6 percentage points, fixed for the year. For… Simple interest. Contract or note actions with an interest provision use the greater of the contract rate or the statutory Treasury-plus-6 rate; all other actions use… Verify the current value at legislature.maine.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "me-jud",
         "source_url": "https://legislature.maine.gov/statutes/14/title14sec1602-C.html",
-        "retrieved_at": "2026-07-11T11:51:06.687Z",
+        "retrieved_at": "2026-07-13T14:27:24.599Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under 14 M.R.S. §1602-C, currently 9.51% (as of January 1, 2026). The weekly-average one-year Treasury constant maturity yield (Fed H.15) for the last full week of the prior calendar year, plus 6 percentage points, fixed for the year. For… Simple interest. Contract or note actions with an interest provision use the greater of the contract rate or the statutory Treasury-plus-6 rate; all other actions use… Verify the current value at legislature.maine.gov; not legal advice."
