@@ -1,0 +1,99 @@
+export const meta = {
+  name: 'verify-state-rates',
+  description: 'Audit every US state + DC post-judgment & prejudgment interest rate against its official statute, hunting for wrong values, missed dual-rates/carve-outs, and staleness',
+  phases: [{ title: 'Verify statutes', detail: 'one verifier per state, paced in waves' }],
+};
+
+const STATES =
+[{"base": "alabama", "name": "Alabama", "code": "AL", "post": {"value_text": "7.5%", "statute": "Ala. Code \u00a7 8-8-10(a)", "method": "statute-fixed"}, "pre": {"value_text": "6%", "statute": "Ala. Code \u00a7 8-8-1", "method": "statute-fixed", "kind": "fixed"}}, {"base": "alaska", "name": "Alaska", "code": "AK", "post": {"value_text": "6.75%", "statute": "Alaska Stat. 09.30.070(a)", "method": "statute-variable"}, "pre": {"value_text": "6.75%", "statute": "AS 09.30.070", "method": "statute-variable", "kind": "variable"}}, {"base": "arizona", "name": "Arizona", "code": "AZ", "post": {"value_text": "7.75%", "statute": "A.R.S. \u00a744-1201(B)", "method": "statute-variable"}, "pre": {"value_text": "7.75%", "statute": "A.R.S. \u00a7 44-1201(A), &", "method": "statute-variable", "kind": "variable"}}, {"base": "arkansas", "name": "Arkansas", "code": "AR", "post": {"value_text": "5.75%", "statute": "Ark. Code Ann. \u00a7 16-65-114(a)", "method": "statute-variable"}, "pre": {"value_text": "5.75%", "statute": "Ark. Code Ann. \u00a7 16-65-114(a)(1)", "method": "statute-variable", "kind": "variable"}}, {"base": "california", "name": "California", "code": "CA", "post": {"value_text": "10%", "statute": "CCP \u00a7685.010", "method": "statute-fixed"}, "pre": {"value_text": "10%", "statute": "Cal. Civ. Code sec. 3287", "method": "statute-variable", "kind": "variable"}}, {"base": "colorado", "name": "Colorado", "code": "CO", "post": {"value_text": "8%", "statute": "C.R.S. \u00a75-12-102(4)(b)", "method": "statute-fixed"}, "pre": {"value_text": "8% / 9%", "statute": "C.R.S. \u00a75-12-102 (8% general); \u00a713-21-101 (9% personal injury)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "connecticut", "name": "Connecticut", "code": "CT", "post": {"value_text": "10%", "statute": "Conn. Gen. Stat. \u00a737-3a", "method": "statute-fixed"}, "pre": {"value_text": "10%", "statute": "Conn. Gen. Stat. \u00a7 37-3a(a)", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "dc", "name": "D.C.", "code": "DC", "post": {"value_text": "5%", "statute": "D.C. Code \u00a7 28-3302(c)", "method": "statute-variable"}, "pre": {"value_text": "6%", "statute": "D.C. Code \u00a7 15-108", "method": "statute-fixed", "kind": "fixed"}}, {"base": "delaware", "name": "Delaware", "code": "DE", "post": {"value_text": "8.75%", "statute": "6 Del. C. \u00a7 2301", "method": "statute-variable"}, "pre": {"value_text": "8.75%", "statute": "6 Del. C. \u00a7 2301(a)", "method": "statute-variable", "kind": "variable"}}, {"base": "florida", "name": "Florida", "code": "FL", "post": {"value_text": "8.06%", "statute": "Fla. Stat. \u00a755.03", "method": "statute-variable"}, "pre": {"value_text": "8.06%", "statute": "Fla. Stat. \u00a7 55.03", "method": "statute-variable", "kind": "variable"}}, {"base": "georgia", "name": "Georgia", "code": "GA", "post": {"value_text": "9.75%", "statute": "O.C.G.A. \u00a77-4-12", "method": "statute-variable"}, "pre": {"value_text": "7%", "statute": "O.C.G.A. \u00a7 7-4-15", "method": "statute-fixed", "kind": "fixed"}}, {"base": "hawaii", "name": "Hawaii", "code": "HI", "post": {"value_text": "10%", "statute": "Haw. Rev. Stat. 478-3. Related: 478-2", "method": "statute-fixed"}, "pre": {"value_text": "10%", "statute": "HRS 636-16", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "idaho", "name": "Idaho", "code": "ID", "post": {"value_text": "8.875%", "statute": "Idaho Code \u00a7 28-22-104(2)", "method": "statute-variable"}, "pre": {"value_text": "12%", "statute": "Idaho Code 28-22-104(1)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "illinois", "name": "Illinois", "code": "IL", "post": {"value_text": "9%", "statute": "735 ILCS 5/2-1303", "method": "statute-fixed"}, "pre": {"value_text": "6% / 5%", "statute": "735 ILCS 5/2-1303(c)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "indiana", "name": "Indiana", "code": "IN", "post": {"value_text": "8%", "statute": "Ind. Code \u00a7 24-4.6-1-101", "method": "statute-fixed"}, "pre": {"value_text": "8%", "statute": "Contract/liquidated: IC 24-4.6-1-103", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "iowa", "name": "Iowa", "code": "IA", "post": {"value_text": "5.95%", "statute": "Iowa Code \u00a7668.13(3)", "method": "derived_ia_668_13_weekly_cmt_plus_2"}, "pre": {"value_text": "6.06%", "statute": "Iowa Code \u00a7 668.13", "method": "statute-variable", "kind": "variable"}}, {"base": "kansas", "name": "Kansas", "code": "KS", "post": {"value_text": "7.75%", "statute": "Kan. Stat. Ann. 16-204", "method": "statute-variable"}, "pre": {"value_text": "10%", "statute": "K.S.A. 16-201", "method": "statute-fixed", "kind": "fixed"}}, {"base": "kentucky", "name": "Kentucky", "code": "KY", "post": {"value_text": "6%", "statute": "KRS 360.040", "method": "statute-fixed"}, "pre": {"value_text": "8%", "statute": "KRS 360.010(1)", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "louisiana", "name": "Louisiana", "code": "LA", "post": {"value_text": "7.5%", "statute": "La. R.S. 13:4202(B)", "method": "statute-variable"}, "pre": {"value_text": "7.5%", "statute": "La. R.S. 13:4202", "method": "statute-variable", "kind": "same-as-postjudgment"}}, {"base": "maine", "name": "Maine", "code": "ME", "post": {"value_text": "9.51%", "statute": "14 M.R.S. \u00a71602-C", "method": "statute-variable"}, "pre": {"value_text": "6.51%", "statute": "14 M.R.S. \u00a7 1602-B", "method": "statute-variable", "kind": "variable"}}, {"base": "maryland", "name": "Maryland", "code": "MD", "post": {"value_text": "10%", "statute": "Md. Code, Courts & Judicial Proceedings Section 11-107(a)", "method": "statute-fixed"}, "pre": {"value_text": "6%", "statute": "Md. Const. Art. III, sec. 57", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "massachusetts", "name": "Massachusetts", "code": "MA", "post": {"value_text": "12%", "statute": "M.G.L. c.231 \u00a7\u00a76B\u20136C", "method": "statute-fixed"}, "pre": {"value_text": "12%", "statute": "M.G.L. c. 231, \u00a7 6B", "method": "statute-fixed", "kind": "fixed"}}, {"base": "michigan", "name": "Michigan", "code": "MI", "post": {"value_text": "4.725%", "statute": "MCL \u00a7600.6013", "method": "statute-variable"}, "pre": {"value_text": "4.725%", "statute": "MCL 600.6013", "method": "statute-variable", "kind": "variable"}}, {"base": "minnesota", "name": "Minnesota", "code": "MN", "post": {"value_text": "4% / 10%", "statute": "Minn. Stat. \u00a7 549.09, subd. 1(c)", "method": "statute-variable"}, "pre": {"value_text": "4%", "statute": "Minn. Stat. \u00a7 549.09, subd. 1(b)", "method": "statute-variable", "kind": "variable"}}, {"base": "mississippi", "name": "Mississippi", "code": "MS", "post": null, "pre": {"value_text": "8%", "statute": "Miss. Code Ann. \u00a7 75-17-7", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "missouri", "name": "Missouri", "code": "MO", "post": {"value_text": "9%", "statute": "Mo. Rev. Stat. \u00a7408.040", "method": "statute-variable"}, "pre": {"value_text": "8.75%", "statute": "Mo. Rev. Stat. \u00a7 408.040", "method": "statute-variable", "kind": "variable"}}, {"base": "montana", "name": "Montana", "code": "MT", "post": {"value_text": "9.75%", "statute": "Mont. Code Ann. \u00a7 25-9-205", "method": "statute-variable"}, "pre": {"value_text": "10%", "statute": "MCA 27-1-211", "method": "statute-fixed", "kind": "fixed"}}, {"base": "nebraska", "name": "Nebraska", "code": "NE", "post": {"value_text": "5.97%", "statute": "Neb. Rev. Stat. \u00a7 45-103", "method": "statute-variable"}, "pre": {"value_text": "12%", "statute": "Neb. Rev. Stat. sec. 45-104", "method": "statute-fixed", "kind": "fixed"}}, {"base": "nevada", "name": "Nevada", "code": "NV", "post": {"value_text": "8.75%", "statute": "Nev. Rev. Stat. 17.130(2)", "method": "statute-variable"}, "pre": {"value_text": "8.75%", "statute": "NRS 99.040", "method": "statute-variable", "kind": "variable"}}, {"base": "new-hampshire", "name": "New Hampshire", "code": "NH", "post": {"value_text": "5.7%", "statute": "N.H. Rev. Stat. Ann. 336:1, II", "method": "statute-variable"}, "pre": {"value_text": "5.7%", "statute": "RSA 336:1, II", "method": "statute-variable", "kind": "variable"}}, {"base": "new-jersey", "name": "New Jersey", "code": "NJ", "post": {"value_text": "4.5% / 6.5%", "statute": "N.J. Court Rule R. 4:42-11", "method": "statute-variable"}, "pre": {"value_text": "4.5%", "statute": "N.J. Ct. R. 4:42-11(b)", "method": "statute-variable", "kind": "same-as-postjudgment"}}, {"base": "new-mexico", "name": "New Mexico", "code": "NM", "post": {"value_text": "8.75%", "statute": "N.M. Stat. Ann. \u00a7 56-8-4", "method": "statute-fixed"}, "pre": {"value_text": "10%", "statute": "NMSA 1978, Sec. 56-8-4(B)", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "new-york", "name": "New York", "code": "NY", "post": {"value_text": "9%", "statute": "CPLR 5004(a)", "method": "statute-fixed"}, "pre": {"value_text": "9%", "statute": "N.Y. C.P.L.R. 5004", "method": "statute-fixed", "kind": "fixed"}}, {"base": "north-carolina", "name": "North Carolina", "code": "NC", "post": {"value_text": "8%", "statute": "N.C.G.S. \u00a724-5 / \u00a724-1", "method": "statute-fixed"}, "pre": {"value_text": "8%", "statute": "N.C. Gen. Stat. 24-5", "method": "statute-fixed", "kind": "fixed"}}, {"base": "north-dakota", "name": "North Dakota", "code": "ND", "post": {"value_text": "10%", "statute": "N.D.C.C. \u00a7 28-20-34", "method": "statute-variable"}, "pre": {"value_text": "6%", "statute": "N.D.C.C. \u00a7 32-03-04", "method": "statute-fixed", "kind": "fixed"}}, {"base": "ohio", "name": "Ohio", "code": "OH", "post": {"value_text": "7%", "statute": "Ohio Rev. Code \u00a71343.03(B) / \u00a75703.47", "method": "statute-variable"}, "pre": {"value_text": "7%", "statute": "Ohio Rev. Code 1343.03", "method": "statute-variable", "kind": "same-as-postjudgment"}}, {"base": "oklahoma", "name": "Oklahoma", "code": "OK", "post": {"value_text": "8.75%", "statute": "12 O.S. Sec. 727.1", "method": "statute-variable"}, "pre": {"value_text": "4.13%", "statute": "12 O.S. Sec. 727.1", "method": "statute-variable", "kind": "variable"}}, {"base": "oregon", "name": "Oregon", "code": "OR", "post": {"value_text": "9%", "statute": "ORS 82.010(2)", "method": "statute-fixed"}, "pre": {"value_text": "9%", "statute": "ORS 82.010(1)(a)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "pennsylvania", "name": "Pennsylvania", "code": "PA", "post": {"value_text": "6%", "statute": "42 Pa.C.S. \u00a78101 / 41 P.S. \u00a7202", "method": "statute-fixed"}, "pre": {"value_text": "6%", "statute": "41 P.S. Sec. 202", "method": "statute-fixed", "kind": "fixed"}}, {"base": "rhode-island", "name": "Rhode Island", "code": "RI", "post": {"value_text": "12%", "statute": "R.I. Gen. Laws \u00a7 9-21-10", "method": "statute-fixed"}, "pre": {"value_text": "12%", "statute": "R.I. Gen. Laws \u00a7 9-21-10", "method": "statute-fixed", "kind": "fixed"}}, {"base": "south-carolina", "name": "South Carolina", "code": "SC", "post": {"value_text": "10.75%", "statute": "S.C. Code Ann. \u00a7 34-31-20(B)", "method": "statute-variable"}, "pre": {"value_text": "8.75%", "statute": "S.C. Code Ann. \u00a7 34-31-20(A)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "south-dakota", "name": "South Dakota", "code": "SD", "post": {"value_text": "10%", "statute": "SDCL \u00a7 54-3-5.1", "method": "statute-fixed"}, "pre": {"value_text": "10%", "statute": "SDCL 21-1-13.1", "method": "statute-variable", "kind": "variable"}}, {"base": "tennessee", "name": "Tennessee", "code": "TN", "post": {"value_text": "8.75%", "statute": "Tenn. Code \u00a747-14-121", "method": "statute-variable"}, "pre": {"value_text": "10%", "statute": "Tenn. Code Ann. \u00a7 47-14-123", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "texas", "name": "Texas", "code": "TX", "post": {"value_text": "6.75%", "statute": "Tex. Fin. Code \u00a7304.003", "method": "statute-variable"}, "pre": {"value_text": "6.75%", "statute": "Tex. Fin. Code Sec. 304.102", "method": "statute-variable", "kind": "same-as-postjudgment"}}, {"base": "utah", "name": "Utah", "code": "UT", "post": {"value_text": "5.51%", "statute": "Utah Code Ann. Sec. 15-1-4", "method": "statute-variable"}, "pre": {"value_text": "10%", "statute": "Utah Code Ann. 15-1-1(2)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "vermont", "name": "Vermont", "code": "VT", "post": {"value_text": "12%", "statute": "9 V.S.A. \u00a7 41a(a)", "method": "statute-fixed"}, "pre": {"value_text": "12%", "statute": "9 V.S.A. \u00a7 41a(a)", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "virginia", "name": "Virginia", "code": "VA", "post": {"value_text": "6%", "statute": "Va. Code \u00a76.2-302 / \u00a78.01-382", "method": "statute-fixed"}, "pre": {"value_text": "6%", "statute": "Va. Code Ann. \u00a7 8.01-382", "method": "statute-fixed", "kind": "discretionary-with-default"}}, {"base": "washington", "name": "Washington", "code": "WA", "post": {"value_text": "8.75%", "statute": "RCW 4.56.110", "method": "statute-variable"}, "pre": {"value_text": "12%", "statute": "RCW 19.52.010(1)", "method": "statute-fixed", "kind": "fixed"}}, {"base": "west-virginia", "name": "West Virginia", "code": "WV", "post": {"value_text": "6.25%", "statute": "W. Va. Code \u00a7 56-6-31", "method": "statute-variable"}, "pre": {"value_text": "6.25%", "statute": "W. Va. Code \u00a7 56-6-31(b)", "method": "statute-variable", "kind": "variable"}}, {"base": "wisconsin", "name": "Wisconsin", "code": "WI", "post": {"value_text": "7.75%", "statute": "Wis. Stat. \u00a7 815.05(8)", "method": "statute-variable"}, "pre": {"value_text": "5%", "statute": "Wis. Stat. 138.04", "method": "statute-fixed", "kind": "fixed"}}, {"base": "wyoming", "name": "Wyoming", "code": "WY", "post": {"value_text": "10%", "statute": "Wyo. Stat. Ann. 1-16-102", "method": "statute-fixed"}, "pre": {"value_text": "7%", "statute": "Wyo. Stat. Ann. Sec. 40-14-106(e)", "method": "statute-fixed", "kind": "fixed"}}]
+;
+
+const CHUNK = 6; // paced waves to avoid tripping the transient API rate limit
+
+const SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  required: ['code', 'name', 'post', 'pre', 'needs_fix', 'fix_summary', 'confidence', 'sources'],
+  properties: {
+    code: { type: 'string' },
+    name: { type: 'string' },
+    post: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['status', 'current_value', 'note'],
+      properties: {
+        status: { type: 'string', enum: ['confirmed', 'discrepancy', 'no_fixed_rate', 'unverifiable'] },
+        current_value: { type: 'string' },
+        correct_value: { type: 'string', description: 'the statute-backed correct value if different from current; else repeat current' },
+        note: { type: 'string', description: 'quote the operative statutory language / current published value' },
+      },
+    },
+    pre: {
+      type: 'object',
+      additionalProperties: false,
+      required: ['status', 'current_value', 'note'],
+      properties: {
+        status: { type: 'string', enum: ['confirmed', 'discrepancy', 'unverifiable'] },
+        current_value: { type: 'string' },
+        correct_value: { type: 'string' },
+        missed_dual_rate_or_carveout: { type: 'string', description: 'a separate statutory rate for a major claim type the single value omits (e.g. personal-injury vs general), or empty' },
+        simple_compound_note: { type: 'string' },
+        note: { type: 'string' },
+      },
+    },
+    needs_fix: { type: 'boolean', description: 'true ONLY if a value is wrong, materially incomplete (a second major-claim-type rate omitted), or stale' },
+    fix_summary: { type: 'string', description: 'one line: exactly what to change, or "none"' },
+    confidence: { type: 'string', enum: ['high', 'medium', 'low'] },
+    sources: { type: 'array', items: { type: 'string' } },
+  },
+};
+
+function prompt(s) {
+  const postLine = s.post
+    ? `${s.post.value_text} — cited to ${s.post.statute} (method: ${s.post.method})`
+    : 'NONE on record — this state is treated as setting post-judgment interest case-by-case with no fixed statutory default. Verify whether that is still correct.';
+  return `You are a meticulous legal-data verifier auditing ONE U.S. jurisdiction's statutory interest rates against the OFFICIAL primary source. Be rigorous, conservative, and cite everything.
+
+JURISDICTION: ${s.name} (${s.code})
+
+CURRENT DATASET VALUES TO VERIFY:
+- POST-JUDGMENT interest: ${postLine}
+- PREJUDGMENT interest: ${s.pre.value_text} — cited to ${s.pre.statute} (kind: ${s.pre.kind})
+
+TASK: Use web search + fetch to find the CONTROLLING statute text on an official or authoritative source. Prefer the state legislature's own site or the official court/agency rate publication; law.cornell.edu, justia.com, public.law, casetext, and findlaw are acceptable text mirrors. Cross-check at least two sources where possible. Then, for EACH metric, determine:
+  1. NUMERIC RATE correct as of July 2026? For variable/formula rates, find the CURRENTLY published value from the official agency/court publication (not a stale figure).
+  2. MISSED DUAL RATE / claim-type split? This is the single most important check. Does the statute set a DIFFERENT rate for a major claim type that the single dataset value omits — e.g. a separate personal-injury rate vs. a general rate, contract vs. tort, liquidated vs. unliquidated, consumer vs. commercial? (Example of the bug we are hunting: Colorado lists 8% but personal-injury actions are actually 9% under a different section.)
+  3. SIMPLE vs COMPOUND correctly characterized?
+  4. Cited statute SECTION correct?
+
+RULES:
+- Set needs_fix = true ONLY when the dataset value is actually WRONG, materially INCOMPLETE (a second statutory rate for a major claim type is omitted), or STALE. Do NOT flag mere additional context, wording, or nuance already implied.
+- In each note, QUOTE the operative statutory language and give the official URL(s) in sources.
+- If you cannot reach a reliable source for a metric, set that metric's status to 'unverifiable', say why, and lower confidence — do NOT guess a value.
+- current_value must echo exactly what I gave you above so I can diff. correct_value is your statute-backed value (repeat current if unchanged).
+- Your ENTIRE response is the structured object, not a message.`;
+}
+
+phase('Verify statutes');
+const results = [];
+for (let i = 0; i < STATES.length; i += CHUNK) {
+  const wave = STATES.slice(i, i + CHUNK);
+  log(`Wave ${Math.floor(i / CHUNK) + 1}/${Math.ceil(STATES.length / CHUNK)}: ${wave.map((s) => s.code).join(', ')}`);
+  const waveResults = await parallel(
+    wave.map((s) => () => agent(prompt(s), { schema: SCHEMA, label: `verify:${s.code}`, phase: 'Verify statutes' })),
+  );
+  results.push(...waveResults);
+}
+
+const clean = results.filter(Boolean);
+const flagged = clean.filter((r) => r.needs_fix);
+const unverifiable = clean.filter((r) =>
+  r.post?.status === 'unverifiable' || r.pre?.status === 'unverifiable');
+log(`Done: ${clean.length} verified, ${flagged.length} flagged for fix, ${unverifiable.length} with an unverifiable metric.`);
+return {
+  total: clean.length,
+  flagged_count: flagged.length,
+  flagged,
+  unverifiable: unverifiable.map((r) => r.code),
+  all: clean,
+};

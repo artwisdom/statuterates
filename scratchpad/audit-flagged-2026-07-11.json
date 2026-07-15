@@ -1,0 +1,588 @@
+[
+ {
+  "code": "CA",
+  "name": "California",
+  "post": {
+   "status": "confirmed",
+   "current_value": "10%",
+   "correct_value": "10%",
+   "note": "CCP §685.010(a)(1): \"Except as provided in paragraph (2), interest accrues at the rate of 10 percent per annum on the principal amount of a money judgment remaining unsatisfied.\" General 10% rate is CORRECT. Statute-fixed (not variable) and SIMPLE interest. Note a narrow carve-out at §685.010(a)(2): for judgments entered on/after Jan 1, 2023, the rate is 5% for (i) medical-expense judgments under $200,000 and (ii) \"personal debt\" (consumer/household) judgments under $50,000. The 10% headline remains the correct default/general post-judgment rate; cited section §685.010 is correct."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "10%",
+   "correct_value": "7% general/tort (incl. personal injury); 10% only for breach of contract with no stipulated rate",
+   "missed_dual_rate_or_carveout": "7% applies to tort and all non-contract claims (incl. personal injury) — Cal. Const. art. XV §1 (default legal rate on judgments absent a legislative rate) and Civ. Code §3288; the single 10% value is correct ONLY for breach-of-contract claims where the contract stipulates no rate (Civ. Code §3289(b)).",
+   "simple_compound_note": "California prejudgment interest is SIMPLE interest, not compound.",
+   "note": "The cited Civ. Code §3287 is the ENTITLEMENT section (right to prejudgment interest on damages certain/liquidated) and sets NO numeric rate — so citing it as the source of a 10% rate is imprecise, and labeling the metric 'variable' is wrong (the rates are statutorily/constitutionally FIXED). Actual rate is a DUAL rate: (1) Non-contract/tort claims accrue at 7% — Cal. Const. art. XV §1: absent a legislative rate, \"the rate of interest on any judgment rendered in any court of the State shall be 7 percent per annum\"; §3288 discretionary tort interest also runs at this 7% constitutional rate. (2) Breach-of-contract claims with no stipulated rate accrue at 10% — Civ. Code §3289(b): \"If a contract entered into after January 1, 1986, does not stipulate a legal rate of interest, the obligation shall bear interest at a rate of 10 percent per annum after a breach.\" Single 10% value omits the 7% rate governing tort/personal-injury and other non-contract claims — the classic missed claim-type split."
+  },
+  "needs_fix": true,
+  "fix_summary": "Prejudgment: single 10% only covers breach-of-contract (Civ. Code §3289(b)); add 7% rate for tort/non-contract incl. personal injury (Cal. Const. art. XV §1 / Civ. Code §3288). Reclassify prejudgment as FIXED (not variable); §3287 is the entitlement section, not the rate source. Post-judgment 10% confirmed (optionally note 5% consumer/medical carve-out under §685.010(a)(2)).",
+  "confidence": "high",
+  "sources": [
+   "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010.",
+   "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3287.&lawCode=CIV",
+   "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
+   "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CONS&sectionNum=SECTION+1.&article=XV",
+   "https://kmtg.com/news/legal-alerts/constitutional-default-interest-rate-of-7-rather-than-10-default-for-breach-of-contract-applies-to-prejudgment-interest-on-a-mechanics-lien-as-applied-to-noncontracting-innocent-owners/"
+  ]
+ },
+ {
+  "code": "GA",
+  "name": "Georgia",
+  "post": {
+   "status": "confirmed",
+   "current_value": "9.75% — O.C.G.A. §7-4-12 (statute-variable)",
+   "correct_value": "9.75% (prime 6.75% + 3%), variable per date judgment entered — O.C.G.A. §7-4-12",
+   "note": "O.C.G.A. §7-4-12: 'All judgments in this state shall bear annual interest upon the principal amount recovered at a rate equal to the prime rate as published by the Board of Governors of the Federal Reserve System, as published in statistical release H.15 ... on the day the judgment is entered plus 3 percent.' The rate is variable, fixed on the day the judgment is entered. Georgia DOR official notice ADMIN-2026-01 confirms prime + 3% = 9.75% for calendar year 2026 (down from 10.50% in 2025), effective Jan 1, 2026, validating 9.75% as the current value. Simple interest (Georgia does not compound; §7-4-2 legal rate is '7 percent per annum simple interest'). Section citation and statute-variable method are correct. Contract-rate carve-out (judgment on a written contract bears the contract's specified rate) is additional context, not a defect."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "7% — O.C.G.A. § 7-4-15 (fixed)",
+   "correct_value": "7% simple for liquidated demands (legal rate under §7-4-2, applied via §7-4-15); SEPARATELY, unliquidated tort/personal-injury prejudgment interest = prime + 3% (currently 9.75%) under O.C.G.A. §51-12-14",
+   "missed_dual_rate_or_carveout": "Unliquidated damages in TORT actions (including personal injury), after a proper written demand by certified mail/statutory overnight delivery, accrue prejudgment interest at 'the prime rate ... plus 3 percent' (currently 9.75%) under O.C.G.A. §51-12-14 — NOT the 7% liquidated legal rate. Runs from the 30th day after the notice to date of judgment if the judgment is not less than the amount demanded.",
+   "simple_compound_note": "Simple interest — O.C.G.A. §7-4-2 fixes the legal rate at '7 percent per annum simple interest where the rate percent is not established by written contract.'",
+   "note": "The 7% value is correct ONLY for LIQUIDATED demands: §7-4-15 governs WHEN interest runs ('All liquidated demands, where by agreement or otherwise the sum to be paid is fixed or certain, bear interest from the time the party shall become liable and bound to pay them'), and the RATE it applies is the §7-4-2 legal rate of 7% simple. However, the single value omits Georgia's separate statutory prejudgment scheme for a major claim type — unliquidated tort/personal-injury damages under O.C.G.A. §51-12-14, which uses prime + 3% (currently 9.75%), not 7%. Additionally, the cited section for the RATE should be §7-4-2 (the legal-rate statute); §7-4-15 fixes timing, not the 7% figure."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add Georgia's separate unliquidated tort/personal-injury prejudgment rate (O.C.G.A. §51-12-14 = prime + 3%, currently 9.75%) alongside the existing 7% liquidated-demand rate; optionally re-cite the 7% rate source to §7-4-2 (§7-4-15 only sets timing).",
+  "confidence": "high",
+  "sources": [
+   "https://dor.georgia.gov/admin-2026-01-annual-notice-interest-rate-adjustment",
+   "https://codes.findlaw.com/ga/title-7-banking-and-finance/ga-code-sect-7-4-12/",
+   "https://law.justia.com/codes/georgia/title-7/chapter-4/article-1/section-7-4-12/",
+   "https://codes.findlaw.com/ga/title-51-torts/ga-code-sect-51-12-14/",
+   "https://law.justia.com/codes/georgia/title-51/chapter-12/article-1/section-51-12-14/",
+   "https://law.justia.com/codes/georgia/title-7/chapter-4/article-1/section-7-4-2/",
+   "https://law.justia.com/codes/georgia/title-7/chapter-4/article-1/section-7-4-15/"
+  ]
+ },
+ {
+  "code": "IA",
+  "name": "Iowa",
+  "pre": {
+   "status": "confirmed",
+   "current_value": "6.06%",
+   "correct_value": "6.06%",
+   "note": "Iowa Code §668.13(1): prejudgment interest “except interest awarded for future damages, shall accrue from the date of the commencement of the action.” The RATE is the single §668.13(3) rate: “Interest shall be calculated as of the date of judgment at a rate equal to the one-year treasury constant maturity published by the federal reserve in the H15 report settled immediately prior to the date of the judgment plus two percent.” Iowa has NO separate prejudgment rate — prejudgment and post-judgment interest use the identical CMT+2% rate. The current published Iowa Judicial Branch table shows the most recent 07/09/2026 H15 auction 1-yr CMT = 4.06%, giving 4.06 + 2 = 6.06%. So the 6.06% prejudgment value is CORRECT as of July 2026.",
+   "missed_dual_rate_or_carveout": "No separate personal-injury vs. general rate (§668.13 is itself the tort/comparative-fault chapter, so PI actions use the same CMT+2%). Distinct carve-outs exist but are narrow: child/spousal/medical support arrearages accrue at a flat 10% per annum (§535.3(2)), and workers'-comp interest (§85.30) uses CMT+2% measured as of the date of INJURY rather than judgment (§535.3(1)(b)). Contract-fixed rates control if set by contract, capped at §535.2 (§668.13(2)). None of these override the general-civil prejudgment value.",
+   "simple_compound_note": "Simple interest — §668.13(5): “Interest shall be computed daily to the date of the payment”; no statutory compounding."
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "5.95%",
+   "correct_value": "6.06%",
+   "note": "Iowa Code §668.13(3): rate = “one-year treasury constant maturity published by the federal reserve in the H15 report settled immediately prior to the date of the judgment plus two percent.” The Iowa Judicial Branch official Post Judgment Interest Table lists the most recent auction dates: 07/09/2026 = 4.06% (→ 6.06%), 06/08/2026 = 3.88% (→ 5.88%), 05/07/2026 = 3.77% (→ 5.77%). The dataset's 5.95% implies a 3.95% index, which matches NO current published row and is a stale weekly capture. The current controlling published rate (07/09/2026 auction) is 4.06% + 2% = 6.06%. Note the dataset's own prejudgment field already carries 6.06%, and both metrics must be equal under §668.13. Update post-judgment to 6.06%."
+  },
+  "needs_fix": true,
+  "fix_summary": "Update post-judgment rate from 5.95% to 6.06% (current Iowa published rate: 1-yr CMT 4.06% + 2%, per the 07/09/2026 H15 auction on the Iowa Judicial Branch table); prejudgment 6.06% is already correct, and both share the identical §668.13(3) rate.",
+  "confidence": "high",
+  "sources": [
+   "https://www.legis.iowa.gov/docs/code/668.13.pdf",
+   "https://www.legis.iowa.gov/docs/code/535.3.pdf",
+   "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table"
+  ]
+ },
+ {
+  "code": "ID",
+  "name": "Idaho",
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "12%",
+   "correct_value": "12% for contract/liquidated/general claims (§ 28-22-104(1)); separately, tort/personal-injury/property-damage/wrongful-death offer-of-settlement prejudgment interest accrues at the § 28-22-104(2) variable rate (currently 8.875%) under § 12-301",
+   "note": "The numeric 12% is CORRECT for the general/contract prejudgment rate and the cited section is right. Idaho Code § 28-22-104(1): 'When there is no express contract in writing fixing a different rate of interest, interest is allowed at the rate of twelve cents (12) on the hundred by the year on: 1. Money due by express contract...' Confirmed applied at 12% in Dillon v. Montgomery under 28-22-104(1). HOWEVER a major claim-type rate is omitted: Idaho Code § 12-301 grants prejudgment interest in tort 'personal injury, property damage or wrongful death' actions where a claimant serves an offer of settlement and recovers an amount equal to/greater than the offer, and expressly states: 'For purposes of this section, annual interest shall mean the rate specified in section 28-22-104(2), Idaho Code.' That rate is currently 8.875% (5% + base), NOT 12%. This is the same dual-rate pattern flagged in the Colorado example.",
+   "missed_dual_rate_or_carveout": "Tort/personal-injury/property-damage/wrongful-death prejudgment interest under Idaho Code § 12-301 uses the § 28-22-104(2) rate (currently 8.875%), distinct from the general/contract 12% rate under § 28-22-104(1).",
+   "simple_compound_note": "Simple interest; § 28-22-104 judgment interest is computed on a 365-day year. No compounding indicated for prejudgment."
+  },
+  "post": {
+   "status": "confirmed",
+   "current_value": "8.875%",
+   "correct_value": "8.875%",
+   "note": "Idaho Code § 28-22-104(2): 'the legal rate of interest on money due on the judgment of any competent court or tribunal shall be the rate of five percent (5%) plus the base rate in effect at the time of entry of the judgment... determined on July 1 of each year by the Idaho state treasurer... the weekly average yield on United States treasury securities as adjusted to a constant maturity of one (1) year and rounded up to the nearest one-eighth percent (1/8%).' The Idaho State Treasurer's official 'Legal Rate of Interest' publication lists 8.875% effective July 1, 2026 - June 30, 2027 (FY2027), which is the currently controlling rate as of 2026-07-11. (Prior: 9.125% FY2026; 10.125% FY2025.) Dataset value 8.875%, section 28-22-104(2), and method 'statute-variable' all correct and current."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add Idaho tort/personal-injury prejudgment carve-out: under § 12-301 that interest accrues at the § 28-22-104(2) rate (currently 8.875%), not the general 12% of § 28-22-104(1).",
+  "confidence": "high",
+  "sources": [
+   "https://legislature.idaho.gov/statutesrules/idstat/title28/t28ch22/sect28-22-104/",
+   "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
+   "https://legislature.idaho.gov/statutesrules/idstat/title12/t12ch3/sect12-301/",
+   "https://codes.findlaw.com/id/title-28-commercial-transactions/id-st-sect-28-22-104.html/",
+   "https://caselaw.findlaw.com/court/id-supreme-court/1261368.html"
+  ]
+ },
+ {
+  "code": "IL",
+  "name": "Illinois",
+  "post": {
+   "status": "confirmed",
+   "current_value": "9%",
+   "correct_value": "9% general; but same section fixes 6% when the judgment debtor is a governmental entity and 5% for consumer debt judgments of $25,000 or less",
+   "note": "735 ILCS 5/2-1303(a): 'judgments recovered in any court shall draw interest at the rate of 9% per annum from the date of the judgment until satisfied or 6% per annum when the judgment debtor is a unit of local government... a school district, a community college district, or any other governmental entity.' It also provides: 'Consumer debt judgments of $25,000 or less shall draw interest from the date of the judgment until satisfied at the rate of 5% per annum.' The 9% general/default figure and the 735 ILCS 5/2-1303 section cite are both correct and current as of July 2026. Interest is simple, computed only on the unsatisfied portion of the judgment. The single 9% value omits two statutorily fixed carve-outs in the very same cited section: 6% (governmental judgment debtors) and 5% (consumer debt judgments <= $25,000, a high-volume category)."
+  },
+  "pre": {
+   "status": "confirmed",
+   "current_value": "6% / 5%",
+   "correct_value": "6% / 5%",
+   "missed_dual_rate_or_carveout": "None missed — both statutory prejudgment rates are already captured. The 6% is the personal-injury/wrongful-death prejudgment rate; the 5% is the general prejudgment rate. Note the 5% actually derives from the Interest Act (815 ILCS 205/2), not from 735 ILCS 5/2-1303(c).",
+   "simple_compound_note": "Simple interest. 735 ILCS 5/2-1303(c): court 'add[s] to the amount of the judgment interest calculated at the rate of 6% per annum on the amount of the judgment' — a flat per-annum add-on, not compounded; accrual capped at 5 years, running from the date the action is filed.",
+   "note": "735 ILCS 5/2-1303(c) (Prejudgment Interest Act, eff. July 1, 2021): in 'all actions brought to recover damages for personal injury or wrongful death... the court shall add to the amount of the judgment interest calculated at the rate of 6% per annum on the amount of the judgment, minus punitive damages, sanctions, statutory attorney's fees, and statutory costs.' The 6% figure and the (c) subsection cite are correct as of July 2026. The companion 5% is Illinois' general prejudgment/statutory interest rate under the Interest Act, 815 ILCS 205/2 ('at the rate of five (5) per centum per annum... on money due on the settlement of account... and on money withheld by an unreasonable and vexatious delay of payment'). Both rates are correct; only caveat is that the 5% is cited to 2-1303(c) whereas it is properly grounded in 815 ILCS 205/2."
+  },
+  "needs_fix": true,
+  "fix_summary": "Post-judgment: 9% is correct but add the two same-section carve-outs — 6% for governmental judgment debtors and 5% for consumer debt judgments of $25,000 or less (735 ILCS 5/2-1303). Optionally re-cite the 5% general prejudgment rate to 815 ILCS 205/2 rather than 2-1303(c).",
+  "confidence": "high",
+  "sources": [
+   "https://codes.findlaw.com/il/chapter-735-civil-procedure/il-st-sect-735-5-2-1303/",
+   "http://www.ilga.gov/legislation/ilcs/fulltext.asp?DocName=073500050K2-1303",
+   "https://law.justia.com/codes/illinois/chapter-815/act-815-ilcs-205/",
+   "https://www.hinshawlaw.com/newsroom-updates-hinshaw-alert-faqs-illinois-prejudgment-interest-rule.html"
+  ]
+ },
+ {
+  "code": "IN",
+  "name": "Indiana",
+  "post": {
+   "status": "confirmed",
+   "current_value": "8% — Ind. Code § 24-4.6-1-101 (statute-fixed)",
+   "correct_value": "8%",
+   "note": "IC 24-4.6-1-101: interest on money judgments runs 'from the date of the return of the verdict or finding of the court until satisfaction' at (1) 'the rate agreed upon in the original contract sued upon, which shall not exceed an annual rate of eight percent (8%)' or (2) 'an annual rate of eight percent (8%) if there was no contract by the parties.' A flat 8% ceiling applies to all claim types (no claim-type split); Indiana post-judgment interest is simple. Rate and cited section are correct."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "8% — Contract/liquidated: IC 24-4.6-1-103 (discretionary-with-default)",
+   "correct_value": "8% for contract/written-instrument & account claims (IC 24-4.6-1-103), PLUS a separate tort prejudgment rate of 6%–10% per year — simple, set at the court's discretion — under IC 34-51-4-9",
+   "missed_dual_rate_or_carveout": "Tort/personal-injury prejudgment interest is governed by a DIFFERENT statute (IC 34-51-4-9) at a discretionary 6%–10% per year, not the 8% contract rate the dataset lists. IC 34-51-4-1: 'This chapter applies to any civil action arising out of tortious conduct.' IC 34-51-4-9 caps the court-set rate: 'The rate ... may not be less than six percent (6%) per year and not more than ten percent (10%) per year.'",
+   "simple_compound_note": "Both rates are simple interest; IC 34-51-4-9 expressly directs the court to compute prejudgment interest at a 'simple rate.'",
+   "note": "The 8% value is correct for contract/written-instrument claims — IC 24-4.6-1-103: 'Interest at the rate of eight percent (8%) per annum shall be allowed from the date of settlement on money due on any instrument in writing which does not specify a rate of interest ... and from the date an itemized bill shall have been rendered and payment demanded on an account stated, account closed or for money had and received.' But it is materially incomplete: Indiana's tort prejudgment interest statute (IC 34-51-4) sets a separate 6%–10% discretionary rate for tort/personal-injury actions, which the single 8% entry omits."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add Indiana's separate tort/personal-injury prejudgment interest rate of 6%–10% per year (simple, court's discretion) under IC 34-51-4-9; the current single 8% prejudgment value (IC 24-4.6-1-103) covers only contract/written-instrument & account claims and omits tort claims.",
+  "confidence": "high",
+  "sources": [
+   "https://codes.findlaw.com/in/title-24-trade-regulation/in-code-sect-24-4-6-1-101/",
+   "https://codes.findlaw.com/in/title-24-trade-regulation/in-code-sect-24-4-6-1-103",
+   "https://codes.findlaw.com/in/title-34-civil-law-and-procedure/in-code-sect-34-51-4-9/",
+   "https://codes.findlaw.com/in/title-34-civil-law-and-procedure/in-code-sect-34-51-4-1/",
+   "https://law.justia.com/codes/indiana/title-34/article-51/chapter-4/section-34-51-4-9/",
+   "https://law.justia.com/codes/indiana/title-24/article-4-6/chapter-1/section-24-4-6-1-101/"
+  ]
+ },
+ {
+  "code": "KS",
+  "name": "Kansas",
+  "post": {
+   "status": "discrepancy",
+   "current_value": "7.75% — Kan. Stat. Ann. 16-204 (method: statute-variable)",
+   "correct_value": "8.25% for the period July 1, 2025 through June 30, 2026 (variable, recomputed each July 1 under K.S.A. 16-204(e)(1))",
+   "note": "STALE numeric value. The cited statute (16-204) is correct and the variable method is correct, but 7.75% is not the current published rate. The Kansas Secretary of State's official notice states: 'the rate of interest on judgments rendered by courts of the state of Kansas pursuant to the code of civil procedure is 8.25 percent during the period of July 1, 2025, through June 30, 2026.' K.S.A. 16-204(e)(1) sets the rate 'equal to an amount that is four percentage points above the discount rate ... [the] charge on loans to depository institutions by the New York federal reserve bank as reported in the money rates column of the Wall Street Journal' as of July 1 preceding the judgment. Kansas post-judgment interest is simple, not compound. Fix: 7.75% -> 8.25%."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "10% — K.S.A. 16-201 (kind: fixed)",
+   "correct_value": "10% per annum for general/contract claims (fixed, K.S.A. 16-201(a)); BUT for civil tort actions filed on or after July 1, 2023, prejudgment interest = two percentage points below the K.S.A. 16-204(e)(1) judgment rate (variable) = 6.25% for July 1, 2025–June 30, 2026 (8.25% judgment rate minus 2 pts)",
+   "missed_dual_rate_or_carveout": "Civil-tort prejudgment carveout omitted: K.S.A. 16-201(b) sets a SEPARATE, variable prejudgment rate for civil tort actions filed on/after July 1, 2023 — 2 percentage points below the K.S.A. 16-204(e)(1) rate. With the current 16-204(e)(1) judgment rate at 8.25%, the civil-tort prejudgment rate is 6.25%, not 10%.",
+   "simple_compound_note": "Kansas prejudgment interest is computed as simple interest; the dataset does not misstate this, but characterizing the metric as a single 'fixed' rate is now inaccurate because the tort branch is variable.",
+   "note": "The 10% fixed default is correct for general claims — K.S.A. 16-201(a): 'Creditors shall be allowed to receive interest at the rate of 10% per annum when no other rate of interest is agreed upon, for any money after it becomes due.' However the single value is materially INCOMPLETE. The statute's own title is now 'Legal rate of interest; prejudgment interest rate in civil tort actions,' and subsection (b) provides: in 'all civil tort actions filed on or after July 1, 2023, under chapter 60 ... the judgment creditor shall be allowed to receive interest at the rate per annum of two percentage points below the rate per annum specified in K.S.A. 16-204(e)(1).' This is the exact dual-rate/claim-type-split bug being hunted (analogous to Colorado): tort prejudgment interest currently = 6.25%, distinct from the 10% general rate."
+  },
+  "needs_fix": true,
+  "fix_summary": "Update post-judgment 7.75%->8.25% (2025-26 SOS official notice under 16-204(e)(1)); and add prejudgment tort carveout under K.S.A. 16-201(b): civil tort actions filed on/after 7/1/2023 accrue at 16-204(e)(1) minus 2 pts (=6.25% now), separate from the fixed 10% general rate.",
+  "confidence": "high",
+  "sources": [
+   "https://www.kssos.org/publications/Register/Volume-44/Issues/Issue-27/07-03-25-53277.html",
+   "https://ksrevisor.gov/statutes/chapters/ch16/016_002_0001.html",
+   "https://www.ksrevisor.gov/statutes/chapters/ch16/016_002_0004.html",
+   "https://codes.findlaw.com/ks/chapter-16-contracts-and-promises/ks-st-sect-16-201/",
+   "https://law.justia.com/codes/kansas/chapter-16/article-2/section-16-201/"
+  ]
+ },
+ {
+  "code": "MA",
+  "name": "Massachusetts",
+  "pre": {
+   "status": "confirmed",
+   "current_value": "12%",
+   "correct_value": "12%",
+   "note": "M.G.L. c.231 §6B (tort): 'there shall be added by the clerk of court to the amount of damages interest thereon at the rate of twelve per cent per annum from the date of commencement of the action.' Rate 12% confirmed, cited section §6B correct for tort. Simple interest (not compounded). Carve-out: contract actions are governed by companion section §6C — interest 'at the contract rate, if established, or at the rate of twelve per cent per annum from the date of the breach or demand' — so a contractually-agreed rate can displace 12%, but 12% is the statutory default. The single 12% value is accurate as the general/tort rate.",
+   "missed_dual_rate_or_carveout": "No separate higher personal-injury rate (tort is a flat 12% under §6B, unlike Colorado). Minor carve-out: §6C lets an established contract rate override the 12% default in contract actions; ideally the prejudgment citation should read §§6B-6C, but both default to 12% so the value is unaffected.",
+   "simple_compound_note": "Simple interest, not compounded (statute adds interest at a flat per-annum rate)."
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "12%",
+   "correct_value": "12% (controlling statute is M.G.L. c. 235, § 8, not c.231 §§6B-6C)",
+   "note": "The 12% RATE is correct, but the cited SECTION is wrong. Post-judgment interest is governed by M.G.L. c. 235, § 8: 'Every judgment for the payment of money shall bear interest from the day of its entry at the same rate per annum as provided for prejudgment interest in such award, report, verdict or finding.' Sections 6B and 6C run only 'from the date of commencement of the action' through judgment (i.e., PREjudgment). The SJC (affirming 12% as constitutional) attributes the postjudgment rate to c.235 §8 and the prejudgment rate to c.231 §6B/§6C. Because §8 pegs the post-judgment rate to the §6B/§6C prejudgment rate, the amount is 12% for these actions, but the dataset should cite c.235 §8 as the controlling post-judgment section."
+  },
+  "needs_fix": true,
+  "fix_summary": "Change the post-judgment citation from M.G.L. c.231 §§6B-6C to M.G.L. c. 235, § 8 (the controlling post-judgment statute); rate stays 12%. Prejudgment 12% is correct (optionally cite §§6B-6C to cover both tort and contract).",
+  "confidence": "high",
+  "sources": [
+   "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6b",
+   "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6c",
+   "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter235/Section8",
+   "https://www.mgmlaw.com/news-insights/12-percent-interest-in-this-economy-the-massachusetts-sjc-affirms-statutory-interest-rate-added-to-judgment",
+   "https://bostonbar.org/journal/the-interesting-implications-of-the-massachusetts-interest-statutes/"
+  ]
+ },
+ {
+  "code": "MI",
+  "name": "Michigan",
+  "needs_fix": true,
+  "fix_summary": "Update both post- and pre-judgment from 4.725% to 4.959% (rate effective July 1, 2026 = 1% + 3.959% certified 5-yr Treasury); add the written-instrument carve-out (up to 13% compounded) and note interest is compounded annually.",
+  "confidence": "high",
+  "post": {
+   "status": "discrepancy",
+   "current_value": "4.725% — cited to MCL §600.6013 (method: statute-variable)",
+   "correct_value": "4.959% effective July 1, 2026 (general money judgments, MCL 600.6013(8) = 1% + 3.959% certified 5-yr Treasury avg, compounded annually). SEPARATE rate for judgments on a written instrument with a specified interest rate (MCL 600.6013(7)): the instrument's specified rate, capped at 13% per year compounded annually (12% for complaints filed 1/1/1987–6/30/2002 under 600.6013(5)-(6)).",
+   "note": "STALE + FORMULA MISREAD. The Michigan Dept. of Treasury page (dated July 9, 2026) certifies: 'that 3.959% was the average high yield paid at auctions of 5-year U.S. Treasury Notes during the six months preceding July 1, 2026.' Its 'INTEREST RATE' column lists the certified Treasury BASE (7/1/2026 = 3.959%; 1/1/2026 = 3.725%), and the statute adds 1%: MCL 600.6013(8) sets interest 'equal to 1% plus the average interest rate paid at auctions of 5-year United States treasury notes... compounded annually.' So the CURRENT rate (period beginning 7/1/2026, in force on today's date 2026-07-11) is 3.959% + 1% = 4.959%. The dataset's 4.725% (= 3.725% + 1%) was the Jan 1–Jun 30 2026 rate and is now superseded. Also compound (annually), not simple. MISSED CARVE-OUT: courts.michigan.gov quotes MCL 600.6013(7) for complaints on a written instrument — interest 'at the rate specified in the instrument... shall not exceed 13% per year compounded annually' — a major contract/debt claim-type rate the single value omits."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "4.725% — cited to MCL 600.6013 (kind: variable)",
+   "correct_value": "4.959% effective July 1, 2026 (= 1% + 3.959% certified 5-yr Treasury avg, compounded annually)",
+   "note": "Michigan has no separate prejudgment-interest statute; MCL 600.6013 interest runs 'from the date of filing the complaint to the date of satisfaction of the judgment,' so pre- and post-judgment share the same rate. Same staleness: the current (7/1/2026) rate is 4.959%, not 4.725% (which was the 1/1/2026 period). Source: Michigan Treasury certification of 3.959% for the six months preceding July 1, 2026 (page dated July 9, 2026), + statutory 1%.",
+   "missed_dual_rate_or_carveout": "Judgments based on a written instrument with a specified interest rate (contract/debt) use the instrument's rate capped at 13% compounded annually (MCL 600.6013(7)); 12% for complaints filed 1/1/1987–6/30/2002 (MCL 600.6013(5)-(6)). Medical-malpractice/settlement scenarios may differ (600.6013(9)-(13)). The single 4.725% value covers only the general variable rate.",
+   "simple_compound_note": "Compounded annually (COMPOUND). Statute: '...as certified by the state treasurer, and compounded annually.' Dataset method 'statute-variable' should reflect annual compounding."
+  },
+  "sources": [
+   "https://www.michigan.gov/taxes/interest-rates-for-money-judgments (Michigan Dept. of Treasury certification, dated July 9, 2026: 5-yr Treasury avg for 6 mo preceding 7/1/2026 = 3.959%; 1/1/2026 = 3.725%)",
+   "https://www.courts.michigan.gov/publications/interest-rates-for-money-judgments/ (SCAO breakdown of MCL 600.6013 subsections incl. written-instrument carve-out up to 13% compounded)",
+   "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013 (MCL 600.6013 statutory text)",
+   "https://www.michbar.org/file/barjournal/article/documents/pdf4article2620.pdf (State Bar of Michigan summary confirming dual rate: general variable rate vs. written-instrument lesser-of-13%-or-specified rate, compounded annually)"
+  ]
+ },
+ {
+  "code": "MN",
+  "name": "Minnesota",
+  "post": {
+   "status": "confirmed",
+   "current_value": "4% / 10%",
+   "correct_value": "4% / 10%",
+   "note": "Minn. Stat. § 549.09, subd. 1(c): for a judgment/award of $50,000 or less (or any award for/against the state or a political subdivision, or a family court award other than child support), 'the interest shall be computed as simple interest per annum' at a rate 'based on the secondary market yield of one year United States Treasury bills,' rounded to the nearest one percent, 'or four percent, whichever is greater.' 'For a judgment or award over $50,000 ... the interest rate shall be ten percent per year until paid.' The Minnesota State Court Administrator's official published rate for calendar year 2026 is 4% (treasury floor met; same as 2025), with 10% for judgments over $50,000 entered on/after 8/1/2009. Both value and section cite are correct. Simple interest."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "4%",
+   "correct_value": "4% / 10%",
+   "missed_dual_rate_or_carveout": "Preverdict/preaward interest follows the same $50,000 tier: awards over $50,000 accrue 10% per year, not 4%. Dataset omits the 10% tier for prejudgment even though it correctly captures it for post-judgment.",
+   "simple_compound_note": "Simple interest per annum (subd. 1(c): 'computed as simple interest per annum').",
+   "note": "Minn. Stat. § 549.09, subd. 1(b): 'Except as otherwise provided by contract or allowed by law, preverdict, preaward, or prereport interest on pecuniary damages shall be computed as provided in paragraph (c) ....' Paragraph (c) is the two-tier structure — 4% treasury-floor rate for awards of $50,000 or less (and for state/political-subdivision/family-court awards regardless of amount), and 'ten percent per year until paid' for awards over $50,000. Thus prejudgment interest is 4% only up to $50,000; over $50,000 it is 10%. The single value '4%' is materially incomplete; it should read '4% / 10%' to mirror the post-judgment entry. Section cite (subd. 1(b)) is correct."
+  },
+  "needs_fix": true,
+  "fix_summary": "Change prejudgment value from \"4%\" to \"4% / 10%\": preverdict interest under § 549.09 subd. 1(b) is computed per paragraph (c), so awards over $50,000 accrue 10%, mirroring the post-judgment dual rate.",
+  "confidence": "high",
+  "sources": [
+   "https://www.revisor.mn.gov/statutes/cite/549.09",
+   "https://www.revisor.mn.gov/court_rules/rule/msinte/",
+   "https://codes.findlaw.com/mn/civil-procedure-ch-540-552/mn-st-sect-549-09/",
+   "https://law.justia.com/codes/minnesota/chapters-540-552/chapter-549/section-549-09/"
+  ]
+ },
+ {
+  "code": "MO",
+  "name": "Missouri",
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "8.75%",
+   "correct_value": "Tort prejudgment (cited §408.040.3) = intended Federal Funds Rate + 3% = 3.75% + 3% = ~6.75% as of July 2026 (range 6.5%-6.75% depending on lower/upper target-band reading). Liquidated/contract prejudgment (§408.020) = fixed 9%.",
+   "note": "§408.040.3: 'In tort actions, a judgment for prejudgment interest awarded pursuant to this section shall bear interest at a per annum interest rate equal to the intended Federal Funds Rate, as established by the Federal Reserve Board, plus three percent.' The current intended Federal Funds Rate is the June 17, 2026 FOMC target range of 3.50%-3.75% (upper limit 3.75%), giving 3.75% + 3% = 6.75%. The listed 8.75% matches neither the §408.040.3 tort formula (would require a 5.75% fed funds rate, never the case) nor the §408.020 general 9% figure; it coincides only with the current tort POST-judgment rate (Fed+5%), suggesting a stale or mis-assigned value.",
+   "missed_dual_rate_or_carveout": "Missouri splits prejudgment interest by claim type: liquidated/contract/account claims get a FIXED 9% under §408.020, while §408.040.3 covers only TORT prejudgment at Fed Funds + 3% (~6.75% now). A single 8.75% value captures neither branch correctly.",
+   "simple_compound_note": "Missouri statutory judgment/prejudgment interest is computed as SIMPLE interest, not compound (Mo. case law; statute states a per annum rate with no compounding provision)."
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "9%",
+   "correct_value": "9% is correct for NONTORT/contract judgments (§408.040.1, fixed — or the contract rate if the contract bears >9%). It OMITS the separate TORT post-judgment rate = intended Federal Funds Rate + 5% = 3.75% + 5% = ~8.75% currently (§408.040.1).",
+   "note": "§408.040.1 (nontort): 'all other judgments and orders for money shall bear nine percent per annum until satisfaction.' §408.040.1 (tort): tort judgments 'shall bear a per annum interest rate equal to the intended Federal Funds Rate, as established by the Federal Reserve Board, plus five percent, until full satisfaction is made.' The dataset's flat 9% is the correct nontort/contract rate but materially incomplete — it drops the tort post-judgment rate, which is variable and currently ~8.75% (Fed target 3.75% + 5%). Effective date of current version: Jan 15, 2015. The judgment states the applicable rate, which does not vary once entered."
+  },
+  "needs_fix": true,
+  "fix_summary": "Prejudgment: replace stale 8.75% with §408.040.3 tort rate = Fed Funds + 3% ≈ 6.75% now (and note §408.020 liquidated/contract prejudgment = fixed 9%); Post-judgment: keep 9% for nontort/contract but ADD the omitted tort rate = Fed Funds + 5% ≈ 8.75% now.",
+  "confidence": "high",
+  "sources": [
+   "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
+   "https://revisor.mo.gov/main/OneSection.aspx?section=408.020",
+   "https://codes.findlaw.com/mo/title-xxvi-trade-and-commerce/mo-rev-st-408-040/",
+   "https://law.justia.com/codes/missouri/title-xxvi/chapter-408/section-408-040/",
+   "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260617a.htm"
+  ]
+ },
+ {
+  "code": "MT",
+  "name": "Montana",
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "10% (fixed), cited MCA 27-1-211",
+   "correct_value": "10% simple for liquidated/contract-type claims (27-1-211 right-to-interest, rate = 10% legal rate under 31-1-106); SEPARATE tort prejudgment rate under 27-1-210 = prime rate + 3% = 9.75% as of Jan 1, 2026 (variable, set annually)",
+   "missed_dual_rate_or_carveout": "Tort/personal-injury prejudgment interest is NOT 10% — it is governed by 27-1-210 'Interest on torts' at prime + 3% (currently 9.75%, reset each Jan 1). The single 10% value omits this major-claim-type rate.",
+   "simple_compound_note": "Simple. Neither the 10% legal rate (31-1-106) nor the tort rate (27-1-210) compounds.",
+   "note": "27-1-211 'Right to interest' does NOT itself state a rate: 'Each person who is entitled to recover damages certain or capable of being made certain by calculation... is entitled also to recover interest on the damages from that day.' The rate for such liquidated/contract-type claims is the 10% legal rate from 31-1-106 ('interest is payable on all money at the rate of 10% a year after it becomes due'), so 10% is defensible for that category. But 27-1-210 'Interest on torts' sets a DIFFERENT rate for tort actions: 'interest at a rate equal to the prime rate published by the federal reserve system... plus 3%,' which 'must be set as of January 1 of each year and remain in effect until December 31.' As of Jan 1, 2026 prime = 6.75%, so the tort prejudgment rate = 9.75%, not 10%. Both the omission of the tort rate and the mislabeling of the source section (10% derives from 31-1-106, not 27-1-211) warrant a fix. 27-1-210 amended by Ch. 446, L. 2017."
+  },
+  "post": {
+   "status": "confirmed",
+   "current_value": "9.75% — Mont. Code Ann. § 25-9-205 (method: statute-variable)",
+   "correct_value": "9.75% as of Jan 1, 2026 (bank prime loan rate 6.75% + 3%); variable, reset each Jan 1",
+   "note": "25-9-205(1)(a): 'interest is payable on judgments recovered in the courts of this state... at a rate equal to the rate for bank prime loans published by the federal reserve system in its Selected Interest Rates in Statistical Release H.15... plus 3%.' 25-9-205(1)(b): 'the rate for bank prime loans... must be set as of January 1 of each year and remain in effect until December 31 of that year.' 'Interest may not be compounded.' Per FRED DPRIME, the bank prime loan rate in effect Jan 1, 2026 = 6.75% (Fed cut from 7.00% on Dec 11, 2025), so 6.75% + 3% = 9.75%. Value, variable characterization, simple (non-compounding), and section citation all correct. Note 25-9-205(2) contract-rate exception (judgment on a contractual obligation carries the contract's own specified rate) is a carve-out, not a separate statutory rate to add. Amended Ch. 446, L. 2017."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add Montana's separate TORT prejudgment rate (MCA 27-1-210 = prime + 3%, currently 9.75%, variable/reset each Jan 1) alongside the existing 10% figure, which only covers liquidated/contract claims and actually derives from the 31-1-106 legal rate (not 27-1-211 itself). Post-judgment 9.75% is correct and needs no change.",
+  "confidence": "high",
+  "sources": [
+   "https://mca.legmt.gov/bills/mca/title_0250/chapter_0090/part_0020/section_0050/0250-0090-0020-0050.html",
+   "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
+   "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0100/0270-0010-0020-0100.html",
+   "https://mca.legmt.gov/bills/mca/title_0310/chapter_0010/part_0010/section_0060/0310-0010-0010-0060.html",
+   "https://fred.stlouisfed.org/series/DPRIME",
+   "https://law.justia.com/codes/montana/title-27/chapter-1/part-2/section-27-1-210/"
+  ]
+ },
+ {
+  "code": "NE",
+  "name": "Nebraska",
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "12%",
+   "correct_value": "12% (Neb. Rev. Stat. § 45-104) for LIQUIDATED claims; UNLIQUIDATED claims (e.g., tort/personal injury) accrue prejudgment interest at the § 45-103 variable judgment rate (currently 5.723%), not 12%, per § 45-103.02(1)",
+   "missed_dual_rate_or_carveout": "Nebraska splits prejudgment interest by claim type. § 45-103.02(2) applies § 45-104's fixed 12% to LIQUIDATED claims, but § 45-103.02(1) applies the § 45-103 VARIABLE judgment rate (currently 5.723%) to UNLIQUIDATED claims (e.g., tort/personal-injury) that beat a written settlement offer. The single 12% value omits this second, major claim-type rate.",
+   "simple_compound_note": "Nebraska statutory prejudgment interest is simple interest.",
+   "note": "§ 45-104: 'Unless otherwise agreed, interest shall be allowed at the rate of twelve percent per annum on money due on any instrument in writing, or on settlement of the account from the day the balance shall be agreed upon...' — 12% is CORRECT for liquidated claims. However § 45-103.02(1) provides that for unliquidated claims 'interest as provided in section 45-103 shall accrue on the unpaid balance' (the variable judgment rate), while § 45-103.02(2) provides that for liquidated claims 'interest as provided in section 45-104 shall accrue.' So a major claim type (unliquidated/tort) carries a different, variable prejudgment rate the single 12% figure misses. Section citation § 45-104 is correct for the liquidated rate."
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "5.97%",
+   "correct_value": "5.723% (rate currently in effect since April 16, 2026; scheduled to rise to 5.970% effective July 16, 2026)",
+   "note": "§ 45-103 sets a variable rate 'equal to two percentage points above the bond investment yield ... of the average accepted auction price for the first auction of each annual quarter of the twenty-six-week United States Treasury bills in effect on the date of entry of the judgment' — method (statute-variable) and section (§ 45-103) are correct. The official Nebraska Judicial Branch publication states: 'Effective April 16, 2026, the judgment interest rate is 5.723%.' and 'Effective July 16, 2026, the judgment interest rate is 5.970%.' As of the audit date (2026-07-11) the CURRENTLY in-effect rate is 5.723%; the dataset's 5.97% is the NEXT rate, not operative until July 16, 2026 (5 days out). Interest is simple."
+  },
+  "needs_fix": true,
+  "fix_summary": "Prejudgment: add the § 45-103.02(1) unliquidated-claim rate (the § 45-103 variable judgment rate, currently 5.723%) alongside the 12% § 45-104 liquidated-claim rate. Post-judgment: current in-effect rate is 5.723% (since Apr 16, 2026); 5.970% does not take effect until July 16, 2026.",
+  "confidence": "high",
+  "sources": [
+   "https://nebraskalegislature.gov/laws/statutes.php?statute=45-103",
+   "https://nebraskalegislature.gov/laws/statutes.php?statute=45-104",
+   "https://nebraskalegislature.gov/laws/statutes.php?statute=s4501003002",
+   "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate"
+  ]
+ },
+ {
+  "code": "NJ",
+  "name": "New Jersey",
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "4.5%",
+   "correct_value": "4.5% / 6.5%",
+   "note": "R. 4:42-11(b) (tort/prejudgment) provides: the court shall include \"simple interest, calculated as hereafter provided... Prejudgment interest shall be calculated in the same amount and manner provided for by paragraph (a) of this rule except that for all periods prior to January 1, 1988 interest shall be calculated at 12% per annum.\" Because (b) incorporates paragraph (a) by reference, prejudgment interest carries paragraph (a)'s TWO-TIER structure, not a single rate: for amounts NOT exceeding the Special Civil Part monetary limit the rate is the (a)(ii) Cash Management Fund rate (4.5% for 2026); for amounts EXCEEDING that limit it is the (a)(ii) rate 'plus 2% per annum' = 6.5% for 2026, per (a)(iii). The single dataset value '4.5%' captures only the lower tier and omits the 6.5% rate that applies to tort recoveries above the Special Civil Part limit (~$20,000) — i.e., most meaningful tort judgments. Correct value mirrors post-judgment: 4.5% / 6.5%.",
+   "missed_dual_rate_or_carveout": "Tort prejudgment interest under R. 4:42-11(b) is 6.5% (base 4.5% + 2%) on amounts exceeding the Special Civil Part monetary limit, per incorporation of R. 4:42-11(a)(iii). The single value 4.5% omits this higher tier.",
+   "simple_compound_note": "R. 4:42-11(b) expressly provides SIMPLE interest ('the court shall... include in the judgment simple interest'). Prejudgment interest is simple, not compound. Prejudgment interest is not allowed on recovery for future economic losses."
+  },
+  "post": {
+   "status": "confirmed",
+   "current_value": "4.5% / 6.5%",
+   "correct_value": "4.5% / 6.5%",
+   "note": "Confirmed by the official NJ Courts notice 'Post-Judgment Interest Rate for Calendar Year 2026 (Rule 4:42-11)': 'the post-judgment annual rate of interest for judgments not exceeding the monetary limit of the Special Civil Part at the time of entry for calendar year 2026 (commencing January 1, 2026) will be 4.5%' and '...for judgments exceeding the monetary limit of the Special Civil Part... will be 6.5%.' Rule text: R. 4:42-11(a)(ii) sets the rate for judgments not exceeding the Special Civil Part limit equal to the average rate of return of the State of New Jersey Cash Management Fund (State accounts) for the preceding fiscal year, to the nearest whole or one-half percent; R. 4:42-11(a)(iii) sets the rate for judgments exceeding that limit at 'the rate provided in subparagraph (a)(ii) plus 2% per annum' (4.5% + 2% = 6.5%). Variable/statute-variable characterization and the two-tier value are both correct; cited section R. 4:42-11 is correct. Method: simple interest."
+  },
+  "needs_fix": true,
+  "fix_summary": "Change prejudgment value from '4.5%' to '4.5% / 6.5%': R. 4:42-11(b) calculates tort prejudgment interest 'in the same amount and manner' as paragraph (a), so amounts over the Special Civil Part limit accrue base + 2% (6.5% for 2026) — same two-tier split as post-judgment; also note it is simple interest.",
+  "confidence": "high",
+  "sources": [
+   "https://www.njcourts.gov/notices/notice-post-judgment-interest-rate-calendar-year-2026-rule-442-11",
+   "https://www.njcourts.gov/notices/notice-post-judgment-rate-of-interest-calendar-year-2025-rule-442-11",
+   "https://www.courtcaddy.com/nj/court-rules/r4-42.html",
+   "https://www.courtrules.net/new_jersey/nj-civil/rule-4-42-11"
+  ]
+ },
+ {
+  "code": "NM",
+  "name": "New Mexico",
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "10%",
+   "correct_value": "Up to 10% discretionary (56-8-4(B)) for unliquidated claims (e.g., personal injury); plus 15% as of right under NMSA 1978 Sec. 56-8-3 for liquidated/contract claims",
+   "note": "Sec. 56-8-4(B): 'Unless the judgment is based on unpaid child support, the court in its discretion may allow interest of up to ten percent from the date the complaint is served upon the defendant...' So 10% is a discretionary CEILING, not a fixed default. Separately, Sec. 56-8-3 fixes prejudgment interest 'not more than fifteen percent annually' and awarded AS OF RIGHT 'on money due by contract; ... on money received to the use of another and retained without the owner's consent...; and on money due upon the settlement of matured accounts.' NM courts treat 56-8-3 (15%, liquidated) and 56-8-4(B) (up to 10%, discretionary/unliquidated) as two distinct prejudgment bases. The dataset's 10% value is correct for the discretionary prong but omits the 15% liquidated-claim prong.",
+   "missed_dual_rate_or_carveout": "15% prejudgment interest as of right under NMSA 1978 Sec. 56-8-3 on liquidated/contract claims (money due by contract, money received to another's use, matured accounts), separate from the discretionary up-to-10% under Sec. 56-8-4(B) for unliquidated claims",
+   "simple_compound_note": "Simple interest; New Mexico applies simple (non-compounded) interest, consistent with the statutory language which specifies no compounding"
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "8.75%",
+   "correct_value": "8.75% general/default (statute-fixed); 15% if judgment based on tortious conduct, bad faith, or intentional or willful acts; or the written-instrument rate if rendered on a written instrument",
+   "note": "Sec. 56-8-4(A): 'Interest shall be allowed on judgments and decrees for the payment of money from entry and shall be calculated at the rate of eight and three-fourths percent per year, unless: (1) the judgment is rendered on a written instrument having a different rate of interest, in which case interest shall be computed at a rate no higher than specified in the instrument; or (2) the judgment is based on tortious conduct, bad faith or intentional or willful acts, in which case interest shall be computed at the rate of fifteen percent.' The base 8.75% is correct and current (hard-coded statutory figure, unchanged in 2018/2019/2021/2025 codes), but the single value materially omits the mandatory 15% post-judgment rate for tort/bad-faith/willful-act judgments -- a major claim-type (contract vs. tort) split."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add the 15% post-judgment rate for tortious-conduct/bad-faith/willful-act judgments under 56-8-4(A)(2) alongside the 8.75% general rate; and note the separate 15%-as-of-right prejudgment rate under 56-8-3 for liquidated/contract claims beside the discretionary up-to-10% under 56-8-4(B).",
+  "confidence": "high",
+  "sources": [
+   "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
+   "https://law.justia.com/codes/new-mexico/chapter-56/article-8/section-56-8-4/",
+   "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-3/",
+   "https://law.justia.com/codes/new-mexico/chapter-56/article-8/section-56-8-3/"
+  ]
+ },
+ {
+  "code": "NY",
+  "name": "New York",
+  "pre": {
+   "status": "confirmed",
+   "current_value": "9%",
+   "correct_value": "9% (general); 2% for consumer-debt accrued claims/judgments where a natural person is the defendant",
+   "note": "CPLR 5004(a): \"Interest shall be at the rate of nine per centum per annum, except where otherwise provided by statute\". The 9% general prejudgment rate is correct and current as of July 2026. However, the same sentence carves out consumer debt: \"...provided the annual rate of interest to be paid in an action arising out of a consumer debt where a natural person is a defendant shall be two per centum per annum (i) on a judgment or accrued claim for judgments entered on or after the effective date...\". The reference to an \"accrued claim\" means the 2% rate can reach prejudgment interest on consumer-debt claims, not only post-judgment interest. Prejudgment interest is otherwise governed by CPLR 5001/5002 (mandatory for contract/property claims, computed from a fixed date for personal injury/wrongful death), all at the 9% rate — no separate personal-injury vs. contract vs. tort rate exists in NY.",
+   "missed_dual_rate_or_carveout": "2% consumer-debt rate under CPLR 5004 (Fair Consumer Judgment Interest Act, eff. Apr 30 2022) where a natural person is the defendant; single 9% value omits it. 'Consumer debt' = obligation of a natural person from a transaction primarily for personal, family or household purposes.",
+   "simple_compound_note": "New York statutory interest under CPLR 5004 is SIMPLE interest, not compounded. Dataset 'kind: fixed' does not mischaracterize this, but simple accrual should be assumed."
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "9%",
+   "correct_value": "9% (general); 2% for consumer-debt judgments where a natural person is the defendant (CPLR 5004)",
+   "note": "CPLR 5004(a): \"Interest shall be at the rate of nine per centum per annum, except where otherwise provided by statute; provided the annual rate of interest to be paid in an action arising out of a consumer debt where a natural person is a defendant shall be two per centum per annum (i) on a judgment or accrued claim for judgments entered on or after the effective date of the chapter of the laws of two thousand twenty-one which amended this section, and (ii) for interest upon a judgment pursuant to section five thousand three of this article...\". 'Consumer debt' is defined as \"any obligation or alleged obligation of any natural person to pay money arising out of a transaction in which the money, property, insurance or services... are primarily for personal, family or household purposes.\" The general 9% post-judgment rate is CORRECT, but the dataset's single value is materially INCOMPLETE: it omits the statutory 2% rate for consumer-debt money judgments against individuals, added by the 2021 Fair Consumer Judgment Interest Act, effective April 30, 2022 (and applicable to pre-existing unpaid consumer judgments going forward). Cited section CPLR 5004 is correct."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add the CPLR 5004 consumer-debt carve-out: 2% per annum on judgments/accrued claims where a natural person is the defendant (eff. Apr 30, 2022); keep 9% as the general pre- and post-judgment rate.",
+  "confidence": "high",
+  "sources": [
+   "https://www.nysenate.gov/legislation/laws/CVP/5004",
+   "https://codes.findlaw.com/ny/civil-practice-law-and-rules/cvp-sect-5004/",
+   "https://law.justia.com/codes/new-york/cvp/article-50/5004/",
+   "https://nylag.org/oca-consumers-post-judgment-interest/"
+  ]
+ },
+ {
+  "code": "OK",
+  "name": "Oklahoma",
+  "post": {
+   "status": "confirmed",
+   "current_value": "8.75% — cited to 12 O.S. Sec. 727.1 (method: statute-variable)",
+   "correct_value": "8.75%",
+   "note": "Matches the official Oklahoma courts certification verbatim: OSCN 'Interest on Judgments (2026)' states 'the postjudgment interest rate to be charged on judgments for calendar year 2026 shall be 8.75 percent,' citing 12 O.S. Supp. Sec. 727.1(I). Rate formula = the prime rate in the first Wall Street Journal edition of the calendar year (certified to the Administrative Director of the Courts by the State Treasurer) PLUS two percent (2%). Simple interest: 727.1 provides that a separate computation is made for each calendar year the judgment remains unpaid at that year's certified rate; it is not compounded. Section citation (727.1) is correct. No claim-type split on the postjudgment side — 8.75% applies uniformly to all judgments rendered on/after Jan 1, 2005."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "4.13% — cited to 12 O.S. Sec. 727.1 (kind: variable)",
+   "correct_value": "4.13% for personal-injury/personal-rights verdicts (12 O.S. Sec. 727.1(E)/(I)); 6% fixed for contract/liquidated 'damages certain' (23 O.S. Sec. 6 + 15 O.S. Sec. 266)",
+   "note": "The 4.13% number itself is CORRECT and matches the official certification verbatim: OSCN 'Interest on Judgments (2026)' states 'The prejudgment interest rate for calendar year 2026 shall be 4.13 percent (applicable to actions filed on or after January 1, 2010).' The rate = average U.S. Treasury Bill rate of the preceding calendar year, certified by the State Treasurer under 727.1(I). BUT this 727.1 prejudgment rate is claim-type-limited: 727.1(E) applies it ONLY to 'a verdict for damages by reason of personal injuries or injury to personal rights' and only from '24 months after the suit ... was commenced.' It is NOT the general prejudgment rate. Prejudgment interest on contract/liquidated claims — 'damages certain, or capable of being made certain by calculation' — is governed by a DIFFERENT statute, 23 O.S. Sec. 6, at the legal rate under 15 O.S. Sec. 266: 'The legal rate of interest shall be six percent (6%) in the absence of any contract as to the rate of interest.' So a single 4.13% value labeled generically 'prejudgment' is materially incomplete — it captures the tort/personal-injury variable rate but omits the 6% fixed rate that governs the very common contract/liquidated-damages case.",
+   "missed_dual_rate_or_carveout": "Contract/liquidated 'damages certain' prejudgment interest = 6% fixed (23 O.S. Sec. 6 applied at the legal rate of 15 O.S. Sec. 266); the dataset's 4.13% variable rate is personal-injury/personal-rights verdicts ONLY (12 O.S. Sec. 727.1(E)/(I)), accruing only from 24 months after suit commenced.",
+   "simple_compound_note": "Simple interest, not compounded. 727.1 makes a separate computation for each calendar year and sums them; 23 O.S. Sec. 6 / 6% liquidated-claim interest is likewise simple."
+  },
+  "needs_fix": true,
+  "fix_summary": "Prejudgment is materially incomplete: add a second prejudgment rate — contract/liquidated 'damages certain' claims accrue 6% fixed under 23 O.S. Sec. 6 + 15 O.S. Sec. 266 — and label the existing 4.13% (727.1) as the personal-injury/personal-rights-only variable rate. Postjudgment 8.75% is correct as-is.",
+  "confidence": "high",
+  "sources": [
+   "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
+   "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=547755",
+   "https://www.oscn.net/applications/oscn/index.asp?ftdb=STOKIN&level=1",
+   "https://law.justia.com/codes/oklahoma/title-12/section-12-727-1/",
+   "http://ok.elaws.us/os/23-6",
+   "http://ok.elaws.us/os/15-266"
+  ]
+ },
+ {
+  "code": "OR",
+  "name": "Oregon",
+  "pre": {
+   "status": "confirmed",
+   "current_value": "9% — ORS 82.010(1)(a) (fixed)",
+   "correct_value": "9% — ORS 82.010(1)(a) (fixed)",
+   "note": "ORS 82.010(1): \"The rate of interest for the following transactions, if the parties have not otherwise agreed to a rate of interest, is nine percent per annum and is payable on: (a) All moneys after they become due; but open accounts bear interest from the date of the last item thereof.\" The 9% statutory legal rate and the cited section (1)(a) are correct. This is the statutory rate applied to prejudgment interest on due/liquidated sums.",
+   "missed_dual_rate_or_carveout": "",
+   "simple_compound_note": "Subsection (1) does not specify simple vs. compound for the legal rate; Oregon prejudgment interest is applied as simple interest by convention/case law. No mischaracterization in the dataset (kind listed as 'fixed')."
+  },
+  "post": {
+   "status": "confirmed",
+   "current_value": "9% — ORS 82.010(2) (statute-fixed)",
+   "correct_value": "9% general; but med/nursing-board professional-negligence judgments = lesser of 5% or Fed discount rate + 3% — ORS 82.010(2)(f)",
+   "note": "ORS 82.010(2): \"Except as provided in this subsection, the rate of interest on judgments for the payment of money is nine percent per annum.\" (2)(b): \"Interest on a judgment under this subsection is simple interest, unless otherwise provided by contract.\" General 9% rate, section cite, and simple-interest characterization are all correct. HOWEVER, subsection (2)(f) sets a different (lower) rate for a specific claim type: \"The rate of interest on a judgment rendered in favor of a plaintiff in a civil action to recover damages for injuries resulting from the professional negligence of a person licensed by the Oregon Medical Board under ORS chapter 677 or the Oregon State Board of Nursing under ORS 678.010 to 678.410 is the lesser of five percent per annum or three percent in excess of the discount rate in effect at the Federal Reserve Bank in the Federal Reserve district where the injuries occurred.\" A single 9% value omits this medical-malpractice/nursing-negligence carve-out."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add the ORS 82.010(2)(f) post-judgment carve-out: judgments for professional negligence of Oregon Medical Board / State Board of Nursing licensees bear the lesser of 5% or Fed discount rate + 3%, not the general 9%.",
+  "confidence": "high",
+  "sources": [
+   "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
+   "https://oregon.public.law/statutes/ors_82.010",
+   "https://codes.findlaw.com/or/title-8-commercial-transactions/or-rev-st-sect-82-010/"
+  ]
+ },
+ {
+  "code": "PA",
+  "name": "Pennsylvania",
+  "post": {
+   "status": "confirmed",
+   "current_value": "6%",
+   "correct_value": "6%",
+   "note": "42 Pa.C.S. § 8101: “Except as otherwise provided by another statute, a judgment for a specific sum of money shall bear interest at the lawful rate from the date of the verdict or award, or from the date of the judgment, if the judgment is not entered upon a verdict or award.” The “lawful rate” is supplied by 41 P.S. § 202: reference to the ‘legal rate of interest’ or to ‘interest’ without a specified rate “shall be construed to refer to the rate of interest of six per cent per annum.” 6% is correct and applies to all judgment types (including tort) once reduced to judgment; interest is simple. Section citations (42 Pa.C.S. §8101 / 41 P.S. §202) are correct. Note: where a contract expressly pleads a higher rate, post-judgment interest may run at that agreed rate instead — additional context, not a defect."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "6%",
+   "correct_value": "6% simple for contract/general claims (as of right under 41 P.S. §202); BUT for bodily injury, death, or property damage (tort) actions the operative rate is Pa.R.C.P. 238 ‘delay damages’ = WSJ prime rate (first edition of Wall Street Journal each January) + 1%, not compounded — a VARIABLE rate, not 6%",
+   "missed_dual_rate_or_carveout": "Pa.R.C.P. No. 238 (231 Pa. Code Rule 238) governs prejudgment interest for the major tort claim types — ‘bodily injury, death or property damage.’ It is calculated at ‘the prime rate as listed in the first edition of the Wall Street Journal published for each calendar year for which the damages are awarded, plus one percent, not compounded,’ running from one year after service of original process to the date of the award. The single ‘6% fixed’ value omits this claim-type split: tort/personal-injury prejudgment interest is a variable prime+1% figure, not 6%.",
+   "simple_compound_note": "Both are simple interest. 41 P.S. §202 (6%) is simple; Rule 238 delay damages are expressly ‘not compounded.’ Characterizing prejudgment interest as simple is correct.",
+   "note": "41 P.S. § 202 fixes the legal rate at “six per cent per annum,” which is the correct prejudgment rate for contract and other liquidated/general claims where interest is recoverable as of right. The dataset value is right for that category but materially incomplete because it omits the separate statutory-scheme rate (Rule 238 delay damages, prime + 1%, variable) that governs prejudgment interest in bodily-injury/death/property-damage actions — a major claim type."
+  },
+  "needs_fix": true,
+  "fix_summary": "Prejudgment entry is materially incomplete: add the Pa.R.C.P. 238 delay-damages rate (WSJ prime + 1%, variable, simple, not compounded) for bodily-injury/death/property-damage (tort) claims, cited to 231 Pa. Code Rule 238; keep 6% (41 P.S. §202) for contract/general claims. Post-judgment 6% is correct as-is.",
+  "confidence": "high",
+  "sources": [
+   "https://codes.findlaw.com/pa/title-41-ps-interest/pa-st-sect-41-202/",
+   "https://codes.findlaw.com/pa/title-42-pacsa-judiciary-and-judicial-procedure/pa-csa-sect-42-8101.html",
+   "https://www.pacodeandbulletin.gov/secure/pacode/data/231/chapter200/s238.html",
+   "https://www.law.cornell.edu/regulations/pennsylvania/231-Pa-Code-r-238"
+  ]
+ },
+ {
+  "code": "UT",
+  "name": "Utah",
+  "post": {
+   "status": "confirmed",
+   "current_value": "5.51% — cited to Utah Code Ann. Sec. 15-1-4 (method: statute-variable)",
+   "correct_value": "5.51% (confirmed). Utah Courts' official 2026 publication: federal postjudgment rate as of Jan 1, 2026 = 3.51%, plus 2% = 5.51% for general civil/criminal judgments under 15-1-4(3). SEPARATE carve-out: 15-1-4(4) sets a judgment under $10,000 for purchase of goods/services at federal rate + 10% = 13.51% for 2026 (not reflected in the single value).",
+   "note": "Utah Code 15-1-4(3): 'Except as otherwise provided by law, or as governed by Subsection (4), all other final civil and criminal judgments of the district court, the justice court, and the Business and Chancery Court shall bear interest at the federal postjudgment interest rate as of January 1 of each year, plus 2%.' The rate is fixed at entry for the life of the judgment (simple interest). Official Utah Courts page states the 2026 rate is 5.51% and that it 'does not apply to ... judgments under $10,000 regarding purchase of goods or services.' Utah Code 15-1-4(4): 'A judgment under $10,000 in an action regarding the purchase of goods and services shall bear interest ... at 10% plus the federal postjudgment interest rate in effect on January 1 of the year in which the judgment is entered' (= 13.51% for 2026). Section citation (15-1-4) and method (statute-variable) are correct; headline numeric 5.51% is current and accurate."
+  },
+  "pre": {
+   "status": "discrepancy",
+   "current_value": "10% — cited to Utah Code Ann. 15-1-1(2) (kind: fixed)",
+   "correct_value": "10% fixed under 15-1-1(2) is correct for the general/contract legal rate, BUT materially incomplete: personal-injury tort prejudgment interest on special damages is a SEPARATE variable rate under Utah Code 78B-5-824 = prime rate + 2%, not lower than 5% / not higher than 10% (= 8.75% for 2026, prime 6.75% + 2%), computed as simple interest, for causes of action arising on or after July 1, 2014.",
+   "note": "Utah Code 15-1-1(2): 'Unless the parties to a lawful written, verbal, or implied contract expressly specify a different rate of interest, the legal rate of interest for the contract ... is 10% per annum.' This 10% is the correct default legal/contract prejudgment rate. However, Utah has a distinct personal-injury prejudgment statute — Utah Code 78B-5-824: prejudgment interest is 'two percentage points above the prime rate, as published by the Board of Governors of the Federal Reserve System on the first business day in January of the calendar year in which the judgment is entered, but the prejudgment interest rate applied to all cases may not be lower than 5% or higher than 10%,' and 'Any prejudgment interest shall be computed as simple interest.' It applies to 'special damages actually incurred' (excluding future medical/wages) for causes of action arising on/after July 1, 2014. Prime on the first business day of Jan 2026 was 6.75%, so the 2026 personal-injury prejudgment rate is 8.75%.",
+   "simple_compound_note": "Simple interest for both. 78B-5-824 expressly states prejudgment interest 'shall be computed as simple interest'; Utah legal-rate (15-1-1) prejudgment interest is likewise simple, not compounded.",
+   "missed_dual_rate_or_carveout": "Personal-injury tort actions: prejudgment interest on special damages is governed by Utah Code 78B-5-824 (variable: prime + 2%, floored 5% / capped 10%; 8.75% for 2026; simple), NOT the flat 10% of 15-1-1(2). The single fixed 10% value omits this major claim-type rate."
+  },
+  "needs_fix": true,
+  "fix_summary": "Add Utah's personal-injury prejudgment carve-out: Utah Code 78B-5-824 sets PI special-damages prejudgment interest at prime + 2% (5% floor / 10% cap; 8.75% for 2026, simple), separate from the 15-1-1(2) fixed 10% general/contract rate; also note post-judgment 15-1-4(4) carve-out (judgments under $10k for goods/services = federal + 10% = 13.51% for 2026). Post-judgment headline 5.51% is correct.",
+  "confidence": "high",
+  "sources": [
+   "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S1.html",
+   "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S4.html",
+   "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
+   "https://codes.findlaw.com/ut/title-15-contracts-and-obligations-in-general/ut-code-sect-15-1-4/",
+   "https://codes.findlaw.com/ut/title-78b-judicial-code/ut-code-sect-78b-5-824.html",
+   "https://le.utah.gov/xcode/Title78B/Chapter5/78B-5-S824.html",
+   "https://www.fedprimerate.com/wall_street_journal_prime_rate_history.htm"
+  ]
+ },
+ {
+  "code": "WA",
+  "name": "Washington",
+  "pre": {
+   "status": "confirmed",
+   "current_value": "12%",
+   "correct_value": "12%",
+   "note": "RCW 19.52.010(1): 'Every loan or forbearance of money, goods, or thing in action shall bear interest at the rate of twelve percent per annum where no different rate is agreed to in writing between the parties.' Washington courts award prejudgment interest on liquidated claims at this 12% legal rate where no contract rate applies, so 12% fixed is correct for the general case. CARVE-OUT: RCW 19.52.010(2) caps prejudgment interest on medical debt (as defined in RCW 19.16.100) at 'not exceed nine percent' — a distinct 9% ceiling for medical-debt claims that the single 12% value does not reflect. Section citation 19.52.010(1) is correct.",
+   "missed_dual_rate_or_carveout": "RCW 19.52.010(2): prejudgment interest 'charged or collected on medical debt, as defined in RCW 19.16.100, must not exceed nine percent' — a 9% cap carve-out for medical-debt claims (narrow claim type, not the general rate).",
+   "simple_compound_note": "Washington prejudgment/judgment interest is simple interest, not compounded; 'fixed' characterization of the 12% legal rate is accurate for general liquidated claims."
+  },
+  "post": {
+   "status": "discrepancy",
+   "current_value": "8.75%",
+   "correct_value": "8.75% is correct ONLY for the variable tort rate against individuals/other entities (= prime 6.75% (June 2026) + 2%). RCW 4.56.110 sets DISTINCT rates by claim type that the single value omits: child support = 12% (fixed); tort of a public agency = 26-week T-bill coupon-issue yield + 2% (variable); tort of individuals/entities = prime + 2% = 8.75%; private student loan debt = prime + 2% = 8.75%; consumer debt = 9% (fixed); ALL OTHER judgments = maximum rate under RCW 19.52.020 on date of entry (currently 12%, being the higher of 12% or 26-week T-bill + 4%). The dataset's lone 8.75% understates the two largest categories (general/'all other' money judgments at 12% and consumer-debt judgments at 9%).",
+   "note": "RCW 4.56.110 (amended 2019 c 371 s 1): '(2) Judgments for unpaid child support ... shall bear interest at the rate of twelve percent.'; '(3)(b) ... founded on the tortious conduct of individuals or other entities ... two percentage points above the prime rate, as published by the board of governors of the federal reserve system on the first business day of the calendar month immediately preceding the date of entry'; '(5) ... unpaid consumer debt ... shall bear interest ... at the rate of nine percent'; '(6) ... all other judgments shall bear interest from the date of entry at the maximum rate permitted under RCW 19.52.020 on the date of entry thereof.' Prime rate is 6.75% as of June 2026 (Fed funds 3.50-3.75% + 3%), so prime + 2% = 8.75% is current, not stale. Numeric is right for the tort sub-category but the metric is materially incomplete: it omits the 9% consumer-debt rate, the 12% child-support rate, and the 12% 'all other judgments' rate."
+  },
+  "needs_fix": true,
+  "fix_summary": "Post-judgment: the single 8.75% (tort = prime+2%) omits RCW 4.56.110's claim-type split — add consumer debt 9%, child support 12%, and 'all other judgments' = max under RCW 19.52.020 (currently 12%); label 8.75% as the tort-only variable rate.",
+  "confidence": "high",
+  "sources": [
+   "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
+   "https://codes.findlaw.com/wa/title-4-civil-procedure/wa-rev-code-4-56-110/",
+   "https://law.justia.com/codes/washington/title-4/chapter-4-56/section-4-56-110/",
+   "https://app.leg.wa.gov/rcw/default.aspx?cite=19.52.010",
+   "https://app.leg.wa.gov/rcw/default.aspx?cite=19.52.020",
+   "https://wa-law.org/rcw/19_business_regulations%E2%80%94miscellaneous/19.052_interest%E2%80%94usury.html",
+   "https://leg.wa.gov/codereviser/documents/rates.htm",
+   "https://primerates.com/primerate/current-prime-rate/"
+  ]
+ }
+]

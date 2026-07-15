@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "kansas-judgment-rate",
   "name": "Kansas Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -17,32 +17,32 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 7.75,
-      "value_text": "7.75%",
+      "value": 8.25,
+      "value_text": "8.25%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-01",
       "source_id": "ks-jud",
       "source_url": "https://sos.ks.gov/general-services/finance-rates.html",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Kan. Stat. Ann. 16-204, currently 7.75% (as of July 1, 2026). . Formula = New York Federal Reserve Bank discount rate (charge on loans to depository institutions, as reported in the \"Money Rates\" column of the Wall Street Journal) as of… Simple interest. This 16-204 rate is POST-judgment. Prejudgment interest is governed separately by K.S.A. 16-201 (10% per annum when no other rate agreed). CONTRACT:… Verify the current value at sos.ks.gov; not legal advice."
+      "notes": "Post-judgment interest under Kan. Stat. Ann. 16-204, currently 8.25% for July 1, 2025–June 30, 2026 (recomputed each July 1 off the prior year's discount-rate formula). Simple interest. Prejudgment interest is separate — see the Kansas prejudgment page (10% general; a lower tort rate for recent tort actions). Verify at sos.ks.gov; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 7.75,
-        "value_text": "7.75%",
+        "value": 8.25,
+        "value_text": "8.25%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-01",
         "source_id": "ks-jud",
         "source_url": "https://sos.ks.gov/general-services/finance-rates.html",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Kan. Stat. Ann. 16-204, currently 7.75% (as of July 1, 2026). . Formula = New York Federal Reserve Bank discount rate (charge on loans to depository institutions, as reported in the \"Money Rates\" column of the Wall Street Journal) as of… Simple interest. This 16-204 rate is POST-judgment. Prejudgment interest is governed separately by K.S.A. 16-201 (10% per annum when no other rate agreed). CONTRACT:… Verify the current value at sos.ks.gov; not legal advice."
+        "notes": "Post-judgment interest under Kan. Stat. Ann. 16-204, currently 8.25% for July 1, 2025–June 30, 2026 (recomputed each July 1 off the prior year's discount-rate formula). Simple interest. Prejudgment interest is separate — see the Kansas prejudgment page (10% general; a lower tort rate for recent tort actions). Verify at sos.ks.gov; not legal advice."
       }
     ]
   }

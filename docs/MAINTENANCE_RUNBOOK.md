@@ -81,6 +81,17 @@ on the same quarterly cadence as the post-judgment variable rates; fixed/discret
 statutory amendment. The critical field to preserve on any edit is `restrictions` (liquidated-vs-unliquidated,
 claim-type, discretionary, future-damages carve-outs) — it is the whole value of the metric.
 
+**Full 51-jurisdiction statute audit (2026-07-11):** every state's post- AND prejudgment rate was
+re-verified against its official statute by a multi-agent pass (scratchpad/verify-workflow.mjs). 21
+were corrected. Key outcome: MANY states have a DUAL prejudgment rate — a general/liquidated rate and a
+separate (often variable) tort/personal-injury rate — now shown as `value_text: "X% / Y%"` with the
+split explained in `notes` + content `applies`/`body` (e.g. CA 7%/10%, GA 7%/9.75%, MT/KS/NE/UT/OK/NM/MN/NJ,
+MO). The `value` numeric = the FIRST (general/liquidated) figure; the prejudgment CALCULATOR computes only
+that fixed general/liquidated rate and says so. Stale variable rates were refreshed (KS post 8.25%, MI
+4.959%, NE post 5.723% — note NE's 5.970% is FUTURE-dated to 7/16/2026, so don't let a future obs win
+"latest"; the DB upserts by (entity,metric,effective_date,source_id) and picks max date). MA post cite →
+M.G.L. c.235 §8. Re-run the audit workflow (resume from cache) after any statutory-rate news.
+
 ## How to add a new source / rate series
 1. Create `pipeline/fetchers/<name>.mjs` exporting an async function that returns
    `{ source, entities, observations }` (copy `irs.mjs` as a template). Use `politeGet` from

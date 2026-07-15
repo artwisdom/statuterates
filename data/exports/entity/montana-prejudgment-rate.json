@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "montana-prejudgment-rate",
   "name": "Montana Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,7 +8,7 @@
   "locale": null,
   "metadata": {
     "state": "MT",
-    "statute": "MCA 27-1-211",
+    "statute": "MCA 31-1-106 (10% legal, via 27-1-211); 27-1-210 (tort, prime+3%)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "fixed"
@@ -20,15 +20,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 10,
-      "value_text": "10%",
+      "value_text": "10% / 9.75%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "mt-prejud",
       "source_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under MCA 27-1-211 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Montana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "Montana prejudgment interest is 10% simple for liquidated/contract-type claims — the legal rate (MCA §31-1-106), applied via the right-to-interest statute §27-1-211. TORT prejudgment interest is instead prime + 3% — currently 9.75% (variable, reset each Jan 1) under §27-1-210. Verified 2026-07-11. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +36,15 @@
       {
         "metric": "annual_rate",
         "value": 10,
-        "value_text": "10%",
+        "value_text": "10% / 9.75%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "mt-prejud",
         "source_url": "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under MCA 27-1-211 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Montana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "Montana prejudgment interest is 10% simple for liquidated/contract-type claims — the legal rate (MCA §31-1-106), applied via the right-to-interest statute §27-1-211. TORT prejudgment interest is instead prime + 3% — currently 9.75% (variable, reset each Jan 1) under §27-1-210. Verified 2026-07-11. Not legal advice."
       }
     ]
   }

@@ -36,7 +36,9 @@ const entities = PREJUDGMENT_CALC_SAFE.flatMap((key) => {
 
 const histories = Object.fromEntries(entities.map((e) => [e.key, [{ effective_date: '1990-01-01', value: e.value }]]));
 const kinds = Object.fromEntries(entities.filter((e) => e.compound).map((e) => [e.key, 'fixed-compound']));
-const seriesOptions = entities.map((e) => ({ key: e.key, label: `${e.name} — ${e.value_text} (${e.cite})${e.compound ? ' · compounded annually' : ''}` }));
+// Label with the COMPUTED rate (e.value = the fixed general/liquidated rate), not value_text, since a
+// few states carry a separate variable tort rate the calculator does not compute (noted below).
+const seriesOptions = entities.map((e) => ({ key: e.key, label: `${e.name} — ${e.value}%${e.compound ? ' · compounded annually' : ''}` }));
 const defaultSeries = 'new-york';
 const stateCount = PREJUDGMENT_CALC_SAFE.filter((k) => k !== 'dc').length; // distinct states; D.C. counted separately in copy
 
@@ -119,8 +121,10 @@ const jsonLd = [
     <a href="/prejudgment/">prejudgment rate page</a> and applied as simple interest, actual/365.
     Colorado compounds annually and has two rates: 8% general (C.R.S. §5-12-102) and 9% personal
     injury (C.R.S. §13-21-101, which runs from the date suit was filed — set that as the accrual date).
-    These statutory rates have been stable for years, so the calculator accepts accrual dates back to
-    1990 at the current rate.</p>
+    This calculator uses each state's <strong>general / liquidated-claim</strong> rate; several states
+    (Georgia, Kansas, Montana, Nebraska, Utah) apply a <em>separate, usually variable</em> rate to tort
+    or personal-injury claims — see the state's page for that figure. These statutory rates have been
+    stable for years, so the calculator accepts accrual dates back to 1990 at the current rate.</p>
 
   <AdSlot id="calc-top" />
 
@@ -134,7 +138,7 @@ const jsonLd = [
         {entities.map((e) => (
           <tr>
             <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>
-            <td class="num">{e.value_text}</td>
+            <td class="num">{e.value}%</td>
             <td>{e.compound ? 'Compounded annually' : 'Simple'}</td>
             <td class="source-note">{e.cite}</td>
           </tr>

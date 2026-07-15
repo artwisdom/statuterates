@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "michigan-prejudgment-rate",
   "name": "Michigan Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -19,20 +19,33 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 4.725,
-      "value_text": "4.725%",
+      "value": 4.959,
+      "value_text": "4.959%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-01-01",
+      "effective_date": "2026-07-01",
       "source_id": "mi-prejud",
       "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Prejudgment interest under MCL 600.6013 — 4.725%, compounded annually. This is PREjudgment interest (accruing before entry of judgment) and is separate from Michigan’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at legislature.mi.gov. Not legal advice."
+      "notes": "Prejudgment interest under MCL §600.6013 (Michigan interest runs from the filing of the complaint), COMPOUNDED ANNUALLY: the general rate is 1% above the six-month average of 5-year Treasury auctions, reset each Jan 1 / Jul 1 — currently 4.959% (period beginning July 1, 2026 = 1% + 3.959%). Judgments on a written instrument use a separate rate (the instrument's rate, capped at 13%, also compounded). Verify the current period at legislature.mi.gov. Not legal advice."
     }
   },
   "history": {
     "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 4.959,
+        "value_text": "4.959%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-01",
+        "source_id": "mi-prejud",
+        "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
+        "confidence": "medium",
+        "method": "statute-variable",
+        "notes": "Prejudgment interest under MCL §600.6013 (Michigan interest runs from the filing of the complaint), COMPOUNDED ANNUALLY: the general rate is 1% above the six-month average of 5-year Treasury auctions, reset each Jan 1 / Jul 1 — currently 4.959% (period beginning July 1, 2026 = 1% + 3.959%). Judgments on a written instrument use a separate rate (the instrument's rate, capped at 13%, also compounded). Verify the current period at legislature.mi.gov. Not legal advice."
+      },
       {
         "metric": "annual_rate",
         "value": 4.725,
@@ -41,7 +54,7 @@
         "effective_date": "2026-01-01",
         "source_id": "mi-prejud",
         "source_url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-11T11:51:06.687Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Prejudgment interest under MCL 600.6013 — 4.725%, compounded annually. This is PREjudgment interest (accruing before entry of judgment) and is separate from Michigan’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at legislature.mi.gov. Not legal advice."

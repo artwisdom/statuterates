@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "connecticut-judgment-rate",
   "name": "Connecticut Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "ct-jud",
       "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "ct-jud",
         "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20… Verify against the statute; not legal advice."

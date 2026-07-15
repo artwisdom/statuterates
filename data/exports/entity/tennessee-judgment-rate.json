@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "tennessee-judgment-rate",
   "name": "Tennessee Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-01",
       "source_id": "tn-courts",
       "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Tenn. Code §47-14-121: the \"formula rate\" (the weekly-average prime loan rate published by the Fed, announced by the TN Commissioner of Financial Institutions) minus 2 percentage points, fixed at judgment — currently 8.75% (judgments entered in the quarter beginning July 1, 2026). Simple interest. Verify the current rate at tncourts.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-01",
         "source_id": "tn-courts",
         "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Tenn. Code §47-14-121: the \"formula rate\" (the weekly-average prime loan rate published by the Fed, announced by the TN Commissioner of Financial Institutions) minus 2 percentage points, fixed at judgment — currently 8.75% (judgments entered in the quarter beginning July 1, 2026). Simple interest. Verify the current rate at tncourts.gov; not legal advice."

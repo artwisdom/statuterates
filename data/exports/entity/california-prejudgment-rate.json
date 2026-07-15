@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "california-prejudgment-rate",
   "name": "California Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,10 @@
   "locale": null,
   "metadata": {
     "state": "CA",
-    "statute": "Cal. Civ. Code sec. 3287",
-    "basis": "statute-variable",
+    "statute": "Cal. Const. art. XV §1 (7% tort/general); Cal. Civ. Code §3289(b) (10% contract)",
+    "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "variable"
+    "kind": "fixed"
   },
   "metrics": [
     "annual_rate"
@@ -19,32 +19,32 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 10,
-      "value_text": "10%",
+      "value": 7,
+      "value_text": "7% / 10%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "ca-prejud",
       "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Prejudgment interest under Cal. Civ. Code sec. 3287 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from California’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at leginfo.legislature.ca.gov. Not legal advice."
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
+      "confidence": "high",
+      "method": "statute-fixed",
+      "notes": "California has a DUAL prejudgment rate, both simple: 7% for tort and other non-contract claims (including personal injury) — the constitutional default legal rate (Cal. Const. art. XV §1; discretionary tort interest under Civ. Code §3288 also runs at this 7%); and 10% for breach of a contract that stipulates no rate (Civ. Code §3289(b)). Entitlement to interest on liquidated/certain damages is Civ. Code §3287. Verified against the statutes 2026-07-11. Not legal advice."
     }
   },
   "history": {
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 10,
-        "value_text": "10%",
+        "value": 7,
+        "value_text": "7% / 10%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "ca-prejud",
         "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
-        "confidence": "medium",
-        "method": "statute-variable",
-        "notes": "Prejudgment interest under Cal. Civ. Code sec. 3287 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from California’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at leginfo.legislature.ca.gov. Not legal advice."
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
+        "confidence": "high",
+        "method": "statute-fixed",
+        "notes": "California has a DUAL prejudgment rate, both simple: 7% for tort and other non-contract claims (including personal injury) — the constitutional default legal rate (Cal. Const. art. XV §1; discretionary tort interest under Civ. Code §3288 also runs at this 7%); and 10% for breach of a contract that stipulates no rate (Civ. Code §3289(b)). Entitlement to interest on liquidated/certain damages is Civ. Code §3287. Verified against the statutes 2026-07-11. Not legal advice."
       }
     ]
   }

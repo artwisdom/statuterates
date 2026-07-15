@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "pennsylvania-prejudgment-rate",
   "name": "Pennsylvania Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,7 +8,7 @@
   "locale": null,
   "metadata": {
     "state": "PA",
-    "statute": "41 P.S. Sec. 202",
+    "statute": "41 P.S. §202 (6% contract); 231 Pa. Code Rule 238 (tort delay damages, prime+1%)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "fixed"
@@ -25,10 +25,10 @@
       "effective_date": "2026-07-09",
       "source_id": "pa-prejud",
       "source_url": "https://www.pacodeandbulletin.gov/secure/pacode/data/231/chapter200/s238.html",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under 41 P.S. Sec. 202 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Pennsylvania’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "Pennsylvania prejudgment interest is 6% simple, as of right, on contract and other liquidated claims (41 P.S. §202). In tort actions for bodily injury, death, or property damage, the operative figure is instead Pa.R.C.P. 238 'delay damages' — the prime rate (first Wall Street Journal edition each January) + 1%, simple, not compounded (231 Pa. Code Rule 238), a variable rate. Verified 2026-07-11. Not legal advice."
     }
   },
   "history": {
@@ -41,10 +41,10 @@
         "effective_date": "2026-07-09",
         "source_id": "pa-prejud",
         "source_url": "https://www.pacodeandbulletin.gov/secure/pacode/data/231/chapter200/s238.html",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under 41 P.S. Sec. 202 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Pennsylvania’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "Pennsylvania prejudgment interest is 6% simple, as of right, on contract and other liquidated claims (41 P.S. §202). In tort actions for bodily injury, death, or property damage, the operative figure is instead Pa.R.C.P. 238 'delay damages' — the prime rate (first Wall Street Journal edition each January) + 1%, simple, not compounded (231 Pa. Code Rule 238), a variable rate. Verified 2026-07-11. Not legal advice."
       }
     ]
   }

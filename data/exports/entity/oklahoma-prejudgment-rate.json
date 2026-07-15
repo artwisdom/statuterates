@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "oklahoma-prejudgment-rate",
   "name": "Oklahoma Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,7 +8,7 @@
   "locale": null,
   "metadata": {
     "state": "OK",
-    "statute": "12 O.S. Sec. 727.1",
+    "statute": "12 O.S. §727.1 (4.13% personal injury); 23 O.S. §6 + 15 O.S. §266 (6% contract)",
     "basis": "statute-variable",
     "metric": "prejudgment",
     "kind": "variable"
@@ -20,15 +20,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 4.13,
-      "value_text": "4.13%",
+      "value_text": "4.13% / 6%",
       "unit": "percent_per_annum",
       "effective_date": "2026-01-02",
       "source_id": "ok-prejud",
       "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Prejudgment interest under 12 O.S. Sec. 727.1 — 4.13% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oklahoma’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-02; verify at oscn.net. Not legal advice."
+      "notes": "Oklahoma prejudgment interest splits by claim type: personal-injury / personal-rights verdicts bear a variable rate (currently 4.13%) set annually under 12 O.S. §727.1; contract / liquidated 'damages certain' claims bear 6% fixed (23 O.S. §6; 15 O.S. §266). Current PI value as of 2026-01-02; verify at oscn.net. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +36,15 @@
       {
         "metric": "annual_rate",
         "value": 4.13,
-        "value_text": "4.13%",
+        "value_text": "4.13% / 6%",
         "unit": "percent_per_annum",
         "effective_date": "2026-01-02",
         "source_id": "ok-prejud",
         "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Prejudgment interest under 12 O.S. Sec. 727.1 — 4.13% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oklahoma’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-02; verify at oscn.net. Not legal advice."
+        "notes": "Oklahoma prejudgment interest splits by claim type: personal-injury / personal-rights verdicts bear a variable rate (currently 4.13%) set annually under 12 O.S. §727.1; contract / liquidated 'damages certain' claims bear 6% fixed (23 O.S. §6; 15 O.S. §266). Current PI value as of 2026-01-02; verify at oscn.net. Not legal advice."
       }
     ]
   }

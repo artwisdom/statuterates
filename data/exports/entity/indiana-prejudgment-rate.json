@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "indiana-prejudgment-rate",
   "name": "Indiana Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,7 +8,7 @@
   "locale": null,
   "metadata": {
     "state": "IN",
-    "statute": "Contract/liquidated: IC 24-4.6-1-103",
+    "statute": "IC 24-4.6-1-103 (8% contract/account); IC 34-51-4-9 (tort, 6–10% discretionary)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "discretionary-with-default"
@@ -25,10 +25,10 @@
       "effective_date": "2026-07-09",
       "source_id": "in-prejud",
       "source_url": "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under Contract/liquidated: IC 24-4.6-1-103 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Indiana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "Indiana prejudgment interest is 8% for contract, written-instrument, and account claims (IC 24-4.6-1-103). SEPARATELY, tort/personal-injury prejudgment interest is set at the court's discretion within a 6%–10% per-year band (simple) under IC 34-51-4-9 — the 8% figure does not apply to tort claims. Verified 2026-07-11. Not legal advice."
     }
   },
   "history": {
@@ -41,10 +41,10 @@
         "effective_date": "2026-07-09",
         "source_id": "in-prejud",
         "source_url": "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under Contract/liquidated: IC 24-4.6-1-103 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Indiana’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "Indiana prejudgment interest is 8% for contract, written-instrument, and account claims (IC 24-4.6-1-103). SEPARATELY, tort/personal-injury prejudgment interest is set at the court's discretion within a 6%–10% per-year band (simple) under IC 34-51-4-9 — the 8% figure does not apply to tort claims. Verified 2026-07-11. Not legal advice."
       }
     ]
   }

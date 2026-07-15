@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "new-jersey-prejudgment-rate",
   "name": "New Jersey Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -20,15 +20,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 4.5,
-      "value_text": "4.5%",
+      "value_text": "4.5% / 6.5%",
       "unit": "percent_per_annum",
       "effective_date": "2026-01-01",
       "source_id": "nj-prejud",
       "source_url": "https://www.njcourts.gov/sites/default/files/courts/civil/postprejudgmentrates.pdf",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Prejudgment interest under N.J. Ct. R. 4:42-11(b) — 4.5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Jersey’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at njcourts.gov. Not legal advice."
+      "notes": "New Jersey tort prejudgment interest is calculated 'in the same amount and manner' as post-judgment interest (R. 4:42-11(b)): for 2026, 4.5% on amounts up to the Special Civil Part limit ($20,000) and 6.5% (base + 2%) above it. Simple interest. Verify the current Notice to the Bar at njcourts.gov. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +36,15 @@
       {
         "metric": "annual_rate",
         "value": 4.5,
-        "value_text": "4.5%",
+        "value_text": "4.5% / 6.5%",
         "unit": "percent_per_annum",
         "effective_date": "2026-01-01",
         "source_id": "nj-prejud",
         "source_url": "https://www.njcourts.gov/sites/default/files/courts/civil/postprejudgmentrates.pdf",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Prejudgment interest under N.J. Ct. R. 4:42-11(b) — 4.5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Jersey’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at njcourts.gov. Not legal advice."
+        "notes": "New Jersey tort prejudgment interest is calculated 'in the same amount and manner' as post-judgment interest (R. 4:42-11(b)): for 2026, 4.5% on amounts up to the Special Civil Part limit ($20,000) and 6.5% (base + 2%) above it. Simple interest. Verify the current Notice to the Bar at njcourts.gov. Not legal advice."
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "idaho-prejudgment-rate",
   "name": "Idaho Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,7 +8,7 @@
   "locale": null,
   "metadata": {
     "state": "ID",
-    "statute": "Idaho Code 28-22-104(1)",
+    "statute": "Idaho Code §28-22-104(1) (12% general); §12-301 / §28-22-104(2) (tort)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "fixed"
@@ -25,10 +25,10 @@
       "effective_date": "2026-07-09",
       "source_id": "id-prejud",
       "source_url": "https://legislature.idaho.gov/statutesrules/idstat/title28/t28ch22/sect28-22-104/",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under Idaho Code 28-22-104(1) — 12% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Idaho’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "Idaho general/contract prejudgment interest is 12% simple (Idaho Code §28-22-104(1)). SEPARATELY, in tort actions for personal injury, property damage, or wrongful death where the claimant serves an offer of settlement, prejudgment interest accrues at the §28-22-104(2) variable rate (currently 8.875%) under §12-301 — not the 12% general rate. Verified 2026-07-11. Not legal advice."
     }
   },
   "history": {
@@ -41,10 +41,10 @@
         "effective_date": "2026-07-09",
         "source_id": "id-prejud",
         "source_url": "https://legislature.idaho.gov/statutesrules/idstat/title28/t28ch22/sect28-22-104/",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under Idaho Code 28-22-104(1) — 12% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Idaho’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "Idaho general/contract prejudgment interest is 12% simple (Idaho Code §28-22-104(1)). SEPARATELY, in tort actions for personal injury, property damage, or wrongful death where the claimant serves an offer of settlement, prejudgment interest accrues at the §28-22-104(2) variable rate (currently 8.875%) under §12-301 — not the 12% general rate. Verified 2026-07-11. Not legal advice."
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "oregon-judgment-rate",
   "name": "Oregon Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,10 +23,10 @@
       "effective_date": "2026-07-09",
       "source_id": "or-jud",
       "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees… Verify against the statute; not legal advice."
+      "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees. Carve-out: judgments for professional negligence of Oregon Medical Board or State Board of Nursing licensees bear the lesser of 5% or the federal discount rate + 3% (ORS 82.010(2)(f)), not 9%. Verify against the statute; not legal advice."
     }
   },
   "history": {
@@ -39,10 +39,10 @@
         "effective_date": "2026-07-09",
         "source_id": "or-jud",
         "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees… Verify against the statute; not legal advice."
+        "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees. Carve-out: judgments for professional negligence of Oregon Medical Board or State Board of Nursing licensees bear the lesser of 5% or the federal discount rate + 3% (ORS 82.010(2)(f)), not 9%. Verify against the statute; not legal advice."
       }
     ]
   }

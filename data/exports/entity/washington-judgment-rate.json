@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "washington-judgment-rate",
   "name": "Washington Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -17,32 +17,32 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 8.75,
-      "value_text": "8.75%",
+      "value": 12,
+      "value_text": "12% / 8.75%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-08",
       "source_id": "wa-rcw",
       "source_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under RCW 4.56.110 (amended 2019): judgments on a written contract carry the contract’s rate; tort judgments and the general catch-all carry a rate tied to the federal prime rate (Fed H.15) — currently about 8.75%. Simple interest. Verify the current rate at app.leg.wa.gov and the Fed H.15 prime; not legal advice."
+      "notes": "Post-judgment interest under RCW 4.56.110 sets DISTINCT rates by claim type: general \"all other\" money judgments carry the statutory maximum under RCW 19.52.020 (currently 12%); consumer-debt judgments 9% (fixed); tort judgments against individuals/entities carry the federal prime rate + 2% (currently 8.75%); child-support judgments 12%; judgments on a written contract carry the contract’s rate. Simple interest. Verify at app.leg.wa.gov; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 8.75,
-        "value_text": "8.75%",
+        "value": 12,
+        "value_text": "12% / 8.75%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-08",
         "source_id": "wa-rcw",
         "source_url": "https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under RCW 4.56.110 (amended 2019): judgments on a written contract carry the contract’s rate; tort judgments and the general catch-all carry a rate tied to the federal prime rate (Fed H.15) — currently about 8.75%. Simple interest. Verify the current rate at app.leg.wa.gov and the Fed H.15 prime; not legal advice."
+        "notes": "Post-judgment interest under RCW 4.56.110 sets DISTINCT rates by claim type: general \"all other\" money judgments carry the statutory maximum under RCW 19.52.020 (currently 12%); consumer-debt judgments 9% (fixed); tort judgments against individuals/entities carry the federal prime rate + 2% (currently 8.75%); child-support judgments 12%; judgments on a written contract carry the contract’s rate. Simple interest. Verify at app.leg.wa.gov; not legal advice."
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "new-mexico-judgment-rate",
   "name": "New Mexico Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -18,12 +18,12 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 8.75,
-      "value_text": "8.75%",
+      "value_text": "8.75% / 15%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "nm-jud",
       "source_url": "https://law.justia.com/codes/new-mexico/chapter-56/article-8/section-56-8-4/",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under N.M. Stat. Ann. § 56-8-4 — 8.75% per year, fixed by statute (simple interest). If the judgment is based on tortious conduct, bad faith, or intentional or willful acts, post-judgment interest is 15% (not 8.75%); plaintiff… Verify against the statute; not legal advice."
@@ -34,12 +34,12 @@
       {
         "metric": "annual_rate",
         "value": 8.75,
-        "value_text": "8.75%",
+        "value_text": "8.75% / 15%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "nm-jud",
         "source_url": "https://law.justia.com/codes/new-mexico/chapter-56/article-8/section-56-8-4/",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under N.M. Stat. Ann. § 56-8-4 — 8.75% per year, fixed by statute (simple interest). If the judgment is based on tortious conduct, bad faith, or intentional or willful acts, post-judgment interest is 15% (not 8.75%); plaintiff… Verify against the statute; not legal advice."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-13T14:27:24.644Z",
+  "generated_at": "2026-07-15T01:22:36.172Z",
   "slug": "new-mexico-prejudgment-rate",
   "name": "New Mexico Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,7 +8,7 @@
   "locale": null,
   "metadata": {
     "state": "NM",
-    "statute": "NMSA 1978, Sec. 56-8-4(B)",
+    "statute": "NMSA 1978 §56-8-4(B) (≤10% discretionary); §56-8-3 (15% liquidated/contract)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "discretionary-with-default"
@@ -20,15 +20,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 10,
-      "value_text": "10%",
+      "value_text": "10% / 15%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "nm-prejud",
       "source_url": "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
-      "retrieved_at": "2026-07-13T14:27:24.599Z",
+      "retrieved_at": "2026-07-15T01:22:36.152Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under NMSA 1978, Sec. 56-8-4(B) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Mexico’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +36,15 @@
       {
         "metric": "annual_rate",
         "value": 10,
-        "value_text": "10%",
+        "value_text": "10% / 15%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "nm-prejud",
         "source_url": "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
-        "retrieved_at": "2026-07-13T14:27:24.599Z",
+        "retrieved_at": "2026-07-15T01:22:36.152Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under NMSA 1978, Sec. 56-8-4(B) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Mexico’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice."
       }
     ]
   }
