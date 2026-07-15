@@ -21,7 +21,7 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 // Site-wide entity schema on every page — establishes the publisher and site as a recognizable entity
 // (durable SEO signal, enables richer knowledge-graph treatment). Per-page jsonLd is layered on top.
 const siteJsonLd = [
-  { '@context': 'https://schema.org', '@type': 'Organization', name: meta.title, url: origin, description: meta.description, logo: `${origin}favicon.svg` },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: meta.title, url: origin, description: meta.description, logo: `${origin}logo-512.png` },
   { '@context': 'https://schema.org', '@type': 'WebSite', name: meta.title, url: origin, description: meta.description },
 ];
 
@@ -34,7 +34,7 @@ const NAV = [
   { href: '/', label: 'Rates' },
   { href: '/states/', label: 'States' },
   { href: '/calculators/', label: 'Calculators' },
-  { href: '/changes/', label: 'Changes' },
+  { href: '/guides/', label: 'Guides' },
   { href: '/api/', label: 'Data & API' },
   { href: '/about/', label: 'About' },
 ];
@@ -51,6 +51,7 @@ const NAV = [
     {noindex && <meta name="robots" content="noindex,follow" />}
     <meta name="theme-color" content="#123a2e" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/logo-512.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
     {adsenseClient && (
@@ -259,12 +260,15 @@ const NAV = [
         <p><span class="fbrand">§ StatuteRates</span> — the statutory, judgment &amp; tax interest-rate almanac.</p>
         <p class="freshness">Compiled {generatedDate}. Every value carries its effective date and official source.</p>
         <p>
-          <a href="/about/">How this data is collected</a> ·
+          <a href="/guides/">Guides</a> ·
+          <a href="/glossary/">Glossary</a> ·
           <a href="/methodology/">Methodology &amp; sources</a> ·
           <a href="/prejudgment/">Prejudgment interest by state</a> ·
+          <a href="/states/highest-lowest/">Highest &amp; lowest rates</a> ·
           <a href="/calculators/">Calculators</a> ·
           <a href="/changes/">Rate changes (RSS)</a> ·
           <a href="/api/">JSON API</a> ·
+          <a href="/about/">About</a> ·
           <a href="/llms.txt">llms.txt</a>
         </p>
         <p>

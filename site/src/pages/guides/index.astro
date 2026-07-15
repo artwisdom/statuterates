@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getMeta } from '../../lib/data.mjs';
+import { GUIDES } from '../../lib/guides.mjs';
+
+const meta = getMeta();
+const title = `Guides: Judgment, Prejudgment, IRS & Statutory Interest | ${meta.title}`;
+const description = `Plain-English guides to how interest on judgments, unpaid tax, and late payments actually works — what each rate is, how it's calculated, and how to use the free calculators. From ${meta.title}.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'StatuteRates guides',
+  url: canonical,
+  description,
+  hasPart: GUIDES.map((g) => ({ '@type': 'Article', name: g.h1, url: new URL(`/guides/${g.slug}/`, Astro.site).href })),
+};
+---
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Home</a> &rsaquo; <span>Guides</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · Guides</div>
+  <h1>Guides</h1>
+  <p class="lead">The rates on this site are only useful if you know what they mean. These plain-English
+    guides explain how interest on judgments, unpaid tax, and late commercial payments actually works —
+    then hand you the calculator to run your own numbers.</p>
+
+  <AdSlot id="guides-top" />
+
+  <div class="grid">
+    {GUIDES.map((g) => (
+      <a class="card" href={`/guides/${g.slug}/`} style="display:block;color:inherit">
+        <h3 style="margin-top:0">{g.h1}</h3>
+        <p class="cmeta">{g.description}</p>
+      </a>
+    ))}
+  </div>
+
+  <p class="source-note">Prefer the numbers? Jump to <a href="/">all tracked rates</a>, the
+    <a href="/states/">state comparison</a>, the <a href="/calculators/">calculators</a>, or the
+    <a href="/glossary/">glossary</a>.</p>
+</BaseLayout>

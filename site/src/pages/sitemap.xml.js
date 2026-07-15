@@ -3,6 +3,7 @@
 // real per-page <lastmod> (the underlying rate's latest effective date, clamped to the build date) so
 // the date is a genuine change signal for crawlers rather than one shared build stamp.
 import { getAllEntities, getMeta, stateHubs, latestOf } from '../lib/data.mjs';
+import { GUIDES } from '../lib/guides.mjs';
 
 export function GET({ site }) {
   const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
@@ -12,10 +13,11 @@ export function GET({ site }) {
 
   const staticPaths = [
     '/', '/about/', '/methodology/', '/api/', '/changes/', '/prejudgment/', '/states/',
-    '/privacy/', '/terms/',
+    '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
     '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
     '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
     '/calculators/prejudgment-interest/',
+    ...GUIDES.map((g) => `/guides/${g.slug}/`),
   ];
 
   const entities = getAllEntities();

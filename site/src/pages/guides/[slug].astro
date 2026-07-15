@@ -1,0 +1,110 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getMeta, prettyDate } from '../../lib/data.mjs';
+import { GUIDES, getGuide } from '../../lib/guides.mjs';
+
+export function getStaticPaths() {
+  return GUIDES.map((g) => ({ params: { slug: g.slug }, props: { guide: g } }));
+}
+
+const { guide } = Astro.props;
+const meta = getMeta();
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const related = GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 4);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: guide.h1,
+    description: guide.description,
+    url: canonical,
+    author: { '@type': 'Organization', name: meta.title },
+    publisher: { '@type': 'Organization', name: meta.title },
+    dateModified: meta.generated_at,
+    mainEntityOfPage: canonical,
+  },
+  guide.faqs?.length && {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guide.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: new URL('/guides/', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: guide.h1, item: canonical },
+    ],
+  },
+].filter(Boolean);
+---
+<BaseLayout title={guide.title} description={guide.description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Home</a> &rsaquo; <a href="/guides/">Guides</a> &rsaquo; <span>{guide.h1}</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · Guide</div>
+  <h1>{guide.h1}</h1>
+  <div class="lead" set:html={guide.intro_html} />
+
+  {guide.key_takeaways?.length > 0 && (
+    <aside class="takeaways">
+      <h2>Key takeaways</h2>
+      <ul>{guide.key_takeaways.map((k) => <li>{k}</li>)}</ul>
+    </aside>
+  )}
+
+  <AdSlot id="guide-top" />
+
+  <article class="guide">
+    {guide.sections.map((s) => (
+      <>
+        <h2>{s.h2}</h2>
+        <div set:html={s.body_html} />
+      </>
+    ))}
+  </article>
+
+  <AdSlot id="guide-bottom" />
+
+  {guide.faqs?.length > 0 && (
+    <section class="faq">
+      <h2>Frequently asked questions</h2>
+      {guide.faqs.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </section>
+  )}
+
+  {related.length > 0 && (
+    <section class="related">
+      <h2>More guides</h2>
+      <ul class="clean">
+        {related.map((g) => <li><a href={`/guides/${g.slug}/`}>{g.h1}</a></li>)}
+      </ul>
+    </section>
+  )}
+
+  <div class="disclaimer">Reference and educational content — not legal, tax, or financial advice.
+    Always confirm the controlling rate against the official statute or your court before relying on it.</div>
+
+  <style>
+    .takeaways { background: var(--green-wash); border: 1px solid var(--line-strong); border-left: 3px solid var(--green); border-radius: 2px; padding: 14px 20px; margin: 20px 0; }
+    .takeaways h2 { font-size: 0.72rem; font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold-ink); margin: 0 0 8px; }
+    .takeaways ul { margin: 0; padding-left: 20px; }
+    .takeaways li { margin: 5px 0; }
+    .guide :global(h2) { margin-top: 30px; }
+    .guide :global(p) { max-width: var(--measure); }
+    .guide :global(a) { color: var(--green); }
+    .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
+    .faq summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
+    .faq p { margin: 8px 0 0; color: var(--ink-soft); }
+    .related ul { columns: 2; }
+    @media (max-width: 520px) { .related ul { columns: 1; } }
+  </style>
+</BaseLayout>

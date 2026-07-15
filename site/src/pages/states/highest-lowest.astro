@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getAllEntities, getMeta, latestOf, prettyDate } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const yr = new Date(meta.generated_at).getUTCFullYear();
+
+// Rank states by their primary numeric rate (the first figure of a dual "X% / Y%" value_text).
+const clean = (name) => name.replace(/ (Pre)?[Jj]udgment Interest Rate$/, '').replace('Post-', '');
+const build = (region) => getAllEntities()
+  .filter((e) => e.region === region && e.metadata?.state !== undefined)
+  .map((e) => ({ name: clean(e.name), slug: e.slug, base: e.slug.replace(/-(pre)?judgment-rate$/, ''), v: latestOf(e)?.value, vt: latestOf(e)?.value_text }))
+  .filter((r) => Number.isFinite(r.v))
+  .sort((a, b) => b.v - a.v);
+
+const post = build('US States');
+const pre = build('US States — Prejudgment');
+const topN = (arr, n = 8) => arr.slice(0, n);
+const botN = (arr, n = 8) => arr.slice(-n).reverse();
+const postHi = topN(post), postLo = botN(post);
+const preHi = topN(pre), preLo = botN(pre);
+
+const title = `Highest & Lowest Judgment Interest Rates by State (${yr}) | ${meta.title}`;
+const description = `Which U.S. states charge the most and least interest on court judgments? A ${yr} ranking of the highest and lowest post-judgment and prejudgment interest rates, each verified against the state statute.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const row = (r) => ({ '@type': 'ListItem', name: `${r.name} — ${r.vt}` });
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'ItemList', name: `Highest post-judgment interest rates by state (${yr})`,
+    itemListElement: postHi.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: `${r.name} — ${r.vt}`, url: new URL(`/states/${r.base}/`, Astro.site).href })) },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Rates', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'States', item: new URL('/states/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: 'Highest & lowest', item: canonical },
+  ] },
+];
+
+---
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Rates</a> &rsaquo; <a href="/states/">States</a> &rsaquo; <span>Highest &amp; lowest</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · Rankings</div>
+  <h1>Highest &amp; lowest judgment interest rates by state ({yr})</h1>
+  <p class="lead">Interest on a money judgment ranges from low single digits to 12% a year depending on
+    the state. Here are the extremes for {yr} — both <em>after</em> judgment and <em>before</em> it —
+    each figure verified against the state's own statute. Rankings use each state's primary rate; some
+    states apply a second rate by claim type (shown as "X% / Y%").</p>
+
+  <AdSlot id="rank-top" />
+
+  <div class="rank-grid">
+    <section>
+      <h2>Highest post-judgment rates</h2>
+      <ol class="rank">
+        {postHi.map((r) => <li><a href={`/states/${r.base}/`}>{r.name}</a><span class="num">{r.vt}</span></li>)}
+      </ol>
+    </section>
+    <section>
+      <h2>Lowest post-judgment rates</h2>
+      <ol class="rank">
+        {postLo.map((r) => <li><a href={`/states/${r.base}/`}>{r.name}</a><span class="num">{r.vt}</span></li>)}
+      </ol>
+    </section>
+    <section>
+      <h2>Highest prejudgment rates</h2>
+      <ol class="rank">
+        {preHi.map((r) => <li><a href={`/states/${r.base}/`}>{r.name}</a><span class="num">{r.vt}</span></li>)}
+      </ol>
+    </section>
+    <section>
+      <h2>Lowest prejudgment rates</h2>
+      <ol class="rank">
+        {preLo.map((r) => <li><a href={`/states/${r.base}/`}>{r.name}</a><span class="num">{r.vt}</span></li>)}
+      </ol>
+    </section>
+  </div>
+
+  <AdSlot id="rank-bottom" />
+
+  <h2>What the rankings tell you</h2>
+  <ul class="clean">
+    <li><strong>Fixed vs. market-linked.</strong> The highest rates (12%) are almost all
+      <em>fixed by statute</em> and haven't moved in years; the lowest tend to be
+      <em>market-linked</em> formulas that rise and fall with Treasury yields or the prime rate. A
+      low-ranked state today can climb as rates rise.</li>
+    <li><strong>Prejudgment is a different number.</strong> Many states set a different rate for the
+      period before judgment — and often a separate rate again for tort/personal-injury claims. See the
+      <a href="/prejudgment/">prejudgment index</a> for the claim-type rules.</li>
+    <li><strong>Simple vs. compound matters more than the headline.</strong> Most states apply
+      <em>simple</em> interest; a few compound annually, which over several years can outweigh a higher
+      simple rate. Each state page notes which applies.</li>
+  </ul>
+  <p class="source-note">See the full <a href="/states/">state-by-state comparison</a>, run the
+    <a href="/calculators/">calculators</a>, or read how each rate is sourced in the
+    <a href="/methodology/">methodology</a>. Reference data as of {prettyDate(meta.generated_at)} — not
+    legal advice; confirm the controlling rate for your judgment date against the statute.</p>
+
+  <style>
+    .rank-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px 32px; }
+    .rank-grid h2 { font-size: 1.2rem; }
+    ol.rank { list-style: none; padding: 0; margin: 0 0 14px; counter-reset: r; }
+    ol.rank li { counter-increment: r; display: flex; align-items: baseline; justify-content: space-between;
+      gap: 10px; border-bottom: 1px solid var(--line); padding: 8px 0; }
+    ol.rank li::before { content: counter(r); font-family: var(--nums); color: var(--gold-ink);
+      font-weight: 600; width: 1.4em; flex: none; }
+    ol.rank li a { flex: 1; color: var(--green); text-decoration: none; border-bottom: 1px solid transparent; }
+    ol.rank li a:hover { border-bottom-color: var(--green); }
+    ol.rank .num { font-family: var(--nums); white-space: nowrap; color: var(--ink); }
+  </style>
+</BaseLayout>

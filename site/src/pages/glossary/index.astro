@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { getMeta, prettyDate } from '../../lib/data.mjs';
+
+const meta = getMeta();
+
+// Curated glossary of the interest-rate / judgment-interest terms people actually search. Each entry
+// is original, plain-English, and cross-linked to the rate pages, calculators, and other terms.
+const TERMS = [
+  { term: 'Post-judgment interest', def: `Interest that accrues on a money judgment from the day it is entered until it is paid. In U.S. federal court it is set by <a href="/rates/us-federal-post-judgment/">28 U.S.C. §1961</a>; every state sets its own rate. See our <a href="/states/">state-by-state table</a> and the <a href="/calculators/post-judgment-interest/">federal calculator</a>.` },
+  { term: 'Prejudgment interest', def: `Interest for the period <em>before</em> judgment — compensating a plaintiff for the time between the loss or breach and the judgment. Unlike post-judgment interest it usually applies only to liquidated amounts and is sometimes discretionary. See the <a href="/prejudgment/">prejudgment index</a>.` },
+  { term: 'Statutory interest', def: `An interest rate fixed by law (a statute, constitution, or court rule) rather than agreed by the parties — for example a judgment rate or the interest the IRS charges on unpaid tax. Contrast with a <a href="#contract-rate">contract rate</a>.` },
+  { term: 'Legal rate of interest', def: `A state's default statutory interest rate that applies when no other rate is set by contract or a more specific statute. Often the same figure a court uses for judgments.` },
+  { term: 'Judgment rate', def: `The statutory interest rate that applies to a court judgment. May differ for <a href="#prejudgment-interest">prejudgment</a> and <a href="#post-judgment-interest">post-judgment</a> periods, and by claim type.` },
+  { term: 'Liquidated claim', def: `A claim for an amount that is fixed or readily calculable by a known standard (a contract sum, an invoice, a promissory note). Most states allow prejudgment interest on liquidated claims but not on <a href="#unliquidated-damages">unliquidated</a> ones.` },
+  { term: 'Unliquidated damages', def: `Damages that are not fixed until a judge or jury sets them — pain and suffering, most general tort damages. Prejudgment interest is frequently barred on unliquidated damages.` },
+  { term: 'Simple interest', def: `Interest charged only on the original principal, not on accumulated interest. Most state judgment interest is simple: <strong>principal × annual rate × days ÷ 365</strong>.` },
+  { term: 'Compound interest', def: `Interest charged on principal plus previously accrued interest. U.S. federal post-judgment interest (§1961) compounds annually; <a href="#irs-6621">IRS interest</a> compounds daily.` },
+  { term: 'Accrual date', def: `The date interest begins to run. For post-judgment interest it is usually the date judgment is entered; for prejudgment interest it varies by claim (date of loss, breach, demand, or filing).` },
+  { term: 'Actual/365', def: `A day-count convention: interest for a period is the annual rate × (actual number of days ÷ 365). The standard method for most simple statutory interest.` },
+  { term: 'Per annum', def: `"Per year." A rate quoted per annum is the annual rate; daily interest is that rate divided by the days in the year.` },
+  { term: 'Federal short-term rate', def: `A rate the IRS publishes based on average market yields on short-term Treasuries. It is the base from which every <a href="#irs-6621">IRS §6621</a> interest rate is built by adding a fixed spread.` },
+  { term: 'IRS §6621', def: `The Internal Revenue Code section that sets IRS interest rates each quarter — the federal short-term rate plus a category spread (e.g. +3 points for underpayments). See the <a href="/rates/irs-underpayment/">IRS underpayment rate</a> and <a href="/calculators/irs-interest/">IRS calculator</a>.`, id: 'irs-6621' },
+  { term: 'IRS §6622', def: `The section requiring IRS interest to be compounded <strong>daily</strong>. It is why a tax balance grows faster than a simple-interest debt of the same rate.` },
+  { term: 'Underpayment rate', def: `The interest the IRS charges on tax paid late or underpaid (federal short-term rate + 3 points, compounded daily). See the <a href="/rates/irs-underpayment/">current rate</a>.` },
+  { term: 'Overpayment rate', def: `The interest the IRS pays when it holds an overpayment (e.g. a delayed refund). Non-corporate overpayments use short-term + 3; corporate overpayments use short-term + 2.` },
+  { term: '28 U.S.C. §1961', def: `The federal statute setting post-judgment interest in U.S. district courts: the weekly-average 1-year Treasury yield for the week before judgment, compounded annually. Try the <a href="/calculators/post-judgment-interest/">§1961 calculator</a>.`, id: 'usc-1961' },
+  { term: 'Treasury constant maturity (CMT)', def: `A yield the U.S. Treasury/Federal Reserve publishes for a standardized maturity (e.g. 1-year). The <a href="/rates/treasury-1-year-cmt/">1-year CMT</a> sets the federal post-judgment rate and several state rates.` },
+  { term: 'H.15', def: `The Federal Reserve's "Selected Interest Rates" statistical release — the official daily source for Treasury yields and the prime rate used across this site. See our <a href="/methodology/">methodology</a>.` },
+  { term: 'Prime rate', def: `A benchmark bank lending rate (published in Fed H.15). Several states peg judgment interest to prime plus a margin (e.g. prime + 3%).` },
+  { term: 'Contract rate', def: `An interest rate the parties agreed to in a contract. Where a valid contract rate exists it usually governs instead of the statutory rate.`, id: 'contract-rate' },
+  { term: 'Delay damages', def: `Pennsylvania's name (Pa.R.C.P. 238) for prejudgment interest in bodily-injury, death, and property-damage cases — prime + 1%, rather than the 6% contract rate.` },
+  { term: 'Late payment interest', def: `Statutory interest a business can claim on overdue commercial (B2B) invoices. The UK charges base + 8 points; the EU charges its reference rate + at least 8. See the <a href="/calculators/late-payment-interest/">late-payment calculator</a>.` },
+  { term: 'Bank of England base rate', def: `The UK's policy interest rate. Statutory late-payment interest on UK commercial debts is this <a href="/rates/uk-late-payment-commercial/">base rate + 8 percentage points</a>, fixed for six-month periods.` },
+  { term: 'ECB reference rate', def: `The European Central Bank main refinancing rate used as the base for the <a href="/rates/eu-late-payment-reference/">EU Late Payment Directive</a> rate (reference + at least 8 points), re-fixed each half-year.` },
+  { term: 'Usury', def: `An interest rate above the legal maximum a jurisdiction allows. Usury caps limit contract rates but generally do not apply to statutory judgment interest.` },
+  { term: 'Wrongful withholding', def: `Keeping money or property that is owed to another. Some states (e.g. Colorado) grant prejudgment interest on wrongfully withheld sums even when the amount is disputed.` },
+];
+const sorted = [...TERMS].map((t) => ({ ...t, id: t.id || t.term.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') })).sort((a, b) => a.term.localeCompare(b.term));
+
+const title = `Interest-Rate Glossary — Judgment, Prejudgment & Statutory Terms | ${meta.title}`;
+const description = `Plain-English definitions of the interest-rate terms that matter: post-judgment and prejudgment interest, statutory vs contract rate, simple vs compound, IRS §6621/§6622, 28 U.S.C. §1961, CMT, and more — each cross-linked to the live rates.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'StatuteRates interest-rate glossary',
+    url: canonical,
+    hasDefinedTerm: sorted.map((t) => ({
+      '@type': 'DefinedTerm',
+      name: t.term,
+      description: t.def.replace(/<[^>]+>/g, ''),
+      url: `${canonical}#${t.id}`,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Glossary', item: canonical },
+    ],
+  },
+];
+---
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Home</a> &rsaquo; <span>Glossary</span>
+  </nav>
+  <div class="eyebrow">The statutory interest-rate almanac · Glossary</div>
+  <h1>Interest-rate glossary</h1>
+  <p class="lead">The vocabulary of judgment, prejudgment, tax, and late-payment interest — defined in
+    plain English, with links to the live rates and calculators for each one.</p>
+
+  <nav class="jump" aria-label="Jump to term">
+    {sorted.map((t) => <a href={`#${t.id}`}>{t.term}</a>)}
+  </nav>
+
+  <AdSlot id="glossary-top" />
+
+  <dl class="glossary">
+    {sorted.map((t) => (
+      <div class="entry" id={t.id}>
+        <dt>{t.term}</dt>
+        <dd set:html={t.def} />
+      </div>
+    ))}
+  </dl>
+
+  <AdSlot id="glossary-bottom" />
+
+  <p class="source-note">Looking for a specific number? Browse <a href="/">all tracked rates</a>,
+    the <a href="/states/">state-by-state table</a>, or run the <a href="/calculators/">calculators</a>.
+    Reference data — not legal advice.</p>
+
+  <style>
+    .jump { display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 6px 0 22px; font-size: 0.82rem; }
+    .jump a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; }
+    .jump a:hover { border-bottom-color: var(--green); }
+    .glossary .entry { border-top: 1px solid var(--line); padding: 16px 0; scroll-margin-top: 20px; }
+    .glossary dt { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+    .glossary dd { margin: 0; color: var(--ink-soft); max-width: var(--measure); }
+    .glossary dd a { color: var(--green); }
+  </style>
+</BaseLayout>
