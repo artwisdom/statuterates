@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T01:22:36.172Z",
+  "generated_at": "2026-07-15T02:13:37.436Z",
   "slug": "north-carolina-judgment-rate",
   "name": "North Carolina Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2016-12-01",
       "source_id": "nc-ncleg",
       "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html",
-      "retrieved_at": "2026-07-15T01:22:36.152Z",
+      "retrieved_at": "2026-07-15T02:13:37.414Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest at North Carolina’s legal rate of 8% per annum — N.C.G.S. §24-5 pegs judgment interest to the §24-1 legal rate (8%), or the contract rate for judgments on a contract. Fixed by statute; simple interest. Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2016-12-01",
         "source_id": "nc-ncleg",
         "source_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html",
-        "retrieved_at": "2026-07-15T01:22:36.152Z",
+        "retrieved_at": "2026-07-15T02:13:37.414Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest at North Carolina’s legal rate of 8% per annum — N.C.G.S. §24-5 pegs judgment interest to the §24-1 legal rate (8%), or the contract rate for judgments on a contract. Fixed by statute; simple interest. Verify against the statute; not legal advice."

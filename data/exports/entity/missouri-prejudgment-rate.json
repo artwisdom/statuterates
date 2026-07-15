@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T01:22:36.172Z",
+  "generated_at": "2026-07-15T02:13:37.436Z",
   "slug": "missouri-prejudgment-rate",
   "name": "Missouri Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "mo-prejud",
       "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-      "retrieved_at": "2026-07-15T01:22:36.152Z",
+      "retrieved_at": "2026-07-15T02:13:37.414Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Missouri prejudgment interest splits by claim type: liquidated/contract claims bear 9% fixed (Mo. Rev. Stat. §408.020); TORT prejudgment interest is the intended Federal Funds rate + 3% — currently about 6.75% (variable) under §408.040.3. Current values as of July 2026; verify at revisor.mo.gov. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "mo-prejud",
         "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-        "retrieved_at": "2026-07-15T01:22:36.152Z",
+        "retrieved_at": "2026-07-15T02:13:37.414Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Missouri prejudgment interest splits by claim type: liquidated/contract claims bear 9% fixed (Mo. Rev. Stat. §408.020); TORT prejudgment interest is the intended Federal Funds rate + 3% — currently about 6.75% (variable) under §408.040.3. Current values as of July 2026; verify at revisor.mo.gov. Not legal advice."

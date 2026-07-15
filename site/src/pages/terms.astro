@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta, prettyDate } from '../lib/data.mjs';
+const meta = getMeta();
+const title = `Terms & Disclaimer | ${meta.title}`;
+const description = `Terms of use for ${meta.title}: the interest-rate data and calculators are reference information, not legal, tax, or financial advice — always confirm against the official source.`;
+const updated = prettyDate(meta.generated_at);
+---
+<BaseLayout title={title} description={description}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Home</a> &rsaquo; <span>Terms &amp; Disclaimer</span>
+  </nav>
+  <h1>Terms &amp; Disclaimer</h1>
+  <p class="lead">Plain and short: {meta.title} gives you reference figures and tools to save time — but
+    it is not a lawyer, an accountant, or a court, and you should confirm anything that matters against
+    the official source before relying on it.</p>
+  <p class="source-note">Last updated {updated}.</p>
+
+  <h2>Not legal, tax, or financial advice</h2>
+  <p>The interest rates, statutory citations, calculators, and other content on this site are provided
+    for general informational and reference purposes only. They are <strong>not</strong> legal, tax,
+    accounting, or financial advice, and no attorney–client or other professional relationship is
+    created by your use of the site. Laws and published rates change, official sources control, and the
+    correct figure can depend on facts specific to your situation (the type of claim, dates, the
+    jurisdiction, and applicable carve-outs). Always verify the controlling value against the official
+    statute, agency publication, or court, and consult a qualified professional for advice about your
+    circumstances.</p>
+
+  <h2>Accuracy and "as-is"</h2>
+  <p>We work hard to keep each value correct — verifying against official statutes and re-checking on a
+    schedule — and every figure links to its source and shows its effective date. Even so, the site is
+    provided <strong>"as is" and "as available," without warranties of any kind</strong>, express or
+    implied, including accuracy, completeness, timeliness, merchantability, or fitness for a particular
+    purpose. Automated calculations are estimates; courts, agencies, and creditors may apply different
+    rounding or conventions.</p>
+
+  <h2>Limitation of liability</h2>
+  <p>To the fullest extent permitted by law, {meta.title} and its operators will not be liable for any
+    loss or damage arising from your use of, or reliance on, the site or its content, including direct,
+    indirect, incidental, consequential, or punitive damages. Your sole remedy if you are dissatisfied
+    is to stop using the site.</p>
+
+  <h2>Use of the data and API</h2>
+  <p>Underlying rate figures are drawn from U.S., U.K., and E.U. government works, which are generally
+    not subject to copyright. Our editorial text, page design, and the way the data is compiled and
+    presented are ours. You are welcome to link to the site and to use the public
+    <a href="/api/">JSON API</a> for reasonable, non-abusive purposes; please don't scrape it in a way
+    that burdens the service, and please attribute {meta.title} when you republish figures.</p>
+
+  <h2>Third-party links and ads</h2>
+  <p>The site links to official sources and may display third-party advertising. We don't control and
+    aren't responsible for third-party sites or ad content. See our <a href="/privacy/">Privacy Policy</a>
+    for how advertising cookies work and your choices.</p>
+
+  <h2>Changes</h2>
+  <p>We may update these terms as the site evolves. Continued use after changes means you accept the
+    updated terms.</p>
+
+  <h2>Contact</h2>
+  <p>Questions? Email <a href="mailto:hello@statuterates.com">hello@statuterates.com</a>.</p>
+
+  <div class="disclaimer">Reference data only — not legal, tax, or financial advice. Always confirm the
+    controlling value against the official source before relying on it.</div>
+</BaseLayout>

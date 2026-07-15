@@ -64,7 +64,7 @@ const calcHref = CALC_FOR[slug]
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.
 const pj = isPrejudgment(entity);
-const stateName = entity.name.replace(/ (Pre)?[Jj]udgment Interest Rate$/, '');
+const stateName = entity.name.replace(/ (?:Pre|Post-)?[Jj]udgment Interest Rate$/, '');
 const allSlugs = new Set(getAllEntities().map((e) => e.slug));
 let postSibling = null, preSibling = null;
 if (pj) {
@@ -137,7 +137,7 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/">Rates</a> &rsaquo; <span>{entity.name}</span>
   </nav>
   <h1>{entity.name}</h1>

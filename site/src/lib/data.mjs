@@ -58,12 +58,15 @@ export function stateHubs() {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// Prejudgment states the calculator can honestly compute: a FIXED statutory rate with a deterministic
-// method — simple interest, or (Colorado) compounded annually. Single unambiguous rate. Excludes
-// formula/VARIABLE rates whose value floated over the accrual window (incl. Michigan, which also
-// compounds but is variable and we hold only the current value), discretionary states, and Illinois
-// (dual 6%/5% + 5-yr cap). Slug base is '<key>-prejudgment-rate'. Single source of truth for the
-// calculator series AND the "Calculate interest" cross-links on the rate pages.
+// Prejudgment states whose GENERAL / liquidated-claim rate the calculator can honestly compute: a
+// FIXED statutory rate with a deterministic method — simple interest, or (Colorado) compounded
+// annually. Several members (GA, KS, MT, NE, UT) are dual-rate — they also carry a separate, usually
+// VARIABLE tort/personal-injury rate; the calculator computes only their fixed general/liquidated rate
+// and the page says so explicitly (see prejudgment-interest.astro). Excludes states whose sole/headline
+// rate is variable (incl. Michigan — variable + we hold only the current value), discretionary states,
+// and Illinois (dual 6%/5% with a 5-yr cap + from-filing accrual that a flat calc can't honor). Slug
+// base is '<key>-prejudgment-rate'. Single source of truth for the calculator series AND the
+// "Calculate interest" cross-links on the rate pages.
 export const PREJUDGMENT_CALC_SAFE = [
   'alabama', 'colorado', 'dc', 'georgia', 'idaho', 'kansas', 'massachusetts', 'montana', 'nebraska',
   'new-york', 'north-carolina', 'north-dakota', 'oregon', 'pennsylvania', 'rhode-island',

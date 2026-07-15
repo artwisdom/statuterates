@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta, prettyDate } from '../lib/data.mjs';
+const meta = getMeta();
+const title = `Privacy Policy | ${meta.title}`;
+const description = `How ${meta.title} handles data: a static reference site with no accounts and no personal-data collection by us, plus how advertising cookies work if ads are enabled, and your choices.`;
+const updated = prettyDate(meta.generated_at);
+---
+<BaseLayout title={title} description={description} noindex={false}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Home</a> &rsaquo; <span>Privacy</span>
+  </nav>
+  <h1>Privacy Policy</h1>
+  <p class="lead">{meta.title} is a static reference website. We keep this simple because we collect
+    very little: there are no accounts, and the calculators run entirely in your browser.</p>
+  <p class="source-note">Last updated {updated}.</p>
+
+  <h2>Who we are</h2>
+  <p>{meta.title} publishes reference data on statutory, judgment, and tax interest rates. The site is a
+    set of static pages served over HTTPS. You can reach us at
+    <a href="mailto:privacy@statuterates.com">privacy@statuterates.com</a>.</p>
+
+  <h2>What we collect</h2>
+  <ul class="clean">
+    <li><strong>Nothing you type stays with us.</strong> The interest calculators compute in your
+      browser (client-side JavaScript). The amounts and dates you enter are never sent to us or stored.</li>
+    <li><strong>No accounts, no sign-up, no marketing emails.</strong> We don't ask for your name,
+      email, or any personal information to use the site.</li>
+    <li><strong>Standard server logs.</strong> Like almost all websites, our hosting and content-delivery
+      providers (currently Cloudflare and GitHub Pages) automatically record basic technical requests —
+      IP address, browser type, and the page requested — to deliver the site and protect it from abuse.
+      We do not use these logs to identify you.</li>
+  </ul>
+
+  <h2>Advertising &amp; cookies</h2>
+  <p>This site is supported by display advertising. When advertising is enabled, we use
+    <strong>Google AdSense</strong>, a third-party advertising service provided by Google LLC. To show
+    ads, Google and its partners may:</p>
+  <ul class="clean">
+    <li>Use cookies and similar technologies (including the DoubleClick/Google advertising cookie) to
+      serve ads based on your prior visits to this and other websites.</li>
+    <li>Collect information such as your IP address, device and browser information, and interactions
+      with ads, in accordance with <a href="https://policies.google.com/technologies/ads" rel="nofollow noopener" target="_blank">Google's advertising policies</a>.</li>
+  </ul>
+  <p>Third-party vendors, including Google, use cookies to serve ads based on your prior visits. You can
+    opt out of personalized advertising by visiting
+    <a href="https://adssettings.google.com" rel="nofollow noopener" target="_blank">Google Ads Settings</a>,
+    and opt out of some third-party vendors' use of cookies at
+    <a href="https://www.aboutads.info/choices/" rel="nofollow noopener" target="_blank">aboutads.info/choices</a>
+    (or <a href="https://www.youronlinechoices.eu" rel="nofollow noopener" target="_blank">youronlinechoices.eu</a>
+    in Europe). You can also block or delete cookies in your browser settings; the site's data and
+    calculators will still work.</p>
+
+  <h2>If you are in the EEA, UK, or Switzerland</h2>
+  <p>Where required, we present a consent choice (via Google's certified consent management) before any
+    advertising cookies that require consent are set, and ads are shown on a non-personalized basis if
+    you do not consent. You have the right to access, correct, or erase personal data, and to withdraw
+    consent, under the GDPR/UK GDPR. Google acts as an independent controller for the advertising data
+    it processes; see <a href="https://policies.google.com/privacy" rel="nofollow noopener" target="_blank">Google's Privacy Policy</a>.</p>
+
+  <h2>If you are in California</h2>
+  <p>We do not sell your personal information for money. Some sharing of advertising identifiers with ad
+    partners may qualify as a "sale" or "sharing" under the CCPA/CPRA; you can opt out using the tools
+    above (Google Ads Settings and aboutads.info). California residents may request access to or deletion
+    of personal information by emailing <a href="mailto:privacy@statuterates.com">privacy@statuterates.com</a>.</p>
+
+  <h2>Analytics</h2>
+  <p>We use privacy-respecting, aggregate traffic measurement to understand which pages are useful. We do
+    not build advertising profiles from it. If we add a named analytics provider, it will be listed here.</p>
+
+  <h2>Children</h2>
+  <p>This is a general-audience reference site and is not directed to children under 13. We do not
+    knowingly collect personal information from children.</p>
+
+  <h2>Data retention</h2>
+  <p>Because we don't collect personal data through the site, there is nothing for us to retain about
+    you. Server logs held by our infrastructure providers are kept only as long as those providers'
+    standard security and operational policies require.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>We may update this policy as the site evolves (for example, when advertising is turned on or a new
+    provider is added). The "last updated" date above reflects the current version.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy or your data? Email
+    <a href="mailto:privacy@statuterates.com">privacy@statuterates.com</a>.</p>
+
+  <div class="disclaimer">Reference data only — not legal, tax, or financial advice. See our
+    <a href="/terms/">Terms &amp; Disclaimer</a>.</div>
+</BaseLayout>

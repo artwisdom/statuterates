@@ -57,7 +57,7 @@ const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
     </div>
     <button type="submit" class="calc-btn">Calculate interest</button>
   </form>
-  <div class="calc-result" data-calc-result hidden></div>
+  <div class="calc-result" data-calc-result role="status" aria-live="polite" hidden></div>
   <p class="calc-fineprint">Estimate for reference only — courts, agencies and creditors may apply
     different rounding or conventions. Not legal, tax, or financial advice.</p>
 </div>

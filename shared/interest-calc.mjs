@@ -112,8 +112,9 @@ function nextAnniversary(originIso, afterIso) {
   let y = a.getUTCFullYear() + 1;
   // walk forward from the year after `afterIso` until the anniversary is strictly after it
   for (;;) {
-    const cand = new Date(Date.UTC(y, o.getUTCMonth(), Math.min(o.getUTCDate(), 28) === o.getUTCDate() ? o.getUTCDate() : o.getUTCDate(), 0, 0, 0));
-    // handle Feb 29 origins: Date.UTC rolls invalid dates forward, which is acceptable here
+    const cand = new Date(Date.UTC(y, o.getUTCMonth(), o.getUTCDate(), 0, 0, 0));
+    // A Feb-29 origin has no anniversary in common years; Date.UTC rolls it to Mar 1, which we accept
+    // as the compounding boundary (a standard convention). This only affects Feb-29 accrual starts.
     const candIso = isoOf(cand);
     if (candIso > afterIso) return candIso;
     y++;

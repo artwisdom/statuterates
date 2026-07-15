@@ -62,7 +62,14 @@ const NAV = [
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={`${origin}og-image.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${meta.title} — statutory, judgment & tax interest rates`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${origin}og-image.png`} />
 
     {[...siteJsonLd, ...jsonLdArray].map((obj) => (
       <script type="application/ld+json" set:html={JSON.stringify(obj)} />
@@ -95,7 +102,8 @@ const NAV = [
         --green: #16463a;      /* deep pine */
         --green-2: #1d5c4a;
         --green-wash: #e5ede7;
-        --gold: #9c7b2e;       /* antique gold — hairlines, eyebrows, § marks */
+        --gold: #9c7b2e;       /* antique gold — hairlines, rules, § marks (decorative) */
+      --gold-ink: #6f571c;   /* darker gold for small TEXT (eyebrows) — AA-contrast on paper */
         --gold-2: #b8933c;
         --amber-bg: #f4ead2;
         --amber-ink: #8a6a1e;
@@ -150,7 +158,9 @@ const NAV = [
       h3 { font-family: var(--serif); font-weight: 560; font-size: 1.12rem; margin: 0 0 6px; font-variation-settings: 'opsz' 32; }
       p { margin: 0 0 16px; }
       p.lead { font-size: 1.2rem; line-height: 1.55; color: var(--ink); max-width: 46rem; }
-      .eyebrow { font-family: var(--sans); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold); margin-bottom: 10px; }
+      .eyebrow { font-family: var(--sans); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold-ink); margin-bottom: 10px; }
+      .skip { position: absolute; left: -9999px; }
+      .skip:focus { position: fixed; left: 8px; top: 8px; z-index: 100; background: var(--green); color: var(--paper); padding: 8px 14px; border-radius: 3px; font-family: var(--sans); font-weight: 700; }
 
       /* ---- Rate hero (ledger entry) ----------------------------------------- */
       .rate-hero { margin: 22px 0 26px; padding: 22px 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line); }
@@ -159,7 +169,7 @@ const NAV = [
 
       .badge { display: inline-block; font-family: var(--sans); font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 2px; border: 1px solid; }
       .badge.high { color: var(--green); border-color: rgba(22,70,58,0.3); background: var(--green-wash); }
-      .badge.medium { color: var(--amber-ink); border-color: rgba(138,106,30,0.35); background: var(--amber-bg); }
+      .badge.medium { color: #7a5c17; border-color: rgba(138,106,30,0.35); background: var(--amber-bg); }
 
       /* ---- Cards / grids ----------------------------------------------------- */
       .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(258px, 1fr)); gap: 0; border-top: 1px solid var(--line); }
@@ -224,6 +234,7 @@ const NAV = [
     </style>
   </head>
   <body>
+    <a class="skip" href="#main">Skip to content</a>
     <div class="headband"></div>
     <header class="site">
       <div class="wrap">
@@ -231,13 +242,13 @@ const NAV = [
           <span class="mark">§</span>
           <span class="name"><b>Statute</b><i>Rates</i></span>
         </a>
-        <nav>
+        <nav aria-label="Primary">
           {NAV.map((n) => <a href={n.href}>{n.label}</a>)}
         </nav>
       </div>
       <div class="rule"></div>
     </header>
-    <main>
+    <main id="main" tabindex="-1">
       <div class="wrap">
         <slot />
       </div>
@@ -255,6 +266,10 @@ const NAV = [
           <a href="/changes/">Rate changes (RSS)</a> ·
           <a href="/api/">JSON API</a> ·
           <a href="/llms.txt">llms.txt</a>
+        </p>
+        <p>
+          <a href="/privacy/">Privacy</a> ·
+          <a href="/terms/">Terms &amp; Disclaimer</a>
         </p>
         <p>Source values are US, UK &amp; EU government works. Reference data — not legal, tax, or financial advice.</p>
       </div>

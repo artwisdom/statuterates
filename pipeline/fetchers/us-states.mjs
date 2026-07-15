@@ -173,8 +173,8 @@ const STATES_3 = [
     notes: "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20… Verify against the statute; not legal advice." },
   { code: "DE", name: "Delaware", slug: "delaware-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-07-08", statute: "6 Del. C. § 2301", srcId: "de-jud", srcName: "Delaware judgment interest (6 Del. C. § 2301)", publisher: "Delaware — delcode.delaware.gov", url: "https://delcode.delaware.gov/title6/c023/",
     notes: "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Legal/post-judgment rate = Federal Reserve discount rate (in practice the Fed's \"primary credit rate,\" which replaced the old adjustment-credit discount rate in Jan 2003) + 5… Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the… Verify the current value at delcode.delaware.gov; not legal advice." },
-  { code: "DC", name: "District of Columbia", slug: "dc-judgment-rate", value: 5, value_text: "5%", kind: "variable", asof: "2026-04-01", statute: "D.C. Code § 28-3302(c)", srcId: "dc-jud", srcName: "District of Columbia judgment interest (D.C. Code § 28-3302(c))", publisher: "District of Columbia — code.dccouncil.gov", url: "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
-    notes: "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (as of April 1, 2026). . Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC section 6621 (26 U.S.C. § 6621) for underpayments of tax, rounded to the nearest full percent (if… Simple interest. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per… Verify the current value at code.dccouncil.gov; not legal advice." },
+  { code: "DC", name: "District of Columbia", slug: "dc-judgment-rate", value: 5, value_text: "5%", kind: "variable", asof: "2026-07-01", statute: "D.C. Code § 28-3302(c)", srcId: "dc-jud", srcName: "District of Columbia judgment interest (D.C. Code § 28-3302(c))", publisher: "District of Columbia — code.dccouncil.gov", url: "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
+    notes: "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (Q3 2026, effective July 1, 2026). Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC §6621 (26 U.S.C. §6621) for underpayments of tax, rounded to the nearest full percent — with the current 7% federal underpayment rate, 70% × 7% = 4.9% rounds to 5%. Simple interest. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per… Verify the current value at code.dccouncil.gov; not legal advice." },
   { code: "HI", name: "Hawaii", slug: "hawaii-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "Haw. Rev. Stat. 478-3. Related: 478-2", srcId: "hi-jud", srcName: "Hawaii judgment interest (Haw. Rev. Stat. 478-3. Related: 478-2)", publisher: "Hawaii — capitol.hawaii.gov", url: "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
     notes: "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice." },
   { code: "ID", name: "Idaho", slug: "idaho-judgment-rate", value: 8.875, value_text: "8.875%", kind: "variable", asof: "2026-07-01", statute: "Idaho Code § 28-22-104(2)", srcId: "id-jud", srcName: "Idaho judgment interest (Idaho Code § 28-22-104(2))", publisher: "Idaho — sto.idaho.gov", url: "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
@@ -268,8 +268,6 @@ const PREJUDG = [
     notes: "Prejudgment interest under 735 ILCS 5/2-1303(c) — 6% / 5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Illinois’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
   { code: "IN", name: "Indiana", slug: "indiana-prejudgment-rate", value: 8, value_text: "8%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "IC 24-4.6-1-103 (8% contract/account); IC 34-51-4-9 (tort, 6–10% discretionary)", srcId: "in-prejud", srcName: "Indiana prejudgment interest (Contract/liquidated: IC 24-4.6-1-103)", publisher: "Indiana — iga.in.gov", url: "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
     notes: "Indiana prejudgment interest is 8% for contract, written-instrument, and account claims (IC 24-4.6-1-103). SEPARATELY, tort/personal-injury prejudgment interest is set at the court's discretion within a 6%–10% per-year band (simple) under IC 34-51-4-9 — the 8% figure does not apply to tort claims. Verified 2026-07-11. Not legal advice." },
-  { code: "IA", name: "Iowa", slug: "iowa-prejudgment-rate", value: 6.06, value_text: "6.06%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Iowa Code § 668.13", srcId: "ia-prejud", srcName: "Iowa prejudgment interest (Iowa Code § 668.13)", publisher: "Iowa — legis.iowa.gov", url: "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-    notes: "Prejudgment interest under Iowa Code § 668.13 — 6.06% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Iowa’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at legis.iowa.gov. Not legal advice." },
   { code: "KS", name: "Kansas", slug: "kansas-prejudgment-rate", value: 10, value_text: "10% / 6.25%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "K.S.A. 16-201 (10% general); 16-201(b)/16-204(e)(1) (tort filed ≥7/1/2023)", srcId: "ks-prejud", srcName: "Kansas prejudgment interest (K.S.A. 16-201)", publisher: "Kansas — ksrevisor.gov", url: "https://ksrevisor.gov/statutes/chapters/ch16/016_002_0001.html",
     notes: "Kansas general/contract prejudgment interest is 10% fixed (K.S.A. 16-201(a)). For civil TORT actions filed on or after July 1, 2023, prejudgment interest is instead two percentage points below the K.S.A. 16-204(e)(1) judgment rate — currently 6.25% (8.25% − 2), variable, recomputed each July 1 (K.S.A. 16-201(b)). Verified 2026-07-11. Not legal advice." },
   { code: "KY", name: "Kentucky", slug: "kentucky-prejudgment-rate", value: 8, value_text: "8%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "KRS 360.010(1)", srcId: "ky-prejud", srcName: "Kentucky prejudgment interest (KRS 360.010(1))", publisher: "Kentucky — apps.legislature.ky.gov", url: "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
@@ -363,6 +361,22 @@ const IA_NOTE =
   'This series applies the weekly-average H.15 value + 2pp for each week. A contract rate governs if the judgment ' +
   'is on a contract that fixes one (§668.13(2)). Confirm against the Iowa Judicial Branch table; not legal advice.';
 
+// Iowa PREjudgment interest uses the identical §668.13 formula as post-judgment, so it is derived from
+// the SAME weekly H.15 series — the two Iowa pages therefore always report the same current rate.
+const IA_PREJUDGMENT_ENTITY = {
+  slug: 'iowa-prejudgment-rate',
+  name: 'Iowa Prejudgment Interest Rate',
+  entity_type: 'rate_series',
+  jurisdiction: 'US',
+  region: 'US States — Prejudgment',
+  metadata: { state: 'IA', statute: 'Iowa Code §668.13', basis: 'statute-variable', metric: 'prejudgment', kind: 'variable' },
+};
+const IA_PREJUDGMENT_NOTE =
+  'Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant ' +
+  'maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week ' +
+  '(it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. ' +
+  'Confirm against the Iowa Judicial Branch table; not legal advice.';
+
 export function buildStateFixed({ retrieved_at }) {
   const entities = FIXED.map((f) => f.entity);
   const observations = FIXED.map((f) => ({
@@ -385,19 +399,27 @@ export function buildStateFixed({ retrieved_at }) {
 }
 
 export function buildIowa(weeks, { retrieved_at }) {
-  const observations = weeks.map((w) => ({
-    entitySlug: IA_ENTITY.slug,
-    metric: 'annual_rate',
-    value_numeric: Math.round((w.avg + 2) * 100) / 100,
-    value_text: `${Math.round((w.avg + 2) * 100) / 100}%`,
-    unit: 'percent_per_annum',
-    effective_date: w.week,
-    source_id: 'ia-legis',
-    source_url: 'https://www.legis.iowa.gov/docs/code/668.13.pdf',
-    retrieved_at,
-    confidence: 'medium',
-    method: 'derived_ia_668_13_weekly_cmt_plus_2',
-    notes: IA_NOTE,
-  }));
-  return { entity: IA_ENTITY, observations };
+  // Post- and PREjudgment interest share §668.13's CMT+2 formula, so both series are derived from the
+  // same weekly H.15 values and therefore always report the same current rate.
+  const mk = (slug, notes) => weeks.map((w) => {
+    const v = Math.round((w.avg + 2) * 100) / 100;
+    return {
+      entitySlug: slug,
+      metric: 'annual_rate',
+      value_numeric: v,
+      value_text: `${v}%`,
+      unit: 'percent_per_annum',
+      effective_date: w.week,
+      source_id: 'ia-legis',
+      source_url: 'https://www.legis.iowa.gov/docs/code/668.13.pdf',
+      retrieved_at,
+      confidence: 'medium',
+      method: 'derived_ia_668_13_weekly_cmt_plus_2',
+      notes,
+    };
+  });
+  return {
+    entities: [IA_ENTITY, IA_PREJUDGMENT_ENTITY],
+    observations: [...mk(IA_ENTITY.slug, IA_NOTE), ...mk(IA_PREJUDGMENT_ENTITY.slug, IA_PREJUDGMENT_NOTE)],
+  };
 }

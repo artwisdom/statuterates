@@ -66,9 +66,20 @@ ships until you activate it.
   minimum and pairs well with a reference site).
 - **ONE-SWITCH ACTIVATION (AdSense):** once approved, just add a repo variable — Settings → Secrets and
   variables → Actions → Variables → New variable: `ADSENSE_CLIENT = ca-pub-XXXXXXXXXXXXXXXX` — then
-  re-run `deploy-site`. That injects Google Auto Ads site-wide; zero code edits. Delete the variable to
-  turn ads off. (Ezoic uses its own site-wide script — paste it into `BaseLayout.astro`'s head, guarded
-  the same way.)
+  re-run `deploy-site`. That injects Google Auto Ads site-wide AND auto-generates the matching
+  `/ads.txt` (both keyed off the same variable); zero code edits. Delete the variable to turn ads off.
+  (Ezoic uses its own site-wide script — paste it into `BaseLayout.astro`'s head, guarded the same way.)
+- **REQUIRED before you flip the switch (compliance — protects the account & is legally required):**
+  1. **Privacy policy + Terms** — already shipped at `/privacy/` and `/terms/`, linked in the footer.
+     They disclose Google's ad cookies and opt-outs, which AdSense reviews during approval. Nothing to do.
+  2. **Consent management (EEA/UK/Switzerland).** Google requires a certified CMP to serve ads there.
+     The zero-code path: in the AdSense dashboard go to **Privacy & messaging → GDPR** (and **CCPA** for
+     California) and turn on Google's own consent messages — they serve automatically through the Auto
+     Ads tag, no code needed. Do this in the same sitting as setting `ADSENSE_CLIENT`. **Do not serve ads
+     without it.**
+  3. **Verify** `/ads.txt` shows your `google.com, pub-…, DIRECT, f08c47fec0942fa0` line after deploy
+     (it reads the same variable), and set up a working inbox for `hello@`/`privacy@statuterates.com`
+     (Cloudflare → Email Routing is free) so the contact addresses on `/about/`, `/privacy/`, `/terms/` resolve.
 - **At ~10k sessions/mo:** revisit Ezoic's higher tiers.
 - **At 50k+ sessions/mo:** apply to **Mediavine** (Journey tier ~10k) or **Raptive** (~100k) for much
   higher RPMs; switch the slot code then.

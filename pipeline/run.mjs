@@ -89,7 +89,7 @@ async function runAll() {
       observations: stateFixed.observations.filter((o) => o.source_id === source.id),
     }));
     const iaBundle = stateBundles.find((b) => b.source.id === 'ia-legis');
-    iaBundle.entities.push(iowa.entity);
+    iaBundle.entities.push(...iowa.entities);
     iaBundle.observations.push(...iowa.observations);
 
     // 3) LOAD into SQLite (source of truth)

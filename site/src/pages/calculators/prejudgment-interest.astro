@@ -85,7 +85,7 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--muted);margin-bottom:6px">
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Prejudgment interest</span>
   </nav>
   <h1>Prejudgment interest calculator</h1>
@@ -122,8 +122,8 @@ const jsonLd = [
     Colorado compounds annually and has two rates: 8% general (C.R.S. §5-12-102) and 9% personal
     injury (C.R.S. §13-21-101, which runs from the date suit was filed — set that as the accrual date).
     This calculator uses each state's <strong>general / liquidated-claim</strong> rate; several states
-    (Georgia, Kansas, Montana, Nebraska, Utah) apply a <em>separate, usually variable</em> rate to tort
-    or personal-injury claims — see the state's page for that figure. These statutory rates have been
+    (Georgia, Idaho, Kansas, Montana, Nebraska, Utah) apply a <em>separate, usually variable</em> rate
+    to tort or personal-injury claims — see the state's page for that figure. These statutory rates have been
     stable for years, so the calculator accepts accrual dates back to 1990 at the current rate.</p>
 
   <AdSlot id="calc-top" />
@@ -148,14 +148,17 @@ const jsonLd = [
   </div>
 
   <h2>Why other states aren't here</h2>
-  <p>A prejudgment calculator is only honest when the rate is fixed and the compounding rule is
-    deterministic. We leave out two groups on purpose, because a single computed number would be
+  <p>A prejudgment calculator is only honest when a single fixed rate applies and the compounding rule
+    is deterministic. We leave out three groups on purpose, because one computed number would be
     misleading:</p>
   <ul class="clean">
-    <li><strong>Formula / variable-rate states</strong> (e.g. Florida, California, Texas — and Michigan,
-      whose rate resets twice a year and <em>also</em> compounds) — the rate <em>changed</em> over the
-      years the interest accrued, so the correct figure stitches together each period's rate. See the
-      state page for the current rate and formula.</li>
+    <li><strong>Formula / variable-rate states</strong> (e.g. Florida, Texas — and Michigan, whose rate
+      resets twice a year and <em>also</em> compounds) — the rate <em>changed</em> over the years the
+      interest accrued, so the correct figure stitches together each period's rate. See the state page
+      for the current rate and formula.</li>
+    <li><strong>Two-fixed-rate states</strong> (California, Illinois) — both rates are fixed, but which
+      one applies turns on the claim (contract vs. tort/personal injury: California is 10% vs. 7%,
+      Illinois 5% vs. 6%), so a single number would be ambiguous. Each state's page shows both.</li>
     <li><strong>Discretionary states</strong> (e.g. Virginia, Connecticut, Tennessee) — a court decides
       whether to award prejudgment interest and when it starts, so there is no automatic amount to compute.</li>
   </ul>

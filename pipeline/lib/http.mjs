@@ -197,18 +197,25 @@ export function nowIso() {
  * @param {object} opts
  * @param {string} opts.sourceId  logical source id (for the per-source fetch cap)
  * @param {boolean} [opts.force]  bypass cache (still throttles + writes cache)
+ * @param {number} [opts.maxAgeMs]  cache freshness window; a cached entry older than this is
+ *   treated as a miss and re-fetched. Default 2 days — keeps market series (IRS/H.15) current on
+ *   any run while staying polite (at most one hit per URL per window). Set 0/Infinity to disable.
  * @returns {Promise<{url,status,retrieved_at,body,fromCache,contentType}>}
  */
-export async function politeGet(url, { sourceId = 'default', force = false } = {}) {
+const DEFAULT_MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000; // 2 days
+export async function politeGet(url, { sourceId = 'default', force = false, maxAgeMs = DEFAULT_MAX_AGE_MS } = {}) {
   const u = new URL(url);
   const host = u.host;
   const origin = u.origin;
 
-  // 1) Cache first — never re-fetch what we have.
+  // 1) Cache first — but treat a cache entry older than maxAgeMs as stale so the data never lags the
+  //    source. (The CI runner starts cacheless and always fetches fresh; this keeps LOCAL regenerations
+  //    from silently republishing stale market rates, which is how a freshness lag slips in.)
   if (!force) {
     const cached = readCache(url);
     if (cached && cached.status === 200) {
-      return { ...cached, fromCache: true };
+      const age = Date.now() - Date.parse(cached.retrieved_at || 0);
+      if (!(age >= 0) || age < maxAgeMs) return { ...cached, fromCache: true };
     }
   }
 
