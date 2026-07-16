@@ -80,6 +80,14 @@ ships until you activate it.
   3. **Verify** `/ads.txt` shows your `google.com, pub-…, DIRECT, f08c47fec0942fa0` line after deploy
      (it reads the same variable), and set up a working inbox for `hello@`/`privacy@statuterates.com`
      (Cloudflare → Email Routing is free) so the contact addresses on `/about/`, `/privacy/`, `/terms/` resolve.
+- **MAXIMIZE REVENUE, TASTEFULLY (optional second switch):** with just `ADSENSE_CLIENT` set, Google
+  **Auto Ads** places ads automatically (hands-off, but Google-controlled). For higher RPM and full
+  control over placement, add intentional in-content units: in AdSense go to **Ads → By ad unit → Display
+  ads**, create one **responsive** unit, copy its numeric **slot id**, and set repo variable
+  `ADSENSE_SLOT=<that id>` + redeploy. Every page then shows two labeled, reserved-height in-content ads
+  (top & bottom of content — already scaffolded via `AdSlot`), which earn well and read clean. To keep it
+  from looking spammy, in **Ads → your site → Auto ads** turn OFF **Anchor** and **Vignette** (the
+  full-screen formats) and keep the density slider low; the in-content units carry the revenue.
 - **At ~10k sessions/mo:** revisit Ezoic's higher tiers.
 - **At 50k+ sessions/mo:** apply to **Mediavine** (Journey tier ~10k) or **Raptive** (~100k) for much
   higher RPMs; switch the slot code then.

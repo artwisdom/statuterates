@@ -50,6 +50,9 @@ jobs:
           SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
           # One-switch ads: set repo variable ADSENSE_CLIENT=ca-pub-XXXX after AdSense approval.
           ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT || '' }}
+          # Optional: set ADSENSE_SLOT to a "Display/responsive" ad-unit id to render intentional,
+          # labeled in-content ad units (top/bottom of each page). Empty = rely on Auto Ads only.
+          ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT || '' }}
         run: npm run build
 
       - name: Apply base path for GitHub Pages project subpath

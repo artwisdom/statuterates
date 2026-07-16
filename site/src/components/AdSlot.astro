@@ -1,10 +1,29 @@
 ---
-// Reserved ad slot. Intentionally renders NOTHING but an HTML comment marker until the owner is
-// approved by an ad network. No ad code, no publisher IDs, no external scripts ship today.
-// Activation steps are in docs/DEPLOYMENT_GUIDE.md (§ "Ad network application").
+// In-content ad slot. Two-switch, tasteful by design:
+//   • ADSENSE_CLIENT set, ADSENSE_SLOT empty  -> renders nothing here; Google Auto Ads (loaded in
+//     BaseLayout) decides placement automatically.
+//   • ADSENSE_CLIENT + ADSENSE_SLOT both set   -> renders a labeled, responsive display unit in THIS
+//     exact spot (top/bottom of content) with reserved height to avoid layout shift. Intentional
+//     in-content placement earns the most and reads cleanest. Create one "Display / responsive" ad
+//     unit in AdSense, put its slot id in the ADSENSE_SLOT repo variable, redeploy.
+// Nothing renders until an ad account is configured, so this is inert by default.
 const { id = 'ad' } = Astro.props;
+const client = (process.env.ADSENSE_CLIENT || '').trim();
+const slot = (process.env.ADSENSE_SLOT || '').trim();
+const active = client && slot;
 ---
-<div class="ad-slot" data-ad-slot={id}>
-  {/* AD_SLOT: activate after ad network approval — see docs/DEPLOYMENT_GUIDE.md.
-      Do NOT add publisher IDs or ad scripts here until the account is approved. */}
-</div>
+{active ? (
+  <aside class="ad-slot" data-ad-slot={id} aria-label="Advertisement">
+    <span class="ad-label">Advertisement</span>
+    <ins class="adsbygoogle" style="display:block" data-ad-client={client} data-ad-slot={slot} data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </aside>
+) : (
+  <div class="ad-slot ad-slot--empty" data-ad-slot={id} aria-hidden="true"></div>
+)}
+<style>
+  .ad-slot { margin: 32px auto; text-align: center; max-width: 728px; }
+  .ad-slot--empty { margin: 0; }
+  .ad-label { display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); opacity: 0.55; margin-bottom: 6px; }
+  .ad-slot .adsbygoogle { display: block; min-height: 100px; }
+</style>
