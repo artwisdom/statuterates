@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T02:13:37.436Z",
+  "generated_at": "2026-07-16T01:46:57.280Z",
   "slug": "arizona-judgment-rate",
   "name": "Arizona Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-08",
       "source_id": "az-ars",
       "source_url": "https://www.azleg.gov/ars/44/01201.htm",
-      "retrieved_at": "2026-07-15T02:13:37.414Z",
+      "retrieved_at": "2026-07-16T01:46:57.257Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under A.R.S. §44-1201(B): the lesser of 10% per annum or the Federal Reserve prime rate (Fed H.15) + 1 percentage point — currently 7.75% (prime ~6.75% + 1). Simple interest. A written agreement may set a different rate. Verify against the current prime rate; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-08",
         "source_id": "az-ars",
         "source_url": "https://www.azleg.gov/ars/44/01201.htm",
-        "retrieved_at": "2026-07-15T02:13:37.414Z",
+        "retrieved_at": "2026-07-16T01:46:57.257Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under A.R.S. §44-1201(B): the lesser of 10% per annum or the Federal Reserve prime rate (Fed H.15) + 1 percentage point — currently 7.75% (prime ~6.75% + 1). Simple interest. A written agreement may set a different rate. Verify against the current prime rate; not legal advice."

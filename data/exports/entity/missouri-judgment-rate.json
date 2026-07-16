@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T02:13:37.436Z",
+  "generated_at": "2026-07-16T01:46:57.280Z",
   "slug": "missouri-judgment-rate",
   "name": "Missouri Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "mo-jud",
       "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-      "retrieved_at": "2026-07-15T02:13:37.414Z",
+      "retrieved_at": "2026-07-16T01:46:57.257Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Mo. Rev. Stat. §408.040: NON-TORT/contract judgments bear 9% fixed (or the contract rate if higher); TORT judgments bear the intended Federal Funds rate + 5% — currently about 8.75% (variable). Simple interest. Verify at revisor.mo.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "mo-jud",
         "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-        "retrieved_at": "2026-07-15T02:13:37.414Z",
+        "retrieved_at": "2026-07-16T01:46:57.257Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Mo. Rev. Stat. §408.040: NON-TORT/contract judgments bear 9% fixed (or the contract rate if higher); TORT judgments bear the intended Federal Funds rate + 5% — currently about 8.75% (variable). Simple interest. Verify at revisor.mo.gov; not legal advice."

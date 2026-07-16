@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T02:13:37.436Z",
+  "generated_at": "2026-07-16T01:46:57.280Z",
   "slug": "indiana-judgment-rate",
   "name": "Indiana Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "in-jud",
       "source_url": "https://iga.in.gov/laws/2025/ic/titles/24",
-      "retrieved_at": "2026-07-15T02:13:37.414Z",
+      "retrieved_at": "2026-07-16T01:46:57.257Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under Ind. Code § 24-4.6-1-101 — 8% per year, fixed by statute (simple interest). This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind.… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "in-jud",
         "source_url": "https://iga.in.gov/laws/2025/ic/titles/24",
-        "retrieved_at": "2026-07-15T02:13:37.414Z",
+        "retrieved_at": "2026-07-16T01:46:57.257Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under Ind. Code § 24-4.6-1-101 — 8% per year, fixed by statute (simple interest). This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind.… Verify against the statute; not legal advice."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T02:13:37.436Z",
+  "generated_at": "2026-07-16T01:46:57.280Z",
   "slug": "pennsylvania-prejudgment-rate",
   "name": "Pennsylvania Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "pa-prejud",
       "source_url": "https://www.pacodeandbulletin.gov/secure/pacode/data/231/chapter200/s238.html",
-      "retrieved_at": "2026-07-15T02:13:37.414Z",
+      "retrieved_at": "2026-07-16T01:46:57.257Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Pennsylvania prejudgment interest is 6% simple, as of right, on contract and other liquidated claims (41 P.S. §202). In tort actions for bodily injury, death, or property damage, the operative figure is instead Pa.R.C.P. 238 'delay damages' — the prime rate (first Wall Street Journal edition each January) + 1%, simple, not compounded (231 Pa. Code Rule 238), a variable rate. Verified 2026-07-11. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "pa-prejud",
         "source_url": "https://www.pacodeandbulletin.gov/secure/pacode/data/231/chapter200/s238.html",
-        "retrieved_at": "2026-07-15T02:13:37.414Z",
+        "retrieved_at": "2026-07-16T01:46:57.257Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Pennsylvania prejudgment interest is 6% simple, as of right, on contract and other liquidated claims (41 P.S. §202). In tort actions for bodily injury, death, or property damage, the operative figure is instead Pa.R.C.P. 238 'delay damages' — the prime rate (first Wall Street Journal edition each January) + 1%, simple, not compounded (231 Pa. Code Rule 238), a variable rate. Verified 2026-07-11. Not legal advice."

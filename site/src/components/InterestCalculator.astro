@@ -63,14 +63,16 @@ const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
 </div>
 
 <style>
-  .calc { border: 1px solid var(--line-strong); border-top: 2px solid var(--green); border-radius: 3px; padding: 22px 22px 20px; margin: 20px 0; background: var(--paper-2); }
+  .calc { border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 14px; padding: 24px; margin: 20px 0; background: var(--paper-2); box-shadow: var(--shadow-sm); }
   .calc-field { display: block; margin: 12px 0; }
   .calc-field span { display: block; font-family: var(--sans); font-size: 0.7rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
-  .calc-field input, .calc-field select { width: 100%; box-sizing: border-box; font-size: 1rem; font-family: var(--sans); padding: 11px 12px; border: 1px solid var(--line-strong); border-radius: 3px; background: var(--paper); color: var(--ink); }
+  .calc-field span { font-family: var(--mono); }
+  .calc-field input, .calc-field select { width: 100%; box-sizing: border-box; font-size: 1rem; font-family: var(--sans); padding: 12px 13px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--paper); color: var(--ink); }
   .calc-field input:focus, .calc-field select:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--green); }
   .calc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   @media (max-width: 520px) { .calc-row { grid-template-columns: 1fr; } }
-  .calc-btn { margin-top: 12px; font-family: var(--sans); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--paper); background: var(--green); border: 0; border-radius: 3px; padding: 13px 26px; cursor: pointer; transition: background 120ms ease; }
+  .calc-btn { margin-top: 14px; font-family: var(--sans); font-size: 0.9rem; font-weight: 620; letter-spacing: -0.005em; color: #fff; background: var(--accent); border: 0; border-radius: 9px; padding: 12px 24px; cursor: pointer; box-shadow: var(--shadow-sm); transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease; }
+  .calc-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
   .calc-btn:hover { background: var(--green-2); }
   .calc-result { margin-top: 18px; border-top: 2px solid var(--ink); padding-top: 14px; }
   /* result content is injected at runtime -> style its children globally (scoped selectors miss them) */

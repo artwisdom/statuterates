@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T02:13:37.436Z",
+  "generated_at": "2026-07-16T01:46:57.280Z",
   "slug": "maryland-judgment-rate",
   "name": "Maryland Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-09",
       "source_id": "md-jud",
       "source_url": "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
-      "retrieved_at": "2026-07-15T02:13:37.414Z",
+      "retrieved_at": "2026-07-16T01:46:57.257Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Under the \"except as provided in Section 11-106\" clause, a money judgment on a contract for a loan of money carries interest at the RATE CHARGED IN… Verify against the statute; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-09",
         "source_id": "md-jud",
         "source_url": "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
-        "retrieved_at": "2026-07-15T02:13:37.414Z",
+        "retrieved_at": "2026-07-16T01:46:57.257Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Under the \"except as provided in Section 11-106\" clause, a money judgment on a contract for a loan of money carries interest at the RATE CHARGED IN… Verify against the statute; not legal advice."

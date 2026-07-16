@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T02:13:37.436Z",
+  "generated_at": "2026-07-16T01:46:57.280Z",
   "slug": "oklahoma-prejudgment-rate",
   "name": "Oklahoma Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-01-02",
       "source_id": "ok-prejud",
       "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-      "retrieved_at": "2026-07-15T02:13:37.414Z",
+      "retrieved_at": "2026-07-16T01:46:57.257Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Oklahoma prejudgment interest splits by claim type: personal-injury / personal-rights verdicts bear a variable rate (currently 4.13%) set annually under 12 O.S. §727.1; contract / liquidated 'damages certain' claims bear 6% fixed (23 O.S. §6; 15 O.S. §266). Current PI value as of 2026-01-02; verify at oscn.net. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-01-02",
         "source_id": "ok-prejud",
         "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-        "retrieved_at": "2026-07-15T02:13:37.414Z",
+        "retrieved_at": "2026-07-16T01:46:57.257Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Oklahoma prejudgment interest splits by claim type: personal-injury / personal-rights verdicts bear a variable rate (currently 4.13%) set annually under 12 O.S. §727.1; contract / liquidated 'damages certain' claims bear 6% fixed (23 O.S. §6; 15 O.S. §266). Current PI value as of 2026-01-02; verify at oscn.net. Not legal advice."

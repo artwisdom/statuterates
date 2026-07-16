@@ -80,7 +80,7 @@ const jsonLd = [
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/">Rates</a> &rsaquo; <span>Prejudgment interest by state</span>
   </nav>
-  <div class="eyebrow">The statutory interest-rate almanac · Prejudgment</div>
+  <div class="eyebrow">Statutory interest rates · Prejudgment</div>
   <h1>Prejudgment interest rates by state</h1>
   <p class="lead">The interest that accrues <em>before</em> a judgment is entered — for all 50 states and
     D.C. Unlike post-judgment interest, the rate is often the <em>second</em> question. The first is
@@ -148,10 +148,10 @@ const jsonLd = [
     .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 6px 0 20px; font-size: 0.86rem; color: var(--ink-soft); }
     .legend-item { display: inline-flex; align-items: baseline; gap: 7px; }
     .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; transform: translateY(1px); }
-    .dot.fixed { background: var(--green); }
-    .dot.variable { background: var(--gold); }
+    .dot.fixed { background: var(--accent); }
+    .dot.variable { background: #0e9384; }
     .dot.same-as-postjudgment { background: #4a6d8c; }
-    .dot.discretionary-with-default { background: #a05a2c; }
+    .dot.discretionary-with-default { background: #b5791f; }
     .pj-table { width: 100%; }
     .pj-table td.st a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
     .pj-table td.st a:hover { border-bottom-color: var(--green); }
@@ -160,7 +160,7 @@ const jsonLd = [
     .tag { display: inline-block; font-family: var(--sans); font-size: 0.6rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 2px;
       white-space: nowrap; border: 1px solid var(--line-strong); color: var(--ink-soft); }
-    .tag.fixed { background: var(--green-wash); color: var(--green); border-color: rgba(22,70,58,0.3); }
-    .tag.variable { background: var(--amber-bg); color: var(--amber-ink); border-color: rgba(138,106,30,0.35); }
+    .tag.fixed { background: var(--green-wash); color: var(--accent); border-color: rgba(58,63,166,0.22); }
+    .tag.variable { background: #e6f6f3; color: #0e766a; border-color: rgba(14,118,106,0.25); }
   </style>
 </BaseLayout>

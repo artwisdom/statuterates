@@ -1,6 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="StatuteRates">
-  <rect width="64" height="64" rx="12" fill="#16463a"/>
-  <rect x="4.5" y="4.5" width="55" height="55" rx="9" fill="none" stroke="#b8933c" stroke-width="1.5" opacity="0.85"/>
-  <text x="32" y="46" font-family="Iowan Old Style, Palatino, Georgia, 'Times New Roman', serif"
-        font-size="42" font-weight="600" text-anchor="middle" fill="#f6f2e9">§</text>
+  <rect width="64" height="64" rx="16" fill="#3a3fa6"/>
+  <text x="32" y="45" font-family="'Space Grotesk', Inter, system-ui, sans-serif" font-size="40" font-weight="600" text-anchor="middle" fill="#ffffff">§</text>
 </svg>
