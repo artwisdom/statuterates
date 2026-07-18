@@ -6,6 +6,8 @@ import { copyFor } from '../lib/content.mjs';
 
 const meta = getMeta();
 const groups = groupedEntities();
+// Real dataset modification date = the newest effective date across all series (never the build date).
+const dataModified = groups.flatMap((g) => g.entities.map((e) => latestOf(e)?.effective_date)).filter(Boolean).sort().at(-1);
 
 // A featured strip of the most-searched current rates, one per jurisdiction where possible.
 const FEATURED = ['irs-underpayment', 'us-federal-post-judgment', 'uk-late-payment-commercial', 'eu-late-payment-reference'];
@@ -25,7 +27,7 @@ const jsonLd = {
   url: new URL('/', Astro.site).href,
   isAccessibleForFree: true,
   creator: { '@type': 'Organization', name: meta.title },
-  dateModified: meta.generated_at,
+  dateModified: dataModified,
   keywords: ['IRS interest rate', 'post-judgment interest rate', 'statutory interest', 'underpayment rate', 'Treasury 1-year CMT'],
   distribution: {
     '@type': 'DataDownload',
@@ -60,6 +62,9 @@ const jsonLd = {
     &nbsp;·&nbsp; <a href="/calculators/">Calculators →</a>
     &nbsp;·&nbsp; <a href="/guides/">Guides →</a>
     &nbsp;·&nbsp; <a href="/glossary/">Glossary →</a></p>
+
+  <p class="trust">Every rate is <a href="/editorial-policy/">verified against the official statute</a> and
+    stamped with its effective date — accuracy, not volume, is the point.</p>
 
   <AdSlot id="home-top" />
 
@@ -114,6 +119,9 @@ const jsonLd = {
     .browse { margin: 18px 0 0; font-family: var(--sans); font-size: 0.94rem; }
     .browse a { color: var(--green); text-decoration: none; font-weight: 600; border-bottom: 1px solid var(--line-strong); }
     .browse a:hover { border-bottom-color: var(--green); }
+    .trust { margin: 14px 0 0; font-size: 0.9rem; color: var(--ink-soft); }
+    .trust::before { content: '✓ '; color: var(--accent); font-weight: 700; }
+    .trust a { color: var(--accent); font-weight: 600; }
     .pj-promo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
       gap: 16px 28px; margin: 30px 0 8px; padding: 22px 24px; background: var(--green-wash);
       border: 1px solid var(--line-strong); border-left: 3px solid var(--green); border-radius: 2px; }

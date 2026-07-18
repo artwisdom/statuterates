@@ -21,7 +21,11 @@ const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 // Site-wide entity schema on every page — establishes the publisher and site as a recognizable entity
 // (durable SEO signal, enables richer knowledge-graph treatment). Per-page jsonLd is layered on top.
 const siteJsonLd = [
-  { '@context': 'https://schema.org', '@type': 'Organization', name: meta.title, url: origin, description: meta.description, logo: `${origin}logo-512.png` },
+  { '@context': 'https://schema.org', '@type': 'Organization', name: meta.title, url: origin, description: meta.description, logo: `${origin}logo-512.png`,
+    foundingDate: '2026',
+    knowsAbout: ['Post-judgment interest', 'Prejudgment interest', 'Statutory interest rates', 'IRS interest rates', 'Judgment interest rates by state', '28 U.S.C. §1961', 'Late-payment interest'],
+    publishingPrinciples: `${origin}editorial-policy/`,
+    contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'hello@statuterates.com' } },
   { '@context': 'https://schema.org', '@type': 'WebSite', name: meta.title, url: origin, description: meta.description },
 ];
 
@@ -271,6 +275,7 @@ const path = Astro.url.pathname;
           <a href="/guides/">Guides</a> ·
           <a href="/glossary/">Glossary</a> ·
           <a href="/methodology/">Methodology &amp; sources</a> ·
+          <a href="/editorial-policy/">Editorial policy</a> ·
           <a href="/prejudgment/">Prejudgment interest by state</a> ·
           <a href="/states/highest-lowest/">Highest &amp; lowest rates</a> ·
           <a href="/calculators/">Calculators</a> ·

@@ -12,7 +12,7 @@ export function GET({ site }) {
   const clamp = (d) => (d && d <= build ? d : build); // never advertise a future date
 
   const staticPaths = [
-    '/', '/about/', '/methodology/', '/api/', '/changes/', '/prejudgment/', '/states/',
+    '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
     '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
     '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',

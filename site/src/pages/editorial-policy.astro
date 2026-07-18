@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getMeta } from '../lib/data.mjs';
+const meta = getMeta();
+const title = `Editorial & data-integrity policy — ${meta.title}`;
+const description = `How StatuteRates verifies every interest rate against the official statute, how often each series is re-checked, our corrections process, funding, and how you may cite the data.`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'Editorial & data-integrity policy',
+  url: new URL('/editorial-policy/', Astro.site).href,
+  publisher: { '@type': 'Organization', name: meta.title },
+};
+---
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/">Home</a> &rsaquo; <span>Editorial policy</span>
+  </nav>
+  <h1>Editorial &amp; data-integrity policy</h1>
+  <p class="lead">Every number on this site is a legal figure someone may rely on to calculate what they
+    owe or are owed. That is why accuracy — not volume — is the point. Here is exactly how we verify each
+    rate, how often we re-check it, and what we do when we get something wrong.</p>
+
+  <h2>How every rate is verified</h2>
+  <p>We do not copy rates from other rate-aggregator sites, law-firm blog posts, or AI summaries. Each
+    value is checked against the <strong>controlling primary source</strong> — the statute text, the
+    court rule, or the agency certification that actually sets the rate — and we record the citation and
+    the URL alongside the value. Rates fall into three kinds, and we treat each differently:</p>
+  <ul class="clean">
+    <li><strong>Statute-fixed rates</strong> (e.g. a flat 12% written into the code) are verified word-for-word
+      against the official legislature or court page, and re-checked on a schedule because a legislature
+      can amend them.</li>
+    <li><strong>Agency- or court-set variable rates</strong> (a prime-rate or Treasury-linked formula reset
+      each quarter or year) are read from the official agency page that publishes the current period's
+      figure, with the effective period recorded.</li>
+    <li><strong>Derived rates</strong> (e.g. the federal post-judgment rate under 28 U.S.C. §1961, or Iowa's
+      Treasury-plus-two formula) are computed by us from an official series using the governing statutory
+      formula — and every such page shows the formula and links the underlying data, so you can check our
+      arithmetic. We never present a computed number as authoritative without its formula and source.</li>
+  </ul>
+  <p>When a rate has a genuine carve-out — a different figure for tort versus contract, for consumer debt,
+    or against a government entity — we state it rather than flattening it into one number, because the
+    wrong branch is as misleading as the wrong number.</p>
+
+  <h2>How often each series is re-checked</h2>
+  <p>The derived and market-linked federal, UK, and EU series refresh <strong>automatically every night</strong>
+    from their official sources; a validation suite checks types, ranges, and cross-value consistency, and
+    if anything fails the dataset is <strong>not</strong> published — stale or broken data never ships. The
+    curated statutory and agency-set state rates are re-verified against their official sources on a rolling
+    schedule and whenever a statutory reset date passes (many state rates reset each January 1 or July 1).
+    Every page carries the <strong>effective date</strong> of the value it shows, and the full effective-date
+    history is available on each rate page and through the <a href="/api/">free JSON API</a>.</p>
+
+  <h2>Corrections</h2>
+  <p>If you believe a rate is wrong, email <a href="mailto:hello@statuterates.com">hello@statuterates.com</a>
+    with the page and, if you can, the official source. We check every report against the controlling
+    primary source. If we confirm an error we correct it promptly and the change appears in our public
+    <a href="/changes/">rate-change log</a> with its new effective date. Before reporting, it is worth
+    opening the official source linked on the page — a rate may have changed at its statutory reset date
+    since you last looked, which is exactly the kind of movement this site exists to track.</p>
+
+  <h2>Independence &amp; funding</h2>
+  <p>StatuteRates is independent and supported by display advertising, not by subscriptions, sponsors, or
+    referral deals with any law firm or vendor. Advertising never influences a rate: the numbers come only
+    from the official sources, and the data and API are free and un-paywalled. Our advertising partner may
+    set cookies — see the <a href="/privacy/">Privacy Policy</a>.</p>
+
+  <h2>Using &amp; citing the data</h2>
+  <p>The underlying figures are edicts of government (statutes, court rules, agency rates) and are in the
+    <strong>public domain</strong> — free for anyone to use. Our compilation, wording, and effective-date
+    provenance are our own work; you are welcome to cite or link to any page, and every rate page includes
+    a one-click <em>&ldquo;Cite this page&rdquo;</em> citation. For programmatic access, the
+    <a href="/api/">JSON API</a> is free and needs no key. If you want to reuse the compiled dataset at
+    scale, a short note to <a href="mailto:hello@statuterates.com">hello@statuterates.com</a> is appreciated.</p>
+
+  <h2>What we are — and are not</h2>
+  <p>We are a reference for what the statutory, judgment, prejudgment, and tax interest rates currently are,
+    with sources you can verify. We are <strong>not</strong> a law firm and this is <strong>not</strong>
+    legal, tax, or financial advice. Which rate applies to a specific matter — and how it compounds, when it
+    starts, and what carve-outs apply — is a legal question for the controlling statute and, where needed, a
+    licensed professional. Always confirm the figure against the official source before you rely on it.</p>
+
+  <div class="disclaimer">
+    Reference data only — not legal, tax, or financial advice. See our
+    <a href="/methodology/">methodology &amp; sources</a>, <a href="/about/">about page</a>,
+    <a href="/terms/">Terms &amp; Disclaimer</a>, and <a href="/privacy/">Privacy Policy</a>.
+  </div>
+</BaseLayout>

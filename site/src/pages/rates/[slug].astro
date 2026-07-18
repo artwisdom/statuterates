@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import CiteThis from '../../components/CiteThis.astro';
 import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
@@ -95,6 +96,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
   ? copy.body.replace(/currently \d+(?:\.\d+)?%/i, `currently ${latest.value_text}`)
   : copy.body;
+
+// Provenance line for the "Cite this page" block.
+const citeStatute = entity.metadata?.statute;
+const citeNote = citeStatute
+  ? `Rate verified against ${citeStatute}${latest?.effective_date ? `, effective ${prettyDate(latest.effective_date)}` : ''}.`
+  : (latest?.effective_date ? `Value effective ${prettyDate(latest.effective_date)}.` : '');
 
 // JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
 const jsonLd = [
@@ -248,6 +255,8 @@ const jsonLd = [
     <br />
     <a href={latest?.source_url} rel="nofollow noopener" target="_blank">{latest?.source_url}</a>
   </p>
+
+  <CiteThis title={entity.name} url={canonical} note={citeNote} />
 
   <AdSlot id="rate-bottom" />
 

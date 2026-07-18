@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import CiteThis from '../../components/CiteThis.astro';
 import { getMeta, latestOf, prettyDate, stateHubs, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
@@ -27,6 +28,8 @@ const postBasis = post
 const title = `${name} Judgment & Prejudgment Interest Rates (current) | ${meta.title}`;
 const description = `${name}'s interest rates on court judgments and debts, in one place: ${post ? `post-judgment ${postLatest?.value_text}` : 'post-judgment (case-by-case)'} and prejudgment ${preLatest?.value_text} (${preCopy.kindLabel?.toLowerCase()}). Each rate verified against the statute, with when it applies and how it's calculated.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Real modification date = the later of the two rates' effective dates (never the build date).
+const hubModified = [postLatest?.effective_date, preLatest?.effective_date].filter(Boolean).sort().at(-1);
 
 const faq = [
   post && {
@@ -51,7 +54,7 @@ const jsonLd = [
     url: canonical,
     description,
     isPartOf: { '@type': 'WebSite', name: meta.title, url: new URL('/', Astro.site).href },
-    dateModified: meta.generated_at,
+    dateModified: hubModified,
   },
   {
     '@context': 'https://schema.org',
@@ -77,8 +80,9 @@ const jsonLd = [
   <div class="eyebrow">Statutory interest rates · {name}</div>
   <h1>{name} judgment &amp; prejudgment interest rates</h1>
   <p class="lead">Everything {theName} charges in interest on a money judgment or an overdue debt, in one
-    place — the rate <em>after</em> judgment and the rate <em>before</em> it, each verified against the
-    statute and linked to its full page with sources, history, and carve-outs.</p>
+    place — the rate <em>after</em> judgment and the rate <em>before</em> it, each
+    <a href="/editorial-policy/">verified against the statute</a> and linked to its full page with sources,
+    history, and carve-outs.</p>
 
   <div class="scroll-x">
     <table class="glance">
@@ -130,6 +134,8 @@ const jsonLd = [
       </details>
     ))}
   </div>
+
+  <CiteThis title={`${name} Judgment & Prejudgment Interest Rates`} url={canonical} note="Each rate verified against the controlling state statute." />
 
   <p class="source-note" style="margin-top:22px">Compare every state on the
     <a href="/states/">state interest-rate index</a> and the

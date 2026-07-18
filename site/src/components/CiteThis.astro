@@ -1,0 +1,44 @@
+---
+// "Cite this page" — a pre-formatted, copyable citation. Makes it effortless for lawyers, journalists,
+// and researchers to cite us, which is how a reference/data site earns durable inbound links.
+// The "Accessed" date is filled CLIENT-SIDE (the reader's real access date), so nothing here churns
+// at build time. Props: title (clean page title, no site suffix), url (canonical), note (optional
+// provenance sentence, e.g. "Rate verified against Neb. Rev. Stat. §45-103, effective July 16, 2026").
+const { title, url, note = '' } = Astro.props;
+---
+<details class="cite">
+  <summary>Cite this page</summary>
+  <div class="cite-body">
+    <p class="cite-text">StatuteRates. &ldquo;{title}.&rdquo; StatuteRates.com. Accessed <span data-cite-date>today</span>. {url}{note ? ` ${note}` : ''}</p>
+    <button type="button" class="cite-copy" data-cite-copy>Copy citation</button>
+  </div>
+</details>
+<style>
+  .cite { margin: 22px 0; border: 1px solid var(--line); border-radius: 12px; background: var(--paper-2); }
+  .cite > summary { cursor: pointer; padding: 12px 16px; font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-soft); list-style: none; }
+  .cite > summary::-webkit-details-marker { display: none; }
+  .cite > summary::before { content: '§ '; color: var(--accent); }
+  .cite[open] > summary { border-bottom: 1px solid var(--line); }
+  .cite-body { padding: 14px 16px 16px; }
+  .cite-text { font-size: 0.9rem; color: var(--ink); background: var(--paper); border: 1px solid var(--line);
+    border-radius: 8px; padding: 12px 14px; margin: 0 0 12px; line-height: 1.5; word-break: break-word; }
+  .cite-copy { font-family: var(--sans); font-weight: 600; font-size: 0.85rem; color: #fff; background: var(--accent);
+    border: 0; border-radius: 9px; padding: 8px 16px; cursor: pointer; transition: background 120ms ease; }
+  .cite-copy:hover { background: var(--green-2); }
+</style>
+<script>
+  // Fill the accessed date with the reader's real date (no build-time churn), then wire copy buttons.
+  const fmt = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  document.querySelectorAll('[data-cite-date]').forEach((el) => { el.textContent = fmt(new Date()); });
+  document.querySelectorAll('[data-cite-copy]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const text = btn.closest('.cite-body').querySelector('.cite-text').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const prev = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = prev; }, 1600);
+      }).catch(() => {});
+    });
+  });
+</script>
