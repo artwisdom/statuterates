@@ -4,6 +4,8 @@
 export const GUIDES = [
   {
     "slug": "post-judgment-interest",
+    "datePublished": "2026-07-15",
+    "dateModified": "2026-07-15",
     "title": "Post-Judgment Interest Explained: Federal & State Rules",
     "h1": "Post-Judgment Interest: What It Is and How It Accrues",
     "description": "Post-judgment interest accrues on a judgment from entry until it's paid. Learn the federal §1961 rule, how states differ, simple vs. compound, and how to calculate it.",
@@ -66,6 +68,8 @@ export const GUIDES = [
   },
   {
     "slug": "prejudgment-interest",
+    "datePublished": "2026-07-15",
+    "dateModified": "2026-07-15",
     "title": "Prejudgment Interest: Rules, Rates, and How to Calculate It",
     "h1": "Prejudgment Interest, Explained",
     "description": "Prejudgment interest compensates for the wait between a loss and judgment. Learn why it's limited to liquidated claims, how the rate is set, and when it accrues.",
@@ -128,6 +132,8 @@ export const GUIDES = [
   },
   {
     "slug": "how-to-calculate-judgment-interest",
+    "datePublished": "2026-07-15",
+    "dateModified": "2026-07-15",
     "title": "How to Calculate Judgment Interest: Step-by-Step Guide",
     "h1": "How to Calculate Judgment Interest",
     "description": "Learn to calculate judgment interest step by step: find the governing rate, lock it to the judgment date, apply simple vs. compound, and do the daily math.",
@@ -194,6 +200,8 @@ export const GUIDES = [
   },
   {
     "slug": "irs-interest-rates",
+    "datePublished": "2026-07-15",
+    "dateModified": "2026-07-15",
     "title": "How IRS Interest Rates Work (§6621 & §6622 Explained)",
     "h1": "How IRS Interest Rates Work Under §6621 and §6622",
     "description": "A plain-English guide to IRS interest rates: how §6621 sets the federal short-term rate plus a category spread, quarterly resets, and daily compounding under §6622.",
@@ -260,6 +268,8 @@ export const GUIDES = [
   },
   {
     "slug": "late-payment-interest",
+    "datePublished": "2026-07-15",
+    "dateModified": "2026-07-15",
     "title": "Late Payment Interest: UK &amp; EU Commercial Debt Guide",
     "h1": "Late Payment Interest on Commercial Debts: The UK and EU Rules",
     "description": "How statutory late payment interest works on overdue B2B invoices in the UK and EU: the base-rate-plus-8 formula, fixed compensation, and how to claim it.",
@@ -322,6 +332,8 @@ export const GUIDES = [
   },
   {
     "slug": "statutory-interest",
+    "datePublished": "2026-07-15",
+    "dateModified": "2026-07-15",
     "title": "Statutory Interest Explained: Rates Set by Law vs Contract",
     "h1": "Statutory Interest: A Plain-English Guide",
     "description": "Statutory interest is a rate set by law, not by your contract. Learn how it is determined for judgments, unpaid tax, and late payments across the US, UK, and EU.",

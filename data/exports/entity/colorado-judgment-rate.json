@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T01:46:57.280Z",
+  "generated_at": "2026-07-18T11:22:20.801Z",
   "slug": "colorado-judgment-rate",
   "name": "Colorado Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "co-sos",
       "source_url": "https://www.coloradosos.gov/pubs/info_center/files/interest_rates.pdf",
-      "retrieved_at": "2026-07-16T01:46:57.257Z",
+      "retrieved_at": "2026-07-18T11:22:20.769Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Post-judgment interest under C.R.S. §5-12-102(4)(b): 8% per annum COMPOUNDED ANNUALLY on general money judgments absent a contract rate. Personal-injury/tort judgments use a separate rate under §13-21-101, and appealed money judgments a variable rate under §5-12-106 (certified each January 1 by the Colorado Secretary of State). Verify the current variable rates at coloradosos.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "co-sos",
         "source_url": "https://www.coloradosos.gov/pubs/info_center/files/interest_rates.pdf",
-        "retrieved_at": "2026-07-16T01:46:57.257Z",
+        "retrieved_at": "2026-07-18T11:22:20.769Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Post-judgment interest under C.R.S. §5-12-102(4)(b): 8% per annum COMPOUNDED ANNUALLY on general money judgments absent a contract rate. Personal-injury/tort judgments use a separate rate under §13-21-101, and appealed money judgments a variable rate under §5-12-106 (certified each January 1 by the Colorado Secretary of State). Verify the current variable rates at coloradosos.gov; not legal advice."

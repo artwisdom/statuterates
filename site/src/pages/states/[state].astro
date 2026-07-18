@@ -25,7 +25,7 @@ const postBasis = post
   : 'No fixed statutory rate';
 
 const title = `${name} Judgment & Prejudgment Interest Rates (current) | ${meta.title}`;
-const description = `${name}'s interest rates on court judgments and debts, in one place: ${post ? `post-judgment ${postLatest?.value_text}` : 'post-judgment (case-by-case)'} and prejudgment ${preLatest?.value_text} (${preCopy.kindLabel?.toLowerCase()}). Each rate verified against the statute, with when it applies and how it's calculated. Updated ${prettyDate(meta.generated_at)}.`;
+const description = `${name}'s interest rates on court judgments and debts, in one place: ${post ? `post-judgment ${postLatest?.value_text}` : 'post-judgment (case-by-case)'} and prejudgment ${preLatest?.value_text} (${preCopy.kindLabel?.toLowerCase()}). Each rate verified against the statute, with when it applies and how it's calculated.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const faq = [

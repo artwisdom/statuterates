@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T01:46:57.280Z",
+  "generated_at": "2026-07-18T11:22:20.801Z",
   "slug": "minnesota-prejudgment-rate",
   "name": "Minnesota Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "mn-prejud",
       "source_url": "https://www.revisor.mn.gov/statutes/cite/549.09",
-      "retrieved_at": "2026-07-16T01:46:57.257Z",
+      "retrieved_at": "2026-07-18T11:22:20.769Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Minnesota preverdict interest under Minn. Stat. §549.09 subd. 1(b) is computed per subd. 1(c): the default rate (currently 4%) applies, but judgments/awards OVER $50,000 (other than certain categories) accrue 10% — the same two-tier split as post-judgment interest. Current value as of 2026-07-09; verify at revisor.mn.gov. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "mn-prejud",
         "source_url": "https://www.revisor.mn.gov/statutes/cite/549.09",
-        "retrieved_at": "2026-07-16T01:46:57.257Z",
+        "retrieved_at": "2026-07-18T11:22:20.769Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Minnesota preverdict interest under Minn. Stat. §549.09 subd. 1(b) is computed per subd. 1(c): the default rate (currently 4%) applies, but judgments/awards OVER $50,000 (other than certain categories) accrue 10% — the same two-tier split as post-judgment interest. Current value as of 2026-07-09; verify at revisor.mn.gov. Not legal advice."

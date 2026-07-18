@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T01:46:57.280Z",
+  "generated_at": "2026-07-18T11:22:20.801Z",
   "slug": "alabama-prejudgment-rate",
   "name": "Alabama Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "al-prejud",
       "source_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-1",
-      "retrieved_at": "2026-07-16T01:46:57.257Z",
+      "retrieved_at": "2026-07-18T11:22:20.769Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under Ala. Code § 8-8-1 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Alabama’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "al-prejud",
         "source_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-1",
-        "retrieved_at": "2026-07-16T01:46:57.257Z",
+        "retrieved_at": "2026-07-18T11:22:20.769Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under Ala. Code § 8-8-1 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Alabama’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

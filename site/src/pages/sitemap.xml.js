@@ -17,14 +17,19 @@ export function GET({ site }) {
     '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
     '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
     '/calculators/prejudgment-interest/',
-    ...GUIDES.map((g) => `/guides/${g.slug}/`),
   ];
 
   const entities = getAllEntities();
   const dateFor = new Map(entities.map((e) => [e.slug, (latestOf(e)?.effective_date || '').slice(0, 10)]));
 
   const rows = [
-    ...staticPaths.map((p) => ({ path: p, lastmod: build })),
+    // Static + index pages: we don't track an honest per-page modification date, so omit <lastmod>
+    // rather than advertise a churning build stamp. Google treats sitemap lastmod trust as binary —
+    // one inflated date and it distrusts every date on the site — so an absent date beats a false one.
+    ...staticPaths.map((p) => ({ path: p })),
+    // Guides carry a hand-maintained dateModified that only moves on a genuine content edit.
+    ...GUIDES.map((g) => ({ path: `/guides/${g.slug}/`, lastmod: clamp(g.dateModified) })),
+    // Rate pages + hubs: the underlying rate's real effective date is a true change signal.
     ...entities.map((e) => ({ path: `/rates/${e.slug}/`, lastmod: clamp(dateFor.get(e.slug)) })),
     ...stateHubs().map((h) => ({
       path: `/states/${h.base}/`,

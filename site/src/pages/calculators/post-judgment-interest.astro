@@ -10,7 +10,7 @@ const latest = latestOf(entity);
 const weekly = historyFor('us-federal-post-judgment');
 
 const title = `Federal Post-Judgment Interest Calculator (28 U.S.C. §1961) | ${meta.title}`;
-const description = `Free federal post-judgment interest calculator. Applies the statutory method exactly: the H.15 weekly-average 1-year Treasury yield for the week preceding your judgment (currently ${latest?.value_text}), computed daily and compounded annually. Updated ${prettyDate(meta.generated_at)}.`;
+const description = `Free federal post-judgment interest calculator. Applies the statutory method exactly: the H.15 weekly-average 1-year Treasury yield for the week preceding your judgment (currently ${latest?.value_text}), computed daily and compounded annually.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

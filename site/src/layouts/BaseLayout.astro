@@ -29,6 +29,10 @@ const siteJsonLd = [
 // approval) and redeploy — that turns on Google Auto Ads site-wide. Empty by default = no ad code ships.
 const adsenseClient = process.env.ADSENSE_CLIENT || '';
 
+// Privacy-respecting, cookieless traffic measurement: set the repo variable CF_ANALYTICS_TOKEN to the
+// Cloudflare Web Analytics site token and redeploy. Empty by default = no beacon ships (no tracking).
+const cfAnalyticsToken = process.env.CF_ANALYTICS_TOKEN || '';
+
 const NAV = [
   { href: '/', label: 'Rates' },
   { href: '/states/', label: 'States' },
@@ -57,6 +61,9 @@ const path = Astro.url.pathname;
 
     {adsenseClient && (
       <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossorigin="anonymous"></script>
+    )}
+    {cfAnalyticsToken && (
+      <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={`{"token": "${cfAnalyticsToken}"}`}></script>
     )}
 
     <meta property="og:type" content="website" />

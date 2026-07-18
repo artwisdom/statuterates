@@ -30,7 +30,7 @@ const KINDS = [
 const counts = Object.fromEntries(KINDS.map((k) => [k.key, rows.filter((r) => r.kind === k.key).length]));
 
 const title = `Prejudgment Interest Rates by State (all 50 states + D.C.) | ${meta.title}`;
-const description = `Prejudgment interest rate for every U.S. state and D.C., with the one thing that matters most: when it actually applies. Prejudgment interest usually attaches only to liquidated or ascertainable amounts and is often barred on unliquidated tort damages — this table shows each state's rate, statute, and claim-type limits. Updated ${prettyDate(meta.generated_at)}.`;
+const description = `Prejudgment interest rate for every U.S. state and D.C., with the one thing that matters most: when it actually applies. Prejudgment interest usually attaches only to liquidated or ascertainable amounts and is often barred on unliquidated tort damages — this table shows each state's rate, statute, and claim-type limits.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

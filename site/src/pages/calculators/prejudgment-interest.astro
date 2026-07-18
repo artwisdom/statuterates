@@ -43,7 +43,7 @@ const defaultSeries = 'new-york';
 const stateCount = PREJUDGMENT_CALC_SAFE.filter((k) => k !== 'dc').length; // distinct states; D.C. counted separately in copy
 
 const title = `Prejudgment Interest Calculator by State | ${meta.title}`;
-const description = `Free prejudgment interest calculator for the ${stateCount} states + D.C. with a fixed statutory rate (simple interest, plus Colorado's annual compounding). Enter the amount, the date interest began accruing, and the judgment date. Excludes formula-rate and discretionary states — see each state's page. Updated ${prettyDate(meta.generated_at)}.`;
+const description = `Free prejudgment interest calculator for the ${stateCount} states + D.C. with a fixed statutory rate (simple interest, plus Colorado's annual compounding). Enter the amount, the date interest began accruing, and the judgment date. Excludes formula-rate and discretionary states — see each state's page.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

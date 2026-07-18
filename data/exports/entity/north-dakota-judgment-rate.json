@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T01:46:57.280Z",
+  "generated_at": "2026-07-18T11:22:20.801Z",
   "slug": "north-dakota-judgment-rate",
   "name": "North Dakota Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "nd-jud",
       "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
-      "retrieved_at": "2026-07-16T01:46:57.257Z",
+      "retrieved_at": "2026-07-18T11:22:20.769Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under N.D.C.C. § 28-20-34, currently 10% (as of January 1, 2026). , reset annually. Rate = (U.S. prime rate as published/reported in the Wall Street Journal on the first Monday in December of the prior year) + 3 percentage points, then… Simple interest. Contract rate governs first — if the original instrument on which the action was based specifies an interest rate, judgment interest accrues at THAT… Verify the current value at ndcourts.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "nd-jud",
         "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
-        "retrieved_at": "2026-07-16T01:46:57.257Z",
+        "retrieved_at": "2026-07-18T11:22:20.769Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under N.D.C.C. § 28-20-34, currently 10% (as of January 1, 2026). , reset annually. Rate = (U.S. prime rate as published/reported in the Wall Street Journal on the first Monday in December of the prior year) + 3 percentage points, then… Simple interest. Contract rate governs first — if the original instrument on which the action was based specifies an interest rate, judgment interest accrues at THAT… Verify the current value at ndcourts.gov; not legal advice."

@@ -84,9 +84,17 @@ const title = pj
   ? `${stateName} Prejudgment Interest Rate — When It Applies & Current Rate | ${meta.title}`
   : `${entity.name} — Current & Historical | ${meta.title}`;
 const description = pj
-  ? `${copy.q} ${latest?.value_text} ${unitLabel} (${copy.kindLabel?.toLowerCase()}). When prejudgment interest applies in ${stateName}, how it accrues, the statute, and how it differs from post-judgment interest. Updated ${prettyDate(meta.generated_at)}.`
-  : `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history, updated ${prettyDate(meta.generated_at)}.`;
+  ? `${copy.q} ${latest?.value_text} ${unitLabel} (${copy.kindLabel?.toLowerCase()}). When prejudgment interest applies in ${stateName}, how it accrues, the statute, and how it differs from post-judgment interest.`
+  : `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+// Stale-proof the descriptive prose: for single-value variable series (Iowa's weekly rate, the quarterly
+// state rates) swap any hardcoded "currently X%" phrase for the live figure from the dataset, so the
+// paragraph can never drift from the hero. Dual-rate "A% / B%" series keep their curated copy, which
+// names each component explicitly.
+const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
+  ? copy.body.replace(/currently \d+(?:\.\d+)?%/i, `currently ${latest.value_text}`)
+  : copy.body;
 
 // JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
 const jsonLd = [
@@ -94,7 +102,7 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: entity.name,
-    description: copy.body.replace(/\s+/g, ' ').trim(),
+    description: bodyText.replace(/\s+/g, ' ').trim(),
     url: canonical,
     isAccessibleForFree: true,
     creator: { '@type': 'Organization', name: meta.title },
@@ -169,7 +177,7 @@ const jsonLd = [
     </span>
   </div>
 
-  <p>{copy.body}</p>
+  <p>{bodyText}</p>
 
   {calcHref && (
     <p><a href={calcHref}><strong>→ Calculate interest at this rate</strong></a></p>

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-16T01:46:57.280Z",
+  "generated_at": "2026-07-18T11:22:20.801Z",
   "slug": "nebraska-judgment-rate",
   "name": "Nebraska Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -17,32 +17,32 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 5.723,
-      "value_text": "5.723%",
+      "value": 5.97,
+      "value_text": "5.970%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-04-16",
+      "effective_date": "2026-07-16",
       "source_id": "ne-jud",
       "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
-      "retrieved_at": "2026-07-16T01:46:57.257Z",
+      "retrieved_at": "2026-07-18T11:22:20.769Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Neb. Rev. Stat. §45-103, currently 5.723% (in effect since Apr 16, 2026; scheduled to rise to 5.970% on July 16, 2026). Rate = bond-equivalent yield of the first 26-week U.S. Treasury bill auction of each quarter. Simple interest. Does not apply where another law fixes the rate or the action is on a contract fixing one. Verify at nebraskajudicial.gov; not legal advice."
+      "notes": "Post-judgment interest under Neb. Rev. Stat. §45-103, currently 5.970% (in effect since July 16, 2026). Rate = bond-equivalent yield of the first 26-week U.S. Treasury bill auction of each quarter. Simple interest. Does not apply where another law fixes the rate or the action is on a contract fixing one. Verify at nebraskajudicial.gov; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 5.723,
-        "value_text": "5.723%",
+        "value": 5.97,
+        "value_text": "5.970%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-04-16",
+        "effective_date": "2026-07-16",
         "source_id": "ne-jud",
         "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
-        "retrieved_at": "2026-07-16T01:46:57.257Z",
+        "retrieved_at": "2026-07-18T11:22:20.769Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Neb. Rev. Stat. §45-103, currently 5.723% (in effect since Apr 16, 2026; scheduled to rise to 5.970% on July 16, 2026). Rate = bond-equivalent yield of the first 26-week U.S. Treasury bill auction of each quarter. Simple interest. Does not apply where another law fixes the rate or the action is on a contract fixing one. Verify at nebraskajudicial.gov; not legal advice."
+        "notes": "Post-judgment interest under Neb. Rev. Stat. §45-103, currently 5.970% (in effect since July 16, 2026). Rate = bond-equivalent yield of the first 26-week U.S. Treasury bill auction of each quarter. Simple interest. Does not apply where another law fixes the rate or the action is on a contract fixing one. Verify at nebraskajudicial.gov; not legal advice."
       }
     ]
   }

@@ -22,7 +22,7 @@ const seriesOptions = [
 ];
 
 const title = `IRS Interest Calculator — Underpayment & Refund Interest (§6621) | ${meta.title}`;
-const description = `Free IRS interest calculator using the real method: quarterly §6621 rates (currently ${latest?.value_text} for underpayments) compounded DAILY per §6622, across every rate change since 2017. Updated ${prettyDate(meta.generated_at)}.`;
+const description = `Free IRS interest calculator using the real method: quarterly §6621 rates (currently ${latest?.value_text} for underpayments) compounded DAILY per §6622, across every rate change since 2017.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

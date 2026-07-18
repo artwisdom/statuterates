@@ -53,6 +53,9 @@ jobs:
           # Optional: set ADSENSE_SLOT to a "Display/responsive" ad-unit id to render intentional,
           # labeled in-content ad units (top/bottom of each page). Empty = rely on Auto Ads only.
           ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT || '' }}
+          # Optional: set CF_ANALYTICS_TOKEN to your Cloudflare Web Analytics site token to ship the
+          # cookieless beacon. Empty = no analytics beacon ships.
+          CF_ANALYTICS_TOKEN: ${{ vars.CF_ANALYTICS_TOKEN || '' }}
         run: npm run build
 
       - name: Apply base path for GitHub Pages project subpath
@@ -70,6 +73,24 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
+
+      # Notify IndexNow (Bing, Yandex, DuckDuckGo, ChatGPT-search — Google does NOT use IndexNow) of the
+      # site's URLs so changed rate pages get recrawled fast. Non-fatal: a ping failure never blocks a
+      # deploy. Only runs for the real domain. The key is a public file at /<key>.txt (site/public/).
+      - name: Ping IndexNow
+        if: ${{ vars.SITE_URL != '' }}
+        continue-on-error: true
+        run: |
+          KEY=78e1a4c8dd592144913ffc2f8f1b9478
+          HOST=$(printf '%s' "${{ vars.SITE_URL }}" | sed -E 's#https?://##; s#/.*$##')
+          if [ ! -f site/dist/sitemap.xml ]; then echo "no sitemap.xml; skipping IndexNow"; exit 0; fi
+          grep -oE '<loc>[^<]+</loc>' site/dist/sitemap.xml | sed -E 's#</?loc>##g' | head -10000 \
+            | jq -R . | jq -s "{host: \"$HOST\", key: \"$KEY\", keyLocation: \"https://$HOST/$KEY.txt\", urlList: .}" > indexnow.json
+          echo "Submitting $(jq '.urlList | length' indexnow.json) URLs to IndexNow for $HOST"
+          curl -sS -X POST "https://api.indexnow.org/indexnow" \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data @indexnow.json -w "IndexNow HTTP %{http_code}\n" -o /dev/null \
+            || echo "IndexNow ping failed (non-fatal)"
 
   deploy:
     needs: build

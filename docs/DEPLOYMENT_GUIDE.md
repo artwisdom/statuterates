@@ -51,6 +51,18 @@ Nothing ranks until it's indexed; don't skip this.
 4. Over the first weeks, watch Coverage → indexed pages; use "Request indexing" on the homepage,
    `/calculators/post-judgment-interest/`, and the state pages to prime the pump.
 
+## 5b. Cloudflare Web Analytics + IndexNow (5 min) — measure traffic, speed up recrawls
+- **Analytics (recommended):** Cloudflare dashboard → your site → **Analytics & Logs → Web Analytics** →
+  enable → copy the **site token** → add repo variable `CF_ANALYTICS_TOKEN=<token>` (Settings → Secrets and
+  variables → Actions → Variables) → re-run `deploy-site`. The cookieless beacon then ships site-wide. It
+  needs no consent banner (no personal data, no cross-site tracking) and the `/privacy/` page already
+  discloses it. Empty variable = no beacon ships.
+- **IndexNow (already automated):** every deploy submits the sitemap URLs to IndexNow (see the "Ping
+  IndexNow" step in `deploy.yml`), authenticated by the public key file
+  `site/public/78e1a4c8dd592144913ffc2f8f1b9478.txt`. Nothing to configure. IndexNow only speeds up engines
+  that use it — **Bing, Yandex, DuckDuckGo, ChatGPT search — not Google** — so still do the Bing Webmaster
+  verification in step 5 (Bing is ~13% of US *desktop* search, and legal users skew desktop).
+
 ## 6. OPTIONAL — custom domain (~$10–12/yr) — recommended for SEO
 A short root domain (e.g. `statuterates.com`) beats a `github.io` subpath for ranking, trust, and
 future Cloudflare pay-per-crawl. **This is the only recommended spend and it is optional.**

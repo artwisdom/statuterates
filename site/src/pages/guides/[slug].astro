@@ -22,7 +22,8 @@ const jsonLd = [
     url: canonical,
     author: { '@type': 'Organization', name: meta.title },
     publisher: { '@type': 'Organization', name: meta.title },
-    dateModified: meta.generated_at,
+    datePublished: guide.datePublished,
+    dateModified: guide.dateModified,
     mainEntityOfPage: canonical,
   },
   guide.faqs?.length && {

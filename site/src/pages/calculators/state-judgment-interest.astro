@@ -60,7 +60,7 @@ const caLatest = latestOf(getEntity('california-judgment-rate'));
 const iaLatest = latestOf(getEntity('iowa-judgment-rate'));
 
 const title = `State Judgment Interest Calculator — CA, NY, MA, IA | ${meta.title}`;
-const description = `Free state judgment interest calculator with verified statutory rates: California 10%, New York 9% (2% consumer debt), Massachusetts 12%, Iowa ${iaLatest?.value_text} (Treasury-linked, changes weekly). Simple daily interest per each statute. Updated ${prettyDate(meta.generated_at)}.`;
+const description = `Free state judgment interest calculator with verified statutory rates: California 10%, New York 9% (2% consumer debt), Massachusetts 12%, Iowa ${iaLatest?.value_text} (Treasury-linked, changes weekly). Simple daily interest per each statute.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

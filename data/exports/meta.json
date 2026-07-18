@@ -7,9 +7,9 @@
   "license": "Compiled dataset offered for reference; values trace to official public-domain sources (see each record).",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-16T01:46:57.280Z",
+  "generated_at": "2026-07-18T11:22:20.801Z",
   "entity_count": 114,
-  "observation_count": 852,
+  "observation_count": 846,
   "metrics": [
     "annual_rate"
   ],
@@ -93,7 +93,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-16T01:46:57.253Z"
+      "retrieved_at": "2026-07-18T11:22:19.876Z"
     },
     {
       "id": "ca-leginfo",
@@ -192,7 +192,7 @@
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-16T01:46:57.255Z"
+      "retrieved_at": "2026-07-18T11:22:20.765Z"
     },
     {
       "id": "fed-h15",
@@ -201,7 +201,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-16T01:46:57.250Z"
+      "retrieved_at": "2026-07-18T11:22:19.010Z"
     },
     {
       "id": "fl-cfo",
@@ -267,15 +267,6 @@
       "retrieved_at": "2026-07-08T00:00:00Z"
     },
     {
-      "id": "ia-prejud",
-      "name": "Iowa prejudgment interest (Iowa Code § 668.13)",
-      "publisher": "Iowa — legis.iowa.gov",
-      "home_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-      "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source verified 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
-    },
-    {
       "id": "id-jud",
       "name": "Idaho judgment interest (Idaho Code § 28-22-104(2))",
       "publisher": "Idaho — sto.idaho.gov",
@@ -336,7 +327,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-16T01:46:57.246Z"
+      "retrieved_at": "2026-07-18T11:22:15.685Z"
     },
     {
       "id": "ks-jud",
