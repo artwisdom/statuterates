@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "new-hampshire-judgment-rate",
   "name": "New Hampshire Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-01-01",
       "source_id": "nh-jud",
       "source_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under N.H. Rev. Stat. Ann. 336:1, II, currently 5.7% (as of January 1, 2026). , reset annually. Formula (RSA 336:1, II): prevailing discount rate on 26-week U.S. Treasury bills at the last auction preceding the last day of September of the prior year,… Simple interest. RSA 336:1, II applies the SAME rate to \"judgments, including prejudgment interest\" — one unified statutory rate covers both; no tort/contract… Verify the current value at courts.nh.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-01-01",
         "source_id": "nh-jud",
         "source_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under N.H. Rev. Stat. Ann. 336:1, II, currently 5.7% (as of January 1, 2026). , reset annually. Formula (RSA 336:1, II): prevailing discount rate on 26-week U.S. Treasury bills at the last auction preceding the last day of September of the prior year,… Simple interest. RSA 336:1, II applies the SAME rate to \"judgments, including prejudgment interest\" — one unified statutory rate covers both; no tort/contract… Verify the current value at courts.nh.gov; not legal advice."

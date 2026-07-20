@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "maryland-prejudgment-rate",
   "name": "Maryland Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "md-prejud",
       "source_url": "https://mgaleg.maryland.gov/Pubs/LegisLegal/2025-constitution-maryland-us.pdf",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under Md. Const. Art. III, sec. 57 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Maryland’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "md-prejud",
         "source_url": "https://mgaleg.maryland.gov/Pubs/LegisLegal/2025-constitution-maryland-us.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under Md. Const. Art. III, sec. 57 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Maryland’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

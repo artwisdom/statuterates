@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "hawaii-prejudgment-rate",
   "name": "Hawaii Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "hi-prejud",
       "source_url": "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Prejudgment interest under HRS 636-16 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Hawaii’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "hi-prejud",
         "source_url": "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Prejudgment interest under HRS 636-16 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Hawaii’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."

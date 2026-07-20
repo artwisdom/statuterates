@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "arkansas-judgment-rate",
   "name": "Arkansas Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-08",
       "source_id": "ar-jud",
       "source_url": "https://www.federalreserve.gov/releases/h15/",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. The primary credit rate… Simple interest. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current… Verify the current value at federalreserve.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-08",
         "source_id": "ar-jud",
         "source_url": "https://www.federalreserve.gov/releases/h15/",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. The primary credit rate… Simple interest. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current… Verify the current value at federalreserve.gov; not legal advice."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "california-prejudgment-rate",
   "name": "California Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "ca-prejud",
       "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "California has a DUAL prejudgment rate, both simple: 7% for tort and other non-contract claims (including personal injury) — the constitutional default legal rate (Cal. Const. art. XV §1; discretionary tort interest under Civ. Code §3288 also runs at this 7%); and 10% for breach of a contract that stipulates no rate (Civ. Code §3289(b)). Entitlement to interest on liquidated/certain damages is Civ. Code §3287. Verified against the statutes 2026-07-11. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ca-prejud",
         "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "California has a DUAL prejudgment rate, both simple: 7% for tort and other non-contract claims (including personal injury) — the constitutional default legal rate (Cal. Const. art. XV §1; discretionary tort interest under Civ. Code §3288 also runs at this 7%); and 10% for breach of a contract that stipulates no rate (Civ. Code §3289(b)). Entitlement to interest on liquidated/certain damages is Civ. Code §3287. Verified against the statutes 2026-07-11. Not legal advice."

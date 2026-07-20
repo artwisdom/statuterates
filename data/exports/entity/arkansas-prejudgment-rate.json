@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "arkansas-prejudgment-rate",
   "name": "Arkansas Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "ar-prejud",
       "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ar-prejud",
         "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."

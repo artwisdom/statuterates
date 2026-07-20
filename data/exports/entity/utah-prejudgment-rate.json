@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "utah-prejudgment-rate",
   "name": "Utah Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "ut-prejud",
       "source_url": "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S1.html",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Utah general/contract prejudgment interest is 10% fixed (Utah Code §15-1-1(2)). For personal-injury actions (causes arising on/after July 1, 2014), prejudgment interest on SPECIAL damages is instead prime + 2% (5% floor, 10% cap) — currently 8.75%, simple — under §78B-5-824. Current PI value as of July 2026; verify at le.utah.gov. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ut-prejud",
         "source_url": "https://le.utah.gov/xcode/Title15/Chapter1/15-1-S1.html",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Utah general/contract prejudgment interest is 10% fixed (Utah Code §15-1-1(2)). For personal-injury actions (causes arising on/after July 1, 2014), prejudgment interest on SPECIAL damages is instead prime + 2% (5% floor, 10% cap) — currently 8.75%, simple — under §78B-5-824. Current PI value as of July 2026; verify at le.utah.gov. Not legal advice."

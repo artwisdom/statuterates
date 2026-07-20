@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "iowa-prejudgment-rate",
   "name": "Iowa Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-13",
       "source_id": "ia-legis",
       "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "medium",
       "method": "derived_ia_668_13_weekly_cmt_plus_2",
       "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-13",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -54,7 +54,7 @@
         "effective_date": "2026-07-06",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -67,7 +67,7 @@
         "effective_date": "2026-06-29",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -80,7 +80,7 @@
         "effective_date": "2026-06-22",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -93,7 +93,7 @@
         "effective_date": "2026-06-15",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -106,7 +106,7 @@
         "effective_date": "2026-06-08",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -119,7 +119,7 @@
         "effective_date": "2026-06-01",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -132,7 +132,7 @@
         "effective_date": "2026-05-25",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -145,7 +145,7 @@
         "effective_date": "2026-05-18",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -158,7 +158,7 @@
         "effective_date": "2026-05-11",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -171,7 +171,7 @@
         "effective_date": "2026-05-04",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -184,7 +184,7 @@
         "effective_date": "2026-04-27",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -197,7 +197,7 @@
         "effective_date": "2026-04-20",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -210,7 +210,7 @@
         "effective_date": "2026-04-13",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -223,7 +223,7 @@
         "effective_date": "2026-04-06",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -236,7 +236,7 @@
         "effective_date": "2026-03-30",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -249,7 +249,7 @@
         "effective_date": "2026-03-23",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -262,7 +262,7 @@
         "effective_date": "2026-03-16",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -275,7 +275,7 @@
         "effective_date": "2026-03-09",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -288,7 +288,7 @@
         "effective_date": "2026-03-02",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -301,7 +301,7 @@
         "effective_date": "2026-02-23",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -314,7 +314,7 @@
         "effective_date": "2026-02-16",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -327,7 +327,7 @@
         "effective_date": "2026-02-09",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -340,7 +340,7 @@
         "effective_date": "2026-02-02",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -353,7 +353,7 @@
         "effective_date": "2026-01-26",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -366,7 +366,7 @@
         "effective_date": "2026-01-19",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -379,7 +379,7 @@
         "effective_date": "2026-01-12",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -392,7 +392,7 @@
         "effective_date": "2026-01-05",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -405,7 +405,7 @@
         "effective_date": "2025-12-29",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -418,7 +418,7 @@
         "effective_date": "2025-12-22",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -431,7 +431,7 @@
         "effective_date": "2025-12-15",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -444,7 +444,7 @@
         "effective_date": "2025-12-08",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -457,7 +457,7 @@
         "effective_date": "2025-12-01",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -470,7 +470,7 @@
         "effective_date": "2025-11-24",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -483,7 +483,7 @@
         "effective_date": "2025-11-17",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -496,7 +496,7 @@
         "effective_date": "2025-11-10",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -509,7 +509,7 @@
         "effective_date": "2025-11-03",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -522,7 +522,7 @@
         "effective_date": "2025-10-27",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -535,7 +535,7 @@
         "effective_date": "2025-10-20",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -548,7 +548,7 @@
         "effective_date": "2025-10-13",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -561,7 +561,7 @@
         "effective_date": "2025-10-06",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -574,7 +574,7 @@
         "effective_date": "2025-09-29",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -587,7 +587,7 @@
         "effective_date": "2025-09-22",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -600,7 +600,7 @@
         "effective_date": "2025-09-15",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -613,7 +613,7 @@
         "effective_date": "2025-09-08",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -626,7 +626,7 @@
         "effective_date": "2025-09-01",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -639,7 +639,7 @@
         "effective_date": "2025-08-25",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -652,7 +652,7 @@
         "effective_date": "2025-08-18",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -665,7 +665,7 @@
         "effective_date": "2025-08-11",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -678,7 +678,7 @@
         "effective_date": "2025-08-04",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -691,7 +691,7 @@
         "effective_date": "2025-07-28",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -704,7 +704,7 @@
         "effective_date": "2025-07-21",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -717,7 +717,7 @@
         "effective_date": "2025-07-14",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -730,7 +730,7 @@
         "effective_date": "2025-07-07",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -743,7 +743,7 @@
         "effective_date": "2025-06-30",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -756,7 +756,7 @@
         "effective_date": "2025-06-23",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -769,7 +769,7 @@
         "effective_date": "2025-06-16",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -782,7 +782,7 @@
         "effective_date": "2025-06-09",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -795,7 +795,7 @@
         "effective_date": "2025-06-02",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -808,7 +808,7 @@
         "effective_date": "2025-05-26",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -821,7 +821,7 @@
         "effective_date": "2025-05-19",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -834,7 +834,7 @@
         "effective_date": "2025-05-12",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -847,7 +847,7 @@
         "effective_date": "2025-05-05",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -860,7 +860,7 @@
         "effective_date": "2025-04-28",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -873,7 +873,7 @@
         "effective_date": "2025-04-21",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -886,7 +886,7 @@
         "effective_date": "2025-04-14",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -899,7 +899,7 @@
         "effective_date": "2025-04-07",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -912,7 +912,7 @@
         "effective_date": "2025-03-31",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -925,7 +925,7 @@
         "effective_date": "2025-03-24",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -938,7 +938,7 @@
         "effective_date": "2025-03-17",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -951,7 +951,7 @@
         "effective_date": "2025-03-10",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -964,7 +964,7 @@
         "effective_date": "2025-03-03",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -977,7 +977,7 @@
         "effective_date": "2025-02-24",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -990,7 +990,7 @@
         "effective_date": "2025-02-17",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1003,7 +1003,7 @@
         "effective_date": "2025-02-10",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1016,7 +1016,7 @@
         "effective_date": "2025-02-03",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1029,7 +1029,7 @@
         "effective_date": "2025-01-27",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1042,7 +1042,7 @@
         "effective_date": "2025-01-20",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1055,7 +1055,7 @@
         "effective_date": "2025-01-13",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1068,7 +1068,7 @@
         "effective_date": "2025-01-06",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1081,7 +1081,7 @@
         "effective_date": "2024-12-30",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1094,7 +1094,7 @@
         "effective_date": "2024-12-23",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1107,7 +1107,7 @@
         "effective_date": "2024-12-16",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1120,7 +1120,7 @@
         "effective_date": "2024-12-09",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1133,7 +1133,7 @@
         "effective_date": "2024-12-02",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1146,7 +1146,7 @@
         "effective_date": "2024-11-25",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1159,7 +1159,7 @@
         "effective_date": "2024-11-18",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1172,7 +1172,7 @@
         "effective_date": "2024-11-11",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1185,7 +1185,7 @@
         "effective_date": "2024-11-04",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1198,7 +1198,7 @@
         "effective_date": "2024-10-28",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1211,7 +1211,7 @@
         "effective_date": "2024-10-21",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1224,7 +1224,7 @@
         "effective_date": "2024-10-14",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1237,7 +1237,7 @@
         "effective_date": "2024-10-07",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1250,7 +1250,7 @@
         "effective_date": "2024-09-30",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1263,7 +1263,7 @@
         "effective_date": "2024-09-23",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1276,7 +1276,7 @@
         "effective_date": "2024-09-16",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1289,7 +1289,7 @@
         "effective_date": "2024-09-09",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1302,7 +1302,7 @@
         "effective_date": "2024-09-02",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1315,7 +1315,7 @@
         "effective_date": "2024-08-26",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1328,7 +1328,7 @@
         "effective_date": "2024-08-19",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1341,7 +1341,7 @@
         "effective_date": "2024-08-12",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1354,7 +1354,7 @@
         "effective_date": "2024-08-05",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1367,7 +1367,7 @@
         "effective_date": "2024-07-29",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1380,7 +1380,7 @@
         "effective_date": "2024-07-22",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
@@ -1393,7 +1393,7 @@
         "effective_date": "2024-07-15",
         "source_id": "ia-legis",
         "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "derived_ia_668_13_weekly_cmt_plus_2",
         "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."

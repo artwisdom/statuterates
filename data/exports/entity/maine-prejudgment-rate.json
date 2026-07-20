@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "maine-prejudgment-rate",
   "name": "Maine Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -25,7 +25,7 @@
       "effective_date": "2026-07-09",
       "source_id": "me-prejud",
       "source_url": "https://legislature.maine.gov/statutes/14/title14sec1602-B.html",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Prejudgment interest under 14 M.R.S. § 1602-B — 6.51% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Maine’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at legislature.maine.gov. Not legal advice."
@@ -41,7 +41,7 @@
         "effective_date": "2026-07-09",
         "source_id": "me-prejud",
         "source_url": "https://legislature.maine.gov/statutes/14/title14sec1602-B.html",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Prejudgment interest under 14 M.R.S. § 1602-B — 6.51% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Maine’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at legislature.maine.gov. Not legal advice."

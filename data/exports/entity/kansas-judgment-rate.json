@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:22:20.801Z",
+  "generated_at": "2026-07-20T13:59:17.401Z",
   "slug": "kansas-judgment-rate",
   "name": "Kansas Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -23,7 +23,7 @@
       "effective_date": "2026-07-01",
       "source_id": "ks-jud",
       "source_url": "https://sos.ks.gov/general-services/finance-rates.html",
-      "retrieved_at": "2026-07-18T11:22:20.769Z",
+      "retrieved_at": "2026-07-20T13:59:17.350Z",
       "confidence": "medium",
       "method": "statute-variable",
       "notes": "Post-judgment interest under Kan. Stat. Ann. 16-204, currently 7.75% for July 1, 2026–June 30, 2027 (four percentage points above the federal discount rate as of July 1, recomputed each July 1). Simple interest. Prejudgment interest is separate — see the Kansas prejudgment page (10% general; a lower tort rate for recent tort actions). Verify at sos.ks.gov; not legal advice."
@@ -39,7 +39,7 @@
         "effective_date": "2026-07-01",
         "source_id": "ks-jud",
         "source_url": "https://sos.ks.gov/general-services/finance-rates.html",
-        "retrieved_at": "2026-07-18T11:22:20.769Z",
+        "retrieved_at": "2026-07-20T13:59:17.350Z",
         "confidence": "medium",
         "method": "statute-variable",
         "notes": "Post-judgment interest under Kan. Stat. Ann. 16-204, currently 7.75% for July 1, 2026–June 30, 2027 (four percentage points above the federal discount rate as of July 1, recomputed each July 1). Simple interest. Prejudgment interest is separate — see the Kansas prejudgment page (10% general; a lower tort rate for recent tort actions). Verify at sos.ks.gov; not legal advice."
