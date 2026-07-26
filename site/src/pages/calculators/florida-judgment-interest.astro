@@ -1,0 +1,342 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import CiteThis from '../../components/CiteThis.astro';
+import FloridaJudgmentCalculator from '../../components/FloridaJudgmentCalculator.astro';
+import {
+  getEntity,
+  getMeta,
+  currentOf,
+  historyFor,
+  latestOf,
+  prettyDate,
+  stateCalculatorReleaseForEntity,
+} from '../../lib/data.mjs';
+import {
+  floridaJudgmentCoverage,
+  floridaPostJudgmentInterest,
+} from '../../../../shared/interest-calc.mjs';
+
+const CFO_URL = 'https://www.myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates';
+const SESSION_LAW_URL = 'https://laws.flrules.org/2011/169';
+const DFS_METHOD_URL = 'https://www.myfloridacfo.com/docs-sf/default-source/rehab-and-liquidation_publicdocuments_files/542_CRT_20220816_MotiontoApproveMethodologyPlanforCalculatingInterestClaims.pdf';
+const DFS_ORDER_URL = 'https://www.myfloridacfo.com/docs-sf/default-source/rehab-and-liquidation_publicdocuments_files/542_CRT_20220819_OrderApprovingDepartmentsMethodologyPlanforCalculatingClassInterestClaims.pdf';
+const MODIFIED = '2026-07-26';
+
+const meta = getMeta();
+const entity = getEntity('florida-judgment-rate');
+const STATUTE_URL = entity.metadata?.official_statute_url;
+if (!STATUTE_URL) throw new Error('Florida official statute URL is missing');
+const release = stateCalculatorReleaseForEntity(entity);
+if (!release || release.path !== '/calculators/florida-judgment-interest/') {
+  throw new Error('Florida calculator release contract is not ready');
+}
+
+const latestPublished = latestOf(entity);
+const latest = currentOf(entity);
+const history = historyFor(entity.slug).sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+const rule = entity.metadata?.calculation;
+const coverage = floridaJudgmentCoverage(history);
+const dayBefore = (iso) => {
+  const date = new Date(`${iso}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() - 1);
+  return date.toISOString().slice(0, 10);
+};
+const addMonths = (iso, months) => {
+  const date = new Date(`${iso}T00:00:00Z`);
+  date.setUTCMonth(date.getUTCMonth() + months);
+  return date.toISOString().slice(0, 10);
+};
+const buildDate = String(meta.generated_at || MODIFIED).slice(0, 10);
+const pageYear = buildDate.slice(0, 4);
+const currentQuarterEnd = dayBefore(addMonths(latest.effective_date, 3));
+const schemaModified = [
+  MODIFIED,
+  String(latestPublished?.effective_date || '').slice(0, 10),
+].filter(Boolean).map((date) => date > buildDate ? buildDate : date).sort().at(-1);
+const maxJudgmentDate = [dayBefore(coverage.judgment_date_before), buildDate].sort()[0];
+const maxEndDate = dayBefore(coverage.calculation_date_through);
+
+const example = floridaPostJudgmentInterest({
+  principal: 10000,
+  judgmentDate: '2024-07-01',
+  endDate: '2025-12-31',
+  history,
+  includeEndDate: true,
+});
+const money = (value) => value.toLocaleString('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const title = `Florida Judgment Interest Calculator ${pageYear} | ${meta.title}`;
+const description = `Calculate Florida post-judgment interest under Fla. Stat. §55.03 with the entry rate, January 1 resets, per diem, and printable schedule.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const faqs = [
+  {
+    q: `What is the Florida judgment interest rate in ${pageYear}?`,
+    a: `The current Florida CFO rate is ${latest.value_text} per year for judgments entered from ${prettyDate(latest.effective_date)} through ${prettyDate(currentQuarterEnd)}. A supported judgment keeps the rate in force on its clerk-entry date through December 31, then generally adjusts to the CFO rate in force each January 1.`,
+  },
+  {
+    q: 'Does a Florida judgment rate change every quarter?',
+    a: 'The CFO publishes a new rate every quarter for newly obtained judgments. An existing ordinary judgment does not change at every quarter: section 55.03(3) adjusts it annually on January 1.',
+  },
+  {
+    q: 'Is Florida post-judgment interest simple or compounded?',
+    a: 'This supported statutory path uses simple daily interest on the entered principal. Accrued interest is not added to principal for the next period. The calculator divides each annual rate by 365 days, or 366 in a leap year.',
+  },
+  {
+    q: 'Which dates does the calculator count?',
+    a: 'It begins with the clerk-entry date. You choose whether the calculate-through date is included or excluded, and the result prints that convention and the exact day count. Florida’s general sources do not establish one universal payment-boundary convention, so confirm the controlling instruction before relying on a payoff.',
+  },
+  {
+    q: 'Can this calculate a Florida judgment with partial payments?',
+    a: 'No. Partial payments, later-added costs or fees, renewals, amended judgments, contract rates, and the listed clerk-entered judgment categories can change the legally relevant balance or rate path. This tool rejects those branches instead of approximating them.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Florida Judgment Interest Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    url: canonical,
+    description,
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    dateModified: schemaModified,
+    featureList: [
+      'Florida CFO rate selection by judgment date',
+      'Annual January 1 statutory rate adjustments',
+      'Daily simple-interest period schedule',
+      'Per-diem, copy, print, and PDF-ready result',
+      'Browser-local private calculation',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Florida judgment interest', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>Florida judgment interest</span>
+  </nav>
+
+  <div class="eyebrow">Florida · Fla. Stat. §55.03</div>
+  <h1>Florida judgment interest calculator</h1>
+  <p class="lead">Calculate simple post-judgment interest for an ordinary Florida money judgment
+    using the official CFO rate in force on the judgment date and the required January 1
+    adjustments. The result includes each rate period, interest, total, and current per diem.</p>
+
+  <div class="quick-answer">
+    <strong>Current rate:</strong> {latest.value_text} per year for the quarter beginning
+    {prettyDate(latest.effective_date)}. That quarterly rate selects the starting rate for a new
+    judgment; an existing ordinary judgment generally changes only on January 1.
+  </div>
+
+  <section class="scope-card" aria-labelledby="supported-case">
+    <h2 id="supported-case">Check that this calculator fits your judgment</h2>
+    <div class="scope-grid">
+      <div>
+        <h3>Use it only when all are true</h3>
+        <ul class="clean">
+          <li>The judgment is an ordinary Florida money judgment governed by §55.03.</li>
+          <li>It was entered/filed by the clerk on or after <strong>July 1, 2011</strong>.</li>
+          <li>The unpaid money sum adjudged or entered has no later additions or payment events.</li>
+          <li>You want an estimate using the statutory CFO schedule.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Do not use it for</h3>
+        <ul class="clean">
+          <li>A rate established by written contract or obligation.</li>
+          <li>Clerk-entered judgments under §§55.141, 61.14, 938.29, or 938.30.</li>
+          <li>Prejudgment interest, payments, later fees or costs, renewals, or amended judgments.</li>
+          <li>A court payoff where a different date, allocation, or rounding rule controls.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <FloridaJudgmentCalculator
+    history={history}
+    minJudgmentDate={rule.valid_from}
+    maxJudgmentDate={maxJudgmentDate}
+    maxEndDate={maxEndDate}
+  />
+
+  <p class="source-note">The form runs entirely in your browser. Rates come from the
+    <a href={CFO_URL}>official Florida CFO table</a>; no amount or date you enter is sent to
+    StatuteRates. The latest published schedule permits existing supported judgments to be
+    calculated through {prettyDate(maxEndDate)} without guessing a future January 1 reset.</p>
+
+  <AdSlot id="florida-calc-after-tool" />
+
+  <h2>How Florida judgment interest is calculated</h2>
+  <p>Florida uses two different clocks that are easy to confuse. The Chief Financial Officer sets a
+    rate for each calendar quarter. That quarterly schedule answers the first question: which rate
+    applies when the judgment is obtained? Once that entry rate is selected, an ordinary judgment
+    keeps it through December 31. Section 55.03(3) then adjusts the judgment to the CFO rate in
+    effect on January 1 of each later year until the judgment is paid.</p>
+
+  <ol class="steps">
+    <li><strong>Select the entry rate.</strong> Find the latest CFO effective date on or before the
+      clerk-entry date. A judgment entered during the quarter beginning
+      {prettyDate(latest.effective_date)} starts at {latest.value_text}, even if the CFO has already
+      announced a different rate for the following quarter.</li>
+    <li><strong>Accrue through year-end.</strong> Multiply principal by the annual rate and the
+      elapsed-day fraction for that calendar year. The calculator uses 365 days, or 366 for a leap
+      year, consistent with the CFO daily-factor schedule.</li>
+    <li><strong>Reset each January 1.</strong> If the calculation continues into a new year, apply
+      the exact CFO rate effective that January 1 to the original principal. Later April, July, and
+      October changes do not alter that existing judgment before the next January 1.</li>
+    <li><strong>Add the simple-interest periods.</strong> Each period’s interest is added to the
+      result, but not to the principal used for the next period. The period table makes that rate
+      path visible instead of hiding it inside one total.</li>
+  </ol>
+
+  <h2>Worked Florida example</h2>
+  <p>Suppose an ordinary <strong>{money(10000)}</strong> Florida judgment was entered on
+    <strong>July 1, 2024</strong> and calculated <strong>through and including December 31,
+    2025</strong>. The entry rate was {example.segments[0].rate_percent}%. It applied for the remaining
+    {example.segments[0].days} days of leap year 2024. On January 1, 2025, the rate adjusted to
+    {example.segments[1].rate_percent}% and applied for that calendar year.</p>
+  <div class="scroll-x">
+    <table>
+      <thead>
+        <tr><th scope="col">Period</th><th scope="col">Rate</th><th scope="col">Days</th><th scope="col">Interest</th></tr>
+      </thead>
+      <tbody>
+        {example.segments.map((segment) => (
+          <tr>
+            <td>{prettyDate(segment.start_date)} through {prettyDate(dayBefore(segment.end_date))}</td>
+            <td class="num">{segment.rate_percent}%</td>
+            <td class="num">{segment.days}</td>
+            <td class="num">{money(segment.interest)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p>The estimated interest is <strong>{money(example.interest)}</strong>, producing a total of
+    <strong>{money(example.total)}</strong>. The live form uses the same tested engine that produced
+    this example, so the explanation and arithmetic cannot quietly drift apart.</p>
+  <p>As an additional arithmetic benchmark, the engine reproduces the Florida DFS example of
+    $18,935,964.29 at 4.75% for 275 included days in 2013: $677,674.06 of interest. The
+    <a href={DFS_METHOD_URL}>DFS methodology filing</a> and
+    <a href={DFS_ORDER_URL}>approval order</a> are case-specific evidence for that example, not a
+    universal payoff instruction for every Florida judgment.</p>
+
+  <h2>What the per diem means</h2>
+  <p>The per diem is the amount of simple interest accruing for one day in the final period shown.
+    It equals the supported unpaid entered amount multiplied by that period’s daily factor. It is
+    useful for updating
+    an estimate by a small number of days, but it is not automatically a court-approved payoff
+    figure. A payment, cost award, amended principal, January 1 reset, or case-specific allocation
+    can change the correct daily amount.</p>
+  <p>The date labeled “calculate through” has an explicit choice. The default includes the entered
+    through-date; the alternate option stops before it. The result prints the selected convention,
+    inclusive period dates, and total day count. This avoids hiding a one-day assumption that can
+    change the amount. Confirm the boundary specified by the judgment, payoff issuer, or court.</p>
+
+  <AdSlot id="florida-calc-mid" />
+
+  <h2>Why the calculator begins July 1, 2011</h2>
+  <p>Florida’s modern rule came from Chapter 2011-169, Laws of Florida. It introduced the quarterly
+    CFO schedule and the annual January 1 adjustment structure used here. The official CFO table
+    contains older rates back to October 1981, and the
+    <a href="/rates/florida-judgment-rate/">Florida rate-history page</a> preserves all of them.
+    This calculator intentionally starts with the modern period instead of pretending that every
+    older judgment follows today’s transition rules.</p>
+
+  <h2>Automatic rate updates without guessed numbers</h2>
+  <p>StatuteRates’ weekly data pipeline checks the official CFO page. It parses every published
+    period, reconciles the annual percentage with the agency’s daily factor, and compares all
+    overlapping rows with the committed history. A new quarter can be appended only when its date,
+    annual rate, and daily arithmetic pass those checks. If the source is unavailable or a
+    historical row changes unexpectedly, the pipeline retains the last verified data and fails
+    closed instead of inventing a replacement.</p>
+  <p>The calculator has a second safeguard: it will not accept a judgment date in an unpublished
+    quarter or cross a January 1 reset whose rate is not yet known. This matters for long-term
+    accuracy because simply carrying the last rate forward would create a plausible-looking but
+    unsupported payoff.</p>
+
+  <h2>Official Florida sources</h2>
+  <ul class="clean">
+    <li><a href={STATUTE_URL}>Fla. Stat. §55.03</a> — quarterly CFO rate setting, the rate shown on
+      judgments, the annual January 1 adjustment, and the contract and clerk-judgment branches.</li>
+    <li><a href={CFO_URL}>Florida CFO judgment interest rates</a> — the current rate, historical
+      schedule, and published daily factors.</li>
+    <li><a href={SESSION_LAW_URL}>Chapter 2011-169, Laws of Florida</a> — the modern statutory
+      transition behind the supported start date.</li>
+    <li><a href={DFS_METHOD_URL}>Florida DFS calculation methodology</a> and
+      <a href={DFS_ORDER_URL}>the approving order</a> — a case-specific official example supporting
+      simple principal-only arithmetic, 365/366 denominators, and retained precision.</li>
+  </ul>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
+  </div>
+
+  <p class="related">Related: <a href="/rates/florida-judgment-rate/">Florida rate and complete
+    history</a> · <a href="/states/florida/">Florida judgment and prejudgment overview</a> ·
+    <a href="/calculators/post-judgment-interest/">federal §1961 calculator</a> ·
+    <a href="/guides/how-to-calculate-judgment-interest/">how to calculate judgment interest</a></p>
+
+  <CiteThis
+    title="Florida Judgment Interest Calculator"
+    url={canonical}
+    note={`Ordinary Fla. Stat. §55.03 scope from July 1, 2011; CFO history through ${prettyDate(latestPublished.effective_date)}.`}
+  />
+
+  <AdSlot id="florida-calc-bottom" />
+
+  <div class="disclaimer"><strong>Reference estimate only.</strong> This is not legal advice, a
+    court ledger, or an official payoff. Confirm the governing judgment category, face rate,
+    principal, payment history, dates, and court rounding before relying on a result.</div>
+
+  <style>
+    .breadcrumb { font-size: .9rem; color: var(--ink-soft); margin-bottom: 6px; }
+    .quick-answer { margin: 24px 0; padding: 15px 17px; border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0; background: var(--green-wash); }
+    .scope-card { margin: 24px 0; padding: 20px; border: 1px solid var(--line);
+      border-radius: 14px; background: var(--paper-2); }
+    .scope-card h2 { margin: 0 0 14px; font-size: 1.25rem; }
+    .scope-card h3 { margin: 0; }
+    .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .steps { padding-left: 23px; }
+    .steps li { margin: 12px 0; padding-left: 4px; }
+    .faq details { border-top: 1px solid var(--line); padding: 13px 0; }
+    .faq summary { cursor: pointer; font-weight: 650; }
+    .faq p { margin: 8px 0 0; color: var(--ink-soft); }
+    .related { margin-top: 24px; color: var(--ink-soft); }
+    @media (max-width: 680px) { .scope-grid { grid-template-columns: 1fr; } }
+  </style>
+</BaseLayout>

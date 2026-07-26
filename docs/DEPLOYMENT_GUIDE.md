@@ -27,13 +27,15 @@ Repository variables used by `.github/workflows/deploy.yml`:
 | `ADSENSE_CLIENT` | Only after approval | `ca-pub-...` client identifier |
 | `ADSENSE_SLOT` | Optional after approval | Responsive display-unit slot |
 
-The refresh workflow runs weekly on Monday at 12:00 UTC. It tests the pipeline, hydrates a fresh
+The refresh workflow runs weekly on Tuesday at 02:00 UTC (Monday evening in U.S. Eastern time),
+after the official weekly Federal Reserve publication. It tests the pipeline, hydrates a fresh
 SQLite database from committed JSON history, fetches permitted sources, validates, and commits exports
 only when they changed.
 
-The deploy workflow tests the site data contract, rebuilds the static API, builds Astro, checks all
-internal targets and calculator indexing gates, validates the API contract, and then publishes to
-GitHub Pages. It runs for reviewed `main` changes and after every successful refresh through
+The deploy workflow installs and tests the pipeline, validates a fresh database hydrated from the
+committed exports, tests the site data contract and shared engine, rebuilds the static API, builds
+Astro, checks all internal targets and calculator indexing gates, validates the API contract, and
+then publishes to GitHub Pages. It runs for reviewed `main` changes and after every successful refresh through
 `workflow_run`. The latter is required because GitHub intentionally prevents a push made with the
 workflow's `GITHUB_TOKEN` from triggering another push workflow. A successful no-change refresh still
 runs the inexpensive deployment verification so production cannot silently drift from `main`.
@@ -52,9 +54,10 @@ cd .. && node machine/check-api-conformance.mjs
 cd machine/mcp-server && npm test
 ```
 
-Never change `STATE_CALCULATOR_RENDERER_READY` or set `ENABLE_STATE_CALCULATORS=true` in production
-until the renderer consumes the structured rule model and each included state has passed the
-calculator-readiness contract.
+Never change `STATE_CALCULATOR_RENDERER_READY` or set `ENABLE_STATE_CALCULATORS=true` in production.
+Those legacy switches remain disabled so the generic prototype cannot mass-publish states. A
+dedicated state calculator requires a reviewed registry entry, matching renderer ID, structured
+ready metadata, tests, and its own page; Florida is currently the only approved entry.
 
 ## 4. Cloudflare edge checks
 
@@ -107,7 +110,7 @@ calculator in a private browser window.
 ## 5. Search indexing
 
 - Submit `https://statuterates.com/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
-- Inspect the sitemap after releases; state calculator prototypes must not appear.
+- Inspect the sitemap after releases; only registry-approved dedicated state calculators may appear.
 - Use URL Inspection only for important newly published pages. Avoid artificial date churn.
 - IndexNow is non-fatal and currently submits sitemap URLs after production deployments. Google does
   not use IndexNow, so Search Console remains necessary.

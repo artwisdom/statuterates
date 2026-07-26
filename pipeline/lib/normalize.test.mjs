@@ -2,7 +2,12 @@
 // Run: node --test  (from pipeline/)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildWeeklyAverages, buildCmtRecords, buildPostJudgmentRecords } from './normalize.mjs';
+import {
+  FEDERAL_PJ_FIRST_RATE_WEEK,
+  buildWeeklyAverages,
+  buildCmtRecords,
+  buildPostJudgmentRecords,
+} from './normalize.mjs';
 
 const src = { source_id: 'fed-h15', source_url: 'https://example', retrieved_at: '2026-07-08T00:00:00Z' };
 
@@ -55,4 +60,25 @@ test('post-judgment records equal the CMT weekly averages (the §1961 invariant)
 
 test('empty input yields no weeks (no crash)', () => {
   assert.deepEqual(buildWeeklyAverages([]), []);
+});
+
+test('weekly averages use published half-up rounding for exact half-cent ties', () => {
+  const [week] = buildWeeklyAverages([
+    { date: '2000-07-03', value: 6.07 },
+    { date: '2000-07-05', value: 6.06 },
+    { date: '2000-07-06', value: 6.10 },
+    { date: '2000-07-07', value: 6.07 },
+  ]);
+  assert.equal(week.avg, 6.08);
+});
+
+test('current-formula federal post-judgment records begin with the 2000-12-11 rate week', () => {
+  const weeks = [
+    { week: '2000-12-04', avg: 5.74, n: 5 },
+    { week: FEDERAL_PJ_FIRST_RATE_WEEK, avg: 5.73, n: 5 },
+  ];
+  const cmt = buildCmtRecords(weeks, src);
+  const pj = buildPostJudgmentRecords(weeks, src);
+  assert.equal(cmt.observations.length, 2);
+  assert.deepEqual(pj.observations.map((row) => row.effective_date), [FEDERAL_PJ_FIRST_RATE_WEEK]);
 });

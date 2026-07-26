@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, historyFor, getEntity, latestOf, prettyDate, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
+import { getMeta, historyFor, getEntity, currentOf, prettyDate, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 
 const meta = getMeta();
 // Calculation histories. For CA/NY/MA the statutory rates have been stable for decades (verified
@@ -56,8 +56,8 @@ const seriesOptions = [
   { key: 'wyoming', label: "Wyoming — 10% (Wyo. Stat. Ann. 1-16-102)" },
   { key: 'iowa', label: 'Iowa — monthly court table + 2% (§668.13)' },
 ];
-const caLatest = latestOf(getEntity('california-judgment-rate'));
-const iaLatest = latestOf(getEntity('iowa-judgment-rate'));
+const caLatest = currentOf(getEntity('california-judgment-rate'));
+const iaLatest = currentOf(getEntity('iowa-judgment-rate'));
 const requiredCalculatorEntities = [
   'california-judgment-rate', 'new-york-judgment-rate', 'new-york-consumer-debt-judgment-rate',
   'massachusetts-judgment-rate', 'pennsylvania-judgment-rate', 'illinois-judgment-rate',

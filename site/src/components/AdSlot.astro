@@ -25,5 +25,7 @@ const active = client && slot;
   .ad-slot { margin: 32px auto; text-align: center; max-width: 728px; }
   .ad-slot--empty { margin: 0; }
   .ad-label { display: block; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); opacity: 0.55; margin-bottom: 6px; }
-  .ad-slot .adsbygoogle { display: block; min-height: 100px; }
+  /* Reserve a common in-content display height before AdSense responds, preventing result-page
+     layout shift when monetization is enabled. The empty/inactive placeholder remains zero-height. */
+  .ad-slot .adsbygoogle { display: block; min-height: 250px; }
 </style>

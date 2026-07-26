@@ -33,6 +33,26 @@ test('refresh records whether exports changed without relying on a suppressed pu
   assert.doesNotMatch(refresh, /deploy workflow runs on push to data\/exports/i);
 });
 
+test('IndexNow runs only after the production deployment step', async () => {
+  const deploy = await readFile(deployPath, 'utf8');
+  const deploymentIndex = deploy.indexOf('uses: actions/deploy-pages@v5');
+  const indexNowIndex = deploy.indexOf('name: Ping IndexNow');
+
+  assert.notEqual(deploymentIndex, -1);
+  assert.notEqual(indexNowIndex, -1);
+  assert.ok(indexNowIndex > deploymentIndex);
+  assert.match(deploy, /sitemap\.xml\?deploy=/);
+});
+
+test('weekly automation opens one deduplicated calculator legal-review reminder', async () => {
+  const refresh = await readFile(refreshPath, 'utf8');
+
+  assert.match(refresh, /^\s*issues:\s*write\b/m);
+  assert.match(refresh, /node machine\/legal-review-reminder\.mjs/);
+  assert.match(refresh, /gh issue list --state open/);
+  assert.match(refresh, /gh issue create --title/);
+});
+
 test('automation uses current Node 24 GitHub Actions runtimes', async () => {
   const [deploy, refresh] = await Promise.all([
     readFile(deployPath, 'utf8'),

@@ -18,6 +18,8 @@
 // These are ESTIMATES for reference — official/court computations may differ in rounding details.
 
 const DAY_MS = 86400000;
+const MAX_SUPPORTED_PRINCIPAL = 1_000_000_000_000;
+export const FEDERAL_MODERN_RULE_START = '2000-12-21';
 
 export function parseDate(iso) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) throw new Error(`Invalid date "${iso}" (need YYYY-MM-DD)`);
@@ -40,6 +42,14 @@ function yearLen(y) {
 
 function assertPositivePrincipal(principal) {
   if (!Number.isFinite(principal) || !(principal > 0)) throw new Error('Principal must be a finite number > 0');
+  const cents = Math.round(principal * 100);
+  if (principal > MAX_SUPPORTED_PRINCIPAL
+      || !Number.isSafeInteger(cents)
+      || Math.abs(cents / 100 - principal) > 1e-9) {
+    throw new Error(
+      `Principal must be a cent-precise amount no greater than $${MAX_SUPPORTED_PRINCIPAL.toLocaleString('en-US')}`
+    );
+  }
 }
 
 function sortHistory(history) {
@@ -73,16 +83,28 @@ export function mondayOf(iso) {
  * Rate: the weekly series entry for the calendar week PRECEDING the judgment week.
  * Accrual: daily at rate/365 on the current base, compounded annually on the judgment anniversary.
  */
-export function federalPostJudgment({ principal, judgmentDate, endDate, weeklyHistory }) {
+export function federalPostJudgment({
+  principal,
+  judgmentDate,
+  endDate,
+  weeklyHistory,
+  validFrom = FEDERAL_MODERN_RULE_START,
+}) {
   assertPositivePrincipal(principal);
   const days = daysBetween(judgmentDate, endDate);
   if (days < 0) throw new Error('End date is before the judgment date');
+  if (judgmentDate < validFrom) {
+    throw new Error(`This federal calculator supports judgments entered on or after ${validFrom}`);
+  }
   const priorWeekMonday = isoOf(new Date(parseDate(mondayOf(judgmentDate)) - 7 * DAY_MS));
   const h = sortHistory(weeklyHistory);
   const entry = h.find((p) => p.date === priorWeekMonday) || null;
-  const fallback = entry ? null : rateOn(h, priorWeekMonday);
-  const rateEntry = entry || (fallback && { date: fallback.effective_date, value: fallback.value });
-  if (!rateEntry) throw new Error(`No H.15 weekly rate available for the week of ${priorWeekMonday} (judgment ${judgmentDate})`);
+  const rateEntry = entry;
+  if (!rateEntry) {
+    throw new Error(
+      `No exact H.15 weekly rate is available for the week of ${priorWeekMonday} (judgment ${judgmentDate}); an older week will not be substituted`
+    );
+  }
   const r = rateEntry.value / 100;
 
   // Daily accrual within each judgment-anniversary year; compound at each anniversary.
@@ -94,11 +116,16 @@ export function federalPostJudgment({ principal, judgmentDate, endDate, weeklyHi
     const segEnd = anniversary <= endDate ? anniversary : endDate;
     const segDays = daysBetween(cursor, segEnd);
     interest += base * r * (segDays / 365);
+    if (!Number.isFinite(interest)) throw new Error('Federal interest result exceeds the supported range');
     if (segEnd === anniversary && segEnd !== endDate) {
       base = principal + interest; // §1961(b): compounded annually
+      if (!Number.isFinite(base)) throw new Error('Federal compounded balance exceeds the supported range');
       anniversary = nextAnniversary(judgmentDate, segEnd);
     }
     cursor = segEnd;
+  }
+  if (!Number.isFinite(principal + interest)) {
+    throw new Error('Federal total exceeds the supported range');
   }
   return {
     method: '28 U.S.C. §1961: daily accrual (actual/365), compounded annually',
@@ -182,6 +209,212 @@ export function irsRateCoverageEnd(quarterlyHistory) {
   }
   d.setUTCMonth(d.getUTCMonth() + 3);
   return isoOf(d);
+}
+
+/**
+ * Safe date boundaries for the modern Florida judgment-interest rule.
+ *
+ * The CFO publishes a rate for each calendar quarter. A newly entered judgment can therefore use
+ * the final published point only until that quarter ends. Once a judgment exists, Fla. Stat.
+ * §55.03(3) keeps its entry rate through December 31 and changes it only on January 1, so an
+ * existing judgment remains calculable through the next January 1 boundary.
+ */
+export function floridaJudgmentCoverage(history) {
+  const h = sortHistory(history);
+  const latest = h.at(-1);
+  if (!latest) throw new Error('No Florida CFO rate history supplied');
+  const d = parseDate(latest.date);
+  if (d.getUTCDate() !== 1 || ![0, 3, 6, 9].includes(d.getUTCMonth())) {
+    throw new Error(`Florida CFO rate ${latest.date} is not a calendar-quarter start`);
+  }
+  const entryEnd = addMonthsClamped(latest.date, 3);
+  const annualResetEnd = `${d.getUTCFullYear() + 1}-01-01`;
+  return {
+    latest_effective_date: latest.date,
+    judgment_date_before: entryEnd,
+    calculation_date_through: annualResetEnd,
+  };
+}
+
+function gcdBigInt(a, b) {
+  let x = a < 0n ? -a : a;
+  let y = b < 0n ? -b : b;
+  while (y) [x, y] = [y, x % y];
+  return x;
+}
+
+function addPositiveFraction(total, numerator, denominator) {
+  if (numerator === 0n) return total;
+  const divisor = gcdBigInt(total.denominator, denominator);
+  const leftMultiplier = denominator / divisor;
+  const rightMultiplier = total.denominator / divisor;
+  const combined = {
+    numerator: total.numerator * leftMultiplier + numerator * rightMultiplier,
+    denominator: total.denominator * leftMultiplier,
+  };
+  const reduction = gcdBigInt(combined.numerator, combined.denominator);
+  return {
+    numerator: combined.numerator / reduction,
+    denominator: combined.denominator / reduction,
+  };
+}
+
+function roundPositiveFraction(numerator, denominator) {
+  const whole = numerator / denominator;
+  const remainder = numerator % denominator;
+  return remainder * 2n >= denominator ? whole + 1n : whole;
+}
+
+function centsNumber(cents) {
+  const value = Number(cents);
+  if (!Number.isSafeInteger(value)) throw new Error('Florida calculation total is too large to display safely');
+  return value / 100;
+}
+
+/**
+ * Florida post-judgment interest for the deliberately narrow modern statutory path:
+ *
+ * - ordinary money judgments governed by Fla. Stat. §55.03;
+ * - judgment obtained on or after July 1, 2011;
+ * - the CFO rate in force on the judgment date applies through December 31;
+ * - the rate changes to the CFO rate in force each January 1;
+ * - simple daily interest on principal only, using 365 or 366 for that calendar year;
+ * - no written-contract rate, excluded clerk judgment, partial payment, fee, cost, or renewal.
+ *
+ * Florida's ordinary-judgment sources do not establish one universal treatment of the payoff
+ * boundary. Callers choose explicitly whether the entered through-date is included; the public
+ * calculator defaults to including it and prints the convention with the result.
+ */
+export function floridaPostJudgmentInterest({
+  principal,
+  judgmentDate,
+  endDate,
+  history,
+  validFrom = '2011-07-01',
+  includeEndDate = true,
+}) {
+  assertPositivePrincipal(principal);
+  const principalCentsNumber = Math.round(principal * 100);
+  if (!Number.isSafeInteger(principalCentsNumber)
+      || Math.abs(principalCentsNumber / 100 - principal) > 1e-9) {
+    throw new Error('Florida judgment principal must be a cent-precise amount within the supported range');
+  }
+  if (typeof includeEndDate !== 'boolean') throw new Error('Florida end-date convention must be selected');
+  const principalCents = BigInt(principalCentsNumber);
+  parseDate(validFrom);
+  const enteredDays = daysBetween(judgmentDate, endDate);
+  if (enteredDays < 0) throw new Error('Calculation date is before the judgment date');
+  const accrualEndExclusive = includeEndDate ? addDays(endDate, 1) : endDate;
+  const totalDays = daysBetween(judgmentDate, accrualEndExclusive);
+  if (judgmentDate < validFrom) {
+    throw new Error(`This Florida calculator supports judgments entered on or after ${validFrom}`);
+  }
+
+  const h = sortHistory(history);
+  const coverage = floridaJudgmentCoverage(h);
+  if (judgmentDate >= coverage.judgment_date_before) {
+    throw new Error(
+      `Florida has not published the CFO entry rate for ${judgmentDate}; choose a judgment date before ${coverage.judgment_date_before}`
+    );
+  }
+  if (accrualEndExclusive > coverage.calculation_date_through) {
+    throw new Error(
+      `A required January 1 Florida reset is not yet published; this date convention requires an accrual boundary after ${coverage.calculation_date_through}`
+    );
+  }
+
+  const entry = rateOn(h, judgmentDate);
+  if (!entry) throw new Error(`No Florida CFO rate on record for ${judgmentDate}`);
+  const exactByDate = new Map(h.map((point) => [point.date, point]));
+  const segments = [];
+  let exactInterestCents = { numerator: 0n, denominator: 1n };
+  let cursor = judgmentDate;
+  let rate = { date: entry.effective_date, value: entry.value };
+
+  while (cursor < accrualEndExclusive) {
+    if (cursor !== judgmentDate) {
+      rate = exactByDate.get(cursor);
+      if (!rate) {
+        throw new Error(`The official Florida CFO history is missing the required January 1 rate for ${cursor}`);
+      }
+    }
+    const year = Number(cursor.slice(0, 4));
+    const nextJanuary = `${year + 1}-01-01`;
+    const segmentEnd = nextJanuary < accrualEndExclusive ? nextJanuary : accrualEndExclusive;
+    const days = daysBetween(cursor, segmentEnd);
+    const denominator = yearLen(year);
+    const rateHundredths = Math.round(rate.value * 100);
+    if (!Number.isSafeInteger(rateHundredths)
+        || Math.abs(rateHundredths / 100 - rate.value) > 1e-9) {
+      throw new Error(`Florida CFO rate ${rate.value}% at ${rate.date} is not cent-precise`);
+    }
+    const fractionNumerator = principalCents * BigInt(rateHundredths) * BigInt(days);
+    const fractionDenominator = 10000n * BigInt(denominator);
+    exactInterestCents = addPositiveFraction(
+      exactInterestCents,
+      fractionNumerator,
+      fractionDenominator,
+    );
+    const dailyFactor = rate.value / 100 / denominator;
+    const perDiemCents = roundPositiveFraction(
+      principalCents * BigInt(rateHundredths),
+      10000n * BigInt(denominator),
+    );
+    const segmentInterestCents = roundPositiveFraction(fractionNumerator, fractionDenominator);
+    segments.push({
+      start_date: cursor,
+      end_date: segmentEnd,
+      days,
+      rate_percent: rate.value,
+      rate_effective_date: rate.date,
+      denominator,
+      daily_factor: dailyFactor,
+      per_diem: centsNumber(perDiemCents),
+      interest: centsNumber(segmentInterestCents),
+    });
+    cursor = segmentEnd;
+  }
+
+  const entryYear = Number(judgmentDate.slice(0, 4));
+  const currentPerDiem = segments.at(-1)?.per_diem
+    ?? centsNumber(roundPositiveFraction(
+      principalCents * BigInt(Math.round(entry.value * 100)),
+      10000n * BigInt(yearLen(entryYear)),
+    ));
+  const interestCents = roundPositiveFraction(
+    exactInterestCents.numerator,
+    exactInterestCents.denominator,
+  );
+  const halfCentTie = exactInterestCents.numerator % exactInterestCents.denominator * 2n
+    === exactInterestCents.denominator;
+  const interest = centsNumber(interestCents);
+  // Each period is independently rounded for display, while the legally relevant total is rounded
+  // once from the exact combined fraction. Keep any difference explicit instead of silently
+  // altering the final period—which could otherwise make a tiny, valid period appear negative.
+  const displayedSegmentCents = segments.reduce(
+    (sum, segment) => sum + BigInt(Math.round(segment.interest * 100)),
+    0n,
+  );
+  const roundingAdjustmentCents = interestCents - displayedSegmentCents;
+  return {
+    method:
+      'Fla. Stat. §55.03: simple daily interest; entry rate through December 31, ' +
+      `adjusted each January 1; entered through-date ${includeEndDate ? 'included' : 'excluded'}`,
+    supported_from: validFrom,
+    entered_end_date: endDate,
+    end_date_included: includeEndDate,
+    accrual_end_exclusive: accrualEndExclusive,
+    half_cent_rounding_tie: halfCentTie,
+    entry_rate_percent: entry.value,
+    entry_rate_effective_date: entry.effective_date,
+    days: totalDays,
+    segments,
+    current_per_diem: currentPerDiem,
+    rounding_adjustment: centsNumber(roundingAdjustmentCents),
+    interest,
+    total: centsNumber(principalCents + interestCents),
+    coverage,
+  };
 }
 
 /**

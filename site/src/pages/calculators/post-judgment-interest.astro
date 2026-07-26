@@ -1,17 +1,73 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import CiteThis from '../../components/CiteThis.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getMeta, getEntity, currentOf, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+import {
+  FEDERAL_MODERN_RULE_START,
+  federalPostJudgment,
+} from '../../../../shared/interest-calc.mjs';
+
+const STATUTE_URL = 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title28-section1961&num=0&edition=prelim';
+const COURTS_URL = 'https://www.uscourts.gov/court-programs/fees/post-judgment-interest-rate';
+const FRED_DAILY_URL = 'https://fred.stlouisfed.org/series/DGS1';
+const FRED_WEEKLY_URL = 'https://fred.stlouisfed.org/series/WGS1YR';
+const FED_ANNOUNCEMENT_URL = 'https://www.federalreserve.gov/datadownload/Download.aspx?rel=H15';
+const MODIFIED = '2026-07-26';
 
 const meta = getMeta();
 const entity = getEntity('us-federal-post-judgment');
-const latest = latestOf(entity);
-const weekly = historyFor('us-federal-post-judgment');
+const latestPublished = latestOf(entity);
+const latest = currentOf(entity);
+const weekly = historyFor('us-federal-post-judgment')
+  .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+const buildDate = String(meta.generated_at || MODIFIED).slice(0, 10);
+const firstWeek = weekly[0];
+const schemaModified = [
+  MODIFIED,
+  String(latestPublished?.effective_date || '').slice(0, 10),
+].filter(Boolean).map((date) => date > buildDate ? buildDate : date).sort().at(-1);
 
-const title = `Federal Judgment Interest Calculator (§1961) | ${meta.title}`;
-const description = `Calculate federal post-judgment interest under 28 U.S.C. §1961 using the prior week's H.15 Treasury rate (${latest?.value_text}), daily accrual, and annual compounding.`;
+const example = federalPostJudgment({
+  principal: 100000,
+  judgmentDate: '2025-01-08',
+  endDate: '2026-01-08',
+  weeklyHistory: weekly,
+});
+const money = (value) => value.toLocaleString('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const title = 'Federal Post-Judgment Interest Calculator | 28 U.S.C. §1961';
+const description = `Calculate federal post-judgment interest under 28 U.S.C. §1961 using the exact prior-week Treasury rate, daily accrual, and annual compounding.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const faqs = [
+  {
+    q: 'How is federal post-judgment interest calculated?',
+    a: 'For a supported civil money judgment, 28 U.S.C. §1961 selects the weekly-average 1-year Treasury constant maturity yield for the calendar week preceding the judgment date. Interest is computed daily from judgment to payment and compounded annually.',
+  },
+  {
+    q: 'What is the current federal post-judgment interest rate?',
+    a: `The most recent recorded weekly value is ${latest.value_text} for the week beginning ${prettyDate(latest.effective_date)}. A specific judgment does not automatically use that latest number; it uses the exact preceding calendar week.`,
+  },
+  {
+    q: 'Does the federal judgment interest rate change after judgment?',
+    a: 'The selected annual rate stays fixed for that judgment. The balance changes because accrued interest is compounded annually, but later Treasury-rate movements do not replace the rate selected at entry.',
+  },
+  {
+    q: 'How far back does this calculator work?',
+    a: `It supports the current 1-year Treasury formula for judgments entered on or after December 21, 2000. The versioned weekly history begins ${prettyDate(firstWeek.effective_date)} and is updated automatically from official Federal Reserve data.`,
+  },
+  {
+    q: 'Does 28 U.S.C. §1961 cover every federal judgment?',
+    a: 'No. The statute and U.S. Courts identify different treatment or exceptions for internal-revenue tax cases, certain Court of Federal Claims judgments, Judgment Fund payments, criminal judgments, and some condemnation matters. Confirm the governing statute and court table.',
+  },
+];
 
 const jsonLd = [
   {
@@ -22,23 +78,24 @@ const jsonLd = [
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     url: canonical,
-    description: 'Computes interest on U.S. federal court money judgments per 28 U.S.C. §1961.',
+    description,
+    isAccessibleForFree: true,
+    dateModified: schemaModified,
+    featureList: [
+      '2000-present federal judgment-rate history',
+      'Exact preceding-calendar-week rate selection',
+      'Daily accrual and annual compounding',
+      'Browser-local calculation',
+    ],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'How is federal post-judgment interest calculated?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Under 28 U.S.C. §1961, the rate is the weekly-average 1-year Treasury constant maturity yield (Fed H.15) for the calendar week preceding the judgment. Interest is computed daily on the judgment amount and compounded annually on each anniversary of the judgment.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'What is the current federal post-judgment interest rate?',
-        acceptedAnswer: { '@type': 'Answer', text: `The most recent weekly value is ${latest?.value_text} (week beginning ${prettyDate(latest?.effective_date)}). The rate applied to a specific judgment is the one for the week preceding that judgment's date.` },
-      },
-    ],
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
   },
   {
     '@context': 'https://schema.org',
@@ -52,35 +109,151 @@ const jsonLd = [
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+  <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Federal post-judgment interest</span>
   </nav>
+  <div class="eyebrow">Federal courts · 28 U.S.C. §1961</div>
   <h1>Federal post-judgment interest calculator</h1>
-  <p class="lead">Computes interest on a U.S. federal court money judgment exactly as
-    28 U.S.C. §1961 prescribes: the H.15 weekly-average 1-year Treasury yield for the calendar week
-    preceding your judgment date, accrued daily and compounded annually.</p>
+  <p class="lead">Calculate interest on a supported U.S. federal court money judgment using the
+    exact weekly-average 1-year Treasury yield for the calendar week before judgment, with daily
+    accrual and annual compounding.</p>
+
+  <div class="quick-answer">
+    <strong>Latest recorded weekly value:</strong> {latest.value_text} for the week beginning
+    {prettyDate(latest.effective_date)}. Coverage begins with judgments entered on
+    <strong>December 21, 2000</strong>. A specific judgment uses its exact preceding calendar week,
+    and the calculator stops rather than substitute an older week’s rate if that week is missing.
+  </div>
 
   <InterestCalculator
     kind="post-judgment"
     histories={{ pj: weekly }}
     defaultSeries="pj"
     principalLabel="Judgment amount"
-    startLabel="Date of judgment"
-    endLabel="Calculated through (e.g. payment date)"
+    startLabel="Date judgment was entered"
+    endLabel="Calculate through (exclusive payment boundary)"
+    minDate={FEDERAL_MODERN_RULE_START}
+    maxDate={buildDate}
+    id="federal-post-judgment-calculator"
+  />
+  <p class="source-note">Your amount and dates stay in your browser. This estimate counts elapsed
+    days from the judgment date up to, but not including, the calculate-through date. Confirm your
+    court’s payoff date and rounding convention.</p>
+
+  <AdSlot id="federal-calc-after-tool" />
+
+  <h2>How the §1961 rate is selected</h2>
+  <p>The phrase “calendar week preceding the date of the judgment” is the key. First locate the
+    Monday-to-Sunday calendar week containing the judgment date. Then move back one full calendar
+    week. The weekly-average 1-year Treasury constant maturity yield for that earlier week becomes
+    the judgment’s annual rate. A Monday judgment and a Sunday judgment in the same calendar week
+    therefore use the same source week.</p>
+  <p>The rate is fixed when the judgment is entered. A Treasury yield published later does not
+    re-price that judgment. Section 1961(b) instead changes the interest-bearing balance: interest
+    is computed daily and, on each judgment anniversary, accrued interest is added for the next
+    annual period.</p>
+
+  <ol class="steps">
+    <li><strong>Find the prior calendar week.</strong> For a judgment entered Wednesday,
+      January 8, 2025, the judgment week began January 6. The required source week began
+      December 30, 2024.</li>
+    <li><strong>Apply that one annual rate.</strong> The calculator divides the annual percentage by
+      365 for daily accrual on the current interest-bearing balance.</li>
+    <li><strong>Compound on the anniversary.</strong> If the judgment remains unpaid for a full
+      year, accrued interest becomes part of the balance used in the next annual period.</li>
+    <li><strong>Stop at the payment boundary.</strong> The entered calculate-through date is not
+      itself counted as another accrual day in this estimate.</li>
+  </ol>
+
+  <h2>Worked federal example</h2>
+  <p>For a <strong>{money(100000)}</strong> judgment entered on
+    <strong>January 8, 2025</strong>, the calculator selects the
+    <strong>{example.rate_percent}%</strong> weekly average for the week beginning
+    <strong>{prettyDate(example.rate_week_monday)}</strong>. Calculated to January 8, 2026, the
+    {example.days}-day estimate is <strong>{money(example.interest)}</strong> of interest and
+    <strong>{money(example.total)}</strong> total.</p>
+  <p>That example spans one anniversary. A longer calculation compounds at each later anniversary
+    using the same selected annual rate. The displayed result is generated by the same tested
+    engine as the form, so the worked numbers update only if the underlying official history
+    changes.</p>
+
+  <h2>Full modern history and a durable data source</h2>
+  <p>The current Treasury formula took effect on December 21, 2000. Before that date, federal
+    post-judgment rates used a different 52-week Treasury-bill auction method, so this calculator
+    rejects earlier judgments rather than applying the modern formula backward.</p>
+  <p>The dataset contains <strong>{weekly.length.toLocaleString('en-US')} exact weekly
+    observations</strong>, beginning {prettyDate(firstWeek.effective_date)}. Daily 1-year Treasury
+    values come from the Federal Reserve’s FRED <a href={FRED_DAILY_URL}>DGS1 series</a>. The
+    pipeline derives the calendar-week averages and independently compares them with the official
+    <a href={FRED_WEEKLY_URL}>WGS1YR weekly series</a>. A missing or mismatched week blocks unsafe
+    output.</p>
+  <p>This migration also protects the site’s automation from a known platform change. In its
+    <a href={FED_ANNOUNCEMENT_URL}>July 16, 2026 DDP announcement</a>, the Federal Reserve Board
+    scheduled the “Build Your Package” option for removal during the week of November 9, 2026 and
+    directed users to FRED or the full XML release. StatuteRates uses the recommended durable source
+    independently of whether that retirement date is past or future.</p>
+
+  <AdSlot id="federal-calc-mid" />
+
+  <h2>What this calculator includes—and what it does not</h2>
+  <p>This page models the general civil-money-judgment path in §1961(a) and (b): rate selection,
+    daily computation, and annual compounding. It does not decide whether §1961 governs your
+    judgment, alter the judgment principal, allocate payments, add costs or attorney fees, or
+    reproduce a district court’s case ledger.</p>
+  <p>The U.S. Courts identifies separate statutes for criminal judgments or sentences and
+    deficiency judgments in condemnation proceedings. Section 1961 itself contains special
+    treatment for internal-revenue tax cases and certain judgments involving the United States,
+    the Court of Federal Claims, or the Judgment Fund. A contract, appellate mandate, corrected
+    judgment, partial satisfaction, or local court order can also require case-specific review.</p>
+
+  <h2>Official sources</h2>
+  <ul class="clean">
+    <li><a href={STATUTE_URL}>28 U.S.C. §1961</a> — the controlling rate-selection, daily-computation,
+      annual-compounding, and exception language.</li>
+    <li><a href={COURTS_URL}>U.S. Courts post-judgment interest guidance</a> — the current formula,
+      December 21, 2000 transition, and related federal judgment statutes.</li>
+    <li><a href={FRED_DAILY_URL}>FRED DGS1</a> and <a href={FRED_WEEKLY_URL}>FRED WGS1YR</a> — the
+      official daily input and independent weekly comparison used by the automated pipeline.</li>
+    <li><a href={FED_ANNOUNCEMENT_URL}>Federal Reserve DDP announcement</a> — the official
+      July 16, 2026 notice directing “Build Your Package” users to FRED or full-release XML.</li>
+  </ul>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
+  </div>
+
+  <p class="related">Related: <a href="/rates/us-federal-post-judgment/">federal weekly rate
+    history</a> · <a href="/rates/treasury-1-year-cmt/">1-year Treasury CMT history</a> ·
+    <a href="/guides/how-to-calculate-judgment-interest/">judgment-interest calculation guide</a> ·
+    <a href="/calculators/florida-judgment-interest/">Florida judgment calculator</a></p>
+
+  <CiteThis
+    title="Federal Post-Judgment Interest Calculator"
+    url={canonical}
+    note={`28 U.S.C. §1961 weekly history from ${prettyDate(firstWeek.effective_date)} through ${prettyDate(latest.effective_date)}.`}
   />
 
-  <AdSlot id="calc-top" />
+  <AdSlot id="federal-calc-bottom" />
 
-  <h2>How it works</h2>
-  <p>The statute sets the rate once, at judgment: the weekly-average 1-year Treasury constant maturity
-    yield for the calendar week <em>preceding</em> the judgment date. That single rate then applies for
-    the life of the judgment — computed daily (annual rate ÷ 365) and compounded each year on the
-    judgment anniversary. The current weekly value is
-    <a href={`/rates/us-federal-post-judgment/`}>{latest?.value_text} (week beginning {prettyDate(latest?.effective_date)})</a>;
-    our data reaches back {weekly.length} weeks, so you can compute judgments entered up to about two years ago.</p>
-  <p class="source-note">Exceptions written into §1961: certain Court of Federal Claims judgments
-    (§2516(b)), Judgment Fund payments (31 U.S.C. §1304(b)), and internal-revenue tax cases (§1961(c)).
-    Some districts publish their own tables — confirm against your district court's table before filing.</p>
+  <div class="disclaimer"><strong>Reference estimate only.</strong> This is not legal advice or an
+    official court payoff. Confirm the governing statute, judgment amount, source week, payment
+    date, case-specific adjustments, and district court table before filing or paying.</div>
 
-  <AdSlot id="calc-bottom" />
+  <style>
+    .breadcrumb { font-size: .9rem; color: var(--ink-soft); margin-bottom: 6px; }
+    .quick-answer { margin: 24px 0 18px; padding: 15px 17px; border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0; background: var(--green-wash); }
+    .steps { padding-left: 23px; }
+    .steps li { margin: 12px 0; padding-left: 4px; }
+    .faq details { border-top: 1px solid var(--line); padding: 13px 0; }
+    .faq summary { cursor: pointer; font-weight: 650; }
+    .faq p { margin: 8px 0 0; color: var(--ink-soft); }
+    .related { margin-top: 24px; color: var(--ink-soft); }
+  </style>
 </BaseLayout>

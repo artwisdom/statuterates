@@ -1,0 +1,886 @@
+---
+// Florida's verified rate history is embedded at build time. The visitor's amount and dates never
+// leave the browser; the shared calculation engine performs all arithmetic locally.
+const {
+  history,
+  minJudgmentDate,
+  maxJudgmentDate,
+  maxEndDate,
+} = Astro.props;
+
+// Keep the client payload narrowly focused on calculation fields. Replacing "<" prevents a future
+// source field from closing the inert JSON script element even though the history is trusted data.
+const calculationHistory = (Array.isArray(history) ? history : []).map((point) => ({
+  effective_date: point.effective_date,
+  value: point.value ?? point.value_numeric,
+  value_text: point.value_text,
+  daily_factor: point.daily_factor ?? point.daily_rate_decimal,
+  daily_rate_decimal: point.daily_rate_decimal,
+  daily_rate_percent: point.daily_rate_percent,
+  days_in_year: point.days_in_year ?? point.denominator,
+}));
+const configJson = JSON.stringify({
+  history: calculationHistory,
+  minJudgmentDate,
+  maxJudgmentDate,
+  maxEndDate,
+}).replace(/</g, '\\u003c');
+---
+
+<section class="florida-calculator" data-florida-calculator aria-labelledby="florida-calculator-heading">
+  <script type="application/json" data-florida-config set:html={configJson} />
+
+  <div class="calculator-heading">
+    <div>
+      <span class="eyebrow">Florida statutory schedule</span>
+      <h2 id="florida-calculator-heading">Calculate post-judgment interest</h2>
+    </div>
+    <span class="private-badge">Private: runs in your browser</span>
+  </div>
+
+  <p class="scope" id="florida-calculator-scope">
+    For a general Florida money judgment using the statutory schedule. Contract rates, specified
+    clerk-entered judgments, partial payments, fees, and costs require separate treatment.
+  </p>
+
+  <form data-florida-form aria-describedby="florida-calculator-scope florida-calculator-privacy" novalidate>
+    <div class="field">
+      <label for="florida-judgment-amount">Unpaid money amount entered in the judgment ($)</label>
+      <input
+        id="florida-judgment-amount"
+        data-principal
+        type="number"
+        min="0.01"
+        max="1000000000000"
+        step="0.01"
+        inputmode="decimal"
+        autocomplete="off"
+        placeholder="10000"
+        required
+      />
+      <small>Enter the unpaid money sum adjudged or entered. Exclude post-entry interest, later-added
+        amounts, and payments; those require a case-specific ledger.</small>
+    </div>
+
+    <div class="date-grid">
+      <div class="field">
+        <label for="florida-judgment-date">Clerk-entered judgment date</label>
+        <input
+          id="florida-judgment-date"
+          data-judgment-date
+          type="date"
+          min={minJudgmentDate}
+          max={maxJudgmentDate}
+          required
+        />
+        <small>Use the date the final money judgment was entered/filed by the clerk. Supported dates: {minJudgmentDate} through {maxJudgmentDate}.</small>
+      </div>
+
+      <div class="field">
+        <label for="florida-calculation-date">Calculate through</label>
+        <input
+          id="florida-calculation-date"
+          data-end-date
+          type="date"
+          min={minJudgmentDate}
+          max={maxEndDate}
+          required
+        />
+        <small>Latest safely supported through-date: {maxEndDate}.</small>
+      </div>
+    </div>
+
+    <fieldset class="boundary-field">
+      <legend>Should the calculate-through date accrue interest?</legend>
+      <label>
+        <input type="radio" name="florida-end-convention" value="include" checked />
+        <span><strong>Include the through-date</strong> (default)</span>
+      </label>
+      <label>
+        <input type="radio" name="florida-end-convention" value="exclude" />
+        <span><strong>Stop before the through-date</strong></span>
+      </label>
+      <small>Florida’s general sources do not establish one universal payment-boundary convention. The selected convention, exact dates, and day count are printed with the result.</small>
+    </fieldset>
+
+    <button type="submit" class="primary-button">Calculate Florida interest</button>
+    <p class="form-error" data-error role="alert" tabindex="-1" hidden></p>
+  </form>
+
+  <p class="privacy" id="florida-calculator-privacy">
+    Your entries are calculated locally. StatuteRates does not transmit or save them.
+  </p>
+
+  <section
+    class="result"
+    data-result
+    aria-labelledby="florida-result-heading"
+    tabindex="-1"
+    hidden
+  >
+    <div class="result-heading">
+      <div>
+        <span class="eyebrow">Calculation result</span>
+        <h3 id="florida-result-heading">Florida judgment interest estimate</h3>
+      </div>
+      <div class="result-actions">
+        <button type="button" data-copy>Copy result</button>
+        <button type="button" data-print>Print / save as PDF</button>
+      </div>
+    </div>
+
+    <p class="result-status" data-result-status role="status" aria-live="polite"></p>
+
+    <dl class="input-summary" aria-label="Inputs used">
+      <div><dt>Entered money amount</dt><dd data-input-principal></dd></div>
+      <div><dt>Judgment entered</dt><dd data-input-judgment-date></dd></div>
+      <div><dt>Calculated through</dt><dd data-input-end-date></dd></div>
+      <div><dt>Through-date</dt><dd data-date-convention></dd></div>
+      <div><dt>Entry rate</dt><dd data-entry-rate></dd></div>
+    </dl>
+
+    <dl class="result-summary" aria-label="Calculated totals">
+      <div><dt>Interest</dt><dd data-interest></dd></div>
+      <div><dt>Total</dt><dd data-total></dd></div>
+      <div><dt>Accrual days</dt><dd data-days></dd></div>
+      <div><dt>Current per diem</dt><dd data-current-per-diem></dd></div>
+    </dl>
+
+    <h4>Rate periods used</h4>
+    <p class="table-intro">
+      Florida generally starts with the rate covering the judgment date and applies later statutory
+      adjustments on January 1. This table shows every period used and, when needed, a separate
+      small final adjustment that reconciles displayed period rounding to the exact combined total.
+    </p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable rate-period calculation table">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Accrual period (inclusive dates)</th>
+            <th scope="col">Annual rate</th>
+            <th scope="col">Days</th>
+            <th scope="col">Per diem</th>
+            <th scope="col">Interest</th>
+          </tr>
+        </thead>
+        <tbody data-segments></tbody>
+      </table>
+    </div>
+
+    <p class="method"><strong>Method:</strong> <span data-method></span></p>
+    <p class="rounding-note" data-rounding-note hidden>
+      The unrounded result landed exactly on a half cent, so this estimate rounded that tie up.
+      Confirm the court or payoff issuer’s rounding method before relying on it.
+    </p>
+    <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+  </section>
+
+  <p class="fineprint">
+    Reference estimate only—not legal advice or a court payoff. Confirm the applicable judgment
+    category, principal, dates, statutory source, payment allocation, and court rounding before use.
+  </p>
+</section>
+
+<style>
+  .florida-calculator {
+    margin: 22px 0;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+    border-radius: 14px;
+    background: var(--paper-2);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .calculator-heading,
+  .result-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .calculator-heading h2 {
+    margin: 3px 0 10px;
+  }
+
+  .result-heading h3 {
+    margin: 3px 0 0;
+  }
+
+  .eyebrow {
+    display: block;
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: .69rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  .private-badge {
+    flex: 0 0 auto;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--ink-soft);
+    font-size: .75rem;
+    white-space: nowrap;
+  }
+
+  .scope {
+    margin: 8px 0 18px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--paper);
+    color: var(--ink-soft);
+    font-size: .9rem;
+  }
+
+  .field {
+    margin: 12px 0;
+  }
+
+  .field label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .field input {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 9px;
+    background: var(--paper);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  .field input:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 1px;
+    border-color: var(--green);
+  }
+
+  .field small {
+    display: block;
+    margin-top: 5px;
+    color: var(--ink-soft);
+    font-size: .78rem;
+    line-height: 1.4;
+  }
+
+  .boundary-field {
+    margin: 14px 0 4px;
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--paper);
+  }
+
+  .boundary-field legend {
+    padding: 0 5px;
+    color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .boundary-field label {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin: 8px 0;
+    cursor: pointer;
+  }
+
+  .boundary-field input {
+    width: auto;
+    margin-top: 4px;
+    accent-color: var(--accent);
+  }
+
+  .boundary-field small {
+    display: block;
+    margin-top: 7px;
+    color: var(--ink-soft);
+    font-size: .78rem;
+    line-height: 1.45;
+  }
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 16px;
+  }
+
+  button {
+    min-height: 44px;
+    font-family: var(--sans);
+    cursor: pointer;
+  }
+
+  .primary-button {
+    margin-top: 10px;
+    padding: 12px 24px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--accent);
+    color: #fff;
+    font-size: .92rem;
+    font-weight: 650;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .primary-button:hover {
+    background: var(--green-2);
+  }
+
+  .primary-button:focus-visible,
+  .result-actions button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  .form-error {
+    margin: 12px 0 0;
+    color: #9a2b26;
+    font-weight: 650;
+  }
+
+  .privacy,
+  .fineprint {
+    margin: 14px 0 0;
+    color: var(--ink-soft);
+    font-size: .8rem;
+  }
+
+  .privacy::before {
+    content: '✓ ';
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  .fineprint {
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  .result {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
+  }
+
+  .result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .result-actions button {
+    padding: 9px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--green);
+    font-size: .8rem;
+    font-weight: 650;
+  }
+
+  .result-actions button:hover {
+    border-color: var(--green);
+  }
+
+  .result-status {
+    min-height: 1.4em;
+    margin: 12px 0;
+    color: var(--ink-soft);
+    font-size: .88rem;
+  }
+
+  .input-summary,
+  .result-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 15px 0;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--line);
+  }
+
+  .input-summary div,
+  .result-summary div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    padding: 11px 13px;
+    background: var(--paper);
+  }
+
+  .input-summary dt,
+  .result-summary dt {
+    color: var(--ink-soft);
+    font-size: .82rem;
+  }
+
+  .input-summary dd,
+  .result-summary dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--ink);
+    font-family: var(--nums);
+    font-weight: 680;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .result-summary dd {
+    color: var(--green);
+    font-size: 1.12rem;
+  }
+
+  .result h4 {
+    margin: 24px 0 5px;
+  }
+
+  .table-intro,
+  .method {
+    color: var(--ink-soft);
+    font-size: .88rem;
+  }
+
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: 9px;
+  }
+
+  .table-scroll:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  table {
+    min-width: 620px;
+    margin: 8px 0;
+  }
+
+  th,
+  td {
+    white-space: nowrap;
+  }
+
+  td.numeric {
+    font-family: var(--nums);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .method {
+    margin: 14px 0 0;
+  }
+
+  .method strong {
+    color: var(--ink);
+  }
+
+  .copy-status {
+    min-height: 1.3em;
+    margin: 8px 0 0;
+    color: var(--green);
+    font-size: .8rem;
+  }
+
+  .rounding-note {
+    margin: 10px 0 0;
+    padding: 10px 12px;
+    border-left: 3px solid var(--gold);
+    background: var(--paper);
+    color: var(--ink-soft);
+    font-size: .82rem;
+  }
+
+  @media (max-width: 620px) {
+    .florida-calculator {
+      padding: 18px;
+    }
+
+    .calculator-heading,
+    .result-heading {
+      display: block;
+    }
+
+    .private-badge {
+      display: inline-block;
+      margin: 4px 0 8px;
+      white-space: normal;
+    }
+
+    .date-grid,
+    .input-summary,
+    .result-summary {
+      grid-template-columns: 1fr;
+    }
+
+    .result-actions {
+      justify-content: flex-start;
+      margin-top: 12px;
+    }
+
+    .result-actions button,
+    .primary-button {
+      width: 100%;
+    }
+  }
+
+  @media print {
+    .florida-calculator {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .florida-calculator form,
+    .private-badge,
+    .privacy,
+    .result-actions,
+    .copy-status {
+      display: none !important;
+    }
+
+    .result { border-top: 1px solid #000; }
+    .result[hidden] { display: none !important; }
+
+    .input-summary,
+    .result-summary,
+    table,
+    tr {
+      break-inside: avoid;
+    }
+
+    .table-scroll {
+      overflow: visible;
+    }
+
+    table {
+      min-width: 0;
+      font-size: 10pt;
+    }
+
+    .fineprint,
+    .scope,
+    .method,
+    .rounding-note,
+    .table-intro {
+      color: #222;
+    }
+  }
+</style>
+
+<script>
+  import { floridaPostJudgmentInterest } from '../../../shared/interest-calc.mjs';
+
+  const moneyFormatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const rateFormatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 4,
+  });
+  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'UTC',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+
+  const finiteNumber = (...values) => {
+    for (const value of values) {
+      if (value === null || value === undefined || value === '') continue;
+      const number = Number(value);
+      if (Number.isFinite(number)) return number;
+    }
+    return null;
+  };
+
+  const formatMoney = (value) => {
+    const number = finiteNumber(value);
+    return number === null ? '—' : moneyFormatter.format(number);
+  };
+
+  const formatRate = (value) => {
+    const number = finiteNumber(value);
+    return number === null ? '—' : `${rateFormatter.format(number)}%`;
+  };
+
+  const formatDate = (iso) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(iso || ''))) return String(iso || '—');
+    const date = new Date(`${iso}T00:00:00Z`);
+    return Number.isNaN(date.getTime()) ? String(iso) : dateFormatter.format(date);
+  };
+
+  const dayBefore = (iso) => {
+    const date = new Date(`${iso}T00:00:00Z`);
+    date.setUTCDate(date.getUTCDate() - 1);
+    return date.toISOString().slice(0, 10);
+  };
+
+  const boundedToday = (minimum, maximum) => {
+    const today = new Date().toISOString().slice(0, 10);
+    if (maximum && today > maximum) return maximum;
+    if (minimum && today < minimum) return minimum;
+    return today;
+  };
+
+  const appendCell = (row, text, className = '') => {
+    const cell = document.createElement('td');
+    cell.textContent = text;
+    if (className) cell.className = className;
+    row.append(cell);
+  };
+
+  for (const root of document.querySelectorAll('[data-florida-calculator]')) {
+    const configElement = root.querySelector('[data-florida-config]');
+    const config = JSON.parse(configElement?.textContent || '{}');
+    const form = root.querySelector('[data-florida-form]');
+    const principalInput = root.querySelector('[data-principal]');
+    const judgmentInput = root.querySelector('[data-judgment-date]');
+    const endInput = root.querySelector('[data-end-date]');
+    const error = root.querySelector('[data-error]');
+    const resultRegion = root.querySelector('[data-result]');
+    const resultStatus = root.querySelector('[data-result-status]');
+    const segmentBody = root.querySelector('[data-segments]');
+    const copyStatus = root.querySelector('[data-copy-status]');
+    const roundingNote = root.querySelector('[data-rounding-note]');
+    let copyText = '';
+
+    if (endInput && !endInput.value) {
+      endInput.value = boundedToday(config.minJudgmentDate, config.maxEndDate);
+    }
+
+    const synchronizeDateRange = () => {
+      if (!judgmentInput || !endInput) return;
+      endInput.min = judgmentInput.value || config.minJudgmentDate || '';
+      if (judgmentInput.value && endInput.value < judgmentInput.value) {
+        endInput.value = judgmentInput.value;
+      }
+    };
+    judgmentInput?.addEventListener('change', synchronizeDateRange);
+
+    form?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      error.textContent = '';
+      resultRegion.hidden = true;
+      resultStatus.textContent = '';
+      copyStatus.textContent = '';
+      copyText = '';
+
+      synchronizeDateRange();
+      if (!form.reportValidity()) return;
+
+      const principal = Number(principalInput.value);
+      const judgmentDate = judgmentInput.value;
+      const endDate = endInput.value;
+      const includeEndDate =
+        root.querySelector('[name="florida-end-convention"]:checked')?.value !== 'exclude';
+      const conventionText = includeEndDate
+        ? 'Included as an accrual day'
+        : 'Excluded; accrual stops before this date';
+
+      try {
+        const calculated = floridaPostJudgmentInterest({
+          principal,
+          judgmentDate,
+          endDate,
+          history: config.history,
+          includeEndDate,
+        });
+        const segments = Array.isArray(calculated.segments) ? calculated.segments : [];
+        const entryRate = finiteNumber(
+          calculated.entry_rate_percent,
+          calculated.rate_percent,
+          segments[0]?.rate_percent,
+          segments[0]?.rate,
+        );
+        const entryRateDate = calculated.entry_rate_effective_date
+          || calculated.rate_effective_date
+          || segments[0]?.rate_effective_date
+          || segments[0]?.effective_date;
+        const interest = finiteNumber(calculated.interest);
+        const total = finiteNumber(calculated.total);
+        const days = finiteNumber(calculated.days, calculated.total_days);
+        const lastSegment = segments.at(-1);
+        const currentPerDiem = finiteNumber(
+          calculated.current_per_diem,
+          calculated.per_diem,
+          calculated.daily_amount,
+          lastSegment?.per_diem,
+          lastSegment?.daily_amount,
+        );
+
+        root.querySelector('[data-input-principal]').textContent = formatMoney(principal);
+        root.querySelector('[data-input-judgment-date]').textContent = formatDate(judgmentDate);
+        root.querySelector('[data-input-end-date]').textContent = formatDate(endDate);
+        root.querySelector('[data-date-convention]').textContent = conventionText;
+        root.querySelector('[data-entry-rate]').textContent = entryRate === null
+          ? '—'
+          : `${formatRate(entryRate)}${entryRateDate ? ` from ${formatDate(entryRateDate)}` : ''}`;
+        root.querySelector('[data-interest]').textContent = formatMoney(interest);
+        root.querySelector('[data-total]').textContent = formatMoney(total);
+        root.querySelector('[data-days]').textContent = days === null
+          ? '—'
+          : days.toLocaleString('en-US');
+        root.querySelector('[data-current-per-diem]').textContent = formatMoney(currentPerDiem);
+        root.querySelector('[data-method]').textContent = calculated.method || 'Florida statutory simple-interest schedule';
+        roundingNote.hidden = !calculated.half_cent_rounding_tie;
+
+        segmentBody.replaceChildren();
+        for (const segment of segments) {
+          const row = document.createElement('tr');
+          const start = segment.start_date || segment.from || segment.effective_date;
+          const end = segment.end_date || segment.to || segment.end_date_exclusive;
+          const segmentRate = finiteNumber(segment.rate_percent, segment.rate, segment.value);
+          const segmentDays = finiteNumber(segment.days);
+          const inclusiveEnd = end && segmentDays > 0 ? dayBefore(end) : end;
+          const segmentInterest = finiteNumber(segment.interest);
+          const dailyFactor = finiteNumber(segment.daily_factor, segment.daily_rate_decimal);
+          const segmentPerDiem = finiteNumber(
+            segment.per_diem,
+            segment.daily_amount,
+            dailyFactor === null ? null : principal * dailyFactor,
+            segmentDays && segmentInterest !== null ? segmentInterest / segmentDays : null,
+          );
+
+          appendCell(
+            row,
+            start || inclusiveEnd ? `${formatDate(start)} – ${formatDate(inclusiveEnd)}` : '—',
+          );
+          appendCell(row, formatRate(segmentRate), 'numeric');
+          appendCell(row, segmentDays === null ? '—' : segmentDays.toLocaleString('en-US'), 'numeric');
+          appendCell(row, formatMoney(segmentPerDiem), 'numeric');
+          appendCell(row, formatMoney(segmentInterest), 'numeric');
+          segmentBody.append(row);
+        }
+
+        const roundingAdjustment = finiteNumber(calculated.rounding_adjustment) ?? 0;
+        if (roundingAdjustment !== 0) {
+          const row = document.createElement('tr');
+          appendCell(row, 'Final rounding adjustment');
+          appendCell(row, '—', 'numeric');
+          appendCell(row, '—', 'numeric');
+          appendCell(row, '—', 'numeric');
+          appendCell(row, formatMoney(roundingAdjustment), 'numeric');
+          segmentBody.append(row);
+        }
+
+        if (!segments.length) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 5;
+          cell.textContent = 'No interest-accruing rate period was needed for these dates.';
+          row.append(cell);
+          segmentBody.append(row);
+        }
+
+        copyText = [
+          'Florida post-judgment interest estimate',
+          `Entered money amount: ${formatMoney(principal)}`,
+          `Judgment entered: ${judgmentDate}`,
+          `Calculated through: ${endDate}`,
+          `Through-date convention: ${conventionText}`,
+          `Entry rate: ${entryRate === null ? 'not reported' : formatRate(entryRate)}${entryRateDate ? ` effective ${entryRateDate}` : ''}`,
+          `Accrual days: ${days === null ? 'not reported' : days}`,
+          `Current per diem: ${formatMoney(currentPerDiem)}`,
+          `Interest: ${formatMoney(interest)}`,
+          `Total: ${formatMoney(total)}`,
+          `Method: ${calculated.method || 'Florida statutory simple-interest schedule'}`,
+          ...segments.map((segment) => {
+            const start = segment.start_date || segment.from || segment.effective_date || 'unknown';
+            const end = segment.end_date || segment.to || segment.end_date_exclusive || 'unknown';
+            const rate = finiteNumber(segment.rate_percent, segment.rate, segment.value);
+            const segmentDays = finiteNumber(segment.days);
+            const segmentInterest = finiteNumber(segment.interest);
+            const inclusiveEnd = end === 'unknown' || !segmentDays ? end : dayBefore(end);
+            return `Inclusive period ${start} to ${inclusiveEnd}: ${formatRate(rate)}, ${segmentDays ?? '—'} days, ${formatMoney(segmentInterest)} interest`;
+          }),
+          ...(roundingAdjustment !== 0
+            ? [`Final rounding adjustment: ${formatMoney(roundingAdjustment)}`]
+            : []),
+          ...(calculated.half_cent_rounding_tie
+            ? ['Rounding note: the exact result was a half-cent tie and was rounded up.']
+            : []),
+          'Reference estimate only—not legal advice or a court payoff.',
+        ].join('\n');
+
+        resultStatus.textContent = `Calculation complete: ${formatMoney(interest)} interest over ${days ?? 0} day${days === 1 ? '' : 's'}.`;
+        resultRegion.hidden = false;
+        resultRegion.focus({ preventScroll: true });
+        resultRegion.scrollIntoView({ behavior: 'auto', block: 'nearest' });
+      } catch (caught) {
+        error.textContent = caught instanceof Error
+          ? caught.message
+          : 'The Florida interest estimate could not be calculated.';
+        error.hidden = false;
+        error.focus();
+      }
+    });
+
+    root.querySelector('[data-copy]')?.addEventListener('click', async () => {
+      if (!copyText) return;
+      try {
+        await navigator.clipboard.writeText(copyText);
+        copyStatus.textContent = 'Result copied.';
+      } catch {
+        copyStatus.textContent = 'Copy is unavailable in this browser. Use Print / save as PDF instead.';
+      }
+    });
+
+    const clearPrintMode = () => document.body.classList.remove('print-florida-calculator');
+    window.addEventListener('afterprint', clearPrintMode);
+    root.querySelector('[data-print]')?.addEventListener('click', () => {
+      document.body.classList.add('print-florida-calculator');
+      window.print();
+      window.setTimeout(clearPrintMode, 1000);
+    });
+  }
+</script>
+
+<style is:global>
+  @media print {
+    body.print-florida-calculator header,
+    body.print-florida-calculator footer,
+    body.print-florida-calculator main > .wrap > :not(.florida-calculator),
+    body.print-florida-calculator .florida-calculator > :not(.result, .fineprint) {
+      display: none !important;
+    }
+
+    body.print-florida-calculator main,
+    body.print-florida-calculator main > .wrap,
+    body.print-florida-calculator .florida-calculator {
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+</style>

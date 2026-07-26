@@ -2,12 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getMeta, getEntity, currentOf, historyFor, prettyDate } from '../../lib/data.mjs';
 
 const meta = getMeta();
 const uk = getEntity('uk-late-payment-commercial');
-const ukLatest = latestOf(uk);
-const euLatest = latestOf(getEntity('eu-late-payment-reference'));
+const ukLatest = currentOf(uk);
+const euLatest = currentOf(getEntity('eu-late-payment-reference'));
 
 const title = `UK & EU Late Payment Interest Calculator | ${meta.title}`;
 const description = `Calculate statutory interest on overdue B2B invoices using the UK Late Payment Act rate (${ukLatest?.value_text}) or EU reference rate (${euLatest?.value_text} plus margin).`;

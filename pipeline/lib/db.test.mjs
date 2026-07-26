@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { openDb, upsertSource, upsertEntity, upsertObservation } from './db.mjs';
+import {
+  deleteObservationsForEntitySlugs,
+  openDb,
+  upsertSource,
+  upsertEntity,
+  upsertObservation,
+} from './db.mjs';
 
 function fixture() {
   const db = openDb({ path: ':memory:' });
@@ -58,5 +64,14 @@ test('source upsert cannot move its last-check time backwards', () => {
     retrieved_at: '2026-07-01T00:00:00Z',
   });
   assert.equal(db.prepare('SELECT retrieved_at FROM sources WHERE id = ?').get('src').retrieved_at, '2026-07-08T00:00:00Z');
+  db.close();
+});
+
+test('complete-snapshot replacement removes rows absent from the new source result', () => {
+  const { db, entity_id } = fixture();
+  upsertObservation(db, observation(entity_id));
+  upsertObservation(db, observation(entity_id, { effective_date: '2026-04-01' }));
+  assert.equal(deleteObservationsForEntitySlugs(db, ['example-rate', 'example-rate']), 2);
+  assert.equal(db.prepare('SELECT COUNT(*) AS n FROM observations').get().n, 0);
   db.close();
 });

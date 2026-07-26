@@ -1,5 +1,6 @@
 # ============================================================================================
-# ACTIVE: refreshes official sources every Monday and commits validated exports to main.
+# ACTIVE: refreshes official sources every Monday evening (U.S. Eastern) and commits validated
+# exports to main.
 #
 # Estimated usage: weekly run × ~3 min = ~13 min/month (GitHub free tier is 2,000 min/month).
 # ============================================================================================
@@ -7,13 +8,15 @@ name: refresh-data
 
 on:
   schedule:
-    # Weekly, Monday 12:00 UTC. The most volatile series (Treasury/post-judgment) updates weekly;
-    # IRS updates quarterly. Weekly is comfortably inside cadence.
-    - cron: "0 12 * * 1"
+    # Tuesday 02:00 UTC is Monday 22:00 EDT / 21:00 EST, after the Federal Reserve's weekly H.15
+    # publication window. DGS1 may already contain a partial newer week, but only WGS1YR-backed
+    # weeks can be exported.
+    - cron: "0 2 * * 2"
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 permissions:
   contents: write # to commit refreshed data/exports back to the repo
+  issues: write # open one deduplicated reminder before a calculator's legal-review gate expires
 
 concurrency:
   group: refresh-data
@@ -85,4 +88,24 @@ jobs:
             echo "Validated exports changed and were pushed. deploy-site will run after this workflow completes."
           else
             echo "No export changes. deploy-site will still verify production from main after this workflow completes."
+          fi
+
+      - name: Check calculator legal-review windows
+        id: legal-review
+        if: success()
+        run: node machine/legal-review-reminder.mjs
+
+      - name: Open calculator legal-review reminder
+        if: success() && steps.legal-review.outputs.due == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REVIEW_TITLE: ${{ steps.legal-review.outputs.title }}
+          REVIEW_BODY: ${{ steps.legal-review.outputs.body }}
+        run: |
+          OPEN_COUNT=$(gh issue list --state open --search "$REVIEW_TITLE in:title" --json number --jq length)
+          if [ "$OPEN_COUNT" = "0" ]; then
+            gh issue create --title "$REVIEW_TITLE" --body "$REVIEW_BODY"
+          else
+            echo "An open legal-review reminder already exists."
           fi

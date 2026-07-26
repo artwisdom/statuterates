@@ -2,12 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import IrsPenaltyInterestCalculator from '../../components/IrsPenaltyInterestCalculator.astro';
-import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getMeta, getEntity, currentOf, historyFor, prettyDate } from '../../lib/data.mjs';
 
 const meta = getMeta();
 const underpayment = getEntity('irs-underpayment');
 const quarterlyHistory = historyFor('irs-underpayment');
-const latest = latestOf(underpayment);
+const latest = currentOf(underpayment);
 const penaltyRules = underpayment.metadata?.penalty_rules;
 const penaltyRulesRetrievedAt = underpayment.metadata?.penalty_rules_retrieved_at;
 if (!penaltyRules) {

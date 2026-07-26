@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { getMeta, getEntity, groupedEntities, latestOf, prettyDate } from '../lib/data.mjs';
+import { getMeta, getEntity, groupedEntities, currentOf, latestOf, prettyDate } from '../lib/data.mjs';
 import { copyFor } from '../lib/content.mjs';
 
 const meta = getMeta();
@@ -13,7 +13,7 @@ const dataModified = groups.flatMap((g) => g.entities.map((e) => latestOf(e)?.ef
 const FEATURED = ['irs-underpayment', 'us-federal-post-judgment', 'uk-late-payment-commercial', 'eu-late-payment-reference'];
 const featured = FEATURED.map((slug) => {
   const e = getEntity(slug);
-  return e ? { slug, name: e.name, latest: latestOf(e), jurisdiction: e.jurisdiction } : null;
+  return e ? { slug, name: e.name, latest: currentOf(e), jurisdiction: e.jurisdiction } : null;
 }).filter(Boolean);
 const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
 const title = `Current Statutory & Judgment Interest Rates | ${meta.title}`;
@@ -85,7 +85,7 @@ const jsonLd = {
       {g.blurb && <p class="source-note" style="margin-top:-2px">{g.blurb}</p>}
       <div class="grid">
         {g.entities.map((e) => {
-          const l = latestOf(e);
+          const l = currentOf(e);
           return (
             <a class="card" href={`/rates/${e.slug}/`} style="display:block;color:inherit">
               <span class="chip">{JUR[e.jurisdiction] || e.jurisdiction}</span>

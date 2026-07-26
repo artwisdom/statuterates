@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, getEntity, latestOf, prettyDate, PREJUDGMENT_CALC_SAFE, PREJUDGMENT_CALC_COMPOUND, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
+import { getMeta, getEntity, currentOf, prettyDate, PREJUDGMENT_CALC_SAFE, PREJUDGMENT_CALC_COMPOUND, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 
 const meta = getMeta();
 
@@ -22,7 +22,7 @@ const CO_SERIES = [
 const entities = PREJUDGMENT_CALC_SAFE.flatMap((key) => {
   if (key === 'colorado') return CO_SERIES;
   const e = getEntity(`${key}-prejudgment-rate`);
-  const l = latestOf(e);
+  const l = currentOf(e);
   return [{
     key,
     name: e.name.replace(/ Prejudgment Interest Rate$/, ''),

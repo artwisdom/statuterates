@@ -48,7 +48,7 @@ const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-')
     )}
     <label class="calc-field">
       <span>{principalLabel} ({currency})</span>
-      <input type="number" data-calc-principal min="0.01" step="0.01" placeholder="10000" required />
+      <input type="number" data-calc-principal min="0.01" max="1000000000000" step="0.01" placeholder="10000" required />
     </label>
     <div class="calc-row">
       <label class="calc-field">

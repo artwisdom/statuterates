@@ -361,20 +361,31 @@ const UTAH_POSTJUDGMENT_CALCULATION = {
   },
 };
 const FLORIDA_POSTJUDGMENT_CALCULATION = {
-  status: 'reference_only',
+  status: 'ready',
   source_tier: 'official_primary',
-  reason: 'The official 1981-present CFO table, quarterly schedule, judgment-date selection, annual January 1 adjustment, written-contract rule, and listed clerk-judgment exceptions are modeled. The renderer remains disabled until day count, partial-payment allocation, the transition rules across the full history, and every supported judgment branch are deterministic.',
-  rate_behavior: 'quarterly_rate_at_entry_then_annual_january_1_adjustment',
+  supported_scope: 'Ordinary Florida money judgments governed by Fla. Stat. §55.03, obtained on or after July 1, 2011, using the statutory CFO schedule with no payment events.',
+  excluded_branches: [
+    'A rate established by written contract or obligation',
+    'Clerk-entered judgments under Fla. Stat. §§55.141, 61.14, 938.29, or 938.30',
+    'Prejudgment interest, partial payments, later-added fees or costs, renewals, amended judgments, and account-specific allocations',
+  ],
+  rate_behavior: 'resets_by_period',
   rate_schedule: 'official_cfo_quarterly_table',
   compounding: 'simple',
-  day_count: 'official_daily_factors_vary_by_calendar_year_and_historical_period',
+  day_count: 'statutory_table',
   history_start: FLORIDA_OFFICIAL_HISTORY_START,
   curated_history_complete_through: FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  valid_from: '2011-07-01',
+  coverage_through: FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
   current_period_monitored: true,
-  branches_complete: false,
+  payments_supported: false,
+  branches_complete: true,
   accrual_rule_verified: true,
-  renderer_supported: false,
+  renderer_supported: true,
+  renderer_id: 'florida-postjudgment-v1',
   rule_verified_at: FLORIDA_HISTORY_VERIFIED_AT,
+  rule_review_expires_at: '2027-01-26',
+  statute_contract_monitored: true,
   branches: {
     general: 'Fla. Stat. §55.03(1): the CFO sets a quarterly annual rate from the preceding 12-month New York Fed discount-rate average plus four percentage points',
     rate_adjustment: '§55.03(3): use the rate in effect when judgment is obtained, then adjust annually each January 1 until paid',
@@ -624,8 +635,9 @@ const PREJUDG = [
     notes: "Connecticut General Statutes §37-3a permits a court to award prejudgment interest of up to 10% per year as damages for detention of money after it becomes payable; the percentage and award are discretionary rather than an automatic 10%. For debt arising from hospital services, both prejudgment and postjudgment interest are capped at 5% and remain discretionary. Verify entitlement and the court-selected rate; not legal advice." },
   { code: "DE", name: "Delaware", slug: "delaware-prejudgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "6 Del. C. § 2301(a)", srcId: "de-prejud", srcName: "Delaware prejudgment interest (6 Del. C. § 2301(a))", publisher: "Delaware — delcode.delaware.gov", url: "https://delcode.delaware.gov/title6/c023/",
     notes: "Prejudgment interest under 6 Del. C. § 2301(a) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Delaware’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at delcode.delaware.gov. Not legal advice." },
-  { code: "FL", name: "Florida", slug: "florida-prejudgment-rate", value: 8.06, value_text: "8.06%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Fla. Stat. § 55.03", srcId: "fl-prejud", srcName: "Florida prejudgment interest (Fla. Stat. § 55.03)", publisher: "Florida — myfloridacfo.com", url: "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-    notes: "Prejudgment interest under Fla. Stat. § 55.03 — 8.06% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Florida’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at myfloridacfo.com. Not legal advice." },
+  { code: "FL", name: "Florida", slug: "florida-prejudgment-rate", value: 8.06, value_text: "8.06%", kind: "variable", method: "statute-variable-official-table", confidence: "high", asof: "2026-07-01", verifiedOn: "2026-07-26", statute: "Fla. Stat. § 55.03", srcId: "fl-prejud", srcName: "Florida prejudgment-interest rate schedule (Fla. Stat. § 55.03)", publisher: "Florida Department of Financial Services, Chief Financial Officer (official)", url: FLORIDA_CFO_RATES_URL,
+    metadata: { official_statute_url: FLORIDA_STATUTE_55_03_URL, official_history_start: FLORIDA_OFFICIAL_HISTORY_START },
+    notes: "Florida’s CFO schedule supplies the rate used for qualifying prejudgment interest periods under Fla. Stat. §55.03. Entitlement, the date of loss, claim characterization, offsets, and the correct accrual periods remain case-specific; this reference series does not decide them. Verify the governing law and record. Not legal advice." },
   { code: "GA", name: "Georgia", slug: "georgia-prejudgment-rate", value: 7, value_text: "7% / 9.75%", kind: "fixed", method: "composite_ga_7_4_2_7_4_15_and_51_12_14", confidence: "high", asof: "2025-12-11", verifiedOn: "2026-07-19", statute: "O.C.G.A. §§7-4-2, 7-4-15, and 51-12-14", srcId: "ga-prejud", srcName: "Georgia prejudgment-interest rules and Federal Reserve prime benchmark", publisher: "Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED", url: GEORGIA_CODE_PORTAL_URL, calculation: GEORGIA_PREJUDGMENT_CALCULATION,
     metadata: { official_statute_url: GEORGIA_CODE_PORTAL_URL, official_benchmark_url: GEORGIA_PRIME_SERIES_URL },
     notes: "Georgia has two prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15 from the legally relevant due or demand date. Qualifying unliquidated tort damages under §51-12-14 instead use the Federal Reserve prime rate on the 30th day after the last written notice plus three points; the current benchmark produces 9.75%. Both paths are treated as simple interest, but notice, entitlement, and the correct branch are case-specific. Not legal advice." },
@@ -810,6 +822,11 @@ export function buildStateFixed({
   retrievedAt = null,
 } = {}) {
   const maineYear = Number(String(today).slice(0, 4));
+  const floridaCoverageThrough = [
+    ...buildFloridaOfficialHistory(),
+    ...floridaCfoPoints,
+  ].sort((a, b) => a.effective_date.localeCompare(b.effective_date)).at(-1)?.effective_date
+    || FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH;
   let maineDerived = null;
   if (daily.length) {
     const postjudgment = deriveMaineAnnualRateFromH15(daily, { year: maineYear, kind: 'postjudgment' });
@@ -828,7 +845,19 @@ export function buildStateFixed({
 
   const entities = FIXED.map((f) => {
     const source = STATE_SOURCES.find((candidate) => candidate.id === f.source_id);
-    return stateEntityWithSafety(f.entity, source);
+    const entity = f.entity.slug === 'florida-judgment-rate'
+      ? {
+          ...f.entity,
+          metadata: {
+            ...f.entity.metadata,
+            calculation: {
+              ...f.entity.metadata.calculation,
+              coverage_through: floridaCoverageThrough,
+            },
+          },
+        }
+      : f.entity;
+    return stateEntityWithSafety(entity, source);
   });
   const observations = FIXED.flatMap((f) => {
     const source = STATE_SOURCES.find((candidate) => candidate.id === f.source_id);
@@ -929,9 +958,11 @@ export function buildStateFixed({
       return monthly;
     }
 
-    if (f.entity.slug === 'florida-judgment-rate') {
+    if (f.entity.slug === 'florida-judgment-rate'
+        || f.entity.slug === 'florida-prejudgment-rate') {
       const byDate = new Map(buildFloridaOfficialHistory().map((point) => [point.effective_date, point]));
       for (const point of floridaCfoPoints) byDate.set(point.effective_date, point);
+      const prejudgment = f.entity.slug === 'florida-prejudgment-rate';
       return [...byDate.values()]
         .sort((a, b) => a.effective_date.localeCompare(b.effective_date))
         .map((point) => ({
@@ -945,6 +976,8 @@ export function buildStateFixed({
           method: 'statute-variable-official-table',
           notes: point.effective_date === f.effective_date
             ? baseObservation.notes
+            : prejudgment
+              ? `Official Florida CFO rate for the period beginning ${point.effective_date}. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice.`
             : `Official Florida CFO judgment-interest rate for the period beginning ${point.effective_date}. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice.`,
         }));
     }

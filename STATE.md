@@ -10,8 +10,8 @@
 
 ## Current product
 
-- 114 rate-series entities and 2,361 recorded historical observations.
-- 194 static HTML pages.
+- 114 rate-series entities and 4,947 recorded historical observations.
+- 195 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
   extension checks for Texas, Alaska, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and
@@ -19,10 +19,11 @@
   against the committed Form 1040 penalty-rule contract.
 - 102 state-law entities across post- and prejudgment interest.
 - Calculator set in the current repository: general fixed-rate judgment/per-diem arithmetic,
-  federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U. late payment, and the
-  deployed Form 1040 penalty-and-interest calculator described below.
-- State calculators: intentionally disabled, `noindex` where legacy comparison routes exist, and
-  omitted from the sitemap.
+  full-modern-history federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U.
+  late payment, Form 1040 penalty-and-interest, and the narrowly scoped Florida §55.03 calculator.
+- State calculators: Florida is the only dedicated released state calculator. Legacy generic state
+  comparison routes remain `noindex`; every other dedicated state calculator is absent from the
+  build and sitemap.
 
 ## July 2026 safety baseline
 
@@ -83,9 +84,10 @@ rules. Phase 1 corrected the foundation:
 - Utah now preserves all 34 exact State Courts annual rates from 1993 through 2026. Automation checks
   the official current and historical tables, verifies the federal-plus-two general formula and the
   federal-plus-ten under-$10,000 goods/services branch, and fails safely on an outage.
-- Florida now preserves all 78 official CFO periods from October 1981 through July 2026. Automation
-  checks the live HTML table, daily factors, quarter cadence, and every historical anchor before a
-  new period can enter the dataset.
+- Florida post-judgment and prejudgment references now each preserve all 78 official CFO periods
+  from October 1981 through July 2026. Automation checks the live table, both daily fields, quarter
+  cadence, historical anchors, and calculation-critical §55.03 text before a new period can enter
+  both datasets.
 - Alaska now preserves all 30 annual pre- and post-judgment rates in official Court System form
   ADM-505 from the August 7, 1997 transition through 2026. Its inherited January 2 prejudgment
   pseudo-effective date was corrected to January 1. A weekly PDF monitor verifies every anchor and
@@ -158,15 +160,51 @@ verified in production.
 - Shared calculation tests now belong to the deployment gate, and changes under `shared/` trigger a
   deployment workflow run.
 
+## Phase 5 federal durability and Florida calculator
+
+- The federal H.15 ingestion no longer depends on the Federal Reserve Board's retiring “Build Your
+  Package” download. It fetches complete official FRED `DGS1` daily history from January 2000,
+  derives Monday-keyed weekly averages with exact decimal rounding, and requires every published
+  `WGS1YR` week to reconcile before loading or exporting.
+- The modern §1961 series now contains 1,336 weekly rate records beginning December 11, 2000—the
+  preceding rate week needed for judgments entered when the current formula began on December 21.
+  The calculator rejects earlier judgments and refuses to substitute an older rate when the exact
+  preceding calendar week is absent.
+- `/calculators/post-judgment-interest/` now explains the formula transition, full source history,
+  daily computation, annual compounding, exclusions, and the dual-feed integrity check. It remains
+  browser-local and fail-closed.
+- `/calculators/florida-judgment-interest/` is the first state-specific release. It supports only an
+  ordinary Florida money judgment entered/filed by the clerk on or after July 1, 2011, under the
+  statutory CFO schedule, with no contract rate, excluded clerk category, payment, amendment,
+  renewal, later fee, or cost event.
+- Florida arithmetic selects the CFO rate in force on the entry date, holds it through December 31,
+  then applies the exact CFO January 1 rate each later year. It uses simple principal-only interest,
+  exact rational arithmetic, 365/366 calendar-year denominators, one final cent rounding, and a
+  visible include/exclude through-date choice. It reproduces the official DFS 2013 comparison
+  fixture and never carries a missing quarter or January reset forward.
+- A code-controlled release registry plus matching entity metadata and renderer ID is required for
+  every dedicated state calculator. The inherited mass-state prototype was removed, so an
+  environment variable cannot generate unreviewed state pages.
+- The Florida tool is linked from its rate page, state hub, calculator index, related federal page,
+  and sitemap. It renders before advertisements, prints/copies a transparent period schedule, and
+  sends no visitor-entered amount or date to a server.
+- Pipeline changes now trigger deployment. The deploy workflow installs and tests pipeline
+  dependencies and validates the exact committed exports in a fresh isolated database before
+  building the API and site. Complete live snapshots can replace prior rows; partial feeds and
+  source outages merge with or preserve the last verified history instead of erasing it.
+- Current values, years, effective dates, branch rates, and history counts on the monitored
+  variable-rate pages are observation-backed. The weekly workflow opens a deduplicated issue 45
+  days before a calculator's legal review expires, and IndexNow runs only after production deploys.
+
 ## Verified checks
 
-- Pipeline: 94 tests.
-- Shared interest engine: 22 tests.
-- Site data contract: 2 tests.
+- Pipeline: 125 tests.
+- Shared interest engine: 36 tests.
+- Site data and copy contracts: 7 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
-- API conformance: 114 entity endpoints and 2,475 latest/history records checked.
-- Static build: 194 pages on Astro 7.
-- Indexable sitemap: 191 URLs.
+- API conformance: 114 entity endpoints and 5,061 latest/history records checked.
+- Static build: 195 pages on Astro 7.
+- Indexable sitemap: 192 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
   because of AdSense third-party-cookie/DevTools findings rather than first-party site code.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
@@ -192,6 +230,7 @@ verified in production.
 - `pipeline/lib/state-rules.mjs`: source tiers and calculator-readiness contract.
 - `pipeline/fetchers/irs-penalty-rules.mjs`: committed Form 1040 rule contract and five-page
   official-source monitor.
+- `pipeline/fetchers/fed-h15.mjs`: complete DGS1 ingestion and mandatory WGS1YR reconciliation.
 - `pipeline/fetchers/us-states.mjs`: curated state values and source-check timestamps.
 - `site/src/lib/data.mjs`: build-time data loader and fail-closed calculator check.
 - `site/scripts/check-build.mjs`: broken-link/indexing/rendered-output deployment guard.
@@ -202,6 +241,8 @@ verified in production.
   unattended-operation safeguards.
 - `docs/PHASE_4_PROGRESS.md`: Form 1040 penalty-and-interest scope, source monitoring, tests, and
   deployed-release safeguards.
+- `docs/PHASE_5_PROGRESS.md`: federal source migration, Florida calculation contract, and release
+  verification.
 - `shared/interest-calc.mjs`: calculation engine shared by the site and MCP.
 - `.github/workflows/refresh.yml`: tested weekly data refresh.
 - `.github/workflows/deploy.yml`: tested static deployment plus successful-refresh handoff.
@@ -209,8 +250,9 @@ verified in production.
 ## Known limitations / next phase
 
 - Most state entities still have only one recorded observation. Texas, Alaska, Nebraska, Iowa,
-  Kentucky, Maine, Georgia, Utah, and Florida now have deeper verified histories, but their
-  calculators remain withheld pending complete arithmetic and legal-branch contracts.
+  Kentucky, Maine, Georgia, Utah, and Florida have deeper verified histories. Florida's deliberately
+  narrow modern scope is released; all other state calculators remain withheld pending complete
+  arithmetic, legal-branch contracts, and dedicated renderers.
 - Iowa's live court page can intermittently block automation. The system safely retains the last
   exact published history and never substitutes a Federal Reserve estimate.
 - Florida CFO and Utah Courts can also be temporarily unreachable from some runners. Both monitors
@@ -222,7 +264,7 @@ verified in production.
   `official_secondary`; the Federal Reserve benchmark underlying Georgia is official primary data.
 - Several government-hosted code reproductions are classified `official_secondary` because the
   online text is not itself the controlling enactment.
-- State calculation metadata is not yet complete enough to enable any state calculator.
+- State calculation metadata is not yet complete enough to enable another state calculator.
 - The Form 1040 calculator does not determine penalty relief or compute failure-to-pay-penalty
   interest without account-specific IRS assessment events. It also excludes corporations,
   employment/deposit penalties, audit deficiencies, estimated-tax additions, disasters and other
@@ -237,7 +279,6 @@ verified in production.
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
 
-Continue source by source: use demand evidence to choose the next official state history, preserve
-the state-calculator gate, and let search engines recrawl the strengthened pages before generating
-more URLs. Phase 4 is deployed; the next expansion should be selected from fresh Search Console
-demand rather than by generating speculative pages.
+Continue source by source: measure the federal and Florida tool cluster, use demand evidence to
+choose the next official state contract, preserve the code-controlled calculator gate, and let
+search engines recrawl before generating more URLs. Do not return to speculative mass-state pages.

@@ -159,6 +159,20 @@ export function upsertObservation(db, o) {
   return info;
 }
 
+// A successful parser represents a complete authoritative snapshot for the entities it returns.
+// Remove the prior snapshot inside the caller's transaction before loading it so a withdrawn,
+// corrected, or previously unpublished row cannot survive merely because upsert never saw it.
+export function deleteObservationsForEntitySlugs(db, slugs) {
+  const unique = [...new Set(slugs.filter(Boolean))];
+  const statement = db.prepare(
+    `DELETE FROM observations
+     WHERE entity_id IN (SELECT id FROM entities WHERE slug = ?)`
+  );
+  let deleted = 0;
+  for (const slug of unique) deleted += statement.run(slug).changes;
+  return deleted;
+}
+
 export function startRun(db) {
   const info = db
     .prepare(`INSERT INTO run_log (started_at, status) VALUES (?, 'running')`)

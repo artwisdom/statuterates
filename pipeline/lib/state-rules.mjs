@@ -80,7 +80,10 @@ const READY_ENUMS = {
   day_count: new Set(['actual_365', 'actual_actual', 'statutory_table']),
 };
 
-export function validateStateCalculationMetadata(metadata) {
+export function validateStateCalculationMetadata(
+  metadata,
+  { today = new Date().toISOString().slice(0, 10) } = {},
+) {
   const errors = [];
   const rule = metadata?.calculation;
   if (!rule) return { status: 'reference_only', errors };
@@ -97,8 +100,39 @@ export function validateStateCalculationMetadata(metadata) {
     if (!allowed.has(rule[field])) errors.push(`calculator-ready rule has invalid or missing ${field}`);
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(rule.valid_from || '')) errors.push('calculator-ready rule is missing valid_from');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(rule.coverage_through || '')) errors.push('calculator-ready rule is missing coverage_through');
   if (rule.branches_complete !== true) errors.push('calculator-ready rule must confirm branches_complete');
   if (rule.accrual_rule_verified !== true) errors.push('calculator-ready rule must confirm accrual_rule_verified');
+  if (!String(rule.supported_scope || '').trim()) errors.push('calculator-ready rule is missing supported_scope');
+  if (!Array.isArray(rule.excluded_branches) || !rule.excluded_branches.length) {
+    errors.push('calculator-ready rule must list excluded_branches');
+  }
+  if (typeof rule.payments_supported !== 'boolean') {
+    errors.push('calculator-ready rule must state payments_supported');
+  }
+  if (rule.renderer_supported !== true) errors.push('calculator-ready rule must enable its reviewed renderer');
+  if (!/^[a-z0-9-]+-v\d+$/.test(rule.renderer_id || '')) {
+    errors.push('calculator-ready rule has invalid or missing renderer_id');
+  }
   if (!/^\d{4}-\d{2}-\d{2}T/.test(rule.rule_verified_at || '')) errors.push('calculator-ready rule is missing rule_verified_at');
+  if (rule.statute_contract_monitored !== true) {
+    errors.push('calculator-ready rule must monitor its governing statute contract');
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(rule.rule_review_expires_at || '')) {
+    errors.push('calculator-ready rule is missing rule_review_expires_at');
+  } else {
+    const verifiedDate = String(rule.rule_verified_at || '').slice(0, 10);
+    const verified = new Date(`${verifiedDate}T00:00:00Z`);
+    const expires = new Date(`${rule.rule_review_expires_at}T00:00:00Z`);
+    if (!Number.isNaN(verified.getTime())) {
+      const reviewWindowDays = Math.round((expires - verified) / 86400000);
+      if (reviewWindowDays < 1 || reviewWindowDays > 200) {
+        errors.push('calculator-ready rule review window must be between 1 and 200 days');
+      }
+    }
+    if (/^\d{4}-\d{2}-\d{2}$/.test(today) && rule.rule_review_expires_at < today) {
+      errors.push(`calculator-ready rule review expired ${rule.rule_review_expires_at}`);
+    }
+  }
   return { status: rule.status, errors };
 }

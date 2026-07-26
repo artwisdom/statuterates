@@ -6,7 +6,7 @@
 //  - provenance completeness: every observation has source_url, retrieved_at, effective_date, unit
 //  - type/parse: value_numeric finite except for narrowly modeled case-specific rules; ISO dates
 //  - unit sanity ranges: percent_per_annum within [-5, 30] (hard), warn outside [0, 25]
-//  - derived-value consistency: us-federal-post-judgment == treasury-1-year-cmt for each shared week
+//  - derived-value consistency: exact one-to-one post-judgment/CMT coverage after the 2000 formula transition
 //  - staleness: warn if the freshest observation is old; ERROR if egregiously old (broken fetch)
 //  - coverage: per-series counts + date ranges
 
@@ -24,11 +24,21 @@ import { validateGeorgiaRateHistory } from '../fetchers/georgia-interest-history
 import { validateUtahOfficialHistory, UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/utah-judgment-history.mjs';
 import { validateFloridaOfficialHistory, FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/florida-judgment-history.mjs';
 import { validateIrsPenaltyRules } from '../fetchers/irs-penalty-rules.mjs';
+import {
+  FED_H15_HISTORY_START_WEEK,
+  FEDERAL_PJ_FIRST_RATE_WEEK,
+} from './normalize.mjs';
 
 const HARD_MIN = -5;
 const HARD_MAX = 30;
 const SOFT_MIN = 0;
 const SOFT_MAX = 25;
+const MIN_CMT_HISTORY_WEEKS = 1_300;
+const MIN_FEDERAL_PJ_HISTORY_WEEKS = 1_250;
+const FEDERAL_SOURCE_ID = 'fed-h15';
+const FEDERAL_WEEKLY_SOURCE_URL = 'https://fred.stlouisfed.org/series/WGS1YR';
+const CMT_METHOD = 'weekly-avg-of-daily-fred-dgs1-crosschecked-wgs1yr';
+const PJ_METHOD = 'derived_28usc1961_weekly_avg_h15_1yr_cmt';
 
 function isIsoDate(s) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
@@ -68,8 +78,21 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
       errors.push(`${entity.slug}: entity metadata is not valid JSON`);
       continue;
     }
-    const result = validateStateCalculationMetadata(metadata);
-    if (result.status === 'ready') calculatorReadyStateRules++;
+    const result = validateStateCalculationMetadata(metadata, { today });
+    if (result.status === 'ready') {
+      calculatorReadyStateRules++;
+      const entityRows = rows.filter((row) => row.entity_slug === entity.slug);
+      const latestCoverage = entityRows
+        .map((row) => row.effective_date)
+        .filter(Boolean)
+        .sort()
+        .at(-1);
+      if (metadata?.calculation?.coverage_through !== latestCoverage) {
+        errors.push(
+          `${entity.slug}: calculator coverage_through ${metadata?.calculation?.coverage_through || 'missing'} does not match latest observation ${latestCoverage || 'missing'}`
+        );
+      }
+    }
     for (const problem of result.errors) errors.push(`${entity.slug}: ${problem}`);
   }
 
@@ -254,6 +277,34 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
         errors.push(`florida-judgment-rate@${row.effective_date}: extension rate is outside the accepted range`);
       }
     }
+
+    const floridaPrejudgmentRows = rows
+      .filter((row) => row.entity_slug === 'florida-prejudgment-rate')
+      .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+    if (floridaPrejudgmentRows.length !== floridaRows.length) {
+      errors.push(
+        `florida-prejudgment-rate: expected ${floridaRows.length} CFO periods, found ${floridaPrejudgmentRows.length}`,
+      );
+    }
+    for (let index = 0; index < Math.min(floridaRows.length, floridaPrejudgmentRows.length); index++) {
+      const post = floridaRows[index];
+      const pre = floridaPrejudgmentRows[index];
+      if (pre.effective_date !== post.effective_date
+          || Math.abs(pre.value_numeric - post.value_numeric) > 1e-9) {
+        errors.push(
+          `florida-prejudgment-rate: CFO schedule differs from post-judgment at ${post.effective_date}`,
+        );
+        break;
+      }
+      if (pre.source_id !== 'fl-prejud'
+          || pre.method !== 'statute-variable-official-table'
+          || pre.confidence !== 'high') {
+        errors.push(
+          `florida-prejudgment-rate@${pre.effective_date}: official CFO provenance contract is invalid`,
+        );
+        break;
+      }
+    }
   }
 
   // Iowa's court-administered selections are monthly. The retired implementation incorrectly
@@ -436,20 +487,122 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     errors.push('connecticut-judgment-rate: the retired universal flat-10% record must not reappear');
   }
 
-  // Derived-value consistency: post-judgment must equal the CMT weekly average for each shared week.
-  const cmt = new Map(
-    rows.filter((r) => r.entity_slug === 'treasury-1-year-cmt').map((r) => [r.effective_date, r.value_numeric])
-  );
+  // Federal derivation consistency. The current §1961 formula begins with the rate week
+  // 2000-12-11; before that, CMT reference history may exist without a post-judgment counterpart.
+  // From the transition forward the two series must have exactly one row per date and equal values.
+  // Merely checking overlapping rows lets hydration conceal a truncated or partially loaded series.
+  const cmtRows = rows.filter((r) => r.entity_slug === 'treasury-1-year-cmt');
   const pj = rows.filter((r) => r.entity_slug === 'us-federal-post-judgment');
+  const cmt = new Map(cmtRows.map((r) => [r.effective_date, r.value_numeric]));
+  const pjByDate = new Map(pj.map((r) => [r.effective_date, r.value_numeric]));
+  const eligibleCmtRows = cmtRows.filter((r) => r.effective_date >= FEDERAL_PJ_FIRST_RATE_WEEK);
   let pjChecked = 0;
-  for (const r of pj) {
-    if (cmt.has(r.effective_date)) {
-      pjChecked++;
-      if (Math.abs(cmt.get(r.effective_date) - r.value_numeric) > 1e-9) {
+  if (cmtRows.length || pj.length) {
+    if (!cmtRows.length) errors.push('treasury-1-year-cmt: series is missing while federal post-judgment history exists');
+    if (!pj.length) errors.push('us-federal-post-judgment: series is missing while CMT history exists');
+    if (cmt.size !== cmtRows.length) {
+      errors.push('treasury-1-year-cmt: duplicate effective dates prevent exact federal coverage');
+    }
+    if (pjByDate.size !== pj.length) {
+      errors.push('us-federal-post-judgment: duplicate effective dates prevent exact federal coverage');
+    }
+    const cmtDates = cmtRows.map((row) => row.effective_date).sort();
+    const pjDates = pj.map((row) => row.effective_date).sort();
+    if (cmtDates[0] !== FED_H15_HISTORY_START_WEEK) {
+      errors.push(
+        `treasury-1-year-cmt: full history must start ${FED_H15_HISTORY_START_WEEK}, found ${cmtDates[0] || 'nothing'}`
+      );
+    }
+    if (pjDates[0] !== FEDERAL_PJ_FIRST_RATE_WEEK) {
+      errors.push(
+        `us-federal-post-judgment: modern history must start ${FEDERAL_PJ_FIRST_RATE_WEEK}, found ${pjDates[0] || 'nothing'}`
+      );
+    }
+    if (cmtRows.length < MIN_CMT_HISTORY_WEEKS) {
+      errors.push(
+        `treasury-1-year-cmt: history is truncated at ${cmtRows.length} weeks (minimum ${MIN_CMT_HISTORY_WEEKS})`
+      );
+    }
+    if (pj.length < MIN_FEDERAL_PJ_HISTORY_WEEKS) {
+      errors.push(
+        `us-federal-post-judgment: history is truncated at ${pj.length} weeks (minimum ${MIN_FEDERAL_PJ_HISTORY_WEEKS})`
+      );
+    }
+    for (const [slug, federalRows, expectedMethod] of [
+      ['treasury-1-year-cmt', cmtRows, CMT_METHOD],
+      ['us-federal-post-judgment', pj, PJ_METHOD],
+    ]) {
+      if (federalRows.some((row) => (
+        row.source_id !== FEDERAL_SOURCE_ID
+        || row.source_url !== FEDERAL_WEEKLY_SOURCE_URL
+        || row.method !== expectedMethod
+      ))) {
         errors.push(
-          `post-judgment@${r.effective_date} (${r.value_numeric}%) != CMT weekly avg (${cmt.get(r.effective_date)}%) — derivation broken`
+          `${slug}: every week must use ${FEDERAL_SOURCE_ID}, published WGS1YR provenance, and method ${expectedMethod}`
         );
       }
+    }
+
+    const federalEntities = db.prepare(
+      `SELECT slug, metadata FROM entities
+       WHERE slug IN ('treasury-1-year-cmt', 'us-federal-post-judgment')`
+    ).all();
+    const metadataBySlug = new Map(federalEntities.map((entity) => {
+      let metadata = null;
+      try {
+        metadata = entity.metadata ? JSON.parse(entity.metadata) : null;
+      } catch {
+        errors.push(`${entity.slug}: entity metadata is not valid JSON`);
+      }
+      return [entity.slug, metadata];
+    }));
+    const cmtMetadata = metadataBySlug.get('treasury-1-year-cmt');
+    if (cmtMetadata?.series_id !== 'DGS1'
+        || cmtMetadata?.validation_series_id !== 'WGS1YR'
+        || cmtMetadata?.history_start !== FED_H15_HISTORY_START_WEEK) {
+      errors.push('treasury-1-year-cmt: DGS1/WGS1YR full-history metadata contract is missing');
+    }
+    const pjMetadata = metadataBySlug.get('us-federal-post-judgment');
+    if (pjMetadata?.input_series_id !== 'DGS1'
+        || pjMetadata?.validation_series_id !== 'WGS1YR'
+        || pjMetadata?.history_start !== FEDERAL_PJ_FIRST_RATE_WEEK
+        || pjMetadata?.formula_effective_date !== '2000-12-21') {
+      errors.push('us-federal-post-judgment: modern DGS1/WGS1YR formula metadata contract is missing');
+    }
+    for (const [slug, federalRows] of [
+      ['treasury-1-year-cmt', cmtRows],
+      ['us-federal-post-judgment', pj],
+    ]) {
+      const dates = federalRows.map((row) => row.effective_date).sort();
+      for (let index = 1; index < dates.length; index++) {
+        if (daysBetween(dates[index], dates[index - 1]) !== 7) {
+          errors.push(`${slug}: weekly history gap between ${dates[index - 1]} and ${dates[index]}`);
+          break;
+        }
+      }
+    }
+  }
+  for (const r of pj) {
+    if (r.effective_date < FEDERAL_PJ_FIRST_RATE_WEEK) {
+      errors.push(
+        `post-judgment@${r.effective_date}: current §1961 weekly-CMT formula cannot predate ${FEDERAL_PJ_FIRST_RATE_WEEK}`
+      );
+      continue;
+    }
+    if (!cmt.has(r.effective_date)) {
+      errors.push(`post-judgment@${r.effective_date}: matching CMT weekly average is missing`);
+      continue;
+    }
+    pjChecked++;
+    if (Math.abs(cmt.get(r.effective_date) - r.value_numeric) > 1e-9) {
+      errors.push(
+        `post-judgment@${r.effective_date} (${r.value_numeric}%) != CMT weekly avg (${cmt.get(r.effective_date)}%) — derivation broken`
+      );
+    }
+  }
+  for (const r of eligibleCmtRows) {
+    if (!pjByDate.has(r.effective_date)) {
+      errors.push(`CMT@${r.effective_date}: matching federal post-judgment row is missing`);
     }
   }
 
@@ -566,7 +719,12 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     //    fetch throws an HTTP error and fails the run anyway).
     const WEEKLY = new Set(['treasury-1-year-cmt', 'us-federal-post-judgment']);
     const MONTHLY = new Set(['texas-judgment-rate', 'texas-prejudgment-rate', 'iowa-judgment-rate', 'iowa-prejudgment-rate']);
-    const QUARTERLY = new Set(['nebraska-judgment-rate', 'nebraska-prejudgment-rate', 'florida-judgment-rate']);
+    const QUARTERLY = new Set([
+      'nebraska-judgment-rate',
+      'nebraska-prejudgment-rate',
+      'florida-judgment-rate',
+      'florida-prejudgment-rate',
+    ]);
     const ANNUAL = new Set([
       'alaska-judgment-rate', 'alaska-prejudgment-rate',
       'maine-judgment-rate', 'maine-prejudgment-rate', 'utah-judgment-rate',

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getMeta, prejudgmentEntities, latestOf } from '../../lib/data.mjs';
+import { getMeta, prejudgmentEntities, currentOf, latestOf } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 const meta = getMeta();
@@ -13,12 +13,16 @@ const datasetModified = entities
   .at(-1);
 const rateYear = String(datasetModified || '').slice(0, 4);
 const rows = entities.map((e) => {
-  const copy = copyFor(e.slug);
+  const current = currentOf(e);
+  const copy = copyFor(e.slug, {
+    observation: current,
+    historyPoints: e.history?.annual_rate?.length,
+  });
   const stateName = e.name.replace(/ Prejudgment Interest Rate$/, '');
   return {
     slug: e.slug,
     state: stateName,
-    value_text: latestOf(e)?.value_text,
+    value_text: current?.value_text,
     kind: copy.kind,
     kindLabel: copy.kindLabel,
     applies: copy.appliesShort || copy.tagline,

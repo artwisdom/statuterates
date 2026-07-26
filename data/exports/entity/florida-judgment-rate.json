@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T19:15:29.528Z",
+  "generated_at": "2026-07-26T21:08:11.041Z",
   "slug": "florida-judgment-rate",
   "name": "Florida Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -13,20 +13,31 @@
     "official_statute_url": "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0055/Sections/0055.03.html",
     "official_history_start": "1981-10-01",
     "calculation": {
-      "status": "reference_only",
+      "status": "ready",
       "source_tier": "official_primary",
-      "reason": "The official 1981-present CFO table, quarterly schedule, judgment-date selection, annual January 1 adjustment, written-contract rule, and listed clerk-judgment exceptions are modeled. The renderer remains disabled until day count, partial-payment allocation, the transition rules across the full history, and every supported judgment branch are deterministic.",
-      "rate_behavior": "quarterly_rate_at_entry_then_annual_january_1_adjustment",
+      "supported_scope": "Ordinary Florida money judgments governed by Fla. Stat. §55.03, obtained on or after July 1, 2011, using the statutory CFO schedule with no payment events.",
+      "excluded_branches": [
+        "A rate established by written contract or obligation",
+        "Clerk-entered judgments under Fla. Stat. §§55.141, 61.14, 938.29, or 938.30",
+        "Prejudgment interest, partial payments, later-added fees or costs, renewals, amended judgments, and account-specific allocations"
+      ],
+      "rate_behavior": "resets_by_period",
       "rate_schedule": "official_cfo_quarterly_table",
       "compounding": "simple",
-      "day_count": "official_daily_factors_vary_by_calendar_year_and_historical_period",
+      "day_count": "statutory_table",
       "history_start": "1981-10-01",
       "curated_history_complete_through": "2026-07-01",
+      "valid_from": "2011-07-01",
+      "coverage_through": "2026-07-01",
       "current_period_monitored": true,
-      "branches_complete": false,
+      "payments_supported": false,
+      "branches_complete": true,
       "accrual_rule_verified": true,
-      "renderer_supported": false,
+      "renderer_supported": true,
+      "renderer_id": "florida-postjudgment-v1",
       "rule_verified_at": "2026-07-26T00:00:00Z",
+      "rule_review_expires_at": "2027-01-26",
+      "statute_contract_monitored": true,
       "branches": {
         "general": "Fla. Stat. §55.03(1): the CFO sets a quarterly annual rate from the preceding 12-month New York Fed discount-rate average plus four percentage points",
         "rate_adjustment": "§55.03(3): use the rate in effect when judgment is obtained, then adjust annually each January 1 until paid",
@@ -47,7 +58,7 @@
       "effective_date": "2026-07-01",
       "source_id": "fl-cfo",
       "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-      "retrieved_at": "2026-07-26T00:00:00Z",
+      "retrieved_at": "2026-07-26T18:31:36.466Z",
       "confidence": "high",
       "method": "statute-variable-official-table",
       "notes": "The Florida CFO publishes 8.06% for the quarter beginning July 1, 2026 under Fla. Stat. §55.03. The statutory rate is selected when judgment is obtained and then adjusts each January 1 to the CFO rate then in effect until paid. A written contract or obligation can establish its own rate, and clerk-entered judgments under §§55.141, 61.14, 938.29, and 938.30 do not receive the annual adjustment. The official table also supplies daily factors and every distinct period since October 1, 1981. Verify the correct branch; not legal advice."
@@ -63,7 +74,7 @@
         "effective_date": "2026-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "The Florida CFO publishes 8.06% for the quarter beginning July 1, 2026 under Fla. Stat. §55.03. The statutory rate is selected when judgment is obtained and then adjusts each January 1 to the CFO rate then in effect until paid. A written contract or obligation can establish its own rate, and clerk-entered judgments under §§55.141, 61.14, 938.29, and 938.30 do not receive the annual adjustment. The official table also supplies daily factors and every distinct period since October 1, 1981. Verify the correct branch; not legal advice."
@@ -76,7 +87,7 @@
         "effective_date": "2026-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2026-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -89,7 +100,7 @@
         "effective_date": "2026-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2026-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -102,7 +113,7 @@
         "effective_date": "2025-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2025-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -115,7 +126,7 @@
         "effective_date": "2025-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2025-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -128,7 +139,7 @@
         "effective_date": "2025-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2025-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -141,7 +152,7 @@
         "effective_date": "2025-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2025-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -154,7 +165,7 @@
         "effective_date": "2024-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2024-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -167,7 +178,7 @@
         "effective_date": "2024-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2024-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -180,7 +191,7 @@
         "effective_date": "2024-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2024-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -193,7 +204,7 @@
         "effective_date": "2024-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2024-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -206,7 +217,7 @@
         "effective_date": "2023-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2023-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -219,7 +230,7 @@
         "effective_date": "2023-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2023-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -232,7 +243,7 @@
         "effective_date": "2023-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2023-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -245,7 +256,7 @@
         "effective_date": "2023-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2023-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -258,7 +269,7 @@
         "effective_date": "2022-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2022-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -271,7 +282,7 @@
         "effective_date": "2022-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2022-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -284,7 +295,7 @@
         "effective_date": "2022-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2022-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -297,7 +308,7 @@
         "effective_date": "2022-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2022-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -310,7 +321,7 @@
         "effective_date": "2021-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2021-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -323,7 +334,7 @@
         "effective_date": "2021-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2021-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -336,7 +347,7 @@
         "effective_date": "2021-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2021-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -349,7 +360,7 @@
         "effective_date": "2021-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2021-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -362,7 +373,7 @@
         "effective_date": "2020-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2020-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -375,7 +386,7 @@
         "effective_date": "2020-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2020-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -388,7 +399,7 @@
         "effective_date": "2020-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2020-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -401,7 +412,7 @@
         "effective_date": "2020-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2020-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -414,7 +425,7 @@
         "effective_date": "2019-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2019-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -427,7 +438,7 @@
         "effective_date": "2019-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2019-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -440,7 +451,7 @@
         "effective_date": "2019-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2019-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -453,7 +464,7 @@
         "effective_date": "2019-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2019-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -466,7 +477,7 @@
         "effective_date": "2018-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2018-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -479,7 +490,7 @@
         "effective_date": "2018-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2018-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -492,7 +503,7 @@
         "effective_date": "2018-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2018-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -505,7 +516,7 @@
         "effective_date": "2018-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2018-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -518,7 +529,7 @@
         "effective_date": "2017-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2017-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -531,7 +542,7 @@
         "effective_date": "2017-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2017-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -544,7 +555,7 @@
         "effective_date": "2017-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2017-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -557,7 +568,7 @@
         "effective_date": "2017-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2017-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -570,7 +581,7 @@
         "effective_date": "2016-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2016-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -583,7 +594,7 @@
         "effective_date": "2016-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2016-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -596,7 +607,7 @@
         "effective_date": "2016-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2016-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -609,7 +620,7 @@
         "effective_date": "2016-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2016-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -622,7 +633,7 @@
         "effective_date": "2015-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2015-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -635,7 +646,7 @@
         "effective_date": "2015-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2015-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -648,7 +659,7 @@
         "effective_date": "2015-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2015-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -661,7 +672,7 @@
         "effective_date": "2015-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2015-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -674,7 +685,7 @@
         "effective_date": "2014-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2014-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -687,7 +698,7 @@
         "effective_date": "2014-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2014-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -700,7 +711,7 @@
         "effective_date": "2014-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2014-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -713,7 +724,7 @@
         "effective_date": "2014-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2014-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -726,7 +737,7 @@
         "effective_date": "2013-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2013-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -739,7 +750,7 @@
         "effective_date": "2013-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2013-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -752,7 +763,7 @@
         "effective_date": "2013-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2013-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -765,7 +776,7 @@
         "effective_date": "2013-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2013-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -778,7 +789,7 @@
         "effective_date": "2012-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2012-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -791,7 +802,7 @@
         "effective_date": "2012-07-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2012-07-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -804,7 +815,7 @@
         "effective_date": "2012-04-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2012-04-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -817,7 +828,7 @@
         "effective_date": "2012-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2012-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -830,7 +841,7 @@
         "effective_date": "2011-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2011-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -843,7 +854,7 @@
         "effective_date": "2011-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2011-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -856,7 +867,7 @@
         "effective_date": "2010-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2010-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -869,7 +880,7 @@
         "effective_date": "2009-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2009-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -882,7 +893,7 @@
         "effective_date": "2008-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2008-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -895,7 +906,7 @@
         "effective_date": "2007-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2007-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -908,7 +919,7 @@
         "effective_date": "2006-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2006-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -921,7 +932,7 @@
         "effective_date": "2005-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2005-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -934,7 +945,7 @@
         "effective_date": "2004-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2004-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -947,7 +958,7 @@
         "effective_date": "2003-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2003-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -960,7 +971,7 @@
         "effective_date": "2002-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2002-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -973,7 +984,7 @@
         "effective_date": "2001-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2001-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -986,7 +997,7 @@
         "effective_date": "2000-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 2000-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -999,7 +1010,7 @@
         "effective_date": "1999-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 1999-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -1012,7 +1023,7 @@
         "effective_date": "1998-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 1998-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -1025,7 +1036,7 @@
         "effective_date": "1997-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 1997-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -1038,7 +1049,7 @@
         "effective_date": "1996-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 1996-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -1051,7 +1062,7 @@
         "effective_date": "1995-01-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 1995-01-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."
@@ -1064,7 +1075,7 @@
         "effective_date": "1981-10-01",
         "source_id": "fl-cfo",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-07-26T00:00:00Z",
+        "retrieved_at": "2026-07-26T18:31:36.466Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO judgment-interest rate for the period beginning 1981-10-01. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice."

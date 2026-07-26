@@ -12,18 +12,21 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
 
 ## Current baseline
 
-- 114 rate series and 2,361 recorded observations across U.S. federal/state, U.K., and E.U. sources.
-- 194 static pages plus 114 JSON and 114 CSV entity endpoints.
+- 114 rate series and 4,947 recorded observations across U.S. federal/state, U.K., and E.U. sources.
+- 195 static pages plus 114 JSON and 114 CSV entity endpoints.
 - Automated weekly refresh for machine-readable federal, U.K., and E.U. sources; live Texas OCCC,
   Alaska Court System, Nebraska Judicial Branch, Iowa Judicial Branch, Florida CFO, Utah State
   Courts, and Federal Reserve prime-rate checks extend or verify state schedules, while Maine's
-  annual court-chart rate is independently checked against official H.15 inputs. A separate
-  five-page IRS integrity monitor protects the Form 1040 penalty rules used by the calculator.
+  annual court-chart rate is independently checked against official H.15 inputs. Federal DGS1
+  history is independently reconciled against WGS1YR before publication. A separate five-page IRS
+  integrity monitor protects the Form 1040 penalty rules used by the calculator.
 - Curated state references carry explicit source tiers and source-check dates.
-- The repository includes general fixed-rate judgment/per-diem, federal §1961, U.K./E.U.
-  late-payment, IRS interest/refund, and individual Form 1040 penalty-and-interest calculators.
-- State calculators are intentionally withheld and excluded from the sitemap until complete rate
-  histories, branches, accrual rules, day counts, and compounding rules pass validation.
+- The repository includes general fixed-rate judgment/per-diem, full-modern-history federal §1961,
+  U.K./E.U. late-payment, IRS interest/refund, individual Form 1040 penalty-and-interest, and a
+  narrowly audited Florida §55.03 judgment calculator.
+- Florida is the only released state-specific calculator. Every other state remains withheld until
+  its history, legal branches, accrual rule, day count, compounding, and dedicated renderer pass the
+  same fail-closed release contract.
 
 The July 2026 safety baseline also makes committed JSON exports the durable history bootstrap for a
 fresh CI database. A clean automation run can no longer erase older observations. IRS calculations
@@ -69,5 +72,7 @@ Search Console page-strengthening milestone,
 [docs/PHASE_3_PROGRESS.md](docs/PHASE_3_PROGRESS.md) for the indexing, automation, performance, and
 Alaska-history release, and
 [docs/PHASE_4_PROGRESS.md](docs/PHASE_4_PROGRESS.md) for the Form 1040 penalty calculator and
-IRS rule-monitor milestone, and
+IRS rule-monitor milestone,
+[docs/PHASE_5_PROGRESS.md](docs/PHASE_5_PROGRESS.md) for the federal-history migration and first
+audited state calculator, and
 [docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.

@@ -2,15 +2,16 @@
 
 > Historical research proposal, not an implementation contract. The July 2026 audit found that its
 > nightly/full-history/state-calculator assumptions were unsafe. The site refreshes weekly, most state
-> histories are single-point references, and all state calculators remain gated until their complete
-> rule models pass validation. Use this document for ideas only.
+> histories are single-point references, and Florida is the only narrowly audited state calculator;
+> every other state remains gated until its complete rule model and dedicated renderer pass
+> validation. Use this document for ideas only.
 
 **Written 2026-07-16 by the research phase (Fable 5). Implementation owner: Opus 4.8.**
 This document is self-contained: everything needed to execute is in here + the repo. Do not rely on
 prior conversation context. Repo: `data-moat-engine/` (site = Astro static → GitHub Pages behind
 Cloudflare, pipeline = Node data refresh weekly via `.github/workflows/refresh.yml`, deploy via
 `deploy.yml` on reviewed pushes and successful refresh completion). Live:
-https://statuterates.com (194-page deployed release as of 2026-07-26).
+https://statuterates.com (Phase 4's 194-page deployed release; Phase 5 builds 195 pages).
 
 ---
 

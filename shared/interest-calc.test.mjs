@@ -5,8 +5,10 @@ import assert from 'node:assert/strict';
 import {
   rateOn, mondayOf, daysBetween,
   federalPostJudgment, irsInterest, fixedSimpleInterest, floatingSimpleInterest, fixedCompoundInterest,
+  floridaJudgmentCoverage, floridaPostJudgmentInterest,
   fullOrPartialMonthsLate, irsPenaltyAndInterestEstimate, irsRateCoverageEnd,
 } from './interest-calc.mjs';
+import { buildFloridaOfficialHistory } from '../pipeline/fetchers/florida-judgment-history.mjs';
 
 const IRS_PENALTY_RULES = {
   failure_to_file: {
@@ -73,6 +75,33 @@ test('federal post-judgment uses the week PRECEDING the judgment week', () => {
   assert.equal(r.total, 101003.18);
 });
 
+test('federal post-judgment fails closed before the modern rule and when the exact week is absent', () => {
+  assert.throws(() => federalPostJudgment({
+    principal: 1000,
+    judgmentDate: '2000-12-20',
+    endDate: '2000-12-21',
+    weeklyHistory: [{ effective_date: '2000-12-11', value: 5.5 }],
+  }), /on or after 2000-12-21/);
+  assert.throws(() => federalPostJudgment({
+    principal: 1000,
+    judgmentDate: '2026-07-08',
+    endDate: '2026-07-09',
+    weeklyHistory: [{ effective_date: '2026-06-22', value: 4 }],
+  }), /No exact H\.15 weekly rate.*older week will not be substituted/);
+});
+
+test('federal post-judgment rejects unsafe or fractional-cent principal amounts', () => {
+  const weeklyHistory = [{ effective_date: '2026-06-29', value: 3.98 }];
+  for (const principal of [1e308, 100.001]) {
+    assert.throws(() => federalPostJudgment({
+      principal,
+      judgmentDate: '2026-07-08',
+      endDate: '2026-07-09',
+      weeklyHistory,
+    }), /cent-precise amount/);
+  }
+});
+
 test('federal post-judgment compounds annually (§1961(b))', () => {
   const weekly = [{ effective_date: '2024-07-01', value: 5 }];
   const r = federalPostJudgment({ principal: 100000, judgmentDate: '2024-07-08', endDate: '2026-07-08', weeklyHistory: weekly });
@@ -118,6 +147,265 @@ test('IRS interest refuses to reuse the last known rate in an unpublished quarte
     endDate: '2026-10-02',
     quarterlyHistory: q,
   }), /only published through 2026-10-01/);
+});
+
+const FLORIDA_HISTORY = [
+  { effective_date: '2011-01-01', value: 6 },
+  { effective_date: '2011-10-01', value: 4.75 },
+  { effective_date: '2012-01-01', value: 4.75 },
+  { effective_date: '2012-04-01', value: 4.75 },
+  { effective_date: '2012-07-01', value: 4.75 },
+  { effective_date: '2012-10-01', value: 4.75 },
+  { effective_date: '2013-01-01', value: 4.75 },
+  { effective_date: '2013-04-01', value: 4.75 },
+  { effective_date: '2013-07-01', value: 4.75 },
+  { effective_date: '2013-10-01', value: 4.75 },
+  { effective_date: '2023-10-01', value: 8.54 },
+  { effective_date: '2024-01-01', value: 9.09 },
+  { effective_date: '2024-04-01', value: 9.34 },
+  { effective_date: '2024-07-01', value: 9.46 },
+  { effective_date: '2024-10-01', value: 9.50 },
+  { effective_date: '2025-01-01', value: 9.38 },
+  { effective_date: '2025-04-01', value: 9.15 },
+  { effective_date: '2025-07-01', value: 8.90 },
+  { effective_date: '2025-10-01', value: 8.65 },
+  { effective_date: '2026-01-01', value: 8.44 },
+  { effective_date: '2026-04-01', value: 8.25 },
+  { effective_date: '2026-07-01', value: 8.06 },
+];
+
+test('Florida uses the judgment-date quarter rate through December 31', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2024-07-01',
+    endDate: '2025-01-01',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  assert.equal(r.entry_rate_percent, 9.46);
+  assert.equal(r.days, 184);
+  assert.deepEqual(r.segments.map((segment) => segment.rate_percent), [9.46]);
+  assert.equal(r.segments[0].denominator, 366);
+  assert.equal(r.interest, 475.58);
+});
+
+test('Florida ignores later quarterly changes and resets only on January 1', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2024-03-31',
+    endDate: '2025-01-02',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  assert.deepEqual(
+    r.segments.map((segment) => [segment.start_date, segment.rate_percent]),
+    [['2024-03-31', 9.09], ['2025-01-01', 9.38]],
+  );
+  assert.equal(r.segments[0].denominator, 366);
+  assert.equal(r.segments[1].denominator, 365);
+  assert.equal(
+    r.segments.reduce((sum, segment) => sum + Math.round(segment.interest * 100), 0)
+      + Math.round(r.rounding_adjustment * 100),
+    Math.round(r.interest * 100),
+  );
+});
+
+test('Florida exposes a ledger rounding adjustment without making a rate period negative', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 0.11,
+    judgmentDate: '2012-01-01',
+    endDate: '2026-12-31',
+    history: buildFloridaOfficialHistory(),
+    includeEndDate: true,
+  });
+  assert.equal(r.interest, 0.10);
+  assert.ok(r.segments.every((segment) => segment.interest >= 0));
+  assert.equal(
+    r.segments.reduce((sum, segment) => sum + Math.round(segment.interest * 100), 0)
+      + Math.round(r.rounding_adjustment * 100),
+    Math.round(r.interest * 100),
+  );
+  assert.notEqual(r.rounding_adjustment, 0);
+});
+
+test('Florida modern transition supports July 1, 2011 and applies the October entry rate', () => {
+  const july = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2011-07-01',
+    endDate: '2011-07-02',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  const october = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2011-10-01',
+    endDate: '2011-10-02',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  assert.equal(july.entry_rate_percent, 6);
+  assert.equal(october.entry_rate_percent, 4.75);
+  assert.equal(july.days, 1);
+  assert.equal(october.days, 1);
+});
+
+test('Florida calculation is simple across annual resets', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 100000,
+    judgmentDate: '2024-01-01',
+    endDate: '2026-01-01',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  // 2024 is leap-year actual/366 at 9.09%; 2025 is actual/365 at 9.38%.
+  assert.equal(r.interest, 18470);
+  assert.equal(r.total, 118470);
+  assert.deepEqual(r.segments.map((segment) => segment.interest), [9090, 9380]);
+});
+
+test('Florida fails closed before scope and beyond unpublished boundaries', () => {
+  assert.deepEqual(floridaJudgmentCoverage(FLORIDA_HISTORY), {
+    latest_effective_date: '2026-07-01',
+    judgment_date_before: '2026-10-01',
+    calculation_date_through: '2027-01-01',
+  });
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2011-06-30',
+    endDate: '2011-07-01',
+    history: FLORIDA_HISTORY,
+  }), /on or after 2011-07-01/);
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2026-10-01',
+    endDate: '2026-10-02',
+    history: FLORIDA_HISTORY,
+  }), /has not published/);
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2026-07-01',
+    endDate: '2027-01-02',
+    history: FLORIDA_HISTORY,
+  }), /required January 1 Florida reset/);
+});
+
+test('Florida rejects missing reset rows, invalid amounts, and reversed dates', () => {
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2024-07-01',
+    endDate: '2025-01-02',
+    history: FLORIDA_HISTORY.filter((point) => point.effective_date !== '2025-01-01'),
+  }), /missing the required January 1 rate/);
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 0,
+    judgmentDate: '2024-01-01',
+    endDate: '2024-01-02',
+    history: FLORIDA_HISTORY,
+  }), /Principal/);
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2024-01-02',
+    endDate: '2024-01-01',
+    history: FLORIDA_HISTORY,
+  }), /before the judgment date/);
+});
+
+test('Florida zero-day result remains transparent and finite', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2026-07-01',
+    endDate: '2026-07-01',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  assert.equal(r.days, 0);
+  assert.equal(r.interest, 0);
+  assert.equal(r.total, 10000);
+  assert.equal(r.current_per_diem, 2.21);
+  assert.deepEqual(r.segments, []);
+});
+
+test('Florida requires an explicit, visible end-date convention and defaults to including it', () => {
+  const included = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2026-07-01',
+    endDate: '2026-07-01',
+    history: FLORIDA_HISTORY,
+  });
+  const excluded = floridaPostJudgmentInterest({
+    principal: 10000,
+    judgmentDate: '2026-07-01',
+    endDate: '2026-07-01',
+    history: FLORIDA_HISTORY,
+    includeEndDate: false,
+  });
+  assert.equal(included.end_date_included, true);
+  assert.equal(included.accrual_end_exclusive, '2026-07-02');
+  assert.equal(included.days, 1);
+  assert.equal(included.interest, 2.21);
+  assert.match(included.method, /through-date included/);
+  assert.equal(excluded.end_date_included, false);
+  assert.equal(excluded.days, 0);
+  assert.equal(excluded.interest, 0);
+  assert.match(excluded.method, /through-date excluded/);
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2026-07-01',
+    endDate: '2026-07-02',
+    history: FLORIDA_HISTORY,
+    includeEndDate: 'yes',
+  }), /convention must be selected/);
+});
+
+test('Florida matches the official DFS inclusive 2013 comparison fixture', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 18935964.29,
+    judgmentDate: '2013-04-01',
+    endDate: '2013-12-31',
+    history: FLORIDA_HISTORY,
+    includeEndDate: true,
+  });
+  assert.equal(r.days, 275);
+  assert.equal(r.entry_rate_percent, 4.75);
+  assert.equal(r.interest, 677674.06);
+  assert.equal(r.total, 19613638.35);
+});
+
+test('Florida sums exact rational periods, rounds once, and rejects fractional cents', () => {
+  const r = floridaPostJudgmentInterest({
+    principal: 12345.67,
+    judgmentDate: '2024-12-31',
+    endDate: '2025-01-02',
+    history: FLORIDA_HISTORY,
+    includeEndDate: true,
+  });
+  assert.equal(
+    r.segments.reduce((sum, segment) => Math.round((sum + segment.interest) * 100) / 100, 0),
+    r.interest,
+  );
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100.001,
+    judgmentDate: '2026-07-01',
+    endDate: '2026-07-02',
+    history: FLORIDA_HISTORY,
+  }), /cent-precise/);
+});
+
+test('Florida permits the last safely covered included day and rejects the unpublished reset day', () => {
+  assert.doesNotThrow(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2026-07-01',
+    endDate: '2026-12-31',
+    history: FLORIDA_HISTORY,
+    includeEndDate: true,
+  }));
+  assert.throws(() => floridaPostJudgmentInterest({
+    principal: 100,
+    judgmentDate: '2026-07-01',
+    endDate: '2027-01-01',
+    history: FLORIDA_HISTORY,
+    includeEndDate: true,
+  }), /required January 1 Florida reset/);
 });
 
 test('fixed simple interest (UK LPA style)', () => {

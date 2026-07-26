@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment, isCalculatorReady, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
+import { getAllEntities, getEntity, getMeta, currentOf, latestOf, prettyDate, prettyDateTime, isPrejudgment, isCalculatorReady, stateCalculatorReleaseForEntity, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -12,11 +12,12 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const entity = getEntity(slug);
 const meta = getMeta();
-const copy = copyFor(slug);
 const JUR = { US: 'United States', GB: 'United Kingdom', EU: 'European Union' };
-const latest = latestOf(entity);
+const latestPublished = latestOf(entity);
+const latest = currentOf(entity);
 const history = (entity.history?.annual_rate || []).slice(0, 40); // recent history for the table
 const totalPoints = (entity.history?.annual_rate || []).length;
+const copy = copyFor(slug, { observation: latest, historyPoints: totalPoints });
 
 const isDerived = latest?.confidence !== 'high';
 const isStatuteFixed = (latest?.method || '').startsWith('statute-fixed');
@@ -64,16 +65,17 @@ const candidateCalcHref = CALC_FOR[slug]
   || (slug.endsWith('-prejudgment-rate') && PREJUDGMENT_CALC_SAFE.includes(slug.replace('-prejudgment-rate', ''))
         ? '/calculators/prejudgment-interest/'
         : null);
+const dedicatedStateCalcHref = stateCalculatorReleaseForEntity(entity)?.path || null;
 const isStateCalculator = candidateCalcHref === '/calculators/state-judgment-interest/'
   || candidateCalcHref === '/calculators/prejudgment-interest/';
 const manualStateCalcHref = !isPrejudgment(entity) && slug.endsWith('-judgment-rate')
   ? '/calculators/judgment-interest/'
   : null;
-const calcHref = isStateCalculator
+const calcHref = dedicatedStateCalcHref || (isStateCalculator
   ? (STATE_CALCULATOR_RENDERER_READY && import.meta.env.ENABLE_STATE_CALCULATORS === 'true' && isCalculatorReady(entity)
       ? candidateCalcHref
       : manualStateCalcHref)
-  : (candidateCalcHref || manualStateCalcHref);
+  : (candidateCalcHref || manualStateCalcHref));
 
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.
@@ -145,15 +147,14 @@ const description = isStateRate
     : `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Cited source and recorded effective-date history.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
-// Stale-proof the descriptive prose: for single-value variable state series, swap any hardcoded
-// "currently X%" phrase for the live figure from the dataset, so the
-// paragraph can never drift from the hero. Dual-rate "A% / B%" series keep their curated copy, which
-// names each component explicitly.
+// Legacy variable-series copy is also stale-proofed here. New volatile copy uses explicit
+// observation-backed tokens in content.mjs; this global replacement protects older single-value
+// paragraphs until each is migrated.
 const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
-  ? copy.body.replace(/currently \d+(?:\.\d+)?%/i, `currently ${latest.value_text}`)
+  ? copy.body.replace(/currently \d+(?:\.\d+)?%/gi, `currently ${latest.value_text}`)
   : copy.body;
 const pageModified = [
-  String(latest?.retrieved_at || latest?.effective_date || '').slice(0, 10),
+  String(latestPublished?.retrieved_at || latestPublished?.effective_date || '').slice(0, 10),
   contentModifiedFor(slug),
 ].filter(Boolean).sort().at(-1);
 
@@ -336,6 +337,8 @@ const jsonLd = [
     <p><a href={calcHref}><strong>
       {slug === 'irs-underpayment'
         ? '→ Estimate Form 1040 penalties and interest'
+        : dedicatedStateCalcHref
+          ? `→ Calculate ${stateName} judgment interest with the audited statutory tool`
         : '→ Calculate interest at this rate'}
     </strong></a></p>
   )}

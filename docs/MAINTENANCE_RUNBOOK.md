@@ -60,14 +60,22 @@ rate, cap, partial-month rule, indexed minimum, penalty-interest start event, or
 The monitor deliberately fails the refresh instead of scraping changed prose into calculator math.
 The previous committed site remains the safe fallback while the new official language is reviewed.
 
-## Federal Reserve H.15 failure
+## Federal Reserve H.15/FRED failure
 
-Symptoms include a missing 1-year CMT column or post-judgment/CMT derivation mismatch.
+Symptoms include a changed FRED CSV header, a weekday or weekly gap, a stale feed, a changed
+historical anchor, a `DGS1`/`WGS1YR` mismatch, or a missing federal/CMT week in database validation.
 
-1. Confirm the configured CSV still includes series `RIFLGFCY01`.
-2. If the Fed changed the bundle, create a replacement CSV URL through its official data-download
-   interface and update `pipeline/fetchers/fed-h15.mjs`.
-3. Run pipeline tests. The weekly post-judgment observation must equal the weekly CMT observation.
+1. Open the official FRED `DGS1` and `WGS1YR` series pages linked in
+   `pipeline/fetchers/fed-h15.mjs`. Both feeds are mandatory; do not publish from only one.
+2. Confirm FRED still returns the exact two-column `observation_date,<series>` CSV shape. `DGS1`
+   may contain blank holiday values; `WGS1YR` may not contain a missing weekly value.
+3. Do not restore the Federal Reserve “Build Your Package” endpoint. The Board announced its
+   removal for November 2026 and directs users to FRED or full XML.
+4. Preserve source ID `fed-h15` so durable-history hydration remains one provenance branch. Do not
+   hand-edit exported federal weeks or substitute a nearby week.
+5. Run `node --test fetchers/fed-h15.test.mjs`, the full pipeline suite, and `node run.mjs all`.
+   The current-formula post-judgment series must begin with rate week `2000-12-11`; from that week
+   forward it must have exact one-to-one dates and values with the CMT weekly series.
 
 ## Bank of England or E.C.B. failure
 
@@ -124,6 +132,31 @@ must retain that baseline without estimating a replacement.
 4. Run the full pipeline and build sequence. A source outage may log a fail-safe fallback; validation
    must still complete without invented observations.
 
+For the released Florida calculator, the latest verified CFO point controls two separate boundaries:
+new entry dates are supported only before the next quarterly boundary, while an existing supported
+judgment can run only through December 31 before an unpublished January 1 reset is required. The
+public through-date is inclusive by default, so the UI maximum is the day before the engine's
+exclusive coverage boundary. Test both included and excluded conventions after any boundary change.
+
+## Calculator legal-rule review
+
+Florida's reviewed calculation contract expires on **January 26, 2027** unless it is rechecked.
+Forty-five days before any calculator contract expires, the weekly workflow opens one deduplicated
+GitHub issue titled `[StatuteRates] Calculator legal-rule review due`. If the deadline passes,
+pipeline and deployment validation fail closed with `calculator-ready rule review expired`.
+
+To renew it:
+
+1. Open the controlling statute and official rate source named in the entity metadata.
+2. Confirm every monitored legal anchor, supported branch, excluded branch, accrual rule,
+   compounding rule, day-count rule, and calculator explanation. A successful automated phrase
+   check is evidence, but it does not replace this review.
+3. If the rule changed, update the engine, metadata, page copy, and boundary tests together. If the
+   review cannot be completed, change the contract to `reference_only`; never extend the date alone.
+4. If the rule is unchanged, update `rule_verified_at` and set `rule_review_expires_at` no more than
+   200 days later. Run the full pipeline, shared, site, API, and production verification gates.
+5. Close the reminder issue only after the renewed contract is deployed.
+
 ## Validation failure
 
 - **Range/type:** inspect the parser; a footnote or wrong column was probably captured.
@@ -133,10 +166,16 @@ must retain that baseline without estimating a replacement.
 - **State calculator rule:** return the entity to `reference_only` unless every required structured
   rule field is supported by a primary source and tests.
 
-Use an isolated database for repair work:
+`build` validates the exact committed exports in a fresh in-memory database:
 
 ```bash
-DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs build
+node pipeline/run.mjs build
+```
+
+For a full source-refresh repair, use a separate writable database:
+
+```bash
+DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs all
 DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs validate
 ```
 
@@ -156,8 +195,9 @@ sitemap exclusions.
 
 ## State-law source review
 
-State records live in `pipeline/fetchers/us-states.mjs`. All 102 state entities are currently
-`reference_only`; most contain one observation. Texas (515 monthly rows), Nebraska (275 change
+State records live in `pipeline/fetchers/us-states.mjs`. Florida judgment interest is the sole
+`ready` state contract; the other state entities remain `reference_only`, and most contain one
+observation. Texas (515 monthly rows), Nebraska (275 change
 points), Iowa (302 monthly selections), Alaska (30 annual rows in each of its pre/post series),
 Florida (78 official periods), Utah (34 annual rows), Maine, Kentucky, and Georgia have deeper
 verified histories. A source review must not invent historical dates or change `retrieved_at` to the
@@ -193,9 +233,10 @@ calculator-ready only when its metadata passes the safety contract for:
 - verified accrual trigger; and
 - explicit validity and verification dates.
 
-Then add calculation tests for boundary dates and every branch. Keep
-`STATE_CALCULATOR_RENDERER_READY` false and `ENABLE_STATE_CALCULATORS` unset in production until the
-rendered page consumes the structured rule model rather than prototype assumptions.
+Then add calculation tests for boundary dates and every branch, create a dedicated renderer, and add
+one reviewed entry to `site/src/lib/state-calculators.mjs`. The entity's versioned `renderer_id`
+must match that registry entry. Keep `STATE_CALCULATOR_RENDERER_READY` false and
+`ENABLE_STATE_CALCULATORS` unset: those legacy switches must never mass-publish generic state pages.
 
 ## Adding a new source or series
 

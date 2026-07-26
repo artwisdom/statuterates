@@ -4,6 +4,12 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  STATE_CALCULATOR_RELEASES,
+  stateCalculatorReleaseForEntitySlug,
+} from './state-calculators.mjs';
+
+export { STATE_CALCULATOR_RELEASES } from './state-calculators.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Astro 7 bundles this module into dist/.prerender before executing getStaticPaths(), so
@@ -133,6 +139,21 @@ export function latestOf(entity) {
   return entity.latest?.annual_rate || null;
 }
 
+// "Latest published" and "current" are not always the same thing. Agencies can publish a future
+// quarter before it takes effect. Pages that say "current" must select the newest observation whose
+// effective date is on or before the build's data date; history/export code can still use latestOf().
+export function currentOf(
+  entity,
+  asOfDate = String(entity?.generated_at || getMeta().generated_at || '').slice(0, 10),
+) {
+  const history = entity?.history?.annual_rate || [];
+  const current = history
+    .filter((observation) => observation.effective_date <= asOfDate)
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date))
+    .at(-1);
+  return current || (history.length ? null : latestOf(entity));
+}
+
 // Two-key release gate for state calculators. Phase 2 must replace the prototype's hardcoded
 // histories/branches with the structured rule model before changing this to true. The deployment
 // environment flag alone can never publish the current prototype.
@@ -142,6 +163,28 @@ export const STATE_CALCULATOR_RENDERER_READY = false;
 // while preventing an incomplete state record from silently becoming an authoritative calculator.
 export function isCalculatorReady(entity) {
   return entity?.metadata?.calculation?.status === 'ready';
+}
+
+// A registry entry alone cannot publish a calculator. The matching entity must also carry the
+// reviewed renderer id and explicitly support that renderer in its versioned rule contract.
+export function stateCalculatorReleaseForEntity(entity) {
+  const release = stateCalculatorReleaseForEntitySlug(entity?.slug);
+  const rule = entity?.metadata?.calculation;
+  return release
+    && isCalculatorReady(entity)
+    && rule?.renderer_supported === true
+    && rule?.renderer_id === release.rendererId
+      ? release
+      : null;
+}
+
+export function publishedStateCalculators() {
+  return Object.values(STATE_CALCULATOR_RELEASES)
+    .map((release) => {
+      const entity = getEntity(release.entitySlug);
+      return stateCalculatorReleaseForEntity(entity) ? { ...release, entity } : null;
+    })
+    .filter(Boolean);
 }
 
 // Compact {effective_date, value} history for embedding into calculator pages.

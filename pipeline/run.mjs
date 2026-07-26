@@ -5,13 +5,21 @@
 // FAILS LOUD: if validation returns errors, the process exits non-zero and does NOT export, so a
 // broken fetch can never publish garbage.
 
-import { openDb, upsertSource, upsertEntity, upsertObservation, startRun, finishRun } from './lib/db.mjs';
+import {
+  deleteObservationsForEntitySlugs,
+  openDb,
+  upsertSource,
+  upsertEntity,
+  upsertObservation,
+  startRun,
+  finishRun,
+} from './lib/db.mjs';
 import { fetchIrs } from './fetchers/irs.mjs';
 import { fetchIrsPenaltyRules } from './fetchers/irs-penalty-rules.mjs';
 import { fetchH15 } from './fetchers/fed-h15.mjs';
 import { fetchBoe, BOE_ENTITY } from './fetchers/boe.mjs';
 import { fetchEcb, ECB_ENTITY } from './fetchers/ecb.mjs';
-import { buildWeeklyAverages, buildCmtRecords, buildPostJudgmentRecords } from './lib/normalize.mjs';
+import { buildCmtRecords, buildPostJudgmentRecords } from './lib/normalize.mjs';
 import { buildPublishedSeries, buildUkLatePayment, buildEuReference } from './lib/rates-intl.mjs';
 import { STATE_SOURCES, buildStateFixed, buildIowa } from './fetchers/us-states.mjs';
 import { fetchTexasCurrentRate } from './fetchers/texas-occc.mjs';
@@ -24,6 +32,11 @@ import { fetchFloridaCfoRates } from './fetchers/florida-cfo.mjs';
 import { validate } from './lib/validate.mjs';
 import { exportAll } from './lib/exporter.mjs';
 import { seedFromExports } from './lib/seed-exports.mjs';
+import { validateCommittedExports } from './lib/build-validation.mjs';
+import {
+  completeSnapshotEntitySlugs,
+  omitUnavailableMonitoredStateEntities,
+} from './lib/snapshot-policy.mjs';
 
 export const DATASET_META = {
   title: 'StatuteRates',
@@ -113,20 +126,26 @@ async function runAll() {
   try {
     const today = new Date().toISOString().slice(0, 10);
 
-    // 1) FETCH — US (IRS + Fed H.15), UK (BoE), EU (ECB)
-    const [irs, h15, boe, ecb, texas, alaskaCourt, nebraska, floridaCfo, georgiaPrime, iowaCourt, utahCourt] = await Promise.all([
+    // 1) FETCH — US (IRS + Fed H.15 through cross-checked FRED feeds), UK (BoE), EU (ECB)
+    const [irs, federalReserve, boe, ecb, texas, alaskaCourt, nebraska, floridaCfo, iowaCourt, utahCourt] = await Promise.all([
       fetchIrs({ log: console.log }),
-      fetchH15({ log: console.log }),
+      // H.15 and Georgia PRIME now share fred.stlouisfed.org. Keep them in one sequential lane so
+      // parallel orchestration cannot defeat the shared per-host politeness interval.
+      (async () => {
+        const h15 = await fetchH15({ log: console.log, today });
+        const georgiaPrime = await fetchGeorgiaPrimeChanges({ log: console.log, today });
+        return { h15, georgiaPrime };
+      })(),
       fetchBoe({ log: console.log }),
       fetchEcb({ log: console.log }),
       fetchTexasCurrentRate({ log: console.log, today }),
       fetchAlaskaCourtRates({ log: console.log, today }),
       fetchNebraskaCurrentRate({ log: console.log, today }),
       fetchFloridaCfoRates({ log: console.log, today }),
-      fetchGeorgiaPrimeChanges({ log: console.log, today }),
       fetchIowaCourtTable({ log: console.log, today }),
       fetchUtahCourtRates({ log: console.log, today }),
     ]);
+    const { h15, georgiaPrime } = federalReserve;
     // Keep the calculation-rule pages sequential with the quarterly-rate page: all live on the
     // same IRS host, and our crawler intentionally leaves at least three seconds between requests.
     const irsPenaltyRules = await fetchIrsPenaltyRules({ log: console.log });
@@ -141,8 +160,8 @@ async function runAll() {
     };
 
     // 2) NORMALIZE
-    // US: H.15 daily -> weekly CMT + derived post-judgment
-    const weeks = buildWeeklyAverages(h15.daily);
+    // US: FRED DGS1 daily -> weekly CMT + derived post-judgment; WGS1YR is the mandatory cross-check.
+    const weeks = h15.verifiedWeeks;
     const cmt = buildCmtRecords(weeks, { source_id: h15.source.id, source_url: h15.source_url, retrieved_at: h15.retrieved_at });
     const pj = buildPostJudgmentRecords(weeks, { source_id: h15.source.id, source_url: h15.source_url, retrieved_at: h15.retrieved_at });
     const h15Bundle = { source: h15.source, entities: [cmt.entity, pj.entity], observations: [...cmt.observations, ...pj.observations] };
@@ -173,10 +192,11 @@ async function runAll() {
     const akPostSource = STATE_SOURCES.find((source) => source.id === 'ak-jud');
     const akPrejudSource = STATE_SOURCES.find((source) => source.id === 'ak-prejud');
     const nePrejudSource = STATE_SOURCES.find((source) => source.id === 'ne-prejud');
+    const flPrejudSource = STATE_SOURCES.find((source) => source.id === 'fl-prejud');
     const gaPostSource = STATE_SOURCES.find((source) => source.id === 'ga-code');
     const gaPrejudSource = STATE_SOURCES.find((source) => source.id === 'ga-prejud');
     const meProvisionalSource = STATE_SOURCES.find((source) => source.id === 'me-h15-provisional');
-    const stateBundles = buildStateBundles({
+    let stateBundles = buildStateBundles({
       daily: h15.daily,
       today,
       retrievedAt: h15.retrieved_at,
@@ -203,6 +223,11 @@ async function runAll() {
           },
         ] : []),
         ...(floridaCfo?.source ? [floridaCfo.source] : []),
+        ...(floridaCfo ? [{
+          ...flPrejudSource,
+          robots_status: `official CFO schedule and §55.03 contract fetched and verified ${floridaCfo.retrieved_at}`,
+          retrieved_at: floridaCfo.retrieved_at,
+        }] : []),
         ...(iowaCourt?.source ? [iowaCourt.source] : []),
         ...(utahCourt?.source ? [utahCourt.source] : []),
         {
@@ -233,35 +258,67 @@ async function runAll() {
       ],
     });
 
-    // 3) LOAD into SQLite (source of truth)
+    const liveStateResults = {
+      alaskaCourt,
+      floridaCfo,
+      georgiaPrime,
+      iowaCourt,
+      utahCourt,
+    };
+    // A graceful outage must retain the previously committed monitored history and its coverage
+    // metadata. Rebuilding that entity from an older code baseline would silently roll it back.
+    stateBundles = omitUnavailableMonitoredStateEntities(stateBundles, liveStateResults);
+
+    const coreBundles = [
+      irs,
+      { source: irsPenaltyRules.source, entities: [], observations: [] },
+      h15Bundle,
+      boeBundle,
+      ecbBundle,
+    ];
+    const allBundles = [
+      ...coreBundles,
+      ...stateBundles,
+    ];
+    const snapshotEntitySlugs = completeSnapshotEntitySlugs(
+      coreBundles,
+      liveStateResults,
+    );
+
+    // 3–4) LOAD + VALIDATE atomically. If a live source passes parsing but fails a cross-series or
+    // legal-rule gate, roll every mutation back so a failed local run cannot poison the durable DB.
     let records = 0;
+    let report;
     const tx = db.transaction(() => {
-      records += loadBundleIntoDb(db, irs);
-      records += loadBundleIntoDb(db, {
-        source: irsPenaltyRules.source,
-        entities: [],
-        observations: [],
-      });
-      records += loadBundleIntoDb(db, h15Bundle);
-      records += loadBundleIntoDb(db, boeBundle);
-      records += loadBundleIntoDb(db, ecbBundle);
-      for (const b of stateBundles) records += loadBundleIntoDb(db, b);
+      deleteObservationsForEntitySlugs(
+        db,
+        snapshotEntitySlugs,
+      );
+      for (const bundle of allBundles) records += loadBundleIntoDb(db, bundle);
+
+      report = validate(db, { today });
+      if (!report.ok) {
+        const error = new Error(`validation failed with ${report.errors.length} errors`);
+        error.validationReport = report;
+        throw error;
+      }
     });
-    tx();
+    try {
+      tx();
+    } catch (error) {
+      const failed = error.validationReport;
+      if (failed) {
+        console.error('\nVALIDATION FAILED (' + failed.errors.length + ' errors):');
+        for (const problem of failed.errors) console.error('  ✗ ' + problem);
+      }
+      throw error;
+    }
     console.log(`Loaded ${records} observations into SQLite.`);
 
-    // 4) VALIDATE — abort before export on any hard error
-    const report = validate(db);
+    // Validation has committed only because every hard gate passed.
     console.log('\n=== VALIDATION ===');
     console.log('coverage:', JSON.stringify(report.coverage, null, 2));
     if (report.warnings.length) console.log('warnings:\n  - ' + report.warnings.join('\n  - '));
-    if (!report.ok) {
-      console.error('\nVALIDATION FAILED (' + report.errors.length + ' errors):');
-      for (const e of report.errors) console.error('  ✗ ' + e);
-      finishRun(db, runId, { status: 'failed', records, notes: `${report.errors.length} validation errors` });
-      db.close();
-      process.exit(1);
-    }
     console.log(`validation OK — ${report.totals.observations} observations, ${report.totals.series} series, ${report.totals.pjConsistencyChecked} post-judgment + ${report.totals.irsSpreadChecked} IRS §6621-spread consistency checks passed`);
 
     // 5) EXPORT versioned JSON snapshots
@@ -294,18 +351,16 @@ if (cmd === 'all' || cmd === 'fetch') {
   const ex = exportAll({ datasetMeta: DATASET_META });
   console.log(`Exported ${ex.entities} entities / ${ex.observations} observations.`);
 } else if (cmd === 'build') {
-  const db = openDb();
-  const seed = seedFromExports(db);
-  let curatedRecords = 0;
-  const loadCurated = db.transaction(() => {
-    for (const bundle of buildStateBundles()) curatedRecords += loadBundleIntoDb(db, bundle);
-  });
-  loadCurated();
-  const report = validate(db);
-  console.log(`Hydrated SQLite from committed exports: ${seed.entities} entities / ${seed.observations} observations; refreshed ${curatedRecords} curated state records from source code.`);
-  if (!report.ok) console.error(JSON.stringify(report, null, 2));
-  db.close();
-  process.exit(report.ok ? 0 : 1);
+  const { seed, report } = validateCommittedExports();
+  if (!report.ok) {
+    console.error(JSON.stringify(report, null, 2));
+    process.exit(1);
+  }
+  console.log(
+    `Validated exact committed exports in an isolated database: ` +
+    `${seed.entities} entities / ${seed.observations} observations.`
+  );
+  process.exit(0);
 } else {
   console.error(`Unknown command "${cmd}". Use: all | fetch | build | validate | export`);
   process.exit(2);

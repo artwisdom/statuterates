@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getMeta, getAllEntities, latestOf, prettyDate } from '../lib/data.mjs';
+import { getMeta, getAllEntities, currentOf, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
 const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
 const title = `Methodology & sources — ${meta.title}`;
@@ -18,7 +18,7 @@ const description = `The formulas, cited sources, confidence levels, validation 
       </thead>
       <tbody>
         {entities.map((e) => {
-          const l = latestOf(e);
+          const l = currentOf(e);
           return (
             <tr>
               <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>

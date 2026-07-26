@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getMeta, latestOf, prettyDate, stateHubs, PREJUDGMENT_CALC_SAFE, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
+import { getMeta, currentOf, latestOf, prettyDate, stateHubs, stateCalculatorReleaseForEntity, PREJUDGMENT_CALC_SAFE, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -19,10 +19,17 @@ const nextHub = hubIndex >= 0 && hubIndex < allStateHubs.length - 1
   ? allStateHubs[hubIndex + 1]
   : null;
 
-const preLatest = latestOf(pre);
-const postLatest = post ? latestOf(post) : null;
-const preCopy = copyFor(pre.slug);
-const postCopy = post ? copyFor(post.slug) : null;
+const preLatest = currentOf(pre);
+const postLatest = post ? currentOf(post) : null;
+const postCalculator = post ? stateCalculatorReleaseForEntity(post) : null;
+const preCopy = copyFor(pre.slug, {
+  observation: preLatest,
+  historyPoints: pre.history?.annual_rate?.length,
+});
+const postCopy = post ? copyFor(post.slug, {
+  observation: postLatest,
+  historyPoints: post.history?.annual_rate?.length,
+}) : null;
 const preCaseSpecific = preLatest?.method === 'court-or-contract-rate';
 const preSafe = STATE_CALCULATOR_RENDERER_READY
   && import.meta.env.ENABLE_STATE_CALCULATORS === 'true'
@@ -65,8 +72,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Real modification date = the latest data or hand-recorded substantial editorial change (never
 // the build date).
 const hubModified = [
-  postLatest?.effective_date,
-  preLatest?.effective_date,
+  post ? latestOf(post)?.effective_date : null,
+  latestOf(pre)?.effective_date,
   post ? contentModifiedFor(post.slug) : null,
   contentModifiedFor(pre.slug),
 ].filter(Boolean).sort().at(-1);
@@ -163,6 +170,9 @@ const jsonLd = [
     <>
       <p><strong>{name}'s post-judgment interest rate is {postLatest?.value_text} per year.</strong> {postCopy.body}</p>
       <p class="xlink"><a href={`/rates/${post.slug}/`}>→ Full {name} post-judgment page</a> — {postStatute}, effective-date history, scope, and official source.</p>
+      {postCalculator && (
+        <p class="xlink"><a href={postCalculator.path}>→ Calculate {name} post-judgment interest</a> — audited statutory scope, annual reset schedule, and printable result.</p>
+      )}
     </>
   ) : (
     <p>{name} does not set a single fixed statutory post-judgment rate; interest on a judgment is

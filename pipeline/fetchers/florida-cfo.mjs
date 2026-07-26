@@ -9,6 +9,7 @@ import {
   buildFloridaOfficialHistory,
   FLORIDA_CFO_RATES_URL,
   FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  FLORIDA_STATUTE_55_03_URL,
 } from './florida-judgment-history.mjs';
 
 const MONTHS = new Map([
@@ -24,6 +25,51 @@ function textContent(value) {
     .replace(/&amp;/gi, '&')
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+function normalizedPhrase(value) {
+  return textContent(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const FLORIDA_STATUTE_CONTRACT = Object.freeze([
+  Object.freeze({
+    label: 'quarterly formula',
+    phrase: 'averaging the discount rate of the federal reserve bank of new york for the preceding 12 months then adding 400 basis points',
+  }),
+  Object.freeze({
+    label: 'quarterly effective date',
+    phrase: 'shall take effect on the first day of each following calendar quarter',
+  }),
+  Object.freeze({
+    label: 'written-contract branch',
+    phrase: 'nothing contained herein shall affect a rate of interest established by written contract or obligation',
+  }),
+  Object.freeze({
+    label: 'accrual until payment',
+    phrase: 'the rate of interest stated in the judgment as adjusted in subsection 3 accrues on the judgment until it is paid',
+  }),
+  Object.freeze({
+    label: 'annual January 1 adjustment',
+    phrase: 'the interest rate is established at the time a judgment is obtained and such interest rate shall be adjusted annually on january 1 of each year',
+  }),
+  Object.freeze({
+    label: 'clerk-entered exceptions',
+    phrase: 'except for judgments entered by the clerk of the court pursuant to ss 55 141 61 14 938 29 and 938 30 which shall not be adjusted annually',
+  }),
+]);
+
+export function assertFloridaStatuteContract(html) {
+  const normalized = normalizedPhrase(html);
+  if (!normalized) throw new Error('Florida statute §55.03 text was not found');
+  for (const anchor of FLORIDA_STATUTE_CONTRACT) {
+    if (!normalized.includes(anchor.phrase)) {
+      throw new Error(`Florida statute §55.03 changed or is incomplete at the ${anchor.label} anchor`);
+    }
+  }
 }
 
 function tableRows(html) {
@@ -122,6 +168,15 @@ export function assertFloridaCfoRates(points, {
     )) {
       throw new Error(`Florida CFO changed verified ${point.effective_date} from ${verified.value_text} to ${point.value_text}`);
     }
+    const isNewQuarter = point.effective_date > FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH;
+    if (isNewQuarter && (
+      !Number.isFinite(point.daily_rate_percent)
+      || !Number.isFinite(point.daily_rate_decimal)
+    )) {
+      throw new Error(
+        `Florida CFO new period ${point.effective_date} is missing an official daily percentage or decimal factor`
+      );
+    }
     if (point.daily_rate_decimal !== null) {
       // The oldest CFO row preserves the former 360-day factor. The 1995–2011 annual
       // schedule uses 365 days even in calendar leap years; the quarterly schedule uses
@@ -134,8 +189,22 @@ export function assertFloridaCfoRates(points, {
           ? 366
           : 365;
       const expectedDaily = point.value / 100 / days;
-      if (Math.abs(point.daily_rate_decimal - expectedDaily) > 0.00000005) {
+      const tolerance = isNewQuarter ? 0.0000000005 : 0.00000005;
+      if (Math.abs(point.daily_rate_decimal - expectedDaily) > tolerance) {
         throw new Error(`Florida CFO daily factor at ${point.effective_date} does not reconcile to ${point.value_text}`);
+      }
+      if (isNewQuarter) {
+        const expectedDailyPercent = point.value / days;
+        if (Math.abs(point.daily_rate_percent - expectedDailyPercent) > 0.00000005) {
+          throw new Error(
+            `Florida CFO daily percentage at ${point.effective_date} does not reconcile to ${point.value_text}`
+          );
+        }
+        if (Math.abs(point.daily_rate_percent / 100 - point.daily_rate_decimal) > 0.0000000005) {
+          throw new Error(
+            `Florida CFO daily percentage and decimal disagree at ${point.effective_date}`
+          );
+        }
       }
     }
   }
@@ -146,27 +215,46 @@ export async function fetchFloridaCfoRates({
   log = () => {},
   today,
 } = {}) {
+  let response;
   try {
-    const response = await getImpl(FLORIDA_CFO_RATES_URL, { sourceId: 'fl-cfo' });
-    const points = parseFloridaCfoRates(response.body);
-    assertFloridaCfoRates(points, { today });
-    const retrieved_at = response.retrieved_at || new Date().toISOString();
-    log(`Florida CFO: parsed ${points.length} official periods through ${points.at(-1).effective_date}`);
-    return {
-      points,
-      retrieved_at,
-      source: {
-        id: 'fl-cfo',
-        name: 'Florida judgment interest current and historical rates',
-        publisher: 'Florida Department of Financial Services, Chief Financial Officer (official)',
-        home_url: FLORIDA_CFO_RATES_URL,
-        license: 'Government edict — not subject to copyright.',
-        robots_status: `official HTML table fetched ${retrieved_at}`,
-        retrieved_at,
-      },
-    };
+    response = await getImpl(FLORIDA_CFO_RATES_URL, { sourceId: 'fl-cfo' });
   } catch (error) {
     log(`Florida CFO unavailable (${error.message}); using verified official history without an estimated replacement.`);
     return null;
   }
+
+  // Parsing and integrity checks deliberately sit outside the network fallback. A reachable source
+  // whose structure or verified values changed must stop the refresh instead of masquerading as an
+  // ordinary outage and silently retaining a stale "current" quarter.
+  const points = parseFloridaCfoRates(response.body);
+  assertFloridaCfoRates(points, { today });
+
+  let statuteResponse = null;
+  try {
+    statuteResponse = await getImpl(FLORIDA_STATUTE_55_03_URL, { sourceId: 'fl-statute-55-03' });
+  } catch (error) {
+    log(
+      `Florida statute §55.03 unavailable (${error.message}); retaining the last reviewed legal contract while using the verified CFO schedule.`
+    );
+  }
+  if (statuteResponse) assertFloridaStatuteContract(statuteResponse.body);
+
+  const retrieved_at = response.retrieved_at || new Date().toISOString();
+  const statuteStatus = statuteResponse
+    ? `§55.03 legal anchors checked ${statuteResponse.retrieved_at || retrieved_at}`
+    : '§55.03 live check unavailable; last reviewed legal contract retained';
+  log(`Florida CFO: parsed ${points.length} official periods through ${points.at(-1).effective_date}; ${statuteStatus}`);
+  return {
+    points,
+    retrieved_at,
+    source: {
+      id: 'fl-cfo',
+      name: 'Florida judgment interest current and historical rates',
+      publisher: 'Florida Department of Financial Services, Chief Financial Officer (official)',
+      home_url: FLORIDA_CFO_RATES_URL,
+      license: 'Government edict — not subject to copyright.',
+      robots_status: `official HTML table fetched ${retrieved_at}; ${statuteStatus}`,
+      retrieved_at,
+    },
+  };
 }

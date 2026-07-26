@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getAllEntities, getMeta, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getAllEntities, getMeta, currentOf, prettyDate } from '../../lib/data.mjs';
 
 const meta = getMeta();
 const yr = new Date(meta.generated_at).getUTCFullYear();
@@ -10,7 +10,7 @@ const yr = new Date(meta.generated_at).getUTCFullYear();
 const clean = (name) => name.replace(/ (Pre)?[Jj]udgment Interest Rate$/, '').replace('Post-', '');
 const build = (region) => getAllEntities()
   .filter((e) => e.region === region && e.metadata?.state !== undefined && !e.slug.includes('consumer-debt'))
-  .map((e) => ({ name: clean(e.name), slug: e.slug, base: e.slug.replace(/-(pre)?judgment-rate$/, ''), v: latestOf(e)?.value, vt: latestOf(e)?.value_text }))
+  .map((e) => ({ name: clean(e.name), slug: e.slug, base: e.slug.replace(/-(pre)?judgment-rate$/, ''), v: currentOf(e)?.value, vt: currentOf(e)?.value_text }))
   // A dual/conditional headline is not one comparable statewide rate, so omit it from numeric ranks.
   .filter((r) => Number.isFinite(r.v) && !r.vt?.includes('/'))
   .sort((a, b) => b.v - a.v);

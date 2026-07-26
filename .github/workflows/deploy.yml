@@ -11,6 +11,7 @@ on:
     branches: [main]
     paths:
       - "data/exports/**"
+      - "pipeline/**"
       - "shared/**"
       - "site/**"
       - "machine/build-api.mjs"
@@ -44,6 +45,16 @@ jobs:
         with:
           node-version: "22.12"
           package-manager-cache: false
+
+      - name: Install pipeline dependencies
+        working-directory: pipeline
+        run: npm ci
+
+      - name: Test and validate the exact committed export contract
+        working-directory: pipeline
+        run: |
+          npm test
+          node run.mjs build
 
       - name: Install site dependencies
         working-directory: site
@@ -93,24 +104,6 @@ jobs:
         with:
           path: site/dist
 
-      # Notify IndexNow (Bing, Yandex, DuckDuckGo, ChatGPT-search — Google does NOT use IndexNow) of the
-      # site's URLs so changed rate pages get recrawled fast. Non-fatal: a ping failure never blocks a
-      # deploy. Only runs for the real domain. The key is a public file at /<key>.txt (site/public/).
-      - name: Ping IndexNow
-        if: ${{ vars.SITE_URL != '' }}
-        continue-on-error: true
-        run: |
-          KEY=78e1a4c8dd592144913ffc2f8f1b9478
-          HOST=$(printf '%s' "${{ vars.SITE_URL }}" | sed -E 's#https?://##; s#/.*$##')
-          if [ ! -f site/dist/sitemap.xml ]; then echo "no sitemap.xml; skipping IndexNow"; exit 0; fi
-          grep -oE '<loc>[^<]+</loc>' site/dist/sitemap.xml | sed -E 's#</?loc>##g' | head -10000 \
-            | jq -R . | jq -s "{host: \"$HOST\", key: \"$KEY\", keyLocation: \"https://$HOST/$KEY.txt\", urlList: .}" > indexnow.json
-          echo "Submitting $(jq '.urlList | length' indexnow.json) URLs to IndexNow for $HOST"
-          curl -sS -X POST "https://api.indexnow.org/indexnow" \
-            -H 'Content-Type: application/json; charset=utf-8' \
-            --data @indexnow.json -w "IndexNow HTTP %{http_code}\n" -o /dev/null \
-            || echo "IndexNow ping failed (non-fatal)"
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -120,6 +113,27 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+      # Notify IndexNow only after production is live, so every submitted URL resolves to the new
+      # artifact. Google does not use IndexNow; the sitemap remains its discovery mechanism.
+      - name: Ping IndexNow
+        if: ${{ vars.SITE_URL != '' }}
+        continue-on-error: true
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          KEY=78e1a4c8dd592144913ffc2f8f1b9478
+          HOST=$(printf '%s' "$SITE_URL" | sed -E 's#https?://##; s#/.*$##')
+          SITEMAP=$(mktemp)
+          curl -fsSL --retry 3 --retry-delay 2 \
+            "${SITE_URL%/}/sitemap.xml?deploy=${{ github.run_id }}" -o "$SITEMAP"
+          grep -oE '<loc>[^<]+</loc>' "$SITEMAP" | sed -E 's#</?loc>##g' | head -10000 \
+            | jq -R . | jq -s "{host: \"$HOST\", key: \"$KEY\", keyLocation: \"https://$HOST/$KEY.txt\", urlList: .}" > indexnow.json
+          echo "Submitting $(jq '.urlList | length' indexnow.json) live URLs to IndexNow for $HOST"
+          curl -sS -X POST "https://api.indexnow.org/indexnow" \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data @indexnow.json -w "IndexNow HTTP %{http_code}\n" -o /dev/null \
+            || echo "IndexNow ping failed (non-fatal)"
 
 # --------------------------------------------------------------------------------------------
 # ALTERNATIVE: Cloudflare Pages (better for pay-per-crawl + edge performance). To use instead of

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getMeta, latestOf, prettyDate, stateHubs } from '../../lib/data.mjs';
+import { getMeta, currentOf, latestOf, prettyDate, stateHubs } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 const meta = getMeta();
@@ -17,8 +17,8 @@ const datasetYear = String(datasetModified || '').slice(0, 4);
 const rows = hubs.map((h) => ({
   base: h.base,
   name: h.name,
-  post: h.post ? latestOf(h.post)?.value_text : null,
-  pre: latestOf(h.pre)?.value_text,
+  post: h.post ? currentOf(h.post)?.value_text : null,
+  pre: currentOf(h.pre)?.value_text,
   preKind: copyFor(h.pre.slug).kindLabel,
 }));
 

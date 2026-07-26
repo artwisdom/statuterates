@@ -2,11 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getMeta, getEntity, currentOf, historyFor, prettyDate } from '../../lib/data.mjs';
 
 const meta = getMeta();
 const under = getEntity('irs-underpayment');
-const latest = latestOf(under);
+const latest = currentOf(under);
 
 const histories = {
   underpayment: historyFor('irs-underpayment'),
@@ -33,7 +33,7 @@ const currentRates = [
   { label: 'Refund / individual overpayment', entity: getEntity('irs-overpayment-noncorporate') },
   { label: 'Corporate overpayment', entity: getEntity('irs-overpayment-corporate') },
   { label: 'Large corporate underpayment', entity: getEntity('irs-large-corporate-underpayment') },
-].map((item) => ({ ...item, latest: latestOf(item.entity) }));
+].map((item) => ({ ...item, latest: currentOf(item.entity) }));
 const rateYear = String(latest?.retrieved_at || latest?.effective_date || '').slice(0, 4);
 
 const title = `IRS Interest & Refund Calculator ${rateYear} (§6621/§6622)`;

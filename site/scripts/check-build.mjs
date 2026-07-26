@@ -5,6 +5,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
@@ -167,6 +168,12 @@ for (const file of htmlFiles) {
   if (/^\/states\/[^/]+\/$/.test(route) && route !== '/states/highest-lowest/' && words < 250) {
     errors.push(`${file}: state hub has only ${words} visible words (minimum safety floor 250)`);
   }
+  if (route === '/calculators/florida-judgment-interest/' && words < 850) {
+    errors.push(`${file}: Florida calculator has only ${words} visible words (minimum safety floor 850)`);
+  }
+  if (route === '/calculators/post-judgment-interest/' && words < 700) {
+    errors.push(`${file}: federal calculator has only ${words} visible words (minimum safety floor 700)`);
+  }
 
   // Astro 7 deliberately removes some newline whitespace around inline elements. Requiring an
   // explicit source space prevents rendered phrases such as "the<a>source</a>" and "</a>for".
@@ -215,13 +222,21 @@ for (const pathname of withheld) {
   if (sitemap.includes(pathname)) errors.push(`${pathname}: withheld calculator appears in sitemap.xml`);
 }
 
-const stateCalculatorFiles = htmlFiles.filter((file) => {
+const stateCalculatorRoutes = htmlFiles.filter((file) => {
   const relative = file.slice(DIST.length).replaceAll('\\', '/');
   return /\/calculators\/(?!post-judgment-interest\/)[a-z-]+-judgment-interest\/index\.html$/.test(relative)
     && !relative.endsWith('/calculators/state-judgment-interest/index.html');
-});
-if (stateCalculatorFiles.length) {
-  errors.push(`unsafe state calculator pages were generated: ${stateCalculatorFiles.join(', ')}`);
+}).map(routeForFile);
+const approvedStateCalculatorPaths = new Set(APPROVED_STATE_CALCULATOR_PATHS);
+const unsafeStateCalculatorRoutes = stateCalculatorRoutes
+  .filter((route) => !approvedStateCalculatorPaths.has(route));
+if (unsafeStateCalculatorRoutes.length) {
+  errors.push(`unsafe state calculator pages were generated: ${unsafeStateCalculatorRoutes.join(', ')}`);
+}
+for (const pathname of approvedStateCalculatorPaths) {
+  if (!stateCalculatorRoutes.includes(pathname)) {
+    errors.push(`${pathname}: approved state calculator was not generated`);
+  }
 }
 
 if (manualCloudflareBeaconFile) {
@@ -254,7 +269,38 @@ const demandGuards = [
   },
   {
     pathname: '/rates/florida-judgment-rate/',
-    patterns: [/Florida Post-Judgment Interest Rate \d{4}/, /78 data points/, /October 1, 1981/],
+    patterns: [/Florida Post-Judgment Interest Rate \d{4}/, /\d+ data points/, /October 1, 1981/],
+  },
+  {
+    pathname: '/calculators/florida-judgment-interest/',
+    patterns: [
+      /Florida Judgment Interest Calculator \d{4}/,
+      /Fla\. Stat\. §55\.03/,
+      /July 1, 2011/,
+      /January 1/,
+      /Contract rates/,
+      /partial payments/,
+      /Include the through-date/,
+      /Stop before the through-date/,
+      /Private: runs in your browser/,
+      /Florida CFO judgment interest rates/,
+      /Frequently asked questions/,
+    ],
+  },
+  {
+    pathname: '/calculators/post-judgment-interest/',
+    patterns: [
+      /Federal Post-Judgment Interest Calculator/,
+      /28 U\.S\.C\. §1961/,
+      /December 21, 2000/,
+      /min="2000-12-21"/,
+      /exact weekly/,
+      /compounded annually/,
+      /DGS1 series/,
+      /WGS1YR weekly series/,
+      /Frequently asked questions/,
+      /substitute an older week/,
+    ],
   },
   {
     pathname: '/states/utah/',
@@ -320,6 +366,19 @@ for (const guard of demandGuards) {
   const html = readFileSync(htmlPath, 'utf8');
   for (const pattern of guard.patterns) {
     if (!pattern.test(html)) errors.push(`${guard.pathname}: missing search-demand contract ${pattern}`);
+  }
+}
+
+const floridaCalculatorPath = join(DIST, 'calculators', 'florida-judgment-interest', 'index.html');
+if (existsSync(floridaCalculatorPath)) {
+  const html = readFileSync(floridaCalculatorPath, 'utf8');
+  const calculatorIndex = html.indexOf('data-florida-calculator');
+  const firstAdIndex = html.indexOf('data-ad-slot=');
+  if (calculatorIndex < 0 || firstAdIndex < 0 || calculatorIndex > firstAdIndex) {
+    errors.push('/calculators/florida-judgment-interest/: calculator must render before the first advertisement');
+  }
+  if (html.includes('1990-01-01')) {
+    errors.push('/calculators/florida-judgment-interest/: synthetic 1990 history anchor is forbidden');
   }
 }
 

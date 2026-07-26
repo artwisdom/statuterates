@@ -35,10 +35,11 @@ test('source tiers distinguish official, judicial, and third-party legal referen
   }), 'official_secondary');
 });
 
-test('every curated state entity remains reference-only and observations use actual source-check time', () => {
+test('only the audited Florida scope is calculator-ready and observations use actual source-check time', () => {
   const sourceById = new Map(STATE_SOURCES.map((source) => [source.id, source]));
   const { entities, observations } = buildStateFixed();
   const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const ready = new Set(['florida-judgment-rate']);
 
   assert.ok(entities.length >= 100);
   assert.ok(observations.length >= entities.length + 500);
@@ -46,7 +47,11 @@ test('every curated state entity remains reference-only and observations use act
     const entity = entityBySlug.get(observation.entitySlug);
     const source = sourceById.get(observation.source_id);
 
-    assert.equal(entity.metadata.calculation.status, 'reference_only', observation.entitySlug);
+    assert.equal(
+      entity.metadata.calculation.status,
+      ready.has(observation.entitySlug) ? 'ready' : 'reference_only',
+      observation.entitySlug,
+    );
     assert.deepEqual(validateStateCalculationMetadata(entity.metadata).errors, [], observation.entitySlug);
     assert.equal(observation.retrieved_at, source.retrieved_at, observation.entitySlug);
     assert.equal(observation.notes.includes('…'), false, observation.entitySlug);
@@ -129,6 +134,9 @@ test('Florida exposes every official CFO period since 1981 and monitors new quar
   const { entities, observations } = buildStateFixed();
   const florida = entities.find((entity) => entity.slug === 'florida-judgment-rate');
   const history = observations.filter((observation) => observation.entitySlug === florida.slug);
+  const prejudgment = observations.filter(
+    (observation) => observation.entitySlug === 'florida-prejudgment-rate',
+  );
   const source = STATE_SOURCES.find((candidate) => candidate.id === 'fl-cfo');
 
   assert.equal(history.length, 78);
@@ -138,9 +146,59 @@ test('Florida exposes every official CFO period since 1981 and monitors new quar
   assert.equal(history.at(-1).effective_date, '2026-07-01');
   assert.equal(history.at(-1).value_text, '8.06%');
   assert.equal(source.publisher, 'Florida Department of Financial Services, Chief Financial Officer (official)');
-  assert.equal(florida.metadata.calculation.status, 'reference_only');
+  assert.equal(florida.metadata.calculation.status, 'ready');
+  assert.equal(florida.metadata.calculation.valid_from, '2011-07-01');
+  assert.equal(florida.metadata.calculation.coverage_through, '2026-07-01');
+  assert.equal(florida.metadata.calculation.renderer_id, 'florida-postjudgment-v1');
+  assert.equal(florida.metadata.calculation.payments_supported, false);
   assert.equal(florida.metadata.calculation.current_period_monitored, true);
-  assert.equal(florida.metadata.calculation.renderer_supported, false);
+  assert.equal(florida.metadata.calculation.renderer_supported, true);
+  assert.deepEqual(
+    prejudgment.map((row) => [row.effective_date, row.value_text]),
+    history.map((row) => [row.effective_date, row.value_text]),
+  );
+  assert.ok(prejudgment.every((row) => row.source_id === 'fl-prejud'));
+  assert.ok(prejudgment.every((row) => row.confidence === 'high'));
+});
+
+test('Florida calculator coverage follows a newly verified CFO quarter automatically', () => {
+  const { entities, observations } = buildStateFixed({
+    floridaCfoPoints: [{
+      effective_date: '2026-10-01',
+      value: 7.95,
+      value_text: '7.95%',
+      source_url: 'https://www.myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates',
+    }],
+    floridaRetrievedAt: '2026-09-25T12:00:00Z',
+  });
+  const florida = entities.find((entity) => entity.slug === 'florida-judgment-rate');
+  const history = observations.filter((observation) => observation.entitySlug === florida.slug);
+  const prejudgment = observations.filter(
+    (observation) => observation.entitySlug === 'florida-prejudgment-rate',
+  );
+
+  assert.equal(florida.metadata.calculation.coverage_through, '2026-10-01');
+  assert.equal(history.at(-1).effective_date, '2026-10-01');
+  assert.equal(history.at(-1).value_text, '7.95%');
+  assert.equal(prejudgment.at(-1).effective_date, '2026-10-01');
+  assert.equal(prejudgment.at(-1).value_text, '7.95%');
+});
+
+test('Florida calculator readiness expires safely and requires the statute monitor', () => {
+  const { entities } = buildStateFixed();
+  const florida = entities.find((entity) => entity.slug === 'florida-judgment-rate');
+
+  assert.match(
+    validateStateCalculationMetadata(florida.metadata, { today: '2027-01-27' }).errors.join('; '),
+    /review expired 2027-01-26/,
+  );
+
+  const unmonitored = structuredClone(florida.metadata);
+  unmonitored.calculation.statute_contract_monitored = false;
+  assert.match(
+    validateStateCalculationMetadata(unmonitored, { today: '2026-07-26' }).errors.join('; '),
+    /monitor its governing statute contract/,
+  );
 });
 
 test('Kentucky and Maine replace review-date placeholders with official histories', () => {

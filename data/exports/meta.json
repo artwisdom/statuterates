@@ -7,9 +7,9 @@
   "license": "StatuteRates compilation; underlying source rights vary. Government edicts are not subject to copyright, while statistical publications and third-party pages may have their own terms. See each source record.",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-26T19:15:29.528Z",
+  "generated_at": "2026-07-26T21:08:11.041Z",
   "entity_count": 114,
-  "observation_count": 2361,
+  "observation_count": 4947,
   "metrics": [
     "annual_rate"
   ],
@@ -93,7 +93,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T19:15:16.403Z"
+      "retrieved_at": "2026-07-26T21:08:10.188Z"
     },
     {
       "id": "ca-leginfo",
@@ -192,16 +192,16 @@
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T19:15:16.404Z"
+      "retrieved_at": "2026-07-26T21:08:10.189Z"
     },
     {
       "id": "fed-h15",
-      "name": "Federal Reserve H.15 — 1-Year Treasury Constant Maturity",
-      "publisher": "Board of Governors of the Federal Reserve System",
-      "home_url": "https://www.federalreserve.gov/releases/h15/",
-      "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
-      "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T19:15:16.401Z"
+      "name": "Federal Reserve H.15 — 1-Year Treasury Constant Maturity (FRED DGS1/WGS1YR)",
+      "publisher": "Board of Governors of the Federal Reserve System via FRED",
+      "home_url": "https://fred.stlouisfed.org/series/DGS1",
+      "license": "U.S. federal government work — public domain. FRED requests source attribution.",
+      "robots_status": "allowed; DGS1 daily history independently cross-checked against WGS1YR; official 28 U.S.C. §1961 phrase contract verified live",
+      "retrieved_at": "2026-07-26T20:19:19.915Z"
     },
     {
       "id": "fl-cfo",
@@ -209,17 +209,17 @@
       "publisher": "Florida Department of Financial Services, Chief Financial Officer (official)",
       "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official HTML table fetched 2026-07-26T18:31:36.466Z",
+      "robots_status": "official HTML table fetched 2026-07-26T18:31:36.466Z; §55.03 legal anchors checked 2026-07-26T21:08:10.792Z",
       "retrieved_at": "2026-07-26T18:31:36.466Z"
     },
     {
       "id": "fl-prejud",
-      "name": "Florida prejudgment interest (Fla. Stat. § 55.03)",
-      "publisher": "Florida — myfloridacfo.com",
+      "name": "Florida prejudgment-interest rate schedule (Fla. Stat. § 55.03)",
+      "publisher": "Florida Department of Financial Services, Chief Financial Officer (official)",
       "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "official CFO schedule and §55.03 contract fetched and verified 2026-07-26T18:31:36.466Z",
+      "retrieved_at": "2026-07-26T18:31:36.466Z"
     },
     {
       "id": "ga-code",
@@ -263,8 +263,8 @@
       "publisher": "Iowa Judicial Branch (official)",
       "home_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official table fetched 2026-07-26T19:15:17.220Z",
-      "retrieved_at": "2026-07-26T19:15:17.220Z"
+      "robots_status": "official table fetched 2026-07-26T21:08:10.858Z",
+      "retrieved_at": "2026-07-26T21:08:10.858Z"
     },
     {
       "id": "id-jud",
@@ -327,7 +327,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T19:15:16.399Z"
+      "retrieved_at": "2026-07-26T21:08:10.186Z"
     },
     {
       "id": "irs-penalty-rules",
@@ -434,8 +434,8 @@
       "publisher": "Federal Reserve Board and Maine Legislature (official inputs)",
       "home_url": "https://www.federalreserve.gov/datadownload/Download.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&filetype=csv&label=include&layout=seriescolumn",
       "license": "U.S. government publication and government edict.",
-      "robots_status": "future-year fallback only after the official Maine Judicial Branch chart ends; official H.15 input fetched 2026-07-26T19:15:16.401Z",
-      "retrieved_at": "2026-07-26T19:15:16.401Z"
+      "robots_status": "future-year fallback only after the official Maine Judicial Branch chart ends; official H.15 input fetched 2026-07-26T20:19:19.915Z",
+      "retrieved_at": "2026-07-26T20:19:19.915Z"
     },
     {
       "id": "me-jud",

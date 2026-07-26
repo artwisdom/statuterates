@@ -134,14 +134,14 @@ follow a different rule.`,
       scope: 'The headline applies to the general noncontract path under §§535.3(1)(a) and 668.13. If a contract fixes a lawful rate, §668.13(2) uses that rate subject to the §535.2 cap. Section 535.3 separately addresses workers’ compensation and child, spousal, and medical-support obligations.',
       accrual: 'Section 668.13 generally allows interest from commencement of the action, with future damages beginning only when judgment is entered. After entry, the rate selected as of the judgment continues while the amount remains unpaid. Section 625.21 also supplies a verdict-to-final-entry rule outside chapter 668.',
       compounding: 'Section 668.13(5) requires interest to be computed daily to payment, and Iowa authority treats the ordinary path as simple interest. The statute does not itself state the annual day-count denominator or every partial-payment rule, so the calculator remains withheld.',
-      history: 'The dataset contains 302 exact Judicial Branch table selections from March 2001 through July 2026, including the court’s confirmed 6.06% selection effective July 9, 2026. The official 1982–2000 scan is linked but not digitized because damaged and handwritten rows need a second manual check. If the live table is temporarily blocked, automation retains the last verified court history instead of substituting an estimate.',
+      history: 'The dataset contains {{history_points}} exact Judicial Branch table selections from March 2001 through {{effective_date}}, including the current {{current_rate}} selection. The official 1982–2000 scan is linked but not digitized because damaged and handwritten rows need a second manual check. If the live table is temporarily blocked, automation retains the last verified court history instead of substituting an estimate.',
     },
   },
   'texas-judgment-rate': {
     tagline: 'Interest on Texas money judgments — tied to the prime rate.',
     q: 'What is the current Texas post-judgment interest rate?',
     body: `Texas post-judgment interest on most money judgments is the Federal Reserve prime rate, held within a
-5% floor and 15% ceiling under Texas Finance Code §304.003 — currently 6.75%. The rate locks in when the
+5% floor and 15% ceiling under Texas Finance Code §304.003 — currently {{current_rate}}. The rate locks in when the
 judgment is entered and, unusually, compounds annually. Judgments on a contract that sets its own interest
 rate follow §304.002 instead (the contract rate, capped at 18%). This page includes every monthly OCCC rate
 from September 1983 through the latest published judgment month, including months when the rate did not change.`,
@@ -149,29 +149,30 @@ from September 1983 through the latest published judgment month, including month
       scope: 'The headline rate applies under §304.003 when the money judgment is not governed by an interest-bearing contract. Section 304.002 instead uses the lesser of the contract rate or 18%. Chapter 304 separately excludes specified delinquent-tax and delinquent-child-support interest.',
       accrual: 'Under §304.005, interest generally runs from the date the judgment is rendered through the date it is satisfied. A granted extension of time for a trial claimant to file an appellate brief pauses accrual for that extension period.',
       compounding: 'Post-judgment interest compounds annually under §304.006. The rate itself remains the OCCC rate assigned to the calendar month in which the judgment was rendered.',
-      history: 'The recorded monthly schedule begins September 1983. Values through January 2026 come from the official OCCC historical table; archived Texas Credit Letters confirm February through July 2026, and the weekly pipeline monitors the current OCCC page for each new month.',
+      history: 'The recorded monthly schedule begins September 1983. The official OCCC historical table and archived Texas Credit Letters supply the verified baseline, and the weekly pipeline merges each newly published current month without discarding earlier months.',
     },
   },
   'florida-judgment-rate': {
     tagline: 'Florida’s official quarterly CFO rate and 1981–present history.',
     q: 'What is the current Florida judgment interest rate?',
     body: `Florida’s post-judgment interest rate is reset every quarter by the state Chief Financial Officer
-under Fla. Stat. §55.03 — the 12-month average of the New York Fed’s discount rate plus 4 points — currently
-8.06% for the quarter beginning July 1, 2026. The rate in effect when judgment is obtained applies first,
-then the judgment adjusts to the CFO rate in effect each January 1 until paid. This page tracks the official
-quarterly table instead of leaving last quarter’s number in place.`,
+under Fla. Stat. §55.03 — the 12-month average of the New York Fed’s discount rate plus 4 points. The
+current value and effective date shown above come directly from the monitored CFO schedule. The rate in
+effect when judgment is obtained applies first, then the judgment adjusts to the CFO rate in effect each
+January 1 until paid. This page tracks the official quarterly table instead of leaving an older quarter’s
+number in place.`,
     postDetails: {
       scope: 'The headline follows the general statutory schedule in Fla. Stat. §55.03. The section expressly leaves an interest rate established by written contract or obligation unaffected. It also gives separate annual-adjustment treatment to clerk-entered judgments under §§55.141, 61.14, 938.29, and 938.30.',
       accrual: 'Use the CFO rate in effect when the judgment is obtained. Under §55.03(3), that rate adjusts annually on each January 1 to the CFO rate then in effect until the judgment is paid. The four listed clerk-judgment categories do not receive that annual adjustment.',
-      compounding: 'The CFO publishes an annual percentage and official daily factors for each effective period. The page reports the reference schedule, but keeps a calculator disabled until historical day-count changes, partial payments, annual resets, and all supported judgment branches are deterministic.',
-      history: 'The dataset preserves all 78 distinct CFO periods from October 1, 1981 through July 1, 2026, including the quarterly schedule introduced in 2011. A weekly monitor parses the official HTML, verifies every overlapping rate and daily factor, and can append a plausible new quarter only after all integrity checks pass.',
+      compounding: 'The CFO publishes an annual percentage and official daily factors for each effective period. The dedicated calculator models simple daily interest for its stated ordinary-judgment scope, uses the entry rate through December 31, and applies the CFO rate in force at each January 1 reset. It deliberately excludes partial payments and special branches.',
+      history: 'The dataset preserves every distinct CFO period from October 1, 1981 through the latest verified publication, including the quarterly schedule introduced in 2011. A weekly monitor parses the official HTML, verifies every overlapping rate and daily factor, and can append a plausible new quarter only after all integrity checks pass.',
     },
   },
   'georgia-judgment-rate': {
     tagline: 'Georgia judgment interest — prime rate plus 3 points.',
     q: 'What is the current Georgia post-judgment interest rate?',
     body: `Under O.C.G.A. §7-4-12, interest on a Georgia money judgment is the Federal Reserve prime rate on the
-day of judgment plus 3 percentage points — currently 9.75% — fixed for the life of that judgment. A judgment
+day of judgment plus 3 percentage points — currently {{current_rate}} — fixed for the life of that judgment. A judgment
 on a written contract that specifies a rate carries the contract rate instead. The history below follows every
 Federal Reserve prime-rate change since the current statutory scheme began on July 1, 2003.`,
     postDetails: {
@@ -198,7 +199,7 @@ for decades. A judgment on a loan or contract can carry a higher lawful contract
     tagline: 'Ohio’s judgment rate, reset annually by the Tax Commissioner.',
     q: 'What is the current Ohio judgment interest rate?',
     body: `Ohio sets its judgment interest rate once a year: under R.C. §1343.03(B) and §5703.47 it’s the federal
-short-term rate plus 3 points, rounded — currently 7% for 2026 — computed as simple interest. A written contract
+short-term rate plus 3 points, rounded — currently {{current_rate}} for {{current_year}} — computed as simple interest. A written contract
 that specifies a different rate controls instead.`,
   },
   'illinois-judgment-rate': {
@@ -220,15 +221,16 @@ statutory rate applied as simple interest.`,
     q: 'What is the current Michigan judgment interest rate?',
     body: `Michigan is unusual: interest runs from the day you file the complaint, not just after judgment. Under
 MCL §600.6013 the general rate is 1 point above the six-month average of 5-year Treasury auctions, reset every
-January 1 and July 1 and compounded annually — currently 4.959%. Judgments on a written instrument use a separate
+January 1 and July 1 and compounded annually — currently {{current_rate}}. Judgments on a written instrument use a separate
 rate capped at 13%.`,
   },
   'new-jersey-judgment-rate': {
     tagline: 'New Jersey’s two-tier judgment rate, set yearly by the courts.',
     q: 'What is the current New Jersey post-judgment interest rate?',
     body: `New Jersey’s post-judgment interest is set annually by the Judiciary under Court Rule R. 4:42-11, based
-on the State Cash Management Fund’s prior-year return. For 2026 it’s 4.5% on judgments up to $20,000 and 6.5%
-(the base plus 2 points) on judgments over $20,000 — simple interest.`,
+on the State Cash Management Fund’s prior-year return. For {{current_year}} it’s
+{{current_rate_part_1}} on judgments up to $20,000 and {{current_rate_part_2}} (the base plus 2 points)
+on judgments over $20,000 — simple interest.`,
   },
   'virginia-judgment-rate': {
     tagline: 'Virginia’s flat 6% judgment rate.',
@@ -240,9 +242,9 @@ simple interest. A judgment on a contract carries the higher of the lawful contr
     tagline: 'Washington’s claim-specific judgment rates under RCW 4.56.110.',
     q: 'What is the current Washington post-judgment interest rate?',
     body: `RCW 4.56.110 does not set one Washington rate for every judgment. General “all other” money judgments
-use the RCW 19.52.020 maximum rate (currently 12%); unpaid consumer-debt judgments use 9%; qualifying
+use the RCW 19.52.020 maximum rate (currently {{current_rate_part_1}}); unpaid consumer-debt judgments use 9%; qualifying
 private student-loan and non-public-agency tort judgments use the Federal Reserve prime rate from the
-preceding month plus two points (currently 8.75%). Written contracts, unpaid child support, and
+preceding month plus two points (currently {{current_rate_part_2}}). Written contracts, unpaid child support, and
 public-agency tort judgments follow separate branches.`,
     postDetails: {
       scope: 'RCW 4.56.110 separates written contracts, unpaid child support, public-agency torts, other torts, private student-loan debt, consumer debt, and all remaining judgments. A contract rate must be stated in the judgment; child-support judgments use 12%; public-agency torts use a separate 26-week Treasury-bill formula.',
@@ -279,12 +281,12 @@ the judgment is entered — currently 8.75%, as simple interest.`,
   "alaska-judgment-rate": {
     tagline: "Alaska’s annual AS 09.30.070 judgment rate, fixed at entry.",
     q: "What is the current Alaska post-judgment interest rate?",
-    body: "For judgments entered in 2026, Alaska’s general pre- and post-judgment interest rate is 6.75% under AS 09.30.070(a). The formula is three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A contract or another statute can supply a different rate.",
+    body: "For judgments entered in {{current_year}}, Alaska’s general pre- and post-judgment interest rate is {{current_rate}} under AS 09.30.070(a). The formula is three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A contract or another statute can supply a different rate.",
     postDetails: {
-      scope: "The 6.75% headline is the general AS 09.30.070(a) path for a judgment entered in 2026. Use a contract rate when the contract controls, or the rate in another applicable statute; Alaska Courts lists child support, bank liquidation, eminent domain, and estate claims as examples of separate statutes.",
+      scope: "The {{current_rate}} headline is the general AS 09.30.070(a) path for a judgment entered in {{current_year}}. Use a contract rate when the contract controls, or the rate in another applicable statute; Alaska Courts lists child support, bank liquidation, eminent domain, and estate claims as examples of separate statutes.",
       accrual: "Alaska Courts states that post-judgment interest begins on the date the judge signs the judgment. The annual rate selected for that judgment does not change while an unpaid balance or payment plan continues into later years.",
       compounding: "The official rate table establishes the annual percentage and rate lock, but it does not state every day-count, compounding, partial-payment, or allocation rule needed for a dependable payoff calculator. StatuteRates therefore keeps the Alaska calculator disabled.",
-      history: "The dataset preserves all 30 annual selections in Alaska Court System form ADM-505 from the August 7, 1997 statutory transition through 2026. The weekly pipeline reads the official PDF, verifies every historical anchor, and can append a later year only when the court publishes it.",
+      history: "The dataset preserves all {{history_points}} annual selections in Alaska Court System form ADM-505 from the August 7, 1997 statutory transition through {{current_year}}. The weekly pipeline reads the official PDF, verifies every historical anchor, and can append a later year only when the court publishes it.",
     },
   },
   "arkansas-judgment-rate": {
@@ -331,7 +333,7 @@ the judgment is entered — currently 8.75%, as simple interest.`,
   "kansas-judgment-rate": {
     tagline: "Kansas judgment interest — a formula rate, reset each year.",
     q: "What is the current Kansas post-judgment interest rate?",
-    body: "Kansas post-judgment interest is currently 7.75% — a statutory formula rate under Kan. Stat. Ann. 16-204 that resets each year. This 16-204 rate is POST-judgment. Prejudgment interest is governed separately by K.S.A. 16-201 (10% per annum when no other rate agreed). CONTRACT:…",
+    body: "Kansas post-judgment interest is currently {{current_rate}} — a statutory formula rate under Kan. Stat. Ann. 16-204 that resets each year. This 16-204 rate is POST-judgment. Prejudgment interest is governed separately by K.S.A. 16-201 (10% per annum when no other rate agreed). CONTRACT:…",
   },
   "kentucky-judgment-rate": {
     tagline: "Kentucky’s general judgment rate, with the 2017 statutory change preserved.",
@@ -363,7 +365,7 @@ the judgment is entered — currently 8.75%, as simple interest.`,
   "minnesota-judgment-rate": {
     tagline: "Minnesota judgment interest — a formula rate, reset each year.",
     q: "What is the current Minnesota post-judgment interest rate?",
-    body: "Minnesota post-judgment interest is currently 4% / 10% — a statutory formula rate under Minn. Stat. § 549.09, subd. 1(c) that resets each year. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the…",
+    body: "Minnesota post-judgment interest is currently {{current_rate_part_1}} / {{current_rate_part_2}} — a statutory formula rate under Minn. Stat. § 549.09, subd. 1(c) that resets each year. The standard variable Treasury-indexed rate (currently {{current_rate_part_1}}) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the…",
   },
   "missouri-judgment-rate": {
     tagline: "Missouri judgment interest — a formula rate, reset periodically.",
@@ -373,7 +375,7 @@ the judgment is entered — currently 8.75%, as simple interest.`,
   "montana-judgment-rate": {
     tagline: "Montana judgment interest — a formula rate, reset periodically.",
     q: "What is the current Montana post-judgment interest rate?",
-    body: "Montana post-judgment interest is currently 9.75% — a statutory formula rate under Mont. Code Ann. § 25-9-205 that resets periodically. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the…",
+    body: "Montana post-judgment interest is currently {{current_rate}} — a statutory formula rate under Mont. Code Ann. § 25-9-205 that resets periodically. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the…",
   },
   "nebraska-judgment-rate": {
     tagline: "Nebraska judgment interest — a quarterly formula rate fixed when judgment is entered.",
@@ -413,9 +415,9 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "oklahoma-judgment-rate": {
     tagline: "Oklahoma’s annual 12 O.S. § 727.1 post-judgment rate.",
     q: "What is the current Oklahoma post-judgment interest rate?",
-    body: "For judgments governed by 12 O.S. § 727.1, Oklahoma’s 2026 post-judgment interest rate is 8.75% per year. The annual post-judgment formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year, plus two percentage points. Oklahoma uses a different formula for qualifying prejudgment interest, and separate laws can govern other judgment categories.",
+    body: "For judgments governed by 12 O.S. § 727.1, Oklahoma’s {{current_year}} post-judgment interest rate is {{current_rate}} per year. The annual post-judgment formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year, plus two percentage points. Oklahoma uses a different formula for qualifying prejudgment interest, and separate laws can govern other judgment categories.",
     postDetails: {
-      scope: "The 8.75% headline is the 2026 § 727.1 general post-judgment reference. The statute contains distinct prejudgment provisions and does not replace a different rate supplied by another controlling law or judgment category.",
+      scope: "The {{current_rate}} headline is the {{current_year}} § 727.1 general post-judgment reference. The statute contains distinct prejudgment provisions and does not replace a different rate supplied by another controlling law or judgment category.",
       accrual: "The formula is selected by calendar year: the first Wall Street Journal prime rate published for that year plus two percentage points. Confirm the rate for the judgment’s applicable year rather than applying the latest rate automatically to an older judgment.",
       compounding: "StatuteRates keeps the Oklahoma calculator disabled because the current data does not yet model every covered judgment branch, day-count convention, compounding treatment, and partial-payment rule at calculator-grade certainty.",
       history: "The page records the current verified annual reference and cites the controlling Oklahoma authority. Historical annual certifications are the next data-depth target; no missing years are inferred from market data.",
@@ -444,12 +446,12 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "utah-judgment-rate": {
     tagline: "Utah’s official annual judgment rate and 1993–present court history.",
     q: "What is the current Utah post-judgment interest rate?",
-    body: "Utah State Courts publishes a 5.51% general civil and criminal post-judgment rate for 2026 under Utah Code §15-1-4. It equals the federal post-judgment rate on January 1, 2026 (3.51%) plus two percentage points. A qualifying judgment under $10,000 involving the purchase of goods or services uses 13.51% instead, while a lawful contract can supply its agreed rate.",
+    body: "Utah State Courts publishes a {{current_rate}} general civil and criminal post-judgment rate for {{current_year}} under Utah Code §15-1-4. It equals the federal post-judgment rate on January 1, {{current_year}} ({{rate_minus_2}}) plus two percentage points. A qualifying judgment under $10,000 involving the purchase of goods or services uses {{rate_plus_8}} instead, while a lawful contract can supply its agreed rate.",
     postDetails: {
-      scope: "The 5.51% headline applies to the general civil and criminal judgment branch unless another rate is specified. Section 15-1-4 separately addresses lawful contract judgments and qualifying judgments under $10,000 involving goods or services; the latter is 13.51% for 2026.",
+      scope: "The {{current_rate}} headline applies to the general civil and criminal judgment branch unless another rate is specified. Section 15-1-4 separately addresses lawful contract judgments and qualifying judgments under $10,000 involving goods or services; the latter is {{rate_plus_8}} for {{current_year}}.",
       accrual: "The applicable annual rate is selected by the calendar year in which judgment is entered. Utah Courts’ renewal guidance instructs filers to use the post-judgment rate in effect when the judgment was entered for the life of that judgment.",
       compounding: "The official annual tables establish the percentage and major branches, but the dataset does not yet have calculator-grade day-count, compounding, partial-payment, and renewal mechanics for every Utah judgment. The calculator therefore remains safely disabled.",
-      history: "The dataset now preserves every annual rate in the official Utah Courts table from 1993 through 2026, including the court’s original display precision. The weekly pipeline checks both the current and historic court tables and can append a new year only after overlapping values and the published formulas reconcile.",
+      history: "The dataset now preserves all {{history_points}} annual rates in the official Utah Courts table from 1993 through {{current_year}}, including the court’s original display precision. The weekly pipeline checks both the current and historic court tables and can append a new year only after overlapping values and the published formulas reconcile.",
     },
   },
   "vermont-judgment-rate": {
@@ -465,7 +467,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "wisconsin-judgment-rate": {
     tagline: "Wisconsin’s § 815.05(8) judgment rate, selected by entry date.",
     q: "What is the current Wisconsin post-judgment interest rate?",
-    body: "For judgments entered from July 1 through December 31, 2026, Wisconsin’s post-judgment interest rate is 7.75% per year under Wis. Stat. § 815.05(8). The rate is one percentage point above the Federal Reserve H.15 bank prime rate in effect on the January 1 or July 1 immediately preceding entry of judgment, and it runs from entry until the judgment is paid.",
+    body: "For judgments entered on or after {{effective_date}} in the current recorded half-year, Wisconsin’s post-judgment interest rate is {{current_rate}} per year under Wis. Stat. § 815.05(8). The rate is one percentage point above the Federal Reserve H.15 bank prime rate in effect on the January 1 or July 1 immediately preceding entry of judgment, and it runs from entry until the judgment is paid.",
     postDetails: {
       scope: "Section 815.05(8) governs interest after entry of a Wisconsin judgment. Prejudgment interest on a verdict, decision, or report is addressed separately in Wis. Stat. § 814.04(4), so the 7.75% post-judgment headline should not be treated as a universal prejudgment rate.",
       accrual: "The judgment-entry date selects the controlling half-year benchmark: use the H.15 bank prime rate in effect on the immediately preceding January 1 or July 1, then add one percentage point. Interest runs from entry until the judgment is paid.",
@@ -481,7 +483,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "maine-judgment-rate": {
     tagline: "Maine’s official annual Treasury-linked post-judgment rate.",
     q: "What is the current Maine post-judgment interest rate?",
-    body: "Maine post-judgment interest is currently 9.51% for interest beginning in 2026. Under 14 M.R.S. §1602-C, the general rate is the weekly-average one-year Treasury constant maturity yield for the last full week of the prior calendar year, plus 6 percentage points. A contract or note with an interest provision uses the greater of its written rate and the statutory rate.",
+    body: "Maine post-judgment interest is currently {{current_rate}} for interest beginning in {{current_year}}. Under 14 M.R.S. §1602-C, the general rate is the weekly-average one-year Treasury constant maturity yield for the last full week of the prior calendar year, plus 6 percentage points. A contract or note with an interest provision uses the greater of its written rate and the statutory rate.",
     postDetails: {
       scope: "The Treasury-plus-6 rate applies to the general civil and small-claims path. If a contract or note contains an interest provision, §1602-C(1)(A) uses the greater of the written rate and the statutory general rate.",
       accrual: "Interest accrues from and after entry of judgment and includes the appeal period. A continuance longer than 30 days obtained at the prevailing party’s request suspends interest for that period, and the court may fully or partially waive interest for good cause on the nonprevailing party’s petition.",
@@ -505,7 +507,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "alaska-prejudgment-rate": {
     tagline: "Alaska’s annual prejudgment rate under AS 09.30.070 and ADM-505.",
     q: "What is the Alaska prejudgment interest rate?",
-    body: "For a judgment entered in 2026, Alaska Court System form ADM-505 publishes 6.75% as the general pre- and post-judgment rate under AS 09.30.070. The percentage is selected by the year judgment is entered and stays attached to that judgment. A contract, another statute, the damages category, or the older transition rule can supply a different result.",
+    body: "For a judgment entered in {{current_year}}, Alaska Court System form ADM-505 publishes {{current_rate}} as the general pre- and post-judgment rate under AS 09.30.070. The percentage is selected by the year judgment is entered and stays attached to that judgment. A contract, another statute, the damages category, or the older transition rule can supply a different result.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -514,7 +516,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     applies: "Prejudgment interest is a general remedy in Alaska and is NOT limited to liquidated or contract claims — it is recoverable on tort and unliquidated damages as compensation for loss of use of money. However, by statute AS 09.30.070(c), prejudgment interest may NOT be awarded on: (1) future economic damages, (2) future noneconomic damages, or (3) punitive damages. Where a written contract specifies an interest rate, that contract rate controls instead of the statutory rate.",
     accrual: "ADM-505 explains that prejudgment interest starts when the claimant could first sue, giving notice of an injury and the first breach of a contract as examples. The exact statutory notice, damages, contract, and special-claim branches must still be confirmed for the case.",
     compound: "Confirm the governing rule. ADM-505 publishes the annual percentage and selection year but does not state one universal calculator-grade compounding and payment-allocation method.",
-    formula: "Three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered (AS 09.30.070(a)). ADM-505 publishes the selected annual schedule; the dataset preserves every listed year from the August 7, 1997 transition through 2026.",
+    formula: "Three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered (AS 09.30.070(a)). ADM-505 publishes the selected annual schedule; the dataset preserves all {{history_points}} listed years from the August 7, 1997 transition through {{current_year}}.",
   },
   "arizona-prejudgment-rate": {
     tagline: "Arizona prejudgment interest — a formula rate, reset periodically.",
@@ -601,7 +603,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "florida-prejudgment-rate": {
     tagline: "Florida prejudgment interest — a formula rate, reset each quarter.",
     q: "What is the Florida prejudgment interest rate?",
-    body: "Florida prejudgment interest is currently 8.06% per year — a statutory formula rate under Fla. Stat. § 55.03 that resets each quarter. Prejudgment interest is available ONLY on LIQUIDATED / readily ascertainable damages representing an actual out-of-pocket pecuniary loss fixed as of a date certain (Argonaut \"loss theory\").",
+    body: "Florida’s prejudgment reference uses the monitored quarterly rate schedule under Fla. Stat. § 55.03; the current value and effective date are shown above. Prejudgment interest is available ONLY on LIQUIDATED / readily ascertainable damages representing an actual out-of-pocket pecuniary loss fixed as of a date certain (Argonaut \"loss theory\").",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -613,9 +615,9 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     formula: "Prejudgment interest accrues at the § 55.03 statutory rate in effect during each period from the date of loss to the date of judgment. § 55.03 rate = 12-month average of the Federal Reserve Bank of New York discount rate + 400 basis points, reset quarterly (Dec 1 / Mar 1 / Jun 1 / Sep 1) by the CFO.",
   },
   "georgia-prejudgment-rate": {
-    tagline: "Georgia prejudgment interest — 7% for liquidated claims, prime+3% for tort.",
+    tagline: "Georgia prejudgment interest — {{current_rate_part_1}} for liquidated claims, {{current_rate_part_2}} for the current tort benchmark.",
     q: "What is the Georgia prejudgment interest rate?",
-    body: "Georgia has two different prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15. A qualifying unliquidated tort demand under §51-12-14 instead uses the Federal Reserve prime rate on the benchmark-selection day plus 3 points — currently 9.75%. The claim type and notice determine which path, if either, applies.",
+    body: "Georgia has two different prejudgment paths. A qualifying liquidated demand uses the {{current_rate_part_1}} legal rate under O.C.G.A. §§7-4-2 and 7-4-15. A qualifying unliquidated tort demand under §51-12-14 instead uses the Federal Reserve prime rate on the benchmark-selection day plus 3 points — currently {{current_rate_part_2}}. The claim type and notice determine which path, if either, applies.",
     prejudgment: true,
     kind: "fixed",
     kindLabel: "Fixed by statute",
@@ -693,9 +695,9 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     formula: "The State Court Administrator publishes a monthly one-year Treasury constant maturity selection from Federal Reserve H.15; §668.13 adds 2 percentage points and selects the rate as of judgment. It is not a weekly-average series and does not float month by month after judgment.",
   },
   "kansas-prejudgment-rate": {
-    tagline: "Kansas prejudgment interest — 10% general, or the judgment rate −2% for recent tort claims.",
+    tagline: "Kansas prejudgment interest — {{current_rate_part_1}} general, or {{current_rate_part_2}} for the current recent-tort branch.",
     q: "What is the Kansas prejudgment interest rate?",
-    body: "Kansas prejudgment interest is 10% for general/contract claims (K.S.A. 16-201), but for civil tort actions filed on or after July 1, 2023 it is the judgment rate minus 2 points — currently 5.75%. Prejudgment interest is available only on LIQUIDATED claims — where both the amount due and the date it became due are fixed and certain, or definitely ascertainable by mathematical…",
+    body: "Kansas prejudgment interest is {{current_rate_part_1}} for general/contract claims (K.S.A. 16-201), but for civil tort actions filed on or after July 1, 2023 it is the judgment rate minus 2 points — currently {{current_rate_part_2}}. Prejudgment interest is available only on LIQUIDATED claims — where both the amount due and the date it became due are fixed and certain, or definitely ascertainable by mathematical…",
     prejudgment: true,
     kind: "fixed",
     kindLabel: "Fixed by statute",
@@ -736,7 +738,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "maine-prejudgment-rate": {
     tagline: "Maine’s official annual Treasury-linked prejudgment rate.",
     q: "What is the Maine prejudgment interest rate?",
-    body: "Maine prejudgment interest is currently 6.51% for interest beginning in 2026. Under 14 M.R.S. §1602-B, the general rate is the prior year’s last-full-week average one-year Treasury constant maturity yield plus 3 percentage points. The official Judicial Branch chart supplies one rate for each year; the dataset preserves all 24 rows from July 2003 through 2026.",
+    body: "Maine prejudgment interest is currently {{current_rate}} for interest beginning in {{current_year}}. Under 14 M.R.S. §1602-B, the general rate is the prior year’s last-full-week average one-year Treasury constant maturity yield plus 3 percentage points. The official Judicial Branch chart supplies one rate for each year; the dataset preserves all {{history_points}} rows from July 2003 through {{current_year}}.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -776,7 +778,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "michigan-prejudgment-rate": {
     tagline: "Michigan prejudgment interest — a formula rate, reset twice a year.",
     q: "What is the Michigan prejudgment interest rate?",
-    body: "Michigan prejudgment interest is currently 4.959% per year — a statutory formula rate under MCL 600.6013 that resets twice a year, compounded annually. Michigan has NO separate general prejudgment-interest statute; instead MCL 600.6013 (nominally the \"interest on money judgments\" statute) runs interest FROM THE DATE THE COMPLAINT IS FILED,…",
+    body: "Michigan prejudgment interest is currently {{current_rate}} per year — a statutory formula rate under MCL 600.6013 that resets twice a year, compounded annually. Michigan has NO separate general prejudgment-interest statute; instead MCL 600.6013 (nominally the \"interest on money judgments\" statute) runs interest FROM THE DATE THE COMPLAINT IS FILED,…",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -785,12 +787,12 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     applies: "Michigan has NO separate general prejudgment-interest statute; instead MCL 600.6013 (nominally the \"interest on money judgments\" statute) runs interest FROM THE DATE THE COMPLAINT IS FILED, so the complaint-to-judgment portion functions as statutory prejudgment interest. It is available broadly and is NOT limited to liquidated/ascertainable claims — it applies to tort AND contract, and to unliquidated/tort damages (e.g., personal injury).",
     accrual: "From the date the complaint is filed (for complaints filed on/after Jan 1, 1987) to the date of satisfaction of the judgment — MCL 600.6013(8). Exception for future damages: interest runs from filing only to the date of judgment (subsection (6)).",
     compound: "Compound — compounded annually (MCL 600.6013(8); the written-instrument rate under (7) is also compounded annually).",
-    formula: "Variable, published by the Michigan State Treasurer. General/default rate = 1% + average 5-yr U.S. Treasury note auction yield for the preceding 6 months, re-certified each Jan 1 and Jul 1, compounded annually. Current (eff. 2026-07-01): 3.959% + 1% = 4.959%.",
+    formula: "Variable, published by the Michigan State Treasurer. General/default rate = 1% + average 5-yr U.S. Treasury note auction yield for the preceding 6 months, re-certified each Jan 1 and Jul 1, compounded annually. Current (effective {{effective_date}}): {{rate_minus_1}} + 1% = {{current_rate}}.",
   },
   "minnesota-prejudgment-rate": {
-    tagline: "Minnesota prejudgment interest — 4%, or 10% on awards over $50,000.",
+    tagline: "Minnesota prejudgment interest — {{current_rate_part_1}}, or {{current_rate_part_2}} on awards over $50,000.",
     q: "What is the Minnesota prejudgment interest rate?",
-    body: "Minnesota preverdict interest is 4% per year, but rises to 10% on judgments/awards over $50,000 (Minn. Stat. §549.09, subd. 1(b)–(c)) — the same two-tier split as post-judgment interest. Preverdict interest is allowed broadly on \"pecuniary damages\" — it is NOT limited to liquidated or contract claims and DOES apply to tort/personal-injury claims (for past pecuniary…",
+    body: "Minnesota preverdict interest is {{current_rate_part_1}} per year, but rises to {{current_rate_part_2}} on judgments/awards over $50,000 (Minn. Stat. §549.09, subd. 1(b)–(c)) — the same two-tier split as post-judgment interest. Preverdict interest is allowed broadly on \"pecuniary damages\" — it is NOT limited to liquidated or contract claims and DOES apply to tort/personal-injury claims (for past pecuniary…",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -829,9 +831,9 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     formula: "Do not treat the two Missouri formulas as interchangeable. Section 408.040.3 uses intended Federal Funds Rate + 5 points for the tort judgment and contains the qualifying prejudgment-interest award. Section 408.040.4 separately applies Federal Funds + 3 points after the awarded prejudgment interest becomes part of the judgment.",
   },
   "montana-prejudgment-rate": {
-    tagline: "Montana prejudgment interest — 10% for liquidated claims, prime+3% for tort.",
+    tagline: "Montana prejudgment interest — {{current_rate_part_1}} for liquidated claims, {{current_rate_part_2}} for the current tort benchmark.",
     q: "What is the Montana prejudgment interest rate?",
-    body: "Montana prejudgment interest is 10% simple for liquidated/contract claims (the legal rate, MCA §31-1-106), but tort prejudgment interest is prime + 3% — currently 9.75% — under §27-1-210. Prejudgment interest is MANDATORY (not discretionary) under MCA 27-1-211 only when three criteria are met: (1) an underlying monetary obligation exists; (2) the amount of recovery is…",
+    body: "Montana prejudgment interest is {{current_rate_part_1}} simple for liquidated/contract claims (the legal rate, MCA §31-1-106), but tort prejudgment interest is prime + 3% — currently {{current_rate_part_2}} — under §27-1-210. Prejudgment interest is MANDATORY (not discretionary) under MCA 27-1-211 only when three criteria are met: (1) an underlying monetary obligation exists; (2) the amount of recovery is…",
     prejudgment: true,
     kind: "fixed",
     kindLabel: "Fixed by statute",
@@ -886,7 +888,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "new-jersey-prejudgment-rate": {
     tagline: "New Jersey prejudgment interest — 4.5%, or 6.5% on amounts over $20,000.",
     q: "What is the New Jersey prejudgment interest rate?",
-    body: "New Jersey tort prejudgment interest tracks post-judgment interest: 4.5% on amounts up to $20,000 and 6.5% above it for 2026 (N.J. Ct. R. 4:42-11(b)), as simple interest. Rule 4:42-11(b) prejudgment interest is MANDATORY in TORT actions, including products liability actions (\"the court shall…",
+    body: "New Jersey tort prejudgment interest tracks post-judgment interest: {{current_rate_part_1}} on amounts up to $20,000 and {{current_rate_part_2}} above it for {{current_year}} (N.J. Ct. R. 4:42-11(b)), as simple interest. Rule 4:42-11(b) prejudgment interest is MANDATORY in TORT actions, including products liability actions (\"the court shall…",
     prejudgment: true,
     kind: "same-as-postjudgment",
     kindLabel: "Same rate as post-judgment",
@@ -961,12 +963,12 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     applies: "Two distinct tracks. (1) CONTRACT / LIQUIDATED claims under ORC 1343.03(A): prejudgment interest is a matter of RIGHT (not discretionary) on money due and payable upon a written contract, book account, settlement, or other instrument of writing — the creditor is entitled to interest at the 1343.03(A) statutory rate (or the contract rate if the written contract provides one). Ohio case law (Royal Elec. Constr.",
     accrual: "Contract/liquidated (1343.03(A)): interest accrues from the date the money became due and payable (e.g., breach/when payment was owed). Tort (1343.03(C)(1)): if awarded, interest is computed from the date the cause of action accrued (for cases of admitted/deliberate liability) or, otherwise, from the earlier of (a)…",
     compound: "Simple interest.",
-    formula: "Federal short-term rate (IRC 1274) for July, rounded to nearest whole percent, plus 3% = statutory rate for the following calendar year (ORC 5703.47). Same as post-judgment rate. 2026 rate = 7%.",
+    formula: "Federal short-term rate (IRC 1274) for July, rounded to nearest whole percent, plus 3% = statutory rate for the following calendar year (ORC 5703.47). Same as post-judgment rate. {{current_year}} rate = {{current_rate}}.",
   },
   "oklahoma-prejudgment-rate": {
-    tagline: "Oklahoma prejudgment interest — 4.13% for personal injury, 6% for contract.",
+    tagline: "Oklahoma prejudgment interest — {{current_rate_part_1}} for personal injury, {{current_rate_part_2}} for contract.",
     q: "What is the Oklahoma prejudgment interest rate?",
-    body: "Oklahoma prejudgment interest splits across two statutes: a variable rate — currently 4.13% — for personal-injury/personal-rights verdicts (12 O.S. §727.1), and 6% fixed for contract/liquidated 'damages certain' claims (23 O.S. §6). Sharply restricted and claim-type dependent.",
+    body: "Oklahoma prejudgment interest splits across two statutes: a variable rate — currently {{current_rate_part_1}} — for personal-injury/personal-rights verdicts (12 O.S. §727.1), and {{current_rate_part_2}} fixed for contract/liquidated 'damages certain' claims (23 O.S. §6). Sharply restricted and claim-type dependent.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -975,7 +977,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     applies: "Sharply restricted and split across two statutes. (1) 12 O.S. 727.1(E) authorizes prejudgment interest ONLY on a \"verdict for damages by reason of personal injuries or injury to personal rights\" (e.g., bodily restraint, personal insult, defamation, invasion of privacy, injury to personal relations) — accepted on/after Nov 1, 2009. It does NOT cover contract, property, or general commercial claims.",
     accrual: "Depends on claim type. For personal-injury/personal-rights verdicts (12 O.S. 727.1(E)): accrual begins the date 24 MONTHS AFTER the suit resulting in the judgment was commenced (not the date of injury), running until verdict acceptance/judgment.",
     compound: "Simple. Oklahoma prejudgment interest is computed as simple interest on the principal/verdict amount; the statute prescribes annual re-setting of the rate but does not compound accrued interest.",
-    formula: "Variable, reset annually. Prejudgment rate = average U.S. Treasury Bill rate of the preceding calendar year, certified by the State Treasurer per 12 O.S. 727.1(I) and published by the Administrative Director of the Courts. 2026 published prejudgment rate = 4.13%.",
+    formula: "Variable, reset annually. Prejudgment rate = average U.S. Treasury Bill rate of the preceding calendar year, certified by the State Treasurer per 12 O.S. 727.1(I) and published by the Administrative Director of the Courts. {{current_year}} published prejudgment rate = {{current_rate_part_1}}.",
   },
   "oregon-prejudgment-rate": {
     tagline: "Oregon’s prejudgment interest rate — when a court awards it.",
@@ -1068,12 +1070,12 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     applies: "STATUTORY prejudgment interest under Tex. Fin. Code Subchapter B applies only to wrongful-death, personal-injury, and property-damage cases (§§304.101–304.102). It may not be assessed on future damages (§304.1045). Qualifying written settlement offers can pause or reduce the amount on which interest accrues (§§304.105–304.107). Condemnation cases use a separate branch (§304.201), and other claims can depend on common law.",
     accrual: "Sec. 304.104: accrues beginning on the EARLIER of (a) the 180th day after the date the defendant receives written notice of a claim, or (b) the date suit is filed; and ends on the day preceding the date judgment is rendered. Common-law claims use the same accrual rule per Kenneco.",
     compound: "Simple. Sec. 304.104 expressly states prejudgment interest is computed as simple interest and does not compound. (Note: postjudgment interest under Sec. 304.006 compounds annually, but prejudgment interest is simple.).",
-    formula: "Prime rate (per Fed Board of Governors) with a 5% minimum and 15% maximum; published monthly by the Texas OCCC. Rate is fixed as of the date of judgment. Current = 6.75% (July 2026).",
+    formula: "Prime rate (per Fed Board of Governors) with a 5% minimum and 15% maximum; published monthly by the Texas OCCC. Rate is fixed as of the date of judgment. Current = {{current_rate}} (effective {{effective_date}}).",
   },
   "utah-prejudgment-rate": {
-    tagline: "Utah prejudgment interest — 10% general, prime+2% for personal-injury special damages.",
+    tagline: "Utah prejudgment interest — {{current_rate_part_1}} general, {{current_rate_part_2}} for the current personal-injury branch.",
     q: "What is the Utah prejudgment interest rate?",
-    body: "Utah prejudgment interest is 10% for general/contract claims (Utah Code §15-1-1(2)), but personal-injury special damages accrue prime + 2% — currently 8.75% — under §78B-5-824. General/contract cases (Track A): Utah does NOT strictly require damages to be \"liquidated,\" but prejudgment interest attaches ONLY where the loss is complete/fixed at a definite time and…",
+    body: "Utah prejudgment interest is {{current_rate_part_1}} for general/contract claims (Utah Code §15-1-1(2)), but personal-injury special damages accrue prime + 2% — currently {{current_rate_part_2}} — under §78B-5-824. General/contract cases (Track A): Utah does NOT strictly require damages to be \"liquidated,\" but prejudgment interest attaches ONLY where the loss is complete/fixed at a definite time and…",
     prejudgment: true,
     kind: "fixed",
     kindLabel: "Fixed by statute",
@@ -1186,12 +1188,54 @@ floor in most states — for example France adds 10 points, Germany 9).`,
   },
 };
 
-export function copyFor(slug) {
+function rateCopyTokens(observation, historyPoints) {
+  if (!observation) return {};
+  const effectiveDate = String(observation.effective_date || '');
+  const rate = Number(observation.value);
+  const parts = String(observation.value_text || '').split('/').map((part) => part.trim());
+  const percent = (value) => Number.isFinite(value)
+    ? `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(value)}%`
+    : '';
+  const prettyEffectiveDate = /^\d{4}-\d{2}-\d{2}$/.test(effectiveDate)
+    ? new Date(`${effectiveDate}T00:00:00Z`).toLocaleDateString('en-US', {
+        timeZone: 'UTC',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : effectiveDate;
+  return {
+    current_rate: observation.value_text || '',
+    current_rate_part_1: parts[0] || observation.value_text || '',
+    current_rate_part_2: parts[1] || '',
+    current_year: effectiveDate.slice(0, 4),
+    effective_date: prettyEffectiveDate,
+    history_points: Number.isInteger(historyPoints) ? String(historyPoints) : '',
+    rate_minus_1: percent(rate - 1),
+    rate_minus_2: percent(rate - 2),
+    rate_plus_8: percent(rate + 8),
+  };
+}
+
+function cleanAndMaterialize(value, tokens) {
+  if (typeof value === 'string') {
+    return removeTruncatedFragments(value).replace(
+      /\{\{([a-z0-9_]+)\}\}/gi,
+      (match, key) => Object.hasOwn(tokens, key) ? tokens[key] : match,
+    );
+  }
+  if (Array.isArray(value)) return value.map((item) => cleanAndMaterialize(item, tokens));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, item]) => [key, cleanAndMaterialize(item, tokens)]),
+    );
+  }
+  return value;
+}
+
+export function copyFor(slug, { observation = null, historyPoints = null } = {}) {
   const raw = SERIES_COPY[slug] || { tagline: '', q: `What is the current ${slug} rate?`, body: '' };
-  const clean = Object.fromEntries(Object.entries(raw).map(([key, value]) => [
-    key,
-    typeof value === 'string' ? removeTruncatedFragments(value) : value,
-  ]));
+  const clean = cleanAndMaterialize(raw, rateCopyTokens(observation, historyPoints));
   if (!clean.body) clean.body = clean.tagline || 'See the cited source and current observation for details.';
   if (clean.prejudgment && !clean.applies) clean.applies = clean.appliesShort || clean.tagline;
   return clean;
@@ -1204,6 +1248,24 @@ export function copyFor(slug) {
 export const CONTENT_MODIFIED = Object.freeze({
   'alaska-judgment-rate': '2026-07-26',
   'alaska-prejudgment-rate': '2026-07-26',
+  'florida-judgment-rate': '2026-07-26',
+  'florida-prejudgment-rate': '2026-07-26',
+  'georgia-judgment-rate': '2026-07-26',
+  'iowa-judgment-rate': '2026-07-26',
+  'maine-judgment-rate': '2026-07-26',
+  'maine-prejudgment-rate': '2026-07-26',
+  'michigan-judgment-rate': '2026-07-26',
+  'michigan-prejudgment-rate': '2026-07-26',
+  'new-jersey-judgment-rate': '2026-07-26',
+  'new-jersey-prejudgment-rate': '2026-07-26',
+  'ohio-judgment-rate': '2026-07-26',
+  'ohio-prejudgment-rate': '2026-07-26',
+  'texas-judgment-rate': '2026-07-26',
+  'texas-prejudgment-rate': '2026-07-26',
+  'us-federal-post-judgment': '2026-07-26',
+  'utah-judgment-rate': '2026-07-26',
+  'washington-judgment-rate': '2026-07-26',
+  'wisconsin-judgment-rate': '2026-07-26',
 });
 
 export function contentModifiedFor(slug) {

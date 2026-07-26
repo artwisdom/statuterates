@@ -2,7 +2,7 @@
 // No integration dependency; the loc URLs use the configured Astro `site` domain. Each URL carries a
 // real per-page <lastmod> (the underlying rate's latest effective date, clamped to the build date) so
 // the date is a genuine change signal for crawlers rather than one shared build stamp.
-import { getAllEntities, getMeta, stateHubs, latestOf, isCalculatorReady, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
+import { getAllEntities, getMeta, stateHubs, latestOf, isCalculatorReady, publishedStateCalculators, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
 import { GUIDES } from '../lib/guides.mjs';
 import { contentModifiedFor } from '../lib/content.mjs';
 
@@ -14,6 +14,7 @@ export function GET({ site }) {
 
   const entities = getAllEntities();
   const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const stateCalculators = publishedStateCalculators();
   const stateCalculatorsEnabled = STATE_CALCULATOR_RENDERER_READY
     && import.meta.env.ENABLE_STATE_CALCULATORS === 'true';
   const prejudgmentCalculatorReady = stateCalculatorsEnabled
@@ -22,15 +23,32 @@ export function GET({ site }) {
   const staticPaths = [
     '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
-    '/calculators/', '/calculators/judgment-interest/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
-    '/calculators/irs-penalty-and-interest/', '/calculators/late-payment-interest/',
+    '/calculators/', '/calculators/judgment-interest/',
     ...(prejudgmentCalculatorReady ? ['/calculators/prejudgment-interest/'] : []),
   ];
 
   const dateFor = new Map(entities.map((e) => [e.slug, [
-    (latestOf(e)?.effective_date || '').slice(0, 10),
+    String(latestOf(e)?.effective_date || '').slice(0, 10),
     contentModifiedFor(e.slug),
   ].filter(Boolean).sort().at(-1)]));
+  const calculatorRows = [
+    { path: '/calculators/post-judgment-interest/', slugs: ['us-federal-post-judgment'] },
+    { path: '/calculators/irs-interest/', slugs: ['irs-underpayment'] },
+    { path: '/calculators/irs-penalty-and-interest/', slugs: ['irs-underpayment'] },
+    {
+      path: '/calculators/late-payment-interest/',
+      slugs: ['uk-late-payment-commercial', 'eu-late-payment-reference'],
+    },
+    ...stateCalculators.map((release) => ({
+      path: release.path,
+      slugs: [release.entitySlug],
+    })),
+  ].map((calculator) => ({
+    path: calculator.path,
+    lastmod: clamp(
+      calculator.slugs.map((slug) => dateFor.get(slug)).filter(Boolean).sort().at(-1),
+    ),
+  }));
 
   const rows = [
     // Static + index pages: we don't track an honest per-page modification date, so omit <lastmod>
@@ -39,6 +57,8 @@ export function GET({ site }) {
     ...staticPaths.map((p) => ({ path: p })),
     // Guides carry a hand-maintained dateModified that only moves on a genuine content edit.
     ...GUIDES.map((g) => ({ path: `/guides/${g.slug}/`, lastmod: clamp(g.dateModified) })),
+    // Data-driven calculators change when their underlying rate contract changes.
+    ...calculatorRows,
     // Rate pages + hubs: the underlying rate's real effective date is a true change signal.
     ...entities.map((e) => ({ path: `/rates/${e.slug}/`, lastmod: clamp(dateFor.get(e.slug)) })),
     ...stateHubs().map((h) => ({
@@ -49,7 +69,7 @@ export function GET({ site }) {
   ];
 
   const urls = rows
-    .map((r) => `  <url><loc>${base}${r.path}</loc>${r.lastmod ? `<lastmod>${r.lastmod}</lastmod>` : ''}<changefreq>weekly</changefreq></url>`)
+    .map((r) => `  <url><loc>${base}${r.path}</loc>${r.lastmod ? `<lastmod>${r.lastmod}</lastmod>` : ''}</url>`)
     .join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
