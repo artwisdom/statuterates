@@ -3,7 +3,7 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-07-25
+**Updated:** 2026-07-25 (production release verified 2026-07-26 UTC)
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 22.12+ (Node 24 also verified locally)
@@ -83,14 +83,18 @@ rules. Phase 1 corrected the foundation:
 
 ## Verified checks
 
-- Pipeline: 63 tests.
+- Pipeline: 66 tests.
 - Shared interest engine: 10 tests.
 - Site data contract: 2 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
 - API conformance: 114 entity endpoints and 2,307 latest/history records checked.
 - Static build: 192 pages on Astro 7.
+- Indexable sitemap: 189 URLs.
 - Local mobile Lighthouse: 100 accessibility, 100 best practices, 100 SEO, and 100 agentic browsing.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
+- Production release: GitHub Actions build/deploy passed; the July 26 homepage, general judgment
+  calculator, 2,193-observation API, Iowa 302-point history, sitemap, HSTS, and security headers were
+  verified through the Cloudflare-served domain.
 
 ## Important files
 

@@ -1,8 +1,8 @@
 # Phase 2 progress — demand-led state verification
 
 **Started:** 2026-07-19
-**Status:** Texas, Nebraska, Iowa, Kentucky, Maine, Georgia, and Mississippi milestone complete locally; calculators withheld
-**Deployment status:** not committed or deployed
+**Status:** Texas, Nebraska, Iowa, Kentucky, Maine, Georgia, and Mississippi milestone deployed; calculators withheld
+**Deployment status:** production verified 2026-07-25 (2026-07-26 UTC)
 
 ## Demand-led order without publishing private account data
 
@@ -13,8 +13,8 @@ Kentucky, Maine, Georgia, and Mississippi followed as source-accuracy and offici
 Private account metrics, queries, and index-coverage counts are intentionally not stored in this
 repository.
 
-The production site still contains the older state implementations. Everything described below is a
-local, tested change until the owner explicitly approves a commit and deployment.
+The production site contains the verified implementations described below. The release was deployed
+through the tested GitHub Pages workflow and verified through Cloudflare at https://statuterates.com.
 
 ## Texas
 
@@ -35,7 +35,7 @@ interest-bearing-contract branch, accrual from rendition through satisfaction, a
 and the separate personal-injury/property-damage prejudgment provisions and exceptions in Chapter
 304.
 
-### Implemented locally
+### Implemented and deployed
 
 - Added all 515 official monthly observations from September 1983 through July 2026. Unchanged
   months are retained because the judgment month selects the locked rate.
@@ -64,7 +64,7 @@ notice effective two weeks after publication. Section 45-103.01 governs the gene
 satisfaction accrual window. Prejudgment interest has separate liquidated-claim, contract, and
 strict settlement-offer branches under §§45-103.02–45-104.
 
-### Implemented locally
+### Implemented and deployed
 
 - Added all 275 published Nebraska change points and preserved their exact effective dates.
 - Added a live Judicial Branch monitor with anchor, date, and rate validation.
@@ -98,7 +98,7 @@ row selects a 4.06% index and therefore confirms a 6.06% judgment rate. This sup
 the earlier 6.02% H.15 estimate; the pipeline now purges that estimate from old exports and rejects it
 if it ever reappears.
 
-### Implemented locally
+### Implemented and deployed
 
 - Replaced the weekly derivation with the monthly Judicial Branch selection model.
 - Added all 302 exact published selections to both the postjudgment and matching prejudgment series.
@@ -128,7 +128,7 @@ Kentucky's 8% legal rate is not a universal prejudgment award. Official appellat
 that unliquidated prejudgment interest can be denied or set below the legal rate, and that the court's
 equitable discretion can include simple-versus-compound treatment.
 
-### Implemented locally
+### Implemented and deployed
 
 - Replaced the fake July 2026 source-review-date row with the exact 12% and 6% statutory change points.
 - Corrected the prejudgment reference to `up to 8%`, effective with the current statutory text, and
@@ -154,7 +154,7 @@ one-year Treasury CMT plus three points; post-judgment uses the same index plus 
 April 2025 standing order corrects an administrative error: the 2025 rates are 7.23% and 10.23%, not
 the initially published 7.88% and 10.88%.
 
-### Implemented locally
+### Implemented and deployed
 
 - Added every exact annual row to both Maine series and corrected the inherited prejudgment
   effective date from July 2026 to January 1, 2026.
@@ -184,7 +184,7 @@ December 11, 2025. Prejudgment interest remains a composite rule: Georgia's 7% l
 prime-plus-three demand provision, written agreements, and tort-demand rules do not collapse into one
 universal percentage.
 
-### Implemented locally
+### Implemented and deployed
 
 - Added all 59 exact current-scheme rate periods from July 1, 2003 through December 11, 2025.
 - Added a live Federal Reserve monitor that validates every curated anchor before appending a later
@@ -209,7 +209,7 @@ of the complaint. The 8% legal contract rate in §75-17-1 can matter in particul
 a mandatory statewide prejudgment percentage. The current appellate decision cross-check confirms
 the court's discretion and affirms a 4% simple-interest award in its particular context.
 
-### Implemented locally
+### Implemented and deployed
 
 - Replaced the misleading universal 8% record with a nonnumeric `contract rate / court-set` rule.
 - Updated human pages, JSON-LD, API output, rankings, and machine-readable summaries so the rule is
@@ -234,17 +234,18 @@ risk of a calculator that only appears complete.
 
 ## Verification
 
-- Pipeline: 63/63 tests pass.
+- Pipeline: 66/66 tests pass.
 - Shared interest engine: 10/10 tests pass.
 - Site data contract: 2/2 tests pass.
 - MCP server: 3/3 tests pass, including traversal protection and full smoke coverage.
 - Full fetch → hydrate → validate → export: 114 entities and 2,193 observations, no warnings.
 - API conformance: 114 entity endpoints and 2,307 latest/history records checked.
-- Static build: 191 HTML pages; SEO metadata, internal links, and calculator-indexing gates pass.
+- Static build: 192 HTML pages; 189 indexable sitemap URLs; SEO metadata, internal links, and
+  calculator-indexing gates pass.
 - All 102 state-law entities remain `reference_only`; no unsafe state calculator is generated.
 
 ## Next work
 
 The next source-hardening targets are additional demand-led official histories and stronger
-controlling-law citations for official-secondary reproductions. No commit or deployment should occur
-without the owner's explicit approval.
+controlling-law citations for official-secondary reproductions. Every future release should pass the
+same test, validation, build, API-conformance, deployment, and live-site verification gate.

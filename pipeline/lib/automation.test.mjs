@@ -22,3 +22,18 @@ test('refresh records whether exports changed without relying on a suppressed pu
   assert.match(refresh, /steps\.commit\.outputs\.changed/);
   assert.doesNotMatch(refresh, /deploy workflow runs on push to data\/exports/i);
 });
+
+test('automation uses current Node 24 GitHub Actions runtimes', async () => {
+  const [deploy, refresh] = await Promise.all([
+    readFile(deployPath, 'utf8'),
+    readFile(refreshPath, 'utf8'),
+  ]);
+
+  for (const workflow of [deploy, refresh]) {
+    assert.match(workflow, /actions\/checkout@v7/);
+    assert.match(workflow, /actions\/setup-node@v7/);
+    assert.doesNotMatch(workflow, /actions\/(?:checkout|setup-node)@v[1-4]\b/);
+  }
+  assert.match(deploy, /actions\/upload-pages-artifact@v5/);
+  assert.match(deploy, /actions\/deploy-pages@v5/);
+});

@@ -33,15 +33,16 @@ jobs:
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # workflow_run points at the triggering run's original SHA, before refresh-data pushes
           # its export commit. Production must always build the latest validated main branch.
           ref: main
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "22.12"
+          package-manager-cache: false
 
       - name: Install site dependencies
         working-directory: site
@@ -86,7 +87,7 @@ jobs:
       - name: Verify API conformance (fail the deploy if the API drifted)
         run: node machine/check-api-conformance.mjs
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site/dist
 
@@ -116,7 +117,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
 # --------------------------------------------------------------------------------------------
 # ALTERNATIVE: Cloudflare Pages (better for pay-per-crawl + edge performance). To use instead of
