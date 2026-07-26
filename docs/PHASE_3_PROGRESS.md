@@ -1,7 +1,8 @@
 # Phase 3 progress — indexing, automation, and Alaska official history
 
 **Started:** 2026-07-26  
-**Status:** Release candidate verified locally; production deployment pending
+**Status:** Deployed and production-verified
+**Deployment:** `a3ab184`, `deploy-site` run 27, 2026-07-26
 
 ## What the audit found
 
@@ -102,3 +103,18 @@ judgment-year table.
    passes the existing safety gate.
 
 This phase spends no new money and does not require an owner action.
+
+## Production verification
+
+GitHub's full deployment gate passed, including site tests, static API generation, the 192-page
+Astro build, crawl/indexing safeguards, API conformance, artifact upload, and IndexNow submission.
+The Cloudflare-served domain was then checked directly:
+
+- the public API reports 114 entities and 2,361 observations from this release;
+- both Alaska pages show 30 data points, the August 7, 1997 transition, and January 1, 2026 current
+  period;
+- the Alaska state hub exposes its Alabama/Arizona previous-next crawl links;
+- all three Alaska sitemap entries carry the honest 2026-07-26 substantive-edit date;
+- HTTP redirects to HTTPS, HSTS remains `max-age=15552000`, and `nosniff` remains active; and
+- a real browser loaded exactly one AdSense account script and one Cloudflare analytics beacon,
+  with the RUM endpoint returning successfully.

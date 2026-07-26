@@ -140,6 +140,10 @@ rules. Phase 1 corrected the foundation:
   The Cloudflare-served domain was verified across the priority state/rate pages, 189-URL sitemap,
   HSTS, and the 114-series/2,303-observation API. Google Search Console accepted the refreshed
   sitemap and started indexing validation; allow Google time to recrawl and update its reports.
+- Phase 3 release `a3ab184` (GitHub Actions `deploy-site` run 27) passed on 2026-07-26. Production
+  now serves the 30-point Alaska pre/post histories, 2,361-observation API, state crawl paths, honest
+  Alaska `lastmod` dates, and stricter deployment safeguards. HTTPS/HSTS/`nosniff`, AdSense, and the
+  single Cloudflare analytics beacon were reverified live.
 
 ## Important files
 
