@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
 import { getMeta, latestOf, prettyDate, stateHubs, PREJUDGMENT_CALC_SAFE, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
-import { copyFor } from '../../lib/content.mjs';
+import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
   return stateHubs().map((h) => ({ params: { state: h.base }, props: { hub: h } }));
@@ -12,6 +12,12 @@ export function getStaticPaths() {
 const { hub } = Astro.props;
 const { base, name, pre, post } = hub;
 const meta = getMeta();
+const allStateHubs = stateHubs();
+const hubIndex = allStateHubs.findIndex((candidate) => candidate.base === base);
+const previousHub = hubIndex > 0 ? allStateHubs[hubIndex - 1] : null;
+const nextHub = hubIndex >= 0 && hubIndex < allStateHubs.length - 1
+  ? allStateHubs[hubIndex + 1]
+  : null;
 
 const preLatest = latestOf(pre);
 const postLatest = post ? latestOf(post) : null;
@@ -56,8 +62,14 @@ const title = base === 'oklahoma'
   : standardTitle;
 const description = `${hubYear} ${name} judgment interest: ${post ? `${postLatest?.value_text} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preLatest?.value_text} prejudgment`}. Statutes, dates, scope, and official sources.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-// Real modification date = the later of the two rates' effective dates (never the build date).
-const hubModified = [postLatest?.effective_date, preLatest?.effective_date].filter(Boolean).sort().at(-1);
+// Real modification date = the latest data or hand-recorded substantial editorial change (never
+// the build date).
+const hubModified = [
+  postLatest?.effective_date,
+  preLatest?.effective_date,
+  post ? contentModifiedFor(post.slug) : null,
+  contentModifiedFor(pre.slug),
+].filter(Boolean).sort().at(-1);
 
 const faq = [
   post && {
@@ -187,6 +199,16 @@ const jsonLd = [
     <a href="/calculators/judgment-interest/">judgment interest and per-diem calculator</a>.
     Reference data only — not legal advice.</p>
 
+  <nav class="state-nav" aria-label="Browse state interest-rate references">
+    {previousHub
+      ? <a rel="prev" href={`/states/${previousHub.base}/`}>← {previousHub.name}</a>
+      : <span aria-hidden="true"></span>}
+    <a class="all-states" href="/states/">All states</a>
+    {nextHub
+      ? <a rel="next" href={`/states/${nextHub.base}/`}>{nextHub.name} →</a>
+      : <span aria-hidden="true"></span>}
+  </nav>
+
   <style>
     .glance td.num { font-family: var(--nums); white-space: nowrap; }
     .glance td a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
@@ -199,5 +221,14 @@ const jsonLd = [
     .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
     .faq summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
     .faq p { margin: 8px 0 0; color: var(--ink-soft); }
+    .state-nav { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+      margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); font-size: .9rem; }
+    .state-nav a { color: var(--green); font-weight: 600; text-decoration: none; }
+    .state-nav a:last-child { text-align: right; }
+    .state-nav .all-states { color: var(--ink-soft); text-align: center; }
+    @media (max-width: 560px) {
+      .state-nav { grid-template-columns: 1fr 1fr; }
+      .state-nav .all-states { grid-column: 1 / -1; grid-row: 1; }
+    }
   </style>
 </BaseLayout>

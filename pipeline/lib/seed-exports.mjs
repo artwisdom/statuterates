@@ -33,6 +33,7 @@ function isSupersededCuratedObservation(record, observation) {
   // Federal Reserve prime change points, and Mississippi has no universal 8% rate. Do not rehydrate
   // any of those retired placeholders.
   return (record.slug === 'texas-prejudgment-rate' && observation.effective_date === '2026-07-09')
+    || (record.slug === 'alaska-prejudgment-rate' && observation.effective_date === '2026-01-02')
     || (record.slug === 'connecticut-judgment-rate'
       && observation.effective_date === '2026-01-01'
       && observation.method === 'statute-fixed')
@@ -53,6 +54,11 @@ function purgeSupersededCuratedObservations(db) {
     DELETE FROM observations
     WHERE effective_date = '2026-07-09'
       AND entity_id IN (SELECT id FROM entities WHERE slug = 'texas-prejudgment-rate')
+  `).run();
+  db.prepare(`
+    DELETE FROM observations
+    WHERE effective_date = '2026-01-02'
+      AND entity_id IN (SELECT id FROM entities WHERE slug = 'alaska-prejudgment-rate')
   `).run();
   db.prepare(`
     DELETE FROM observations

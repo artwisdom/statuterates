@@ -10,12 +10,12 @@
 
 ## Current product
 
-- 114 rate-series entities and 2,303 recorded historical observations.
+- 114 rate-series entities and 2,361 recorded historical observations.
 - 192 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
-  extension checks for Texas, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and an
-  independent Maine annual-formula integrity check.
+  extension checks for Texas, Alaska, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and
+  an independent Maine annual-formula integrity check.
 - 102 state-law entities across post- and prejudgment interest.
 - Available calculators: general fixed-rate judgment/per-diem arithmetic, federal post-judgment,
   IRS interest, and U.K./E.U. late payment.
@@ -84,6 +84,10 @@ rules. Phase 1 corrected the foundation:
 - Florida now preserves all 78 official CFO periods from October 1981 through July 2026. Automation
   checks the live HTML table, daily factors, quarter cadence, and every historical anchor before a
   new period can enter the dataset.
+- Alaska now preserves all 30 annual pre- and post-judgment rates in official Court System form
+  ADM-505 from the August 7, 1997 transition through 2026. Its inherited January 2 prejudgment
+  pseudo-effective date was corrected to January 1. A weekly PDF monitor verifies every anchor and
+  can append a later year only when the court publishes it.
 - Connecticut's inherited universal flat-10% postjudgment row was removed. The page and API now
   preserve its discretionary, negligence, hospital-debt, and condemnation branches as an
   `up to 10%` reference, with a durable migration preventing the retired row from returning.
@@ -99,16 +103,38 @@ rules. Phase 1 corrected the foundation:
   these state pages can expose a calculator.
 - The full pipeline fetch/validation/export passes with no warning and no calculator-ready states.
 
+## Phase 3 indexing and unattended-operation milestone
+
+- Every indexable sitemap URL must now be reachable from the homepage through ordinary HTML links.
+  A deployment fails if a future template creates an orphan.
+- Every rate page must retain at least 200 visible words and every state hub at least 250. These are
+  conservative regression alarms for broken templates or missing content, not ranking targets.
+- State hubs now form an alphabetical previous/next crawl path in addition to the state indexes and
+  hub-to-rate links. The underlinked statutory-interest guide also gains a contextual homepage link.
+- Rate and state `lastmod`/Dataset modification dates can reflect a hand-recorded substantial
+  editorial update without changing on every build.
+- Alaska's official PDF is fetched through the shared robots, throttle, retry, cache, and fetch-cap
+  layer. The parser rejects oversized input, disables PDF JavaScript evaluation, limits page count,
+  validates every historical anchor, and falls back to committed verified data on any failure.
+- The robots gate now evaluates the same `StatuteRatesBot` token that the public user agent
+  advertises.
+- Performance is not the current growth bottleneck. A production Texas rate page measured 85 ms
+  lab LCP, 1 ms TTFB, and 0.00 CLS. Mobile audits scored 100 for accessibility, SEO, and agentic
+  browsing; the remaining best-practices findings came from third-party AdSense behavior.
+- Google AdSense Auto Ads is active. Manual ad units remain intentionally unconfigured rather than
+  inventing a slot ID or adding page weight before traffic supports the tradeoff.
+
 ## Verified checks
 
-- Pipeline: 78 tests.
+- Pipeline: 84 tests.
 - Shared interest engine: 10 tests.
 - Site data contract: 2 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
-- API conformance: 114 entity endpoints and 2,417 latest/history records checked.
+- API conformance: 114 entity endpoints and 2,475 latest/history records checked.
 - Static build: 192 pages on Astro 7.
 - Indexable sitemap: 189 URLs.
-- Local mobile Lighthouse: 100 accessibility, 100 best practices, 100 SEO, and 100 agentic browsing.
+- Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
+  because of AdSense third-party-cookie/DevTools findings rather than first-party site code.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
 - Production release `76748cb` (GitHub Actions `deploy-site` run 26) passed on 2026-07-26.
   The Cloudflare-served domain was verified across the priority state/rate pages, 189-URL sitemap,
@@ -125,19 +151,24 @@ rules. Phase 1 corrected the foundation:
 - `docs/PHASE_1_AUDIT.md`: takeover findings, competitor research, keyword map, and growth priorities.
 - `docs/PHASE_2_PROGRESS.md`: demand-led Texas, Nebraska, Iowa, Kentucky, Maine, Georgia, and
   Mississippi source research and the current state-verification roadmap.
+- `docs/PHASE_3_PROGRESS.md`: indexing/performance audit, Alaska official history, crawl paths, and
+  unattended-operation safeguards.
 - `shared/interest-calc.mjs`: calculation engine shared by the site and MCP.
 - `.github/workflows/refresh.yml`: tested weekly data refresh.
 - `.github/workflows/deploy.yml`: tested static deployment plus successful-refresh handoff.
 
 ## Known limitations / next phase
 
-- Most state entities still have only one recorded observation. Texas, Nebraska, Iowa, Kentucky,
-  Maine, Georgia, Utah, and Florida now have deeper verified histories, but their calculators remain withheld
-  pending complete arithmetic and legal-branch contracts.
+- Most state entities still have only one recorded observation. Texas, Alaska, Nebraska, Iowa,
+  Kentucky, Maine, Georgia, Utah, and Florida now have deeper verified histories, but their
+  calculators remain withheld pending complete arithmetic and legal-branch contracts.
 - Iowa's live court page can intermittently block automation. The system safely retains the last
   exact published history and never substitutes a Federal Reserve estimate.
 - Florida CFO and Utah Courts can also be temporarily unreachable from some runners. Both monitors
   retain complete verified baselines and never estimate a replacement rate.
+- Alaska's annual effective date can be more than 200 days old late in the calendar year without
+  being stale. Validation uses an annual cadence threshold while the live PDF retrieval timestamp
+  proves that the current table was checked.
 - Georgia and Mississippi use legislature-authorized code portals classified as
   `official_secondary`; the Federal Reserve benchmark underlying Georgia is official primary data.
 - Several government-hosted code reproductions are classified `official_secondary` because the

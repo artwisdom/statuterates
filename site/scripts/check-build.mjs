@@ -3,7 +3,7 @@
 // whitespace around inline elements. Runs against static dist/ output and requires no dependencies.
 
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { dirname, extname, join } from 'node:path';
+import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -14,6 +14,7 @@ const titleOwners = new Map();
 const descriptionOwners = new Map();
 const expectedOrigin = new URL(process.env.SITE_URL || 'https://statuterates.com').origin;
 let manualCloudflareBeaconFile = null;
+const linkGraph = new Map();
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -60,8 +61,42 @@ function decodeHtmlText(value) {
 }
 
 const htmlFiles = walk(DIST).filter((file) => file.endsWith('.html'));
+function routeForFile(file) {
+  const local = relative(DIST, file).replaceAll('\\', '/');
+  if (local === 'index.html') return '/';
+  if (local.endsWith('/index.html')) return `/${local.slice(0, -'index.html'.length)}`;
+  return `/${local.replace(/\.html$/, '/')}`;
+}
+const routeToFile = new Map(htmlFiles.map((file) => [routeForFile(file), file]));
+
+function linkedHtmlRoute(target) {
+  let pathname;
+  try {
+    pathname = new URL(target, expectedOrigin).pathname;
+  } catch {
+    return null;
+  }
+  if (routeToFile.has(pathname)) return pathname;
+  const withSlash = pathname.endsWith('/') ? pathname : `${pathname}/`;
+  return routeToFile.has(withSlash) ? withSlash : null;
+}
+
+function visibleMainWordCount(html) {
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || '';
+  const text = decodeHtmlText(main
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(?:nbsp|#160);/gi, ' ')
+    .replace(/\s+/g, ' '));
+  return text.split(/\s+/).filter((word) => /[A-Za-z]/.test(word)).length;
+}
+
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
+  const route = routeForFile(file);
+  const outgoing = new Set();
+  linkGraph.set(route, outgoing);
 
   // Production Cloudflare Web Analytics uses edge-managed automatic injection. Shipping a second
   // beacon in the static HTML would double-count visits and bypass the zone's EU exclusion.
@@ -112,10 +147,25 @@ for (const file of htmlFiles) {
     if (!/\balt="[^"]*"/.test(image[0])) errors.push(`${file}: image is missing an alt attribute`);
   }
 
-  for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
-    const target = match[1];
+  for (const match of html.matchAll(/(href|src)="([^"]+)"/g)) {
+    const target = match[2];
     if (!target.startsWith('/') || target.startsWith('//')) continue;
     if (!localTargetExists(target)) errors.push(`${file}: broken internal target ${target}`);
+    if (match[1] === 'href') {
+      const linkedRoute = linkedHtmlRoute(target);
+      if (linkedRoute) outgoing.add(linkedRoute);
+    }
+  }
+
+  // These conservative floors are regression alarms, not a claim that word count causes rankings.
+  // They prevent a template/data failure from publishing an indexable rate or state page containing
+  // little more than chrome, a number, and a source link.
+  const words = visibleMainWordCount(html);
+  if (/^\/rates\/[^/]+\/$/.test(route) && words < 200) {
+    errors.push(`${file}: rate page has only ${words} visible words (minimum safety floor 200)`);
+  }
+  if (/^\/states\/[^/]+\/$/.test(route) && route !== '/states/highest-lowest/' && words < 250) {
+    errors.push(`${file}: state hub has only ${words} visible words (minimum safety floor 250)`);
   }
 
   // Astro 7 deliberately removes some newline whitespace around inline elements. Requiring an
@@ -133,6 +183,25 @@ for (const file of htmlFiles) {
 
 const sitemapPath = join(DIST, 'sitemap.xml');
 const sitemap = readFileSync(sitemapPath, 'utf8');
+const sitemapRoutes = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)]
+  .map((match) => new URL(match[1]).pathname);
+const reachable = new Set(['/']);
+const queue = ['/'];
+while (queue.length) {
+  const route = queue.shift();
+  for (const target of linkGraph.get(route) || []) {
+    if (reachable.has(target)) continue;
+    reachable.add(target);
+    queue.push(target);
+  }
+}
+for (const route of sitemapRoutes) {
+  if (!routeToFile.has(route)) {
+    errors.push(`sitemap.xml: indexable route ${route} has no rendered HTML page`);
+  } else if (!reachable.has(route)) {
+    errors.push(`sitemap.xml: indexable route ${route} is not reachable through HTML links from the homepage`);
+  }
+}
 const withheld = [
   '/calculators/state-judgment-interest/',
   '/calculators/prejudgment-interest/',
@@ -196,6 +265,14 @@ const demandGuards = [
     patterns: [/Utah Post-Judgment Interest Rate \d{4}/, /34 data points/, /1993 through 2026/],
   },
   {
+    pathname: '/rates/alaska-judgment-rate/',
+    patterns: [/Alaska Post-Judgment Interest Rate \d{4}/, /30 data points/, /August 7, 1997/, /weekly pipeline/i],
+  },
+  {
+    pathname: '/rates/alaska-prejudgment-rate/',
+    patterns: [/Alaska Prejudgment Interest Rate \d{4}/, /30 data points/, /August 7, 1997/, /selected by the year judgment is entered/i],
+  },
+  {
     pathname: '/rates/connecticut-judgment-rate/',
     patterns: [/Connecticut Post-Judgment Interest Rate \d{4}: up to 10%/, /does not set one automatic percentage/],
   },
@@ -238,4 +315,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Build verification OK: ${htmlFiles.length} HTML pages, unique search snippets and technical SEO valid, internal targets intact, calculator indexing gates intact.`);
+console.log(`Build verification OK: ${htmlFiles.length} HTML pages, unique search snippets and technical SEO valid, every sitemap page homepage-reachable, content-depth floors met, internal targets intact, calculator indexing gates intact.`);

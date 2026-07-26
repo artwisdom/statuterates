@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T17:35:44.836Z",
+  "generated_at": "2026-07-26T18:31:37.687Z",
   "slug": "nebraska-prejudgment-rate",
   "name": "Nebraska Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -38,10 +38,10 @@
       "effective_date": "2026-07-16",
       "source_id": "ne-prejud",
       "source_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
-      "retrieved_at": "2026-07-19T00:00:00Z",
+      "retrieved_at": "2026-07-26T01:52:04.311Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Nebraska uses distinct prejudgment paths. Section 45-103.02(2) uses the 12% §45-104 rate on the unpaid balance of qualifying liquidated claims from the cause-of-action date. Section 45-103.02(1) uses the variable §45-103 judgment rate—currently 5.970%—for an unliquidated claim only when the plaintiff satisfies every written-offer, certified-mail, filing, timing, nonacceptance, and judgment-exceeds-offer condition. Section 45-103.04 excludes Chapter 42 actions and specified government-related claims. Verify entitlement and applicability; not legal advice."
+      "method": "composite_ne_45_104_and_45_103_02",
+      "notes": "Nebraska uses distinct prejudgment paths. Qualifying liquidated claims use the 12% §45-104 rate under §45-103.02(2). Qualifying unliquidated claims use the current §45-103 judgment rate (5.970% effective 2026-07-16) only after every settlement-offer condition in §45-103.02(1) is met. Section 45-103.04 contains exclusions. Verify entitlement and applicability; not legal advice."
     }
   },
   "history": {
@@ -54,10 +54,10 @@
         "effective_date": "2026-07-16",
         "source_id": "ne-prejud",
         "source_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
-        "retrieved_at": "2026-07-19T00:00:00Z",
+        "retrieved_at": "2026-07-26T01:52:04.311Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Nebraska uses distinct prejudgment paths. Section 45-103.02(2) uses the 12% §45-104 rate on the unpaid balance of qualifying liquidated claims from the cause-of-action date. Section 45-103.02(1) uses the variable §45-103 judgment rate—currently 5.970%—for an unliquidated claim only when the plaintiff satisfies every written-offer, certified-mail, filing, timing, nonacceptance, and judgment-exceeds-offer condition. Section 45-103.04 excludes Chapter 42 actions and specified government-related claims. Verify entitlement and applicability; not legal advice."
+        "method": "composite_ne_45_104_and_45_103_02",
+        "notes": "Nebraska uses distinct prejudgment paths. Qualifying liquidated claims use the 12% §45-104 rate under §45-103.02(2). Qualifying unliquidated claims use the current §45-103 judgment rate (5.970% effective 2026-07-16) only after every settlement-offer condition in §45-103.02(1) is met. Section 45-103.04 contains exclusions. Verify entitlement and applicability; not legal advice."
       }
     ]
   }

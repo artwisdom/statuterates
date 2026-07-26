@@ -52,6 +52,18 @@ test('fresh SQLite is hydrated idempotently from durable exports', () => {
       }],
     },
   });
+  writeJson(join(entityDir, 'alaska-prejudgment-rate.json'), {
+    slug: 'alaska-prejudgment-rate', name: 'Alaska Prejudgment Interest Rate', entity_type: 'rate_series',
+    jurisdiction: 'US', region: 'US States — Prejudgment', locale: null, metadata: { state: 'AK' },
+    history: {
+      annual_rate: [{
+        metric: 'annual_rate', value: 6.75, value_text: '6.75%', unit: 'percent_per_annum',
+        effective_date: '2026-01-02', source_id: 'state-source',
+        source_url: 'https://example.test/statute', retrieved_at: '2026-07-18T00:00:00Z',
+        confidence: 'medium', method: 'statute-variable', notes: 'Superseded source-review-date row.',
+      }],
+    },
+  });
   writeJson(join(entityDir, 'connecticut-judgment-rate.json'), {
     slug: 'connecticut-judgment-rate', name: 'Connecticut Judgment Interest Rate', entity_type: 'rate_series',
     jurisdiction: 'US', region: 'US States', locale: null, metadata: { state: 'CT' },
@@ -113,6 +125,13 @@ test('fresh SQLite is hydrated idempotently from durable exports', () => {
     source_url: 'https://example.test/statute', retrieved_at: '2026-07-09T00:00:00Z',
     confidence: 'high', method: 'statute-variable', notes: 'Legacy local row.',
   });
+  const alaskaEntityId = db.prepare(`SELECT id FROM entities WHERE slug='alaska-prejudgment-rate'`).get().id;
+  upsertObservation(db, {
+    entity_id: alaskaEntityId, metric: 'annual_rate', value_numeric: 6.75, value_text: '6.75%',
+    unit: 'percent_per_annum', effective_date: '2026-01-02', source_id: 'state-source',
+    source_url: 'https://example.test/statute', retrieved_at: '2026-07-18T00:00:00Z',
+    confidence: 'medium', method: 'statute-variable', notes: 'Legacy local source-review-date row.',
+  });
   const iowaEntityId = db.prepare(`SELECT id FROM entities WHERE slug='iowa-judgment-rate'`).get().id;
   upsertObservation(db, {
     entity_id: iowaEntityId, metric: 'annual_rate', value_numeric: 6.03, value_text: '6.03%',
@@ -144,10 +163,11 @@ test('fresh SQLite is hydrated idempotently from durable exports', () => {
     confidence: 'medium', method: 'statute-variable', notes: 'Legacy local review-date row.',
   });
   const second = seedFromExports(db, { exportsDir: root });
-  assert.deepEqual(first, { seeded: true, sources: 1, entities: 9, observations: 2 });
+  assert.deepEqual(first, { seeded: true, sources: 1, entities: 10, observations: 2 });
   assert.deepEqual(second, first);
   assert.equal(db.prepare('SELECT COUNT(*) AS count FROM observations').get().count, 2);
   assert.equal(db.prepare(`SELECT COUNT(*) AS count FROM observations o JOIN entities e ON e.id=o.entity_id WHERE e.slug='texas-prejudgment-rate'`).get().count, 0);
+  assert.equal(db.prepare(`SELECT COUNT(*) AS count FROM observations o JOIN entities e ON e.id=o.entity_id WHERE e.slug='alaska-prejudgment-rate'`).get().count, 0);
   assert.equal(db.prepare(`SELECT COUNT(*) AS count FROM observations o JOIN entities e ON e.id=o.entity_id WHERE e.slug='connecticut-judgment-rate'`).get().count, 0);
   assert.equal(db.prepare(`SELECT COUNT(*) AS count FROM observations o JOIN entities e ON e.id=o.entity_id WHERE e.slug='iowa-judgment-rate'`).get().count, 0);
   assert.equal(db.prepare(`SELECT COUNT(*) AS count FROM observations o JOIN entities e ON e.id=o.entity_id WHERE e.slug='kentucky-judgment-rate'`).get().count, 0);

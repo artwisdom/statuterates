@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T17:35:44.836Z",
+  "generated_at": "2026-07-26T18:31:37.687Z",
   "slug": "nebraska-judgment-rate",
   "name": "Nebraska Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -44,11 +44,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-16",
       "source_id": "ne-jud",
-      "source_url": "https://nebraskajudicial.gov/sites/default/files/judgment-interest-rate.pdf",
-      "retrieved_at": "2026-07-19T00:00:00Z",
+      "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
+      "retrieved_at": "2026-07-26T01:52:04.311Z",
       "confidence": "high",
-      "method": "statute-variable-official-table",
-      "notes": "The Nebraska Judicial Branch publishes a 5.970% judgment rate effective July 16, 2026. For judgments entered on or after July 20, 2002, Neb. Rev. Stat. §45-103 fixes the rate at the first quarterly 26-week Treasury-bill bond investment yield plus two percentage points; the court's notice becomes effective two weeks after publication. Section 45-103.01 runs interest from entry until satisfaction. Another law or an agreed contract rate can control instead. The statute does not state the day-count or calculator-grade compounding mechanics; verify applicability. Not legal advice."
+      "method": "statute-variable-official-page",
+      "notes": "The Nebraska Judicial Branch publishes 5.970% effective 2026-07-16 under Neb. Rev. Stat. §45-103. For judgments entered on or after July 20, 2002, the rate is the first quarterly 26-week Treasury-bill bond investment yield plus two percentage points and is fixed at judgment. Other-law and agreed contract-rate exceptions apply. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -60,11 +60,11 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-16",
         "source_id": "ne-jud",
-        "source_url": "https://nebraskajudicial.gov/sites/default/files/judgment-interest-rate.pdf",
-        "retrieved_at": "2026-07-19T00:00:00Z",
+        "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
+        "retrieved_at": "2026-07-26T01:52:04.311Z",
         "confidence": "high",
-        "method": "statute-variable-official-table",
-        "notes": "The Nebraska Judicial Branch publishes a 5.970% judgment rate effective July 16, 2026. For judgments entered on or after July 20, 2002, Neb. Rev. Stat. §45-103 fixes the rate at the first quarterly 26-week Treasury-bill bond investment yield plus two percentage points; the court's notice becomes effective two weeks after publication. Section 45-103.01 runs interest from entry until satisfaction. Another law or an agreed contract rate can control instead. The statute does not state the day-count or calculator-grade compounding mechanics; verify applicability. Not legal advice."
+        "method": "statute-variable-official-page",
+        "notes": "The Nebraska Judicial Branch publishes 5.970% effective 2026-07-16 under Neb. Rev. Stat. §45-103. For judgments entered on or after July 20, 2002, the rate is the first quarterly 26-week Treasury-bill bond investment yield plus two percentage points and is fixed at judgment. Other-law and agreed contract-rate exceptions apply. Verify applicability; not legal advice."
       },
       {
         "metric": "annual_rate",

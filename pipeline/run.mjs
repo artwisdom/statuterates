@@ -14,6 +14,7 @@ import { buildWeeklyAverages, buildCmtRecords, buildPostJudgmentRecords } from '
 import { buildPublishedSeries, buildUkLatePayment, buildEuReference } from './lib/rates-intl.mjs';
 import { STATE_SOURCES, buildStateFixed, buildIowa } from './fetchers/us-states.mjs';
 import { fetchTexasCurrentRate } from './fetchers/texas-occc.mjs';
+import { fetchAlaskaCourtRates } from './fetchers/alaska-judicial.mjs';
 import { fetchNebraskaCurrentRate } from './fetchers/nebraska-judicial.mjs';
 import { fetchIowaCourtTable } from './fetchers/iowa-judicial.mjs';
 import { fetchGeorgiaPrimeChanges } from './fetchers/georgia-prime.mjs';
@@ -51,9 +52,11 @@ function loadBundleIntoDb(db, bundle) {
   return n;
 }
 
-function buildStateBundles({ daily = [], today, retrievedAt, texasCurrent = null, nebraskaCurrent = null, floridaCfo = null, georgiaPrime = null, iowaCourt = null, utahCourt = null, sourceOverrides = [] } = {}) {
+function buildStateBundles({ daily = [], today, retrievedAt, texasCurrent = null, alaskaCourt = null, nebraskaCurrent = null, floridaCfo = null, georgiaPrime = null, iowaCourt = null, utahCourt = null, sourceOverrides = [] } = {}) {
   const stateFixed = buildStateFixed({
     texasCurrent,
+    alaskaCourtHistory: alaskaCourt?.historyPoints || [],
+    alaskaRetrievedAt: alaskaCourt?.retrieved_at || null,
     nebraskaCurrent,
     floridaCfoPoints: floridaCfo?.points || [],
     floridaRetrievedAt: floridaCfo?.retrieved_at || null,
@@ -110,12 +113,13 @@ async function runAll() {
     const today = new Date().toISOString().slice(0, 10);
 
     // 1) FETCH — US (IRS + Fed H.15), UK (BoE), EU (ECB)
-    const [irs, h15, boe, ecb, texas, nebraska, floridaCfo, georgiaPrime, iowaCourt, utahCourt] = await Promise.all([
+    const [irs, h15, boe, ecb, texas, alaskaCourt, nebraska, floridaCfo, georgiaPrime, iowaCourt, utahCourt] = await Promise.all([
       fetchIrs({ log: console.log }),
       fetchH15({ log: console.log }),
       fetchBoe({ log: console.log }),
       fetchEcb({ log: console.log }),
       fetchTexasCurrentRate({ log: console.log, today }),
+      fetchAlaskaCourtRates({ log: console.log, today }),
       fetchNebraskaCurrentRate({ log: console.log, today }),
       fetchFloridaCfoRates({ log: console.log, today }),
       fetchGeorgiaPrimeChanges({ log: console.log, today }),
@@ -143,6 +147,7 @@ async function runAll() {
     const ecbBundle = { source: ecb.source, entities: [ecbPub.entity, euRef.entity], observations: [...ecbPub.observations, ...euRef.observations] };
 
     // US states: curated official references. Texas and Nebraska receive live official observations;
+    // Alaska verifies and can extend its official annual court-PDF schedule;
     // Florida checks its official 1981-present CFO table and appends a verified new quarter;
     // Georgia validates and extends its exact Federal Reserve prime-rate change-point history.
     // Iowa uses the Judicial Branch's monthly table (never the federal weekly average) and attempts
@@ -152,6 +157,8 @@ async function runAll() {
     // Each state's entities/observations load under ITS OWN source bundle so the source row exists
     // before any observation references it (FK integrity).
     const txPrejudSource = STATE_SOURCES.find((source) => source.id === 'tx-prejud');
+    const akPostSource = STATE_SOURCES.find((source) => source.id === 'ak-jud');
+    const akPrejudSource = STATE_SOURCES.find((source) => source.id === 'ak-prejud');
     const nePrejudSource = STATE_SOURCES.find((source) => source.id === 'ne-prejud');
     const gaPostSource = STATE_SOURCES.find((source) => source.id === 'ga-code');
     const gaPrejudSource = STATE_SOURCES.find((source) => source.id === 'ga-prejud');
@@ -161,6 +168,7 @@ async function runAll() {
       today,
       retrievedAt: h15.retrieved_at,
       texasCurrent: texas.observation,
+      alaskaCourt,
       nebraskaCurrent: nebraska.observation,
       floridaCfo,
       georgiaPrime,
@@ -169,6 +177,18 @@ async function runAll() {
       sourceOverrides: [
         texas.source,
         nebraska.source,
+        ...(alaskaCourt ? [
+          {
+            ...akPostSource,
+            robots_status: `official ADM-505 annual table fetched and verified ${alaskaCourt.retrieved_at}`,
+            retrieved_at: alaskaCourt.retrieved_at,
+          },
+          {
+            ...akPrejudSource,
+            robots_status: `official ADM-505 annual table fetched and verified ${alaskaCourt.retrieved_at}`,
+            retrieved_at: alaskaCourt.retrieved_at,
+          },
+        ] : []),
         ...(floridaCfo?.source ? [floridaCfo.source] : []),
         ...(iowaCourt?.source ? [iowaCourt.source] : []),
         ...(utahCourt?.source ? [utahCourt.source] : []),

@@ -2,9 +2,9 @@
 // Run: node --test  (from pipeline/)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseRobots, pathAllowed, USER_AGENT } from './http.mjs';
+import { parseRobots, pathAllowed, USER_AGENT, USER_AGENT_TOKEN } from './http.mjs';
 
-const UA = 'DataMoatEngineBot';
+const UA = USER_AGENT_TOKEN;
 
 test('honest UA carries the public product name and a contact field', () => {
   assert.ok(USER_AGENT.includes('StatuteRatesBot'));
@@ -45,7 +45,7 @@ test('most specific rule wins: Allow overrides a broader Disallow', () => {
 
 test('UA-specific group takes precedence over *', () => {
   const g = parseRobots(
-    `User-agent: *\nDisallow: /\n\nUser-agent: DataMoatEngineBot\nDisallow: /admin/`
+    `User-agent: *\nDisallow: /\n\nUser-agent: StatuteRatesBot\nDisallow: /admin/`
   );
   // Our UA group allows everything except /admin/, ignoring the '*' blanket block.
   assert.equal(pathAllowed(g, UA, '/data/x'), true);

@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
 import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment, isCalculatorReady, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
-import { copyFor } from '../../lib/content.mjs';
+import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
   return getAllEntities().map((e) => ({ params: { slug: e.slug } }));
@@ -152,6 +152,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
   ? copy.body.replace(/currently \d+(?:\.\d+)?%/i, `currently ${latest.value_text}`)
   : copy.body;
+const pageModified = [
+  String(latest?.retrieved_at || latest?.effective_date || '').slice(0, 10),
+  contentModifiedFor(slug),
+].filter(Boolean).sort().at(-1);
 
 // Provenance line for the "Cite this page" block.
 const citeStatute = entity.metadata?.statute;
@@ -195,7 +199,7 @@ const jsonLd = [
     url: canonical,
     isAccessibleForFree: true,
     creator: { '@type': 'Organization', name: meta.title },
-    dateModified: latest?.retrieved_at || latest?.effective_date,
+    dateModified: pageModified,
     variableMeasured: {
       '@type': 'PropertyValue',
       name: entity.name,

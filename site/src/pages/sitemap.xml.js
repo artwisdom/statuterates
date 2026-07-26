@@ -4,6 +4,7 @@
 // the date is a genuine change signal for crawlers rather than one shared build stamp.
 import { getAllEntities, getMeta, stateHubs, latestOf, isCalculatorReady, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
 import { GUIDES } from '../lib/guides.mjs';
+import { contentModifiedFor } from '../lib/content.mjs';
 
 export function GET({ site }) {
   const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
@@ -26,7 +27,10 @@ export function GET({ site }) {
     ...(prejudgmentCalculatorReady ? ['/calculators/prejudgment-interest/'] : []),
   ];
 
-  const dateFor = new Map(entities.map((e) => [e.slug, (latestOf(e)?.effective_date || '').slice(0, 10)]));
+  const dateFor = new Map(entities.map((e) => [e.slug, [
+    (latestOf(e)?.effective_date || '').slice(0, 10),
+    contentModifiedFor(e.slug),
+  ].filter(Boolean).sort().at(-1)]));
 
   const rows = [
     // Static + index pages: we don't track an honest per-page modification date, so omit <lastmod>

@@ -29,6 +29,14 @@ import {
   TEXAS_OCCC_CURRENT_URL,
 } from './texas-occc-history.mjs';
 import {
+  ALASKA_ADM_505_URL,
+  ALASKA_HISTORY_VERIFIED_AT,
+  ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  ALASKA_OFFICIAL_HISTORY_START,
+  ALASKA_STATUTE_URL,
+  buildAlaskaOfficialHistory,
+} from './alaska-interest-history.mjs';
+import {
   buildNebraskaOfficialHistory,
   NEBRASKA_HISTORY_VERIFIED_AT,
   NEBRASKA_JUDICIAL_CURRENT_URL,
@@ -292,6 +300,44 @@ const MAINE_PREJUDGMENT_CALCULATION = {
   renderer_supported: false,
   rule_verified_at: MAINE_HISTORY_VERIFIED_AT,
 };
+const ALASKA_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official 1997-present annual table, judgment-year selection, rate lock, accrual start, contract branch, and listed special-statute branches are modeled, but day count, compounding, partial-payment allocation, and every special statutory path are not deterministic.',
+  rate_behavior: 'fixed_at_entry',
+  rate_schedule: 'annual_judgment_year_table',
+  compounding: 'not_verified_for_calculator',
+  day_count: 'not_specified_in_adm_505_or_as_09_30_070',
+  history_start: ALASKA_OFFICIAL_HISTORY_START,
+  curated_history_complete_through: ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  current_period_monitored: true,
+  branches_complete: false,
+  accrual_rule_verified: true,
+  renderer_supported: false,
+  rule_verified_at: ALASKA_HISTORY_VERIFIED_AT,
+  branches: {
+    general: 'AS 09.30.070(a): January 2 Twelfth District discount rate plus three percentage points',
+    contract: 'A controlling contract supplies its stated rate',
+    other_statute: 'A separate statute controls when applicable, including listed support, bank, eminent-domain, and estate paths',
+    accrual: 'Post-judgment interest begins when the judge signs the judgment',
+  },
+};
+const ALASKA_PREJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'ADM-505 confirms the annual rate table and general accrual concept, but entitlement, the precise cause-of-action date, the 1980–1997 transition, contract and special-statute branches, day count, compounding, offsets, and payment allocation are not deterministic.',
+  rate_behavior: 'rate_selected_by_judgment_year',
+  rate_schedule: 'same_annual_adm_505_table_as_postjudgment',
+  compounding: 'not_verified_for_calculator',
+  day_count: 'not_specified_in_adm_505_or_as_09_30_070',
+  history_start: ALASKA_OFFICIAL_HISTORY_START,
+  curated_history_complete_through: ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  current_period_monitored: true,
+  branches_complete: false,
+  accrual_rule_verified: false,
+  renderer_supported: false,
+  rule_verified_at: ALASKA_HISTORY_VERIFIED_AT,
+};
 const UTAH_POSTJUDGMENT_CALCULATION = {
   status: 'reference_only',
   source_tier: 'official_primary',
@@ -479,7 +525,8 @@ for (const st of STATES_2) {
 const STATES_3 = [
   { code: "AL", name: "Alabama", slug: "alabama-judgment-rate", value: 7.5, value_text: "7.5%", kind: "fixed", asof: "2026-07-09", statute: "Ala. Code § 8-8-10(a)", srcId: "al-jud", srcName: "Alabama judgment interest (Ala. Code § 8-8-10(a))", publisher: "Alabama — alison.legislature.state.al.us", url: "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
     notes: "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). For a judgment \"based upon a contract action,\" interest runs \"at the same rate of interest as stated in the contract\" (the contract rate governs, not… Verify against the statute; not legal advice." },
-  { code: "AK", name: "Alaska", slug: "alaska-judgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "Alaska Stat. 09.30.070(a)", srcId: "ak-jud", srcName: "Alaska pre- and post-judgment interest rate table (ADM-505)", publisher: "Alaska Court System (official)", url: "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf", confidence: "high",
+  { code: "AK", name: "Alaska", slug: "alaska-judgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "Alaska Stat. 09.30.070(a)", srcId: "ak-jud", srcName: "Alaska pre- and post-judgment interest rate table (ADM-505)", publisher: "Alaska Court System (official)", url: ALASKA_ADM_505_URL, confidence: "high", method: "statute-variable-official-table", calculation: ALASKA_POSTJUDGMENT_CALCULATION,
+    metadata: { official_history_url: ALASKA_ADM_505_URL, official_statute_url: ALASKA_STATUTE_URL },
     notes: "Alaska Court System form ADM-505 publishes 6.75% for judgments entered in 2026 under AS 09.30.070(a): three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A controlling contract or another statute can set a different rate. The selected annual rate stays fixed until the judgment is paid, and post-judgment interest begins when the judge signs the judgment. Verify the correct branch; not legal advice." },
   { code: "AR", name: "Arkansas", slug: "arkansas-judgment-rate", value: 5.75, value_text: "5.75%", kind: "variable", asof: "2026-07-08", statute: "Ark. Code Ann. § 16-65-114(a)", srcId: "ar-jud", srcName: "Arkansas judgment interest (Ark. Code Ann. § 16-65-114(a))", publisher: "Arkansas — federalreserve.gov", url: "https://www.federalreserve.gov/releases/h15/",
     notes: "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. The primary credit rate… Simple interest. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current… Verify the current value at federalreserve.gov; not legal advice." },
@@ -562,8 +609,9 @@ for (const st of STATES_3) {
 const PREJUDG = [
   { code: "AL", name: "Alabama", slug: "alabama-prejudgment-rate", value: 6, value_text: "6%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "Ala. Code § 8-8-1", srcId: "al-prejud", srcName: "Alabama prejudgment interest (Ala. Code § 8-8-1)", publisher: "Alabama — alison.legislature.state.al.us", url: "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-1",
     notes: "Prejudgment interest under Ala. Code § 8-8-1 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Alabama’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
-  { code: "AK", name: "Alaska", slug: "alaska-prejudgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-01-02", statute: "AS 09.30.070", srcId: "ak-prejud", srcName: "Alaska prejudgment interest (AS 09.30.070)", publisher: "Alaska — public.courts.alaska.gov", url: "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-    notes: "Prejudgment interest under AS 09.30.070 — 6.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Alaska’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-02; verify at public.courts.alaska.gov. Not legal advice." },
+  { code: "AK", name: "Alaska", slug: "alaska-prejudgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", method: "statute-variable-official-table", confidence: "high", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "AS 09.30.070", srcId: "ak-prejud", srcName: "Alaska pre- and post-judgment interest rate table (ADM-505)", publisher: "Alaska Court System (official)", url: ALASKA_ADM_505_URL, calculation: ALASKA_PREJUDGMENT_CALCULATION,
+    metadata: { official_history_url: ALASKA_ADM_505_URL, official_statute_url: ALASKA_STATUTE_URL },
+    notes: "Alaska Court System form ADM-505 publishes 6.75% for both general pre- and post-judgment interest when judgment is entered in 2026. Prejudgment interest generally begins when the claimant could first sue, but a controlling contract, another statute, the claim, and the older 1980–1997 transition can change the result. Verify the correct rate and accrual branch; not legal advice." },
   { code: "AZ", name: "Arizona", slug: "arizona-prejudgment-rate", value: 7.75, value_text: "7.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-08", statute: "A.R.S. § 44-1201(A), &", srcId: "az-prejud", srcName: "Arizona prejudgment interest (A.R.S. § 44-1201(A), &)", publisher: "Arizona — azleg.gov", url: "https://www.azleg.gov/ars/44/01201.htm",
     notes: "Prejudgment interest under A.R.S. § 44-1201(A), & — 7.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arizona’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-08; verify at azleg.gov. Not legal advice." },
   { code: "AR", name: "Arkansas", slug: "arkansas-prejudgment-rate", value: 5.75, value_text: "5.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Ark. Code Ann. § 16-65-114(a)(1)", srcId: "ar-prejud", srcName: "Arkansas Act 995 of 2019 (§ 16-65-114)", publisher: "Arkansas General Assembly (official enacted act)", url: "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
@@ -747,6 +795,8 @@ const IA_PREJUDGMENT_ENTITY = {
 
 export function buildStateFixed({
   texasCurrent = null,
+  alaskaCourtHistory = [],
+  alaskaRetrievedAt = null,
   nebraskaCurrent = null,
   floridaCfoPoints = [],
   floridaRetrievedAt = null,
@@ -799,6 +849,29 @@ export function buildStateFixed({
       method: f.method || 'statute-fixed',
       notes: removeTruncatedFragments(f.notes),
     };
+
+    if (f.entity.slug === 'alaska-judgment-rate' || f.entity.slug === 'alaska-prejudgment-rate') {
+      const byDate = new Map(buildAlaskaOfficialHistory().map((point) => [point.effective_date, point]));
+      for (const point of alaskaCourtHistory) byDate.set(point.effective_date, point);
+      const prejudgment = f.entity.slug === 'alaska-prejudgment-rate';
+      return [...byDate.values()]
+        .sort((a, b) => a.effective_date.localeCompare(b.effective_date))
+        .map((point) => ({
+          ...baseObservation,
+          value_numeric: point.value,
+          value_text: point.value_text,
+          effective_date: point.effective_date,
+          source_url: point.source_url,
+          retrieved_at: alaskaRetrievedAt || source.retrieved_at,
+          confidence: 'high',
+          method: 'statute-variable-official-table',
+          notes: point.effective_date === f.effective_date
+            ? baseObservation.notes
+            : prejudgment
+              ? `Alaska Court System form ADM-505 publishes ${point.value_text} as the general pre- and post-judgment rate selected for a judgment entered in ${point.effective_date.slice(0, 4)}. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice.`
+              : `Alaska Court System form ADM-505 publishes ${point.value_text} as the general rate for a judgment entered in ${point.effective_date.slice(0, 4)}. That annual rate remains fixed until the judgment is paid; contracts and other statutes can control. Not legal advice.`,
+        }));
+    }
 
     if (f.entity.slug === 'georgia-judgment-rate') {
       const history = buildGeorgiaPrimeHistory(georgiaPrimeChanges.length ? georgiaPrimeChanges : undefined);

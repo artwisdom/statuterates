@@ -69,6 +69,28 @@ test('Texas exposes official monthly history and a structured but safely withhel
   assert.equal(texas.metadata.calculation.renderer_supported, false);
 });
 
+test('Alaska exposes the shared official annual pre/post schedule and monitors the court PDF', () => {
+  const { entities, observations } = buildStateFixed();
+  const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+  const post = history('alaska-judgment-rate');
+  const pre = history('alaska-prejudgment-rate');
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+
+  assert.equal(post.length, 30);
+  assert.equal(pre.length, 30);
+  assert.equal(post[0].effective_date, '1997-08-07');
+  assert.equal(post[0].value_text, '8%');
+  assert.equal(post.at(-1).effective_date, '2026-01-01');
+  assert.equal(post.at(-1).value_text, '6.75%');
+  assert.deepEqual(
+    pre.map((row) => [row.effective_date, row.value_text]),
+    post.map((row) => [row.effective_date, row.value_text])
+  );
+  assert.equal(entityBySlug.get('alaska-judgment-rate').metadata.calculation.current_period_monitored, true);
+  assert.equal(entityBySlug.get('alaska-prejudgment-rate').metadata.calculation.status, 'reference_only');
+  assert.equal(entityBySlug.get('alaska-judgment-rate').metadata.calculation.renderer_supported, false);
+});
+
 test('Nebraska exposes the official 1987-present history and a safely withheld rule model', () => {
   const { entities, observations } = buildStateFixed();
   const nebraska = entities.find((entity) => entity.slug === 'nebraska-judgment-rate');

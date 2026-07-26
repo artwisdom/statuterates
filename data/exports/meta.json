@@ -7,9 +7,9 @@
   "license": "StatuteRates compilation; underlying source rights vary. Government edicts are not subject to copyright, while statistical publications and third-party pages may have their own terms. See each source record.",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-07-26T17:35:44.836Z",
+  "generated_at": "2026-07-26T18:31:37.687Z",
   "entity_count": 114,
-  "observation_count": 2303,
+  "observation_count": 2361,
   "metrics": [
     "annual_rate"
   ],
@@ -20,17 +20,17 @@
       "publisher": "Alaska Court System (official)",
       "home_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-26",
-      "retrieved_at": "2026-07-26T00:00:00Z"
+      "robots_status": "official ADM-505 annual table fetched and verified 2026-07-26T18:31:37.548Z",
+      "retrieved_at": "2026-07-26T18:31:37.548Z"
     },
     {
       "id": "ak-prejud",
-      "name": "Alaska prejudgment interest (AS 09.30.070)",
-      "publisher": "Alaska — public.courts.alaska.gov",
+      "name": "Alaska pre- and post-judgment interest rate table (ADM-505)",
+      "publisher": "Alaska Court System (official)",
       "home_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "official ADM-505 annual table fetched and verified 2026-07-26T18:31:37.548Z",
+      "retrieved_at": "2026-07-26T18:31:37.548Z"
     },
     {
       "id": "al-jud",
@@ -93,7 +93,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T17:31:46.918Z"
+      "retrieved_at": "2026-07-26T18:31:34.074Z"
     },
     {
       "id": "ca-leginfo",
@@ -192,7 +192,7 @@
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T17:31:46.919Z"
+      "retrieved_at": "2026-07-26T18:31:34.076Z"
     },
     {
       "id": "fed-h15",
@@ -201,7 +201,7 @@
       "home_url": "https://www.federalreserve.gov/releases/h15/",
       "license": "U.S. federal government work — public domain. Fed Data Download Program is a public bulk feed.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T17:31:46.916Z"
+      "retrieved_at": "2026-07-26T18:31:34.071Z"
     },
     {
       "id": "fl-cfo",
@@ -209,8 +209,8 @@
       "publisher": "Florida Department of Financial Services, Chief Financial Officer (official)",
       "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-26",
-      "retrieved_at": "2026-07-26T00:00:00Z"
+      "robots_status": "official HTML table fetched 2026-07-26T18:31:36.466Z",
+      "retrieved_at": "2026-07-26T18:31:36.466Z"
     },
     {
       "id": "fl-prejud",
@@ -227,7 +227,7 @@
       "publisher": "Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED",
       "home_url": "https://www.lexisnexis.com/hottopics/gacode",
       "license": "Georgia statutory text is a government edict; the FRED PRIME series requests citation to its Federal Reserve source.",
-      "robots_status": "curated variable value; secondary source checked 2026-07-19",
+      "robots_status": "Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched 2026-07-26T01:52:04.352Z",
       "retrieved_at": "2026-07-26T01:52:04.352Z"
     },
     {
@@ -236,7 +236,7 @@
       "publisher": "Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED",
       "home_url": "https://www.lexisnexis.com/hottopics/gacode",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated fixed prejudgment value; secondary source checked 2026-07-19",
+      "robots_status": "Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched 2026-07-26T01:52:04.352Z",
       "retrieved_at": "2026-07-26T01:52:04.352Z"
     },
     {
@@ -259,12 +259,12 @@
     },
     {
       "id": "ia-jud",
-      "name": "Iowa §668.13 post-judgment interest table",
+      "name": "Iowa post-judgment interest table",
       "publisher": "Iowa Judicial Branch (official)",
       "home_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official HTML/PDF history verified through 2026-07-09; live page rechecked 2026-07-19",
-      "retrieved_at": "2026-07-26T01:52:04.415Z"
+      "robots_status": "official table fetched 2026-07-26T18:31:34.779Z",
+      "retrieved_at": "2026-07-26T18:31:34.779Z"
     },
     {
       "id": "id-jud",
@@ -327,7 +327,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-07-26T17:31:46.915Z"
+      "retrieved_at": "2026-07-26T18:31:34.069Z"
     },
     {
       "id": "ks-jud",
@@ -425,8 +425,8 @@
       "publisher": "Federal Reserve Board and Maine Legislature (official inputs)",
       "home_url": "https://www.federalreserve.gov/datadownload/Download.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&filetype=csv&label=include&layout=seriescolumn",
       "license": "U.S. government publication and government edict.",
-      "robots_status": "future-year fallback only after the official Maine Judicial Branch chart ends; formula verified 2026-07-19",
-      "retrieved_at": "2026-07-26T17:31:46.916Z"
+      "robots_status": "future-year fallback only after the official Maine Judicial Branch chart ends; official H.15 input fetched 2026-07-26T18:31:34.071Z",
+      "retrieved_at": "2026-07-26T18:31:34.071Z"
     },
     {
       "id": "me-jud",
@@ -565,11 +565,11 @@
     },
     {
       "id": "ne-jud",
-      "name": "Nebraska judgment interest rate and official history (Neb. Rev. Stat. §45-103)",
+      "name": "Nebraska judgment interest rate (Neb. Rev. Stat. §45-103)",
       "publisher": "Nebraska Judicial Branch (official)",
       "home_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
-      "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-19",
+      "license": "Nebraska government publication - not subject to copyright.",
+      "robots_status": "allowed; current rate fetched through the shared robots-respecting cache",
       "retrieved_at": "2026-07-26T01:52:04.311Z"
     },
     {
@@ -578,7 +578,7 @@
       "publisher": "Nebraska Legislature (official)",
       "home_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated fixed prejudgment value; official source checked 2026-07-19",
+      "robots_status": "official Chapter 45 text verified 2026-07-19; current linked Judicial Branch rate fetched 2026-07-26T01:52:04.311Z",
       "retrieved_at": "2026-07-26T01:52:04.311Z"
     },
     {
@@ -817,11 +817,11 @@
     },
     {
       "id": "tx-occc",
-      "name": "Texas post-judgment interest rate (Fin. Code §304.003)",
+      "name": "Texas postjudgment interest rate (Finance Code §304.003)",
       "publisher": "Texas Office of Consumer Credit Commissioner (official)",
       "home_url": "https://occc.texas.gov/publications/interest-rates/",
-      "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-19",
+      "license": "Texas government publication — not subject to copyright.",
+      "robots_status": "allowed; current rate fetched through the shared robots-respecting cache",
       "retrieved_at": "2026-07-26T01:52:04.277Z"
     },
     {
@@ -830,7 +830,7 @@
       "publisher": "Texas Legislature and Office of Consumer Credit Commissioner (official)",
       "home_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated same-as-postjudgment prejudgment value; official source checked 2026-07-19",
+      "robots_status": "official Chapter 304 text verified 2026-07-19; current linked OCCC rate fetched 2026-07-26T01:52:04.277Z",
       "retrieved_at": "2026-07-26T01:52:04.277Z"
     },
     {
@@ -839,8 +839,8 @@
       "publisher": "Utah State Courts (official)",
       "home_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-26",
-      "retrieved_at": "2026-07-26T00:00:00Z"
+      "robots_status": "official current/history tables fetched 2026-07-26T18:31:34.769Z",
+      "retrieved_at": "2026-07-26T18:31:34.769Z"
     },
     {
       "id": "ut-prejud",

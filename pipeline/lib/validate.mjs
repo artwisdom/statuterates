@@ -12,6 +12,10 @@
 
 import { validateStateCalculationMetadata } from './state-rules.mjs';
 import { validateTexasMonthlyHistory } from '../fetchers/texas-occc-history.mjs';
+import {
+  ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  validateAlaskaOfficialHistory,
+} from '../fetchers/alaska-interest-history.mjs';
 import { validateNebraskaHistory } from '../fetchers/nebraska-judgment-history.mjs';
 import { validateIowaOfficialHistory } from '../fetchers/iowa-judgment-history.mjs';
 import { validateKentuckyPostJudgmentHistory } from '../fetchers/kentucky-interest-history.mjs';
@@ -93,6 +97,55 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     if (!['high', 'medium', 'low'].includes(r.confidence)) {
       warnings.push(`${tag}: unexpected confidence "${r.confidence}"`);
     }
+  }
+
+  // Alaska ADM-505 publishes one annual schedule for both pre- and post-judgment interest. Preserve
+  // every 1997-present anchor, reject the inherited Jan. 2 pseudo-effective date, and require a live
+  // annual extension to appear identically in both series.
+  const alaskaPostRows = rows
+    .filter((row) => row.entity_slug === 'alaska-judgment-rate' && row.source_id === 'ak-jud')
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+  const alaskaPreRows = rows
+    .filter((row) => row.entity_slug === 'alaska-prejudgment-rate' && row.source_id === 'ak-prejud')
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+  for (const [slug, alaskaRows] of [
+    ['alaska-judgment-rate', alaskaPostRows],
+    ['alaska-prejudgment-rate', alaskaPreRows],
+  ]) {
+    if (stateEntities.some((entity) => entity.slug === slug)) {
+      const baseline = alaskaRows
+        .filter((row) => row.effective_date <= ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH)
+        .map((row) => ({
+          effective_date: row.effective_date,
+          value: row.value_numeric,
+          value_text: row.value_text,
+        }));
+      for (const problem of validateAlaskaOfficialHistory(baseline)) {
+        errors.push(`${slug}: ${problem}`);
+      }
+      let expectedYear = Number(ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH.slice(0, 4)) + 1;
+      for (const row of alaskaRows.filter(
+        (candidate) => candidate.effective_date > ALASKA_OFFICIAL_HISTORY_COMPLETE_THROUGH
+      )) {
+        const expectedDate = `${expectedYear}-01-01`;
+        if (row.effective_date !== expectedDate) {
+          errors.push(`${slug}: extension must continue annually with ${expectedDate}, found ${row.effective_date}`);
+        }
+        expectedYear++;
+      }
+    }
+  }
+  const alaskaPreByDate = new Map(alaskaPreRows.map((row) => [row.effective_date, row]));
+  for (const post of alaskaPostRows) {
+    const pre = alaskaPreByDate.get(post.effective_date);
+    if (!pre
+      || Math.abs(post.value_numeric - pre.value_numeric) > 1e-9
+      || post.value_text !== pre.value_text) {
+      errors.push(`alaska-judgment-rate@${post.effective_date}: ADM-505 pre/post schedules must match`);
+    }
+  }
+  if (alaskaPostRows.length !== alaskaPreRows.length) {
+    errors.push(`Alaska ADM-505 schedule count differs: ${alaskaPostRows.length} post vs ${alaskaPreRows.length} pre`);
   }
 
   // Texas publishes a legally meaningful rate for every judgment month. The curated official table
@@ -445,7 +498,10 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     const WEEKLY = new Set(['treasury-1-year-cmt', 'us-federal-post-judgment']);
     const MONTHLY = new Set(['texas-judgment-rate', 'texas-prejudgment-rate', 'iowa-judgment-rate', 'iowa-prejudgment-rate']);
     const QUARTERLY = new Set(['nebraska-judgment-rate', 'nebraska-prejudgment-rate', 'florida-judgment-rate']);
-    const ANNUAL = new Set(['maine-judgment-rate', 'maine-prejudgment-rate', 'utah-judgment-rate']);
+    const ANNUAL = new Set([
+      'alaska-judgment-rate', 'alaska-prejudgment-rate',
+      'maine-judgment-rate', 'maine-prejudgment-rate', 'utah-judgment-rate',
+    ]);
     const POLICY_CHANGEPOINT = new Set([
       'boe-bank-rate', 'ecb-main-refinancing-rate',
       'georgia-judgment-rate', 'georgia-prejudgment-rate',

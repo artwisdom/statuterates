@@ -12,8 +12,8 @@ them newly verified merely by rebuilding.
 4. Review `data/exports/meta.json` source `retrieved_at` values—not only `generated_at`. The latter is
    compilation time and does not prove that every source was freshly checked.
 5. Once per quarter, review variable state rates and the IRS quarter against their cited sources.
-   Texas, Florida, and Utah are monitored automatically each week, but failures still require the
-   playbooks below.
+   Texas, Alaska, Florida, and Utah are monitored automatically each week, but failures still
+   require the playbooks below.
 
 ## IRS fetch failure
 
@@ -54,6 +54,23 @@ published month that does not match the current month.
 4. Confirm `texas-judgment-rate` remains contiguous from September 1983 through the new month and
    that Texas prejudgment's monthly value exactly matches it under §304.103.
 5. Keep both calculation statuses `reference_only` unless the separate readiness contract passes.
+
+## Alaska Court System PDF fetch failure
+
+Symptoms include `ADM-505 response is not a PDF`, missing table boundaries, a changed verified
+anchor, an annual gap, or an oversized-input rejection.
+
+1. Open the official ADM-505 URL recorded in `pipeline/fetchers/alaska-interest-history.mjs`.
+2. If the court has not published a new calendar year, retain the committed 1997-present schedule.
+   Never derive or estimate a replacement from an unrelated Federal Reserve series.
+3. If the PDF layout changed, update `extractAlaskaPdfText`/`parseAlaskaAdm505Text` and a
+   representative test without removing the byte limit, page-count limit, disabled JavaScript
+   evaluation, robots, cache, throttle, or historical-anchor checks.
+4. A new row must continue on January 1 of the next year and match identically in both Alaska
+   pre- and post-judgment series. The 1997 transition begins August 7; do not flatten the older
+   complaint-date rule into this judgment-year table.
+5. The monitor may log a fail-safe fallback and continue with the last verified schedule. A changed
+   historical anchor must fail validation rather than overwrite committed legal-rate history.
 
 ## Florida CFO or Utah Courts fetch failure
 
@@ -96,16 +113,18 @@ cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-bui
 cd .. && node machine/check-api-conformance.mjs
 ```
 
-The build verifier checks internal targets, Astro whitespace regressions, state-calculator output,
-`noindex` gates, and sitemap exclusions.
+The build verifier checks internal targets, homepage reachability for every sitemap URL, minimum
+content-depth alarms, Astro whitespace regressions, state-calculator output, `noindex` gates, and
+sitemap exclusions.
 
 ## State-law source review
 
 State records live in `pipeline/fetchers/us-states.mjs`. All 102 state entities are currently
 `reference_only`; most contain one observation. Texas (515 monthly rows), Nebraska (275 change
-points), Iowa (302 monthly selections), Florida (78 official periods), Utah (34 annual rows), Maine,
-Kentucky, and Georgia have deeper verified histories. A source review must not invent historical
-dates or change `retrieved_at` to the build time.
+points), Iowa (302 monthly selections), Alaska (30 annual rows in each of its pre/post series),
+Florida (78 official periods), Utah (34 annual rows), Maine, Kentucky, and Georgia have deeper
+verified histories. A source review must not invent historical dates or change `retrieved_at` to the
+build time.
 
 For each state reviewed:
 

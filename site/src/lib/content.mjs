@@ -283,8 +283,8 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     postDetails: {
       scope: "The 6.75% headline is the general AS 09.30.070(a) path for a judgment entered in 2026. Use a contract rate when the contract controls, or the rate in another applicable statute; Alaska Courts lists child support, bank liquidation, eminent domain, and estate claims as examples of separate statutes.",
       accrual: "Alaska Courts states that post-judgment interest begins on the date the judge signs the judgment. The annual rate selected for that judgment does not change while an unpaid balance or payment plan continues into later years.",
-      compounding: "The official rate table and rate-lock rule are recorded, but every day-count, compounding, partial-payment, contract, and special-statute branch is not yet modeled to calculator-grade certainty, so the Alaska calculator remains disabled.",
-      history: "Official Alaska Court form ADM-505 publishes prior annual rates from August 7, 1997 through 2026 and describes an older 10.5% transition rule. The current dataset does not yet present that PDF table as structured history; it will not infer missing years from a later rate.",
+      compounding: "The official rate table establishes the annual percentage and rate lock, but it does not state every day-count, compounding, partial-payment, or allocation rule needed for a dependable payoff calculator. StatuteRates therefore keeps the Alaska calculator disabled.",
+      history: "The dataset preserves all 30 annual selections in Alaska Court System form ADM-505 from the August 7, 1997 statutory transition through 2026. The weekly pipeline reads the official PDF, verifies every historical anchor, and can append a later year only when the court publishes it.",
     },
   },
   "arkansas-judgment-rate": {
@@ -503,18 +503,18 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     compound: "Simple.",
   },
   "alaska-prejudgment-rate": {
-    tagline: "Alaska prejudgment interest — a formula rate, reset twice a year.",
+    tagline: "Alaska’s annual prejudgment rate under AS 09.30.070 and ADM-505.",
     q: "What is the Alaska prejudgment interest rate?",
-    body: "Alaska prejudgment interest is currently 6.75% per year — a statutory formula rate under AS 09.30.070 that resets twice a year. Prejudgment interest is a general remedy in Alaska and is NOT limited to liquidated or contract claims — it is recoverable on tort and unliquidated damages as compensation for loss of use…",
+    body: "For a judgment entered in 2026, Alaska Court System form ADM-505 publishes 6.75% as the general pre- and post-judgment rate under AS 09.30.070. The percentage is selected by the year judgment is entered and stays attached to that judgment. A contract, another statute, the damages category, or the older transition rule can supply a different result.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
     postSlug: "alaska-judgment-rate",
-    appliesShort: "Prejudgment interest is a general remedy in Alaska and is NOT limited to liquidated or contract claims — it is recoverable on tort and unliquidated damages as compensation for loss of use…",
+    appliesShort: "Alaska prejudgment interest can reach tort and unliquidated damages, but statutory exclusions, contracts, and special statutes can change entitlement or the rate.",
     applies: "Prejudgment interest is a general remedy in Alaska and is NOT limited to liquidated or contract claims — it is recoverable on tort and unliquidated damages as compensation for loss of use of money. However, by statute AS 09.30.070(c), prejudgment interest may NOT be awarded on: (1) future economic damages, (2) future noneconomic damages, or (3) punitive damages. Where a written contract specifies an interest rate, that contract rate controls instead of the statutory rate.",
-    accrual: "Accrues from the earlier of (a) the day process is served on the defendant, or (b) the day the defendant received written notification that an injury occurred and that a claim may be brought — the notice being of a nature that would lead a prudent person to believe a claim will be made — unless the parties have agreed…",
-    compound: "Simple.",
-    formula: "Three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered (AS 09.30.070(a)). Discount rate published by the Federal Reserve at https://www.frbdiscountwindow.org/pages/discount-rates.",
+    accrual: "ADM-505 explains that prejudgment interest starts when the claimant could first sue, giving notice of an injury and the first breach of a contract as examples. The exact statutory notice, damages, contract, and special-claim branches must still be confirmed for the case.",
+    compound: "Confirm the governing rule. ADM-505 publishes the annual percentage and selection year but does not state one universal calculator-grade compounding and payment-allocation method.",
+    formula: "Three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered (AS 09.30.070(a)). ADM-505 publishes the selected annual schedule; the dataset preserves every listed year from the August 7, 1997 transition through 2026.",
   },
   "arizona-prejudgment-rate": {
     tagline: "Arizona prejudgment interest — a formula rate, reset periodically.",
@@ -1195,4 +1195,17 @@ export function copyFor(slug) {
   if (!clean.body) clean.body = clean.tagline || 'See the cited source and current observation for details.';
   if (clean.prejudgment && !clean.applies) clean.applies = clean.appliesShort || clean.tagline;
   return clean;
+}
+
+// Hand-maintained dates for substantial editorial changes that do not alter the underlying rate.
+// Sitemap lastmod must move for a real page improvement (for example, adding official history), but
+// must not churn merely because Astro rebuilt. Add a slug here only when its rendered substance
+// materially changes.
+export const CONTENT_MODIFIED = Object.freeze({
+  'alaska-judgment-rate': '2026-07-26',
+  'alaska-prejudgment-rate': '2026-07-26',
+});
+
+export function contentModifiedFor(slug) {
+  return CONTENT_MODIFIED[slug] || null;
 }

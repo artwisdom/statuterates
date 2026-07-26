@@ -21,7 +21,8 @@ const CACHE_DIR = join(__dirname, '..', '..', 'data', 'cache');
 // The crawler advertises an honest UA with a contact. STATUTERATES_CONTACT can override the public
 // about page when the owner wants source administrators to use a different email or URL.
 const CONTACT = process.env.STATUTERATES_CONTACT || 'https://statuterates.com/about/';
-export const USER_AGENT = `StatuteRatesBot/0.1 (+https://statuterates.com/about/; contact: ${CONTACT})`;
+export const USER_AGENT_TOKEN = 'StatuteRatesBot';
+export const USER_AGENT = `${USER_AGENT_TOKEN}/0.1 (+https://statuterates.com/about/; contact: ${CONTACT})`;
 const MIN_HOST_INTERVAL_MS = 3000; // >= 3s between requests to the same host
 const MAX_FETCHES_PER_SOURCE = 150; // hard ceiling per source per run
 const REQUEST_TIMEOUT_MS = 30000;
@@ -199,10 +200,14 @@ export function nowIso() {
  * @param {number} [opts.maxAgeMs]  cache freshness window; a cached entry older than this is
  *   treated as a miss and re-fetched. Default 2 days — keeps market series (IRS/H.15) current on
  *   any run while staying polite (at most one hit per URL per window). Set 0/Infinity to disable.
- * @returns {Promise<{url,status,retrieved_at,body,fromCache,contentType}>}
+ * @returns {Promise<{url,status,retrieved_at,body:string,fromCache,contentType}>}
  */
 const DEFAULT_MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000; // 2 days
-export async function politeGet(url, { sourceId = 'default', force = false, maxAgeMs = DEFAULT_MAX_AGE_MS } = {}) {
+async function politeGetInternal(
+  url,
+  { sourceId = 'default', force = false, maxAgeMs = DEFAULT_MAX_AGE_MS } = {},
+  responseType = 'text'
+) {
   const u = new URL(url);
   const host = u.host;
   const origin = u.origin;
@@ -214,14 +219,25 @@ export async function politeGet(url, { sourceId = 'default', force = false, maxA
     const cached = readCache(url);
     if (cached && cached.status === 200) {
       const age = Date.now() - Date.parse(cached.retrieved_at || 0);
-      if (!(age >= 0) || age < maxAgeMs) return { ...cached, fromCache: true };
+      const fresh = !(age >= 0) || age < maxAgeMs;
+      if (fresh && responseType === 'text' && typeof cached.body === 'string') {
+        return { ...cached, fromCache: true };
+      }
+      if (fresh && responseType === 'buffer' && cached.body_encoding === 'base64'
+          && typeof cached.body_base64 === 'string') {
+        return {
+          ...cached,
+          body: Buffer.from(cached.body_base64, 'base64'),
+          fromCache: true,
+        };
+      }
     }
   }
 
   // 2) robots.txt gate.
   const robots = await getRobots(host, origin);
   if (!robots.absent) {
-    const allowed = pathAllowed(robots.groups, 'DataMoatEngineBot', u.pathname + (u.search || ''));
+    const allowed = pathAllowed(robots.groups, USER_AGENT_TOKEN, u.pathname + (u.search || ''));
     if (!allowed) {
       throw new Error(`ROBOTS_DISALLOW: ${url} is disallowed by ${origin}/robots.txt for our UA`);
     }
@@ -241,14 +257,16 @@ export async function politeGet(url, { sourceId = 'default', force = false, maxA
   //    blips without hammering a source.
   const MAX_ATTEMPTS = 3;
   const BACKOFF_MS = [2000, 5000];
-  let res, body, lastErr;
+  let res, body;
   for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     await throttleHost(host);
     try {
       res = await fetchWithTimeout(url);
-      body = await res.text();
+      body = responseType === 'buffer'
+        ? Buffer.from(await res.arrayBuffer())
+        : await res.text();
     } catch (e) {
-      lastErr = e; // network/timeout error -> retry
+      // Network/timeout error -> retry.
       if (attempt < MAX_ATTEMPTS) { await sleep(BACKOFF_MS[attempt - 1]); continue; }
       throw new Error(`NETWORK: ${url} failed after ${MAX_ATTEMPTS} attempts (${e.message})`);
     }
@@ -261,13 +279,29 @@ export async function politeGet(url, { sourceId = 'default', force = false, maxA
     status: res.status,
     retrieved_at: nowIso(),
     contentType: res.headers.get('content-type') || '',
-    body,
+    ...(responseType === 'buffer'
+      ? { body_encoding: 'base64', body_base64: body.toString('base64') }
+      : { body }),
   };
   writeCache(url, entry); // cache all responses, including non-200, to avoid re-fetching
   if (res.status !== 200) {
     throw new Error(`HTTP_${res.status}: ${url}`);
   }
-  return { ...entry, fromCache: false };
+  return { ...entry, body, fromCache: false };
+}
+
+export function politeGet(url, options = {}) {
+  return politeGetInternal(url, options, 'text');
+}
+
+/**
+ * Binary counterpart to politeGet. It inherits the same robots, throttling, retry, fetch-cap, and
+ * two-day cache protections, while serializing cached bytes as base64 so PDFs are never corrupted by
+ * an implicit UTF-8 conversion.
+ * @returns {Promise<{url,status,retrieved_at,body:Buffer,fromCache,contentType}>}
+ */
+export function politeGetBuffer(url, options = {}) {
+  return politeGetInternal(url, options, 'buffer');
 }
 
 export function fetchStats() {
