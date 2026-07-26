@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "new-york-consumer-debt-judgment-rate",
   "name": "New York Consumer-Debt Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,12 @@
   "metadata": {
     "state": "NY",
     "statute": "CPLR 5004(b)",
-    "basis": "statute-fixed"
+    "basis": "statute-fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"

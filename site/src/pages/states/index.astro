@@ -5,7 +5,15 @@ import { getMeta, latestOf, prettyDate, stateHubs } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 const meta = getMeta();
-const rows = stateHubs().map((h) => ({
+const hubs = stateHubs();
+const datasetModified = hubs
+  .flatMap((hub) => [hub.pre, hub.post])
+  .filter(Boolean)
+  .map((entity) => latestOf(entity)?.retrieved_at || latestOf(entity)?.effective_date)
+  .filter(Boolean)
+  .sort()
+  .at(-1);
+const rows = hubs.map((h) => ({
   base: h.base,
   name: h.name,
   post: h.post ? latestOf(h.post)?.value_text : null,
@@ -13,8 +21,8 @@ const rows = stateHubs().map((h) => ({
   preKind: copyFor(h.pre.slug).kindLabel,
 }));
 
-const title = `Judgment Interest Rates by State — All 50 States + D.C. | ${meta.title}`;
-const description = `Interest rates on court judgments for every U.S. state and D.C., post-judgment and prejudgment side by side, each verified against the statute. Compare rates or open a state for its full detail, sources, and calculators.`;
+const title = `Judgment Interest Rates by State | ${meta.title}`;
+const description = `Recorded post-judgment and prejudgment interest-rate references for every U.S. state and D.C., side by side with cited sources and scope notes.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [
@@ -25,7 +33,7 @@ const jsonLd = [
     url: canonical,
     description,
     isPartOf: { '@type': 'WebSite', name: meta.title, url: new URL('/', Astro.site).href },
-    dateModified: meta.generated_at,
+    dateModified: datasetModified,
   },
   {
     '@context': 'https://schema.org',
@@ -52,9 +60,9 @@ const jsonLd = [
   <div class="eyebrow">Statutory interest rates · By state</div>
   <h1>Judgment interest rates by state</h1>
   <p class="lead">Interest on a money judgment differs in every state — and the rate that runs
-    <em>before</em> judgment is a different number with different rules than the one that runs
-    <em>after</em>. Here they are side by side for all 50 states and D.C., each verified against the
-    statute. Open any state for the full detail, sources, history, and calculators.</p>
+    <em>before</em> judgment can be a different rate — or a case-specific rule — from the one that runs
+    <em>after</em>. Here are the current recorded references for all 50 states and D.C. Open any state
+    for its cited sources, observations, scope, and known exceptions.</p>
 
   <AdSlot id="states-top" />
 

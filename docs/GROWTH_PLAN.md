@@ -1,10 +1,16 @@
 # GROWTH_PLAN.md — StatuteRates long-term traffic & revenue plan
 
+> Historical research proposal, not an implementation contract. The July 2026 audit found that its
+> nightly/full-history/state-calculator assumptions were unsafe. The site refreshes weekly, most state
+> histories are single-point references, and all state calculators remain gated until their complete
+> rule models pass validation. Use this document for ideas only.
+
 **Written 2026-07-16 by the research phase (Fable 5). Implementation owner: Opus 4.8.**
 This document is self-contained: everything needed to execute is in here + the repo. Do not rely on
 prior conversation context. Repo: `data-moat-engine/` (site = Astro static → GitHub Pages behind
-Cloudflare, pipeline = Node data refresh nightly via `.github/workflows/refresh.yml`, deploy via
-`deploy.yml` on push). Live: https://statuterates.com (190 pages).
+Cloudflare, pipeline = Node data refresh weekly via `.github/workflows/refresh.yml`, deploy via
+`deploy.yml` on reviewed pushes and successful refresh completion). Live:
+https://statuterates.com (192-page release candidate as of 2026-07-25).
 
 ---
 
@@ -150,9 +156,9 @@ and actually being monetized tastefully.
     DB/exports), no neighboring-state comparison.
 11. IndexNow/Bing absent (see §1.7). FAQPage everywhere (fine to keep; stop adding).
 12. Ad slots: 2/page (top+bottom). No mid-content unit on 1,000+-word guides; no multiplex at ends.
-13. Assets already in place (do NOT rebuild): 190 pages, hub↔spoke mesh, Dataset/Article/Breadcrumb/
+13. Assets already in place (do NOT rebuild): 192 pages, hub↔spoke mesh, Dataset/Article/Breadcrumb/
     Org/WebSite schema, per-entity lastmod for rates, robots+sitemap+GSC, llms.txt + llms-full.txt,
-    free JSON API + CSV, RSS, shared 10/10-test calc engine, nightly pipeline + auto-deploy,
+    free JSON API + CSV, RSS, shared 10/10-test calc engine, weekly pipeline + auto-deploy,
     fintech design system in `BaseLayout.astro` tokens, a11y pass, privacy/terms, consent published,
     two-switch ads, og-image, 404.
 

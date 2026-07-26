@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "count": 114,
   "entities": [
     {
@@ -11,16 +11,16 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 4.03,
-          "value_text": "4.03%",
+          "value": 4.09,
+          "value_text": "4.09%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-13",
+          "effective_date": "2026-07-20",
           "source_id": "fed-h15",
           "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-          "retrieved_at": "2026-07-20T13:59:10.061Z",
+          "retrieved_at": "2026-07-26T01:52:06.830Z",
           "confidence": "high",
           "method": "weekly-avg-of-daily-h15",
-          "notes": "Weekly average of 4 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-13."
+          "notes": "Weekly average of 4 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-20."
         }
       }
     },
@@ -39,10 +39,10 @@
           "effective_date": "2026-07-09",
           "source_id": "al-jud",
           "source_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). For a judgment \"based upon a contract action,\" interest runs \"at the same rate of interest as stated in the contract\" (the contract rate governs, not… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
         }
       }
     },
@@ -83,10 +83,10 @@
           "effective_date": "2026-01-01",
           "source_id": "ak-jud",
           "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Alaska Stat. 09.30.070(a), currently 6.75% (as of January 1, 2026). Three (3) percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered. The 12th FRD… Simple interest. A judgment founded on a written contract that specifies an interest rate (not exceeding the legal maximum) bears the contract rate if that rate is… Verify the current value at public.courts.alaska.gov; not legal advice."
+          "notes": "Post-judgment interest under Alaska Stat. 09.30.070(a), currently 6.75% (as of January 1, 2026). Three (3) percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered. Simple interest. Verify the current value at public.courts.alaska.gov; not legal advice."
         }
       }
     },
@@ -171,10 +171,10 @@
           "effective_date": "2026-07-08",
           "source_id": "ar-jud",
           "source_url": "https://www.federalreserve.gov/releases/h15/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. The primary credit rate… Simple interest. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current… Verify the current value at federalreserve.gov; not legal advice."
+          "notes": "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. Simple interest. Verify the current value at federalreserve.gov; not legal advice."
         }
       }
     },
@@ -192,11 +192,11 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "ar-prejud",
-          "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."
+          "notes": "Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice."
         }
       }
     },
@@ -302,8 +302,8 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "co-prejud",
-          "source_url": "https://colorado.public.law/statutes/crs_5-12-102",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
           "notes": "Colorado has TWO prejudgment rates, both compounded annually: 8% for general/contract claims and money or property wrongfully withheld (C.R.S. §5-12-102(1)(b)), and 9% for personal-injury actions (C.R.S. §13-21-101, from the date suit was filed, for actions filed on/after July 1, 1979). §5-12-102 opens \"Except as provided in section 13-21-101,\" carving personal-injury cases out to the 9% rate. Verified against the statute text 2026-07-09. This is PREjudgment interest, separate from Colorado’s post-judgment rate. Not legal advice."
@@ -325,10 +325,10 @@
           "effective_date": "2026-01-01",
           "source_id": "ct-jud",
           "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
         }
       }
     },
@@ -391,10 +391,10 @@
           "effective_date": "2026-07-08",
           "source_id": "de-jud",
           "source_url": "https://delcode.delaware.gov/title6/c023/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Legal/post-judgment rate = Federal Reserve discount rate (in practice the Fed's \"primary credit rate,\" which replaced the old adjustment-credit discount rate in Jan 2003) + 5… Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the… Verify the current value at delcode.delaware.gov; not legal advice."
+          "notes": "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Verify the current value at delcode.delaware.gov; not legal advice."
         }
       }
     },
@@ -435,10 +435,10 @@
           "effective_date": "2026-07-01",
           "source_id": "dc-jud",
           "source_url": "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (Q3 2026, effective July 1, 2026). Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC §6621 (26 U.S.C. §6621) for underpayments of tax, rounded to the nearest full percent — with the current 7% federal underpayment rate, 70% × 7% = 4.9% rounds to 5%. Simple interest. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per… Verify the current value at code.dccouncil.gov; not legal advice."
+          "notes": "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (Q3 2026, effective July 1, 2026). Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC §6621 (26 U.S.C. §6621) for underpayments of tax, rounded to the nearest full percent — with the current 7% federal underpayment rate, 70% × 7% = 4.9% rounds to 5%. Simple interest. Verify the current value at code.dccouncil.gov; not legal advice."
         }
       }
     },
@@ -542,13 +542,13 @@
           "value": 9.75,
           "value_text": "9.75%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-08",
+          "effective_date": "2025-12-11",
           "source_id": "ga-code",
-          "source_url": "http://ga.elaws.us/law/section7-4-12",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "statute-variable",
-          "notes": "Post-judgment interest under O.C.G.A. §7-4-12: the Federal Reserve prime rate (published in Fed release H.15) on the day of judgment + 3 percentage points, fixed for the life of the judgment — currently about 9.75% (prime ~6.75% + 3). Simple interest. A judgment on a written contract that specifies a rate carries the contract rate instead (§7-4-12(b)). Verify against the current prime rate; not legal advice."
+          "source_url": "https://fred.stlouisfed.org/series/PRIME",
+          "retrieved_at": "2026-07-19T00:00:00Z",
+          "confidence": "high",
+          "method": "derived_ga_7_4_12_prime_plus_3",
+          "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate on the day judgment is entered plus three percentage points, fixed for that judgment. The prime rate has been 6.75% since December 11, 2025, producing a 9.75% general reference. A judgment on a written contract that specifies a rate uses the contract rate instead under §7-4-12(b). Verify applicability; not legal advice."
         }
       }
     },
@@ -564,13 +564,13 @@
           "value": 7,
           "value_text": "7% / 9.75%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-09",
+          "effective_date": "2025-12-11",
           "source_id": "ga-prejud",
-          "source_url": "http://ga.elaws.us/law/section7-4-2",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://fred.stlouisfed.org/series/PRIME",
+          "retrieved_at": "2026-07-19T00:00:00Z",
           "confidence": "high",
-          "method": "statute-fixed",
-          "notes": "Georgia has two prejudgment schemes, both simple: LIQUIDATED demands bear 7% — the legal rate (O.C.G.A. §7-4-2), applied from when the sum became due (§7-4-15). UNLIQUIDATED tort/personal-injury damages, after a proper written demand, instead bear prime + 3% (currently 9.75%, variable) under §51-12-14, running from the 30th day after the notice. Verified 2026-07-11. Not legal advice."
+          "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
+          "notes": "Georgia has two prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15 from the legally relevant due or demand date. Qualifying unliquidated tort damages under §51-12-14 instead use the Federal Reserve prime rate on the 30th day after the last written notice plus three points; the current benchmark produces 9.75%. Both paths are treated as simple interest, but notice, entitlement, and the correct branch are case-specific. Not legal advice."
         }
       }
     },
@@ -589,10 +589,10 @@
           "effective_date": "2026-07-09",
           "source_id": "hi-jud",
           "source_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. Verify against the statute; not legal advice."
         }
       }
     },
@@ -765,10 +765,10 @@
           "effective_date": "2026-07-01",
           "source_id": "id-jud",
           "source_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Treasury securities adjusted to a constant maturity of one (1)… Simple interest. § 28-22-104(2) applies \"unless the judgment is rendered on a written contract or agreement providing for a different rate of interest, in which case… Verify the current value at sto.idaho.gov; not legal advice."
+          "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Simple interest. Verify the current value at sto.idaho.gov; not legal advice."
         }
       }
     },
@@ -853,10 +853,10 @@
           "effective_date": "2026-01-01",
           "source_id": "in-jud",
           "source_url": "https://iga.in.gov/laws/2025/ic/titles/24",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under Ind. Code § 24-4.6-1-101 — 8% per year, fixed by statute (simple interest). This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind.… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under Ind. Code § 24-4.6-1-101 — 8% per year, fixed by statute (simple interest). This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind. Verify against the statute; not legal advice."
         }
       }
     },
@@ -891,16 +891,16 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 6.03,
-          "value_text": "6.03%",
+          "value": 6.06,
+          "value_text": "6.06%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-13",
-          "source_id": "ia-legis",
-          "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "derived_ia_668_13_weekly_cmt_plus_2",
-          "notes": "Derived: Iowa Code §668.13(3) sets judgment interest at the 1-year Treasury constant maturity (Fed H.15) \"settled immediately prior to the date of the judgment\" + 2 percentage points, computed daily (§668.13(5)). This series applies the weekly-average H.15 value + 2pp for each week. A contract rate governs if the judgment is on a contract that fixes one (§668.13(2)). Confirm against the Iowa Judicial Branch table; not legal advice."
+          "effective_date": "2026-07-09",
+          "source_id": "ia-jud",
+          "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
+          "retrieved_at": "2026-07-20T04:21:35.424Z",
+          "confidence": "high",
+          "method": "derived_ia_668_13_official_court_table_plus_2",
+          "notes": "Official Iowa Judicial Branch table selection: 4.06% one-year Treasury CMT plus two percentage points under Iowa Code §668.13 equals 6.06%. The rate is selected at judgment and computed daily; a qualifying contract rate and other statutory branches can control. Not legal advice."
         }
       }
     },
@@ -913,16 +913,16 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 6.03,
-          "value_text": "6.03%",
+          "value": 6.06,
+          "value_text": "6.06%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-13",
-          "source_id": "ia-legis",
-          "source_url": "https://www.legis.iowa.gov/docs/code/668.13.pdf",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "derived_ia_668_13_weekly_cmt_plus_2",
-          "notes": "Iowa prejudgment interest uses the SAME §668.13 formula as post-judgment — the 1-year Treasury constant maturity (Fed H.15) + 2 percentage points — so this rate tracks the post-judgment series week for week (it accrues from commencement of the action, §668.13(1)). Derived from the weekly-average H.15 value + 2pp. Confirm against the Iowa Judicial Branch table; not legal advice."
+          "effective_date": "2026-07-09",
+          "source_id": "ia-jud",
+          "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
+          "retrieved_at": "2026-07-20T04:21:35.424Z",
+          "confidence": "high",
+          "method": "derived_ia_668_13_official_court_table_plus_2",
+          "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.06% one-year Treasury CMT for this date; adding two points gives 6.06%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
         }
       }
     },
@@ -982,13 +982,13 @@
           "value": 6,
           "value_text": "6%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-09",
+          "effective_date": "2017-06-29",
           "source_id": "ky-jud",
-          "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://apps.legislature.ky.gov/law/acts/17RS/documents/0017.pdf",
+          "retrieved_at": "2026-07-19T00:00:00Z",
           "confidence": "high",
-          "method": "statute-fixed",
-          "notes": "Post-judgment interest under KRS 360.040 — 6% per year, fixed by statute, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD… Verify against the statute; not legal advice."
+          "method": "statute-fixed-official-history",
+          "notes": "For general judgments entered on or after June 29, 2017, KRS 360.040(1) sets 6% interest compounded annually from entry. The enrolled 2017 Act changed the prior 12% general rate and expressly applies the change by judgment-entry date. Unpaid child-support judgments remain 12%; a written contract, note, or obligation uses its stated rate; an unliquidated judgment may receive less than 6% after notice and a hearing. Verify applicability; not legal advice."
         }
       }
     },
@@ -1002,15 +1002,15 @@
         "annual_rate": {
           "metric": "annual_rate",
           "value": 8,
-          "value_text": "8%",
+          "value_text": "up to 8%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-09",
+          "effective_date": "2018-07-14",
           "source_id": "ky-prejud",
           "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-19T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Prejudgment interest under KRS 360.010(1) — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kentucky’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+          "notes": "KRS 360.010(1) states an 8% annual legal rate, but 8% is not an automatic prejudgment award for every claim. Kentucky authority distinguishes liquidated claims from unliquidated damages; for an unliquidated claim, the court may award no interest or select a rate up to the legal rate, and may choose simple or compound treatment. A written agreement or claim-specific statute can control. The headline is a ceiling/reference rate, not a guaranteed recovery. Not legal advice."
         }
       }
     },
@@ -1029,10 +1029,10 @@
           "effective_date": "2026-01-01",
           "source_id": "la-jud",
           "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under La. R.S. 13:4202(B), currently 7.5% (as of January 1, 2026). . Formula: Federal Reserve Board of Governors approved \"discount rate\" (published daily in the Wall Street Journal), ascertained by the Commissioner on the first business day… Simple interest. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. 13:4203 provides interest attaches from the date of judicial… Verify the current value at ofi.la.gov; not legal advice."
+          "notes": "Post-judgment interest under La. R.S. 13:4202(B), currently 7.5% (as of January 1, 2026).. Simple interest. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. Verify the current value at ofi.la.gov; not legal advice."
         }
       }
     },
@@ -1072,11 +1072,11 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-01-01",
           "source_id": "me-jud",
-          "source_url": "https://legislature.maine.gov/statutes/14/title14sec1602-C.html",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "statute-variable",
-          "notes": "Post-judgment interest under 14 M.R.S. §1602-C, currently 9.51% (as of January 1, 2026). The weekly-average one-year Treasury constant maturity yield (Fed H.15) for the last full week of the prior calendar year, plus 6 percentage points, fixed for the year. For… Simple interest. Contract or note actions with an interest provision use the greater of the contract rate or the statutory Treasury-plus-6 rate; all other actions use… Verify the current value at legislature.maine.gov; not legal advice."
+          "source_url": "https://mjbportal.courts.maine.gov/CourtForms/FormsLists/DownloadForm?strFormNumber=OTH-156",
+          "retrieved_at": "2026-07-19T00:00:00Z",
+          "confidence": "high",
+          "method": "derived_me_1602_c_official_judicial_chart",
+          "notes": "The Maine Judicial Branch publishes 9.51% for judgments beginning to accrue in 2026. Under 14 M.R.S. §1602-C, the general rate is the prior calendar year's last-full-week average one-year Treasury CMT plus six points. A contract or note with an interest provision uses the greater of its rate and the statutory rate. Interest begins after entry and includes appeal, subject to continuance suspension and possible waiver. The statute does not specify calculator-grade compounding or day-count mechanics. Not legal advice."
         }
       }
     },
@@ -1092,13 +1092,13 @@
           "value": 6.51,
           "value_text": "6.51%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-09",
+          "effective_date": "2026-01-01",
           "source_id": "me-prejud",
-          "source_url": "https://legislature.maine.gov/statutes/14/title14sec1602-B.html",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "statute-variable",
-          "notes": "Prejudgment interest under 14 M.R.S. § 1602-B — 6.51% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Maine’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at legislature.maine.gov. Not legal advice."
+          "source_url": "https://mjbportal.courts.maine.gov/CourtForms/FormsLists/DownloadForm?strFormNumber=OTH-155",
+          "retrieved_at": "2026-07-19T00:00:00Z",
+          "confidence": "high",
+          "method": "derived_me_1602_b_official_judicial_chart",
+          "notes": "The Maine Judicial Branch publishes 6.51% for prejudgment interest beginning to accrue in 2026. Under 14 M.R.S. §1602-B, the general rate is the prior calendar year's last-full-week average one-year Treasury CMT plus three points. A contract or note with an interest provision uses its written rate; small claims generally exclude prejudgment interest unless based on such a writing. Accrual starts with qualifying sworn notice or, absent notice, filing, and can be suspended or waived. Prejudgment interest is excluded from the principal base for post-judgment interest. Not legal advice."
         }
       }
     },
@@ -1117,10 +1117,10 @@
           "effective_date": "2026-07-09",
           "source_id": "md-jud",
           "source_url": "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Under the \"except as provided in Section 11-106\" clause, a money judgment on a contract for a loan of money carries interest at the RATE CHARGED IN… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
         }
       }
     },
@@ -1249,10 +1249,10 @@
           "effective_date": "2026-01-01",
           "source_id": "mn-jud",
           "source_url": "https://www.revisor.mn.gov/court_rules/rule/msinte/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026). , set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Rate = the secondary market yield / one-year constant maturity… Simple interest. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the… Verify the current value at revisor.mn.gov; not legal advice."
+          "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026)., set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Simple interest. Verify the current value at revisor.mn.gov; not legal advice."
         }
       }
     },
@@ -1287,16 +1287,16 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 8,
-          "value_text": "8%",
+          "value": null,
+          "value_text": "contract rate / court-set",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-09",
+          "effective_date": "1989-07-01",
           "source_id": "ms-prejud",
-          "source_url": "https://law.justia.com/codes/mississippi/title-75/chapter-17/general-provisions/section-75-17-7/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://www.lexisnexis.com/hottopics/mscode/",
+          "retrieved_at": "2026-07-19T00:00:00Z",
           "confidence": "high",
-          "method": "statute-fixed",
-          "notes": "Prejudgment interest under Miss. Code Ann. § 75-17-7 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Mississippi’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+          "method": "court-or-contract-rate",
+          "notes": "Mississippi does not set one statewide prejudgment percentage. Under §75-17-7, a judgment founded on a sale or contract bears the rate supplied by the contract evidencing the debt. For all other judgments, the judge selects a fair annual rate and a fair start date, never before the complaint was filed; prejudgment interest can be included in that category. Section 75-17-1's 8% legal contract rate may inform some matters, but current appellate authority confirms that 8% is not mandatory and that the court can select another rate and method. Verify the claim and order; not legal advice."
         }
       }
     },
@@ -1332,15 +1332,15 @@
         "annual_rate": {
           "metric": "annual_rate",
           "value": 9,
-          "value_text": "9% / 6.75%",
+          "value_text": "9% non-tort; tort rule varies",
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "mo-prejud",
           "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Missouri prejudgment interest splits by claim type: liquidated/contract claims bear 9% fixed (Mo. Rev. Stat. §408.020); TORT prejudgment interest is the intended Federal Funds rate + 3% — currently about 6.75% (variable) under §408.040.3. Current values as of July 2026; verify at revisor.mo.gov. Not legal advice."
+          "notes": "Liquidated or contract claims may bear 9% under § 408.020. For qualifying tort claims, § 408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points. Section 408.040.4 separately says the judgment for prejudgment interest bears Federal Funds plus 3 points after entry. Because those are distinct stages, this reference record does not flatten the tort rule into one headline percentage. Not legal advice."
         }
       }
     },
@@ -1359,10 +1359,10 @@
           "effective_date": "2026-01-01",
           "source_id": "mt-jud",
           "source_url": "https://mca.legmt.gov/bills/mca/title_0250/chapter_0090/part_0020/section_0050/0250-0090-0020-0050.html",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Mont. Code Ann. § 25-9-205, currently 9.75% (as of January 1, 2026). Rate = (bank prime loan rate published in the Federal Reserve System's H.15 \"Selected Interest Rates\" release, or any superseding publication, on the day judgment is entered)… Simple interest. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the… Verify the current value at mca.legmt.gov; not legal advice."
+          "notes": "Post-judgment interest under Mont. Code Ann. § 25-9-205, currently 9.75% (as of January 1, 2026). Simple interest. Verify the current value at mca.legmt.gov; not legal advice."
         }
       }
     },
@@ -1403,10 +1403,10 @@
           "effective_date": "2026-07-16",
           "source_id": "ne-jud",
           "source_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "statute-variable",
-          "notes": "Post-judgment interest under Neb. Rev. Stat. §45-103, currently 5.970% (in effect since July 16, 2026). Rate = bond-equivalent yield of the first 26-week U.S. Treasury bill auction of each quarter. Simple interest. Does not apply where another law fixes the rate or the action is on a contract fixing one. Verify at nebraskajudicial.gov; not legal advice."
+          "retrieved_at": "2026-07-20T02:55:21.803Z",
+          "confidence": "high",
+          "method": "statute-variable-official-page",
+          "notes": "The Nebraska Judicial Branch publishes 5.970% effective 2026-07-16 under Neb. Rev. Stat. §45-103. For judgments entered on or after July 20, 2002, the rate is the first quarterly 26-week Treasury-bill bond investment yield plus two percentage points and is fixed at judgment. Other-law and agreed contract-rate exceptions apply. Verify applicability; not legal advice."
         }
       }
     },
@@ -1424,11 +1424,11 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-16",
           "source_id": "ne-prejud",
-          "source_url": "https://nebraskalegislature.gov/laws/statutes.php?statute=45-104",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
+          "retrieved_at": "2026-07-20T02:55:21.803Z",
           "confidence": "high",
-          "method": "statute-fixed",
-          "notes": "Nebraska prejudgment interest is 12% for LIQUIDATED claims (Neb. Rev. Stat. §45-104). UNLIQUIDATED claims (tort/personal injury) instead accrue prejudgment interest at the §45-103 variable judgment rate — currently 5.970% (in effect since July 16, 2026) — under §45-103.02(1), not 12%. Verify at nebraskajudicial.gov. Not legal advice."
+          "method": "composite_ne_45_104_and_45_103_02",
+          "notes": "Nebraska uses distinct prejudgment paths. Qualifying liquidated claims use the 12% §45-104 rate under §45-103.02(2). Qualifying unliquidated claims use the current §45-103 judgment rate (5.970% effective 2026-07-16) only after every settlement-offer condition in §45-103.02(1) is met. Section 45-103.04 contains exclusions. Verify entitlement and applicability; not legal advice."
         }
       }
     },
@@ -1447,10 +1447,10 @@
           "effective_date": "2026-07-01",
           "source_id": "nv-jud",
           "source_url": "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201,%202026.pdf",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Nev. Rev. Stat. 17.130(2), currently 8.75% (as of July 1, 2026). Post-judgment rate = (prime rate at the largest bank in Nevada as ascertained by the Commissioner of Financial Institutions on the Jan 1 or Jul 1 immediately preceding the… Simple interest. Interest runs from time of SERVICE of the summons and complaint until satisfied, EXCEPT amounts representing FUTURE damages, which draw interest only… Verify the current value at fid.nv.gov; not legal advice."
+          "notes": "Post-judgment interest under Nev. Rev. Stat. 17.130(2), currently 8.75% (as of July 1, 2026). Simple interest. Verify the current value at fid.nv.gov; not legal advice."
         }
       }
     },
@@ -1491,10 +1491,10 @@
           "effective_date": "2026-01-01",
           "source_id": "nh-jud",
           "source_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under N.H. Rev. Stat. Ann. 336:1, II, currently 5.7% (as of January 1, 2026). , reset annually. Formula (RSA 336:1, II): prevailing discount rate on 26-week U.S. Treasury bills at the last auction preceding the last day of September of the prior year,… Simple interest. RSA 336:1, II applies the SAME rate to \"judgments, including prejudgment interest\" — one unified statutory rate covers both; no tort/contract… Verify the current value at courts.nh.gov; not legal advice."
+          "notes": "Post-judgment interest under N.H. Rev. Stat. Ann. 336:1, II, currently 5.7% (as of January 1, 2026)., reset annually. Formula (RSA 336:1, II): prevailing discount rate on 26-week U.S. Simple interest. Verify the current value at courts.nh.gov; not legal advice."
         }
       }
     },
@@ -1578,11 +1578,11 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "nm-jud",
-          "source_url": "https://law.justia.com/codes/new-mexico/chapter-56/article-8/section-56-8-4/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://nmonesource.com/nmos/en/nav.do",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under N.M. Stat. Ann. § 56-8-4 — 8.75% per year, fixed by statute (simple interest). If the judgment is based on tortious conduct, bad faith, or intentional or willful acts, post-judgment interest is 15% (not 8.75%); plaintiff… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under N.M. Stat. Ann. § 56-8-4 — 8.75% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
         }
       }
     },
@@ -1600,8 +1600,8 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "nm-prejud",
-          "source_url": "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://nmonesource.com/nmos/en/nav.do",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
           "notes": "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice."
@@ -1733,10 +1733,10 @@
           "effective_date": "2026-01-01",
           "source_id": "nd-jud",
           "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under N.D.C.C. § 28-20-34, currently 10% (as of January 1, 2026). , reset annually. Rate = (U.S. prime rate as published/reported in the Wall Street Journal on the first Monday in December of the prior year) + 3 percentage points, then… Simple interest. Contract rate governs first — if the original instrument on which the action was based specifies an interest rate, judgment interest accrues at THAT… Verify the current value at ndcourts.gov; not legal advice."
+          "notes": "Post-judgment interest under N.D.C.C. § 28-20-34, currently 10% (as of January 1, 2026)., reset annually. Rate = (U.S. Simple interest. Verify the current value at ndcourts.gov; not legal advice."
         }
       }
     },
@@ -1821,10 +1821,10 @@
           "effective_date": "2026-01-01",
           "source_id": "ok-jud",
           "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026). . Postjudgment rate = the prime rate as listed in the FIRST edition of the Wall Street Journal published for the calendar year, certified to the Administrative Director of… Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Treasury Bill rate of the preceding calendar year,… Verify the current value at oscn.net; not legal advice."
+          "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026).. Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Verify the current value at oscn.net; not legal advice."
         }
       }
     },
@@ -1886,11 +1886,11 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "or-prejud",
-          "source_url": "https://oregon.public.law/statutes/ors_82.010",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Prejudgment interest under ORS 82.010(1)(a) — 9% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oregon’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+          "notes": "ORS 82.010 supplies a 9% rate for qualifying amounts, but the section does not itself create entitlement to prejudgment interest. Availability and the accrual date depend on the underlying claim and Oregon case law. Simple-interest reference only; confirm the controlling rule. Not legal advice."
         }
       }
     },
@@ -1953,10 +1953,10 @@
           "effective_date": "2026-07-09",
           "source_id": "ri-jud",
           "source_url": "https://webserver.rilegislature.gov/Statutes/TITLE9/9-21/9-21-10.HTM",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under R.I. Gen. Laws § 9-21-10 — 12% per year, fixed by statute (simple interest). Carve-outs affect scope/accrual date, not the rate. (1) Pre- vs post-judgment: § 9-21-10(a) provides prejudgment interest at 12% from the date the… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under R.I. Gen. Laws § 9-21-10 — 12% per year, fixed by statute (simple interest). Carve-outs affect scope/accrual date, not the rate. Verify against the statute; not legal advice."
         }
       }
     },
@@ -1997,10 +1997,10 @@
           "effective_date": "2026-01-15",
           "source_id": "sc-jud",
           "source_url": "https://www.scstatehouse.gov/code/t34c031.php",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under S.C. Code Ann. § 34-31-20(B), currently 10.75% (as of January 15, 2026). Legal rate = (prime rate as listed in the first edition of the Wall Street Journal published for the calendar year for which damages are awarded) + 4 percentage points,… Compounded annually. This is the rate on money decrees and judgments under § 34-31-20(B), applicable to all judgments entered on or after July 1, 2005. TRANSITIONAL: for… Verify the current value at scstatehouse.gov; not legal advice."
+          "notes": "Post-judgment interest under S.C. Code Ann. § 34-31-20(B), currently 10.75% (as of January 15, 2026). Compounded annually. This is the rate on money decrees and judgments under § 34-31-20(B), applicable to all judgments entered on or after July 1, 2005. Verify the current value at scstatehouse.gov; not legal advice."
         }
       }
     },
@@ -2041,10 +2041,10 @@
           "effective_date": "2026-07-09",
           "source_id": "sd-jud",
           "source_url": "https://sdlegislature.gov/Statutes/54-3-5.1",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. Verify against the statute; not legal advice."
         }
       }
     },
@@ -2102,15 +2102,15 @@
         "annual_rate": {
           "metric": "annual_rate",
           "value": 10,
-          "value_text": "10%",
+          "value_text": "up to 10%",
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "tn-prejud",
-          "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "high",
+          "source_url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+          "retrieved_at": "2026-07-09T00:00:00Z",
+          "confidence": "medium",
           "method": "statute-fixed",
-          "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+          "notes": "Tenn. Code Ann. § 47-14-123 permits a judge or jury to award prejudgment interest as an element of damages at a rate not exceeding 10% per year. The award and rate are discretionary; 10% is a ceiling, not an automatic default. Confirm the current statute and controlling case law. Not legal advice."
         }
       }
     },
@@ -2129,10 +2129,10 @@
           "effective_date": "2026-07-01",
           "source_id": "tx-occc",
           "source_url": "https://occc.texas.gov/publications/interest-rates/",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "statute-variable",
-          "notes": "Post-judgment interest on money judgments not on an interest-bearing contract, under Tex. Fin. Code §304.003: the Federal Reserve prime rate with a 5% floor and 15% cap — currently 6.75% (July 2026, published by the Texas OCCC). The rate is fixed at entry for the life of the judgment and COMPOUNDS ANNUALLY (§304.006). Judgments on a contract that sets interest instead use §304.002 (lesser of the contract rate or 18%). Verify the current period at occc.texas.gov; not legal advice."
+          "retrieved_at": "2026-07-20T02:35:57.634Z",
+          "confidence": "high",
+          "method": "statute-variable-official-page",
+          "notes": "Texas OCCC published 6.75% for money judgments rendered during July 2026. Under Texas Finance Code §§304.003, 304.005, and 304.006, the general noncontract rate is fixed at judgment, accrues from rendition through satisfaction (subject to the appeal-extension exception), and compounds annually. Contract, tax, and child-support branches can differ. Verify applicability; not legal advice."
         }
       }
     },
@@ -2148,13 +2148,13 @@
           "value": 6.75,
           "value_text": "6.75%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-09",
+          "effective_date": "2026-07-01",
           "source_id": "tx-prejud",
-          "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
-          "confidence": "medium",
-          "method": "statute-variable",
-          "notes": "Prejudgment interest under Tex. Fin. Code Sec. 304.102 — 6.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Texas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at statutes.capitol.texas.gov. Not legal advice."
+          "source_url": "https://occc.texas.gov/publications/interest-rates/",
+          "retrieved_at": "2026-07-20T02:35:57.634Z",
+          "confidence": "high",
+          "method": "derived_tx_304_103_from_occc_postjudgment",
+          "notes": "For a judgment rendered during 2026-07, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
         }
       }
     },
@@ -2167,13 +2167,13 @@
       "latest": {
         "annual_rate": {
           "metric": "annual_rate",
-          "value": 4.03,
-          "value_text": "4.03%",
+          "value": 4.09,
+          "value_text": "4.09%",
           "unit": "percent_per_annum",
-          "effective_date": "2026-07-13",
+          "effective_date": "2026-07-20",
           "source_id": "fed-h15",
           "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-          "retrieved_at": "2026-07-20T13:59:10.061Z",
+          "retrieved_at": "2026-07-26T01:52:06.830Z",
           "confidence": "medium",
           "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
           "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."
@@ -2217,10 +2217,10 @@
           "effective_date": "2026-01-01",
           "source_id": "ut-jud",
           "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Utah Code Ann. Sec. 15-1-4, currently 5.51% (as of January 1, 2026). (federal postjudgment interest rate as of January 1 of the year the judgment is entered) + 2%. The \"federal postjudgment interest rate\" is defined by Sec. 15-1-4(1) as the… Simple interest. Contract judgments (Sec. 15-1-4(2)(a)): a judgment rendered on a lawful contract conforms to the contract and bears the interest rate agreed by the… Verify the current value at utcourts.gov; not legal advice."
+          "notes": "Post-judgment interest under Utah Code Ann. Sec. 15-1-4, currently 5.51% (as of January 1, 2026). (federal postjudgment interest rate as of January 1 of the year the judgment is entered) + 2%. The \"federal postjudgment interest rate\" is defined by Sec. Simple interest. Contract judgments (Sec. Verify the current value at utcourts.gov; not legal advice."
         }
       }
     },
@@ -2261,10 +2261,10 @@
           "effective_date": "2026-07-09",
           "source_id": "vt-jud",
           "source_url": "https://legislature.vermont.gov/statutes/section/09/004/00041a",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under 9 V.S.A. § 41a(a) — 12% per year, fixed by statute (simple interest). No pre- vs post-judgment split in the rate itself: Vermont applies the same 12% legal rate to prejudgment interest (as of right on… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under 9 V.S.A. § 41a(a) — 12% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
         }
       }
     },
@@ -2393,10 +2393,10 @@
           "effective_date": "2026-01-01",
           "source_id": "wv-jud",
           "source_url": "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under W. Va. Code § 56-6-31, currently 6.25% (as of January 1, 2026). 2 percentage points above the Fifth Federal Reserve District SECONDARY DISCOUNT rate in effect on January 2 of the year the judgment/decree is entered, with a statutory floor… Simple interest. Formula and rate apply to both (unified by 2017 amendment eff. Jan 1, 2018) — pre-judgment keyed to the rate on Jan 2 of the year the CAUSE OF ACTION… Verify the current value at courtswv.gov; not legal advice."
+          "notes": "Post-judgment interest under W. Va. Code § 56-6-31, currently 6.25% (as of January 1, 2026). Simple interest. Formula and rate apply to both (unified by 2017 amendment eff. Verify the current value at courtswv.gov; not legal advice."
         }
       }
     },
@@ -2436,11 +2436,11 @@
           "unit": "percent_per_annum",
           "effective_date": "2026-07-09",
           "source_id": "wi-jud",
-          "source_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "source_url": "https://docs.legis.wisconsin.gov/document/statutes/815.05(8)",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "medium",
           "method": "statute-variable",
-          "notes": "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Prime rate is the bank prime loan rate published by the Federal Reserve Board in statistical release H.15… Simple interest. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which… Verify the current value at docs.legis.wisconsin.gov; not legal advice."
+          "notes": "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Simple interest. Verify the current value at docs.legis.wisconsin.gov; not legal advice."
         }
       }
     },
@@ -2481,10 +2481,10 @@
           "effective_date": "2026-07-09",
           "source_id": "wy-jud",
           "source_url": "https://wyoleg.gov/statutes/compress/title01.pdf",
-          "retrieved_at": "2026-07-20T13:59:17.350Z",
+          "retrieved_at": "2026-07-09T00:00:00Z",
           "confidence": "high",
           "method": "statute-fixed",
-          "notes": "Post-judgment interest under Wyo. Stat. Ann. 1-16-102 — 10% per year, fixed by statute (simple interest). POST-judgment only (this statute governs interest on decrees/judgments from date of rendition; prejudgment interest is a separate common-law/contract… Verify against the statute; not legal advice."
+          "notes": "Post-judgment interest under Wyo. Stat. Ann. 1-16-102 — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
         }
       }
     },

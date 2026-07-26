@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "us-federal-post-judgment",
   "name": "U.S. Federal Post-Judgment Interest Rate (28 U.S.C. §1961)",
   "entity_type": "rate_series",
@@ -16,13 +16,13 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 4.03,
-      "value_text": "4.03%",
+      "value": 4.09,
+      "value_text": "4.09%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-13",
+      "effective_date": "2026-07-20",
       "source_id": "fed-h15",
       "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-      "retrieved_at": "2026-07-20T13:59:10.061Z",
+      "retrieved_at": "2026-07-26T01:52:06.830Z",
       "confidence": "medium",
       "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
       "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."
@@ -32,13 +32,26 @@
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 4.03,
-        "value_text": "4.03%",
+        "value": 4.09,
+        "value_text": "4.09%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-20",
+        "source_id": "fed-h15",
+        "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
+        "retrieved_at": "2026-07-26T01:52:06.830Z",
+        "confidence": "medium",
+        "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
+        "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 4.02,
+        "value_text": "4.02%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-13",
         "source_id": "fed-h15",
         "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-        "retrieved_at": "2026-07-20T13:59:10.061Z",
+        "retrieved_at": "2026-07-26T01:52:06.830Z",
         "confidence": "medium",
         "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
         "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."
@@ -1371,13 +1384,13 @@
       },
       {
         "metric": "annual_rate",
-        "value": 4.83,
-        "value_text": "4.83%",
+        "value": 4.79,
+        "value_text": "4.79%",
         "unit": "percent_per_annum",
         "effective_date": "2024-07-22",
         "source_id": "fed-h15",
         "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-        "retrieved_at": "2026-07-20T13:59:10.061Z",
+        "retrieved_at": "2026-07-26T01:52:06.830Z",
         "confidence": "medium",
         "method": "derived_28usc1961_weekly_avg_h15_1yr_cmt",
         "notes": "Derived: equals the weekly-average 1-year Treasury constant-maturity yield (Fed H.15) for the week. Under 28 U.S.C. §1961, the post-judgment rate for a judgment is the weekly-average 1-year CMT for the calendar week PRECEDING the judgment date, rounded per the statute. Confirm the exact applicable week against your district court’s published table. Reference, not legal advice."

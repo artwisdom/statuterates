@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "south-dakota-judgment-rate",
   "name": "South Dakota Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,12 @@
   "metadata": {
     "state": "SD",
     "statute": "SDCL § 54-3-5.1",
-    "basis": "statute-fixed"
+    "basis": "statute-fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -23,10 +28,10 @@
       "effective_date": "2026-07-09",
       "source_id": "sd-jud",
       "source_url": "https://sdlegislature.gov/Statutes/54-3-5.1",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)… Verify against the statute; not legal advice."
+      "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. Verify against the statute; not legal advice."
     }
   },
   "history": {
@@ -39,10 +44,10 @@
         "effective_date": "2026-07-09",
         "source_id": "sd-jud",
         "source_url": "https://sdlegislature.gov/Statutes/54-3-5.1",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)… Verify against the statute; not legal advice."
+        "notes": "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. Verify against the statute; not legal advice."
       }
     ]
   }

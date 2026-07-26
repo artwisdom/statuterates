@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "north-carolina-prejudgment-rate",
   "name": "North Carolina Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "N.C. Gen. Stat. 24-5",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "fixed"
+    "kind": "fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_secondary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"

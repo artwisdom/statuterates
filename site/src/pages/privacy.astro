@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
 const title = `Privacy Policy | ${meta.title}`;
-const description = `How ${meta.title} handles data: a static reference site with no accounts and no personal-data collection by us, plus how advertising cookies work if ads are enabled, and your choices.`;
-const updated = prettyDate(meta.generated_at);
+const description = `${meta.title} privacy policy: no user accounts, minimal first-party data handling, browser-only calculators, and advertising-cookie choices if ads are enabled.`;
+const updated = prettyDate('2026-07-19');
 ---
 <BaseLayout title={title} description={description} noindex={false}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
@@ -33,7 +33,7 @@ const updated = prettyDate(meta.generated_at);
   </ul>
 
   <h2>Advertising &amp; cookies</h2>
-  <p>This site is supported by display advertising. When advertising is enabled, we use
+  <p>This site is designed to be supported by display advertising. When advertising is enabled, we use
     <strong>Google AdSense</strong>, a third-party advertising service provided by Google LLC. To show
     ads, Google and its partners may:</p>
   <ul class="clean">

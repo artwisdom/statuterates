@@ -8,7 +8,7 @@ function esc(s) {
 }
 
 export function GET({ site }) {
-  const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
+  const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
   const meta = getMeta();
   const changes = recentChanges(30);
 
@@ -33,7 +33,7 @@ export function GET({ site }) {
     <title>${esc(meta.title)} — rate changes</title>
     <link>${base}/changes/</link>
     <atom:link href="${base}/changes.xml" rel="self" type="application/rss+xml"/>
-    <description>${esc('New statutory, judgment and tax interest-rate values across the US, UK and EU, with effective dates and official sources.')}</description>
+    <description>${esc('New statutory, judgment and tax interest-rate observations across the US, UK and EU, with effective dates and cited sources.')}</description>
     <language>en</language>
     <lastBuildDate>${new Date(meta.generated_at).toUTCString()}</lastBuildDate>
 ${items}

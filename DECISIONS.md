@@ -57,7 +57,8 @@ One line per judgment call made during the autonomous build, with rationale. New
   against OFFICIAL statute texts (leginfo, nysenate.gov, malegislature.gov, legis.iowa.gov).
   Statute-fixed values carry citations + carve-outs (CA 5% medical/personal-debt; NY 2% consumer;
   MA contract-rate displacement) and are exempt from date-staleness (quarterly re-verification
-  playbook added instead). Iowa derives weekly from H.15 (+2pp) per §668.13(3).
+  playbook added instead). **Superseded July 19, 2026:** Iowa is not a weekly-average series; State
+  Court Administration publishes a monthly §668.13 selection. The weekly implementation was removed.
 - **State calculator embeds documented backfilled histories (1990+) for CA/NY/MA** since the rates
   are decades-stable, and models NY-consumer's 2022 transition as segment accrual. Rationale: reject
   older judgment dates and you lose the user; the assumption is disclosed on-page. Dataset keeps

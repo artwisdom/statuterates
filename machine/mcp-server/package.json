@@ -9,9 +9,16 @@
   },
   "scripts": {
     "start": "node src/server.mjs",
+    "test": "node --test",
     "smoke": "node test/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0"
+  },
+  "overrides": {
+    "@hono/node-server": "^2.0.5"
   }
 }

@@ -22,10 +22,12 @@ const {
   principalLabel = 'Amount',
   startLabel = 'Start date',
   endLabel = 'End date (e.g. payment date)',
+  id = null,
 } = Astro.props;
 
 const config = { kind, kinds, histories, defaultSeries, marginPercent, currency };
-const uid = `calc-${Math.random().toString(36).slice(2, 8)}`;
+// Stable output prevents meaningless HTML churn (and needless CDN/indexing work) on every rebuild.
+const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-').toLowerCase();
 ---
 
 <div class="calc" data-calc id={uid}>

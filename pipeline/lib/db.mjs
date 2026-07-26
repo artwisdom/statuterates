@@ -11,12 +11,14 @@
 //                   + confidence. History is preserved: new effective_dates are new rows.
 
 import Database from 'better-sqlite3';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdirSync } from 'node:fs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-export const DB_PATH = join(__dirname, '..', '..', 'data', 'db.sqlite');
+export const DB_PATH = process.env.DATA_MOAT_DB
+  ? resolve(process.env.DATA_MOAT_DB)
+  : join(__dirname, '..', '..', 'data', 'db.sqlite');
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS sources (
@@ -87,7 +89,12 @@ export function upsertSource(db, s) {
      ON CONFLICT(id) DO UPDATE SET
        name=excluded.name, publisher=excluded.publisher, home_url=excluded.home_url,
        license=excluded.license, robots_status=excluded.robots_status,
-       retrieved_at=excluded.retrieved_at`
+       retrieved_at=CASE
+         WHEN excluded.retrieved_at IS NULL THEN sources.retrieved_at
+         WHEN sources.retrieved_at IS NULL OR excluded.retrieved_at > sources.retrieved_at
+           THEN excluded.retrieved_at
+         ELSE sources.retrieved_at
+       END`
   ).run({
     license: null,
     robots_status: null,
@@ -125,7 +132,20 @@ export function upsertObservation(db, o) {
           @source_id, @source_url, @retrieved_at, @confidence, @method, @notes)
        ON CONFLICT(entity_id, metric, effective_date, source_id) DO UPDATE SET
          value_numeric=excluded.value_numeric, value_text=excluded.value_text, unit=excluded.unit,
-         source_url=excluded.source_url, retrieved_at=excluded.retrieved_at,
+         source_url=excluded.source_url,
+         retrieved_at=CASE
+           -- retrieved_at records when this exact observation was first captured. A routine rebuild
+           -- must not make unchanged historical data look newly discovered or newly effective.
+           WHEN observations.value_numeric IS excluded.value_numeric
+            AND observations.value_text IS excluded.value_text
+            AND observations.unit IS excluded.unit
+            AND observations.source_url IS excluded.source_url
+            AND observations.confidence IS excluded.confidence
+            AND observations.method IS excluded.method
+            AND observations.notes IS excluded.notes
+             THEN observations.retrieved_at
+           ELSE excluded.retrieved_at
+         END,
          confidence=excluded.confidence, method=excluded.method, notes=excluded.notes`
     )
     .run({

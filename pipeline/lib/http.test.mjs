@@ -6,8 +6,8 @@ import { parseRobots, pathAllowed, USER_AGENT } from './http.mjs';
 
 const UA = 'DataMoatEngineBot';
 
-test('honest UA carries bot name and a contact field', () => {
-  assert.ok(USER_AGENT.includes('DataMoatEngineBot'));
+test('honest UA carries the public product name and a contact field', () => {
+  assert.ok(USER_AGENT.includes('StatuteRatesBot'));
   assert.ok(/contact:/.test(USER_AGENT));
   // no unfilled placeholder token should remain in the functional UA string
   assert.ok(!USER_AGENT.includes('<<'));

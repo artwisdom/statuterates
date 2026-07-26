@@ -16,8 +16,8 @@ const featured = FEATURED.map((slug) => {
   return e ? { slug, name: e.name, latest: latestOf(e), jurisdiction: e.jurisdiction } : null;
 }).filter(Boolean);
 const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
-const title = `${meta.title} — Statutory, Judgment & Tax Interest Rates (current + historical)`;
-const description = `Current and historical U.S. statutory interest rates: IRS §6621 quarterly rates, the federal post-judgment rate (28 U.S.C. §1961), and the 1-year Treasury yield. Each value with its effective date, official source, and a free JSON API.`;
+const title = `Current Statutory & Judgment Interest Rates | ${meta.title}`;
+const description = `Current statutory, judgment, IRS, and late-payment interest rates with effective dates, cited sources, calculators, state tables, and a free JSON API.`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -43,7 +43,7 @@ const jsonLd = {
   <p class="lead">
     The interest rates the law and the IRS actually charge change every quarter or every week, so a
     figure you remember is usually already wrong. {meta.title} tracks each one with its effective date,
-    a link to the official source, and a free JSON API for people and machines — across the US, UK, and EU.
+    a link to its cited source, and a free JSON API for people and machines — across the US, UK, and EU.
   </p>
 
   <div class="featured">
@@ -63,8 +63,8 @@ const jsonLd = {
     &nbsp;·&nbsp; <a href="/guides/">Guides →</a>
     &nbsp;·&nbsp; <a href="/glossary/">Glossary →</a></p>
 
-  <p class="trust">Every rate is <a href="/editorial-policy/">verified against the official statute</a> and
-    stamped with its effective date — accuracy, not volume, is the point.</p>
+  <p class="trust">Every rate carries a <a href="/editorial-policy/">source, effective date, and confidence label</a>.
+    Primary government sources are preferred; exceptions remain explicitly reference-only.</p>
 
   <AdSlot id="home-top" />
 
@@ -82,7 +82,7 @@ const jsonLd = {
               <div class="cval">{l?.value_text}</div>
               <div class="cmeta">
                 effective {prettyDate(l?.effective_date)} ·
-                {l?.confidence === 'high' ? ' published' : ' derived'}
+                {(l?.method || '').startsWith('statute') ? ' curated reference' : l?.confidence === 'high' ? ' published' : ' derived'}
               </div>
             </a>
           );
@@ -107,9 +107,8 @@ const jsonLd = {
 
   <h2>Why this exists</h2>
   <p>
-    These values are public and official, but scattered across quarterly IRS bulletins, a Federal
-    Reserve data feed, and a statute that defines the post-judgment rate as a <em>formula</em> rather
-    than a number. {meta.title} assembles them into one normalized, provenance-tracked, as-of-date
+    These values are scattered across quarterly tax bulletins, central-bank feeds, statutes, court
+    rules, and agency tables. {meta.title} assembles the recorded observations into one normalized, provenance-tracked, as-of-date
     dataset — the thing neither a single government page nor a language model gives you in one place.
     See <a href="/methodology/">methodology &amp; sources</a> and
     <a href="/about/">how this data is collected</a>.

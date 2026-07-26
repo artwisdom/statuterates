@@ -13,6 +13,13 @@ const meta = getMeta();
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const related = GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 4);
 
+// State calculators are intentionally unavailable until their complete rule models pass validation.
+// Older guide copy linked to the prototypes, so route those links to the honest reference indexes.
+const safeGuideHtml = (html = '') => html
+  .replace(/<a href="\/calculators\/state-judgment-interest\/">[^<]*<\/a>/g, '<a href="/states/">state-by-state reference</a>')
+  .replace(/<a href="\/calculators\/prejudgment-interest\/">[^<]*<\/a>/g, '<a href="/prejudgment/">prejudgment interest reference</a>')
+  .replace(/verified against the official source/gi, 'recorded with a cited source');
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -48,7 +55,7 @@ const jsonLd = [
   </nav>
   <div class="eyebrow">Statutory interest rates · Guide</div>
   <h1>{guide.h1}</h1>
-  <div class="lead" set:html={guide.intro_html} />
+  <div class="lead" set:html={safeGuideHtml(guide.intro_html)} />
 
   {guide.key_takeaways?.length > 0 && (
     <aside class="takeaways">
@@ -63,7 +70,7 @@ const jsonLd = [
     {guide.sections.map((s) => (
       <>
         <h2>{s.h2}</h2>
-        <div set:html={s.body_html} />
+        <div set:html={safeGuideHtml(s.body_html)} />
       </>
     ))}
   </article>

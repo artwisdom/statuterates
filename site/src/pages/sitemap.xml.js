@@ -2,24 +2,30 @@
 // No integration dependency; the loc URLs use the configured Astro `site` domain. Each URL carries a
 // real per-page <lastmod> (the underlying rate's latest effective date, clamped to the build date) so
 // the date is a genuine change signal for crawlers rather than one shared build stamp.
-import { getAllEntities, getMeta, stateHubs, latestOf } from '../lib/data.mjs';
+import { getAllEntities, getMeta, stateHubs, latestOf, isCalculatorReady, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
 import { GUIDES } from '../lib/guides.mjs';
 
 export function GET({ site }) {
-  const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
+  const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
   const meta = getMeta();
   const build = (meta.generated_at || '').slice(0, 10);
   const clamp = (d) => (d && d <= build ? d : build); // never advertise a future date
 
+  const entities = getAllEntities();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const stateCalculatorsEnabled = STATE_CALCULATOR_RENDERER_READY
+    && import.meta.env.ENABLE_STATE_CALCULATORS === 'true';
+  const prejudgmentCalculatorReady = stateCalculatorsEnabled
+    && PREJUDGMENT_CALC_SAFE.every((key) => isCalculatorReady(entityBySlug.get(`${key}-prejudgment-rate`)));
+
   const staticPaths = [
     '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
-    '/calculators/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
-    '/calculators/state-judgment-interest/', '/calculators/late-payment-interest/',
-    '/calculators/prejudgment-interest/',
+    '/calculators/', '/calculators/judgment-interest/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
+    '/calculators/late-payment-interest/',
+    ...(prejudgmentCalculatorReady ? ['/calculators/prejudgment-interest/'] : []),
   ];
 
-  const entities = getAllEntities();
   const dateFor = new Map(entities.map((e) => [e.slug, (latestOf(e)?.effective_date || '').slice(0, 10)]));
 
   const rows = [

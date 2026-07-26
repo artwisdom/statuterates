@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import ManualInterestCalculator from '../../components/ManualInterestCalculator.astro';
+import { getMeta } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const title = `Judgment Interest Calculator & Per Diem | ${meta.title}`;
+const description = `Calculate simple or annually compounded judgment interest using a verified rate and dates. See interest, total payoff, accrual days, and the starting per diem.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const faqs = [
+  {
+    q: 'What rate should I enter in a judgment interest calculator?',
+    a: 'Enter the rate required by the controlling judgment, statute, or court rule for the relevant date and claim type. State rules vary, and federal judgments use the separate 28 U.S.C. §1961 method. StatuteRates provides cited state rate pages, but you should confirm the official source before calculating.',
+  },
+  {
+    q: 'What is the per-diem interest on a judgment?',
+    a: 'The starting per diem shown here is the judgment amount multiplied by the annual rate, divided by 365. With annual compounding, the daily amount rises after accrued interest is added to the balance on an anniversary.',
+  },
+  {
+    q: 'Should the payoff date count as an interest-accruing day?',
+    a: 'Court and payoff conventions differ. The calculator lets you include or exclude the payoff date and states the choice in the result. Confirm the convention required by the governing court or payoff instructions.',
+  },
+  {
+    q: 'Can this calculator handle rate changes or partial payments?',
+    a: 'No. It applies one fixed annual rate to one principal amount. A judgment with changing rates, partial payments, fees, non-interest-bearing costs, or claim-specific branches requires a segmented calculation under the controlling rules.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Judgment Interest Calculator and Per-Diem Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    isAccessibleForFree: true,
+    url: canonical,
+    description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Judgment interest calculator', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>Judgment interest calculator</span>
+  </nav>
+  <h1>Judgment interest calculator</h1>
+  <p class="lead">Calculate interest, total payoff, elapsed days, and the starting daily per-diem at
+    a rate you have already verified. Choose simple interest or annual compounding and make the
+    end-date convention explicit.</p>
+
+  <div class="notice">
+    <strong>This tool does not choose the legal rate.</strong> Find the recorded rate and rule in the
+    <a href="/states/">state judgment-interest directory</a>, or use the dedicated
+    <a href="/calculators/post-judgment-interest/">federal §1961 calculator</a>. Confirm the controlling
+    official source, effective date, compounding rule, and claim-specific exceptions before entering it.
+  </div>
+
+  <ManualInterestCalculator />
+
+  <AdSlot id="manual-calc-top" />
+
+  <h2>How the judgment interest calculation works</h2>
+  <p>For simple interest, the arithmetic is:</p>
+  <p class="formula"><strong>interest = principal × annual rate × accrual days ÷ 365</strong></p>
+  <p>The per diem is the one-day version of that formula: principal × annual rate ÷ 365. Annual
+    compounding uses the same daily accrual during each year, then adds accrued interest to the balance
+    on the anniversary so the next year starts with a larger base.</p>
+
+  <h2>Inputs to verify before relying on a payoff</h2>
+  <ul class="clean">
+    <li><strong>Governing rate:</strong> use the rate in force for the correct jurisdiction, judgment
+      date, claim type, and amount. Do not assume today’s rate applies to an older judgment.</li>
+    <li><strong>Accrual date:</strong> identify when interest legally begins—not merely when a loss,
+      invoice, verdict, or demand occurred.</li>
+    <li><strong>Simple or compound:</strong> the statute or judgment controls. Federal post-judgment
+      interest compounds annually; many state judgment rates are simple, but exceptions exist.</li>
+    <li><strong>End-date treatment:</strong> payoff instructions and courts can count dates differently.
+      Use the checkbox to test either convention and retain the convention in the copied result.</li>
+  </ul>
+
+  <h2>What requires a more detailed calculation</h2>
+  <p>This fixed-rate tool intentionally does not model partial payments, fees that do not earn interest,
+    changing statutory rates, tiered rates, leap-year day-count rules, amended judgments, or different
+    rules before and after judgment. Those facts require a period-by-period ledger. Use the
+    <a href="/states/">recorded state rate pages</a> to identify changes and verify the method against the
+    controlling source.</p>
+
+  <AdSlot id="manual-calc-bottom" />
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
+  </div>
+
+  <div class="disclaimer">
+    Reference arithmetic only—not legal, tax, or financial advice. A correct calculation depends on
+    correct legal inputs. Confirm the rate, principal, dates, day-count convention, compounding, and
+    payment allocation against the controlling judgment, statute, and court practice.
+  </div>
+
+  <style>
+    .notice { margin: 18px 0 6px; padding: 15px 18px; border: 1px solid var(--line);
+      border-left: 3px solid var(--accent); border-radius: 10px; background: var(--paper-2);
+      color: var(--ink-soft); font-size: .95rem; }
+    .notice strong { color: var(--ink); }
+    .formula { padding: 15px 18px; border-radius: 10px; background: var(--green-wash);
+      color: var(--green); font-family: var(--mono); overflow-wrap: anywhere; }
+    .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
+    .faq summary { cursor: pointer; font: 600 1.05rem var(--serif); }
+    .faq p { margin: 8px 0 0; color: var(--ink-soft); }
+  </style>
+</BaseLayout>

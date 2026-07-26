@@ -11,7 +11,7 @@
 //   latest.json        — flat list of latest observations (one per entity+metric)
 //   entity/<slug>.json — full per-entity record incl. history, for detail pages + API
 
-import { mkdirSync, writeFileSync, rmSync, existsSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openDb } from './db.mjs';
@@ -25,8 +25,8 @@ function write(path, obj) {
   writeFileSync(path, JSON.stringify(obj, null, 2) + '\n');
 }
 
-export function exportAll({ datasetMeta } = {}) {
-  const db = openDb({ create: false });
+export function exportAll({ datasetMeta, dbPath, exportDir = EXPORT_DIR, generatedAt = new Date().toISOString() } = {}) {
+  const db = openDb({ create: false, path: dbPath });
 
   const entities = db.prepare(`SELECT * FROM entities ORDER BY name`).all();
   const sources = db.prepare(`SELECT * FROM sources ORDER BY id`).all();
@@ -48,9 +48,18 @@ export function exportAll({ datasetMeta } = {}) {
     `SELECT * FROM observations WHERE entity_id = ? AND metric = ? ORDER BY effective_date DESC, id DESC`
   );
 
-  const generatedAt = new Date().toISOString();
   const entityRecords = [];
   const latestFlat = [];
+
+  // Delete entity snapshots no longer represented in SQLite. Leaving one behind would keep a dead
+  // API/page address alive even though the entity was removed from the source of truth.
+  const entityDir = join(exportDir, 'entity');
+  const expectedEntityFiles = new Set(entities.map((entity) => `${entity.slug}.json`));
+  if (existsSync(entityDir)) {
+    for (const file of readdirSync(entityDir)) {
+      if (file.endsWith('.json') && !expectedEntityFiles.has(file)) rmSync(join(entityDir, file));
+    }
+  }
 
   for (const e of entities) {
     const metrics = metricsFor.all(e.id).map((r) => r.metric);
@@ -77,8 +86,7 @@ export function exportAll({ datasetMeta } = {}) {
       history: historyByMetric,
     };
     entityRecords.push(record);
-    // Clear any stale per-entity file layout, then write this entity.
-    write(join(EXPORT_DIR, 'entity', `${e.slug}.json`), { generated_at: generatedAt, ...record });
+    write(join(exportDir, 'entity', `${e.slug}.json`), { generated_at: generatedAt, ...record });
   }
 
   const meta = {
@@ -98,8 +106,8 @@ export function exportAll({ datasetMeta } = {}) {
     })),
   };
 
-  write(join(EXPORT_DIR, 'meta.json'), meta);
-  write(join(EXPORT_DIR, 'entities.json'), {
+  write(join(exportDir, 'meta.json'), meta);
+  write(join(exportDir, 'entities.json'), {
     generated_at: generatedAt,
     count: entityRecords.length,
     entities: entityRecords.map((r) => ({
@@ -111,7 +119,7 @@ export function exportAll({ datasetMeta } = {}) {
       latest: r.latest,
     })),
   });
-  write(join(EXPORT_DIR, 'latest.json'), {
+  write(join(exportDir, 'latest.json'), {
     generated_at: generatedAt,
     count: latestFlat.length,
     observations: latestFlat.sort((a, b) => a.entity_name.localeCompare(b.entity_name)),

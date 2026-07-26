@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "kentucky-prejudgment-rate",
   "name": "Kentucky Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,24 @@
   "locale": null,
   "metadata": {
     "state": "KY",
-    "statute": "KRS 360.010(1)",
+    "statute": "KRS 360.010(1) and Kentucky case law",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "discretionary-with-default"
+    "kind": "claim-dependent",
+    "official_case_url": "https://appellatepublic.kycourts.net/api/api/v1/publicaccessdocuments/2d3b5274367f7348db02a0e286f793cef3d6e859562960a3253fa37fe5ea07ea/download",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Kentucky entitlement differs for liquidated and unliquidated claims, and an unliquidated award, its rate up to the legal rate, and simple-versus-compound treatment can be discretionary. Contract terms and claim-specific law can also control.",
+      "rate_behavior": "claim_branch_specific",
+      "rate_schedule": "legal_rate_or_contract_and_court_selected_rate",
+      "compounding": "court_discretion_for_unliquidated_claims",
+      "day_count": "not_verified_across_claim_branches",
+      "branches_complete": false,
+      "accrual_rule_verified": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-07-19T00:00:00Z"
+    }
   },
   "metrics": [
     "annual_rate"
@@ -20,15 +34,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 8,
-      "value_text": "8%",
+      "value_text": "up to 8%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "2018-07-14",
       "source_id": "ky-prejud",
       "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "retrieved_at": "2026-07-19T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under KRS 360.010(1) — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kentucky’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "KRS 360.010(1) states an 8% annual legal rate, but 8% is not an automatic prejudgment award for every claim. Kentucky authority distinguishes liquidated claims from unliquidated damages; for an unliquidated claim, the court may award no interest or select a rate up to the legal rate, and may choose simple or compound treatment. A written agreement or claim-specific statute can control. The headline is a ceiling/reference rate, not a guaranteed recovery. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +50,15 @@
       {
         "metric": "annual_rate",
         "value": 8,
-        "value_text": "8%",
+        "value_text": "up to 8%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "2018-07-14",
         "source_id": "ky-prejud",
         "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=47989",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "retrieved_at": "2026-07-19T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under KRS 360.010(1) — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Kentucky’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "KRS 360.010(1) states an 8% annual legal rate, but 8% is not an automatic prejudgment award for every claim. Kentucky authority distinguishes liquidated claims from unliquidated damages; for an unliquidated claim, the court may award no interest or select a rate up to the legal rate, and may choose simple or compound treatment. A written agreement or claim-specific statute can control. The headline is a ceiling/reference rate, not a guaranteed recovery. Not legal advice."
       }
     ]
   }

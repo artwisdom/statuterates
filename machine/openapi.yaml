@@ -10,7 +10,7 @@ info:
     /api/v1/meta.json for the live values.)
   license:
     name: See attribution in meta.json
-    url: https://example.org/about
+    url: https://statuterates.com/about/
 servers:
   - url: https://statuterates.com
     description: Production CDN
@@ -35,7 +35,7 @@ paths:
   /api/v1/meta.json:
     get:
       operationId: getMeta
-      summary: Dataset metadata, freshness, and official sources
+      summary: Dataset metadata, freshness, and cited sources
       responses:
         "200":
           description: OK
@@ -79,7 +79,7 @@ paths:
   /api/v1/entity/{slug}.json:
     get:
       operationId: getEntity
-      summary: One entity — latest values + full history, each with provenance
+      summary: One entity — latest values + all recorded observations, each with provenance
       parameters:
         - name: slug
           in: path
@@ -98,7 +98,7 @@ paths:
   /api/v1/entity/{slug}.csv:
     get:
       operationId: getEntityCsv
-      summary: One entity's full history as CSV (spreadsheet-ready, provenance columns included)
+      summary: One entity's recorded observations as CSV (spreadsheet-ready, provenance columns included)
       parameters:
         - name: slug
           in: path

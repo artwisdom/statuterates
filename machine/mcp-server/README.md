@@ -8,9 +8,9 @@ static API.
 ## Tools
 | Tool | Purpose |
 |---|---|
-| `dataset_info` | Dataset title, description, available metrics, freshness, and official sources. Call first. |
+| `dataset_info` | Dataset title, description, available metrics, freshness, and cited sources. Call first. |
 | `search_entities` | Fuzzy-find rate series by name/slug/jurisdiction; returns latest values. |
-| `get_entity` | Full record for one series: latest value per metric + full history, each with provenance. |
+| `get_entity` | Full record for one series: latest value per metric + all recorded observations, each with provenance. |
 | `get_latest_value` | Current value of a metric for one series, with `effective_date`/`source_url`/`confidence`. |
 | `compare_values` | Compare one metric across several series, sorted high→low. |
 

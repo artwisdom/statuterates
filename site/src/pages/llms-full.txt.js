@@ -3,22 +3,30 @@
 import { getMeta, getAllEntities } from '../lib/data.mjs';
 
 export function GET({ site }) {
-  const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
+  const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
   const meta = getMeta();
   const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
 
   const sections = entities.map((e) => {
     const l = e.latest?.annual_rate;
     if (!l) return `## ${e.name}\n(no current value)`;
+    const caseSpecific = l.method === 'court-or-contract-rate';
+    const basis = caseSpecific
+      ? 'case-specific rule; no uniform numeric percentage'
+      : l.confidence === 'high'
+        ? l.method === 'statute-fixed' ? 'set by statute' : l.method?.startsWith('derived_') ? 'formula value' : 'published value'
+        : 'derived value';
     const lines = [
       `## ${e.name}`,
-      `Current value: ${l.value_text} per year (effective ${l.effective_date}; ${l.confidence === 'high' ? l.method === 'statute-fixed' ? 'set by statute' : 'published value' : 'derived value'})`,
+      caseSpecific
+        ? `Current rule: ${l.value_text} (effective ${l.effective_date}; ${basis})`
+        : `Current value: ${l.value_text} per year (effective ${l.effective_date}; ${basis})`,
       `Jurisdiction: ${e.jurisdiction}${e.region ? ` (${e.region})` : ''}`,
       `Source: ${l.source_url}`,
       `Retrieved: ${l.retrieved_at}`,
       l.notes ? `Notes: ${l.notes}` : null,
       `Page: ${base}/rates/${e.slug}/`,
-      `JSON (full history): ${base}/api/v1/entity/${e.slug}.json`,
+      `JSON (all recorded observations): ${base}/api/v1/entity/${e.slug}.json`,
     ].filter(Boolean);
     return lines.join('\n');
   });

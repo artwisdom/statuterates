@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "hawaii-judgment-rate",
   "name": "Hawaii Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,12 @@
   "metadata": {
     "state": "HI",
     "statute": "Haw. Rev. Stat. 478-3. Related: 478-2",
-    "basis": "statute-fixed"
+    "basis": "statute-fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -23,10 +28,10 @@
       "effective_date": "2026-07-09",
       "source_id": "hi-jud",
       "source_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice."
+      "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. Verify against the statute; not legal advice."
     }
   },
   "history": {
@@ -39,10 +44,10 @@
         "effective_date": "2026-07-09",
         "source_id": "hi-jud",
         "source_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice."
+        "notes": "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. Verify against the statute; not legal advice."
       }
     ]
   }

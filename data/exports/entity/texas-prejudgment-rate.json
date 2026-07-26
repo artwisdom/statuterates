@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "texas-prejudgment-rate",
   "name": "Texas Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,23 @@
   "locale": null,
   "metadata": {
     "state": "TX",
-    "statute": "Tex. Fin. Code Sec. 304.102",
+    "statute": "Tex. Fin. Code §§304.101–304.107",
     "basis": "statute-variable",
     "metric": "prejudgment",
-    "kind": "same-as-postjudgment"
+    "kind": "same-as-postjudgment",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "The statutory rate, simple-interest rule, and base accrual window are verified, but settlement-offer adjustments, damages exclusions, common-law entitlement, day count, and all supported claim branches are not yet deterministic.",
+      "rate_behavior": "fixed_at_judgment",
+      "rate_schedule": "same_as_postjudgment_rate_at_judgment",
+      "compounding": "simple",
+      "day_count": "not_specified_in_chapter_304",
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-07-19T00:00:00Z"
+    }
   },
   "metrics": [
     "annual_rate"
@@ -22,13 +35,13 @@
       "value": 6.75,
       "value_text": "6.75%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "2026-07-01",
       "source_id": "tx-prejud",
-      "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Prejudgment interest under Tex. Fin. Code Sec. 304.102 — 6.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Texas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at statutes.capitol.texas.gov. Not legal advice."
+      "source_url": "https://occc.texas.gov/publications/interest-rates/",
+      "retrieved_at": "2026-07-20T02:35:57.634Z",
+      "confidence": "high",
+      "method": "derived_tx_304_103_from_occc_postjudgment",
+      "notes": "For a judgment rendered during 2026-07, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -38,13 +51,13 @@
         "value": 6.75,
         "value_text": "6.75%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "2026-07-01",
         "source_id": "tx-prejud",
-        "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
-        "confidence": "medium",
-        "method": "statute-variable",
-        "notes": "Prejudgment interest under Tex. Fin. Code Sec. 304.102 — 6.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Texas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at statutes.capitol.texas.gov. Not legal advice."
+        "source_url": "https://occc.texas.gov/publications/interest-rates/",
+        "retrieved_at": "2026-07-20T02:35:57.634Z",
+        "confidence": "high",
+        "method": "derived_tx_304_103_from_occc_postjudgment",
+        "notes": "For a judgment rendered during 2026-07, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
       }
     ]
   }

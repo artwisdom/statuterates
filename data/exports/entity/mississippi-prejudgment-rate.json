@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "mississippi-prejudgment-rate",
   "name": "Mississippi Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,25 @@
   "locale": null,
   "metadata": {
     "state": "MS",
-    "statute": "Miss. Code Ann. § 75-17-7",
-    "basis": "statute-fixed",
+    "statute": "Miss. Code Ann. §§75-17-7 and 75-17-1",
+    "basis": "court-or-contract-rate",
     "metric": "prejudgment",
-    "kind": "discretionary-with-default"
+    "kind": "case-specific",
+    "official_code_portal_url": "https://www.lexisnexis.com/hottopics/mscode/",
+    "appellate_crosscheck_url": "https://law.justia.com/cases/mississippi/court-of-appeals/2025/2024-ca-00023-coa.html",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_secondary",
+      "reason": "Mississippi does not provide one statewide prejudgment percentage. A sale or contract can use its governing contract rate, while other judgments use a fair rate and date selected by the judge. Entitlement, the percentage, accrual, and simple-versus-compound treatment are case-specific.",
+      "rate_behavior": "contract_or_court_selected",
+      "rate_schedule": "no_uniform_statewide_percentage",
+      "compounding": "contract_or_court_specific",
+      "day_count": "contract_or_court_specific",
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-07-19T00:00:00Z"
+    }
   },
   "metrics": [
     "annual_rate"
@@ -19,32 +34,32 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 8,
-      "value_text": "8%",
+      "value": null,
+      "value_text": "contract rate / court-set",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "1989-07-01",
       "source_id": "ms-prejud",
-      "source_url": "https://law.justia.com/codes/mississippi/title-75/chapter-17/general-provisions/section-75-17-7/",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://www.lexisnexis.com/hottopics/mscode/",
+      "retrieved_at": "2026-07-19T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Prejudgment interest under Miss. Code Ann. § 75-17-7 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Mississippi’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "method": "court-or-contract-rate",
+      "notes": "Mississippi does not set one statewide prejudgment percentage. Under §75-17-7, a judgment founded on a sale or contract bears the rate supplied by the contract evidencing the debt. For all other judgments, the judge selects a fair annual rate and a fair start date, never before the complaint was filed; prejudgment interest can be included in that category. Section 75-17-1's 8% legal contract rate may inform some matters, but current appellate authority confirms that 8% is not mandatory and that the court can select another rate and method. Verify the claim and order; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 8,
-        "value_text": "8%",
+        "value": null,
+        "value_text": "contract rate / court-set",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "1989-07-01",
         "source_id": "ms-prejud",
-        "source_url": "https://law.justia.com/codes/mississippi/title-75/chapter-17/general-provisions/section-75-17-7/",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://www.lexisnexis.com/hottopics/mscode/",
+        "retrieved_at": "2026-07-19T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Prejudgment interest under Miss. Code Ann. § 75-17-7 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Mississippi’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "method": "court-or-contract-rate",
+        "notes": "Mississippi does not set one statewide prejudgment percentage. Under §75-17-7, a judgment founded on a sale or contract bears the rate supplied by the contract evidencing the debt. For all other judgments, the judge selects a fair annual rate and a fair start date, never before the complaint was filed; prejudgment interest can be included in that category. Section 75-17-1's 8% legal contract rate may inform some matters, but current appellate authority confirms that 8% is not mandatory and that the court can select another rate and method. Verify the claim and order; not legal advice."
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "kentucky-judgment-rate",
   "name": "Kentucky Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,32 @@
   "metadata": {
     "state": "KY",
     "statute": "KRS 360.040",
-    "basis": "statute-fixed"
+    "basis": "statute-fixed",
+    "official_statute_urls": [
+      "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719"
+    ],
+    "official_act_url": "https://apps.legislature.ky.gov/law/acts/17RS/documents/0017.pdf",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "The official statutory change points, annual-compounding rule, and primary branches are modeled, but day count, partial-payment allocation, the unliquidated-damages hearing outcome, and every contract and support exception are not deterministic.",
+      "rate_behavior": "fixed_at_entry",
+      "rate_schedule": "statutory_change_points",
+      "compounding": "annual",
+      "day_count": "not_specified_in_krs_360_040",
+      "history_start": "1982-07-15",
+      "curated_history_complete_through": "2017-06-29",
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-07-19T00:00:00Z",
+      "branches": {
+        "general": "KRS 360.040(1): 6%, compounded annually, from entry for judgments entered on or after June 29, 2017",
+        "child_support": "KRS 360.040(2): unpaid child-support judgments bear 12%, compounded annually",
+        "written_obligation": "KRS 360.040(3): the contract, note, or other written obligation rate controls",
+        "unliquidated": "KRS 360.040(4): the court may set a rate below 6% after notice and a hearing"
+      }
+    }
   },
   "metrics": [
     "annual_rate"
@@ -20,13 +45,13 @@
       "value": 6,
       "value_text": "6%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "2017-06-29",
       "source_id": "ky-jud",
-      "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://apps.legislature.ky.gov/law/acts/17RS/documents/0017.pdf",
+      "retrieved_at": "2026-07-19T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Post-judgment interest under KRS 360.040 — 6% per year, fixed by statute, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD… Verify against the statute; not legal advice."
+      "method": "statute-fixed-official-history",
+      "notes": "For general judgments entered on or after June 29, 2017, KRS 360.040(1) sets 6% interest compounded annually from entry. The enrolled 2017 Act changed the prior 12% general rate and expressly applies the change by judgment-entry date. Unpaid child-support judgments remain 12%; a written contract, note, or obligation uses its stated rate; an unliquidated judgment may receive less than 6% after notice and a hearing. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -36,13 +61,26 @@
         "value": 6,
         "value_text": "6%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "2017-06-29",
         "source_id": "ky-jud",
-        "source_url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45719",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://apps.legislature.ky.gov/law/acts/17RS/documents/0017.pdf",
+        "retrieved_at": "2026-07-19T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Post-judgment interest under KRS 360.040 — 6% per year, fixed by statute, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD… Verify against the statute; not legal advice."
+        "method": "statute-fixed-official-history",
+        "notes": "For general judgments entered on or after June 29, 2017, KRS 360.040(1) sets 6% interest compounded annually from entry. The enrolled 2017 Act changed the prior 12% general rate and expressly applies the change by judgment-entry date. Unpaid child-support judgments remain 12%; a written contract, note, or obligation uses its stated rate; an unliquidated judgment may receive less than 6% after notice and a hearing. Verify applicability; not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 12,
+        "value_text": "12%",
+        "unit": "percent_per_annum",
+        "effective_date": "1982-07-15",
+        "source_id": "ky-jud",
+        "source_url": "https://apps.legislature.ky.gov/law/acts/17RS/documents/0017.pdf",
+        "retrieved_at": "2026-07-19T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-fixed-official-history",
+        "notes": "The enrolled 2017 Kentucky Act shows the former 12% general judgment rate that applied before the 6% amendment took effect on June 29, 2017. KRS 360.040 contains separate child-support, written-obligation, and unliquidated-judgment branches. Verify the law applicable when the judgment was entered. Not legal advice."
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "arkansas-prejudgment-rate",
   "name": "Arkansas Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "Ark. Code Ann. § 16-65-114(a)(1)",
     "basis": "statute-variable",
     "metric": "prejudgment",
-    "kind": "variable"
+    "kind": "variable",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -24,11 +29,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "ar-prejud",
-      "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."
+      "notes": "Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice."
     }
   },
   "history": {
@@ -40,11 +45,11 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "ar-prejud",
-        "source_url": "https://codes.findlaw.com/ar/title-16-practice-procedure-and-courts/ar-code-sect-16-65-114/",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Prejudgment interest under Ark. Code Ann. § 16-65-114(a)(1) — 5.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arkansas’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at codes.findlaw.com. Not legal advice."
+        "notes": "Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice."
       }
     ]
   }

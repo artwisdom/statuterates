@@ -7,9 +7,14 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --test src/lib/*.test.mjs",
+    "verify-build": "node scripts/check-build.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   },
   "dependencies": {
-    "astro": "^4.16.18"
+    "astro": "7.1.1"
   }
 }

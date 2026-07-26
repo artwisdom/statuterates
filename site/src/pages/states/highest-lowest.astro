@@ -9,9 +9,10 @@ const yr = new Date(meta.generated_at).getUTCFullYear();
 // Rank states by their primary numeric rate (the first figure of a dual "X% / Y%" value_text).
 const clean = (name) => name.replace(/ (Pre)?[Jj]udgment Interest Rate$/, '').replace('Post-', '');
 const build = (region) => getAllEntities()
-  .filter((e) => e.region === region && e.metadata?.state !== undefined)
+  .filter((e) => e.region === region && e.metadata?.state !== undefined && !e.slug.includes('consumer-debt'))
   .map((e) => ({ name: clean(e.name), slug: e.slug, base: e.slug.replace(/-(pre)?judgment-rate$/, ''), v: latestOf(e)?.value, vt: latestOf(e)?.value_text }))
-  .filter((r) => Number.isFinite(r.v))
+  // A dual/conditional headline is not one comparable statewide rate, so omit it from numeric ranks.
+  .filter((r) => Number.isFinite(r.v) && !r.vt?.includes('/'))
   .sort((a, b) => b.v - a.v);
 
 const post = build('US States');
@@ -21,8 +22,8 @@ const botN = (arr, n = 8) => arr.slice(-n).reverse();
 const postHi = topN(post), postLo = botN(post);
 const preHi = topN(pre), preLo = botN(pre);
 
-const title = `Highest & Lowest Judgment Interest Rates by State (${yr}) | ${meta.title}`;
-const description = `Which U.S. states charge the most and least interest on court judgments? A ${yr} ranking of the highest and lowest post-judgment and prejudgment interest rates, each verified against the state statute.`;
+const title = `Highest & Lowest State Judgment Rates (${yr}) | ${meta.title}`;
+const description = `Which U.S. states have the highest and lowest single headline judgment-interest rates? A ${yr} reference ranking that excludes multi-rate and conditional entries.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const row = (r) => ({ '@type': 'ListItem', name: `${r.name} — ${r.vt}` });
@@ -45,8 +46,8 @@ const jsonLd = [
   <h1>Highest &amp; lowest judgment interest rates by state ({yr})</h1>
   <p class="lead">Interest on a money judgment ranges from low single digits to 12% a year depending on
     the state. Here are the extremes for {yr} — both <em>after</em> judgment and <em>before</em> it —
-    each figure verified against the state's own statute. Rankings use each state's primary rate; some
-    states apply a second rate by claim type (shown as "X% / Y%").</p>
+    based on the current recorded observations. States with multiple rates by claim type, judgment size,
+    or debtor type are excluded because ranking only their first number would be misleading.</p>
 
   <AdSlot id="rank-top" />
 

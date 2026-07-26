@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "oklahoma-judgment-rate",
   "name": "Oklahoma Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,12 @@
   "metadata": {
     "state": "OK",
     "statute": "12 O.S. Sec. 727.1",
-    "basis": "statute-variable"
+    "basis": "statute-variable",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_secondary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -23,10 +28,10 @@
       "effective_date": "2026-01-01",
       "source_id": "ok-jud",
       "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026). . Postjudgment rate = the prime rate as listed in the FIRST edition of the Wall Street Journal published for the calendar year, certified to the Administrative Director of… Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Treasury Bill rate of the preceding calendar year,… Verify the current value at oscn.net; not legal advice."
+      "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026).. Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Verify the current value at oscn.net; not legal advice."
     }
   },
   "history": {
@@ -39,10 +44,10 @@
         "effective_date": "2026-01-01",
         "source_id": "ok-jud",
         "source_url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026). . Postjudgment rate = the prime rate as listed in the FIRST edition of the Wall Street Journal published for the calendar year, certified to the Administrative Director of… Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Treasury Bill rate of the preceding calendar year,… Verify the current value at oscn.net; not legal advice."
+        "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026).. Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Verify the current value at oscn.net; not legal advice."
       }
     ]
   }

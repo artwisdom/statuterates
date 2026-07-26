@@ -1,9 +1,7 @@
 # ============================================================================================
-# INACTIVE until this repo is pushed to GitHub by the owner. GitHub Actions only runs on GitHub;
-# nothing here executes locally. See docs/DEPLOYMENT_GUIDE.md to activate.
+# ACTIVE: refreshes official sources every Monday and commits validated exports to main.
 #
 # Estimated usage: weekly run × ~3 min = ~13 min/month (GitHub free tier is 2,000 min/month).
-# Well under the 300 min/month budget.
 # ============================================================================================
 name: refresh-data
 
@@ -29,11 +27,15 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22.12"
 
       - name: Install pipeline dependencies
         working-directory: pipeline
-        run: npm ci || npm install
+        run: npm ci
+
+      - name: Run pipeline tests
+        working-directory: pipeline
+        run: npm test
 
       - name: Run pipeline (fetch → validate → export)
         id: pipeline
@@ -43,6 +45,7 @@ jobs:
         run: node run.mjs all
 
       - name: Commit refreshed data (only if exports changed)
+        id: commit
         if: success()
         run: |
           git config user.name "statuterates-bot"
@@ -71,9 +74,14 @@ jobs:
             echo "1. Open the 'Run pipeline' step log above and find the failing source id + error."
             echo "2. If a source layout changed, update its fetcher in \`pipeline/fetchers/\`."
             echo "3. If a source is temporarily down/rate-limiting, just re-run this workflow."
-            echo "4. Re-run \`node run.mjs all\` locally to confirm green before pushing the fix."
+            echo "4. Re-run \`npm test\` and \`node run.mjs all\` locally before pushing the fix."
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Trigger deploy on data change
-        if: success() && steps.pipeline.outcome == 'success'
-        run: echo "Data pushed; the deploy workflow runs on push to data/exports."
+      - name: Record deployment handoff
+        if: success()
+        run: |
+          if [ "${{ steps.commit.outputs.changed }}" = "true" ]; then
+            echo "Validated exports changed and were pushed. deploy-site will run after this workflow completes."
+          else
+            echo "No export changes. deploy-site will still verify production from main after this workflow completes."
+          fi

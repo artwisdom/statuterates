@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "oregon-prejudgment-rate",
   "name": "Oregon Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "ORS 82.010(1)(a)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "fixed"
+    "kind": "fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -24,11 +29,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "or-prejud",
-      "source_url": "https://oregon.public.law/statutes/ors_82.010",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under ORS 82.010(1)(a) — 9% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oregon’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "ORS 82.010 supplies a 9% rate for qualifying amounts, but the section does not itself create entitlement to prejudgment interest. Availability and the accrual date depend on the underlying claim and Oregon case law. Simple-interest reference only; confirm the controlling rule. Not legal advice."
     }
   },
   "history": {
@@ -40,11 +45,11 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "or-prejud",
-        "source_url": "https://oregon.public.law/statutes/ors_82.010",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under ORS 82.010(1)(a) — 9% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Oregon’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "ORS 82.010 supplies a 9% rate for qualifying amounts, but the section does not itself create entitlement to prejudgment interest. Availability and the accrual date depend on the underlying claim and Oregon case law. Simple-interest reference only; confirm the controlling rule. Not legal advice."
       }
     ]
   }

@@ -13,17 +13,22 @@ import { fetchEcb, ECB_ENTITY } from './fetchers/ecb.mjs';
 import { buildWeeklyAverages, buildCmtRecords, buildPostJudgmentRecords } from './lib/normalize.mjs';
 import { buildPublishedSeries, buildUkLatePayment, buildEuReference } from './lib/rates-intl.mjs';
 import { STATE_SOURCES, buildStateFixed, buildIowa } from './fetchers/us-states.mjs';
+import { fetchTexasCurrentRate } from './fetchers/texas-occc.mjs';
+import { fetchNebraskaCurrentRate } from './fetchers/nebraska-judicial.mjs';
+import { fetchIowaCourtTable } from './fetchers/iowa-judicial.mjs';
+import { fetchGeorgiaPrimeChanges } from './fetchers/georgia-prime.mjs';
 import { validate } from './lib/validate.mjs';
 import { exportAll } from './lib/exporter.mjs';
+import { seedFromExports } from './lib/seed-exports.mjs';
 
 export const DATASET_META = {
   title: 'StatuteRates',
   description:
-    'The canonical, provenance-tracked database of statutory, judgment and tax interest rates across the US, UK and EU — IRS §6621 quarterly rates, the US federal post-judgment rate (28 U.S.C. §1961), UK late-commercial-payment interest (Late Payment Act 1998), and the EU Late Payment Directive reference rate — each value stamped with its effective date and official source.',
-  version: '0.2.0',
+    'A provenance-tracked reference dataset of statutory, judgment and tax interest rates across the US, UK and EU — with effective dates, methods, and a cited source for each observation. Primary government sources are preferred; any secondary source is identified in its source record.',
+  version: '0.3.0',
   update_cadence: 'IRS quarterly; US Treasury/post-judgment weekly; UK/EU statutory rates semi-annual; BoE/ECB policy rates on decision. Refreshed weekly.',
-  attribution: 'Source values are U.S. federal government works (public domain). Compiled by StatuteRates.',
-  license: 'Compiled dataset offered for reference; values trace to official public-domain sources (see each record).',
+  attribution: 'Compiled by StatuteRates from government publications, statutory texts, and identified secondary legal sources.',
+  license: 'StatuteRates compilation; underlying source rights vary. Government edicts are not subject to copyright, while statistical publications and third-party pages may have their own terms. See each source record.',
   sample_query: 'irs',
   disclaimer:
     'Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.',
@@ -44,17 +49,70 @@ function loadBundleIntoDb(db, bundle) {
   return n;
 }
 
+function buildStateBundles({ daily = [], today, retrievedAt, texasCurrent = null, nebraskaCurrent = null, georgiaPrime = null, iowaCourt = null, sourceOverrides = [] } = {}) {
+  const stateFixed = buildStateFixed({
+    texasCurrent,
+    nebraskaCurrent,
+    georgiaPrimeChanges: georgiaPrime?.changePoints || [],
+    georgiaRetrievedAt: georgiaPrime?.retrieved_at || null,
+    daily,
+    today,
+    retrievedAt,
+  });
+  const sourceById = new Map(STATE_SOURCES.map((source) => [source.id, source]));
+  for (const source of sourceOverrides) sourceById.set(source.id, source);
+  const sources = [...sourceById.values()];
+  const iaSource = sourceById.get('ia-jud');
+  const iowa = buildIowa({
+    courtPoints: iowaCourt?.points || [],
+    courtRetrievedAt: iowaCourt?.retrieved_at || null,
+    daily,
+    retrieved_at: retrievedAt || iaSource.retrieved_at,
+  });
+  const entityToSources = new Map();
+  for (const observation of stateFixed.observations) {
+    if (!entityToSources.has(observation.entitySlug)) entityToSources.set(observation.entitySlug, new Set());
+    entityToSources.get(observation.entitySlug).add(observation.source_id);
+  }
+  const bundles = sources.map((source) => ({
+    source,
+    // A future Maine period can have official-chart history plus a separately labeled provisional
+    // H.15 point. Re-upserting its entity in both source bundles is intentional and idempotent.
+    entities: stateFixed.entities.filter((entity) => entityToSources.get(entity.slug)?.has(source.id)),
+    observations: stateFixed.observations.filter((observation) => observation.source_id === source.id),
+  }));
+  for (const sourceId of new Set(iowa.observations.map((observation) => observation.source_id))) {
+    const iaBundle = bundles.find((bundle) => bundle.source.id === sourceId);
+    if (!iaBundle) throw new Error(`Iowa observation source ${sourceId} is missing from STATE_SOURCES`);
+    // Re-upserting Iowa's entity alongside its official court observations is intentional and
+    // idempotent. Estimated H.15 substitutes are forbidden for this series.
+    iaBundle.entities.push(...iowa.entities);
+    iaBundle.observations.push(...iowa.observations.filter((observation) => observation.source_id === sourceId));
+  }
+  return bundles;
+}
+
 async function runAll() {
   const db = openDb();
+  const seed = seedFromExports(db);
+  if (seed.seeded) {
+    console.log(`Hydrated SQLite from committed history: ${seed.entities} entities / ${seed.observations} observations.`);
+  }
   const runId = startRun(db);
   try {
     const today = new Date().toISOString().slice(0, 10);
 
     // 1) FETCH — US (IRS + Fed H.15), UK (BoE), EU (ECB)
-    const irs = await fetchIrs({ log: console.log });
-    const h15 = await fetchH15({ log: console.log });
-    const boe = await fetchBoe({ log: console.log });
-    const ecb = await fetchEcb({ log: console.log });
+    const [irs, h15, boe, ecb, texas, nebraska, georgiaPrime, iowaCourt] = await Promise.all([
+      fetchIrs({ log: console.log }),
+      fetchH15({ log: console.log }),
+      fetchBoe({ log: console.log }),
+      fetchEcb({ log: console.log }),
+      fetchTexasCurrentRate({ log: console.log, today }),
+      fetchNebraskaCurrentRate({ log: console.log, today }),
+      fetchGeorgiaPrimeChanges({ log: console.log, today }),
+      fetchIowaCourtTable({ log: console.log, today }),
+    ]);
 
     // 2) NORMALIZE
     // US: H.15 daily -> weekly CMT + derived post-judgment
@@ -75,22 +133,56 @@ async function runAll() {
     const euRef = buildEuReference(ecb.changePoints, { ...ecbSrc, today });
     const ecbBundle = { source: ecb.source, entities: [ecbPub.entity, euRef.entity], observations: [...ecbPub.observations, ...euRef.observations] };
 
-    // US states: statute-fixed values (CA/NY/MA, verified against official texts) + Iowa derived
-    // weekly from the same H.15 weeks as the federal series (Iowa Code §668.13(3) = CMT + 2pp).
+    // US states: curated official references. Texas and Nebraska receive live official observations;
+    // Georgia validates and extends its exact Federal Reserve prime-rate change-point history.
+    // Iowa uses the Judicial Branch's monthly table (never the federal weekly average) and attempts
+    // a live table refresh. If access is blocked, it retains verified court history without estimating.
     // Each state's entities/observations load under ITS OWN source bundle so the source row exists
     // before any observation references it (FK integrity).
-    const nowIso = new Date().toISOString();
-    const stateFixed = buildStateFixed({ retrieved_at: nowIso });
-    const iowa = buildIowa(weeks, { retrieved_at: nowIso });
-    const entityToSource = new Map(stateFixed.observations.map((o) => [o.entitySlug, o.source_id]));
-    const stateBundles = STATE_SOURCES.map((source) => ({
-      source,
-      entities: stateFixed.entities.filter((e) => entityToSource.get(e.slug) === source.id),
-      observations: stateFixed.observations.filter((o) => o.source_id === source.id),
-    }));
-    const iaBundle = stateBundles.find((b) => b.source.id === 'ia-legis');
-    iaBundle.entities.push(...iowa.entities);
-    iaBundle.observations.push(...iowa.observations);
+    const txPrejudSource = STATE_SOURCES.find((source) => source.id === 'tx-prejud');
+    const nePrejudSource = STATE_SOURCES.find((source) => source.id === 'ne-prejud');
+    const gaPostSource = STATE_SOURCES.find((source) => source.id === 'ga-code');
+    const gaPrejudSource = STATE_SOURCES.find((source) => source.id === 'ga-prejud');
+    const meProvisionalSource = STATE_SOURCES.find((source) => source.id === 'me-h15-provisional');
+    const stateBundles = buildStateBundles({
+      daily: h15.daily,
+      today,
+      retrievedAt: h15.retrieved_at,
+      texasCurrent: texas.observation,
+      nebraskaCurrent: nebraska.observation,
+      georgiaPrime,
+      iowaCourt,
+      sourceOverrides: [
+        texas.source,
+        nebraska.source,
+        ...(iowaCourt?.source ? [iowaCourt.source] : []),
+        {
+          ...txPrejudSource,
+          robots_status: `official Chapter 304 text verified 2026-07-19; current linked OCCC rate fetched ${texas.retrieved_at}`,
+          retrieved_at: texas.retrieved_at,
+        },
+        {
+          ...nePrejudSource,
+          robots_status: `official Chapter 45 text verified 2026-07-19; current linked Judicial Branch rate fetched ${nebraska.retrieved_at}`,
+          retrieved_at: nebraska.retrieved_at,
+        },
+        {
+          ...gaPostSource,
+          robots_status: `Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched ${georgiaPrime.retrieved_at}`,
+          retrieved_at: georgiaPrime.retrieved_at,
+        },
+        {
+          ...gaPrejudSource,
+          robots_status: `Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched ${georgiaPrime.retrieved_at}`,
+          retrieved_at: georgiaPrime.retrieved_at,
+        },
+        {
+          ...meProvisionalSource,
+          robots_status: `future-year fallback only after the official Maine Judicial Branch chart ends; official H.15 input fetched ${h15.retrieved_at}`,
+          retrieved_at: h15.retrieved_at,
+        },
+      ],
+    });
 
     // 3) LOAD into SQLite (source of truth)
     let records = 0;
@@ -133,7 +225,7 @@ async function runAll() {
 }
 
 const cmd = process.argv[2] || 'all';
-if (cmd === 'all') {
+if (cmd === 'all' || cmd === 'fetch') {
   runAll().catch((e) => {
     console.error('\nPIPELINE FAILED:', e.message);
     process.exit(1);
@@ -147,7 +239,20 @@ if (cmd === 'all') {
 } else if (cmd === 'export') {
   const ex = exportAll({ datasetMeta: DATASET_META });
   console.log(`Exported ${ex.entities} entities / ${ex.observations} observations.`);
+} else if (cmd === 'build') {
+  const db = openDb();
+  const seed = seedFromExports(db);
+  let curatedRecords = 0;
+  const loadCurated = db.transaction(() => {
+    for (const bundle of buildStateBundles()) curatedRecords += loadBundleIntoDb(db, bundle);
+  });
+  loadCurated();
+  const report = validate(db);
+  console.log(`Hydrated SQLite from committed exports: ${seed.entities} entities / ${seed.observations} observations; refreshed ${curatedRecords} curated state records from source code.`);
+  if (!report.ok) console.error(JSON.stringify(report, null, 2));
+  db.close();
+  process.exit(report.ok ? 0 : 1);
 } else {
-  console.error(`Unknown command "${cmd}". Use: all | validate | export`);
+  console.error(`Unknown command "${cmd}". Use: all | fetch | build | validate | export`);
   process.exit(2);
 }

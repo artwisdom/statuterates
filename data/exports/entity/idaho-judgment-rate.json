@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "idaho-judgment-rate",
   "name": "Idaho Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,12 @@
   "metadata": {
     "state": "ID",
     "statute": "Idaho Code § 28-22-104(2)",
-    "basis": "statute-variable"
+    "basis": "statute-variable",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -23,10 +28,10 @@
       "effective_date": "2026-07-01",
       "source_id": "id-jud",
       "source_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Treasury securities adjusted to a constant maturity of one (1)… Simple interest. § 28-22-104(2) applies \"unless the judgment is rendered on a written contract or agreement providing for a different rate of interest, in which case… Verify the current value at sto.idaho.gov; not legal advice."
+      "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Simple interest. Verify the current value at sto.idaho.gov; not legal advice."
     }
   },
   "history": {
@@ -39,10 +44,10 @@
         "effective_date": "2026-07-01",
         "source_id": "id-jud",
         "source_url": "https://sto.idaho.gov/Banking/Legal-Rate-of-Interest",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Treasury securities adjusted to a constant maturity of one (1)… Simple interest. § 28-22-104(2) applies \"unless the judgment is rendered on a written contract or agreement providing for a different rate of interest, in which case… Verify the current value at sto.idaho.gov; not legal advice."
+        "notes": "Post-judgment interest under Idaho Code § 28-22-104(2), currently 8.875% (as of July 1, 2026). Judgment rate = 5% + base rate in effect at time of entry of judgment. Base rate = weekly average yield on U.S. Simple interest. Verify the current value at sto.idaho.gov; not legal advice."
       }
     ]
   }

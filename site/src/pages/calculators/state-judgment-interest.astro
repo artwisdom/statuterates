@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
-import { getMeta, historyFor, getEntity, latestOf, prettyDate } from '../../lib/data.mjs';
+import { getMeta, historyFor, getEntity, latestOf, prettyDate, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 
 const meta = getMeta();
 // Calculation histories. For CA/NY/MA the statutory rates have been stable for decades (verified
@@ -54,16 +54,32 @@ const seriesOptions = [
   { key: 'south-dakota', label: "South Dakota — 10% (SDCL § 54-3-5.1)" },
   { key: 'vermont', label: "Vermont — 12% (9 V.S.A. § 41a(a))" },
   { key: 'wyoming', label: "Wyoming — 10% (Wyo. Stat. Ann. 1-16-102)" },
-  { key: 'iowa', label: 'Iowa — 1-yr Treasury + 2% (§668.13, weekly)' },
+  { key: 'iowa', label: 'Iowa — monthly court table + 2% (§668.13)' },
 ];
 const caLatest = latestOf(getEntity('california-judgment-rate'));
 const iaLatest = latestOf(getEntity('iowa-judgment-rate'));
+const requiredCalculatorEntities = [
+  'california-judgment-rate', 'new-york-judgment-rate', 'new-york-consumer-debt-judgment-rate',
+  'massachusetts-judgment-rate', 'pennsylvania-judgment-rate', 'illinois-judgment-rate',
+  'north-carolina-judgment-rate', 'virginia-judgment-rate', 'alabama-judgment-rate',
+  'hawaii-judgment-rate', 'indiana-judgment-rate', 'maryland-judgment-rate',
+  'new-mexico-judgment-rate', 'oregon-judgment-rate', 'rhode-island-judgment-rate',
+  'south-dakota-judgment-rate', 'vermont-judgment-rate', 'wyoming-judgment-rate',
+  'iowa-judgment-rate',
+];
+const calculatorEnabled = STATE_CALCULATOR_RENDERER_READY
+  && import.meta.env.ENABLE_STATE_CALCULATORS === 'true'
+  && requiredCalculatorEntities.every((slug) => isCalculatorReady(getEntity(slug)));
 
-const title = `State Judgment Interest Calculator — CA, NY, MA, IA | ${meta.title}`;
-const description = `Free state judgment interest calculator with verified statutory rates: California 10%, New York 9% (2% consumer debt), Massachusetts 12%, Iowa ${iaLatest?.value_text} (Treasury-linked, changes weekly). Simple daily interest per each statute.`;
+const title = calculatorEnabled
+  ? `State Judgment Interest Calculator — CA, NY, MA, IA | ${meta.title}`
+  : `State Judgment Calculator Verification | ${meta.title}`;
+const description = calculatorEnabled
+  ? `State judgment interest calculator using structured, source-backed state rules and rate histories.`
+  : `Why the state judgment calculator is temporarily withheld while historical rates, reset rules, compounding, and statutory exceptions are verified.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
-const jsonLd = [
+const jsonLd = calculatorEnabled ? [
   {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -81,7 +97,7 @@ const jsonLd = [
       {
         '@type': 'Question',
         name: 'What interest rate applies to a court judgment in my state?',
-        acceptedAnswer: { '@type': 'Answer', text: 'It varies by state statute: California 10% (5% for certain medical/personal debt against individuals), New York 9% (2% for consumer debt), Massachusetts 12%, and Iowa uses the 1-year Treasury yield + 2%, which changes weekly. Each state page on this site cites the statute.' },
+        acceptedAnswer: { '@type': 'Answer', text: 'It varies by state statute: California 10% (5% for certain medical/personal debt against individuals), New York 9% (2% for consumer debt), Massachusetts 12%, and Iowa uses a monthly State Court Administration selection from the one-year Treasury CMT plus 2%. Each state page cites its source.' },
       },
       {
         '@type': 'Question',
@@ -98,13 +114,26 @@ const jsonLd = [
       { '@type': 'ListItem', position: 2, name: 'State judgment interest', item: canonical },
     ],
   },
-];
+] : null;
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} noindex={!calculatorEnabled}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>State judgment interest</span>
   </nav>
+  {!calculatorEnabled ? (
+    <>
+      <h1>State judgment calculator verification in progress</h1>
+      <p class="lead">State rates remain available as sourced reference data, but this calculator is
+        temporarily withheld while historical rates, compounding, reset rules, and claim-type
+        exceptions are converted into a testable rule model.</p>
+      <div class="disclaimer"><strong>Why this matters:</strong> using today’s rate for an older
+        judgment—or ignoring a statutory exception—can produce a confident but wrong result. Browse
+        the <a href="/states/">state rate references</a> or use the verified
+        <a href="/calculators/post-judgment-interest/">federal calculator</a>.</div>
+    </>
+  ) : (
+    <>
   <h1>State judgment interest calculator</h1>
   <p class="lead">Simple daily interest on a money judgment at your state's statutory rate — each rate
     verified against the official statute text and cited on its own page.</p>
@@ -121,8 +150,8 @@ const jsonLd = [
   />
   <p class="source-note">Assumptions: CA/NY/MA statutory rates have been stable for decades, so this
     calculator accepts start dates back to 1990 at the current rate. The NY consumer series applies 9%
-    before April 30, 2022 and 2% from that date (the statutory transition). Iowa requires a judgment
-    date within our weekly data (mid-2024 onward).</p>
+    before April 30, 2022 and 2% from that date (the statutory transition). Iowa requires the monthly
+    court-table selection applicable when the judgment was entered and is not calculator-enabled.</p>
 
   <AdSlot id="calc-top" />
 
@@ -138,11 +167,14 @@ const jsonLd = [
       and contract — an agreed contract rate displaces the contract default; the commonwealth pays a
       Treasury-linked rate capped at 10%.</li>
     <li><strong><a href="/rates/iowa-judgment-rate/">Iowa</a>:</strong> market-linked (1-yr Treasury + 2%),
-      fixed per judgment from the H.15 value published just before it — pick the judgment date and this
-      calculator applies that week's rate.</li>
+      selected as of judgment from the State Court Administrator’s monthly table. It is not the federal
+      weekly-average series, and contract, structured-judgment, workers’ compensation, and support
+      branches require separate treatment.</li>
   </ul>
   <p class="source-note">Federal-court judgments use a different statute and compounding —
     use the <a href="/calculators/post-judgment-interest/">federal post-judgment calculator</a>.</p>
 
   <AdSlot id="calc-bottom" />
+    </>
+  )}
 </BaseLayout>

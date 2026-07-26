@@ -2,6 +2,8 @@
 // page substantive for readers and search engines, and states plainly what the number means and how
 // it is sourced/derived. `q` powers the FAQ rich-result and the human "what is it" line.
 
+import { removeTruncatedFragments } from '../../../shared/text-quality.mjs';
+
 export const SERIES_COPY = {
   'irs-underpayment': {
     tagline: 'What the IRS charges on unpaid federal tax.',
@@ -120,13 +122,20 @@ statutory rates in the U.S. In contract cases an established contract rate displ
 and judgments against the commonwealth instead bear interest at a Treasury-linked rate capped at 10%.`,
   },
   'iowa-judgment-rate': {
-    tagline: 'Iowa’s market-linked judgment interest rate.',
+    tagline: 'Iowa’s monthly published Treasury-linked judgment rate.',
     q: 'What is the current Iowa judgment interest rate?',
-    body: `Unlike fixed-rate states, Iowa ties judgment interest to the market: Iowa Code §668.13 sets it at
-the 1-year Treasury constant maturity yield (Federal Reserve H.15) published immediately before the
-judgment, plus 2 percentage points, computed daily. That means the rate changes every week — this page
-computes it from the same official H.15 series that drives the federal post-judgment rate. A contract
-rate governs instead if the judgment is on a contract that fixes one.`,
+    body: `Iowa Code §§535.3 and 668.13 set the general noncontract judgment rate at the one-year Treasury
+constant maturity selected from Federal Reserve H.15, plus 2 percentage points. State Court
+Administration publishes the applicable selection in a monthly table; it is not the federal court
+system’s weekly-average rate. The rate is selected as of judgment and interest is computed daily. A
+qualifying contract rate, workers’ compensation award, support obligation, or structured judgment can
+follow a different rule.`,
+    postDetails: {
+      scope: 'The headline applies to the general noncontract path under §§535.3(1)(a) and 668.13. If a contract fixes a lawful rate, §668.13(2) uses that rate subject to the §535.2 cap. Section 535.3 separately addresses workers’ compensation and child, spousal, and medical-support obligations.',
+      accrual: 'Section 668.13 generally allows interest from commencement of the action, with future damages beginning only when judgment is entered. After entry, the rate selected as of the judgment continues while the amount remains unpaid. Section 625.21 also supplies a verdict-to-final-entry rule outside chapter 668.',
+      compounding: 'Section 668.13(5) requires interest to be computed daily to payment, and Iowa authority treats the ordinary path as simple interest. The statute does not itself state the annual day-count denominator or every partial-payment rule, so the calculator remains withheld.',
+      history: 'The dataset contains 302 exact Judicial Branch table selections from March 2001 through July 2026, including the court’s confirmed 6.06% selection effective July 9, 2026. The official 1982–2000 scan is linked but not digitized because damaged and handwritten rows need a second manual check. If the live table is temporarily blocked, automation retains the last verified court history instead of substituting an estimate.',
+    },
   },
   'texas-judgment-rate': {
     tagline: 'Interest on Texas money judgments — tied to the prime rate.',
@@ -134,7 +143,14 @@ rate governs instead if the judgment is on a contract that fixes one.`,
     body: `Texas post-judgment interest on most money judgments is the Federal Reserve prime rate, held within a
 5% floor and 15% ceiling under Texas Finance Code §304.003 — currently 6.75%. The rate locks in when the
 judgment is entered and, unusually, compounds annually. Judgments on a contract that sets its own interest
-rate follow §304.002 instead (the contract rate, capped at 18%).`,
+rate follow §304.002 instead (the contract rate, capped at 18%). This page includes every monthly OCCC rate
+from September 1983 through the latest published judgment month, including months when the rate did not change.`,
+    postDetails: {
+      scope: 'The headline rate applies under §304.003 when the money judgment is not governed by an interest-bearing contract. Section 304.002 instead uses the lesser of the contract rate or 18%. Chapter 304 separately excludes specified delinquent-tax and delinquent-child-support interest.',
+      accrual: 'Under §304.005, interest generally runs from the date the judgment is rendered through the date it is satisfied. A granted extension of time for a trial claimant to file an appellate brief pauses accrual for that extension period.',
+      compounding: 'Post-judgment interest compounds annually under §304.006. The rate itself remains the OCCC rate assigned to the calendar month in which the judgment was rendered.',
+      history: 'The recorded monthly schedule begins September 1983. Values through January 2026 come from the official OCCC historical table; archived Texas Credit Letters confirm February through July 2026, and the weekly pipeline monitors the current OCCC page for each new month.',
+    },
   },
   'florida-judgment-rate': {
     tagline: 'Florida’s quarterly judgment rate, set by the CFO.',
@@ -148,8 +164,15 @@ January 1. Many sites still quote last quarter’s number; this page tracks the 
     tagline: 'Georgia judgment interest — prime rate plus 3 points.',
     q: 'What is the current Georgia post-judgment interest rate?',
     body: `Under O.C.G.A. §7-4-12, interest on a Georgia money judgment is the Federal Reserve prime rate on the
-day of judgment plus 3 percentage points — about 9.75% today — fixed for the life of that judgment, as simple
-interest. A judgment on a written contract that specifies a rate carries the contract rate instead.`,
+day of judgment plus 3 percentage points — currently 9.75% — fixed for the life of that judgment. A judgment
+on a written contract that specifies a rate carries the contract rate instead. The history below follows every
+Federal Reserve prime-rate change since the current statutory scheme began on July 1, 2003.`,
+    postDetails: {
+      scope: 'For civil actions filed on or after July 1, 2003, §7-4-12(a) applies the prime-plus-three formula to the general money-judgment path. Under subsection (b), a judgment founded on a written contract that specifies an interest rate uses the contract rate instead.',
+      accrual: 'The benchmark is the Federal Reserve prime rate in force on the date the judgment is entered. The resulting rate is fixed for that judgment rather than resetting whenever prime later changes.',
+      compounding: 'The general rule is treated as simple interest. Calculator output remains withheld while day count, partial-payment allocation, amended judgments, and every supported exception are verified to calculator-grade certainty.',
+      history: 'The recorded history begins July 1, 2003 with the 4.00% prime rate then in force, producing 7.00%. Each later row is an exact effective-date change from the Federal Reserve/FRED PRIME series. The weekly refresh validates the complete baseline and automatically appends a later change.',
+    },
   },
   'pennsylvania-judgment-rate': {
     tagline: 'Pennsylvania’s flat 6% legal judgment rate.',
@@ -276,9 +299,15 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     body: "Kansas post-judgment interest is currently 7.75% — a statutory formula rate under Kan. Stat. Ann. 16-204 that resets each year. This 16-204 rate is POST-judgment. Prejudgment interest is governed separately by K.S.A. 16-201 (10% per annum when no other rate agreed). CONTRACT:…",
   },
   "kentucky-judgment-rate": {
-    tagline: "Kentucky’s statutory judgment interest rate.",
+    tagline: "Kentucky’s general judgment rate, with the 2017 statutory change preserved.",
     q: "What is the current Kentucky post-judgment interest rate?",
-    body: "Kentucky money judgments carry a fixed statutory rate of 6% per year under KRS 360.040, compounded annually. Default (tort/general/unpaid money judgments, and prejudgment interest once reduced to judgment): 6% compounded annually [KRS 360.040(1)]. CHILD…",
+    body: "Kentucky’s general rate is 6% per year for judgments entered on or after June 29, 2017, compounded annually from entry under KRS 360.040(1). The enrolled 2017 Act reduced the prior general rate from 12%. Important branches remain: unpaid child-support judgments bear 12%; a judgment on a contract, note, or other written obligation uses its stated rate; and a court may set an unliquidated judgment below 6% after notice and a hearing.",
+    postDetails: {
+      scope: "The 6% headline is the general KRS 360.040(1) path. Subsection (2) keeps unpaid child-support judgments at 12%. Subsection (3) uses the rate in a contract, promissory note, or other written obligation. Under subsection (4), an unliquidated judgment may bear less than 6% after notice and a hearing.",
+      accrual: "The statute runs general post-judgment interest from the date the judgment is entered. The 2017 Act expressly applies the 6% amendment to judgments entered on or after June 29, 2017, so the judgment-entry date selects between the recorded 12% and 6% general rates.",
+      compounding: "KRS 360.040 expressly requires annual compounding. A calculator is still withheld because the statute does not supply a complete day-count and partial-payment method, and the written-obligation, support, and unliquidated-judgment branches require separate inputs.",
+      history: "The dataset records the 12% general rate from the July 15, 1982 amendment date and the 6% rate from June 29, 2017. Earlier enactments appear in the statute history but are not digitized as calculator data without their historical text.",
+    },
   },
   "louisiana-judgment-rate": {
     tagline: "Louisiana judgment interest — a formula rate, reset each year.",
@@ -306,9 +335,19 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     body: "Montana post-judgment interest is currently 9.75% — a statutory formula rate under Mont. Code Ann. § 25-9-205 that resets periodically. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the…",
   },
   "nebraska-judgment-rate": {
-    tagline: "Nebraska judgment interest — a formula rate, reset each quarter.",
+    tagline: "Nebraska judgment interest — a quarterly formula rate fixed when judgment is entered.",
     q: "What is the current Nebraska post-judgment interest rate?",
-    body: "Nebraska post-judgment interest is currently 5.970% — a statutory formula rate under Neb. Rev. Stat. § 45-103 that resets each quarter. Statutory rate does NOT apply where (1) the interest rate is specifically provided by other law, or (2) the action is founded on an oral or written…",
+    body: `Nebraska post-judgment interest is currently 5.970% under Neb. Rev. Stat. §45-103, effective
+July 16, 2026. For judgments entered on or after July 20, 2002, the rate is the bond investment yield
+from the first 26-week U.S. Treasury-bill auction of the quarter plus two percentage points. The rate
+is fixed when judgment is entered, not reset on an existing judgment every quarter. This page includes
+the Nebraska Judicial Branch's complete published change-point table from January 1, 1987 forward.`,
+    postDetails: {
+      scope: 'The headline §45-103 rate applies to decrees and judgments for payment of money. It does not apply when another law specifically provides the rate or when an oral or written contract agrees a different rate.',
+      accrual: 'Section 45-103.01 runs interest from entry of judgment until satisfaction. An appeal does not by itself restart that date; for installment judgments, Nebraska case annotations say each installment begins accruing when it becomes due and payable.',
+      compounding: 'The applicable rate is fixed on the judgment-entry date. Sections 45-103 and 45-103.01 do not state the day-count, compounding, or partial-payment mechanics needed for a dependable general calculator, so StatuteRates keeps the Nebraska calculator disabled pending further primary-source verification.',
+      history: 'The official Judicial Branch table contains every published change point from January 1, 1987 through the latest effective date. It also preserves the source table’s gap between March 13, 2001 and the July 20, 2002 formula transition instead of inventing missing values. The weekly pipeline checks the current court page for each new quarter.',
+    },
   },
   "nevada-judgment-rate": {
     tagline: "Nevada judgment interest — a formula rate, reset twice a year.",
@@ -381,9 +420,15 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     body: "Wyoming money judgments carry a fixed statutory rate of 10% per year under Wyo. Stat. Ann. 1-16-102, as simple interest. POST-judgment only (this statute governs interest on decrees/judgments from date of rendition; prejudgment interest is a separate common-law/contract…",
   },
   "maine-judgment-rate": {
-    tagline: "Maine judgment interest — a formula rate, reset each year.",
+    tagline: "Maine’s official annual Treasury-linked post-judgment rate.",
     q: "What is the current Maine post-judgment interest rate?",
-    body: "Maine post-judgment interest is currently 9.51% — a statutory formula rate under 14 M.R.S. §1602-C that resets each year. Contract or note actions with an interest provision use the greater of the contract rate or the statutory Treasury-plus-6 rate; all other actions use…",
+    body: "Maine post-judgment interest is currently 9.51% for interest beginning in 2026. Under 14 M.R.S. §1602-C, the general rate is the weekly-average one-year Treasury constant maturity yield for the last full week of the prior calendar year, plus 6 percentage points. A contract or note with an interest provision uses the greater of its written rate and the statutory rate.",
+    postDetails: {
+      scope: "The Treasury-plus-6 rate applies to the general civil and small-claims path. If a contract or note contains an interest provision, §1602-C(1)(A) uses the greater of the written rate and the statutory general rate.",
+      accrual: "Interest accrues from and after entry of judgment and includes the appeal period. A continuance longer than 30 days obtained at the prevailing party’s request suspends interest for that period, and the court may fully or partially waive interest for good cause on the nonprevailing party’s petition.",
+      compounding: "The rate is selected by the calendar year in which post-judgment interest begins. Section 1602-C does not specify the calculator-grade compounding, day-count, or partial-payment mechanics, so StatuteRates does not publish a Maine payoff calculator yet.",
+      history: "The dataset contains all 24 annual rows in the official Judicial Branch chart from July 2003 through 2026. The 2025 row uses the court’s corrected April 1, 2025 value of 10.23%, replacing the 10.88% value first published due to an administrative error. The pipeline independently checks the current chart against official H.15 data.",
+    },
   },
   "alabama-prejudgment-rate": {
     tagline: "Alabama’s prejudgment interest rate — when a court awards it.",
@@ -511,15 +556,16 @@ the judgment is entered — currently 8.75%, as simple interest.`,
   "georgia-prejudgment-rate": {
     tagline: "Georgia prejudgment interest — 7% for liquidated claims, prime+3% for tort.",
     q: "What is the Georgia prejudgment interest rate?",
-    body: "Georgia prejudgment interest is 7% simple for liquidated demands (the legal rate, O.C.G.A. §7-4-2), but unliquidated tort/personal-injury damages instead accrue prime + 3% — currently 9.75% — under §51-12-14. Award depends entirely on claim type. LIQUIDATED demands (OCGA 7-4-15): prejudgment interest at 7% is MANDATORY, awarded as a matter of law, when the sum owed is fixed or certain by…",
+    body: "Georgia has two different prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15. A qualifying unliquidated tort demand under §51-12-14 instead uses the Federal Reserve prime rate on the benchmark-selection day plus 3 points — currently 9.75%. The claim type and notice determine which path, if either, applies.",
     prejudgment: true,
     kind: "fixed",
     kindLabel: "Fixed by statute",
     postSlug: "georgia-judgment-rate",
-    appliesShort: "Award depends entirely on claim type. LIQUIDATED demands (OCGA 7-4-15): prejudgment interest at 7% is MANDATORY, awarded as a matter of law, when the sum owed is fixed or certain by…",
-    applies: "Award depends entirely on claim type. LIQUIDATED demands (OCGA 7-4-15): prejudgment interest at 7% is MANDATORY, awarded as a matter of law, when the sum owed is fixed or certain by agreement or otherwise; it is NOT available where a genuine question of fact remains as to the amount owed (then the demand is unliquidated and 7-4-15 interest is not authorized).",
-    accrual: "LIQUIDATED (7-4-15): interest runs from the time the party became liable and bound to pay (if payable on demand, from the time of demand; for demand promissory notes, from date).",
-    compound: "Simple. OCGA 7-4-2 specifies the 7% legal rate as simple interest; Georgia courts hold prejudgment interest is calculated as simple, not compound, interest.",
+    appliesShort: "A liquidated sum can use §§7-4-2 and 7-4-15; a qualifying unliquidated tort demand follows the separate §51-12-14 notice formula.",
+    applies: "For the liquidated-demand path, the amount must be fixed or certain by agreement or otherwise; a genuine factual dispute over the amount can prevent §7-4-15 interest. Section 51-12-14 creates a separate path for qualifying unliquidated tort damages after the required written notice. It does not turn every tort claim into an automatic award.",
+    accrual: "For a qualifying liquidated demand, interest runs from the legally relevant date the party became bound to pay, or from demand where the obligation is payable on demand. For the §51-12-14 tort path, interest begins on the 30th day after the last written notice, and the prime rate on that 30th day supplies the benchmark.",
+    compound: "Both recorded paths are treated as simple interest. The calculator remains withheld because eligibility, notice, the exact accrual date, offsets, and payment mechanics depend on the claim.",
+    formula: "The liquidated path remains 7%. The tort-demand path is Federal Reserve prime plus 3 percentage points; the history table records every benchmark change since the current scheme began and the weekly pipeline monitors FRED for the next change.",
   },
   "hawaii-prejudgment-rate": {
     tagline: "Hawaii prejudgment interest is discretionary — here is the rate courts apply.",
@@ -574,18 +620,18 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     compound: "Simple. Tort statute (IC 34-51-4-9) expressly requires the court to compute prejudgment interest \"at the simple rate.\" Contract-claim prejudgment interest (IC 24-4.6-1-103, 8%) is likewise applied as simple interest.",
   },
   "iowa-prejudgment-rate": {
-    tagline: "Iowa prejudgment interest — a formula rate, reset monthly.",
+    tagline: "Iowa prejudgment interest — monthly published rate, selected at judgment.",
     q: "What is the Iowa prejudgment interest rate?",
-    body: "Iowa prejudgment interest is currently 6.03% per year — a statutory formula rate under Iowa Code § 668.13 that resets monthly. Prejudgment interest is broadly available on money due on judgments/decrees, including both tort/comparative-fault (§ 668.13 is in the comparative fault chapter) and contract claims (via §…",
+    body: "Iowa’s general prejudgment rate uses the same Iowa Code §668.13 selection as post-judgment interest: the State Court Administrator’s monthly one-year Treasury CMT value plus 2 percentage points, selected as of the judgment. The published table changes monthly, but an individual judgment does not reset every month. Entitlement and the accrual start still depend on the claim and governing statute.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
     postSlug: "iowa-judgment-rate",
-    appliesShort: "Prejudgment interest is broadly available on money due on judgments/decrees, including both tort/comparative-fault (§ 668.13 is in the comparative fault chapter) and contract claims (via §…",
-    applies: "Prejudgment interest is broadly available on money due on judgments/decrees, including both tort/comparative-fault (§ 668.13 is in the comparative fault chapter) and contract claims (via § 535.3), and does NOT require the claim to be liquidated in the strict sense. KEY EXCLUSIONS: (1) Future damages get NO prejudgment interest — § 668.13(4) states interest on future damages does not begin to accrue until the date of entry of judgment.",
-    accrual: "From the date of commencement of the action (i.e., when suit is filed), per § 668.13(1) — EXCEPT interest awarded for future damages, which does not begin to accrue until the date of entry of judgment (§ 668.13(4)).",
-    compound: "Simple. § 668.13(5) provides interest \"shall be computed daily to the date of the payment\" — daily simple accrual, not compounding (except structured/periodic non-lump-sum payments under § 668.3(7), which reflect interest per annuity…",
-    formula: "Variable: (1-year Treasury constant maturity from Fed H.15 report settled immediately prior to judgment date) + 2%. Same rate basis as post-judgment (§ 535.3(1)(a) pegs all judgment interest to § 668.13).",
+    appliesShort: "The general §668.13 path can include interest before judgment, but future damages, contract-rate cases, non-chapter-668 verdict interest, support obligations, and workers’ compensation use important separate rules.",
+    applies: "Sections 535.3 and 668.13 govern the general judgment-interest path, including interest for the period before entry. A lawful contract rate can control under §668.13(2). Future damages do not earn interest before judgment, and §625.21 separately addresses verdict-to-final-entry interest in actions outside chapter 668. Workers’ compensation and support obligations have their own §535.3 rules.",
+    accrual: "The general §668.13(1) path begins on the date the action is commenced. Future damages begin only on entry of judgment under §668.13(4). Section 625.21 instead adds interest from verdict or report until final judgment in covered non-chapter-668 money cases, so the correct start date depends on the claim.",
+    compound: "Ordinary §668.13 interest is computed daily to payment and treated as simple interest. Structured or periodic non-lump-sum judgments use annuity principles under §668.13(6). The statute does not itself specify every day-count and payment-allocation mechanic.",
+    formula: "The State Court Administrator publishes a monthly one-year Treasury constant maturity selection from Federal Reserve H.15; §668.13 adds 2 percentage points and selects the rate as of judgment. It is not a weekly-average series and does not float month by month after judgment.",
   },
   "kansas-prejudgment-rate": {
     tagline: "Kansas prejudgment interest — 10% general, or the judgment rate −2% for recent tort claims.",
@@ -601,17 +647,18 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     compound: "Simple.",
   },
   "kentucky-prejudgment-rate": {
-    tagline: "Kentucky prejudgment interest is discretionary — here is the rate courts apply.",
+    tagline: "Kentucky prejudgment interest depends on the claim; 8% is a legal reference, not a universal award.",
     q: "What is the Kentucky prejudgment interest rate?",
-    body: "In Kentucky, prejudgment interest is discretionary: a court may award it, and when it does the rate is 8% per year under KRS 360.010(1). LIQUIDATED / ascertainable claims (a fixed contract price, a bill or note past due, an amount due on open account, a sum \"made certain or fixed by agreement or by operation of law\"):…",
+    body: "Kentucky’s legal rate is 8% per year under KRS 360.010(1), but that figure is not automatic for every prejudgment claim. Kentucky authority distinguishes liquidated or readily ascertainable sums from unliquidated damages. For an unliquidated claim, a court may award no prejudgment interest or select a rate up to the legal rate, and the court may choose simple or compound treatment.",
     prejudgment: true,
-    kind: "discretionary-with-default",
-    kindLabel: "Discretionary",
+    kind: "claim-dependent",
+    kindLabel: "Claim-dependent",
     postSlug: "kentucky-judgment-rate",
-    appliesShort: "LIQUIDATED / ascertainable claims (a fixed contract price, a bill or note past due, an amount due on open account, a sum \"made certain or fixed by agreement or by operation of law\"):…",
-    applies: "LIQUIDATED / ascertainable claims (a fixed contract price, a bill or note past due, an amount due on open account, a sum \"made certain or fixed by agreement or by operation of law\"): prejudgment interest is awarded AS A MATTER OF RIGHT at 8% (3D Enterprises; Nucor).",
-    accrual: "For liquidated claims, prejudgment interest accrues from the date the claim became due/liquidated (e.g., date of breach, date payment was due, or when the sum became fixed — for a charged-off debt, the charge-off date fixes the principal and starts the prejudgment period) up to entry of judgment.",
-    compound: "Prejudgment interest under KRS 360.010 is simple interest (the statute states a flat per-annum legal rate with no compounding provision).",
+    appliesShort: "Liquidated claims and unliquidated claims follow different entitlement rules.",
+    applies: "Prejudgment interest is generally available as a matter of right on a liquidated claim whose amount is fixed or readily ascertainable, while an award on unliquidated damages is equitable and discretionary. A written agreement or a claim-specific statute may supply a different rule or rate.",
+    accrual: "For a qualifying liquidated claim, interest generally runs from the time the payment became due or the amount became fixed through entry of judgment. An unliquidated award depends on the court’s equitable findings, so the start date cannot be safely inferred from the 8% legal-rate statute alone.",
+    compound: "Do not assume a single method. Kentucky appellate authority treats simple-versus-compound prejudgment interest on an unliquidated claim as part of the court’s discretion. The calculator remains withheld because entitlement, rate, start date, and compounding are not deterministic across claim types.",
+    formula: "KRS 360.010(1) supplies an 8% annual legal reference rate. It is a ceiling/reference for the discretionary unliquidated path, not a promise that every successful claimant receives 8%.",
   },
   "louisiana-prejudgment-rate": {
     tagline: "Louisiana prejudgment interest — the same rate as its post-judgment interest.",
@@ -628,18 +675,18 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     formula: "Variable, reset annually. Under R.S. 13:4202(B), on the first business day of October the Commissioner of Financial Institutions ascertains the Federal Reserve Board of Governors' approved \"discount rate\" (as published in the Wall Street Journal) and adds three and one-quarter (3.25) percentage…",
   },
   "maine-prejudgment-rate": {
-    tagline: "Maine prejudgment interest — a formula rate, reset each year.",
+    tagline: "Maine’s official annual Treasury-linked prejudgment rate.",
     q: "What is the Maine prejudgment interest rate?",
-    body: "Maine prejudgment interest is currently 6.51% per year — a statutory formula rate under 14 M.R.S. § 1602-B that resets each year. Maine is unusually broad and does NOT limit prejudgment interest to liquidated/ascertainable claims.",
+    body: "Maine prejudgment interest is currently 6.51% for interest beginning in 2026. Under 14 M.R.S. §1602-B, the general rate is the prior year’s last-full-week average one-year Treasury constant maturity yield plus 3 percentage points. The official Judicial Branch chart supplies one rate for each year; the dataset preserves all 24 rows from July 2003 through 2026.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
     postSlug: "maine-judgment-rate",
-    appliesShort: "Maine is unusually broad and does NOT limit prejudgment interest to liquidated/ascertainable claims.",
-    applies: "Maine is unusually broad and does NOT limit prejudgment interest to liquidated/ascertainable claims. Under sub 3, prejudgment interest is allowed in essentially ALL civil actions other than small claims (sub 1) and interest-bearing contract/note actions (sub 2) - this expressly INCLUDES tort and unliquidated damages (e.g., personal injury). No liquidated-only, contract-only, or ascertainable-amount requirement.",
-    accrual: "Accrues from the time a sworn notice of claim setting forth the cause of action is served on the defendant personally or by registered/certified mail, until the date judgment is entered. If no notice of claim was given, accrues from the date the complaint is filed.",
-    compound: "Simple. The statute prescribes a flat rate applied to the damages amount with no compounding; sub 6 further bars prejudgment interest from being folded into the base for post-judgment interest.",
-    formula: "1-year U.S. Treasury bill rate + 3%, where the T-bill rate = weekly average one-year constant maturity Treasury yield (Federal Reserve Board of Governors) for the last full week of the calendar year immediately before the accrual year.",
+    appliesShort: "The general civil-action path is broad, with separate small-claims and written-contract branches.",
+    applies: "For civil actions outside the small-claims and interest-bearing contract/note branches, §1602-B(3) allows the Treasury-plus-3 rate and does not state a liquidated-claim limitation. Small claims generally receive no prejudgment interest unless based on a contract or note with an interest provision; that writing supplies the rate for the contract/note branch.",
+    accrual: "Interest starts when a sworn notice of claim is properly served, or from filing if no such notice was given, and runs until judgment. A prevailing party’s requested continuance longer than 30 days suspends interest for the continuance; the court may fully or partially waive an award for good cause.",
+    compound: "Section 1602-B does not specify calculator-grade compounding or day-count mechanics. It does expressly prohibit adding prejudgment interest to the principal base on which post-judgment interest accrues. StatuteRates therefore withholds the Maine calculator rather than assume a method.",
+    formula: "The general rate is the weekly-average one-year Treasury constant maturity yield for the last full week of the calendar year immediately before interest begins, plus 3 points. The corrected official 2025 rate is 7.23%, not the 7.88% value initially published in error.",
   },
   "maryland-prejudgment-rate": {
     tagline: "Maryland prejudgment interest is discretionary — here is the rate courts apply.",
@@ -696,22 +743,22 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     formula: "Two tiers. (1) Judgments/awards not over $50,000: rate = max(one-year constant maturity Treasury yield rounded to nearest 1%, 4%). Set annually by the State Court Administrator by Dec. 20 (official annual notice at https://www.revisor.mn.gov/court_rules/rule/msinte/).",
   },
   "mississippi-prejudgment-rate": {
-    tagline: "Mississippi prejudgment interest is discretionary — here is the rate courts apply.",
+    tagline: "Mississippi uses the contract rate or a rate selected by the court.",
     q: "What is the Mississippi prejudgment interest rate?",
-    body: "In Mississippi, prejudgment interest is discretionary: a court may award it, and when it does the rate is 8% per year under Miss. Code Ann. § 75-17-7. Prejudgment interest is allowed ONLY on liquidated / reasonably ascertainable amounts.",
+    body: "Mississippi does not set one universal prejudgment percentage. Under Miss. Code Ann. §75-17-7, a judgment founded on a sale or contract uses the rate supplied by the contract evidencing the debt. For other judgments, the judge selects a fair annual rate and a fair start date. The 8% legal contract rate in §75-17-1 may be relevant in some matters, but it is not a mandatory statewide prejudgment rate.",
     prejudgment: true,
-    kind: "discretionary-with-default",
-    kindLabel: "Discretionary",
-    postSlug: "mississippi-judgment-rate",
-    appliesShort: "Prejudgment interest is allowed ONLY on liquidated / reasonably ascertainable amounts.",
-    applies: "Prejudgment interest is allowed ONLY on liquidated / reasonably ascertainable amounts. Mississippi Supreme Court holds NO prejudgment interest is allowed where the amount owed is UNLIQUIDATED prior to judgment. This BARS prejudgment interest on most tort / personal-injury claims and medical-malpractice claims because damages there are typically unliquidated (Coho Resources v. McCarthy — personal injury; med-mal damages generally not liquidated). Available for contract claims and other liquidated/sum-certain claims.",
-    accrual: "Interest runs at the contract rate and, per Arcadia Farms P'ship v. Audubon Ins. Co. (2012), the trial court MAY award it from the DATE OF BREACH (not limited to the post-complaint period).",
-    compound: "Simple interest (statute does not authorize compounding; the § 75-17-1 legal rate is computed by the actuarial method but prejudgment interest is applied as simple interest).",
+    kind: "case-specific",
+    kindLabel: "Case-specific",
+    appliesShort: "The governing contract or the judge supplies the percentage; entitlement and timing depend on the claim and order.",
+    applies: "Section 75-17-7 separates judgments founded on a sale or contract from all other judgments. Contract and sale matters look to the rate in the contract evidencing the debt. In the other category, the judge may include prejudgment interest and selects a rate considered fair. Entitlement still depends on Mississippi law and the facts; the record intentionally does not flatten those branches into 8%.",
+    accrual: "For the 'all other judgments' category, §75-17-7 lets the judge select a fair start date but never a date before the complaint was filed. Contract or sale claims can follow the governing obligation and claim-specific authority, so there is no single statewide start date.",
+    compound: "Case-specific. Mississippi authority recognizes that the governing contract or court may determine the method, and courts have approved different rates and simple-interest outcomes. Do not assume either simple or compound treatment without the controlling contract and order.",
+    formula: "There is no universal formula: use the contract rate for the contract/sale branch, or the rate expressly selected by the judge for the other-judgment branch. This is why the machine-readable numeric value is intentionally null.",
   },
   "missouri-prejudgment-rate": {
-    tagline: "Missouri prejudgment interest — 9% for contract, ~6.75% (Fed Funds+3%) for tort.",
+    tagline: "Missouri prejudgment interest — 9% for some non-tort claims; tort rules have two stages.",
     q: "What is the Missouri prejudgment interest rate?",
-    body: "Missouri prejudgment interest splits by claim type: 9% fixed for liquidated/contract claims (§408.020), and the intended Federal Funds rate + 3% — currently about 6.75% — for tort claims (§408.040.3). Prejudgment interest is NOT freely available; it is claim-type restricted.",
+    body: "Missouri prejudgment interest is claim-specific. Liquidated or contract claims may use the 9% rule in §408.020. For qualifying tort claims, §408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points; §408.040.4 separately sets a Federal Funds plus 3-point rate on the prejudgment-interest portion after it becomes part of the judgment.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
@@ -720,7 +767,7 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     applies: "Prejudgment interest is NOT freely available; it is claim-type restricted. (1) TORT actions (§ 408.040.2): available ONLY if the claimant made a written demand/settlement offer sent by certified mail return receipt, accompanied by a signed affidavit describing the claim, injuries, and a computation of damage categories with supporting documentation (medical provider list, bills, employer list and authorizations for PI/wrongful-death wage claims), the demand references § 408.040 and stays open 90 days, the suit is…",
     accrual: "TORT (§ 408.040.2): accrues from a date 90 days AFTER the demand/offer was received (per certified-mail return receipt), OR from the date the demand/offer was rejected without a counteroffer, whichever is earlier.",
     compound: "Simple. The statute states a per annum rate and does not authorize compounding; Missouri courts apply § 408.020 and § 408.040 prejudgment interest as simple interest.",
-    formula: "TORT (variable): intended Federal Funds Rate (Federal Reserve Board) + 5.00%. Current = 3.75% (target-range upper limit, July 2026) + 5% = 8.75%. Note a distinct sub-rule: a judgment FOR prejudgment interest, once entered, bears interest at Fed Funds + 3% (that is the rate on the interest-judgment…",
+    formula: "Do not treat the two Missouri formulas as interchangeable. Section 408.040.3 uses intended Federal Funds Rate + 5 points for the tort judgment and contains the qualifying prejudgment-interest award. Section 408.040.4 separately applies Federal Funds + 3 points after the awarded prejudgment interest becomes part of the judgment.",
   },
   "montana-prejudgment-rate": {
     tagline: "Montana prejudgment interest — 10% for liquidated claims, prime+3% for tort.",
@@ -736,17 +783,18 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     compound: "Simple. MCA 31-1-106 legal-rate prejudgment interest is applied as simple interest under Montana practice; MCA 27-1-210 tort interest and MCA 25-9-205 both expressly state interest may not be compounded.",
   },
   "nebraska-prejudgment-rate": {
-    tagline: "Nebraska prejudgment interest — 12% for liquidated claims, the judgment rate for unliquidated.",
+    tagline: "Nebraska prejudgment interest — separate 12% and settlement-offer tracks.",
     q: "What is the Nebraska prejudgment interest rate?",
-    body: "Nebraska prejudgment interest is 12% for liquidated claims (§45-104), but unliquidated tort/personal-injury claims accrue the variable judgment rate — currently 5.970% — under §45-103.02(1). Prejudgment interest is NOT freely available on all claims — Nebraska splits by claim type.",
+    body: "Nebraska prejudgment interest is not one automatic rate. Qualifying liquidated claims use the 12% §45-104 rate under §45-103.02(2). A qualifying unliquidated claim uses the current §45-103 judgment rate only when every settlement-offer condition in §45-103.02(1) is satisfied. The two figures above show these separate statutory paths.",
     prejudgment: true,
     kind: "fixed",
-    kindLabel: "Fixed by statute",
+    kindLabel: "Two statutory tracks",
     postSlug: "nebraska-judgment-rate",
-    appliesShort: "Prejudgment interest is NOT freely available on all claims — Nebraska splits by claim type.",
-    applies: "Prejudgment interest is NOT freely available on all claims — Nebraska splits by claim type. LIQUIDATED claims (no reasonable controversy as to right to recover or amount; computable with exactness without opinion/discretion) get 12% as a matter of right from when the cause of action arose (sec. 45-103.02(2)).",
-    accrual: "Liquidated claims (sec. 45-103.02(2)) and contract claims (sec. 45-104): from the date the cause of action arose. Unliquidated claims (sec. 45-103.02(1)): from the date of the plaintiff's first qualifying offer of settlement that is later exceeded by the judgment — NOT from the date of loss/injury.",
-    compound: "Simple. Nebraska statutes and case law treat statutory prejudgment interest as simple interest (no statutory provision for compounding; interest is computed on the unpaid balance/principal until entry of judgment).",
+    appliesShort: "Nebraska uses separate liquidated-claim, listed contract-obligation, and strictly conditioned unliquidated-claim paths; Chapter 42 and specified government claims are excluded.",
+    applies: "Section 45-103.02(2) applies the 12% §45-104 rate to a liquidated claim when there is no reasonable controversy over the right to recover or the amount. Section 45-104 independently covers listed written instruments, settled accounts, retained money, loans, and money withheld by unreasonable delay unless otherwise agreed. For an unliquidated claim, §45-103.02(1) requires a written offer served by certified mail, proper filing and proof, statutory timing and nonacceptance, and a judgment exceeding the offer. Section 45-103.04 excludes Chapter 42 actions and specified claims involving Nebraska government bodies or employees.",
+    accrual: "A qualifying liquidated claim under §45-103.02(2) accrues on its unpaid balance from the date the cause of action arose through entry of judgment. A qualifying unliquidated claim under §45-103.02(1) runs from the first qualifying offer that the judgment exceeds through entry. Section 45-104 has category-specific starting points, including the applicable due, settlement, receipt, delay, or billing date.",
+    compound: "The cited statutes specify annual rates and unpaid-balance rules but do not state a universal calculator-grade day-count or compounding convention. StatuteRates therefore presents these as reference rates and does not enable automated Nebraska prejudgment arithmetic.",
+    formula: "Liquidated path: 12% under §§45-103.02(2) and 45-104. Qualifying unliquidated path: the §45-103 rate in effect for the relevant judgment, subject to every settlement-offer condition. Under §45-103.03, payments made before trial are subtracted from the judgment before unliquidated-claim interest is added.",
   },
   "nevada-prejudgment-rate": {
     tagline: "Nevada prejudgment interest — a formula rate, reset twice a year.",
@@ -958,7 +1006,7 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     kindLabel: "Same rate as post-judgment",
     postSlug: "texas-judgment-rate",
     appliesShort: "STATUTORY prejudgment interest (Tex. Fin. Code Subch. B) applies ONLY to wrongful death, personal injury, and property damage cases (Sec. 304.102).",
-    applies: "STATUTORY prejudgment interest (Tex. Fin. Code Subch. B) applies ONLY to wrongful death, personal injury, and property damage cases (Sec. 304.102). (2) Prejudgment interest may NOT be assessed or recovered on an award of FUTURE damages (Sec. 304.1045) — bars interest on future/not-yet-accrued losses.",
+    applies: "STATUTORY prejudgment interest under Tex. Fin. Code Subchapter B applies only to wrongful-death, personal-injury, and property-damage cases (§§304.101–304.102). It may not be assessed on future damages (§304.1045). Qualifying written settlement offers can pause or reduce the amount on which interest accrues (§§304.105–304.107). Condemnation cases use a separate branch (§304.201), and other claims can depend on common law.",
     accrual: "Sec. 304.104: accrues beginning on the EARLIER of (a) the 180th day after the date the defendant receives written notice of a claim, or (b) the date suit is filed; and ends on the day preceding the date judgment is rendered. Common-law claims use the same accrual rule per Kenneco.",
     compound: "Simple. Sec. 304.104 expressly states prejudgment interest is computed as simple interest and does not compound. (Note: postjudgment interest under Sec. 304.006 compounds annually, but prejudgment interest is simple.).",
     formula: "Prime rate (per Fed Board of Governors) with a 5% minimum and 15% maximum; published monthly by the Texas OCCC. Rate is fixed as of the date of judgment. Current = 6.75% (July 2026).",
@@ -1080,5 +1128,12 @@ floor in most states — for example France adds 10 points, Germany 9).`,
 };
 
 export function copyFor(slug) {
-  return SERIES_COPY[slug] || { tagline: '', q: `What is the current ${slug} rate?`, body: '' };
+  const raw = SERIES_COPY[slug] || { tagline: '', q: `What is the current ${slug} rate?`, body: '' };
+  const clean = Object.fromEntries(Object.entries(raw).map(([key, value]) => [
+    key,
+    typeof value === 'string' ? removeTruncatedFragments(value) : value,
+  ]));
+  if (!clean.body) clean.body = clean.tagline || 'See the cited source and current observation for details.';
+  if (clean.prejudgment && !clean.applies) clean.applies = clean.appliesShort || clean.tagline;
+  return clean;
 }

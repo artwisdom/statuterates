@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getMeta, latestOf, prettyDate, stateHubs, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
+import { getMeta, latestOf, prettyDate, stateHubs, PREJUDGMENT_CALC_SAFE, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -17,7 +17,10 @@ const preLatest = latestOf(pre);
 const postLatest = post ? latestOf(post) : null;
 const preCopy = copyFor(pre.slug);
 const postCopy = post ? copyFor(post.slug) : null;
-const preSafe = PREJUDGMENT_CALC_SAFE.includes(base);
+const preCaseSpecific = preLatest?.method === 'court-or-contract-rate';
+const preSafe = STATE_CALCULATOR_RENDERER_READY
+  && import.meta.env.ENABLE_STATE_CALCULATORS === 'true'
+  && PREJUDGMENT_CALC_SAFE.includes(base) && isCalculatorReady(pre);
 const theName = base === 'dc' ? 'the District of Columbia' : name;
 
 // Post-judgment basis line (statute-fixed vs derived/formula) for the at-a-glance row.
@@ -25,8 +28,8 @@ const postBasis = post
   ? ((postLatest?.method || '').startsWith('statute') ? 'Set by statute' : 'Derived / formula')
   : 'No fixed statutory rate';
 
-const title = `${name} Judgment & Prejudgment Interest Rates (current) | ${meta.title}`;
-const description = `${name}'s interest rates on court judgments and debts, in one place: ${post ? `post-judgment ${postLatest?.value_text}` : 'post-judgment (case-by-case)'} and prejudgment ${preLatest?.value_text} (${preCopy.kindLabel?.toLowerCase()}). Each rate verified against the statute, with when it applies and how it's calculated.`;
+const title = `${name} Judgment Interest Rates | ${meta.title}`;
+const description = `${name} judgment interest: ${post ? `${postLatest?.value_text} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preLatest?.value_text} prejudgment`}. Cited sources, dates, scope, and notes.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Real modification date = the later of the two rates' effective dates (never the build date).
 const hubModified = [postLatest?.effective_date, preLatest?.effective_date].filter(Boolean).sort().at(-1);
@@ -38,11 +41,15 @@ const faq = [
   },
   {
     q: `What is the prejudgment interest rate in ${name}?`,
-    a: `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}). ${preCopy.appliesShort || preCopy.tagline}`,
+    a: preCaseSpecific
+      ? `${name} has no uniform statewide prejudgment percentage. The governing contract or the judge supplies the rate. ${preCopy.appliesShort || preCopy.tagline}`
+      : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}). ${preCopy.appliesShort || preCopy.tagline}`,
   },
   {
     q: `Is ${name} judgment interest simple or compound, and when does it start?`,
-    a: `See each rate's page for the exact compounding rule, accrual date, and statutory carve-outs — ${name} prejudgment interest in particular turns on the type of claim.`,
+    a: postCopy?.postDetails
+      ? `${postCopy.postDetails.compounding} ${postCopy.postDetails.accrual}`
+      : `See each rate's page for the exact compounding rule, accrual date, and statutory carve-outs — ${name} prejudgment interest in particular turns on the type of claim.`,
   },
 ].filter(Boolean);
 
@@ -81,8 +88,8 @@ const jsonLd = [
   <h1>{name} judgment &amp; prejudgment interest rates</h1>
   <p class="lead">Everything {theName} charges in interest on a money judgment or an overdue debt, in one
     place — the rate <em>after</em> judgment and the rate <em>before</em> it, each
-    <a href="/editorial-policy/">verified against the statute</a> and linked to its full page with sources,
-    history, and carve-outs.</p>
+    <a href="/editorial-policy/">recorded with a cited source</a> and linked to its full page with observations,
+    scope, and known carve-outs.</p>
 
   <div class="scroll-x">
     <table class="glance">
@@ -117,7 +124,9 @@ const jsonLd = [
   )}
 
   <h2>Prejudgment interest</h2>
-  <p><strong>{name}'s prejudgment interest rate is {preLatest?.value_text} per year ({preCopy.kindLabel?.toLowerCase()}).</strong> {preCopy.body}</p>
+  <p><strong>{preCaseSpecific
+    ? `${name} has no uniform statewide prejudgment percentage (${preCopy.kindLabel?.toLowerCase()}).`
+    : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}).`}</strong> {preCopy.body}</p>
   <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — when it applies, accrual, compounding, and carve-outs.</p>
   {preSafe && (
     <p class="xlink"><a href="/calculators/prejudgment-interest/">→ Calculate {name} prejudgment interest</a></p>
@@ -135,12 +144,13 @@ const jsonLd = [
     ))}
   </div>
 
-  <CiteThis title={`${name} Judgment & Prejudgment Interest Rates`} url={canonical} note="Each rate verified against the controlling state statute." />
+  <CiteThis title={`${name} Judgment & Prejudgment Interest Rates`} url={canonical} note="Each rate includes a cited source and recorded effective date; confirm the controlling authority before use." />
 
   <p class="source-note" style="margin-top:22px">Compare every state on the
     <a href="/states/">state interest-rate index</a> and the
-    <a href="/prejudgment/">prejudgment interest index</a>, or run the numbers with our
-    <a href="/calculators/">interest calculators</a>. Reference data only — not legal advice.</p>
+    <a href="/prejudgment/">prejudgment interest index</a>, or enter a confirmed rate in the
+    <a href="/calculators/judgment-interest/">judgment interest and per-diem calculator</a>.
+    Reference data only — not legal advice.</p>
 
   <style>
     .glance td.num { font-family: var(--nums); white-space: nowrap; }

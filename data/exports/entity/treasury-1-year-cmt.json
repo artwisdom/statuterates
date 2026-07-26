@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "treasury-1-year-cmt",
   "name": "1-Year Treasury Constant Maturity Yield (weekly average)",
   "entity_type": "rate_series",
@@ -17,32 +17,45 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 4.03,
-      "value_text": "4.03%",
+      "value": 4.09,
+      "value_text": "4.09%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-13",
+      "effective_date": "2026-07-20",
       "source_id": "fed-h15",
       "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-      "retrieved_at": "2026-07-20T13:59:10.061Z",
+      "retrieved_at": "2026-07-26T01:52:06.830Z",
       "confidence": "high",
       "method": "weekly-avg-of-daily-h15",
-      "notes": "Weekly average of 4 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-13."
+      "notes": "Weekly average of 4 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-20."
     }
   },
   "history": {
     "annual_rate": [
       {
         "metric": "annual_rate",
-        "value": 4.03,
-        "value_text": "4.03%",
+        "value": 4.09,
+        "value_text": "4.09%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-07-20",
+        "source_id": "fed-h15",
+        "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
+        "retrieved_at": "2026-07-26T01:52:06.830Z",
+        "confidence": "high",
+        "method": "weekly-avg-of-daily-h15",
+        "notes": "Weekly average of 4 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-20."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 4.02,
+        "value_text": "4.02%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-13",
         "source_id": "fed-h15",
         "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-        "retrieved_at": "2026-07-20T13:59:10.061Z",
+        "retrieved_at": "2026-07-26T01:52:06.830Z",
         "confidence": "high",
         "method": "weekly-avg-of-daily-h15",
-        "notes": "Weekly average of 4 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-13."
+        "notes": "Weekly average of 5 daily H.15 1-year CMT observation(s) for the week beginning 2026-07-13."
       },
       {
         "metric": "annual_rate",
@@ -1372,16 +1385,16 @@
       },
       {
         "metric": "annual_rate",
-        "value": 4.83,
-        "value_text": "4.83%",
+        "value": 4.79,
+        "value_text": "4.79%",
         "unit": "percent_per_annum",
         "effective_date": "2024-07-22",
         "source_id": "fed-h15",
         "source_url": "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=520&filetype=csv&label=include&layout=seriescolumn",
-        "retrieved_at": "2026-07-20T13:59:10.061Z",
+        "retrieved_at": "2026-07-26T01:52:06.830Z",
         "confidence": "high",
         "method": "weekly-avg-of-daily-h15",
-        "notes": "Weekly average of 5 daily H.15 1-year CMT observation(s) for the week beginning 2024-07-22."
+        "notes": "Weekly average of 1 daily H.15 1-year CMT observation(s) for the week beginning 2024-07-22."
       },
       {
         "metric": "annual_rate",

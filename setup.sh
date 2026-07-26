@@ -1,30 +1,40 @@
 #!/usr/bin/env bash
 # One-command local bootstrap: install deps, run the pipeline, build the API + site, verify the MCP
-# server. Safe to re-run. Requires Node 20+ (no global installs; everything stays local).
+# server. Safe to re-run. Requires Node 22.12+ (no global installs; everything stays local).
 #
 #   ./setup.sh
 #
 set -euo pipefail
 cd "$(dirname "$0")"
 
-echo "==> 1/5  Installing dependencies (local only)"
-( cd pipeline && npm install --no-audit --no-fund )
-( cd machine/mcp-server && npm install --no-audit --no-fund )
-( cd site && npm install --no-audit --no-fund )
+node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 12)) { console.error("Node 22.12 or newer is required. Current: " + process.versions.node); process.exit(1); }'
 
-echo "==> 2/5  Running the data pipeline (fetch -> validate -> export)"
+echo "==> 1/6  Installing locked dependencies (local only)"
+( cd pipeline && npm ci --no-audit --no-fund )
+( cd machine/mcp-server && npm ci --no-audit --no-fund )
+( cd site && npm ci --no-audit --no-fund )
+
+echo "==> 2/6  Running unit and data-contract tests"
+( cd pipeline && npm test )
+( cd shared && node --test )
+( cd site && npm test )
+
+echo "==> 3/6  Running the data pipeline (fetch -> validate -> export)"
 ( cd pipeline && node run.mjs all )
 
-echo "==> 3/5  Building the static JSON API"
+echo "==> 4/6  Building the static JSON API"
 node machine/build-api.mjs
 node machine/check-api-conformance.mjs
 
-echo "==> 4/5  Building the site"
-( cd site && npm run build )
+echo "==> 5/6  Building and verifying the site"
+(
+  cd site
+  npm run build
+  npm run verify-build
+)
 
-echo "==> 5/5  Verifying the MCP server + shared interest engine"
-( cd shared && node --test . )
-( cd machine/mcp-server && node test/smoke.mjs )
+echo "==> 6/6  Verifying the MCP server"
+( cd machine/mcp-server && npm test )
 
 echo ""
 echo "Done. Next:"

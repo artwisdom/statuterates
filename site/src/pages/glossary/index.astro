@@ -39,8 +39,8 @@ const TERMS = [
 ];
 const sorted = [...TERMS].map((t) => ({ ...t, id: t.id || t.term.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') })).sort((a, b) => a.term.localeCompare(b.term));
 
-const title = `Interest-Rate Glossary — Judgment, Prejudgment & Statutory Terms | ${meta.title}`;
-const description = `Plain-English definitions of the interest-rate terms that matter: post-judgment and prejudgment interest, statutory vs contract rate, simple vs compound, IRS §6621/§6622, 28 U.S.C. §1961, CMT, and more — each cross-linked to the live rates.`;
+const title = `Statutory Interest Glossary | ${meta.title}`;
+const description = `Plain-English definitions for judgment, prejudgment, statutory, IRS, simple, compound, Treasury, and late-payment interest terms, linked to useful rates.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

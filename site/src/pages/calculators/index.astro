@@ -1,19 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getMeta, getEntity, latestOf } from '../../lib/data.mjs';
+import { getMeta, getEntity, latestOf, stateHubs, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 
 const meta = getMeta();
-const title = `Statutory Interest Calculators — Judgment, IRS & Late Payment | ${meta.title}`;
-const description = `Free calculators that apply each statute's real method: federal post-judgment interest (§1961), IRS underpayment/refund interest (§6621/§6622 daily compounding), UK & EU late-payment interest, and state judgment interest (CA, NY, MA, IA).`;
+// The per-state calculator rollout is preserved behind a safety gate until every state has
+// calculator-ready rule metadata and verified historical rates. A production build must opt in.
+const stateCalculatorsEnabled = STATE_CALCULATOR_RENDERER_READY
+  && import.meta.env.ENABLE_STATE_CALCULATORS === 'true';
+const stateCalcs = stateCalculatorsEnabled
+  ? stateHubs().filter((h) => h.post && isCalculatorReady(h.post)).map((h) => ({ base: h.base, name: h.name, rate: latestOf(h.post)?.value_text }))
+  : [];
+const title = `Statutory Interest Calculators | ${meta.title}`;
+const description = `Free calculators for federal judgment interest, IRS underpayment and refunds, and UK/EU late-payment interest using recorded rate histories.`;
 
 const CALCS = [
+  { href: '/calculators/judgment-interest/', name: 'Judgment interest & per diem', desc: 'Enter a verified rate to calculate simple or annually compounded interest, total payoff, accrual days, and per diem.', label: 'Enter your rate' },
   { href: '/calculators/post-judgment-interest/', name: 'Federal post-judgment interest', desc: 'The §1961 method: H.15 weekly rate for the week before judgment, daily accrual, compounded annually.', slug: 'us-federal-post-judgment' },
   { href: '/calculators/irs-interest/', name: 'IRS interest (underpayment & refund)', desc: 'Quarterly §6621 rates compounded daily per §6622, across every rate change since 2017.', slug: 'irs-underpayment' },
-  { href: '/calculators/state-judgment-interest/', name: 'State judgment interest', desc: 'California, New York (incl. the 2% consumer rate), Massachusetts, and Treasury-linked Iowa.', slug: 'california-judgment-rate' },
-  { href: '/calculators/prejudgment-interest/', name: 'Prejudgment interest (fixed-rate states)', desc: 'Interest before judgment for the 19 states + D.C. with a fixed statutory rate — simple, or Colorado’s annual compounding.', slug: 'new-york-prejudgment-rate' },
   { href: '/calculators/late-payment-interest/', name: 'Late payment interest (UK & EU)', desc: 'UK Late Payment Act 1998 (base + 8pp, fixed at overdue date) and the EU Directive rate.', slug: 'uk-late-payment-commercial' },
 ];
-const withRates = CALCS.map((c) => ({ ...c, latest: latestOf(getEntity(c.slug)) }));
+const withRates = CALCS.map((c) => ({ ...c, latest: c.slug ? latestOf(getEntity(c.slug)) : null }));
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -35,16 +41,31 @@ const jsonLd = {
     {withRates.map((c) => (
       <a class="card" href={c.href} style="display:block;color:inherit">
         <h3>{c.name}</h3>
-        <div class="cval">{c.latest?.value_text}</div>
+        <div class="cval">{c.label || c.latest?.value_text}</div>
         <div class="cmeta">{c.desc}</div>
       </a>
     ))}
   </div>
 
+  {stateCalcs.length > 0 && (
+    <>
+      <h2>Judgment interest by state</h2>
+      <p>A dedicated calculator for each state's post-judgment interest rate — the verified statutory rate, the
+        correct simple-or-compound rule, a worked example, and the daily per-diem. Pick your state:</p>
+      <div class="state-calc-grid">
+        {stateCalcs.map((s) => (
+          <a href={`/calculators/${s.base}-judgment-interest/`}><span class="scn">{s.name}</span><span class="scr">{s.rate}</span></a>
+        ))}
+      </div>
+      <p class="source-note">Comparing several states? Use the
+        <a href="/calculators/state-judgment-interest/">multi-state comparison calculator</a>. Prejudgment
+        interest (before judgment) has its <a href="/calculators/prejudgment-interest/">own calculator</a>.</p>
+    </>
+  )}
+
   <h2>Why these are different</h2>
-  <p>Most online calculators hardcode a rate that quietly goes stale. These pull from a dataset that
-    re-verifies against official sources on a schedule, keep the full effective-date history (so a
-    2024 judgment gets 2024's rate, not today's), and implement the statutory computation — daily
+  <p>Most online calculators hardcode a rate that quietly goes stale. The available calculators use
+    versioned observations from scheduled primary-source fetches and implement the statutory computation — daily
     compounding for the IRS, annual compounding for federal judgments, fixed-at-overdue-date for UK
     late payment — rather than a generic percentage formula.</p>
 </BaseLayout>

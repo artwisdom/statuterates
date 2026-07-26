@@ -1,5 +1,9 @@
 # EXECUTION_REPORT.md — Data Moat Engine
 
+> Historical execution snapshot from the initial July 8 build. It is retained as project history,
+> but its deployment status, counts, source claims, and state-calculator claims are superseded by
+> `README.md`, `STATE.md`, and the July 2026 safety baseline.
+
 **Autonomous build, 2026-07-08.** One canonical, provenance-tracked dataset in a narrow global niche,
 wrapped in three "skins" (human site, machine API + MCP, licensing-later). Built end-to-end, verified,
 and documented, entirely inside `./data-moat-engine` under the Section 0 hard rules — **no remote, no
@@ -59,7 +63,9 @@ central-bank rates (BIS/TradingEconomics), minimum wages (WageIndicator), public
   Bank Rate (published) + derived statutory late-commercial-payment interest (Late Payment Act 1998).
   **EU:** ECB main refinancing rate (published) + derived EU Late Payment Directive reference rate.
   **US states:** CA 10%, NY 9% + 2% consumer-debt, MA 12% (statute-fixed, verified against the official
-  texts with citations and carve-outs) and Iowa (1-yr CMT + 2pp, derived weekly per §668.13(3)).
+  texts with citations and carve-outs) and Iowa. **Later safety correction:** Iowa's §668.13 value is
+  administered through a monthly State Court Administration table, not the federal weekly average;
+  the inherited weekly derivation has been removed.
 - The UK & EU statutory rates are correctly modeled as **semi-annual** (fixed on the 31 Dec/30 Jun
   reference dates for the UK; 1 Jan/1 Jul for the EU) rather than a naive "live base + 8pp" — the exact
   domain rigor generic aggregators miss, and it's unit-tested.

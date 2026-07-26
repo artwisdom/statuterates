@@ -3,8 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
 const title = `Terms & Disclaimer | ${meta.title}`;
-const description = `Terms of use for ${meta.title}: the interest-rate data and calculators are reference information, not legal, tax, or financial advice — always confirm against the official source.`;
-const updated = prettyDate(meta.generated_at);
+const description = `${meta.title} terms: interest-rate data and calculators are reference information, not legal, tax, or financial advice. Confirm important figures at the source.`;
+const updated = prettyDate('2026-07-19');
 ---
 <BaseLayout title={title} description={description}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
@@ -27,8 +27,8 @@ const updated = prettyDate(meta.generated_at);
     circumstances.</p>
 
   <h2>Accuracy and "as-is"</h2>
-  <p>We work hard to keep each value correct — verifying against official statutes and re-checking on a
-    schedule — and every figure links to its source and shows its effective date. Even so, the site is
+  <p>We work hard to keep each value correct — recording its source and re-checking it on a documented
+    schedule — and every figure links to its cited source and shows its effective date. Even so, the site is
     provided <strong>"as is" and "as available," without warranties of any kind</strong>, express or
     implied, including accuracy, completeness, timeliness, merchantability, or fitness for a particular
     purpose. Automated calculations are estimates; courts, agencies, and creditors may apply different
@@ -41,14 +41,15 @@ const updated = prettyDate(meta.generated_at);
     is to stop using the site.</p>
 
   <h2>Use of the data and API</h2>
-  <p>Underlying rate figures are drawn from U.S., U.K., and E.U. government works, which are generally
-    not subject to copyright. Our editorial text, page design, and the way the data is compiled and
-    presented are ours. You are welcome to link to the site and to use the public
+  <p>Underlying source rights vary. Many records come from government edicts or public statistical
+    releases and state-authorized code portals; each source record identifies its publisher and any applicable terms.
+    Each record identifies its source. Our editorial text, page design, and the way the data is compiled
+    and presented are ours. You are welcome to link to the site and to use the public
     <a href="/api/">JSON API</a> for reasonable, non-abusive purposes; please don't scrape it in a way
     that burdens the service, and please attribute {meta.title} when you republish figures.</p>
 
   <h2>Third-party links and ads</h2>
-  <p>The site links to official sources and may display third-party advertising. We don't control and
+  <p>The site links to cited sources, including official and third-party references, and may display third-party advertising. We don't control and
     aren't responsible for third-party sites or ad content. See our <a href="/privacy/">Privacy Policy</a>
     for how advertising cookies work and your choices.</p>
 

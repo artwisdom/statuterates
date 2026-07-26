@@ -4,7 +4,7 @@ import { getMeta, getAllEntities, latestOf, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
 const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
 const title = `Methodology & sources — ${meta.title}`;
-const description = `The formulas and official sources behind each rate series in ${meta.title}, plus how the post-judgment rate is derived from the Federal Reserve H.15 1-year Treasury yield.`;
+const description = `The formulas, cited sources, confidence levels, validation rules, and coverage limits behind every ${meta.title} interest-rate series.`;
 ---
 <BaseLayout title={title} description={description}>
   <h1>Methodology &amp; sources</h1>
@@ -24,7 +24,7 @@ const description = `The formulas and official sources behind each rate series i
               <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>
               <td class="num">{l?.value_text}</td>
               <td>{prettyDate(l?.effective_date)}</td>
-              <td class="source-note">{l?.confidence === 'high' ? 'Published' : 'Derived'}</td>
+              <td class="source-note">{(l?.method || '').startsWith('statute') ? 'Curated reference' : l?.confidence === 'high' ? 'Published' : 'Derived'}</td>
             </tr>
           );
         })}
@@ -68,12 +68,10 @@ const description = `The formulas and official sources behind each rate series i
   </ul>
 
   <h2>US state judgment rates</h2>
-  <p>State rates come in two kinds, and we treat them differently. <strong>Statute-fixed</strong> rates
-    (California 10%, New York 9%/2%, Massachusetts 12%) are written into the law; we verify them against
-    the official statute text (the legislature's own site), cite the section, record the carve-outs, and
-    re-verify on a schedule — the page shows the verification date. <strong>Market-linked</strong> rates
-    (Iowa: 1-yr Treasury + 2%) are computed weekly from the same official H.15 series as the federal
-    rate, with the statutory formula cited.</p>
+  <p>State entries are curated references. Fixed rates are written into law; variable rates come from a
+    statutory formula, court rule, or agency table. Each record cites its current source and carries a
+    source-check time. Primary government sources are preferred and secondary mirrors are identified.
+    A current value alone does not establish a complete historical series or make a calculator safe.</p>
 
   <h2>US state prejudgment rates</h2>
   <p>Prejudgment interest — the interest that accrues <em>before</em> judgment, compensating for the
@@ -83,10 +81,9 @@ const description = `The formulas and official sources behind each rate series i
     turns on <em>claim type</em>. Most states allow it only on <strong>liquidated or readily
     ascertainable</strong> amounts and bar it on unliquidated damages (pain and suffering, most general
     tort damages); several make it <strong>discretionary</strong>; a few apply the <strong>same rate as
-    post-judgment</strong>. Each state's page states the rate, the controlling statute or high-court
-    rule, the accrual date, whether it is simple or compound, and the carve-outs — each verified against
-    the official source on the date shown. Fixed statutory rates are high confidence; formula rates that
-    reset off a benchmark are medium confidence and re-verified on a schedule.</p>
+    post-judgment</strong>. Each state's page states the recorded rate, cited rule, accrual date,
+    compounding method, and known carve-outs. These pages remain reference material while their rule
+    branches and historical coverage move through the calculator-ready audit.</p>
 
   <h2>Coverage &amp; roadmap</h2>
   <p>The dataset covers U.S. federal statutory, judgment, and tax interest rates; U.S. state judgment
@@ -94,10 +91,9 @@ const description = `The formulas and official sources behind each rate series i
     by case rather than by a fixed statutory default); U.S. state <a href="/prejudgment/">prejudgment
     interest rates</a> (all 50 states + D.C.); U.K. statutory late-commercial-payment interest and the
     Bank of England base rate; and the EU Late Payment Directive reference rate and ECB main refinancing
-    rate. Tools include a <a href="/calculators/prejudgment-interest/">prejudgment interest calculator</a>
-    for the states where the rate is fixed and the compounding rule is deterministic — simple interest,
-    or fixed-rate annual compounding (Colorado) — the only ones where a single computed figure is honest.
-    Planned expansion: per-EU-country late-payment margins.</p>
+    rate. Federal, IRS, UK, and EU calculators remain available. State calculators are withheld until
+    each included rule passes the calculator-safety contract. Planned expansion: calculator-ready state
+    histories and per-EU-country late-payment margins.</p>
 
   <div class="disclaimer">Reference data, not legal, tax, or financial advice.</div>
 </BaseLayout>

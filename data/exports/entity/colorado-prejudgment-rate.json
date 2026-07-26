@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "colorado-prejudgment-rate",
   "name": "Colorado Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "C.R.S. §5-12-102 (8% general); §13-21-101 (9% personal injury)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "fixed"
+    "kind": "fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -24,8 +29,8 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "co-prejud",
-      "source_url": "https://colorado.public.law/statutes/crs_5-12-102",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "Colorado has TWO prejudgment rates, both compounded annually: 8% for general/contract claims and money or property wrongfully withheld (C.R.S. §5-12-102(1)(b)), and 9% for personal-injury actions (C.R.S. §13-21-101, from the date suit was filed, for actions filed on/after July 1, 1979). §5-12-102 opens \"Except as provided in section 13-21-101,\" carving personal-injury cases out to the 9% rate. Verified against the statute text 2026-07-09. This is PREjudgment interest, separate from Colorado’s post-judgment rate. Not legal advice."
@@ -40,8 +45,8 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "co-prejud",
-        "source_url": "https://colorado.public.law/statutes/crs_5-12-102",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "Colorado has TWO prejudgment rates, both compounded annually: 8% for general/contract claims and money or property wrongfully withheld (C.R.S. §5-12-102(1)(b)), and 9% for personal-injury actions (C.R.S. §13-21-101, from the date suit was filed, for actions filed on/after July 1, 1979). §5-12-102 opens \"Except as provided in section 13-21-101,\" carving personal-injury cases out to the 9% rate. Verified against the statute text 2026-07-09. This is PREjudgment interest, separate from Colorado’s post-judgment rate. Not legal advice."

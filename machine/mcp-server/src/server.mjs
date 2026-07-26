@@ -52,7 +52,7 @@ server.registerTool(
   'dataset_info',
   {
     title: 'Dataset info',
-    description: `Metadata about the ${DATASET_TITLE}: what it covers, which metrics exist, how fresh it is, and the official sources. Call this first to learn the available metric names and entity count.`,
+    description: `Metadata about the ${DATASET_TITLE}: what it covers, which metrics exist, how fresh it is, and the cited sources. Call this first to learn the available metric names and entity count.`,
     inputSchema: {},
   },
   async () => json({

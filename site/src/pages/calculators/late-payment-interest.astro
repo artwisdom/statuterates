@@ -9,8 +9,8 @@ const uk = getEntity('uk-late-payment-commercial');
 const ukLatest = latestOf(uk);
 const euLatest = latestOf(getEntity('eu-late-payment-reference'));
 
-const title = `Late Payment Interest Calculator — UK & EU Statutory Rates | ${meta.title}`;
-const description = `Free late-payment interest calculators for overdue B2B invoices: UK statutory interest (currently ${ukLatest?.value_text} under the Late Payment Act 1998) and the EU Late Payment Directive (reference ${euLatest?.value_text} + 8pp floor).`;
+const title = `UK & EU Late Payment Interest Calculator | ${meta.title}`;
+const description = `Calculate statutory interest on overdue B2B invoices using the UK Late Payment Act rate (${ukLatest?.value_text}) or EU reference rate (${euLatest?.value_text} plus margin).`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

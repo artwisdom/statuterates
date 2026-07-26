@@ -32,6 +32,9 @@ export function entitiesIndex() {
 }
 
 export function getEntity(slug) {
+  // Slugs are data identifiers, never paths. Reject traversal, separators, extensions, and other
+  // unexpected input before it reaches the filesystem.
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''))) return null;
   const rec = readJson(join('entity', `${slug}.json`));
   return rec;
 }

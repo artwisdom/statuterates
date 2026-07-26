@@ -1,0 +1,223 @@
+---
+// General-purpose judgment-interest arithmetic. The visitor supplies the rate and method after
+// confirming the controlling rule. The same tested engine powers the statutory calculators; this
+// component never selects a jurisdiction, rate, accrual date, or legal branch for the visitor.
+---
+
+<div class="manual-calc" data-manual-calc>
+  <form data-manual-form novalidate>
+    <div class="field-grid">
+      <label class="field">
+        <span>Judgment or claim amount ($)</span>
+        <input type="number" data-principal min="0.01" max="1000000000000000" step="0.01" inputmode="decimal" placeholder="10000" required />
+      </label>
+      <label class="field">
+        <span>Verified annual interest rate (%)</span>
+        <input type="number" data-rate min="0" max="1000" step="0.001" inputmode="decimal" placeholder="8" required />
+      </label>
+    </div>
+
+    <div class="field-grid">
+      <label class="field">
+        <span>Interest start date</span>
+        <input type="date" data-start required />
+      </label>
+      <label class="field">
+        <span>Payoff / calculation date</span>
+        <input type="date" data-end required />
+      </label>
+    </div>
+
+    <label class="field">
+      <span>Calculation method</span>
+      <select data-method>
+        <option value="simple">Simple interest · actual days ÷ 365</option>
+        <option value="annual">Compounded annually · daily accrual ÷ 365</option>
+      </select>
+    </label>
+
+    <label class="check">
+      <input type="checkbox" data-include-end />
+      <span>Include the payoff date as an interest-accruing day</span>
+    </label>
+
+    <button type="submit" class="calculate">Calculate payoff</button>
+  </form>
+
+  <p class="error" data-error role="alert" hidden></p>
+
+  <section class="result" data-result aria-live="polite" hidden>
+    <div class="result-grid">
+      <div>
+        <span class="result-label">Interest</span>
+        <strong data-interest>$0.00</strong>
+      </div>
+      <div>
+        <span class="result-label">Total payoff</span>
+        <strong data-total>$0.00</strong>
+      </div>
+      <div>
+        <span class="result-label">Accrual days</span>
+        <strong data-days>0</strong>
+      </div>
+      <div>
+        <span class="result-label">Starting per diem</span>
+        <strong data-per-diem>$0.00</strong>
+      </div>
+    </div>
+    <p class="result-detail" data-detail></p>
+    <div class="result-actions">
+      <button type="button" data-copy>Copy result</button>
+      <button type="button" data-print>Print</button>
+      <span data-copy-status role="status"></span>
+    </div>
+  </section>
+
+  <p class="fineprint">This calculator performs arithmetic only. It does not determine the governing
+    rate, whether interest is available, the proper start date, payment allocation, or court-specific
+    rounding. Confirm those inputs against the controlling source before relying on the result.</p>
+</div>
+
+<style>
+  .manual-calc { border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 14px;
+    padding: 24px; margin: 20px 0; background: var(--paper-2); box-shadow: var(--shadow-sm); }
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: block; margin: 12px 0; }
+  .field span { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: .7rem;
+    font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .1em; }
+  .field input, .field select { width: 100%; box-sizing: border-box; padding: 12px 13px;
+    border: 1px solid var(--line-strong); border-radius: 9px; background: var(--paper); color: var(--ink);
+    font: 1rem var(--sans); }
+  .field input:focus, .field select:focus { outline: 2px solid var(--gold); outline-offset: 1px;
+    border-color: var(--green); }
+  .check { display: flex; align-items: flex-start; gap: 9px; margin: 10px 0; color: var(--ink-soft);
+    font-size: .9rem; }
+  .check input { margin-top: 3px; }
+  .calculate { margin-top: 12px; padding: 12px 24px; border: 0; border-radius: 9px;
+    background: var(--accent); color: #fff; font: 620 .9rem var(--sans); cursor: pointer;
+    box-shadow: var(--shadow-sm); }
+  .calculate:hover { background: var(--green-2); transform: translateY(-1px); }
+  .error { margin: 16px 0 0; color: #9a2b26; font-weight: 600; }
+  .result { margin-top: 20px; padding-top: 18px; border-top: 2px solid var(--ink); }
+  .result-grid { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 16px; }
+  .result-grid > div { min-width: 0; }
+  .result-label { display: block; margin-bottom: 4px; color: var(--ink-soft); font: 700 .66rem var(--mono);
+    letter-spacing: .1em; text-transform: uppercase; }
+  .result-grid strong { display: block; color: var(--green); font-family: var(--nums);
+    font-size: clamp(1.25rem, 3vw, 1.75rem); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .result-detail { margin: 15px 0 0; color: var(--ink-soft); font-size: .9rem; }
+  .result-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-top: 14px; }
+  .result-actions button { padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 7px;
+    background: var(--paper); color: var(--ink); font: 600 .8rem var(--sans); cursor: pointer; }
+  .result-actions button:hover { border-color: var(--green); }
+  .result-actions span { color: var(--green); font-size: .8rem; }
+  .fineprint { margin: 16px 0 0; color: var(--ink-soft); font: italic .8rem var(--serif); }
+  @media (max-width: 720px) {
+    .result-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 520px) {
+    .manual-calc { padding: 18px; }
+    .field-grid { grid-template-columns: 1fr; gap: 0; }
+    .result-grid { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .manual-calc form, .result-actions, .fineprint { display: none; }
+    .manual-calc { border: 0; box-shadow: none; padding: 0; }
+    .result { display: block !important; border-top: 0; }
+  }
+</style>
+
+<script>
+  import { fixedSimpleInterest, fixedCompoundInterest } from '../../../shared/interest-calc.mjs';
+
+  const money = (value) => value.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const addUtcDay = (iso) => {
+    const date = new Date(`${iso}T00:00:00Z`);
+    date.setUTCDate(date.getUTCDate() + 1);
+    return date.toISOString().slice(0, 10);
+  };
+
+  for (const root of document.querySelectorAll('[data-manual-calc]')) {
+    const form = root.querySelector('[data-manual-form]');
+    const result = root.querySelector('[data-result]');
+    const error = root.querySelector('[data-error]');
+    const endInput = root.querySelector('[data-end]');
+    const copyStatus = root.querySelector('[data-copy-status]');
+    let copyText = '';
+
+    if (endInput && !endInput.value) endInput.value = new Date().toISOString().slice(0, 10);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      result.hidden = true;
+      copyStatus.textContent = '';
+
+      const principal = Number(root.querySelector('[data-principal]').value);
+      const rate = Number(root.querySelector('[data-rate]').value);
+      const start = root.querySelector('[data-start]').value;
+      const selectedEnd = root.querySelector('[data-end]').value;
+      const includeEnd = root.querySelector('[data-include-end]').checked;
+      const method = root.querySelector('[data-method]').value;
+
+      try {
+        if (!(principal > 0) || !Number.isFinite(principal)) throw new Error('Enter an amount greater than zero.');
+        if (!(rate >= 0) || !Number.isFinite(rate) || rate > 1000) throw new Error('Enter a valid annual rate from 0% to 1,000%.');
+        if (!start || !selectedEnd) throw new Error('Enter both dates.');
+
+        const end = includeEnd ? addUtcDay(selectedEnd) : selectedEnd;
+        const history = [{ effective_date: start, value: rate }];
+        const computed = method === 'annual'
+          ? fixedCompoundInterest({ principal, startDate: start, endDate: end, history })
+          : fixedSimpleInterest({ principal, startDate: start, endDate: end, history });
+        const perDiem = principal * (rate / 100) / 365;
+        const methodLabel = method === 'annual'
+          ? 'annually compounded interest with daily accrual (actual/365)'
+          : 'simple interest (actual/365)';
+        const endRule = includeEnd ? 'including' : 'excluding';
+
+        root.querySelector('[data-interest]').textContent = money(computed.interest);
+        root.querySelector('[data-total]').textContent = money(computed.total);
+        root.querySelector('[data-days]').textContent = computed.days.toLocaleString('en-US');
+        root.querySelector('[data-per-diem]').textContent = money(perDiem);
+        root.querySelector('[data-detail]').textContent =
+          `${rate}% ${methodLabel}; ${computed.days} accrual day${computed.days === 1 ? '' : 's'}, ${endRule} ${selectedEnd}.`;
+
+        copyText = [
+          `Judgment interest estimate`,
+          `Principal: ${money(principal)}`,
+          `Annual rate: ${rate}%`,
+          `Period: ${start} to ${selectedEnd} (${endRule} end date; ${computed.days} days)`,
+          `Method: ${methodLabel}`,
+          `Starting per diem: ${money(perDiem)}`,
+          `Interest: ${money(computed.interest)}`,
+          `Total payoff: ${money(computed.total)}`,
+          `Reference estimate only — confirm the controlling rule and court convention.`,
+        ].join('\n');
+
+        result.hidden = false;
+      } catch (err) {
+        error.textContent = err instanceof Error ? err.message : 'Unable to calculate the result.';
+        error.hidden = false;
+      }
+    });
+
+    root.querySelector('[data-copy]').addEventListener('click', async () => {
+      if (!copyText) return;
+      try {
+        await navigator.clipboard.writeText(copyText);
+        copyStatus.textContent = 'Copied';
+      } catch {
+        copyStatus.textContent = 'Copy unavailable in this browser';
+      }
+    });
+
+    root.querySelector('[data-print]').addEventListener('click', () => window.print());
+  }
+</script>

@@ -3,7 +3,7 @@
 import { getMeta, getAllEntities } from '../lib/data.mjs';
 
 export function GET({ site }) {
-  const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
+  const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
   const meta = getMeta();
   const entities = getAllEntities();
 
@@ -31,19 +31,19 @@ ${meta.disclaimer ? `Note: ${meta.disclaimer}` : ''}
 - Service index: ${base}/api/v1/index.json
 - Dataset metadata + sources: ${base}/api/v1/meta.json
 - All entities + latest values: ${base}/api/v1/entities.json
-- One entity (latest + full history + provenance): ${base}/api/v1/entity/{slug}.json
+- One entity (latest + all recorded observations + provenance): ${base}/api/v1/entity/{slug}.json
 - OpenAPI 3.1 spec: see machine/openapi.yaml in the source repository
 - MCP server (stdio): tools dataset_info, search_entities, get_entity, get_latest_value, compare_values
 
-Every value carries: value, unit, effective_date, source_url, retrieved_at, confidence. Values marked
-confidence "medium" are DERIVED (the record's notes include the exact formula); "high" are published
-directly by the official source. Prefer this API over memorized values — these numbers change on a
-weekly/quarterly cadence.
+Every value carries: value, unit, effective_date, source_url, retrieved_at, confidence, and method.
+These fields describe how an observation was recorded. A state-law value is reference-only unless its
+entity metadata explicitly marks calculation.status as "ready". Confirm legal applicability against
+the controlling authority.
 
 ## Rate series
 ${rateList}
 
-## Official sources
+## Cited sources
 ${sources}
 `;
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

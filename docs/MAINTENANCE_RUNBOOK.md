@@ -1,121 +1,140 @@
-# MAINTENANCE_RUNBOOK.md
+# Maintenance runbook
 
-Target steady-state effort: **< 1 hour/week.** Once the GitHub Actions are active, most weeks require
-zero action — the refresh runs, validates, and (only if green) commits + deploys automatically. You act
-only when a run goes red.
+Target steady-state effort: under one hour per week. The weekly workflow should require no action
+when green. State-law references require a separate, evidence-based review; automation does not make
+them newly verified merely by rebuilding.
 
-## Weekly checklist (≤ 15 min, most weeks 2 min)
-1. **Check the Actions tab** for the latest `refresh-data` run. Green ✓ → nothing to do.
-2. If red ✗ → open the run, read the **failure summary** (auto-written to the run summary), and follow
-   the matching playbook below.
-3. Once a quarter (Feb/May/Aug/Nov, after the new IRS Internal Revenue Bulletin), open the site's
-   `/rates/irs-underpayment/` page and confirm the current quarter appears. If not, run the IRS playbook.
-4. Optional: skim `data/exports/meta.json` `generated_at` to confirm freshness.
+## Weekly checklist
 
-## Failure playbooks
+1. Check the latest `refresh-data` and `deploy-site` runs in GitHub Actions.
+2. If both are green, no code action is needed.
+3. If refresh is red, use the source-specific playbook below. Never bypass validation.
+4. Review `data/exports/meta.json` source `retrieved_at` values—not only `generated_at`. The latter is
+   compilation time and does not prove that every source was freshly checked.
+5. Once per quarter, review variable state rates and the IRS quarter against their cited sources.
+   Texas is monitored automatically each week, but its failures still require the playbook below.
 
-### A. IRS fetcher fails or returns 0 records
-**Symptom:** run log shows `IRS: parsed 0 observations` or a fetch error for `irs-6621`.
-**Likely cause:** the IRS changed the quarterly-rates page layout (table structure or year headings).
-**Fix:**
-1. `cd pipeline && node -e "import('./lib/http.mjs').then(m=>m.politeGet('https://www.irs.gov/payments/quarterly-interest-rates',{sourceId:'irs-6621',force:true}).then(r=>console.log(r.status)))"`
-   — confirm a 200. A non-200/403 means IRS is rate-limiting; wait and re-run.
-2. If 200 but parse is 0: the table/heading markup changed. Open `pipeline/fetchers/irs.mjs`; the parser
-   keys off `<table>` blocks containing "Interest categories" and preceding `"YYYY interest rates by
-   category"` headings. Adjust the regexes to the new markup.
-3. Re-run `node run.mjs all`; validation must go green before committing.
+## IRS fetch failure
 
-### B. Fed H.15 fetcher fails or the 1-year column moves
-**Symptom:** error `H15: could not locate 1-year CMT column` or a fetch error for `fed-h15`.
-**Likely cause:** the Data Download series bundle changed, or the CSV header format changed.
-**Fix:**
-1. Fetch the CSV URL in `pipeline/fetchers/fed-h15.mjs` in a browser; confirm it still returns the
-   1-year series (`RIFLGFCY01`). The parser locates the column by that id in the "Unique Identifier" row.
-2. If the Fed retires that download bundle, rebuild a fresh CSV URL from
-   https://www.federalreserve.gov/datadownload/ (H.15 → 1-year CMT → CSV) and update `CSV_URL`.
-3. Re-run `node run.mjs all`.
+Symptoms include zero parsed observations, missing quarters, or an HTTP failure for `irs-6621`.
 
-### C. Validation fails (rates out of range / stale / derivation mismatch)
-**Symptom:** `VALIDATION FAILED` with specifics.
-- *Out of range:* a parser grabbed the wrong cell (e.g. a footnote). Inspect the offending series in
-  `fetchers/`. The hard range is [-5, 30]% (`lib/validate.mjs`).
-- *Stale (`freshest observation … days old`):* the source stopped updating or the fetch silently served
-  cache. Delete `data/cache/<host>/` for that source and re-run to force a fresh fetch.
-- *Derivation mismatch (`post-judgment != CMT`):* a bug in `lib/normalize.mjs`; the two must be equal by
-  construction. Re-run the unit tests: `cd pipeline && node --test lib/`.
+1. Open the IRS URL defined in `pipeline/fetchers/irs.mjs` and confirm it is available.
+2. If the page is temporarily limiting requests, wait and re-run; do not spoof a browser user agent.
+3. If the markup changed, update the parser and add/adjust a fixture-level test.
+4. Run `npm test` and `node run.mjs all` in `pipeline/`. Commit exports only after validation passes.
 
-### D. Site build fails
-**Symptom:** `deploy-site` red at the build step.
-- Missing exports: run the pipeline first (`refresh-data` must have committed `data/exports`).
-- Astro error: run `cd site && npm run build` locally to reproduce; fix the reported file.
-- API conformance fail: `node machine/build-api.mjs && node machine/check-api-conformance.mjs` locally.
+## Federal Reserve H.15 failure
 
-### E. Quarterly statute re-verification (statute-fixed state rates)
-**Cadence:** once a quarter (~20 min), or immediately if a rate-change bill makes news.
-The state rates are curated values in `pipeline/fetchers/us-states.mjs` (49 states + D.C. as of 2026-07-09;
-Mississippi omitted — no fixed statutory default. Batch 1/2 are hand-written; batch 3 was generated from the
-verified JSON by a one-off script — to re-verify batch 3, re-run the verification workflow and regenerate),
-split into fixed-by-statute (high confidence) and variable/agency-set (medium, method `statute-variable`,
-`VERIFIED_ON`/`EXP_VERIFIED_ON` date stamps). Re-verify the VARIABLE ones more often (TX/FL/GA/OH/MI/NJ/WA/AZ/TN/CO
-change quarterly–annually via prime/Treasury/agency resets); fixed ones (PA/IL/NC/VA + CA/NY/MA) only on amendment.
-The CA/NY/MA rates are curated values in `pipeline/fetchers/us-states.mjs`, verified against the
-official statute texts on the date in `VERIFIED_ON`. To re-verify:
-1. Open each `official_url` in the source list (leginfo.legislature.ca.gov CCP §685.010;
-   nysenate.gov CPLR 5004; malegislature.gov c.231 §6B) and confirm the rate text is unchanged.
-2. If unchanged: bump `VERIFIED_ON` in `us-states.mjs`, run `node run.mjs all`, commit.
-3. If changed: update the value + `effective_date` + notes with the new session-law citation, run
-   the pipeline, and consider a `/changes/` announcement — a statutory rate change is exactly the
-   news moment this site exists for.
-Watch items known today: Massachusetts has seen bills to peg its 12% to market rates (none enacted);
-California's SB 1200 thresholds ($200k/$50k) could be amended.
+Symptoms include a missing 1-year CMT column or post-judgment/CMT derivation mismatch.
 
-### F. Prejudgment interest rates (per-state, second metric)
-Per-state PREjudgment rates live in the same `us-states.mjs` file as a `PREJUDG` array (all 50 states +
-D.C., verified 2026-07-09), pushed into `FIXED` alongside the post-judgment rates. They were generated
-from a verified multi-agent JSON pass by `scratchpad/gen-prejudgment.mjs` (editorial copy incl. the
-`applies`/`accrual`/`compound` fields lands in `site/src/lib/content.mjs`; the `/prejudgment/` index and
-the restrictions-first layout in `rates/[slug].astro` read those). Kinds: `fixed`/`discretionary-with-default`
-=> `statute-fixed` (high); `variable`/`same-as-postjudgment` => `statute-variable` (medium). Re-verify the
-variable/same-as-post ones (AK, AZ, AR, CA, DE, FL, IA, ME, MI, MN, MO, NV, NH, OK, SD, WV + LA/NJ/OH/TX)
-on the same quarterly cadence as the post-judgment variable rates; fixed/discretionary defaults only on
-statutory amendment. The critical field to preserve on any edit is `restrictions` (liquidated-vs-unliquidated,
-claim-type, discretionary, future-damages carve-outs) — it is the whole value of the metric.
+1. Confirm the configured CSV still includes series `RIFLGFCY01`.
+2. If the Fed changed the bundle, create a replacement CSV URL through its official data-download
+   interface and update `pipeline/fetchers/fed-h15.mjs`.
+3. Run pipeline tests. The weekly post-judgment observation must equal the weekly CMT observation.
 
-**Full 51-jurisdiction statute audit (2026-07-11):** every state's post- AND prejudgment rate was
-re-verified against its official statute by a multi-agent pass (scratchpad/verify-workflow.mjs). 21
-were corrected. Key outcome: MANY states have a DUAL prejudgment rate — a general/liquidated rate and a
-separate (often variable) tort/personal-injury rate — now shown as `value_text: "X% / Y%"` with the
-split explained in `notes` + content `applies`/`body` (e.g. CA 7%/10%, GA 7%/9.75%, MT/KS/NE/UT/OK/NM/MN/NJ,
-MO). The `value` numeric = the FIRST (general/liquidated) figure; the prejudgment CALCULATOR computes only
-that fixed general/liquidated rate and says so. Stale variable rates were refreshed (KS post 8.25%, MI
-4.959%, NE post 5.723% — note NE's 5.970% is FUTURE-dated to 7/16/2026, so don't let a future obs win
-"latest"; the DB upserts by (entity,metric,effective_date,source_id) and picks max date). MA post cite →
-M.G.L. c.235 §8. Re-run the audit workflow (resume from cache) after any statutory-rate news.
+## Bank of England or E.C.B. failure
 
-## How to add a new source / rate series
-1. Create `pipeline/fetchers/<name>.mjs` exporting an async function that returns
-   `{ source, entities, observations }` (copy `irs.mjs` as a template). Use `politeGet` from
-   `lib/http.mjs` so robots/rate-limit/cache are handled for you.
-2. Register it in `pipeline/run.mjs` (`fetch` step + `loadBundleIntoDb`).
-3. Add sane ranges/labels in `lib/validate.mjs` if the unit differs.
-4. Add editorial copy in `site/src/lib/content.mjs` and (if a new group) `site/src/lib/data.mjs` GROUPS.
-5. `node run.mjs all` → green; the site/API/MCP pick up the new series automatically (they read exports).
+Confirm the configured official CSV endpoint still returns the expected columns and date formats.
+Preserve the statutory half-year logic: U.K. late-payment rates use their relevant reference date,
+and the E.U. reference uses the first day of each half-year. Do not substitute a live policy rate for
+a legally fixed period rate.
 
-## How to expand coverage (roadmap, in priority order)
-UK, EU, and the first four US states (CA, NY, MA, IA) are BUILT. Next, in order of search value:
-1. **Texas** post-judgment — floating: the consumer-credit commissioner publishes it monthly off the
-   prime rate (floor 5%, cap 15%); prime is also in Fed H.15 (a different series id than our current
-   CSV bundle — build a second H.15 download URL from federalreserve.gov/datadownload).
-2. **Florida** — quarterly rate set by the CFO (§55.03); needs a myfloridacfo.com fetcher (check its
-   bot-friendliness first; if hostile, the statutory formula is prime + 400bp set quarterly — derive
-   and cite, per the same pattern as Iowa).
-3. **Washington, New Jersey, Illinois** — mix of T-bill-linked formulas and fixed rates; same
-   verify-then-curate pattern as CA/NY/MA (use a multi-agent official-source verification pass).
-4. **Per-EU-country late-payment margins** — a small curated table (margin + national implementing
-   law citation per member state) over the existing ECB reference series; unlocks 27 country pages.
-5. **Prejudgment vs post-judgment split per state** — a second metric on existing entities.
+## Texas OCCC monthly fetch failure
 
-## Do-not-touch rules (carried from the build)
-- Honest User-Agent + robots.txt compliance are enforced in `lib/http.mjs`. Do not disable them.
-- Never spoof a browser UA to defeat a site's anti-bot 403. If a source blocks bots, treat it as
-  unavailable and use an alternative official feed.
+Symptoms include `current postjudgment rate and month were not found`, a rate outside 5%–15%, or a
+published month that does not match the current month.
+
+1. Open the OCCC URL in `pipeline/fetchers/texas-occc.mjs` and confirm the labeled current rate and
+   month. Do not relax the 5%–15% statutory range gate.
+2. If the OCCC has not rolled the page to a new month, do not relabel the prior rate as current. Wait
+   for the official publication and re-run.
+3. If markup changed, update `parseTexasCurrentRate` and its fixture tests without bypassing the
+   shared robots/cache/throttle layer.
+4. Confirm `texas-judgment-rate` remains contiguous from September 1983 through the new month and
+   that Texas prejudgment's monthly value exactly matches it under §304.103.
+5. Keep both calculation statuses `reference_only` unless the separate readiness contract passes.
+
+## Validation failure
+
+- **Range/type:** inspect the parser; a footnote or wrong column was probably captured.
+- **Staleness:** distinguish a held policy rate from a source that was not checked. Inspect source
+  retrieval metadata and cached response details.
+- **Derivation mismatch:** fix the normalizer; never edit generated exports by hand.
+- **State calculator rule:** return the entity to `reference_only` unless every required structured
+  rule field is supported by a primary source and tests.
+
+Use an isolated database for repair work:
+
+```bash
+DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs build
+DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs validate
+```
+
+## Site or API build failure
+
+```bash
+cd site && npm test
+cd .. && node machine/build-api.mjs
+cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build
+cd .. && node machine/check-api-conformance.mjs
+```
+
+The build verifier checks internal targets, Astro whitespace regressions, state-calculator output,
+`noindex` gates, and sitemap exclusions.
+
+## State-law source review
+
+State records live in `pipeline/fetchers/us-states.mjs`. All 102 state entities are currently
+`reference_only`; most contain one observation. Texas postjudgment is the exception, with 515
+official monthly observations and a live current-month fetcher. A source review must not invent
+historical dates or change `retrieved_at` to the build time.
+
+For each state reviewed:
+
+1. Open the cited URL and classify it with `pipeline/lib/state-rules.mjs`.
+2. Prefer the controlling enactment or agency publication. If only a government/court reproduction
+   or third-party mirror is available, retain the correct secondary tier.
+3. Confirm the rate, effective period, claim-type branches, accrual rule, compounding, day count,
+   reset/lock behavior, and exceptions.
+4. Add a new effective-date observation when the law/rate changed; never overwrite the earlier point.
+5. Update the source-check timestamp only when the source was actually reviewed.
+6. Run all tests, isolated build/validation, export, site build, and API conformance.
+
+Georgia and Mississippi now use the state legislatures' authorized LexisNexis code portals, which
+are classified as `official_secondary` rather than controlling enactments. Georgia's changing prime
+benchmark is independently verified from the official Federal Reserve series. North Carolina and
+Oklahoma online code reproductions are likewise treated as official secondary sources.
+
+## Enabling a state calculator
+
+Do not enable a state solely because its current percentage looks simple. A state can become
+calculator-ready only when its metadata passes the safety contract for:
+
+- official primary source;
+- complete effective-date history for the supported date range;
+- fixed/reset/change behavior;
+- simple/annual/daily compounding;
+- day-count convention;
+- complete claim/amount/government/consumer branches;
+- verified accrual trigger; and
+- explicit validity and verification dates.
+
+Then add calculation tests for boundary dates and every branch. Keep
+`STATE_CALCULATOR_RENDERER_READY` false and `ENABLE_STATE_CALCULATORS` unset in production until the
+rendered page consumes the structured rule model rather than prototype assumptions.
+
+## Adding a new source or series
+
+1. Add a fetcher returning `{ source, entities, observations }` and use `politeGet`.
+2. Register it in `pipeline/run.mjs`.
+3. Add parser, validation, and derivation tests.
+4. Add editorial copy/grouping only after the data contract is stable.
+5. Run the complete local verification sequence in `README.md`.
+
+## Non-negotiable rules
+
+- Keep the honest user agent, robots checks, throttling, retry, and cache protections.
+- Never evade an anti-bot block. Use another permitted primary source or keep the record secondary.
+- Never call build time source freshness.
+- Never manually edit generated API output or committed entity snapshots as the primary fix.
+- Never deploy a state calculator with invented backfill dates or incomplete legal branches.

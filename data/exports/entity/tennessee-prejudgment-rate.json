@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "tennessee-prejudgment-rate",
   "name": "Tennessee Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "Tenn. Code Ann. § 47-14-123",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "discretionary-with-default"
+    "kind": "discretionary-with-default",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_secondary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -20,15 +25,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 10,
-      "value_text": "10%",
+      "value_text": "up to 10%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "tn-prejud",
-      "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
-      "confidence": "high",
+      "source_url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+      "retrieved_at": "2026-07-09T00:00:00Z",
+      "confidence": "medium",
       "method": "statute-fixed",
-      "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "notes": "Tenn. Code Ann. § 47-14-123 permits a judge or jury to award prejudgment interest as an element of damages at a rate not exceeding 10% per year. The award and rate are discretionary; 10% is a ceiling, not an automatic default. Confirm the current statute and controlling case law. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +41,15 @@
       {
         "metric": "annual_rate",
         "value": 10,
-        "value_text": "10%",
+        "value_text": "up to 10%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "tn-prejud",
-        "source_url": "https://codes.findlaw.com/tn/title-47-commercial-instruments-and-transactions/tn-code-sect-47-14-123/",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
-        "confidence": "high",
+        "source_url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+        "retrieved_at": "2026-07-09T00:00:00Z",
+        "confidence": "medium",
         "method": "statute-fixed",
-        "notes": "Prejudgment interest under Tenn. Code Ann. § 47-14-123 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Tennessee’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "notes": "Tenn. Code Ann. § 47-14-123 permits a judge or jury to award prejudgment interest as an element of damages at a rate not exceeding 10% per year. The award and rate are discretionary; 10% is a ceiling, not an automatic default. Confirm the current statute and controlling case law. Not legal advice."
       }
     ]
   }

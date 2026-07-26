@@ -1,50 +1,65 @@
-# Data Moat Engine
+# StatuteRates
 
-A zero-capital, solo-operable **data business foundation**: one canonical, constantly-changing,
-provenance-tracked dataset in a narrow global niche, monetized through three interfaces ("skins")
-over a single data asset:
+StatuteRates is a static legal-rate reference site and data pipeline for statutory, judgment, tax,
+and late-payment interest rates. The same versioned dataset powers three interfaces:
 
-1. **Human skin** — a fast static reference website (display-ad monetization later).
-2. **Machine skin** — the same data as a static JSON API + an MCP server for AI agents, plus `llms.txt`.
-3. **Licensing skin** — bulk licensing if the dataset becomes canonical (documented, not built).
+1. A fast Astro website for people and organic search.
+2. A static JSON/CSV API plus an MCP server for software and AI tools.
+3. A future licensing layer if the dataset earns enough trust and demand.
 
-The interface code is disposable. The asset is the **normalized, provenance-tracked dataset and its
-automated refresh pipeline**.
+Production: [statuterates.com](https://statuterates.com)
+Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/statuterates)
 
-## Status
+## Current baseline
 
-**Niche:** StatuteRates — statutory, judgment & tax interest rates across the **US (federal + states),
-UK and EU**, plus **statutory-interest calculators** (federal §1961, IRS, state judgment, UK/EU late
-payment) and a free JSON/CSV API + MCP server for AI agents.
-**Dataset:** ~650 provenance-tracked records · 17 rate series · 8 official sources · 28 pages.
-Code-complete and QA-green (31 unit tests, browser-verified calculators, MCP smoke incl.
-`calculate_interest`, API conformance). **Nothing is deployed yet** — going live is a ~15-minute owner
-action (push + Pages + Search Console).
+- 114 rate series and 2,193 recorded observations across U.S. federal/state, U.K., and E.U. sources.
+- 192 static pages plus 114 JSON and 114 CSV entity endpoints.
+- Automated weekly refresh for machine-readable federal, U.K., and E.U. sources; live Texas OCCC,
+  Nebraska Judicial Branch, Iowa Judicial Branch, and Federal Reserve prime-rate checks extend or
+  verify state schedules, while Maine's annual court-chart rate is independently checked against
+  official H.15 inputs.
+- Curated state references carry explicit source tiers and source-check dates.
+- A general fixed-rate judgment/per-diem calculator plus federal §1961, IRS, and U.K./E.U.
+  late-payment calculators are available.
+- State calculators are intentionally withheld and excluded from the sitemap until complete rate
+  histories, branches, accrual rules, day counts, and compounding rules pass validation.
 
-See [`STATE.md`](STATE.md) for live build state, [`EXECUTION_REPORT.md`](EXECUTION_REPORT.md) for the
-full report, [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) to go live, and
-[`research/NICHE_DECISION.md`](research/NICHE_DECISION.md) for why this niche.
+The July 2026 safety baseline also makes committed JSON exports the durable history bootstrap for a
+fresh CI database. A clean automation run can no longer erase older observations.
 
-## Quickstart
+## Local setup
+
+Node 22.12 or newer is required. Version files are included for common Node version managers.
+
 ```bash
-./setup.sh          # install deps, run pipeline, build API + site, verify MCP (one command)
+./setup.sh
 ```
-Or step by step — see the "Local dev quickstart" in [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md).
 
-## Layout
+That command installs locked dependencies, runs tests, refreshes the remote data sources, builds the
+API and site, and verifies the final static output. For an offline/code-only verification, run:
+
+```bash
+cd pipeline && npm ci && npm test
+cd ../site && npm ci && npm test
+cd .. && node machine/build-api.mjs
+cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build
+cd ../machine/mcp-server && npm ci && npm test
+```
+
+## Project layout
 
 | Path | Purpose |
 |---|---|
-| `research/` | Research log + niche decision |
-| `pipeline/` | Node.js fetchers, politeness layer, normalizer, validation |
-| `data/` | SQLite source of truth (`db.sqlite`) + versioned JSON exports |
-| `site/` | Astro static site (human skin) |
-| `machine/` | Static JSON API build + MCP server + `llms.txt` (machine skin) |
-| `docs/` | Architecture, QA report, deployment guide, runbook, risk register |
-| `.github/workflows/` | INACTIVE automation blueprints (activate only on owner push) |
+| `pipeline/` | Fetchers, durable-history hydration, normalization, validation, and export |
+| `data/exports/` | Versioned, deployable JSON snapshots and automation history bootstrap |
+| `site/` | Astro static site, SEO pages, safe calculators, and build verification |
+| `shared/` | Dependency-free interest calculation engine and tests |
+| `machine/` | Static API generator, OpenAPI contract, and MCP server |
+| `docs/` | Architecture, deployment, maintenance, risk, and historical planning records |
+| `.github/workflows/` | Weekly data refresh and GitHub Pages deployment automation |
 
-## Local-only
-
-This repository has **no git remote**, is **not deployed anywhere**, and requires **no accounts or
-spend** to build. Every step that would need a credential, deployment, or account is a documented
-manual step in `docs/DEPLOYMENT_GUIDE.md`, marked with an `<<OWNER_PROVIDES>>` placeholder.
+Start with [STATE.md](STATE.md) for the current handoff,
+[docs/PHASE_1_AUDIT.md](docs/PHASE_1_AUDIT.md) for the research-backed growth roadmap, and
+[docs/PHASE_2_PROGRESS.md](docs/PHASE_2_PROGRESS.md) for the demand-led Texas, Nebraska, Iowa,
+Kentucky, Maine, Georgia, and Mississippi milestone, and
+[docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.

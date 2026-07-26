@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "new-mexico-prejudgment-rate",
   "name": "New Mexico Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "NMSA 1978 §56-8-4(B) (≤10% discretionary); §56-8-3 (15% liquidated/contract)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "discretionary-with-default"
+    "kind": "discretionary-with-default",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -24,8 +29,8 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "nm-prejud",
-      "source_url": "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://nmonesource.com/nmos/en/nav.do",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
       "notes": "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice."
@@ -40,8 +45,8 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "nm-prejud",
-        "source_url": "https://codes.findlaw.com/nm/chapter-56-commercial-instruments-and-transactions/nm-st-sect-56-8-4/",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://nmonesource.com/nmos/en/nav.do",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
         "notes": "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice."

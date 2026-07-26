@@ -1,7 +1,7 @@
 // Dynamic robots.txt so the Sitemap line always points at the real deploy domain (Astro `site`).
 // Allow-all for content; only the sitemap is advertised. AI crawlers are welcomed (see llms.txt).
 export function GET({ site }) {
-  const base = (site?.href || 'https://data-moat-engine.example.org/').replace(/\/$/, '');
+  const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
   const body = `User-agent: *
 Allow: /
 

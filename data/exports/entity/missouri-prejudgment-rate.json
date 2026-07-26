@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "missouri-prejudgment-rate",
   "name": "Missouri Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,15 @@
   "locale": null,
   "metadata": {
     "state": "MO",
-    "statute": "Mo. Rev. Stat. §408.020 (9% liquidated/contract); §408.040.3 (tort, Fed Funds+3%)",
+    "statute": "Mo. Rev. Stat. §§ 408.020, 408.040.3–.4",
     "basis": "statute-variable",
     "metric": "prejudgment",
-    "kind": "variable"
+    "kind": "variable",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"
@@ -20,15 +25,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 9,
-      "value_text": "9% / 6.75%",
+      "value_text": "9% non-tort; tort rule varies",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "mo-prejud",
       "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Missouri prejudgment interest splits by claim type: liquidated/contract claims bear 9% fixed (Mo. Rev. Stat. §408.020); TORT prejudgment interest is the intended Federal Funds rate + 3% — currently about 6.75% (variable) under §408.040.3. Current values as of July 2026; verify at revisor.mo.gov. Not legal advice."
+      "notes": "Liquidated or contract claims may bear 9% under § 408.020. For qualifying tort claims, § 408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points. Section 408.040.4 separately says the judgment for prejudgment interest bears Federal Funds plus 3 points after entry. Because those are distinct stages, this reference record does not flatten the tort rule into one headline percentage. Not legal advice."
     }
   },
   "history": {
@@ -36,15 +41,15 @@
       {
         "metric": "annual_rate",
         "value": 9,
-        "value_text": "9% / 6.75%",
+        "value_text": "9% non-tort; tort rule varies",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "mo-prejud",
         "source_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Missouri prejudgment interest splits by claim type: liquidated/contract claims bear 9% fixed (Mo. Rev. Stat. §408.020); TORT prejudgment interest is the intended Federal Funds rate + 3% — currently about 6.75% (variable) under §408.040.3. Current values as of July 2026; verify at revisor.mo.gov. Not legal advice."
+        "notes": "Liquidated or contract claims may bear 9% under § 408.020. For qualifying tort claims, § 408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points. Section 408.040.4 separately says the judgment for prejudgment interest bears Federal Funds plus 3 points after entry. Because those are distinct stages, this reference record does not flatten the tort rule into one headline percentage. Not legal advice."
       }
     ]
   }

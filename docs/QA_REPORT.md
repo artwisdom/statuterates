@@ -1,5 +1,13 @@
 # QA_REPORT.md — QA gauntlet
 
+> Historical QA snapshot from the initial build. Counts and calculator claims below are not the
+> current production baseline. See `README.md` and `STATE.md`; current CI commands re-run the live
+> pipeline, site, shared-engine, API, and MCP checks.
+>
+> **Superseded Iowa result:** the weekly-average Iowa calculator described later in this snapshot was
+> legally incorrect and has been removed. Iowa now follows the Judicial Branch's monthly table and
+> remains `reference_only`; see `docs/PHASE_2_PROGRESS.md`.
+
 **Date:** 2026-07-08. All checks run locally on the owner's machine. Result: **all green.**
 **Re-run after the UK/EU expansion + hardening:** 536 observations · 12 series · 4 sources ·
 3 jurisdictions · **22 unit tests** · 16 pages · API 12 endpoints. Added data-integrity checks:
@@ -52,9 +60,8 @@ entity by its own token), `get_latest_value` (value + `source_url` + `effective_
 - **No secrets** anywhere (grep for api-key/secret/password/token/AKIA/BEGIN → only benign matches: the
   word "token" in generic search code, package names, a "secret" path in a robots test).
 - **No `<<OWNER_PROVIDES>>`/`<<OWNER_…>>` placeholder in any functional code path** (`.mjs/.js/.astro`).
-  The UA contact was refactored to the `STATUTERATES_CONTACT` env var (neutral default). The only
-  remaining placeholder is `<<OWNER_DOMAIN>>` in `machine/openapi.yaml` — a spec/config file, which is
-  the sanctioned location for a documented server-URL placeholder.
+  The UA contact can be overridden with `STATUTERATES_CONTACT`; the safe default and OpenAPI links
+  now use the permanent StatuteRates production domain.
 - `.env.example` present; documents that **no credentials exist** in this project.
 
 ## 6. Containment & hygiene ✅

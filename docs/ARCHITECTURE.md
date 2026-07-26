@@ -1,83 +1,110 @@
-# ARCHITECTURE.md — data model, pipeline, and the three skins
+# Architecture
 
 ## 1. The asset
-A normalized, provenance-tracked, **as-of-date** database of legally-mandated ("statutory") interest
-rates. The interface code (site, API, MCP server) is disposable; the asset is the dataset + its
-automated refresh pipeline.
 
-## 2. Data model (SQLite is the single source of truth: `data/db.sqlite`)
-The schema is intentionally generic — "observations of a metric's value for an entity, over time, each
-row carrying full provenance" — so the same engine can extend to other rate/fee/price niches. Tables
-(`pipeline/lib/db.mjs`):
+The durable asset is a normalized, provenance-tracked collection of legally relevant interest-rate
+observations. The website, API, and MCP server are separate interfaces over that same dataset.
 
-- **`sources`** — every data source with `publisher`, `home_url`, `license`, `robots_status`, `retrieved_at`.
-- **`entities`** — here, one row per **rate series** (e.g. `irs-underpayment`, `us-federal-post-judgment`).
-  `slug` is the URL and API key. `jurisdiction` is ISO-3166 (`US`, `GB`, `EU`). This "entity = series"
-  choice gives one focused, indexable page per rate (good SEO) instead of one giant page per country.
-- **`observations`** — one row per `(entity, metric, effective_date)` with `value_numeric`, `unit`,
-  `source_id`, `source_url`, `retrieved_at`, `confidence`, `method`, `notes`. History is preserved:
-  a new `effective_date` is a new row, never an overwrite. Unique on
-  `(entity_id, metric, effective_date, source_id)` → idempotent re-runs.
-- **`run_log`** — audit of each pipeline run (freshness stamp + maintenance).
+## 2. Storage and durability
 
-All rate observations use `metric = 'annual_rate'`, `unit = 'percent_per_annum'`.
+`pipeline/lib/db.mjs` defines four SQLite tables:
 
-## 3. Entities in the seed (rate series)
+- `sources`: publisher, source URL, reuse notes, robots status, and latest real source-check time.
+- `entities`: one row per rate series and its structured metadata.
+- `observations`: values keyed by entity, metric, effective date, and source, with full provenance.
+- `run_log`: pipeline run status and diagnostics.
 
-| slug | series | jurisdiction | source | confidence |
-|---|---|---|---|---|
-| `irs-underpayment` | IRS underpayment rate (§6621) | US | IRS quarterly page | high (published) |
-| `irs-overpayment-noncorporate` | IRS non-corporate overpayment | US | IRS quarterly page | high |
-| `irs-overpayment-corporate` | IRS corporate overpayment | US | IRS quarterly page | high |
-| `irs-large-corporate-underpayment` | IRS large-corp underpayment (LCU) | US | IRS quarterly page | high |
-| `irs-gatt` | GATT (corp overpayment > $10k) | US | IRS quarterly page | high |
-| `irs-6603-federal-short-term` | IRC §6603 deposit / federal short-term | US | IRS quarterly page | high |
-| `treasury-1-year-cmt` | 1-yr Treasury constant-maturity yield (weekly avg) | US | Fed H.15 CSV | high (published) |
-| `us-federal-post-judgment` | Federal post-judgment rate (28 U.S.C. §1961) | US | derived from H.15 | **medium (derived)** |
-| `boe-bank-rate` | Bank of England Bank Rate | GB | BoE IADB CSV | high (published) |
-| `uk-late-payment-commercial` | UK late-payment interest (LPA 1998, semi-annual) | GB | derived from BoE | **medium (derived)** |
-| `ecb-main-refinancing-rate` | ECB main refinancing rate | EU | ECB Data Portal CSV | high (published) |
-| `eu-late-payment-reference` | EU Late Payment Directive reference (semi-annual) | EU | derived from ECB | **medium (derived)** |
+`data/db.sqlite` is an ignored runtime database. The committed snapshots in `data/exports/` are the
+durable automation history. Before any refresh, `pipeline/lib/seed-exports.mjs` hydrates a fresh
+SQLite database from those exports. This makes CI idempotent and prevents a clean runner from
+silently replacing multi-period history with only the current fetch.
 
-**12 series across 3 jurisdictions (US/UK/EU), 4 official sources, 536 records.** The UK/EU statutory
-series are correctly modeled as SEMI-ANNUAL (fixed on 31 Dec/30 Jun for the UK; 1 Jan/1 Jul for the EU),
-not "live base + 8" — see `pipeline/lib/rates-intl.mjs` and its tests.
+An unchanged observation keeps its original retrieval time. A changed observation records the new
+retrieval time. Source timestamps cannot move backward.
 
-Designed-in further expansion (documented, not yet built): per-EU-country late-payment margins, US state
-judgment/legal rates.
+## 3. Coverage
 
-## 4. Provenance & honesty rules (baked into the pipeline)
-- Every observation stores the exact `source_url` and `retrieved_at`.
-- **Published** values (IRS categories, H.15 CMT) are `confidence = high`.
-- The **derived** post-judgment rate is `confidence = medium`, `method = derived_weekly_avg_h15_1yr_cmt`,
-  and carries a `notes` string with the statutory formula (28 U.S.C. §1961) and a "confirm the exact
-  applicable week against your district court's table; not legal advice" caveat. No computed value is
-  ever presented as authoritative without its formula and source.
+The current snapshot contains 114 series and 2,193 observations:
 
-## 5. Pipeline (`pipeline/`)
+- IRS §6621/§6603 categories and related federal tax rates.
+- Federal Reserve 1-year Treasury CMT and derived 28 U.S.C. §1961 post-judgment rates.
+- Bank of England and E.C.B. policy series plus U.K./E.U. late-payment references.
+- Post-judgment references for 49 states plus D.C. (Mississippi has no uniform statutory default).
+- Prejudgment references for all 50 states plus D.C.
+- A complete official Texas judgment-month schedule from September 1983 through July 2026.
+- Nebraska's complete published change-point table from January 1987 through July 2026.
+- Iowa's exact monthly Judicial Branch table from March 2001 through July 2026, including the
+  confirmed 6.06% selection effective July 9, 2026.
+- Kentucky's official general-rate change points from the 12% era to the 6% amendment effective
+  June 29, 2017.
+- Maine's complete official prejudgment and post-judgment annual charts from July 2003 through 2026,
+  including the corrected 2025 values and an independent H.15 formula check.
+- Georgia's 59 exact prime-rate periods from July 2003 through December 2025, independently verified
+  against the Federal Reserve's PRIME series.
+- Mississippi prejudgment interest represented as a nonnumeric contract-or-court-set rule instead
+  of a misleading universal percentage.
+
+Automated feeds accumulate real history. Texas OCCC, Nebraska Judicial Branch, Iowa Judicial Branch,
+and Federal Reserve PRIME monitors verify or extend state schedules, and Maine can safely disclose a
+future H.15-derived provisional period pending its next court chart. Most other state-law series still
+contain one curated observation, so they are reference pages—not complete historical datasets.
+
+## 4. Source and calculator safety
+
+Every observation stores a source URL, effective date, retrieval/source-check time, confidence, and
+method. State sources are classified as `official_primary`, `official_secondary`,
+`third_party_secondary`, or `unclassified`.
+
+All 102 state-law entities currently have `metadata.calculation.status = "reference_only"`.
+`pipeline/lib/state-rules.mjs` and the validator require an official primary source plus structured
+rate behavior, compounding, day count, validity date, complete branches, and verified accrual rules
+before a state rule can become `ready`. Missing metadata is unsafe by default.
+
+The state calculator routes have four independent protections:
+
+1. The prototype renderer has a hard-disabled code-level readiness flag.
+2. They require an explicit build environment switch.
+3. They require calculator-ready entity metadata.
+4. Withheld comparison pages render `noindex` and are excluded from the sitemap.
+
+## 5. Pipeline
+
+```text
+committed exports → hydrate SQLite → fetch allowed feeds → normalize/load
+                  → validate (fail closed) → export versioned JSON
 ```
-run.mjs  <cmd>         orchestrator: fetch | build | validate | export | all
-  fetchers/irs.mjs     fetch IRS quarterly page -> raw quarter×category rows
-  fetchers/fed-h15.mjs fetch Fed H.15 CSV -> daily 1-yr CMT observations
-  lib/http.mjs         politeness layer (robots gate, 3s/host, cache, honest UA)
-  lib/db.mjs           schema + idempotent upserts
-  lib/normalize.mjs    raw -> schema records; derive weekly CMT + post-judgment
-  lib/validate.mjs     type/range/staleness/cross-source/coverage checks (FAIL LOUD)
-  lib/exporter.mjs     SQLite -> versioned JSON snapshots (data/exports/)
-```
-Flow: **fetch → normalize+load (SQLite) → validate (must be green) → export JSON**. The pipeline
-FAILS LOUDLY on bad data and never publishes a failing dataset.
 
-## 6. The three skins over this one asset
-- **Human skin** (`site/`, Astro static): one page per rate series (current value + freshness stamp +
-  history table + source), plus index/browse and an honest "How this data is collected" page. Built
-  from `data/exports/` at `astro build` time.
-- **Machine skin** (`machine/`): `build-api.mjs` emits `site/public/api/v1/*.json` (static API, no
-  server); an MCP server (`machine/mcp-server/`) exposes `dataset_info`, `search_entities`,
-  `get_entity`, `get_latest_value`, `compare_values` over the same exports; `llms.txt` at the site root.
-- **Licensing skin**: documented only (EXECUTION_REPORT / RISK_REGISTER) — a lottery ticket, not built.
+Important modules:
 
-## 7. Refresh cadence
-IRS updates quarterly (Feb/May/Aug/Nov IRBs); H.15 updates every business day; the derived
-post-judgment rate updates weekly. The GitHub Actions blueprint (`.github/workflows/refresh.yml`,
-INACTIVE) runs weekly, well inside cadence, and commits data only if validation passes.
+- `pipeline/run.mjs`: `fetch`, `build`, `validate`, `export`, and `all` orchestration.
+- `pipeline/lib/http.mjs`: honest user agent, robots checks, throttling, retry, and cache.
+- `pipeline/lib/seed-exports.mjs`: durable-history hydration.
+- `pipeline/lib/validate.mjs`: schema, range, derivation, freshness, and calculator-rule checks.
+- `pipeline/fetchers/us-states.mjs`: curated state values and source-check provenance.
+- `pipeline/fetchers/texas-occc.mjs`: fail-closed current-month OCCC monitor.
+- `pipeline/fetchers/texas-occc-history.mjs`: audited official Texas monthly history.
+- `pipeline/fetchers/nebraska-judicial.mjs`: fail-closed current Nebraska court-rate monitor.
+- `pipeline/fetchers/nebraska-judgment-history.mjs`: audited official Nebraska history.
+- `pipeline/fetchers/iowa-judicial.mjs`: safe Iowa court-table monitor with graceful WAF fallback.
+- `pipeline/fetchers/iowa-judgment-history.mjs`: audited monthly Iowa court history.
+- `pipeline/fetchers/kentucky-interest-history.mjs`: audited statutory Kentucky change points.
+- `pipeline/fetchers/maine-interest-history.mjs`: audited court charts, 2025 correction anchors, and
+  fail-closed annual H.15 reproduction.
+- `pipeline/fetchers/georgia-interest-history.mjs`: audited Georgia prime-plus-three history.
+- `pipeline/fetchers/georgia-prime.mjs`: exact Federal Reserve PRIME change-point monitor.
+
+## 6. Outputs
+
+- Human site: Astro 7 static build in `site/dist/` (191 HTML pages in the current baseline).
+- Static API: `machine/build-api.mjs` writes `site/public/api/v1/` from committed exports.
+- MCP: six read/calculation tools over the same snapshots, with slug validation before file access.
+- Search discovery: sitemap, robots, RSS changes feed, `llms.txt`, and `llms-full.txt`.
+
+`site/scripts/check-build.mjs` fails deployment on broken internal targets, unsafe calculator output,
+missing `noindex` gates, or prose whitespace damage after framework upgrades.
+
+## 7. Runtime and automation
+
+The repository is standardized on Node 22.12+. Both GitHub workflows install from lockfiles with
+`npm ci`. The refresh workflow runs pipeline tests before fetching, and the deploy workflow runs site
+data-contract tests plus static-output verification before publishing.

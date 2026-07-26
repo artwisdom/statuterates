@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "nebraska-prejudgment-rate",
   "name": "Nebraska Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,23 @@
   "locale": null,
   "metadata": {
     "state": "NE",
-    "statute": "Neb. Rev. Stat. §45-104 (12% liquidated); §45-103.02(1) (unliquidated, judgment rate)",
+    "statute": "Neb. Rev. Stat. §§45-103.02–45-104",
     "basis": "statute-fixed",
     "metric": "prejudgment",
-    "kind": "fixed"
+    "kind": "fixed",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_primary",
+      "reason": "Nebraska prejudgment interest has separate liquidated, unliquidated-settlement-offer, and contract-obligation paths with statutory exclusions. Entitlement, payment offsets, day count, and compounding are not yet deterministic across every branch.",
+      "rate_behavior": "claim_branch_specific",
+      "rate_schedule": "12_percent_liquidated_or_section_45_103_rate_for_qualifying_unliquidated_claims",
+      "compounding": "not_verified",
+      "day_count": "not_specified_in_sections_45_103_02_through_45_104",
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-07-19T00:00:00Z"
+    }
   },
   "metrics": [
     "annual_rate"
@@ -24,11 +37,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-16",
       "source_id": "ne-prejud",
-      "source_url": "https://nebraskalegislature.gov/laws/statutes.php?statute=45-104",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
+      "retrieved_at": "2026-07-20T02:55:21.803Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Nebraska prejudgment interest is 12% for LIQUIDATED claims (Neb. Rev. Stat. §45-104). UNLIQUIDATED claims (tort/personal injury) instead accrue prejudgment interest at the §45-103 variable judgment rate — currently 5.970% (in effect since July 16, 2026) — under §45-103.02(1), not 12%. Verify at nebraskajudicial.gov. Not legal advice."
+      "method": "composite_ne_45_104_and_45_103_02",
+      "notes": "Nebraska uses distinct prejudgment paths. Qualifying liquidated claims use the 12% §45-104 rate under §45-103.02(2). Qualifying unliquidated claims use the current §45-103 judgment rate (5.970% effective 2026-07-16) only after every settlement-offer condition in §45-103.02(1) is met. Section 45-103.04 contains exclusions. Verify entitlement and applicability; not legal advice."
     }
   },
   "history": {
@@ -40,11 +53,11 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-16",
         "source_id": "ne-prejud",
-        "source_url": "https://nebraskalegislature.gov/laws/statutes.php?statute=45-104",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
+        "retrieved_at": "2026-07-20T02:55:21.803Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Nebraska prejudgment interest is 12% for LIQUIDATED claims (Neb. Rev. Stat. §45-104). UNLIQUIDATED claims (tort/personal injury) instead accrue prejudgment interest at the §45-103 variable judgment rate — currently 5.970% (in effect since July 16, 2026) — under §45-103.02(1), not 12%. Verify at nebraskajudicial.gov. Not legal advice."
+        "method": "composite_ne_45_104_and_45_103_02",
+        "notes": "Nebraska uses distinct prejudgment paths. Qualifying liquidated claims use the 12% §45-104 rate under §45-103.02(2). Qualifying unliquidated claims use the current §45-103 judgment rate (5.970% effective 2026-07-16) only after every settlement-offer condition in §45-103.02(1) is met. Section 45-103.04 contains exclusions. Verify entitlement and applicability; not legal advice."
       }
     ]
   }

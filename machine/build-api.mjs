@@ -10,7 +10,7 @@
 //   GET /api/v1/meta.json             -> dataset metadata + freshness + sources
 //   GET /api/v1/entities.json         -> collection index (all entities + latest values)
 //   GET /api/v1/metrics.json          -> list of metrics
-//   GET /api/v1/entity/{slug}.json    -> one entity: latest + full history + provenance
+//   GET /api/v1/entity/{slug}.json    -> one entity: latest + recorded observations + provenance
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -75,12 +75,12 @@ function main() {
     description: meta.description || null,
     generated_at: meta.generated_at,
     endpoints: {
-      meta: 'api/v1/meta.json',
-      entities: 'api/v1/entities.json',
-      latest: 'api/v1/latest.json',
-      metrics: 'api/v1/metrics.json',
-      entity: 'api/v1/entity/{slug}.json',
-      entity_csv: 'api/v1/entity/{slug}.csv',
+      meta: '/api/v1/meta.json',
+      entities: '/api/v1/entities.json',
+      latest: '/api/v1/latest.json',
+      metrics: '/api/v1/metrics.json',
+      entity: '/api/v1/entity/{slug}.json',
+      entity_csv: '/api/v1/entity/{slug}.csv',
     },
     counts: { entities: meta.entity_count, observations: meta.observation_count },
   });

@@ -21,8 +21,8 @@ const seriesOptions = [
   { key: 'large-corporate-underpayment', label: 'Large corporate underpayment (LCU)' },
 ];
 
-const title = `IRS Interest Calculator — Underpayment & Refund Interest (§6621) | ${meta.title}`;
-const description = `Free IRS interest calculator using the real method: quarterly §6621 rates (currently ${latest?.value_text} for underpayments) compounded DAILY per §6622, across every rate change since 2017.`;
+const title = `IRS Interest Calculator (§6621/§6622) | ${meta.title}`;
+const description = `Calculate IRS underpayment or refund interest using quarterly §6621 rates—currently ${latest?.value_text} for underpayments—and daily compounding under §6622.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [

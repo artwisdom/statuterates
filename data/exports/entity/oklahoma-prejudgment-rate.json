@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T13:59:17.401Z",
+  "generated_at": "2026-07-26T01:52:06.908Z",
   "slug": "oklahoma-prejudgment-rate",
   "name": "Oklahoma Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "12 O.S. §727.1 (4.13% personal injury); 23 O.S. §6 + 15 O.S. §266 (6% contract)",
     "basis": "statute-variable",
     "metric": "prejudgment",
-    "kind": "variable"
+    "kind": "variable",
+    "calculation": {
+      "status": "reference_only",
+      "source_tier": "official_secondary",
+      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+    }
   },
   "metrics": [
     "annual_rate"

@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta } from '../lib/data.mjs';
 const meta = getMeta();
 const title = `Editorial & data-integrity policy — ${meta.title}`;
-const description = `How StatuteRates verifies every interest rate against the official statute, how often each series is re-checked, our corrections process, funding, and how you may cite the data.`;
+const description = `How StatuteRates sources and labels interest-rate records, how often automated series refresh, our calculator safety gate, corrections process, and data limits.`;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -22,15 +22,14 @@ const jsonLd = {
     owe or are owed. That is why accuracy — not volume — is the point. Here is exactly how we verify each
     rate, how often we re-check it, and what we do when we get something wrong.</p>
 
-  <h2>How every rate is verified</h2>
-  <p>We do not copy rates from other rate-aggregator sites, law-firm blog posts, or AI summaries. Each
-    value is checked against the <strong>controlling primary source</strong> — the statute text, the
-    court rule, or the agency certification that actually sets the rate — and we record the citation and
-    the URL alongside the value. Rates fall into three kinds, and we treat each differently:</p>
+  <h2>How rates are sourced</h2>
+  <p>We record a citation and URL alongside every value. A controlling government source is preferred.
+    State-authorized code portals and judicial summaries are labeled official-secondary when they are
+    useful but are not themselves the controlling enactment. State rules remain calculator-ineligible
+    until the source, history, branches, and arithmetic mechanics are complete. Records fall into four kinds:</p>
   <ul class="clean">
     <li><strong>Statute-fixed rates</strong> (e.g. a flat 12% written into the code) are verified word-for-word
-      against the official legislature or court page, and re-checked on a schedule because a legislature
-      can amend them.</li>
+      against a cited statute or court source and re-checked on a schedule because a legislature can amend them.</li>
     <li><strong>Agency- or court-set variable rates</strong> (a prime-rate or Treasury-linked formula reset
       each quarter or year) are read from the official agency page that publishes the current period's
       figure, with the effective period recorded.</li>
@@ -38,38 +37,46 @@ const jsonLd = {
       Treasury-plus-two formula) are computed by us from an official series using the governing statutory
       formula — and every such page shows the formula and links the underlying data, so you can check our
       arithmetic. We never present a computed number as authoritative without its formula and source.</li>
+    <li><strong>Case-specific rules</strong> have no honest statewide numeric value. In those records the
+      API deliberately returns a null number and a plain-language rule, preventing rankings and calculators
+      from silently treating a contract rate or judge-selected rate as a universal percentage.</li>
   </ul>
   <p>When a rate has a genuine carve-out — a different figure for tort versus contract, for consumer debt,
     or against a government entity — we state it rather than flattening it into one number, because the
     wrong branch is as misleading as the wrong number.</p>
 
   <h2>How often each series is re-checked</h2>
-  <p>The derived and market-linked federal, UK, and EU series refresh <strong>automatically every night</strong>
+  <p>The derived and market-linked federal, UK, and EU series refresh <strong>automatically once a week</strong>
     from their official sources; a validation suite checks types, ranges, and cross-value consistency, and
-    if anything fails the dataset is <strong>not</strong> published — stale or broken data never ships. The
-    curated statutory and agency-set state rates are re-verified against their official sources on a rolling
-    schedule and whenever a statutory reset date passes (many state rates reset each January 1 or July 1).
-    Every page carries the <strong>effective date</strong> of the value it shows, and the full effective-date
-    history is available on each rate page and through the <a href="/api/">free JSON API</a>.</p>
+    if anything fails the failed run cannot overwrite the last validated export. Curated state rates require
+    a separate source-check process. Every page carries the <strong>effective date</strong> recorded for the
+    value and exposes all observations currently held in the <a href="/api/">free JSON API</a>; a one-point
+    record is not described as complete historical coverage.</p>
+
+  <h2>Calculator safety gate</h2>
+  <p>A state reference value is not automatically safe for calculation. State calculators stay disabled
+    unless the source is primary and the rate history, claim-type branches, accrual rule, day-count rule,
+    reset behavior, and compounding method are all structured and pass automated validation.</p>
 
   <h2>Corrections</h2>
   <p>If you believe a rate is wrong, email <a href="mailto:hello@statuterates.com">hello@statuterates.com</a>
     with the page and, if you can, the official source. We check every report against the controlling
-    primary source. If we confirm an error we correct it promptly and the change appears in our public
-    <a href="/changes/">rate-change log</a> with its new effective date. Before reporting, it is worth
+    primary source. If we confirm an error we correct the record and its provenance; the
+    <a href="/changes/">rate-change feed</a> reports newly recorded effective-rate changes, not a complete
+    editorial correction ledger. Before reporting, it is worth
     opening the official source linked on the page — a rate may have changed at its statutory reset date
     since you last looked, which is exactly the kind of movement this site exists to track.</p>
 
   <h2>Independence &amp; funding</h2>
-  <p>StatuteRates is independent and supported by display advertising, not by subscriptions, sponsors, or
+  <p>StatuteRates is independent and designed to be supported by display advertising, not by subscriptions, sponsors, or
     referral deals with any law firm or vendor. Advertising never influences a rate: the numbers come only
-    from the official sources, and the data and API are free and un-paywalled. Our advertising partner may
+    from the cited sources, and the data and API are free and un-paywalled. If advertising is enabled, the provider may
     set cookies — see the <a href="/privacy/">Privacy Policy</a>.</p>
 
   <h2>Using &amp; citing the data</h2>
-  <p>The underlying figures are edicts of government (statutes, court rules, agency rates) and are in the
-    <strong>public domain</strong> — free for anyone to use. Our compilation, wording, and effective-date
-    provenance are our own work; you are welcome to cite or link to any page, and every rate page includes
+  <p>Statutes and court rules are government edicts; statistical publications and third-party pages may
+    carry separate reuse terms, which are recorded per source. Our compilation, wording, and effective-date
+    provenance are our own work. You are welcome to cite or link to any page, and every rate page includes
     a one-click <em>&ldquo;Cite this page&rdquo;</em> citation. For programmatic access, the
     <a href="/api/">JSON API</a> is free and needs no key. If you want to reuse the compiled dataset at
     scale, a short note to <a href="mailto:hello@statuterates.com">hello@statuterates.com</a> is appreciated.</p>

@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment, PREJUDGMENT_CALC_SAFE } from '../../lib/data.mjs';
+import { getAllEntities, getEntity, getMeta, latestOf, prettyDate, prettyDateTime, isPrejudgment, isCalculatorReady, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 import { copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -19,8 +19,11 @@ const history = (entity.history?.annual_rate || []).slice(0, 40); // recent hist
 const totalPoints = (entity.history?.annual_rate || []).length;
 
 const isDerived = latest?.confidence !== 'high';
-const isStatuteFixed = latest?.method === 'statute-fixed';
+const isStatuteFixed = (latest?.method || '').startsWith('statute-fixed');
 const isStatutory = (latest?.method || '').startsWith('statute'); // fixed OR agency-set variable
+const isProvisional = (latest?.method || '').includes('provisional');
+const isCaseSpecific = latest?.method === 'court-or-contract-rate';
+const isFormulaDerived = (latest?.method || '').startsWith('derived_');
 const unitLabel = 'per year';
 
 // Which calculator (if any) uses this series — internal linking both helps users and SEO.
@@ -57,15 +60,28 @@ const CALC_FOR = {
 };
 // Prejudgment slugs get the calculator link only for the fixed-simple "safe" states (single source
 // of truth in data.mjs); everything else uses the explicit CALC_FOR map.
-const calcHref = CALC_FOR[slug]
+const candidateCalcHref = CALC_FOR[slug]
   || (slug.endsWith('-prejudgment-rate') && PREJUDGMENT_CALC_SAFE.includes(slug.replace('-prejudgment-rate', ''))
         ? '/calculators/prejudgment-interest/'
         : null);
+const isStateCalculator = candidateCalcHref === '/calculators/state-judgment-interest/'
+  || candidateCalcHref === '/calculators/prejudgment-interest/';
+const manualStateCalcHref = !isPrejudgment(entity) && slug.endsWith('-judgment-rate')
+  ? '/calculators/judgment-interest/'
+  : null;
+const calcHref = isStateCalculator
+  ? (STATE_CALCULATOR_RENDERER_READY && import.meta.env.ENABLE_STATE_CALCULATORS === 'true' && isCalculatorReady(entity)
+      ? candidateCalcHref
+      : manualStateCalcHref)
+  : (candidateCalcHref || manualStateCalcHref);
 
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.
 const pj = isPrejudgment(entity);
 const stateName = entity.name.replace(/ (?:Pre|Post-)?[Jj]udgment Interest Rate$/, '');
+const provisionalConfirmation = slug.startsWith('maine-')
+  ? 'Maine Judicial Branch annual chart'
+  : 'Iowa Judicial Branch table';
 const allSlugs = new Set(getAllEntities().map((e) => e.slug));
 let postSibling = null, preSibling = null;
 if (pj) {
@@ -81,16 +97,29 @@ const hubBases = new Set([...allSlugs].filter((s) => s.endsWith('-prejudgment-ra
 const rateBase = slug.replace(/-(?:pre)?judgment-rate$/, '');
 const hubHref = hubBases.has(rateBase) ? `/states/${rateBase}/` : null;
 
-const title = pj
-  ? `${stateName} Prejudgment Interest Rate — When It Applies & Current Rate | ${meta.title}`
-  : `${entity.name} — Current & Historical | ${meta.title}`;
-const description = pj
-  ? `${copy.q} ${latest?.value_text} ${unitLabel} (${copy.kindLabel?.toLowerCase()}). When prejudgment interest applies in ${stateName}, how it accrues, the statute, and how it differs from post-judgment interest.`
-  : `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Official source + full effective-date history.`;
+const targetedTitle = slug === 'texas-judgment-rate'
+  ? `${entity.name} — ${latest?.value_text} (${entity.metadata?.statute})`
+  : slug === 'nebraska-judgment-rate'
+    ? `${entity.name} — ${latest?.value_text} (§45-103)`
+    : slug === 'iowa-judgment-rate'
+      ? `${entity.name} — ${latest?.value_text} (§668.13)`
+      : slug === 'kentucky-judgment-rate'
+        ? `${entity.name} — ${latest?.value_text} (KRS 360.040)`
+        : slug === 'maine-judgment-rate'
+          ? `${entity.name} — ${latest?.value_text} (§1602-C)`
+    : `${entity.name} | ${meta.title}`;
+const title = targetedTitle.length <= 65 ? targetedTitle : entity.name;
+const description = isProvisional
+  ? `${stateName} judgment interest estimate: ${latest?.value_text} ${unitLabel} from official H.15 inputs, pending confirmation in the ${provisionalConfirmation}. Statute, caveats, and official history.`
+  : isCaseSpecific
+    ? `${stateName} prejudgment interest has no uniform statewide percentage: use the governing contract rate or the rate selected by the court. See the rule, scope, and cited source.`
+  : pj
+    ? `Current ${stateName} prejudgment interest rate: ${latest?.value_text} ${unitLabel}. See when it applies, accrual rules, the cited statute, and recorded observations.`
+    : `${copy.q} As of ${prettyDate(latest?.effective_date)}: ${latest?.value_text} ${unitLabel}. Cited source and recorded effective-date history.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
-// Stale-proof the descriptive prose: for single-value variable series (Iowa's weekly rate, the quarterly
-// state rates) swap any hardcoded "currently X%" phrase for the live figure from the dataset, so the
+// Stale-proof the descriptive prose: for single-value variable state series, swap any hardcoded
+// "currently X%" phrase for the live figure from the dataset, so the
 // paragraph can never drift from the hero. Dual-rate "A% / B%" series keep their curated copy, which
 // names each component explicitly.
 const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
@@ -99,9 +128,14 @@ const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
 
 // Provenance line for the "Cite this page" block.
 const citeStatute = entity.metadata?.statute;
-const citeNote = citeStatute
-  ? `Rate verified against ${citeStatute}${latest?.effective_date ? `, effective ${prettyDate(latest.effective_date)}` : ''}.`
+const citeNote = isProvisional
+  ? `Provisional H.15-based calculation dated ${prettyDate(latest?.effective_date)}; pending ${provisionalConfirmation} confirmation.`
+  : isCaseSpecific
+  ? `Case-specific rule recorded under ${citeStatute}; no uniform numeric percentage is published.`
+  : citeStatute
+  ? `Rate recorded under ${citeStatute}${latest?.effective_date ? `, effective ${prettyDate(latest.effective_date)}` : ''}.`
   : (latest?.effective_date ? `Value effective ${prettyDate(latest.effective_date)}.` : '');
+const sourceRecord = (meta.sources || []).find((source) => source.id === latest?.source_id);
 
 // JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
 const jsonLd = [
@@ -113,12 +147,12 @@ const jsonLd = [
     url: canonical,
     isAccessibleForFree: true,
     creator: { '@type': 'Organization', name: meta.title },
-    dateModified: meta.generated_at,
+    dateModified: latest?.retrieved_at || latest?.effective_date,
     variableMeasured: {
       '@type': 'PropertyValue',
       name: entity.name,
-      unitText: 'percent per annum',
-      value: latest?.value,
+      unitText: isCaseSpecific ? 'case-specific legal rule' : 'percent per annum',
+      value: isCaseSpecific ? latest?.value_text : latest?.value,
     },
     distribution: {
       '@type': 'DataDownload',
@@ -135,7 +169,9 @@ const jsonLd = [
         name: copy.q,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: `As of ${prettyDate(latest?.effective_date)}, ${entity.name} is ${latest?.value_text} ${unitLabel}. ${copy.tagline}`,
+          text: isCaseSpecific
+            ? `${entity.name} has no uniform statewide percentage: the governing contract or the judge supplies the rate. ${copy.tagline}`
+            : `${isProvisional ? 'Provisional estimate' : `As of ${prettyDate(latest?.effective_date)}`}: ${entity.name} is ${latest?.value_text} ${unitLabel}. ${copy.tagline}`,
         },
       },
     ],
@@ -162,29 +198,57 @@ const jsonLd = [
   )}
 
   <div class="rate-hero">
-    <div class="eyebrow">Current rate</div>
+    <div class="eyebrow">{isCaseSpecific ? 'Current rule' : isProvisional ? 'Provisional current estimate' : 'Current rate'}</div>
     <span class="value">{latest?.value_text}</span>
     <span class="asof">
-      {pj
+      {isCaseSpecific
+        ? <>— no uniform statewide percentage</>
+        : isProvisional
+        ? <>per year — official H.15 input, pending {provisionalConfirmation} confirmation</>
+        : pj
         ? (copy.kind === 'discretionary-with-default'
             ? <>per year — the rate courts apply <em>when</em> prejudgment interest is awarded</>
             : copy.kind === 'variable'
               ? <>per year — current formula value, effective {prettyDate(latest?.effective_date)}</>
               : copy.kind === 'same-as-postjudgment'
                 ? <>per year — the same rate as post-judgment interest, effective {prettyDate(latest?.effective_date)}</>
-                : <>per year — statutory prejudgment rate (statute verified {prettyDate(latest?.retrieved_at)})</>)
+                : <>per year — statutory prejudgment reference (source checked {prettyDate(latest?.retrieved_at)})</>)
         : isStatuteFixed
-          ? <>per year — current statutory rate (official text verified {prettyDate(latest?.retrieved_at)})</>
+          ? <>per year — current statutory reference (source checked {prettyDate(latest?.retrieved_at)})</>
           : <>{unitLabel}, effective {prettyDate(latest?.effective_date)}</>}
       <br />
       <span class={`badge ${latest?.confidence === 'high' ? 'high' : 'medium'}`}>
-        {isStatutory ? 'Set by statute' : latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
+        {isCaseSpecific ? 'Case-specific rule' : isProvisional ? 'Provisional estimate' : isStatutory ? 'Set by statute' : isFormulaDerived ? 'Formula value' : latest?.confidence === 'high' ? 'Published value' : 'Derived value'}
       </span>
       {pj && copy.kindLabel && <span class="kind-chip">{copy.kindLabel}</span>}
     </span>
   </div>
 
   <p>{bodyText}</p>
+
+  {!pj && copy.postDetails && (
+    <section class="applies">
+      <h2>How {stateName} post-judgment interest works</h2>
+      <div class="applies-grid">
+        <div>
+          <h3>Which rate applies</h3>
+          <p>{copy.postDetails.scope}</p>
+        </div>
+        <div>
+          <h3>When interest accrues</h3>
+          <p>{copy.postDetails.accrual}</p>
+        </div>
+        <div>
+          <h3>Compounding and rate lock</h3>
+          <p>{copy.postDetails.compounding}</p>
+        </div>
+        <div>
+          <h3>Official history coverage</h3>
+          <p>{copy.postDetails.history}</p>
+        </div>
+      </div>
+    </section>
+  )}
 
   {calcHref && (
     <p><a href={calcHref}><strong>→ Calculate interest at this rate</strong></a></p>
@@ -232,7 +296,7 @@ const jsonLd = [
     <table>
       <caption>
         {totalPoints} data point{totalPoints === 1 ? '' : 's'} on record{totalPoints > history.length ? ` (showing the most recent ${history.length})` : ''}.
-        Full history in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.
+        All recorded observations are in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.
       </caption>
       <thead>
         <tr><th scope="col">Effective date</th><th scope="col">Rate</th><th scope="col">Basis</th></tr>
@@ -242,7 +306,7 @@ const jsonLd = [
           <tr>
             <td>{prettyDate(o.effective_date)}</td>
             <td class="num">{o.value_text}</td>
-            <td class="source-note">{(o.method || '').startsWith('statute') ? 'Statute' : o.confidence === 'high' ? 'Published' : 'Derived'}</td>
+            <td class="source-note">{o.method === 'court-or-contract-rate' ? 'Case-specific rule' : (o.method || '').includes('provisional') ? 'Provisional' : (o.method || '').startsWith('statute') ? 'Statute' : (o.method || '').startsWith('derived_') ? 'Formula' : o.confidence === 'high' ? 'Published' : 'Derived'}</td>
           </tr>
         ))}
       </tbody>
@@ -251,7 +315,7 @@ const jsonLd = [
 
   <h2>Source &amp; provenance</h2>
   <p class="source-note">
-    Latest value retrieved {prettyDateTime(latest?.retrieved_at)} from the official source:
+    Observation recorded {prettyDateTime(latest?.retrieved_at)} from the cited source{sourceRecord?.publisher ? ` (${sourceRecord.publisher})` : ''}:
     <br />
     <a href={latest?.source_url} rel="nofollow noopener" target="_blank">{latest?.source_url}</a>
   </p>
@@ -262,7 +326,7 @@ const jsonLd = [
 
   <div class="disclaimer">
     Reference data only — not legal, tax, or financial advice. Always confirm the controlling value
-    against the official source and, where applicable, the governing statute or court before relying on it.
+    against the controlling official source and, where applicable, the governing statute or court before relying on it.
   </div>
 
   <style>

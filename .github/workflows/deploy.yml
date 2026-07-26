@@ -1,8 +1,8 @@
 # ============================================================================================
-# INACTIVE until this repo is pushed to GitHub by the owner AND GitHub Pages is enabled
-# (Settings → Pages → Source: GitHub Actions). See docs/DEPLOYMENT_GUIDE.md.
+# ACTIVE: deploys validated main-branch changes and follows every successful weekly refresh.
 #
-# Estimated usage: runs on data/site changes (≈ weekly) × ~2 min = ~9 min/month. Free tier: 2,000.
+# The workflow_run trigger is intentional. GitHub suppresses push workflows caused by GITHUB_TOKEN,
+# so a refresh commit cannot reliably trigger this workflow through `push` alone.
 # ============================================================================================
 name: deploy-site
 
@@ -14,6 +14,9 @@ on:
       - "site/**"
       - "machine/build-api.mjs"
       - ".github/workflows/deploy.yml"
+  workflow_run:
+    workflows: ["refresh-data"]
+    types: [completed]
   workflow_dispatch: {}
 
 permissions:
@@ -27,17 +30,26 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # workflow_run points at the triggering run's original SHA, before refresh-data pushes
+          # its export commit. Production must always build the latest validated main branch.
+          ref: main
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22.12"
 
       - name: Install site dependencies
         working-directory: site
-        run: npm ci || npm install
+        run: npm ci
+
+      - name: Run site data-contract tests
+        working-directory: site
+        run: npm test
 
       - name: Build the static JSON API from the committed exports
         # Regenerate site/public/api/ (git-ignored) from data/exports before building the site.
@@ -57,6 +69,10 @@ jobs:
           # cookieless beacon. Empty = no analytics beacon ships.
           CF_ANALYTICS_TOKEN: ${{ vars.CF_ANALYTICS_TOKEN || '' }}
         run: npm run build
+
+      - name: Verify built links and indexing guardrails
+        working-directory: site
+        run: npm run verify-build
 
       - name: Apply base path for GitHub Pages project subpath
         working-directory: site

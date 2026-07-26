@@ -27,14 +27,15 @@ const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
             <td>{prettyDate(c.effective_date)}</td>
             <td><span class="chip">{JUR[c.jurisdiction] || c.jurisdiction}</span> <a href={`/rates/${c.slug}/`}>{c.name}</a></td>
             <td class="num">{c.value_text}</td>
-            <td class="source-note">{c.method === 'statute-fixed' ? 'Statute' : c.confidence === 'high' ? 'Published' : 'Derived'}</td>
+            <td class="source-note">{(c.method || '').includes('provisional') ? 'Provisional' : c.method === 'statute-fixed' ? 'Statute' : c.confidence === 'high' ? 'Published' : 'Derived'}</td>
           </tr>
         ))}
       </tbody>
     </table>
   </div>
 
-  <p class="source-note">Weekly series (federal post-judgment, 1-yr Treasury, Iowa) produce a new value
-    most weeks; the IRS resets quarterly; UK/EU statutory rates semi-annually; policy rates on decision
-    dates. Machine consumers: the same data is in the <a href="/api/">JSON API</a>.</p>
+  <p class="source-note">Federal post-judgment and 1-year Treasury series produce a new value most
+    weeks; Iowa and Texas publish monthly selections; Nebraska changes quarterly; the IRS resets
+    quarterly; UK/EU statutory rates semi-annually; policy rates on decision dates. Machine consumers:
+    the same data is in the <a href="/api/">JSON API</a>.</p>
 </BaseLayout>

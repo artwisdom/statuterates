@@ -6,7 +6,17 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const EXPORTS = resolve(__dirname, '..', '..', '..', 'data', 'exports');
+// Astro 7 bundles this module into dist/.prerender before executing getStaticPaths(), so
+// import.meta.url no longer points back into src/lib at build time. Prefer an explicit override,
+// then resolve from the package working directory; retain the source-relative path for direct use.
+const exportCandidates = [
+  process.env.DATA_EXPORTS_DIR && resolve(process.env.DATA_EXPORTS_DIR),
+  resolve(process.cwd(), '..', 'data', 'exports'),
+  resolve(process.cwd(), 'data', 'exports'),
+  resolve(__dirname, '..', '..', '..', 'data', 'exports'),
+].filter(Boolean);
+const EXPORTS = exportCandidates.find((candidate) => existsSync(join(candidate, 'meta.json')))
+  || exportCandidates[0];
 
 function readJson(rel) {
   const p = join(EXPORTS, rel);
@@ -121,6 +131,17 @@ export function groupedEntities() {
 
 export function latestOf(entity) {
   return entity.latest?.annual_rate || null;
+}
+
+// Two-key release gate for state calculators. Phase 2 must replace the prototype's hardcoded
+// histories/branches with the structured rule model before changing this to true. The deployment
+// environment flag alone can never publish the current prototype.
+export const STATE_CALCULATOR_RENDERER_READY = false;
+
+// Missing rule metadata is intentionally treated as unsafe. This lets old snapshots remain readable
+// while preventing an incomplete state record from silently becoming an authoritative calculator.
+export function isCalculatorReady(entity) {
+  return entity?.metadata?.calculation?.status === 'ready';
 }
 
 // Compact {effective_date, value} history for embedding into calculator pages.
