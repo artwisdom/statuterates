@@ -11,14 +11,16 @@
 ## Current product
 
 - 114 rate-series entities and 2,361 recorded historical observations.
-- 192 static HTML pages.
+- 194 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
   extension checks for Texas, Alaska, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and
-  an independent Maine annual-formula integrity check.
+  an independent Maine annual-formula integrity check. Five official IRS pages are also checked
+  against the committed Form 1040 penalty-rule contract.
 - 102 state-law entities across post- and prejudgment interest.
-- Available calculators: general fixed-rate judgment/per-diem arithmetic, federal post-judgment,
-  IRS interest, and U.K./E.U. late payment.
+- Calculator set in the current repository: general fixed-rate judgment/per-diem arithmetic,
+  federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U. late payment, and the
+  locally verified Form 1040 penalty-and-interest release candidate described below.
 - State calculators: intentionally disabled, `noindex` where legacy comparison routes exist, and
   omitted from the sitemap.
 
@@ -124,15 +126,47 @@ rules. Phase 1 corrected the foundation:
 - Google AdSense Auto Ads is active. Manual ad units remain intentionally unconfigured rather than
   inventing a slot ID or adding page weight before traffic supports the tradeoff.
 
+## Phase 4 Form 1040 calculator release candidate
+
+The following work is implemented and locally verified but is not recorded as deployed until the
+hosted workflow and Cloudflare-served pages pass live checks.
+
+- `/calculators/irs-penalty-and-interest/` models the common individual original Form 1040 case.
+  It separates failure-to-file, failure-to-pay, tax interest, and failure-to-file-penalty interest
+  instead of presenting one false payoff number.
+- The calculation supports separate original payment and extended filing deadlines, dated partial
+  tax payments, a qualifying installment-agreement start, and an applicable intent-to-levy date.
+  Month-by-month tables expose the rate and balance used for each penalty period.
+- Interest follows every published quarterly §6621 rate and §6622 daily compounding. The engine
+  refuses an end date beyond the final published quarter instead of silently extrapolating the last
+  rate.
+- Failure-to-pay-penalty interest is explicitly excluded because its start depends on an
+  account-specific IRS notice, assessment, or 23C date. The result is a planning estimate, not an
+  official IRS payoff.
+- The page shows a separate Automatic Exemption from Penalty comparison for a potentially eligible
+  current return. It never decides eligibility; only the IRS can confirm AEP from its compliance
+  records.
+- `/calculators/irs-interest/` remains the dedicated interest/refund tool for personal and corporate
+  underpayment and overpayment intent. It now links to the Form 1040 tool and displays the FAQs that
+  its structured data describes.
+- The weekly rules monitor checks the IRS failure-to-file, failure-to-pay, interest, administrative
+  penalty-relief, and Internal Revenue Manual 20.1.2 pages. Calculator constants remain committed
+  and reviewable; changed official anchors fail the refresh rather than being scraped directly into
+  production math.
+- The new calculator and companion guide are in the ordinary internal-link graph and sitemap.
+  Build guards protect the page's core rules, AEP explanation, exclusions, and estimate language.
+- Shared calculation tests now belong to the deployment gate, and changes under `shared/` trigger a
+  deployment workflow run.
+
 ## Verified checks
 
-- Pipeline: 84 tests.
-- Shared interest engine: 10 tests.
+- Pipeline: 94 tests.
+- Shared interest engine: 22 tests.
 - Site data contract: 2 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
 - API conformance: 114 entity endpoints and 2,475 latest/history records checked.
-- Static build: 192 pages on Astro 7.
-- Indexable sitemap: 189 URLs.
+- Static build: 194 pages on Astro 7.
+- Indexable sitemap: 191 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
   because of AdSense third-party-cookie/DevTools findings rather than first-party site code.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
@@ -149,6 +183,8 @@ rules. Phase 1 corrected the foundation:
 
 - `pipeline/lib/seed-exports.mjs`: hydrates fresh SQLite from durable exports.
 - `pipeline/lib/state-rules.mjs`: source tiers and calculator-readiness contract.
+- `pipeline/fetchers/irs-penalty-rules.mjs`: committed Form 1040 rule contract and five-page
+  official-source monitor.
 - `pipeline/fetchers/us-states.mjs`: curated state values and source-check timestamps.
 - `site/src/lib/data.mjs`: build-time data loader and fail-closed calculator check.
 - `site/scripts/check-build.mjs`: broken-link/indexing/rendered-output deployment guard.
@@ -157,6 +193,8 @@ rules. Phase 1 corrected the foundation:
   Mississippi source research and the current state-verification roadmap.
 - `docs/PHASE_3_PROGRESS.md`: indexing/performance audit, Alaska official history, crawl paths, and
   unattended-operation safeguards.
+- `docs/PHASE_4_PROGRESS.md`: Form 1040 penalty-and-interest scope, source monitoring, tests, and
+  release-candidate safeguards.
 - `shared/interest-calc.mjs`: calculation engine shared by the site and MCP.
 - `.github/workflows/refresh.yml`: tested weekly data refresh.
 - `.github/workflows/deploy.yml`: tested static deployment plus successful-refresh handoff.
@@ -178,6 +216,10 @@ rules. Phase 1 corrected the foundation:
 - Several government-hosted code reproductions are classified `official_secondary` because the
   online text is not itself the controlling enactment.
 - State calculation metadata is not yet complete enough to enable any state calculator.
+- The Form 1040 calculator does not determine penalty relief or compute failure-to-pay-penalty
+  interest without account-specific IRS assessment events. It also excludes corporations,
+  employment/deposit penalties, audit deficiencies, estimated-tax additions, disasters and other
+  special deadlines.
 - The 2026-07-19 follow-up live check verified Cloudflare **Always Use HTTPS** (`301` to HTTPS), the
   documented response-header rule, and HSTS with `max-age=15552000`. `includeSubDomains` and
   `preload` remain off intentionally. These controls live at the Cloudflare edge rather than in the
@@ -188,6 +230,6 @@ rules. Phase 1 corrected the foundation:
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
 
-Phase 2 continues source by source. More demand-led official histories and stronger controlling-law
-citations are next. Calculator pages remain gated until individual states pass the full readiness
-contract.
+Continue source by source: use demand evidence to choose the next official state history, preserve
+the state-calculator gate, and let search engines recrawl the strengthened pages before generating
+more URLs. The Phase 4 release candidate still requires deployment and live verification.

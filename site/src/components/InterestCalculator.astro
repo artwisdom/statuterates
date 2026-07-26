@@ -11,6 +11,7 @@
 //   marginPercent  for floating-simple (EU margin)
 //   currency       display symbol, default '$'
 //   principalLabel/startLabel/endLabel  input labels
+//   minDate/maxDate optional ISO date limits for both date fields
 const {
   kind,
   kinds = null, // optional per-series override: { seriesKey: kind }
@@ -22,6 +23,8 @@ const {
   principalLabel = 'Amount',
   startLabel = 'Start date',
   endLabel = 'End date (e.g. payment date)',
+  minDate = undefined,
+  maxDate = undefined,
   id = null,
 } = Astro.props;
 
@@ -50,11 +53,11 @@ const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-')
     <div class="calc-row">
       <label class="calc-field">
         <span>{startLabel}</span>
-        <input type="date" data-calc-start required />
+        <input type="date" data-calc-start min={minDate} max={maxDate} required />
       </label>
       <label class="calc-field">
         <span>{endLabel}</span>
-        <input type="date" data-calc-end required />
+        <input type="date" data-calc-end min={minDate} max={maxDate} required />
       </label>
     </div>
     <button type="submit" class="calc-btn">Calculate interest</button>
@@ -121,10 +124,15 @@ const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-')
     const form = root.querySelector('[data-calc-form]');
     const out = root.querySelector('[data-calc-result]');
     const endInput = root.querySelector('[data-calc-end]');
-    if (endInput && !endInput.value) endInput.value = new Date().toISOString().slice(0, 10);
+    if (endInput && !endInput.value) {
+      const today = new Date().toISOString().slice(0, 10);
+      const boundedToday = endInput.max && today > endInput.max ? endInput.max : today;
+      endInput.value = endInput.min && boundedToday < endInput.min ? endInput.min : boundedToday;
+    }
 
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
+      if (!form.reportValidity()) return;
       out.hidden = false;
       const principal = Number(root.querySelector('[data-calc-principal]').value);
       const start = root.querySelector('[data-calc-start]').value;

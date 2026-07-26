@@ -38,6 +38,13 @@ const description = `The formulas, cited sources, confidence levels, validation 
     +2 for corporate overpayments, +5 for large corporate underpayments, and +0.5 for the GATT portion
     of large corporate overpayments. We read the published quarterly figures directly from the IRS and
     record each with its effective quarter — these are <strong>published</strong> values.</p>
+  <p>The separate <a href="/calculators/irs-penalty-and-interest/">Form 1040 penalty and interest
+    calculator</a> uses committed, reviewable rules rather than scraping live prose into a formula.
+    Each weekly refresh rechecks five official IRS pages covering failure to file, failure to pay,
+    penalty interest, administrative relief, and the indexed minimum schedule. If a
+    calculation-critical statement changes, validation stops publication until the rule and its
+    boundary tests are reviewed. The interest engine likewise refuses to carry the latest rate into
+    an unpublished quarter.</p>
 
   <h2>The federal post-judgment rate (28 U.S.C. §1961)</h2>
   <p>Federal law defines this rate as the <em>weekly average 1-year Treasury constant maturity yield</em>

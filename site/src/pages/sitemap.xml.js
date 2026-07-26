@@ -23,7 +23,7 @@ export function GET({ site }) {
     '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
     '/calculators/', '/calculators/judgment-interest/', '/calculators/post-judgment-interest/', '/calculators/irs-interest/',
-    '/calculators/late-payment-interest/',
+    '/calculators/irs-penalty-and-interest/', '/calculators/late-payment-interest/',
     ...(prejudgmentCalculatorReady ? ['/calculators/prejudgment-interest/'] : []),
   ];
 

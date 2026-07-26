@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T18:31:37.687Z",
+  "generated_at": "2026-07-26T19:15:29.528Z",
   "slug": "irs-underpayment",
   "name": "IRS Underpayment Interest Rate (§6621)",
   "entity_type": "rate_series",
@@ -9,7 +9,111 @@
   "metadata": {
     "authority": "IRS",
     "statute": "26 U.S.C. §6621",
-    "category_label": "Underpayment (corporate and non-corporate)"
+    "category_label": "Underpayment (corporate and non-corporate)",
+    "penalty_rules": {
+      "scope": {
+        "form": "Form 1040",
+        "taxpayer_type": "individual",
+        "balance_type": "tax shown on an original return"
+      },
+      "failure_to_file": {
+        "monthly_rate": 0.05,
+        "max_months": 5,
+        "max_fraction": 0.25,
+        "partial_month_counts": true,
+        "concurrent_failure_to_pay_reduces_rate": true,
+        "minimum_after_days": 60,
+        "minimum_rule": "more_than",
+        "minimums": [
+          {
+            "from": "2009-01-01",
+            "to": "2015-12-31",
+            "amount": 135
+          },
+          {
+            "from": "2016-01-01",
+            "to": "2017-12-31",
+            "amount": 205
+          },
+          {
+            "from": "2018-01-01",
+            "to": "2019-12-31",
+            "amount": 210
+          },
+          {
+            "from": "2020-01-01",
+            "to": "2022-12-31",
+            "amount": 435
+          },
+          {
+            "from": "2023-01-01",
+            "to": "2023-12-31",
+            "amount": 450
+          },
+          {
+            "from": "2024-01-01",
+            "to": "2024-12-31",
+            "amount": 485
+          },
+          {
+            "from": "2025-01-01",
+            "to": "2025-12-31",
+            "amount": 510
+          },
+          {
+            "from": "2026-01-01",
+            "to": "2026-12-31",
+            "amount": 525
+          },
+          {
+            "from": "2027-01-01",
+            "to": null,
+            "amount": 535
+          }
+        ],
+        "source_url": "https://www.irs.gov/payments/failure-to-file-penalty",
+        "minimum_source_url": "https://www.irs.gov/irm/part20/irm_20-001-002r"
+      },
+      "failure_to_pay": {
+        "standard_rate": 0.005,
+        "installment_rate": 0.0025,
+        "levy_rate": 0.01,
+        "max_fraction": 0.25,
+        "partial_month_counts": true,
+        "source_url": "https://www.irs.gov/payments/failure-to-pay-penalty"
+      },
+      "interest": {
+        "rate_changes_quarterly": true,
+        "accrues_daily": true,
+        "failure_to_file_start": "return due date or extended return due date",
+        "failure_to_pay_start": "notice or assessment date",
+        "source_url": "https://www.irs.gov/payments/interest"
+      },
+      "administrative_relief": {
+        "program": "Automatic Exemption from Penalty (AEP)",
+        "begins": "summer 2026",
+        "eligible_tax_year_from": 2025,
+        "compliance_lookback_years": 3,
+        "automatic": true,
+        "eligible_return_series": [
+          "Form 1040"
+        ],
+        "eligible_penalties": [
+          "failure_to_file",
+          "failure_to_pay"
+        ],
+        "source_url": "https://www.irs.gov/payments/administrative-penalty-relief"
+      },
+      "primary_sources": {
+        "failure_to_file": "https://www.irs.gov/payments/failure-to-file-penalty",
+        "failure_to_pay": "https://www.irs.gov/payments/failure-to-pay-penalty",
+        "interest": "https://www.irs.gov/payments/interest",
+        "administrative_penalty_relief": "https://www.irs.gov/payments/administrative-penalty-relief",
+        "irm_20_1_2": "https://www.irs.gov/irm/part20/irm_20-001-002r"
+      },
+      "verified_at": "2026-07-26"
+    },
+    "penalty_rules_retrieved_at": "2026-07-26T19:15:29.437Z"
   },
   "metrics": [
     "annual_rate"

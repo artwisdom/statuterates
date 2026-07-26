@@ -38,6 +38,10 @@ function yearLen(y) {
   return (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0 ? 366 : 365;
 }
 
+function assertPositivePrincipal(principal) {
+  if (!Number.isFinite(principal) || !(principal > 0)) throw new Error('Principal must be a finite number > 0');
+}
+
 function sortHistory(history) {
   return [...history]
     .map((h) => ({ date: h.effective_date || h.date, value: h.value ?? h.value_numeric }))
@@ -70,7 +74,7 @@ export function mondayOf(iso) {
  * Accrual: daily at rate/365 on the current base, compounded annually on the judgment anniversary.
  */
 export function federalPostJudgment({ principal, judgmentDate, endDate, weeklyHistory }) {
-  if (!(principal > 0)) throw new Error('Principal must be > 0');
+  assertPositivePrincipal(principal);
   const days = daysBetween(judgmentDate, endDate);
   if (days < 0) throw new Error('End date is before the judgment date');
   const priorWeekMonday = isoOf(new Date(parseDate(mondayOf(judgmentDate)) - 7 * DAY_MS));
@@ -126,22 +130,31 @@ function nextAnniversary(originIso, afterIso) {
  * The applicable annual rate changes by calendar quarter; each day compounds at r/daysInYear.
  */
 export function irsInterest({ principal, startDate, endDate, quarterlyHistory }) {
-  if (!(principal > 0)) throw new Error('Principal must be > 0');
+  assertPositivePrincipal(principal);
   const totalDays = daysBetween(startDate, endDate);
   if (totalDays < 0) throw new Error('End date is before the start date');
   const h = sortHistory(quarterlyHistory);
-  if (!rateOn(h, startDate)) throw new Error(`No IRS rate on record for ${startDate} (history starts ${h[0]?.date})`);
+  const startRate = rateOn(h, startDate);
+  if (!startRate) throw new Error(`No IRS rate on record for ${startDate} (history starts ${h[0]?.date})`);
+  const coveredThrough = irsRateCoverageEnd(quarterlyHistory);
+  if (endDate > coveredThrough) {
+    throw new Error(
+      `IRS rates are only published through ${coveredThrough}; choose an end date on or before that boundary`
+    );
+  }
 
   let factor = 1;
   const ratesUsed = new Map();
+  let rateIndex = h.findIndex((point) => point.date === startRate.effective_date);
   const d = parseDate(startDate);
   const end = parseDate(endDate);
   while (d < end) {
     const iso = isoOf(d);
-    const r = rateOn(h, iso);
+    while (rateIndex + 1 < h.length && h[rateIndex + 1].date <= iso) rateIndex++;
+    const r = h[rateIndex];
     const daily = r.value / 100 / yearLen(d.getUTCFullYear());
     factor *= 1 + daily;
-    ratesUsed.set(r.effective_date, r.value);
+    ratesUsed.set(r.date, r.value);
     d.setUTCDate(d.getUTCDate() + 1);
   }
   const interest = principal * (factor - 1);
@@ -155,11 +168,28 @@ export function irsInterest({ principal, startDate, endDate, quarterlyHistory })
 }
 
 /**
+ * Exclusive end of the final published IRS quarter. An end date equal to this boundary is safe:
+ * the accrual loop covers only dates before it. Anything later would silently extrapolate an
+ * already-published rate into an unpublished quarter, so callers must fail closed.
+ */
+export function irsRateCoverageEnd(quarterlyHistory) {
+  const h = sortHistory(quarterlyHistory);
+  const latest = h.at(-1);
+  if (!latest) throw new Error('No IRS quarterly rate history supplied');
+  const d = parseDate(latest.date);
+  if (d.getUTCDate() !== 1 || ![0, 3, 6, 9].includes(d.getUTCMonth())) {
+    throw new Error(`IRS rate ${latest.date} is not a calendar-quarter start`);
+  }
+  d.setUTCMonth(d.getUTCMonth() + 3);
+  return isoOf(d);
+}
+
+/**
  * Simple interest at a FIXED rate (UK LPA 1998 style): the statutory rate applicable when the debt
  * became overdue applies for the whole period. actual/365.
  */
 export function fixedSimpleInterest({ principal, startDate, endDate, history }) {
-  if (!(principal > 0)) throw new Error('Principal must be > 0');
+  assertPositivePrincipal(principal);
   const days = daysBetween(startDate, endDate);
   if (days < 0) throw new Error('End date is before the start date');
   const r = rateOn(history, startDate);
@@ -183,7 +213,7 @@ export function fixedSimpleInterest({ principal, startDate, endDate, history }) 
  * (Same anniversary-compounding mechanism as the federal §1961 calculator, with a fixed rate.)
  */
 export function fixedCompoundInterest({ principal, startDate, endDate, history }) {
-  if (!(principal > 0)) throw new Error('Principal must be > 0');
+  assertPositivePrincipal(principal);
   const days = daysBetween(startDate, endDate);
   if (days < 0) throw new Error('End date is before the start date');
   const rEntry = rateOn(history, startDate);
@@ -219,7 +249,7 @@ export function fixedCompoundInterest({ principal, startDate, endDate, history }
  * segment-by-segment at (reference in force that day + margin). actual/365.
  */
 export function floatingSimpleInterest({ principal, startDate, endDate, history, marginPercent = 0 }) {
-  if (!(principal > 0)) throw new Error('Principal must be > 0');
+  assertPositivePrincipal(principal);
   const totalDays = daysBetween(startDate, endDate);
   if (totalDays < 0) throw new Error('End date is before the start date');
   const h = sortHistory(history);
@@ -246,6 +276,386 @@ export function floatingSimpleInterest({ principal, startDate, endDate, history,
     segments,
     interest: round2(interest),
     total: round2(principal + interest),
+  };
+}
+
+function addDays(iso, days) {
+  const d = parseDate(iso);
+  d.setUTCDate(d.getUTCDate() + days);
+  return isoOf(d);
+}
+
+function addMonthsClamped(iso, months) {
+  const source = parseDate(iso);
+  const sourceDay = source.getUTCDate();
+  const target = new Date(Date.UTC(source.getUTCFullYear(), source.getUTCMonth() + months, 1));
+  const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
+  target.setUTCDate(Math.min(sourceDay, lastDay));
+  return isoOf(target);
+}
+
+function isLastDayOfMonth(iso) {
+  const date = parseDate(iso);
+  const next = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1));
+  next.setUTCDate(next.getUTCDate() - 1);
+  return date.getUTCDate() === next.getUTCDate();
+}
+
+function penaltyMonthPeriods(dueDate, endDate, maxMonths = Number.POSITIVE_INFINITY) {
+  const days = daysBetween(dueDate, endDate);
+  if (days < 0) throw new Error('Penalty end date is before the due date');
+  const due = parseDate(dueDate);
+  const calendarMonthPeriods = isLastDayOfMonth(dueDate);
+  const periods = [];
+  for (let month = 1; month <= maxMonths; month++) {
+    let start;
+    let end;
+    if (calendarMonthPeriods) {
+      start = isoOf(new Date(Date.UTC(
+        due.getUTCFullYear(),
+        due.getUTCMonth() + month,
+        1,
+      )));
+      end = isoOf(new Date(Date.UTC(
+        due.getUTCFullYear(),
+        due.getUTCMonth() + month + 1,
+        0,
+      )));
+    } else {
+      start = addDays(addMonthsClamped(dueDate, month - 1), 1);
+      end = addMonthsClamped(dueDate, month);
+    }
+    if (start > endDate) break;
+    periods.push({
+      month,
+      start,
+      end,
+    });
+  }
+  return periods;
+}
+
+/** Count every full or partial penalty month after a civil-date deadline. */
+export function fullOrPartialMonthsLate(dueDate, endDate, { maxMonths = Number.POSITIVE_INFINITY } = {}) {
+  return penaltyMonthPeriods(dueDate, endDate, maxMonths).length;
+}
+
+function minimumFailureToFileFor(originalDueDate, minimums) {
+  const match = (minimums || []).find((entry) => (
+    entry
+    && typeof entry.from === 'string'
+    && entry.from <= originalDueDate
+    && (!entry.to || originalDueDate <= entry.to)
+    && Number.isFinite(entry.amount)
+    && entry.amount >= 0
+  ));
+  if (!match) throw new Error(`No failure-to-file minimum is verified for original due date ${originalDueDate}`);
+  return match.amount;
+}
+
+function validatePenaltyInputs({
+  unpaidTax,
+  originalDueDate,
+  filingDueDate,
+  filingDate,
+  calculationDate,
+  payments,
+  installmentAgreementStartDate,
+  levyNoticeDate,
+}) {
+  assertPositivePrincipal(unpaidTax);
+  for (const value of [originalDueDate, filingDueDate, filingDate, calculationDate]) parseDate(value);
+  if (filingDueDate < originalDueDate) {
+    throw new Error('Filing deadline cannot be before the original payment due date');
+  }
+  if (calculationDate < originalDueDate) {
+    throw new Error('Calculation date is before the original due date');
+  }
+  if (filingDate > calculationDate) {
+    throw new Error('Return filing date cannot be after the calculation date');
+  }
+  for (const optional of [installmentAgreementStartDate, levyNoticeDate]) {
+    if (optional) {
+      parseDate(optional);
+      if (optional < originalDueDate || optional > calculationDate) {
+        throw new Error('Optional agreement/notice dates must fall between the original due date and calculation date');
+      }
+    }
+  }
+
+  let paid = 0;
+  const normalizedPayments = [...(payments || [])]
+    .map((payment) => ({ date: payment?.date, amount: Number(payment?.amount) }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  for (const payment of normalizedPayments) {
+    parseDate(payment.date);
+    if (!Number.isFinite(payment.amount) || !(payment.amount > 0)) {
+      throw new Error('Every partial payment must be a finite amount greater than zero');
+    }
+    if (payment.date <= originalDueDate || payment.date > calculationDate) {
+      throw new Error('Partial payments must be after the original due date and on or before the calculation date');
+    }
+    paid += payment.amount;
+  }
+  if (paid > unpaidTax + 0.005) {
+    throw new Error('Partial payments cannot exceed the unpaid tax entered; this tool does not allocate payments to penalties or interest');
+  }
+  if (installmentAgreementStartDate && filingDate > filingDueDate) {
+    throw new Error('The 0.25% installment-agreement rate requires an individual return filed by its filing deadline');
+  }
+  return { payments: normalizedPayments, paid: Math.min(paid, unpaidTax) };
+}
+
+function irsTaxInterestWithPayments({
+  unpaidTax,
+  originalDueDate,
+  calculationDate,
+  quarterlyHistory,
+  payments,
+}) {
+  const h = sortHistory(quarterlyHistory);
+  const startRate = rateOn(h, originalDueDate);
+  if (!startRate) {
+    throw new Error(`No IRS rate on record for ${originalDueDate} (history starts ${h[0]?.date})`);
+  }
+  const coveredThrough = irsRateCoverageEnd(quarterlyHistory);
+  if (calculationDate > coveredThrough) {
+    throw new Error(
+      `IRS rates are only published through ${coveredThrough}; choose a calculation date on or before that boundary`
+    );
+  }
+
+  const paymentsByDate = new Map();
+  for (const payment of payments) {
+    paymentsByDate.set(payment.date, (paymentsByDate.get(payment.date) || 0) + payment.amount);
+  }
+
+  let principal = unpaidTax;
+  let interest = 0;
+  let rateIndex = h.findIndex((point) => point.date === startRate.effective_date);
+  const ratesUsed = new Map();
+  const cursor = parseDate(originalDueDate);
+  const end = parseDate(calculationDate);
+  while (cursor < end) {
+    const iso = isoOf(cursor);
+    const payment = paymentsByDate.get(iso) || 0;
+    if (payment) principal = Math.max(0, principal - payment);
+    while (rateIndex + 1 < h.length && h[rateIndex + 1].date <= iso) rateIndex++;
+    const rate = h[rateIndex];
+    interest += (principal + interest) * (rate.value / 100 / yearLen(cursor.getUTCFullYear()));
+    ratesUsed.set(rate.date, rate.value);
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
+  }
+
+  return {
+    interest: round2(interest),
+    remaining_tax: round2(unpaidTax - payments.reduce((sum, payment) => sum + payment.amount, 0)),
+    rates_used: [...ratesUsed.entries()].map(([effective_date, value]) => ({ effective_date, value })),
+  };
+}
+
+function failureToPayRate({
+  periodStart,
+  periodEnd,
+  installmentAgreementStartDate,
+  levyNoticeDate,
+  rules,
+}) {
+  if (levyNoticeDate && periodStart > addDays(levyNoticeDate, 10)) {
+    return { rate: rules.levy_rate, reason: 'post-levy-notice rate' };
+  }
+  // The reduced rate applies for any penalty month during which a qualifying agreement is in
+  // effect, including an agreement that begins after that civil penalty month has started.
+  if (installmentAgreementStartDate && installmentAgreementStartDate <= periodEnd) {
+    return { rate: rules.installment_rate, reason: 'qualifying installment-agreement rate' };
+  }
+  return { rate: rules.standard_rate, reason: 'standard rate' };
+}
+
+/**
+ * Individual Form 1040 failure-to-file/failure-to-pay estimate plus §6621/§6622 interest.
+ *
+ * The modeled total deliberately excludes interest on the failure-to-pay penalty: IRS guidance
+ * starts that interest on notice/assessment dates that cannot be inferred from the civil dates
+ * entered here. Every result exposes that exclusion and must be presented as an estimate.
+ */
+export function irsPenaltyAndInterestEstimate({
+  unpaidTax,
+  originalDueDate,
+  filingDueDate = originalDueDate,
+  filingDate,
+  calculationDate,
+  quarterlyHistory,
+  penaltyRules,
+  payments = [],
+  installmentAgreementStartDate = null,
+  levyNoticeDate = null,
+}) {
+  const normalized = validatePenaltyInputs({
+    unpaidTax,
+    originalDueDate,
+    filingDueDate,
+    filingDate,
+    calculationDate,
+    payments,
+    installmentAgreementStartDate,
+    levyNoticeDate,
+  });
+  const ftfRules = penaltyRules?.failure_to_file;
+  const ftpRules = penaltyRules?.failure_to_pay;
+  if (!ftfRules || !ftpRules) throw new Error('Verified IRS penalty rules are missing');
+  for (const [name, value] of Object.entries({
+    'failure-to-file monthly rate': ftfRules.monthly_rate,
+    'failure-to-pay standard rate': ftpRules.standard_rate,
+    'failure-to-pay installment rate': ftpRules.installment_rate,
+    'failure-to-pay levy rate': ftpRules.levy_rate,
+    'failure-to-pay cap': ftpRules.max_fraction,
+  })) {
+    if (!Number.isFinite(value) || value < 0 || value > 1) throw new Error(`Invalid verified ${name}`);
+  }
+  if (!Number.isInteger(ftfRules.max_months) || ftfRules.max_months < 1) {
+    throw new Error('Invalid verified failure-to-file month cap');
+  }
+
+  const taxInterest = irsTaxInterestWithPayments({
+    unpaidTax,
+    originalDueDate,
+    calculationDate,
+    quarterlyHistory,
+    payments: normalized.payments,
+  });
+
+  const paymentTotalsBefore = (date) => normalized.payments
+    .filter((payment) => payment.date < date)
+    .reduce((sum, payment) => sum + payment.amount, 0);
+  const ftpCap = round2(unpaidTax * ftpRules.max_fraction);
+  let ftpTotal = 0;
+  const ftpPeriods = [];
+  for (const period of penaltyMonthPeriods(originalDueDate, calculationDate)) {
+    if (ftpTotal >= ftpCap) break;
+    const balance = round2(Math.max(0, unpaidTax - paymentTotalsBefore(period.start)));
+    if (balance <= 0) break;
+    const rateInfo = failureToPayRate({
+      periodStart: period.start,
+      periodEnd: period.end,
+      installmentAgreementStartDate,
+      levyNoticeDate,
+      rules: ftpRules,
+    });
+    const rawCharge = round2(balance * rateInfo.rate);
+    const charge = round2(Math.min(rawCharge, ftpCap - ftpTotal));
+    ftpTotal = round2(ftpTotal + charge);
+    ftpPeriods.push({
+      ...period,
+      unpaid_tax_at_start: balance,
+      rate: rateInfo.rate,
+      rate_reason: rateInfo.reason,
+      charge,
+    });
+  }
+
+  const ftfPeriods = filingDate > filingDueDate
+    ? penaltyMonthPeriods(filingDueDate, filingDate, ftfRules.max_months)
+    : [];
+  const ftfGross = round2(unpaidTax * ftfRules.monthly_rate * ftfPeriods.length);
+  const usedFtpMonths = new Set();
+  let overlapReduction = 0;
+  const ftfBreakdown = ftfPeriods.map((period) => {
+    const ftpIndex = ftpPeriods.findIndex((ftp, index) => (
+      !usedFtpMonths.has(index)
+      && ftp.start <= period.start
+      && period.start <= ftp.end
+    ));
+    const reduction = ftpIndex >= 0 ? ftpPeriods[ftpIndex].charge : 0;
+    if (ftpIndex >= 0) usedFtpMonths.add(ftpIndex);
+    overlapReduction = round2(overlapReduction + reduction);
+    return {
+      ...period,
+      gross_charge: round2(unpaidTax * ftfRules.monthly_rate),
+      ftp_overlap_reduction: reduction,
+    };
+  });
+  const coordinatedFtf = round2(Math.max(0, ftfGross - overlapReduction));
+  const filingDaysLate = Math.max(0, daysBetween(filingDueDate, filingDate));
+  const minimumAmount = minimumFailureToFileFor(originalDueDate, ftfRules.minimums);
+  const minimumCandidate = filingDaysLate > ftfRules.minimum_after_days
+    ? round2(Math.min(minimumAmount, unpaidTax))
+    : 0;
+  const ftfTotal = round2(Math.max(coordinatedFtf, minimumCandidate));
+  const minimumApplied = minimumCandidate > coordinatedFtf;
+
+  const ftfInterest = ftfTotal > 0
+    ? irsInterest({
+        principal: ftfTotal,
+        startDate: filingDueDate,
+        endDate: calculationDate,
+        quarterlyHistory,
+      })
+    : { interest: 0, rates_used: [] };
+  const ratesUsed = new Map();
+  for (const rate of [...taxInterest.rates_used, ...ftfInterest.rates_used]) {
+    ratesUsed.set(rate.effective_date, rate.value);
+  }
+
+  const penalties = round2(ftfTotal + ftpTotal);
+  const modeledInterest = round2(taxInterest.interest + ftfInterest.interest);
+  const modeledTotal = round2(taxInterest.remaining_tax + penalties + modeledInterest);
+  const aepScenarioTotal = round2(taxInterest.remaining_tax + taxInterest.interest);
+
+  return {
+    method: 'IRC §6651 penalties plus §6621/§6622 daily-compounded interest (individual Form 1040 estimate)',
+    original_unpaid_tax: round2(unpaidTax),
+    partial_payments: normalized.payments,
+    remaining_tax: taxInterest.remaining_tax,
+    filing_days_late: filingDaysLate,
+    payment_days_late: Math.max(0, daysBetween(originalDueDate, calculationDate)),
+    filing_months: ftfPeriods.length,
+    payment_months: ftpPeriods.length,
+    failure_to_file: {
+      gross_penalty: ftfGross,
+      overlap_reduction: overlapReduction,
+      coordinated_penalty: coordinatedFtf,
+      minimum_amount_for_due_year: minimumAmount,
+      minimum_candidate: minimumCandidate,
+      minimum_applied: minimumApplied,
+      penalty: ftfTotal,
+      interest: round2(ftfInterest.interest),
+      months: ftfBreakdown,
+    },
+    failure_to_pay: {
+      penalty: ftpTotal,
+      cap: ftpCap,
+      months: ftpPeriods,
+      interest: null,
+      interest_excluded_reason: 'The IRS starts interest on this penalty from notice/assessment dates, which were not entered.',
+    },
+    tax_interest: taxInterest.interest,
+    modeled_interest: modeledInterest,
+    penalties,
+    modeled_total: modeledTotal,
+    rates_used: [...ratesUsed.entries()].map(([effective_date, value]) => ({ effective_date, value })),
+    aep: {
+      may_apply: originalDueDate >= '2026-01-01',
+      scenario_total_if_irs_confirms_relief: aepScenarioTotal,
+      potential_modeled_savings: round2(modeledTotal - aepScenarioTotal),
+    },
+    assumptions: [
+      'Individual original Form 1040/1040-SR with nonfraudulent tax shown on the return.',
+      'The unpaid-tax input is net of payments and credits effective by the original due date.',
+      'Later listed payments are applied to tax principal first; they do not pay penalties or accrued interest in this estimate.',
+      'A payment must precede a failure-to-pay penalty month to reduce that month; a payment on its first day reduces later months.',
+      ...(installmentAgreementStartDate
+        ? [levyNoticeDate
+            ? 'The qualifying installment agreement is assumed to remain effective until the modeled post-levy rate transition.'
+            : 'The qualifying installment agreement is assumed to remain effective through the calculation date.']
+        : []),
+      'No penalty abatement is applied to the statutory result.',
+    ],
+    excluded: [
+      'Interest on the failure-to-pay penalty without IRS notice/assessment dates.',
+      'Estimated-tax, accuracy-related, fraud, deposit, partnership, corporate, and amended-assessment penalties.',
+      'Disaster, combat-zone, bankruptcy, reasonable-cause, and other account-specific adjustments.',
+    ],
   };
 }
 

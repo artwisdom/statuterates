@@ -7,6 +7,7 @@
 
 import { openDb, upsertSource, upsertEntity, upsertObservation, startRun, finishRun } from './lib/db.mjs';
 import { fetchIrs } from './fetchers/irs.mjs';
+import { fetchIrsPenaltyRules } from './fetchers/irs-penalty-rules.mjs';
 import { fetchH15 } from './fetchers/fed-h15.mjs';
 import { fetchBoe, BOE_ENTITY } from './fetchers/boe.mjs';
 import { fetchEcb, ECB_ENTITY } from './fetchers/ecb.mjs';
@@ -126,6 +127,18 @@ async function runAll() {
       fetchIowaCourtTable({ log: console.log, today }),
       fetchUtahCourtRates({ log: console.log, today }),
     ]);
+    // Keep the calculation-rule pages sequential with the quarterly-rate page: all live on the
+    // same IRS host, and our crawler intentionally leaves at least three seconds between requests.
+    const irsPenaltyRules = await fetchIrsPenaltyRules({ log: console.log });
+    const irsUnderpaymentEntity = irs.entities.find((entity) => entity.slug === 'irs-underpayment');
+    if (!irsUnderpaymentEntity) {
+      throw new Error('IRS quarterly fetch did not return the underpayment series');
+    }
+    irsUnderpaymentEntity.metadata = {
+      ...irsUnderpaymentEntity.metadata,
+      penalty_rules: irsPenaltyRules.rules,
+      penalty_rules_retrieved_at: irsPenaltyRules.retrieved_at,
+    };
 
     // 2) NORMALIZE
     // US: H.15 daily -> weekly CMT + derived post-judgment
@@ -224,6 +237,11 @@ async function runAll() {
     let records = 0;
     const tx = db.transaction(() => {
       records += loadBundleIntoDb(db, irs);
+      records += loadBundleIntoDb(db, {
+        source: irsPenaltyRules.source,
+        entities: [],
+        observations: [],
+      });
       records += loadBundleIntoDb(db, h15Bundle);
       records += loadBundleIntoDb(db, boeBundle);
       records += loadBundleIntoDb(db, ecbBundle);

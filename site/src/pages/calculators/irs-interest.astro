@@ -14,6 +14,14 @@ const histories = {
   'overpayment-corporate': historyFor('irs-overpayment-corporate'),
   'large-corporate-underpayment': historyFor('irs-large-corporate-underpayment'),
 };
+// All selectable series must support the chosen dates. Use their latest common starting point and
+// never invite a calculation beyond the dataset's actual refresh date.
+const historyStarts = Object.values(histories)
+  .map((history) => [...history].sort((a, b) => a.effective_date.localeCompare(b.effective_date))[0]?.effective_date)
+  .filter(Boolean)
+  .sort();
+const minDate = historyStarts.at(-1);
+const maxDate = String(meta.generated_at || latest?.retrieved_at || latest?.effective_date).slice(0, 10);
 const seriesOptions = [
   { key: 'underpayment', label: 'Underpayment (what the IRS charges you)' },
   { key: 'overpayment-individual', label: 'Overpayment — individual (what the IRS pays you)' },
@@ -32,6 +40,21 @@ const title = `IRS Interest & Refund Calculator ${rateYear} (§6621/§6622)`;
 const description = `Calculate ${rateYear} IRS underpayment or refund interest using quarterly §6621 rates and daily compounding under §6622. Current rates and history included.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
+const faqs = [
+  {
+    q: 'How does the IRS calculate interest on unpaid taxes?',
+    a: 'The IRS applies the §6621 rate for each calendar quarter (federal short-term rate plus 3 points for most taxpayers) and compounds it daily under §6622. Because the rate resets quarterly, a balance that spans several quarters accrues at several different rates.',
+  },
+  {
+    q: 'Does the IRS pay interest on refunds?',
+    a: 'Yes — overpayments accrue interest at the §6621 overpayment rate (the same as the underpayment rate for individuals and one point lower for corporations), also compounded daily.',
+  },
+  {
+    q: 'How do I calculate IRS interest on a delayed tax refund?',
+    a: 'Choose the individual or corporate overpayment series, enter the overpayment amount and applicable start and end dates, and the calculator applies each quarterly §6621 rate with §6622 daily compounding.',
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -46,23 +69,11 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'How does the IRS calculate interest on unpaid taxes?',
-        acceptedAnswer: { '@type': 'Answer', text: 'The IRS applies the §6621 rate for each calendar quarter (federal short-term rate plus 3 points for most taxpayers) and compounds it DAILY under §6622. Because the rate resets quarterly, a balance that spans several quarters accrues at several different rates.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'Does the IRS pay interest on refunds?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Yes — overpayments accrue interest at the §6621 overpayment rate (same as the underpayment rate for individuals; one point lower for corporations), also compounded daily.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'How do I calculate IRS interest on a delayed tax refund?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Choose the individual or corporate overpayment series, enter the overpayment amount and applicable start and end dates, and the calculator applies each quarterly §6621 rate with §6622 daily compounding.' },
-      },
-    ],
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
   },
   {
     '@context': 'https://schema.org',
@@ -84,6 +95,13 @@ const jsonLd = [
     refund — using the real method: the quarterly §6621 rate in force each day, compounded daily
     under §6622, across every rate change on record (back to 2017).</p>
 
+  <aside class="penalty-callout">
+    <strong>Filed or paid Form 1040 late?</strong>
+    This calculator covers interest only. Use the
+    <a href="/calculators/irs-penalty-and-interest/">IRS penalty and interest calculator</a>
+    to estimate failure-to-file and failure-to-pay penalties, partial payments, and interest together.
+  </aside>
+
   <InterestCalculator
     kind="irs"
     histories={histories}
@@ -92,6 +110,8 @@ const jsonLd = [
     principalLabel="Tax amount owed (or overpaid)"
     startLabel="Start date (e.g. return due date)"
     endLabel="Calculated through (e.g. payment date)"
+    minDate={minDate}
+    maxDate={maxDate}
   />
 
   <AdSlot id="calc-top" />
@@ -123,10 +143,11 @@ const jsonLd = [
     <em>daily</em>: each day's interest is added to the balance before the next day's is computed.
     This calculator walks day-by-day through your date range, applying the correct quarter's rate
     (365- or 366-day years handled), which matters whenever a balance spans a rate change.</p>
-  <p class="source-note">Not covered here: penalties (failure-to-file, failure-to-pay — separate from
-    interest), and the estimated-tax additions under §§6654/6655, which use the underpayment rate but as
-    simple interest. The IRS computes official amounts with its Rev. Proc. 95-17 factor tables; small
-    rounding differences are possible.</p>
+  <p class="source-note">For failure-to-file and failure-to-pay charges, use the separate
+    <a href="/calculators/irs-penalty-and-interest/">Form 1040 penalty and interest calculator</a>.
+    Estimated-tax additions under §§6654/6655 are not covered; they use the underpayment rate but as
+    simple interest. The IRS computes official amounts with its Rev. Proc. 95-17 factor tables, so
+    small rounding differences are possible.</p>
 
   <h2>Calculating interest on an IRS refund</h2>
   <p>Select <strong>Overpayment — individual</strong> when the IRS owes interest to a person, or the
@@ -135,5 +156,25 @@ const jsonLd = [
     rate change, and compounds daily. The IRS controls the legal start date and may apply statutory
     waiting periods, so confirm the dates against the notice or refund rules that apply to the return.</p>
 
+  <h2>Frequently asked questions</h2>
+  <div class="faq-list">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
+  </div>
+
   <AdSlot id="calc-bottom" />
 </BaseLayout>
+
+<style>
+  .penalty-callout { margin: 18px 0; padding: 15px 17px; border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--green); border-radius: 4px; background: var(--green-wash);
+    color: var(--ink-soft); }
+  .penalty-callout strong { color: var(--ink); }
+  .faq-list details { border-top: 1px solid var(--line); padding: 13px 0; }
+  .faq-list summary { cursor: pointer; color: var(--green); font-weight: 700; }
+  .faq-list p { margin-bottom: 3px; }
+</style>

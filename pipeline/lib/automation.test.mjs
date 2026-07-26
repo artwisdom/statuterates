@@ -15,6 +15,16 @@ test('a successful scheduled refresh has an explicit deployment handoff', async 
   assert.match(deploy, /^\s*ref:\s*main\s*$/m);
 });
 
+test('shared calculation changes trigger deployment and run the shared test suite', async () => {
+  const deploy = await readFile(deployPath, 'utf8');
+
+  assert.match(deploy, /^\s*-\s*"shared\/\*\*"\s*$/m);
+  assert.match(
+    deploy,
+    /name:\s*Run shared calculation tests[\s\S]*working-directory:\s*shared[\s\S]*run:\s*node --test/,
+  );
+});
+
 test('refresh records whether exports changed without relying on a suppressed push trigger', async () => {
   const refresh = await readFile(refreshPath, 'utf8');
 

@@ -12,10 +12,10 @@ them newly verified merely by rebuilding.
 4. Review `data/exports/meta.json` source `retrieved_at` values—not only `generated_at`. The latter is
    compilation time and does not prove that every source was freshly checked.
 5. Once per quarter, review variable state rates and the IRS quarter against their cited sources.
-   Texas, Alaska, Florida, and Utah are monitored automatically each week, but failures still
-   require the playbooks below.
+   The five Form 1040 penalty-rule pages and Texas, Alaska, Florida, and Utah are monitored
+   automatically each week, but failures still require the playbooks below.
 
-## IRS fetch failure
+## IRS quarterly-rate fetch failure
 
 Symptoms include zero parsed observations, missing quarters, or an HTTP failure for `irs-6621`.
 
@@ -23,6 +23,42 @@ Symptoms include zero parsed observations, missing quarters, or an HTTP failure 
 2. If the page is temporarily limiting requests, wait and re-run; do not spoof a browser user agent.
 3. If the markup changed, update the parser and add/adjust a fixture-level test.
 4. Run `npm test` and `node run.mjs all` in `pipeline/`. Commit exports only after validation passes.
+
+The calculators intentionally reject dates beyond the final published quarter. If a new quarter is
+not in the official source yet, wait for the IRS publication and re-run; never copy the previous
+rate forward as an estimate.
+
+## IRS penalty-rule monitor failure
+
+Symptoms name one of the five official pages or a missing calculation anchor, such as the monthly
+rate, cap, partial-month rule, indexed minimum, penalty-interest start event, or AEP language.
+
+1. Open the exact official URL in `pipeline/fetchers/irs-penalty-rules.mjs`. If it is temporarily
+   unavailable, retain the committed exports and retry later. Do not substitute an unofficial page
+   or bypass the shared robots/cache/throttle rules.
+2. Decide whether the IRS changed only wording/layout or changed the rule itself. Do not loosen an
+   anchor until that distinction is established from the official page.
+3. For a wording-only change, update the narrow page assertion and its representative test while
+   preserving every calculation-critical check.
+4. For a substantive change, update the committed `IRS_PENALTY_RULES`, its validator, engine
+   boundary tests, and user-facing explanation together. Preserve effective-date history for an
+   indexed minimum; never silently replace a prior-year rule.
+5. Run:
+
+   ```bash
+   cd pipeline
+   node --test fetchers/irs-penalty-rules.test.mjs
+   npm test
+   node run.mjs all
+   cd ..
+   node --test shared/*.test.mjs
+   ```
+
+6. Inspect `irs-underpayment.metadata.penalty_rules` in the generated export and complete the full
+   site/API build sequence below. Never hand-edit the generated export as the fix.
+
+The monitor deliberately fails the refresh instead of scraping changed prose into calculator math.
+The previous committed site remains the safe fallback while the new official language is reviewed.
 
 ## Federal Reserve H.15 failure
 
@@ -108,7 +144,8 @@ DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs validate
 
 ```bash
 cd site && npm test
-cd .. && node machine/build-api.mjs
+cd .. && node --test shared/*.test.mjs
+node machine/build-api.mjs
 cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build
 cd .. && node machine/check-api-conformance.mjs
 ```
@@ -175,3 +212,4 @@ rendered page consumes the structured rule model rather than prototype assumptio
 - Never call build time source freshness.
 - Never manually edit generated API output or committed entity snapshots as the primary fix.
 - Never deploy a state calculator with invented backfill dates or incomplete legal branches.
+- Never extend an IRS interest rate into an unpublished quarter or infer a missing IRS penalty rule.

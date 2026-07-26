@@ -397,6 +397,71 @@ export const GUIDES = [
       "The US has no single rate — it varies by federal vs. state court and by litigation stage — while the UK and EU use a public benchmark plus a fixed statutory margin.",
       "Never rely on a remembered number: confirm compounding and pull the current rate from the official source before you calculate."
     ]
+  },
+  {
+    "slug": "irs-penalties-explained",
+    "datePublished": "2026-07-26",
+    "dateModified": "2026-07-26",
+    "title": "IRS Late-Filing & Late-Payment Penalties Explained",
+    "h1": "IRS Late-Filing and Late-Payment Penalties, Explained",
+    "description": "Learn how Form 1040 late-filing and late-payment penalties interact, how IRS interest grows, what changed in 2026, and what an estimate excludes.",
+    "intro_html": "<p>When an individual Form 1040 balance is late, the IRS may add three different charges: a <strong>failure-to-file penalty</strong>, a <strong>failure-to-pay penalty</strong>, and <strong>underpayment interest</strong>. They run on different clocks, and an extension to file does not normally extend the deadline to pay. That is why a useful estimate needs more than one percentage.</p><p>This guide explains the standard Form 1040 rules, how the two penalties interact, what happens after 60 days, how payments and quarterly interest changes affect the total, and the IRS's new Automatic Exemption from Penalty. Use the <a href=\"/calculators/irs-penalty-and-interest/\">IRS penalty and interest calculator</a> for a dated estimate, the <a href=\"/calculators/irs-interest/\">IRS interest calculator</a> for interest-only or refund scenarios, and the <a href=\"/rates/irs-underpayment/\">IRS underpayment rate history</a> to inspect the quarterly data. These are planning tools, not official IRS payoff figures.</p>",
+    "sections": [
+      {
+        "h2": "One unpaid Form 1040 balance can create three charges",
+        "body_html": "<p>The charges commonly grouped together as \"IRS penalties and interest\" are legally separate. The <strong>failure-to-file penalty</strong> applies when a required Form 1040 is filed after its filing deadline, including a valid extended deadline. The <strong>failure-to-pay penalty</strong> applies when tax shown on the return remains unpaid after the payment deadline. <strong>Underpayment interest</strong> generally runs from that payment due date until the liability is paid.</p><p>The starting balance is not simply the total tax printed on the return. The IRS calculates unpaid tax after taking account of withholding, estimated payments, timely payments, and allowed refundable credits. The calculator therefore asks for the net tax left unpaid at the original deadline, then treats any listed later payment as a separate event. The controlling public explanations are the IRS pages for the <a href=\"https://www.irs.gov/payments/failure-to-file-penalty\">failure-to-file penalty</a>, <a href=\"https://www.irs.gov/payments/failure-to-pay-penalty\">failure-to-pay penalty</a>, and <a href=\"https://www.irs.gov/payments/interest\">interest</a>.</p>"
+      },
+      {
+        "h2": "How the Form 1040 failure-to-file penalty works",
+        "body_html": "<p>For an individual Form 1040, the ordinary failure-to-file penalty is <strong>5% of unpaid tax for each month or part of a month</strong> the return is late, normally for no more than five months. A partial month is a full penalty month: filing one day after the deadline can create the first monthly charge. The base is tax required to be shown on the return that was not paid by the original payment deadline; a later payment does not go backward and erase that filing base.</p><p>A second rule matters for a return filed <strong>more than 60 days late</strong>. The filing penalty cannot fall below the lesser of the indexed dollar minimum for the return's original due year or 100% of the unpaid tax. The <a href=\"/calculators/irs-penalty-and-interest/\">calculator</a> selects the monitored due-year row and compares it with the ordinary coordinated calculation, so this guide does not embed a dollar figure that can become stale after an inflation adjustment. Fraudulent failure to file follows a different, much higher rule and is not modeled.</p>"
+      },
+      {
+        "h2": "How failure to pay works—and how the penalties overlap",
+        "body_html": "<p>The standard failure-to-pay penalty on tax shown on a Form 1040 is <strong>0.5% of unpaid tax for each month or part of a month</strong> it remains unpaid, up to an aggregate 25%. A payment during a penalty month does not prorate that month's charge; it reduces the base for later months. This is why a dated payment timeline produces a different answer from subtracting every payment before doing the calculation.</p><p>When the standard filing and payment penalties apply during the same month, the IRS reduces the filing penalty by the payment penalty. At the usual rates, the overlapping charge is generally 4.5% for filing plus 0.5% for payment—not 5% plus another 0.5%. The filing penalty normally reaches its limit after five months, while the payment penalty can continue. During a qualifying approved installment agreement for a timely filed individual return, the payment rate can fall to 0.25%; after the applicable intent-to-levy period it can rise to 1%. Those branches depend on real account dates, so never select them merely to create a preferred result.</p>"
+      },
+      {
+        "h2": "An extension moves the filing deadline, not the payment deadline",
+        "body_html": "<p>A valid Form 4868 extension generally gives an individual more time to file without the failure-to-file penalty. It does <strong>not</strong> normally extend the original deadline to pay the tax. Unpaid tax can therefore accumulate the failure-to-pay penalty and interest throughout the extension period even when the return is filed by the extended deadline. The calculator keeps the payment and filing dates separate so that extension does not accidentally stop both clocks.</p><p>Special deadlines can apply to taxpayers abroad, people in combat zones, and taxpayers affected by federally declared disasters. A general-purpose tool should not infer those deadlines from a ZIP code or a short questionnaire. Enter only the official payment and filing deadlines that actually apply, and verify special postponement relief with the IRS before relying on the result.</p>"
+      },
+      {
+        "h2": "Interest changes quarterly, compounds daily, and starts on different dates",
+        "body_html": "<p>IRS underpayment interest is separate from both penalties. The rate may change at the start of each calendar quarter, and interest compounds daily. A balance spanning several quarters must therefore apply each published rate only to its own dates; using today's percentage for the entire period can be materially wrong. StatuteRates records the history on the <a href=\"/rates/irs-underpayment/\">IRS underpayment rate page</a>, while the IRS publishes the official <a href=\"https://www.irs.gov/payments/quarterly-interest-rates\">quarterly interest-rate table</a>.</p><p>The interest start date also depends on what bears interest. Tax interest generally starts at the payment due date. Interest on the final failure-to-file penalty starts from the applicable return filing deadline, including a valid extended deadline. But interest on the failure-to-pay penalty starts from IRS notice or assessment events. A calculator without those account events cannot honestly call that last amount exact, so the StatuteRates result shows the payment-penalty principal and explicitly excludes its unknown interest rather than inventing a date.</p>"
+      },
+      {
+        "h2": "What changed in 2026: Automatic Exemption from Penalty",
+        "body_html": "<p>The IRS says it is transitioning from requested First Time Abate relief to <strong>Automatic Exemption from Penalty (AEP)</strong>, beginning in summer 2026. The IRS says AEP can apply during original-return processing to eligible Form 1040 failure-to-file and failure-to-pay penalties, beginning with qualifying 2025 tax-year returns. Eligibility depends on IRS records, including timely compliance for the prior three years. When AEP applies, the IRS does not assess the covered penalty and sends a notice explaining the result.</p><p>AEP is not a cancellation of every charge. It does not remove the underlying tax, tax interest, or penalties outside its coverage, and only the IRS can confirm that the account qualifies. Read the current <a href=\"https://www.irs.gov/payments/administrative-penalty-relief\">IRS administrative penalty relief guidance</a>. The calculator always shows the statutory estimate first, then—when the due date could fall within the new program—shows a separate <em>if the IRS confirms AEP</em> comparison so the possible relief is visible without being promised.</p>"
+      },
+      {
+        "h2": "What the calculator estimates—and what remains account-specific",
+        "body_html": "<p>The <a href=\"/calculators/irs-penalty-and-interest/\">IRS penalty and interest calculator</a> models an individual original Form 1040 using the entered tax base, deadlines, filing date, calculation date, optional later tax payments, and optional verified installment or levy dates. It applies the ordinary filing rule, the appropriate due-year minimum, actual overlapping payment-penalty dollars, quarterly rate changes, daily compounding, and the filing-penalty interest start date. The print view preserves the inputs, monthly rows, rate periods, and exclusions for review.</p><p>It does not decide AEP, First Time Abate, reasonable cause, disaster or combat-zone relief, bankruptcy effects, or a disputed payment allocation. It also excludes estimated-tax additions, corporations, partnerships, amended or audit assessments, substitute returns, accuracy-related penalties, fraud, collection fees, and failure-to-pay penalty interest without assessment dates. Compare the estimate with the taxpayer's IRS notice, account transcript, or official payoff before making a financial decision.</p>"
+      }
+    ],
+    "faqs": [
+      {
+        "q": "How much is the IRS failure-to-file penalty on a Form 1040?",
+        "a": "The ordinary penalty is 5% of unpaid tax for each month or part of a month the return is late, normally up to five months. When failure to pay applies during the same month, the filing portion is reduced by the payment penalty. A due-year minimum can replace a smaller result when the return is more than 60 days late."
+      },
+      {
+        "q": "Does a Form 4868 extension stop IRS penalties and interest?",
+        "a": "It generally moves the failure-to-file deadline, but it does not normally move the original deadline to pay. Failure-to-pay penalties and underpayment interest can still run on tax left unpaid after the payment date."
+      },
+      {
+        "q": "What is the IRS Automatic Exemption from Penalty?",
+        "a": "The IRS says AEP begins in summer 2026. For an eligible original Form 1040 and a qualifying prior three-year compliance history, the IRS can automatically prevent covered filing or payment penalties from being assessed. It does not eliminate tax or tax interest, and only the IRS can confirm eligibility."
+      },
+      {
+        "q": "Is the calculator total the same as an official IRS payoff?",
+        "a": "No. It is a planning estimate. It cannot reconstruct every IRS notice, assessment, payment allocation, relief decision, postponement, audit, or collection event. It separately identifies the failure-to-pay penalty interest that remains unknown without assessment dates."
+      }
+    ],
+    "key_takeaways": [
+      "Late filing, late payment, and underpayment interest are separate charges with different clocks.",
+      "The ordinary Form 1040 filing penalty is 5% per month or partial month; the standard payment penalty is 0.5%, and the filing portion is reduced when both overlap.",
+      "A filing extension does not normally extend the deadline to pay tax or stop underpayment interest.",
+      "A due-year minimum can replace a smaller filing penalty when the return is more than 60 days late.",
+      "The IRS says AEP can automatically prevent covered penalties for eligible taxpayers beginning in summer 2026, but it does not remove tax or tax interest.",
+      "A calculator is still an estimate: IRS notices, assessment dates, account transcripts, and official payoff figures control."
+    ]
   }
 ];
 

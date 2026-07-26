@@ -11,11 +11,12 @@ const stateCalcs = stateCalculatorsEnabled
   ? stateHubs().filter((h) => h.post && isCalculatorReady(h.post)).map((h) => ({ base: h.base, name: h.name, rate: latestOf(h.post)?.value_text }))
   : [];
 const title = `Statutory Interest Calculators | ${meta.title}`;
-const description = `Free calculators for federal judgment interest, IRS underpayment and refunds, and UK/EU late-payment interest using recorded rate histories.`;
+const description = `Free calculators for federal judgment interest, IRS late-filing penalties, tax interest and refunds, and UK/EU late-payment interest.`;
 
 const CALCS = [
   { href: '/calculators/judgment-interest/', name: 'Judgment interest & per diem', desc: 'Enter a verified rate to calculate simple or annually compounded interest, total payoff, accrual days, and per diem.', label: 'Enter your rate' },
   { href: '/calculators/post-judgment-interest/', name: 'Federal post-judgment interest', desc: 'The §1961 method: H.15 weekly rate for the week before judgment, daily accrual, compounded annually.', slug: 'us-federal-post-judgment' },
+  { href: '/calculators/irs-penalty-and-interest/', name: 'IRS penalty & interest (Form 1040)', desc: 'Estimate failure-to-file and failure-to-pay penalties, partial payments, and daily interest—with the important exclusions shown.', label: 'Form 1040' },
   { href: '/calculators/irs-interest/', name: 'IRS interest (underpayment & refund)', desc: 'Quarterly §6621 rates compounded daily per §6622, across every rate change since 2017.', slug: 'irs-underpayment' },
   { href: '/calculators/late-payment-interest/', name: 'Late payment interest (UK & EU)', desc: 'UK Late Payment Act 1998 (base + 8pp, fixed at overdue date) and the EU Directive rate.', slug: 'uk-late-payment-commercial' },
 ];

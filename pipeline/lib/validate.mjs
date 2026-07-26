@@ -23,6 +23,7 @@ import { validateMaineOfficialHistory, MAINE_OFFICIAL_HISTORY_COMPLETE_THROUGH }
 import { validateGeorgiaRateHistory } from '../fetchers/georgia-interest-history.mjs';
 import { validateUtahOfficialHistory, UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/utah-judgment-history.mjs';
 import { validateFloridaOfficialHistory, FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/florida-judgment-history.mjs';
+import { validateIrsPenaltyRules } from '../fetchers/irs-penalty-rules.mjs';
 
 const HARD_MIN = -5;
 const HARD_MAX = 30;
@@ -475,6 +476,74 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
       errors.push(
         `${r.entity_slug}@${r.effective_date}: ${r.value_numeric}% != federal short-term ${s}% + ${spread} (§6621) — parse error?`
       );
+    }
+  }
+
+  // IRS calculator safety contracts. Seeded history could otherwise hide a parser that returned
+  // only part of the current table, and malformed penalty metadata could silently change high-stakes
+  // calculations. Require all six categories, every quarter from 2017 onward, current-quarter
+  // coverage, and the separately monitored Form 1040 rule object.
+  const irsUnderpaymentEntity = db.prepare(
+    `SELECT slug, metadata FROM entities WHERE slug = 'irs-underpayment'`
+  ).get();
+  if (irsUnderpaymentEntity) {
+    let metadata = null;
+    try {
+      metadata = irsUnderpaymentEntity.metadata ? JSON.parse(irsUnderpaymentEntity.metadata) : null;
+    } catch {
+      errors.push('irs-underpayment: entity metadata is not valid JSON');
+    }
+    if (!metadata?.penalty_rules) {
+      errors.push('irs-underpayment: monitored Form 1040 penalty rules are missing');
+    } else {
+      for (const problem of validateIrsPenaltyRules(metadata.penalty_rules)) {
+        errors.push(`irs-underpayment: penalty rules ${problem}`);
+      }
+    }
+    if (
+      typeof metadata?.penalty_rules_retrieved_at !== 'string'
+      || Number.isNaN(Date.parse(metadata.penalty_rules_retrieved_at))
+    ) {
+      errors.push('irs-underpayment: penalty-rules retrieval timestamp is missing or invalid');
+    }
+
+    const irsSeries = [
+      'irs-6603-federal-short-term',
+      'irs-gatt',
+      'irs-large-corporate-underpayment',
+      'irs-overpayment-corporate',
+      'irs-overpayment-noncorporate',
+      'irs-underpayment',
+    ];
+    const requiredHistoryStart = '2017-01-01';
+    const now = new Date(`${today}T00:00:00Z`);
+    const currentQuarterMonth = Math.floor(now.getUTCMonth() / 3) * 3;
+    const currentQuarter = new Date(Date.UTC(now.getUTCFullYear(), currentQuarterMonth, 1))
+      .toISOString().slice(0, 10);
+    for (const slug of irsSeries) {
+      const dates = rows
+        .filter((row) => row.entity_slug === slug)
+        .map((row) => row.effective_date)
+        .sort();
+      if (!dates.length) {
+        errors.push(`${slug}: IRS quarterly category is missing`);
+        continue;
+      }
+      if (!dates.includes(currentQuarter)) {
+        errors.push(`${slug}: IRS quarterly history does not cover current quarter ${currentQuarter}`);
+      }
+      if (dates[0] !== requiredHistoryStart) {
+        errors.push(`${slug}: IRS quarterly history must start ${requiredHistoryStart}, found ${dates[0]}`);
+      }
+      let expected = new Date(`${requiredHistoryStart}T00:00:00Z`);
+      for (const actual of dates) {
+        const expectedIso = expected.toISOString().slice(0, 10);
+        if (actual !== expectedIso) {
+          errors.push(`${slug}: IRS quarterly history gap; expected ${expectedIso}, found ${actual}`);
+          break;
+        }
+        expected.setUTCMonth(expected.getUTCMonth() + 3);
+      }
     }
   }
 

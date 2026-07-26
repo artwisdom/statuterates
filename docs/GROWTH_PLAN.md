@@ -236,16 +236,26 @@ after deploy. Commit per phase.
       sitemap (data-driven lastmod = state's latest effective_date), CALC_FOR map in
       `rates/[slug].astro` so rate pages link to their own state calculator instead of the combined
       one. Keep the combined page as a comparison tool (canonical stays self).
-2.2 **IRS penalty + interest calculator** `/calculators/irs-penalty-and-interest/`:
-    - Engine additions in `shared/interest-calc.mjs` (+ tests): failure-to-file (5%/mo or part-month,
-      25% cap, reduced by concurrent FTP; minimum penalty for 60+ days late — use current statutory
-      minimum with a data-sourced constant), failure-to-pay (0.5%/mo or part-month, 25% cap;
-      0.25% installment-agreement variant, 1% post-levy variant as toggles), interest on tax +
-      penalties per §6621/§6622 daily compounding from the existing quarterly history.
-    - Page: mode toggle (filed-late / paid-late / both), month-by-month breakdown table, prominent
-      "estimates — IRS bills control" disclaimer, links to IRS rate pages + guide.
-    - Companion guide `/guides/irs-penalties-explained/` (add to `guides.mjs` with real
-      dateModified; guide content rules: no hardcoded current rates, link live pages).
+2.2 **Implemented locally 2026-07-26 — IRS penalty + interest calculator**
+    `/calculators/irs-penalty-and-interest/` (deployment pending):
+    - The tested engine models an individual original Form 1040 balance: 5% failure to file per
+      month or partial month with overlap coordination and the indexed **more-than-60-day** minimum;
+      0.5% failure to pay with optional dated 0.25% qualifying-installment and 1% post-levy branches;
+      separate original-payment and extended-filing deadlines; and dated partial tax payments.
+    - Tax interest uses each published §6621 quarter and §6622 daily compounding. The engine fails
+      closed beyond the final published quarter. Failure-to-file-penalty interest is included;
+      failure-to-pay-penalty interest is explicitly excluded because it requires an account-specific
+      IRS notice or assessment date.
+    - The page provides month-by-month penalty tables, assumptions/exclusions, a printable
+      input-and-results summary, and a conditional Automatic Exemption from Penalty comparison that
+      never declares IRS eligibility or labels the result an official payoff.
+    - Committed calculation rules are protected by a weekly five-page official IRS monitor covering
+      failure to file, failure to pay, interest, administrative penalty relief/AEP, and IRM 20.1.2.
+      Changed critical anchors fail the refresh for human review instead of flowing directly into
+      production math.
+    - The companion `/guides/irs-penalties-explained/` page and internal links form a dedicated
+      late-filing/payment cluster. `/calculators/irs-interest/` remains separate for individual and
+      corporate underpayment/refund interest intent.
 2.3 Calculator UX polish for ads era: ensure result region never overlaps future ad slots; keep the
     top of every calculator ad-free above the fold on mobile (tool usability = the AIO moat).
 

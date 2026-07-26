@@ -1,0 +1,251 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import IrsPenaltyInterestCalculator from '../../components/IrsPenaltyInterestCalculator.astro';
+import { getMeta, getEntity, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const underpayment = getEntity('irs-underpayment');
+const quarterlyHistory = historyFor('irs-underpayment');
+const latest = latestOf(underpayment);
+const penaltyRules = underpayment.metadata?.penalty_rules;
+const penaltyRulesRetrievedAt = underpayment.metadata?.penalty_rules_retrieved_at;
+if (!penaltyRules) {
+  throw new Error('The monitored IRS Form 1040 penalty rules are missing; refusing to build the calculator.');
+}
+if (!penaltyRulesRetrievedAt || Number.isNaN(Date.parse(penaltyRulesRetrievedAt))) {
+  throw new Error('The IRS penalty-rule recheck timestamp is missing or invalid; refusing to build the calculator.');
+}
+
+const orderedHistory = [...quarterlyHistory].sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+const minDate = orderedHistory[0].effective_date;
+const maxDate = String(meta.generated_at).slice(0, 10);
+const rateYear = String(latest?.effective_date || maxDate).slice(0, 4);
+const currentMinimum = penaltyRules.failure_to_file.minimums.find((entry) =>
+  entry.from <= maxDate && (!entry.to || maxDate <= entry.to)
+);
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const title = `IRS Penalty & Interest Calculator ${rateYear} (Form 1040)`;
+const description = `Estimate Form 1040 late-filing and late-payment penalties, partial payments, and daily IRS interest using official quarterly rates. Updated for ${rateYear}.`;
+
+const faqs = [
+  {
+    q: 'How much is the IRS failure-to-file penalty?',
+    a: 'For an individual Form 1040, the standard penalty is 5% of unpaid tax for each month or part of a month the return is late, normally capped after five months. When the failure-to-pay penalty applies in the same month, the filing penalty is reduced by the payment penalty. A separate minimum can apply when the return is more than 60 days late.',
+  },
+  {
+    q: 'How much is the IRS failure-to-pay penalty?',
+    a: 'The standard rate is 0.5% of unpaid tax for each month or part of a month, up to 25%. It can fall to 0.25% during a qualifying installment agreement for an individual who filed on time, or rise to 1% after the applicable intent-to-levy notice period.',
+  },
+  {
+    q: 'Does a tax extension stop IRS penalties and interest?',
+    a: 'A valid filing extension generally moves the failure-to-file deadline, but it does not move the original tax payment deadline. Failure-to-pay penalties and underpayment interest can therefore continue during the extension period.',
+  },
+  {
+    q: 'Is this the same as an official IRS payoff?',
+    a: 'No. The result is a planning estimate. In particular, it excludes interest on the failure-to-pay penalty unless IRS assessment events are known, and it cannot decide relief, postponements, payment allocation disputes, or other account-specific adjustments.',
+  },
+  {
+    q: 'What is Automatic Exemption from Penalty?',
+    a: 'The IRS says Automatic Exemption from Penalty, or AEP, begins in summer 2026. Eligible original returns beginning with tax year 2025 may receive automatic failure-to-file and failure-to-pay relief when IRS records show the required prior compliance. Tax and tax interest remain, and only the IRS can confirm eligibility.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'IRS Penalty and Interest Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: canonical,
+    description,
+    featureList: [
+      'Failure-to-file penalty estimate',
+      'Failure-to-pay penalty estimate',
+      'Partial tax payment timeline',
+      'Quarterly IRS rate changes',
+      'Daily-compounded underpayment interest',
+      'Automatic Exemption from Penalty comparison',
+      'Printable calculation report',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'IRS penalty and interest', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>IRS penalty and interest</span>
+  </nav>
+  <h1>IRS penalty and interest calculator for Form 1040</h1>
+  <p class="lead">Estimate what the IRS may add when an individual Form 1040 is filed or paid late.
+    The calculator separates failure-to-file, failure-to-pay, tax interest, and interest on the
+    filing penalty; follows partial payments; changes the interest rate by quarter; and shows the
+    IRS's new 2026 penalty-relief scenario without promising eligibility.</p>
+
+  <div class="scope-strip">
+    <span><strong>Current underpayment rate:</strong> <a href="/rates/irs-underpayment/">{latest?.value_text}</a></span>
+    <span><strong>Rate history:</strong> {orderedHistory.length} quarters since {minDate.slice(0, 4)}</span>
+    <span><strong>Rules reviewed:</strong> {prettyDate(penaltyRules.verified_at)}</span>
+    <span><strong>Official pages rechecked:</strong> {prettyDate(penaltyRulesRetrievedAt)}</span>
+  </div>
+
+  <IrsPenaltyInterestCalculator
+    quarterlyHistory={quarterlyHistory}
+    penaltyRules={penaltyRules}
+    minDate={minDate}
+    maxDate={maxDate}
+  />
+
+  <AdSlot id="irs-penalty-after-tool" />
+
+  <h2>What this IRS tax penalty calculator includes</h2>
+  <p>The default calculation is the common individual case: tax shown on an original Form 1040
+    remained unpaid after its deadline, the ordinary late-payment rate applies, and no penalty
+    relief has yet been granted. Unlike a generic percentage calculator, this one preserves four
+    separate clocks:</p>
+  <ul>
+    <li><strong>Failure to file:</strong> runs from the filing deadline that actually applied,
+      including a valid extension.</li>
+    <li><strong>Failure to pay:</strong> normally runs from the original payment deadline, even when
+      the return had an extension to file.</li>
+    <li><strong>Tax interest:</strong> compounds daily and changes whenever a new quarterly
+      <a href="/rates/irs-underpayment/">IRS underpayment rate</a> takes effect.</li>
+    <li><strong>Penalty interest:</strong> the failure-to-file amount is modeled from its filing
+      deadline. Interest on the failure-to-pay penalty is identified but excluded because the IRS
+      starts it from account-specific notice or assessment dates.</li>
+  </ul>
+  <p>Optional dated tax payments reduce later failure-to-pay bases and tax principal without
+    rewriting the original failure-to-file base. Advanced fields can model a qualifying
+    installment-agreement period or the higher rate after an intent-to-levy notice. Leave those
+    fields blank unless the facts actually apply.</p>
+
+  <h2 id="failure-to-file">Failure-to-file penalty calculation</h2>
+  <p>For an individual Form 1040, the IRS states that the ordinary filing penalty is 5% of unpaid
+    tax for each month or partial month the return is late, up to 25%. One day late therefore counts
+    as a full penalty month. If the 0.5% failure-to-pay charge applies during the same month, it
+    reduces the filing portion: the ordinary combined charge is generally 4.5% for filing plus 0.5%
+    for payment, not 5.5%.</p>
+  <p>When a return is <strong>more than 60 days late</strong>, a due-year minimum can replace the
+    smaller ordinary filing result. For a return due in {maxDate.slice(0, 4)}, the monitored minimum
+    is {currentMinimum ? `$${currentMinimum.amount.toLocaleString('en-US')}` : 'set by the applicable IRS schedule'},
+    limited to 100% of the unpaid tax. The minimum is not reduced below that floor by the overlapping
+    payment penalty. Because the amount is indexed, the pipeline checks the official table every
+    week instead of leaving one dollar figure hardcoded in page copy forever.</p>
+
+  <h2 id="failure-to-pay">Failure-to-pay penalty calculation</h2>
+  <p>The standard late-payment penalty is 0.5% of tax still unpaid at the start of each penalty
+    month, up to an aggregate 25% of the original unpaid tax. A payment must be made before a
+    penalty month begins to reduce that month's base; one made during the month—or on its first
+    day—does not prorate the full monthly charge and instead reduces later bases. The calculator's
+    optional payment timeline implements that distinction and displays every charged month.</p>
+  <p>Two advanced rates are available because the IRS publishes them as separate branches. For a
+    timely filed individual return, an approved installment agreement can reduce the monthly rate
+    to 0.25% while it qualifies. After the specified intent-to-levy period, the rate can rise to 1%.
+    The inputs do not decide whether an agreement or notice is legally effective—they only apply the
+    branch to dates the user supplies.</p>
+
+  <div class="scroll-x">
+    <table>
+      <thead>
+        <tr><th scope="col">Charge</th><th scope="col">Standard rule modeled</th><th scope="col">Limit / important boundary</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Failure to file</td><td>5% per full or partial month</td><td>Five months normally; due-year minimum may be larger</td></tr>
+        <tr><td>Failure to pay</td><td>0.5% per full or partial month</td><td>25% aggregate cap; optional 0.25% and 1% branches</td></tr>
+        <tr><td>Tax interest</td><td>Applicable quarterly rate, compounded daily</td><td>Stops only as modeled tax principal is paid</td></tr>
+        <tr><td>Filing-penalty interest</td><td>Final filing penalty from applicable filing deadline</td><td>Removed from the AEP comparison only if IRS confirms relief</td></tr>
+        <tr><td>Payment-penalty interest</td><td>Not included</td><td>Requires IRS notice/assessment dates</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="automatic-exemption">New for 2026: Automatic Exemption from Penalty</h2>
+  <p>The IRS says <strong>Automatic Exemption from Penalty (AEP)</strong> begins in summer 2026.
+    Beginning with eligible 2025 tax-year original returns, IRS records showing three prior years of
+    timely compliance may prevent covered failure-to-file and failure-to-pay penalties from being
+    assessed. The taxpayer does not apply when AEP is granted automatically; the IRS sends a notice
+    explaining the result.</p>
+  <p>The calculator keeps the statutory estimate as the primary answer and, for a potentially
+    eligible current return, shows a separate <em>if the IRS confirms AEP</em> comparison. It never
+    declares a user eligible. AEP does not erase the underlying tax or tax interest, and it does not
+    cover every type of penalty. Read the official
+    <a href="https://www.irs.gov/payments/administrative-penalty-relief">IRS administrative penalty relief guidance</a>
+    before relying on the comparison.</p>
+
+  <h2>Why the result is an estimate, not an IRS payoff</h2>
+  <p>An IRS account is an event ledger, not one formula. Notices and assessments determine when
+    interest starts on the failure-to-pay penalty; payments can be designated or allocated
+    differently; relief can remove a penalty and its related interest; and special deadlines can
+    arise from disasters, combat-zone service, bankruptcy, or overseas filing rules. An audit or
+    amended return also follows different payment and penalty starting points.</p>
+  <p>This calculator deliberately refuses to carry the latest interest rate into a quarter the IRS
+    has not published. It also labels the missing failure-to-pay penalty interest instead of
+    inventing an assessment date. Use the result to understand the moving parts and compare
+    scenarios, then use the notice, account transcript, or official payoff amount for an actual
+    payment decision.</p>
+  <p class="source-note">Outside scope: Form 2210 estimated-tax additions, corporations,
+    partnerships and S corporations, payroll/deposit penalties, fraud, accuracy-related penalties,
+    substitute returns, audit deficiencies, collection fees, and relief eligibility. For a
+    penalty-free underpayment or delayed refund calculation, use the separate
+    <a href="/calculators/irs-interest/">IRS interest and refund calculator</a>.</p>
+
+  <h2>Official sources and calculation transparency</h2>
+  <ul>
+    <li><a href="https://www.irs.gov/payments/failure-to-file-penalty">IRS failure-to-file penalty</a> — monthly rate, cap, overlap, and minimum table.</li>
+    <li><a href="https://www.irs.gov/payments/failure-to-pay-penalty">IRS failure-to-pay penalty</a> — standard, installment-agreement, post-levy, and partial-month rules.</li>
+    <li><a href="https://www.irs.gov/payments/interest">IRS interest guidance</a> — separate penalty interest start dates.</li>
+    <li><a href="https://www.irs.gov/payments/quarterly-interest-rates">IRS quarterly interest rates</a> — the history used by the daily engine.</li>
+    <li><a href="https://www.irs.gov/irm/part20/irm_20-001-002r">Internal Revenue Manual 20.1.2</a> — detailed penalty periods, coordination, and indexed minimums.</li>
+  </ul>
+  <p>For a plain-language walkthrough, read
+    <a href="/guides/irs-penalties-explained/">IRS late-filing and late-payment penalties explained</a>.
+    The existing <a href="/guides/irs-interest-rates/">IRS interest-rate guide</a> explains the
+    quarterly benchmark and daily compounding.</p>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq-list">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
+  </div>
+
+  <h2>Related IRS tools</h2>
+  <ul>
+    <li><a href="/calculators/irs-interest/">IRS interest and delayed-refund calculator</a> — interest-only scenarios for individuals and corporations.</li>
+    <li><a href="/rates/irs-underpayment/">Current IRS underpayment rate and quarterly history</a> — inspect every recorded rate period since 2017.</li>
+    <li><a href="/guides/irs-penalties-explained/">IRS filing and payment penalties explained</a> — a plain-language walkthrough of the rules and exclusions.</li>
+  </ul>
+
+  <AdSlot id="irs-penalty-bottom" />
+</BaseLayout>
+
+<style>
+  .scope-strip { display: flex; flex-wrap: wrap; gap: 8px 18px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 11px 0; margin: 16px 0; color: var(--ink-soft); font-size: .86rem; }
+  .scope-strip strong { color: var(--ink); }
+  .scroll-x { overflow-x: auto; }
+  .faq-list details { border-top: 1px solid var(--line); padding: 13px 0; }
+  .faq-list summary { cursor: pointer; color: var(--green); font-weight: 700; }
+  .faq-list p { margin-bottom: 3px; }
+</style>

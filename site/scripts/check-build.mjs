@@ -298,7 +298,21 @@ const demandGuards = [
   },
   {
     pathname: '/calculators/irs-interest/',
-    patterns: [/IRS Interest &amp; Refund Calculator \d{4}/, /Calculating interest on an IRS refund/],
+    patterns: [
+      /IRS Interest &amp; Refund Calculator \d{4}/,
+      /Calculating interest on an IRS refund/,
+      /Frequently asked questions/,
+    ],
+  },
+  {
+    pathname: '/calculators/irs-penalty-and-interest/',
+    patterns: [
+      /IRS Penalty &amp; Interest Calculator \d{4} \(Form 1040\)/,
+      /Failure-to-file penalty calculation/,
+      /Automatic Exemption from Penalty/,
+      /estimate, not an IRS payoff/,
+      /failure-to-pay penalty interest/i,
+    ],
   },
 ];
 for (const guard of demandGuards) {

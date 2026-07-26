@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { openDb, upsertSource, upsertEntity, upsertObservation } from './db.mjs';
 import { validate } from './validate.mjs';
 import { buildIowa, STATE_SOURCES } from '../fetchers/us-states.mjs';
+import { IRS_PENALTY_RULES } from '../fetchers/irs-penalty-rules.mjs';
 
 function seed() {
   const db = openDb({ path: ':memory:' });
@@ -94,6 +95,70 @@ test('IRS §6621 spread mismatch is a hard error', () => {
   const r = validate(db, { today });
   assert.equal(r.ok, false);
   assert.ok(r.errors.some((e) => /§6621/.test(e)));
+});
+
+test('IRS penalty metadata is required and validated at the database boundary', () => {
+  const db = seed();
+  const st = upsertEntity(db, {
+    slug: 'irs-6603-federal-short-term', name: 'ST', entity_type: 'rate_series', jurisdiction: 'US',
+  });
+  const corrupted = structuredClone(IRS_PENALTY_RULES);
+  corrupted.failure_to_pay.standard_rate = 0.05;
+  const up = upsertEntity(db, {
+    slug: 'irs-underpayment', name: 'UP', entity_type: 'rate_series', jurisdiction: 'US',
+    metadata: { penalty_rules: corrupted, penalty_rules_retrieved_at: 'not-a-date' },
+  });
+  upsertObservation(db, {
+    ...base, entity_id: st, value_numeric: 4, value_text: '4%', effective_date: '2026-07-01',
+  });
+  upsertObservation(db, {
+    ...base, entity_id: up, value_numeric: 7, value_text: '7%', effective_date: '2026-07-01',
+  });
+  const result = validate(db, { today });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((error) => /penalty rules failure_to_pay\.standard_rate/.test(error)));
+  assert.ok(result.errors.some((error) => /penalty-rules retrieval timestamp/.test(error)));
+  db.close();
+});
+
+test('IRS quarterly histories cannot be truncated to only the current quarter', () => {
+  const db = seed();
+  const series = [
+    ['irs-6603-federal-short-term', 4],
+    ['irs-gatt', 4.5],
+    ['irs-large-corporate-underpayment', 9],
+    ['irs-overpayment-corporate', 6],
+    ['irs-overpayment-noncorporate', 7],
+    ['irs-underpayment', 7],
+  ];
+  for (const [slug, value] of series) {
+    const id = upsertEntity(db, {
+      slug,
+      name: slug,
+      entity_type: 'rate_series',
+      jurisdiction: 'US',
+      metadata: slug === 'irs-underpayment'
+        ? {
+            penalty_rules: IRS_PENALTY_RULES,
+            penalty_rules_retrieved_at: '2026-07-26T00:00:00.000Z',
+          }
+        : null,
+    });
+    upsertObservation(db, {
+      ...base,
+      entity_id: id,
+      value_numeric: value,
+      value_text: `${value}%`,
+      effective_date: '2026-07-01',
+    });
+  }
+
+  const result = validate(db, { today });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((error) => (
+    /irs-underpayment: IRS quarterly history must start 2017-01-01/.test(error)
+  )));
+  db.close();
 });
 
 test('an incomplete state rule cannot be marked calculator-ready', () => {

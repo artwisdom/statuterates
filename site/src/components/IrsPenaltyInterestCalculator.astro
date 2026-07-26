@@ -1,0 +1,495 @@
+---
+// Form 1040 penalty + interest calculator. The official rules and quarterly history are embedded
+// at build time; all arithmetic stays in the browser through the shared, tested engine. No entered
+// amount or date is transmitted anywhere.
+const {
+  quarterlyHistory,
+  penaltyRules,
+  minDate,
+  maxDate,
+} = Astro.props;
+
+const config = { quarterlyHistory, penaltyRules };
+---
+
+<section class="irs-penalty-calculator" data-irs-penalty-calc>
+  <script type="application/json" data-irs-penalty-config set:html={JSON.stringify(config)} />
+
+  <div class="calc-heading">
+    <div>
+      <span class="eyebrow">Individual Form 1040 estimate</span>
+      <h2>Calculate penalties and interest</h2>
+    </div>
+    <span class="private-note">Private: runs only in your browser</span>
+  </div>
+
+  <form data-irs-penalty-form novalidate>
+    <div class="field">
+      <label for="irs-unpaid-tax">Unpaid tax at the original deadline ($)</label>
+      <input id="irs-unpaid-tax" data-unpaid-tax type="number" min="0.01" step="0.01"
+        inputmode="decimal" placeholder="10000" required />
+      <small>After withholding, estimated payments, timely payments, and refundable credits.</small>
+    </div>
+
+    <div class="date-grid">
+      <div class="field">
+        <label for="irs-original-due">Original payment due date</label>
+        <input id="irs-original-due" data-original-due type="date" min={minDate} max={maxDate} required />
+        <small>An extension to file normally does not move this date.</small>
+      </div>
+      <div class="field">
+        <label for="irs-filing-due">Filing deadline that applied</label>
+        <input id="irs-filing-due" data-filing-due type="date" min={minDate} max={maxDate} required />
+        <small>Use the valid extended deadline if you had one.</small>
+      </div>
+      <div class="field">
+        <label for="irs-filed-date">Date filed (or assumed filing date)</label>
+        <input id="irs-filed-date" data-filed-date type="date" min={minDate} max={maxDate} required />
+        <small>If still unfiled, use the calculation date. For a late return, use the e-file
+          acceptance date or the IRS receipt date for paper filing—not a late postmark date.</small>
+      </div>
+      <div class="field">
+        <label for="irs-calc-date">Calculate through</label>
+        <input id="irs-calc-date" data-calculation-date type="date" min={minDate} max={maxDate}
+          value={maxDate} required />
+        <small>Limited to the last verified data refresh: {maxDate}.</small>
+      </div>
+    </div>
+
+    <details class="advanced" data-payments-details>
+      <summary>Partial tax payments (optional)</summary>
+      <p>Add payments made after the original deadline. The estimate applies them to tax principal
+        first and leaves assessed penalties and interest unpaid.</p>
+      <div data-payment-list></div>
+      <button type="button" class="secondary-btn" data-add-payment>+ Add a payment</button>
+      <template data-payment-template>
+        <div class="payment-row" data-payment-row>
+          <div class="field">
+            <label>Payment date</label>
+            <input data-payment-date type="date" min={minDate} max={maxDate} />
+          </div>
+          <div class="field">
+            <label>Amount applied to tax ($)</label>
+            <input data-payment-amount type="number" min="0.01" step="0.01"
+              inputmode="decimal" placeholder="1000" />
+          </div>
+          <button type="button" class="remove-btn" data-remove-payment aria-label="Remove this payment">Remove</button>
+        </div>
+      </template>
+    </details>
+
+    <details class="advanced">
+      <summary>Advanced failure-to-pay rates (optional)</summary>
+      <p>Leave blank for the standard 0.5% monthly rate. Only enter dates that actually apply to the
+        IRS account; the calculator does not decide eligibility.</p>
+      <div class="date-grid">
+        <div class="field">
+          <label for="irs-installment-date">Qualifying installment agreement start</label>
+          <input id="irs-installment-date" data-installment-date type="date" min={minDate} max={maxDate} />
+          <small>The 0.25% rate requires an individual return filed on time. Enter it only if the
+            agreement remained effective through the calculation date; ended agreements are not modeled.</small>
+        </div>
+        <div class="field">
+          <label for="irs-levy-date">Intent-to-levy notice date</label>
+          <input id="irs-levy-date" data-levy-date type="date" min={minDate} max={maxDate} />
+          <small>The engine applies 1% beginning with the first penalty month after the 10-day period.</small>
+        </div>
+      </div>
+    </details>
+
+    <button type="submit" class="calc-btn">Estimate IRS charges</button>
+    <p class="form-error" data-form-error role="alert" hidden></p>
+  </form>
+
+  <section class="calc-result" data-result aria-live="polite" hidden>
+    <div class="result-head">
+      <div>
+        <span class="eyebrow">Modeled amount remaining</span>
+        <div class="big" data-modeled-total></div>
+      </div>
+      <button type="button" class="secondary-btn print-btn" data-print>Print / save as PDF</button>
+    </div>
+    <p class="result-warning"><strong>This is not an official IRS payoff.</strong> The subtotal
+      excludes interest on the failure-to-pay penalty because that interest starts from IRS
+      notice/assessment dates that these inputs cannot reconstruct.</p>
+
+    <section class="input-recap">
+      <h3>Inputs used</h3>
+      <dl class="breakdown recap-grid">
+        <div><dt>Original unpaid tax</dt><dd data-input-tax></dd></div>
+        <div><dt>Original payment due</dt><dd data-input-original-due></dd></div>
+        <div><dt>Filing deadline used</dt><dd data-input-filing-due></dd></div>
+        <div><dt>Return filed / assumed filed</dt><dd data-input-filed></dd></div>
+        <div><dt>Calculated through</dt><dd data-input-calculation></dd></div>
+        <div><dt>Installment agreement</dt><dd data-input-installment></dd></div>
+        <div><dt>Intent-to-levy notice</dt><dd data-input-levy></dd></div>
+      </dl>
+      <h4>Later tax payments entered</h4>
+      <ul data-input-payments></ul>
+    </section>
+
+    <dl class="breakdown">
+      <div><dt>Tax still unpaid</dt><dd data-remaining-tax></dd></div>
+      <div><dt>Failure-to-file penalty</dt><dd data-ftf></dd></div>
+      <div><dt>Interest on filing penalty</dt><dd data-ftf-interest></dd></div>
+      <div><dt>Failure-to-pay penalty</dt><dd data-ftp></dd></div>
+      <div><dt>Interest on unpaid tax</dt><dd data-tax-interest></dd></div>
+      <div class="total-row"><dt>Modeled subtotal</dt><dd data-modeled-total-copy></dd></div>
+    </dl>
+
+    <aside class="aep-panel" data-aep-panel hidden>
+      <span class="eyebrow">IRS-announced · summer 2026</span>
+      <h3>If the IRS confirms Automatic Exemption from Penalty</h3>
+      <p>For a potentially eligible return, the modeled subtotal would fall to
+        <strong data-aep-total></strong>, a modeled difference of <strong data-aep-savings></strong>.
+        Only the IRS can determine eligibility; unpaid-tax interest remains.</p>
+    </aside>
+
+    <div class="result-grid">
+      <details>
+        <summary>Failure-to-file calculation</summary>
+        <p data-ftf-summary></p>
+        <div class="scroll-x">
+          <table>
+            <thead><tr><th>Month</th><th>Period</th><th>Gross</th><th>FTP reduction</th></tr></thead>
+            <tbody data-ftf-rows></tbody>
+          </table>
+        </div>
+      </details>
+      <details>
+        <summary>Failure-to-pay month-by-month calculation</summary>
+        <p data-ftp-summary></p>
+        <div class="scroll-x">
+          <table>
+            <thead><tr><th>Month</th><th>Period</th><th>Tax base</th><th>Rate</th><th>Charge</th></tr></thead>
+            <tbody data-ftp-rows></tbody>
+          </table>
+        </div>
+      </details>
+      <details>
+        <summary>Quarterly interest rates used</summary>
+        <ul class="rate-list" data-rate-list></ul>
+      </details>
+      <details>
+        <summary>Scope and exclusions</summary>
+        <h4>Assumptions</h4>
+        <ul data-assumptions></ul>
+        <h4>Not included</h4>
+        <ul data-exclusions></ul>
+      </details>
+    </div>
+    <p class="verification-line">Calculation rules monitored against official IRS pages; rate data
+      verified through {maxDate}. Keep this printout with the dates and amounts you entered.</p>
+  </section>
+
+  <p class="fineprint">Planning estimate for an individual original Form 1040/1040-SR only. Do not
+    enter a Social Security number, name, address, or other personal information. IRS notices,
+    transcripts, relief determinations, and official payoff figures control.</p>
+</section>
+
+<style>
+  .irs-penalty-calculator { border: 1px solid var(--line); border-top: 3px solid var(--accent); border-radius: 14px; padding: 24px; margin: 22px 0; background: var(--paper-2); box-shadow: var(--shadow-sm); }
+  .calc-heading, .result-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+  .calc-heading h2 { margin: 3px 0 10px; }
+  .eyebrow { display: block; color: var(--green); font-family: var(--mono); font-size: .69rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .private-note { color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 7px 10px; font-size: .75rem; white-space: nowrap; }
+  .field { margin: 12px 0; }
+  .field label { display: block; font-family: var(--mono); font-size: .7rem; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+  .field input { width: 100%; box-sizing: border-box; font: inherit; padding: 12px 13px; border: 1px solid var(--line-strong); border-radius: 9px; background: var(--paper); color: var(--ink); }
+  .field input:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--green); }
+  .field small { display: block; color: var(--ink-soft); font-size: .78rem; line-height: 1.35; margin-top: 5px; }
+  .date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .advanced { margin: 18px 0; border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; background: var(--paper); }
+  .advanced summary, .result-grid summary { cursor: pointer; color: var(--green); font-family: var(--sans); font-weight: 700; }
+  .advanced > p { color: var(--ink-soft); font-size: .88rem; margin: 10px 0; }
+  .payment-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: end; border-top: 1px solid var(--line); margin-top: 12px; padding-top: 4px; }
+  button { font-family: var(--sans); }
+  .calc-btn { margin-top: 8px; font-size: .92rem; font-weight: 650; color: #fff; background: var(--accent); border: 0; border-radius: 9px; padding: 13px 24px; cursor: pointer; box-shadow: var(--shadow-sm); }
+  .calc-btn:hover { background: var(--green-2); }
+  .secondary-btn, .remove-btn { border: 1px solid var(--line-strong); border-radius: 8px; background: var(--paper); color: var(--green); font-weight: 650; padding: 9px 12px; cursor: pointer; }
+  .remove-btn { color: #8e2e2a; margin-bottom: 12px; }
+  .form-error { color: #9a2b26; font-weight: 650; margin: 12px 0 0; }
+  .calc-result { border-top: 2px solid var(--ink); margin-top: 24px; padding-top: 19px; }
+  .big { font-family: var(--nums); font-size: clamp(2rem, 6vw, 3.1rem); font-weight: 680; color: var(--green); font-variant-numeric: tabular-nums; line-height: 1; margin-top: 6px; }
+  .result-warning { border-left: 4px solid #a45a16; background: #fff8ec; padding: 12px 14px; margin: 17px 0; }
+  .input-recap { margin: 18px 0; }
+  .input-recap h3, .input-recap h4 { margin-bottom: 8px; }
+  .input-recap ul { margin-top: 5px; }
+  .breakdown { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 16px 0; }
+  .breakdown div { display: flex; justify-content: space-between; gap: 12px; background: var(--paper); padding: 11px 13px; }
+  .breakdown dt { color: var(--ink-soft); }
+  .breakdown dd { margin: 0; font-family: var(--nums); font-weight: 650; font-variant-numeric: tabular-nums; }
+  .breakdown .total-row { background: var(--green-wash); color: var(--green-2); }
+  .aep-panel { border: 1px solid #cbd0f4; border-radius: 10px; padding: 17px; margin: 18px 0; background: var(--green-wash); }
+  .aep-panel h3 { margin: 4px 0 7px; }
+  .aep-panel p { margin: 0; }
+  .result-grid details { border-top: 1px solid var(--line); padding: 14px 0; }
+  .result-grid details > p { color: var(--ink-soft); font-size: .88rem; }
+  .result-grid table { font-size: .82rem; min-width: 610px; }
+  .result-grid td, .result-grid th { padding: 8px 9px; }
+  .rate-list { columns: 2; }
+  .verification-line, .fineprint { color: var(--ink-soft); font-size: .79rem; font-style: italic; }
+  .fineprint { margin: 15px 0 0; }
+  .scroll-x { overflow-x: auto; }
+  @media (max-width: 650px) {
+    .date-grid, .breakdown { grid-template-columns: 1fr; }
+    .payment-row { grid-template-columns: 1fr; gap: 0; }
+    .remove-btn { justify-self: start; }
+    .calc-heading, .result-head { display: block; }
+    .private-note { display: inline-block; margin-bottom: 8px; }
+    .print-btn { margin-top: 12px; }
+    .rate-list { columns: 1; }
+  }
+  @media print {
+    :global(body.print-irs-calculator header),
+    :global(body.print-irs-calculator footer),
+    :global(body.print-irs-calculator main > .wrap > *:not(.irs-penalty-calculator)) { display: none !important; }
+    :global(body.print-irs-calculator main) { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+    :global(body.print-irs-calculator main > .wrap) { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+    .irs-penalty-calculator { display: block !important; border: 0; box-shadow: none; padding: 0; margin: 0; background: #fff; }
+    .irs-penalty-calculator form, .calc-heading, .fineprint, .print-btn { display: none !important; }
+    .calc-result { display: block !important; border: 0; margin: 0; padding: 0; }
+    .result-grid details { break-inside: avoid; }
+    .result-grid details:not([open]) > *:not(summary) { display: block; }
+  }
+</style>
+
+<script>
+  import { irsPenaltyAndInterestEstimate } from '../../../shared/interest-calc.mjs';
+
+  const money = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const dateFmt = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+
+  function text(root, selector, value) {
+    const node = root.querySelector(selector);
+    if (node) node.textContent = value;
+  }
+
+  function fillList(root, selector, items) {
+    const list = root.querySelector(selector);
+    list.replaceChildren();
+    for (const item of items) {
+      const li = document.createElement('li');
+      li.textContent = item;
+      list.append(li);
+    }
+  }
+
+  function cell(value) {
+    const td = document.createElement('td');
+    td.textContent = value;
+    return td;
+  }
+
+  function periodLabel(period) {
+    return `${dateFmt.format(new Date(`${period.start}T00:00:00Z`))} – ${dateFmt.format(new Date(`${period.end}T00:00:00Z`))}`;
+  }
+
+  function addPaymentRow(root) {
+    const list = root.querySelector('[data-payment-list]');
+    if (list.children.length >= 12) return;
+    const template = root.querySelector('[data-payment-template]');
+    const fragment = template.content.cloneNode(true);
+    const row = fragment.querySelector('[data-payment-row]');
+    const index = Number(root.dataset.nextPaymentIndex || '1');
+    root.dataset.nextPaymentIndex = String(index + 1);
+    const date = row.querySelector('[data-payment-date]');
+    const amount = row.querySelector('[data-payment-amount]');
+    const dateId = `irs-payment-date-${index}`;
+    const amountId = `irs-payment-amount-${index}`;
+    date.id = dateId;
+    amount.id = amountId;
+    row.querySelectorAll('label')[0].htmlFor = dateId;
+    row.querySelectorAll('label')[1].htmlFor = amountId;
+    row.querySelector('[data-remove-payment]').addEventListener('click', () => row.remove());
+    list.append(fragment);
+  }
+
+  for (const root of document.querySelectorAll('[data-irs-penalty-calc]')) {
+    const cfg = JSON.parse(root.querySelector('[data-irs-penalty-config]').textContent);
+    const form = root.querySelector('[data-irs-penalty-form]');
+    const result = root.querySelector('[data-result]');
+    const error = root.querySelector('[data-form-error]');
+    const originalDue = root.querySelector('[data-original-due]');
+    const filingDue = root.querySelector('[data-filing-due]');
+    const filedDate = root.querySelector('[data-filed-date]');
+    const calculationDate = root.querySelector('[data-calculation-date]');
+    let lastSyncedDue = '';
+
+    originalDue.addEventListener('change', () => {
+      if (!filingDue.value || filingDue.value === lastSyncedDue) filingDue.value = originalDue.value;
+      lastSyncedDue = originalDue.value;
+    });
+    root.querySelector('[data-add-payment]').addEventListener('click', () => addPaymentRow(root));
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      if (!form.reportValidity()) return;
+
+      const payments = [];
+      for (const row of root.querySelectorAll('[data-payment-row]')) {
+        const date = row.querySelector('[data-payment-date]').value;
+        const amountRaw = row.querySelector('[data-payment-amount]').value;
+        if (!date && !amountRaw) continue;
+        if (!date || !amountRaw) {
+          error.textContent = 'Each partial payment needs both a date and an amount.';
+          error.hidden = false;
+          return;
+        }
+        payments.push({ date, amount: Number(amountRaw) });
+      }
+
+      try {
+        const output = irsPenaltyAndInterestEstimate({
+          unpaidTax: Number(root.querySelector('[data-unpaid-tax]').value),
+          originalDueDate: originalDue.value,
+          filingDueDate: filingDue.value,
+          filingDate: filedDate.value,
+          calculationDate: calculationDate.value,
+          quarterlyHistory: cfg.quarterlyHistory,
+          penaltyRules: cfg.penaltyRules,
+          payments,
+          installmentAgreementStartDate: root.querySelector('[data-installment-date]').value || null,
+          levyNoticeDate: root.querySelector('[data-levy-date]').value || null,
+        });
+
+        const total = money.format(output.modeled_total);
+        text(root, '[data-modeled-total]', total);
+        text(root, '[data-modeled-total-copy]', total);
+        text(root, '[data-remaining-tax]', money.format(output.remaining_tax));
+        text(root, '[data-ftf]', money.format(output.failure_to_file.penalty));
+        text(root, '[data-ftf-interest]', money.format(output.failure_to_file.interest));
+        text(root, '[data-ftp]', money.format(output.failure_to_pay.penalty));
+        text(root, '[data-tax-interest]', money.format(output.tax_interest));
+        text(root, '[data-input-tax]', money.format(output.original_unpaid_tax));
+        text(root, '[data-input-original-due]', dateFmt.format(new Date(`${originalDue.value}T00:00:00Z`)));
+        text(root, '[data-input-filing-due]', dateFmt.format(new Date(`${filingDue.value}T00:00:00Z`)));
+        text(root, '[data-input-filed]', dateFmt.format(new Date(`${filedDate.value}T00:00:00Z`)));
+        text(root, '[data-input-calculation]', dateFmt.format(new Date(`${calculationDate.value}T00:00:00Z`)));
+        const installmentDate = root.querySelector('[data-installment-date]').value;
+        const levyDate = root.querySelector('[data-levy-date]').value;
+        text(
+          root,
+          '[data-input-installment]',
+          installmentDate ? dateFmt.format(new Date(`${installmentDate}T00:00:00Z`)) : 'Not entered',
+        );
+        text(
+          root,
+          '[data-input-levy]',
+          levyDate ? dateFmt.format(new Date(`${levyDate}T00:00:00Z`)) : 'Not entered',
+        );
+        fillList(
+          root,
+          '[data-input-payments]',
+          output.partial_payments.length
+            ? output.partial_payments.map((payment) => (
+                `${money.format(payment.amount)} on ${dateFmt.format(new Date(`${payment.date}T00:00:00Z`))}`
+              ))
+            : ['No later tax payments entered.'],
+        );
+
+        const minimumNote = output.failure_to_file.minimum_applied
+          ? ` The more-than-60-day minimum replaced the ordinary coordinated amount.`
+          : '';
+        text(
+          root,
+          '[data-ftf-summary]',
+          `${output.filing_days_late} day(s) late; ${output.filing_months} full-or-partial penalty month(s). `
+          + `Gross ${money.format(output.failure_to_file.gross_penalty)}, less `
+          + `${money.format(output.failure_to_file.overlap_reduction)} for overlapping payment penalties.`
+          + minimumNote,
+        );
+        text(
+          root,
+          '[data-ftp-summary]',
+          `${output.payment_months} charged month(s), ${money.format(output.failure_to_pay.penalty)} total. `
+          + `The statutory cap for this tax base is ${money.format(output.failure_to_pay.cap)}.`,
+        );
+
+        const ftfRows = root.querySelector('[data-ftf-rows]');
+        ftfRows.replaceChildren();
+        if (!output.failure_to_file.months.length) {
+          const tr = document.createElement('tr');
+          const td = cell('No failure-to-file month was triggered.');
+          td.colSpan = 4;
+          tr.append(td);
+          ftfRows.append(tr);
+        } else {
+          for (const month of output.failure_to_file.months) {
+            const tr = document.createElement('tr');
+            tr.append(
+              cell(String(month.month)),
+              cell(periodLabel(month)),
+              cell(money.format(month.gross_charge)),
+              cell(money.format(month.ftp_overlap_reduction)),
+            );
+            ftfRows.append(tr);
+          }
+        }
+
+        const ftpRows = root.querySelector('[data-ftp-rows]');
+        ftpRows.replaceChildren();
+        if (!output.failure_to_pay.months.length) {
+          const tr = document.createElement('tr');
+          const td = cell('No failure-to-pay month was triggered.');
+          td.colSpan = 5;
+          tr.append(td);
+          ftpRows.append(tr);
+        } else {
+          for (const month of output.failure_to_pay.months) {
+            const tr = document.createElement('tr');
+            tr.append(
+              cell(String(month.month)),
+              cell(periodLabel(month)),
+              cell(money.format(month.unpaid_tax_at_start)),
+              cell(`${(month.rate * 100).toFixed(2)}% — ${month.rate_reason}`),
+              cell(money.format(month.charge)),
+            );
+            ftpRows.append(tr);
+          }
+        }
+
+        fillList(
+          root,
+          '[data-rate-list]',
+          output.rates_used.map((rate) => `${rate.value}% from ${rate.effective_date}`),
+        );
+        fillList(root, '[data-assumptions]', output.assumptions);
+        fillList(root, '[data-exclusions]', output.excluded);
+
+        const aepPanel = root.querySelector('[data-aep-panel]');
+        aepPanel.hidden = !output.aep.may_apply;
+        if (output.aep.may_apply) {
+          text(root, '[data-aep-total]', money.format(output.aep.scenario_total_if_irs_confirms_relief));
+          text(root, '[data-aep-savings]', money.format(output.aep.potential_modeled_savings));
+        }
+
+        result.hidden = false;
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (caught) {
+        error.textContent = caught instanceof Error ? caught.message : String(caught);
+        error.hidden = false;
+        result.hidden = true;
+      }
+    });
+
+    root.querySelector('[data-print]').addEventListener('click', () => {
+      document.body.classList.add('print-irs-calculator');
+      const cleanup = () => document.body.classList.remove('print-irs-calculator');
+      window.addEventListener('afterprint', cleanup, { once: true });
+      window.print();
+      window.setTimeout(cleanup, 1000);
+    });
+  }
+</script>
