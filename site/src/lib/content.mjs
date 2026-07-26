@@ -153,12 +153,19 @@ from September 1983 through the latest published judgment month, including month
     },
   },
   'florida-judgment-rate': {
-    tagline: 'Florida’s quarterly judgment rate, set by the CFO.',
+    tagline: 'Florida’s official quarterly CFO rate and 1981–present history.',
     q: 'What is the current Florida judgment interest rate?',
     body: `Florida’s post-judgment interest rate is reset every quarter by the state Chief Financial Officer
 under Fla. Stat. §55.03 — the 12-month average of the New York Fed’s discount rate plus 4 points — currently
-8.06% for the quarter beginning July 1, 2026. It’s simple interest, and a judgment’s rate re-adjusts each
-January 1. Many sites still quote last quarter’s number; this page tracks the current one.`,
+8.06% for the quarter beginning July 1, 2026. The rate in effect when judgment is obtained applies first,
+then the judgment adjusts to the CFO rate in effect each January 1 until paid. This page tracks the official
+quarterly table instead of leaving last quarter’s number in place.`,
+    postDetails: {
+      scope: 'The headline follows the general statutory schedule in Fla. Stat. §55.03. The section expressly leaves an interest rate established by written contract or obligation unaffected. It also gives separate annual-adjustment treatment to clerk-entered judgments under §§55.141, 61.14, 938.29, and 938.30.',
+      accrual: 'Use the CFO rate in effect when the judgment is obtained. Under §55.03(3), that rate adjusts annually on each January 1 to the CFO rate then in effect until the judgment is paid. The four listed clerk-judgment categories do not receive that annual adjustment.',
+      compounding: 'The CFO publishes an annual percentage and official daily factors for each effective period. The page reports the reference schedule, but keeps a calculator disabled until historical day-count changes, partial payments, annual resets, and all supported judgment branches are deterministic.',
+      history: 'The dataset preserves all 78 distinct CFO periods from October 1, 1981 through July 1, 2026, including the quarterly schedule introduced in 2011. A weekly monitor parses the official HTML, verifies every overlapping rate and daily factor, and can append a plausible new quarter only after all integrity checks pass.',
+    },
   },
   'georgia-judgment-rate': {
     tagline: 'Georgia judgment interest — prime rate plus 3 points.',
@@ -180,6 +187,12 @@ Federal Reserve prime-rate change since the current statutory scheme began on Ju
     body: `Pennsylvania judgments carry interest at the state’s legal rate of 6% per year — 42 Pa.C.S. §8101 sets
 judgment interest at "the lawful rate," which 41 P.S. §202 fixes at 6%. It’s simple interest and has been 6%
 for decades. A judgment on a loan or contract can carry a higher lawful contract rate where the documents set one.`,
+    postDetails: {
+      scope: 'The 6% headline is the general lawful rate supplied by 42 Pa.C.S. §8101 and 41 P.S. §202. A judgment founded on an obligation with a different enforceable contract rate can require separate analysis.',
+      accrual: 'Section 8101 runs interest from the date of the verdict or award, or from the date of the judgment if it is not entered on a verdict or award, until satisfaction.',
+      compounding: 'The general statutory reference is treated as simple interest. StatuteRates keeps a general Pennsylvania calculator disabled until every day-count, payment-allocation, contract-rate, and judgment-type branch is verified.',
+      history: 'The current 6% legal-rate reference is recorded with official statutory sources. The page does not present a manufactured amendment history when earlier effective-date texts have not been independently digitized.',
+    },
   },
   'ohio-judgment-rate': {
     tagline: 'Ohio’s judgment rate, reset annually by the Tax Commissioner.',
@@ -224,9 +237,19 @@ on the State Cash Management Fund’s prior-year return. For 2026 it’s 4.5% on
 simple interest. A judgment on a contract carries the higher of the lawful contract rate or 6%.`,
   },
   'washington-judgment-rate': {
-    tagline: 'Washington judgment interest — 12% general, 9% consumer, prime+2% tort.',
+    tagline: 'Washington’s claim-specific judgment rates under RCW 4.56.110.',
     q: 'What is the current Washington post-judgment interest rate?',
-    body: `Since a 2019 amendment to RCW 4.56.110, Washington sets judgment interest by claim type: general money judgments carry the statutory maximum (currently 12%), consumer-debt judgments 9%, and tort judgments the federal prime rate + 2% (currently 8.75%); contract judgments carry the contract’s own rate. It’s simple interest.`,
+    body: `RCW 4.56.110 does not set one Washington rate for every judgment. General “all other” money judgments
+use the RCW 19.52.020 maximum rate (currently 12%); unpaid consumer-debt judgments use 9%; qualifying
+private student-loan and non-public-agency tort judgments use the Federal Reserve prime rate from the
+preceding month plus two points (currently 8.75%). Written contracts, unpaid child support, and
+public-agency tort judgments follow separate branches.`,
+    postDetails: {
+      scope: 'RCW 4.56.110 separates written contracts, unpaid child support, public-agency torts, other torts, private student-loan debt, consumer debt, and all remaining judgments. A contract rate must be stated in the judgment; child-support judgments use 12%; public-agency torts use a separate 26-week Treasury-bill formula.',
+      accrual: 'The statute generally runs interest from entry of judgment. For specified verdicts later entered, affirmed, or reinstated on review, interest on the judgment or affirmed portion dates back to the verdict date.',
+      compounding: 'StatuteRates keeps the Washington payoff calculator disabled because the page models several rate branches but not every day-count, compounding, appellate, payment-allocation, and historical benchmark input needed for a deterministic result.',
+      history: 'The current page records the major §4.56.110 branches and their present references. A complete historical schedule would require separate prime, Treasury-bill, contract, consumer, and statutory-maximum timelines, so missing branch histories are not collapsed into one misleading series.',
+    },
   },
   'arizona-judgment-rate': {
     tagline: 'Arizona judgment interest — lesser of 10% or prime + 1.',
@@ -254,9 +277,15 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     body: "Alabama money judgments carry a fixed statutory rate of 7.5% per year under Ala. Code § 8-8-10(a), as simple interest. For a judgment \"based upon a contract action,\" interest runs \"at the same rate of interest as stated in the contract\" (the contract rate governs, not…",
   },
   "alaska-judgment-rate": {
-    tagline: "Alaska judgment interest — a formula rate, reset twice a year.",
+    tagline: "Alaska’s annual AS 09.30.070 judgment rate, fixed at entry.",
     q: "What is the current Alaska post-judgment interest rate?",
-    body: "Alaska post-judgment interest is currently 6.75% — a statutory formula rate under Alaska Stat. 09.30.070(a) that resets twice a year. A judgment founded on a written contract that specifies an interest rate (not exceeding the legal maximum) bears the contract rate if that rate is…",
+    body: "For judgments entered in 2026, Alaska’s general pre- and post-judgment interest rate is 6.75% under AS 09.30.070(a). The formula is three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A contract or another statute can supply a different rate.",
+    postDetails: {
+      scope: "The 6.75% headline is the general AS 09.30.070(a) path for a judgment entered in 2026. Use a contract rate when the contract controls, or the rate in another applicable statute; Alaska Courts lists child support, bank liquidation, eminent domain, and estate claims as examples of separate statutes.",
+      accrual: "Alaska Courts states that post-judgment interest begins on the date the judge signs the judgment. The annual rate selected for that judgment does not change while an unpaid balance or payment plan continues into later years.",
+      compounding: "The official rate table and rate-lock rule are recorded, but every day-count, compounding, partial-payment, contract, and special-statute branch is not yet modeled to calculator-grade certainty, so the Alaska calculator remains disabled.",
+      history: "Official Alaska Court form ADM-505 publishes prior annual rates from August 7, 1997 through 2026 and describes an older 10.5% transition rule. The current dataset does not yet present that PDF table as structured history; it will not infer missing years from a later rate.",
+    },
   },
   "arkansas-judgment-rate": {
     tagline: "Arkansas judgment interest — a formula rate, reset periodically.",
@@ -264,9 +293,15 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     body: "Arkansas post-judgment interest is currently 5.75% — a statutory formula rate under Ark. Code Ann. § 16-65-114(a) that resets periodically. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current…",
   },
   "connecticut-judgment-rate": {
-    tagline: "Connecticut’s statutory judgment interest rate.",
+    tagline: "Connecticut’s branching judgment-interest rules and 10% ceiling.",
     q: "What is the current Connecticut post-judgment interest rate?",
-    body: "Connecticut money judgments carry a fixed statutory rate of 10% per year under Conn. Gen. Stat. §37-3a, as simple interest. §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20…",
+    body: "Connecticut does not apply one automatic 10% rate to every judgment. Under Conn. Gen. Stat. §37-3a, a court may award up to 10% per year as damages for detention of money; qualifying hospital-service debt is capped at 5% and remains discretionary. Section 37-3b separately requires 10% in covered negligence actions, while §37-3c uses a Treasury-linked condemnation rule.",
+    postDetails: {
+      scope: "Section 37-3a supplies a discretionary rate of up to 10% for qualifying detention-of-money claims and a 5% cap for hospital-service debt. Section 37-3b governs covered negligence judgments. Section 37-3c governs condemnation awards, and §52-192a can create another offer-of-compromise path.",
+      accrual: "For a negligence cause of action arising on or after May 27, 1997, §37-3b computes interest from the earlier of 20 days after judgment or 90 days after verdict. A plaintiff’s own postverdict motion or appeal can toll interest, subject to the statute’s response exception.",
+      compounding: "Because entitlement, start date, percentage, tolling, claim type, and the condemnation calculation differ by branch, StatuteRates treats 10% as a ceiling/reference—not a universal calculator input—and keeps the Connecticut payoff calculator disabled.",
+      history: "The page records the present branch structure from the official Connecticut General Assembly text. It does not manufacture a single historical series by merging discretionary, negligence, hospital, condemnation, and offer-of-compromise rules.",
+    },
   },
   "delaware-judgment-rate": {
     tagline: "Delaware judgment interest — a formula rate, reset twice a year.",
@@ -315,9 +350,15 @@ the judgment is entered — currently 8.75%, as simple interest.`,
     body: "Louisiana post-judgment interest is currently 7.5% — a statutory formula rate under La. R.S. 13:4202(B) that resets each year. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. 13:4203 provides interest attaches from the date of judicial…",
   },
   "maryland-judgment-rate": {
-    tagline: "Maryland’s statutory judgment interest rate.",
+    tagline: "Maryland’s general 10% judgment rate and statutory exceptions.",
     q: "What is the current Maryland post-judgment interest rate?",
-    body: "Maryland money judgments carry a fixed statutory rate of 10% per year under Md. Code, Courts & Judicial Proceedings Section 11-107(a), as simple interest. Under the \"except as provided in Section 11-106\" clause, a money judgment on a contract for a loan of money carries interest at the RATE CHARGED IN…",
+    body: "Maryland’s general judgment interest rate is 10% per year under Md. Code, Courts and Judicial Proceedings §11-107(a). Residential-rent judgments use 6%, and delinquent property-tax judgments use the greater of 10% or the combined statutory interest-and-penalty rates. Section 11-106 supplies a separate rule for qualifying contracts for the loan of money.",
+    postDetails: {
+      scope: "The 10% headline is the general §11-107(a) rate. Subsection (b) sets 6% for a money judgment for residential rent. Subsection (c) sets delinquent real- or personal-property tax judgments at the greater of 10% or the combined Tax–Property Article interest and penalty rates.",
+      accrual: "For a qualifying action arising from a contract for the loan of money, §11-106 generally applies the contract rate to unpaid principal until the contract’s originally scheduled maturity. Mortgage and deed-of-trust loans are excluded, and student loans have an additional statutory caveat.",
+      compounding: "The statutory percentages and major branches are recorded, but the dataset does not yet model every day-count, compounding, maturity, payment-allocation, tax, rent, and loan-contract rule needed for a dependable Maryland calculator.",
+      history: "The current statutory branch structure is recorded from the official Maryland General Assembly text. StatuteRates does not invent a historical timeline from the present codification when amendment-effective dates have not been independently digitized.",
+    },
   },
   "minnesota-judgment-rate": {
     tagline: "Minnesota judgment interest — a formula rate, reset each year.",
@@ -370,9 +411,15 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     body: "North Dakota post-judgment interest is currently 10% — a statutory formula rate under N.D.C.C. § 28-20-34 that resets each year. Contract rate governs first — if the original instrument on which the action was based specifies an interest rate, judgment interest accrues at THAT…",
   },
   "oklahoma-judgment-rate": {
-    tagline: "Oklahoma judgment interest — a formula rate, reset each year.",
+    tagline: "Oklahoma’s annual 12 O.S. § 727.1 post-judgment rate.",
     q: "What is the current Oklahoma post-judgment interest rate?",
-    body: "Oklahoma post-judgment interest is currently 8.75% — a statutory formula rate under 12 O.S. Sec. 727.1 that resets each year. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Treasury Bill rate of the preceding calendar year,…",
+    body: "For judgments governed by 12 O.S. § 727.1, Oklahoma’s 2026 post-judgment interest rate is 8.75% per year. The annual post-judgment formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year, plus two percentage points. Oklahoma uses a different formula for qualifying prejudgment interest, and separate laws can govern other judgment categories.",
+    postDetails: {
+      scope: "The 8.75% headline is the 2026 § 727.1 general post-judgment reference. The statute contains distinct prejudgment provisions and does not replace a different rate supplied by another controlling law or judgment category.",
+      accrual: "The formula is selected by calendar year: the first Wall Street Journal prime rate published for that year plus two percentage points. Confirm the rate for the judgment’s applicable year rather than applying the latest rate automatically to an older judgment.",
+      compounding: "StatuteRates keeps the Oklahoma calculator disabled because the current data does not yet model every covered judgment branch, day-count convention, compounding treatment, and partial-payment rule at calculator-grade certainty.",
+      history: "The page records the current verified annual reference and cites the controlling Oklahoma authority. Historical annual certifications are the next data-depth target; no missing years are inferred from market data.",
+    },
   },
   "oregon-judgment-rate": {
     tagline: "Oregon’s statutory judgment interest rate.",
@@ -395,9 +442,15 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     body: "South Dakota money judgments carry a fixed statutory rate of 10% per year under SDCL § 54-3-5.1, as simple interest. Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)…",
   },
   "utah-judgment-rate": {
-    tagline: "Utah judgment interest — a formula rate, reset each year.",
+    tagline: "Utah’s official annual judgment rate and 1993–present court history.",
     q: "What is the current Utah post-judgment interest rate?",
-    body: "Utah post-judgment interest is currently 5.51% — a statutory formula rate under Utah Code Ann. Sec. 15-1-4 that resets each year. Contract judgments (Sec. 15-1-4(2)(a)): a judgment rendered on a lawful contract conforms to the contract and bears the interest rate agreed by the…",
+    body: "Utah State Courts publishes a 5.51% general civil and criminal post-judgment rate for 2026 under Utah Code §15-1-4. It equals the federal post-judgment rate on January 1, 2026 (3.51%) plus two percentage points. A qualifying judgment under $10,000 involving the purchase of goods or services uses 13.51% instead, while a lawful contract can supply its agreed rate.",
+    postDetails: {
+      scope: "The 5.51% headline applies to the general civil and criminal judgment branch unless another rate is specified. Section 15-1-4 separately addresses lawful contract judgments and qualifying judgments under $10,000 involving goods or services; the latter is 13.51% for 2026.",
+      accrual: "The applicable annual rate is selected by the calendar year in which judgment is entered. Utah Courts’ renewal guidance instructs filers to use the post-judgment rate in effect when the judgment was entered for the life of that judgment.",
+      compounding: "The official annual tables establish the percentage and major branches, but the dataset does not yet have calculator-grade day-count, compounding, partial-payment, and renewal mechanics for every Utah judgment. The calculator therefore remains safely disabled.",
+      history: "The dataset now preserves every annual rate in the official Utah Courts table from 1993 through 2026, including the court’s original display precision. The weekly pipeline checks both the current and historic court tables and can append a new year only after overlapping values and the published formulas reconcile.",
+    },
   },
   "vermont-judgment-rate": {
     tagline: "Vermont’s statutory judgment interest rate.",
@@ -410,9 +463,15 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     body: "West Virginia post-judgment interest is currently 6.25% — a statutory formula rate under W. Va. Code § 56-6-31 that resets twice a year. Formula and rate apply to both (unified by 2017 amendment eff. Jan 1, 2018) — pre-judgment keyed to the rate on Jan 2 of the year the CAUSE OF ACTION…",
   },
   "wisconsin-judgment-rate": {
-    tagline: "Wisconsin judgment interest — a formula rate, reset twice a year.",
+    tagline: "Wisconsin’s § 815.05(8) judgment rate, selected by entry date.",
     q: "What is the current Wisconsin post-judgment interest rate?",
-    body: "Wisconsin post-judgment interest is currently 7.75% — a statutory formula rate under Wis. Stat. § 815.05(8) that resets twice a year. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which…",
+    body: "For judgments entered from July 1 through December 31, 2026, Wisconsin’s post-judgment interest rate is 7.75% per year under Wis. Stat. § 815.05(8). The rate is one percentage point above the Federal Reserve H.15 bank prime rate in effect on the January 1 or July 1 immediately preceding entry of judgment, and it runs from entry until the judgment is paid.",
+    postDetails: {
+      scope: "Section 815.05(8) governs interest after entry of a Wisconsin judgment. Prejudgment interest on a verdict, decision, or report is addressed separately in Wis. Stat. § 814.04(4), so the 7.75% post-judgment headline should not be treated as a universal prejudgment rate.",
+      accrual: "The judgment-entry date selects the controlling half-year benchmark: use the H.15 bank prime rate in effect on the immediately preceding January 1 or July 1, then add one percentage point. Interest runs from entry until the judgment is paid.",
+      compounding: "StatuteRates does not enable a Wisconsin payoff calculator yet because the dataset has not verified every day-count, compounding, partial-payment, and judgment-branch rule needed for a dependable result.",
+      history: "The current half-year reference is recorded with its statute and official source. A complete historical half-year schedule remains a future data-depth project; missing periods are not backfilled from assumptions.",
+    },
   },
   "wyoming-judgment-rate": {
     tagline: "Wyoming’s statutory judgment interest rate.",
@@ -513,17 +572,17 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     compound: "Compound — compounded annually under both 5-12-102 (8%) and 13-21-101 (9%, compounded annually for actions filed on/after 7/1/1979).",
   },
   "connecticut-prejudgment-rate": {
-    tagline: "Connecticut prejudgment interest is discretionary — here is the rate courts apply.",
+    tagline: "Connecticut prejudgment interest is discretionary and capped at 10%.",
     q: "What is the Connecticut prejudgment interest rate?",
-    body: "In Connecticut, prejudgment interest is discretionary: a court may award it, and when it does the rate is 10% per year under Conn. Gen. Stat. § 37-3a(a). § 37-3a prejudgment interest is available ONLY as \"damages for the detention of money after it becomes payable\" — i.e., a LIQUIDATED or readily ascertainable sum that was wrongfully…",
+    body: "Under Conn. Gen. Stat. §37-3a, a court may award prejudgment interest of up to 10% per year as damages for detaining money after it becomes payable. It is not an automatic 10% award. For debt arising from hospital services, both pre- and post-judgment interest are capped at 5% and the award remains discretionary.",
     prejudgment: true,
-    kind: "discretionary-with-default",
-    kindLabel: "Discretionary",
+    kind: "discretionary-with-cap",
+    kindLabel: "Discretionary, capped",
     postSlug: "connecticut-judgment-rate",
-    appliesShort: "§ 37-3a prejudgment interest is available ONLY as \"damages for the detention of money after it becomes payable\" — i.e., a LIQUIDATED or readily ascertainable sum that was wrongfully…",
+    appliesShort: "Available only when the court finds a qualifying detention of money after it became payable.",
     applies: "§ 37-3a prejudgment interest is available ONLY as \"damages for the detention of money after it becomes payable\" — i.e., a LIQUIDATED or readily ascertainable sum that was wrongfully withheld after it became due (breach of contract, unpaid debts, wrongfully retained deposits/payments, ascertainable amounts).",
     accrual: "Interest runs from the date the money became due and payable / the date it was wrongfully withheld (i.e., the date the court determines the money was due), through the date of judgment. Not from date of filing.",
-    compound: "Simple. The statute does not specify compounding; Connecticut Supreme Court/appellate case law (e.g., Sears, Roebuck & Co. v. Board of Tax Review; Foley v. Huntington Co.) treats § 37-3a interest as simple interest absent a contractual…",
+    compound: "The statute states an annual ceiling but does not itself supply a universal compounding and payment-allocation method. StatuteRates therefore keeps this discretionary branch out of the calculator.",
   },
   "delaware-prejudgment-rate": {
     tagline: "Delaware prejudgment interest — a formula rate, reset periodically.",

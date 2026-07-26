@@ -65,6 +65,23 @@ import {
   MAINE_PREJUDGMENT_STATUTE_URL,
 } from './maine-interest-history.mjs';
 import {
+  buildUtahOfficialHistory,
+  UTAH_HISTORY_VERIFIED_AT,
+  UTAH_JUDGMENT_CURRENT_URL,
+  UTAH_JUDGMENT_HISTORY_URL,
+  UTAH_JUDGMENT_STATUTE_URL,
+  UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  UTAH_OFFICIAL_HISTORY_START,
+} from './utah-judgment-history.mjs';
+import {
+  buildFloridaOfficialHistory,
+  FLORIDA_CFO_RATES_URL,
+  FLORIDA_HISTORY_VERIFIED_AT,
+  FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  FLORIDA_OFFICIAL_HISTORY_START,
+  FLORIDA_STATUTE_55_03_URL,
+} from './florida-judgment-history.mjs';
+import {
   buildGeorgiaPrimeHistory,
   GEORGIA_CODE_PORTAL_URL,
   GEORGIA_CURRENT_SCHEME_START,
@@ -275,6 +292,50 @@ const MAINE_PREJUDGMENT_CALCULATION = {
   renderer_supported: false,
   rule_verified_at: MAINE_HISTORY_VERIFIED_AT,
 };
+const UTAH_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official 1993-present annual table, current formula branches, and rate-at-entry rule are modeled, but day count, compounding, partial-payment allocation, renewal treatment, and all contract or special-judgment branches are not deterministic.',
+  rate_behavior: 'fixed_at_entry',
+  rate_schedule: 'annual_federal_postjudgment_rate_on_january_1_plus_2',
+  compounding: 'not_verified_for_calculator',
+  day_count: 'not_specified_in_section_15_1_4',
+  history_start: UTAH_OFFICIAL_HISTORY_START,
+  curated_history_complete_through: UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  current_period_monitored: true,
+  branches_complete: false,
+  accrual_rule_verified: true,
+  renderer_supported: false,
+  rule_verified_at: UTAH_HISTORY_VERIFIED_AT,
+  branches: {
+    general: 'Utah Code §15-1-4(3)(a): January 1 federal post-judgment rate plus two percentage points',
+    contract: '§15-1-4(2)(a): a lawful contract judgment conforms to the contract and agreed interest rate',
+    goods_services_under_10000: '§15-1-4(4): qualifying judgments under $10,000 involving goods or services use the January 1 federal rate plus ten points',
+    rate_lock: 'Utah Courts instructs renewal filers to use the rate in effect when the judgment was entered for the life of that judgment',
+  },
+};
+const FLORIDA_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official 1981-present CFO table, quarterly schedule, judgment-date selection, annual January 1 adjustment, written-contract rule, and listed clerk-judgment exceptions are modeled. The renderer remains disabled until day count, partial-payment allocation, the transition rules across the full history, and every supported judgment branch are deterministic.',
+  rate_behavior: 'quarterly_rate_at_entry_then_annual_january_1_adjustment',
+  rate_schedule: 'official_cfo_quarterly_table',
+  compounding: 'simple',
+  day_count: 'official_daily_factors_vary_by_calendar_year_and_historical_period',
+  history_start: FLORIDA_OFFICIAL_HISTORY_START,
+  curated_history_complete_through: FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  current_period_monitored: true,
+  branches_complete: false,
+  accrual_rule_verified: true,
+  renderer_supported: false,
+  rule_verified_at: FLORIDA_HISTORY_VERIFIED_AT,
+  branches: {
+    general: 'Fla. Stat. §55.03(1): the CFO sets a quarterly annual rate from the preceding 12-month New York Fed discount-rate average plus four percentage points',
+    rate_adjustment: '§55.03(3): use the rate in effect when judgment is obtained, then adjust annually each January 1 until paid',
+    written_contract: '§55.03(1): the statutory schedule does not affect an interest rate established by written contract or obligation',
+    clerk_judgments: '§55.03(3): judgments entered by the clerk under §§55.141, 61.14, 938.29, and 938.30 do not receive the annual January 1 adjustment',
+  },
+};
 const GEORGIA_POSTJUDGMENT_CALCULATION = {
   status: 'reference_only',
   source_tier: 'official_secondary',
@@ -332,9 +393,11 @@ const STATES_2 = [
     verifiedOn: '2026-07-19', confidence: 'high', method: 'statute-variable-official-table', calculation: TEXAS_POSTJUDGMENT_CALCULATION,
     notes: 'Texas OCCC published 6.75% for money judgments rendered during July 2026. Under Texas Finance Code §§304.003, 304.005, and 304.006, the general noncontract rate is fixed at judgment, accrues from rendition through satisfaction (subject to the appeal-extension exception), and compounds annually. An interest-bearing contract instead uses §304.002 (the lesser of its rate or 18%); specified tax and child-support interest are outside Chapter 304. Verify applicability; not legal advice.' },
   { code: 'FL', name: 'Florida', slug: 'florida-judgment-rate', value: 8.06, kind: 'variable', asof: '2026-07-01',
-    statute: 'Fla. Stat. §55.03', srcId: 'fl-cfo', srcName: 'Florida judgment interest rate (Fla. Stat. §55.03)',
-    publisher: 'Florida Chief Financial Officer (official)', url: 'https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates',
-    notes: 'Post-judgment interest on judgments and decrees, set quarterly by the Florida Chief Financial Officer under Fla. Stat. §55.03 (12-month average of the New York Fed discount/primary-credit rate + 4 percentage points) — currently 8.06% for the quarter beginning July 1, 2026. Simple interest; a judgment’s rate re-adjusts each January 1 to the then-current CFO rate (§55.03(3)). Verify the current quarter at myfloridacfo.com; not legal advice.' },
+    statute: 'Fla. Stat. §55.03', srcId: 'fl-cfo', srcName: 'Florida judgment interest current and historical rates',
+    publisher: 'Florida Department of Financial Services, Chief Financial Officer (official)', url: FLORIDA_CFO_RATES_URL,
+    verifiedOn: '2026-07-26', confidence: 'high', method: 'statute-variable-official-table', calculation: FLORIDA_POSTJUDGMENT_CALCULATION,
+    metadata: { official_statute_url: FLORIDA_STATUTE_55_03_URL, official_history_start: FLORIDA_OFFICIAL_HISTORY_START },
+    notes: 'The Florida CFO publishes 8.06% for the quarter beginning July 1, 2026 under Fla. Stat. §55.03. The statutory rate is selected when judgment is obtained and then adjusts each January 1 to the CFO rate then in effect until paid. A written contract or obligation can establish its own rate, and clerk-entered judgments under §§55.141, 61.14, 938.29, and 938.30 do not receive the annual adjustment. The official table also supplies daily factors and every distinct period since October 1, 1981. Verify the correct branch; not legal advice.' },
   { code: 'GA', name: 'Georgia', slug: 'georgia-judgment-rate', value: 9.75, kind: 'variable', asof: '2025-12-11',
     statute: 'O.C.G.A. §7-4-12', srcId: 'ga-code', srcName: 'Georgia judgment interest (O.C.G.A. §7-4-12)',
     publisher: 'Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED', url: GEORGIA_CODE_PORTAL_URL,
@@ -416,12 +479,12 @@ for (const st of STATES_2) {
 const STATES_3 = [
   { code: "AL", name: "Alabama", slug: "alabama-judgment-rate", value: 7.5, value_text: "7.5%", kind: "fixed", asof: "2026-07-09", statute: "Ala. Code § 8-8-10(a)", srcId: "al-jud", srcName: "Alabama judgment interest (Ala. Code § 8-8-10(a))", publisher: "Alabama — alison.legislature.state.al.us", url: "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
     notes: "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). For a judgment \"based upon a contract action,\" interest runs \"at the same rate of interest as stated in the contract\" (the contract rate governs, not… Verify against the statute; not legal advice." },
-  { code: "AK", name: "Alaska", slug: "alaska-judgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", asof: "2026-01-01", statute: "Alaska Stat. 09.30.070(a)", srcId: "ak-jud", srcName: "Alaska judgment interest (Alaska Stat. 09.30.070(a))", publisher: "Alaska — public.courts.alaska.gov", url: "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-    notes: "Post-judgment interest under Alaska Stat. 09.30.070(a), currently 6.75% (as of January 1, 2026). Three (3) percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered. The 12th FRD… Simple interest. A judgment founded on a written contract that specifies an interest rate (not exceeding the legal maximum) bears the contract rate if that rate is… Verify the current value at public.courts.alaska.gov; not legal advice." },
+  { code: "AK", name: "Alaska", slug: "alaska-judgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "Alaska Stat. 09.30.070(a)", srcId: "ak-jud", srcName: "Alaska pre- and post-judgment interest rate table (ADM-505)", publisher: "Alaska Court System (official)", url: "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf", confidence: "high",
+    notes: "Alaska Court System form ADM-505 publishes 6.75% for judgments entered in 2026 under AS 09.30.070(a): three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A controlling contract or another statute can set a different rate. The selected annual rate stays fixed until the judgment is paid, and post-judgment interest begins when the judge signs the judgment. Verify the correct branch; not legal advice." },
   { code: "AR", name: "Arkansas", slug: "arkansas-judgment-rate", value: 5.75, value_text: "5.75%", kind: "variable", asof: "2026-07-08", statute: "Ark. Code Ann. § 16-65-114(a)", srcId: "ar-jud", srcName: "Arkansas judgment interest (Ark. Code Ann. § 16-65-114(a))", publisher: "Arkansas — federalreserve.gov", url: "https://www.federalreserve.gov/releases/h15/",
     notes: "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. The primary credit rate… Simple interest. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current… Verify the current value at federalreserve.gov; not legal advice." },
-  { code: "CT", name: "Connecticut", slug: "connecticut-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-01-01", statute: "Conn. Gen. Stat. §37-3a", srcId: "ct-jud", srcName: "Connecticut judgment interest (Conn. Gen. Stat. §37-3a)", publisher: "Connecticut — cga.ct.gov", url: "https://www.cga.ct.gov/current/pub/chap_673.htm",
-    notes: "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). §37-3a covers both prejudgment and postjudgment interest as damages for detention of money; §37-3b postjudgment interest runs from the earlier of 20… Verify against the statute; not legal advice." },
+  { code: "CT", name: "Connecticut", slug: "connecticut-judgment-rate", value: 10, value_text: "up to 10%", kind: "variable", asof: "1997-05-27", verifiedOn: "2026-07-26", statute: "Conn. Gen. Stat. §§37-3a–37-3c", srcId: "ct-jud", srcName: "Connecticut judgment interest branches (§§37-3a–37-3c)", publisher: "Connecticut General Assembly (official)", url: "https://www.cga.ct.gov/current/pub/chap_673.htm", confidence: "high", method: "statute-branching",
+    notes: "Connecticut does not set one automatic percentage for every judgment. Section 37-3a permits up to 10% as damages for qualifying detention of money and caps hospital-service debt at 5%, with awards discretionary. For covered negligence causes arising on or after May 27, 1997, §37-3b requires 10% from the earlier of 20 days after judgment or 90 days after verdict, subject to plaintiff-motion and appeal tolling. Section 37-3c uses a separate Treasury-linked condemnation formula. Verify the applicable branch; not legal advice." },
   { code: "DE", name: "Delaware", slug: "delaware-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-07-08", statute: "6 Del. C. § 2301", srcId: "de-jud", srcName: "Delaware judgment interest (6 Del. C. § 2301)", publisher: "Delaware — delcode.delaware.gov", url: "https://delcode.delaware.gov/title6/c023/",
     notes: "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Legal/post-judgment rate = Federal Reserve discount rate (in practice the Fed's \"primary credit rate,\" which replaced the old adjustment-credit discount rate in Jan 2003) + 5… Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the… Verify the current value at delcode.delaware.gov; not legal advice." },
   { code: "DC", name: "District of Columbia", slug: "dc-judgment-rate", value: 5, value_text: "5%", kind: "variable", asof: "2026-07-01", statute: "D.C. Code § 28-3302(c)", srcId: "dc-jud", srcName: "District of Columbia judgment interest (D.C. Code § 28-3302(c))", publisher: "District of Columbia — code.dccouncil.gov", url: "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
@@ -440,7 +503,7 @@ const STATES_3 = [
   { code: "LA", name: "Louisiana", slug: "louisiana-judgment-rate", value: 7.5, value_text: "7.5%", kind: "variable", asof: "2026-01-01", statute: "La. R.S. 13:4202(B)", srcId: "la-jud", srcName: "Louisiana judgment interest (La. R.S. 13:4202(B))", publisher: "Louisiana — ofi.la.gov", url: "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
     notes: "Post-judgment interest under La. R.S. 13:4202(B), currently 7.5% (as of January 1, 2026). . Formula: Federal Reserve Board of Governors approved \"discount rate\" (published daily in the Wall Street Journal), ascertained by the Commissioner on the first business day… Simple interest. Louisiana uses one unified \"judicial interest\" (= \"legal interest\") rate; La. R.S. 13:4203 provides interest attaches from the date of judicial… Verify the current value at ofi.la.gov; not legal advice." },
   { code: "MD", name: "Maryland", slug: "maryland-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "Md. Code, Courts & Judicial Proceedings Section 11-107(a)", srcId: "md-jud", srcName: "Maryland judgment interest (Md. Code, Courts & Judicial Proceedings Section 11-107(a))", publisher: "Maryland — mgaleg.maryland.gov", url: "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
-    notes: "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Under the \"except as provided in Section 11-106\" clause, a money judgment on a contract for a loan of money carries interest at the RATE CHARGED IN… Verify against the statute; not legal advice." },
+    notes: "Maryland Courts and Judicial Proceedings §11-107 sets a 10% general judgment rate, a 6% rate for residential-rent judgments, and a delinquent-property-tax rate equal to the greater of 10% or the combined Tax–Property interest and penalty rates. Section 11-106 separately applies the contract rate to unpaid principal for qualifying loan-of-money judgments until originally scheduled maturity, with mortgage, deed-of-trust, and student-loan caveats. Verify the correct branch; not legal advice." },
   { code: "MN", name: "Minnesota", slug: "minnesota-judgment-rate", value: 4, value_text: "4% / 10%", kind: "variable", asof: "2026-01-01", statute: "Minn. Stat. § 549.09, subd. 1(c)", srcId: "mn-jud", srcName: "Minnesota judgment interest (Minn. Stat. § 549.09, subd. 1(c))", publisher: "Minnesota — revisor.mn.gov", url: "https://www.revisor.mn.gov/court_rules/rule/msinte/",
     notes: "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026). , set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Rate = the secondary market yield / one-year constant maturity… Simple interest. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the… Verify the current value at revisor.mn.gov; not legal advice." },
   { code: "MO", name: "Missouri", slug: "missouri-judgment-rate", value: 9, value_text: "9% / 8.75%", kind: "variable", asof: "2026-07-09", statute: "Mo. Rev. Stat. §408.040", srcId: "mo-jud", srcName: "Missouri judgment interest (Mo. Rev. Stat. §408.040)", publisher: "Missouri — revisor.mo.gov", url: "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
@@ -468,8 +531,9 @@ const STATES_3 = [
     notes: "Post-judgment interest under S.C. Code Ann. § 34-31-20(B), currently 10.75% (as of January 15, 2026). Legal rate = (prime rate as listed in the first edition of the Wall Street Journal published for the calendar year for which damages are awarded) + 4 percentage points,… Compounded annually. This is the rate on money decrees and judgments under § 34-31-20(B), applicable to all judgments entered on or after July 1, 2005. TRANSITIONAL: for… Verify the current value at scstatehouse.gov; not legal advice." },
   { code: "SD", name: "South Dakota", slug: "south-dakota-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "SDCL § 54-3-5.1", srcId: "sd-jud", srcName: "South Dakota judgment interest (SDCL § 54-3-5.1)", publisher: "South Dakota — sdlegislature.gov", url: "https://sdlegislature.gov/Statutes/54-3-5.1",
     notes: "Post-judgment interest under SDCL § 54-3-5.1 — 10% per year, fixed by statute (simple interest). Post-judgment default is Category B = 10% under SDCL 54-3-5.1. EXCLUSIONS from that section (these are NOT at the flat Category B judgment rate): (1)… Verify against the statute; not legal advice." },
-  { code: "UT", name: "Utah", slug: "utah-judgment-rate", value: 5.51, value_text: "5.51%", kind: "variable", asof: "2026-01-01", statute: "Utah Code Ann. Sec. 15-1-4", srcId: "ut-jud", srcName: "Utah judgment interest (Utah Code Ann. Sec. 15-1-4)", publisher: "Utah — utcourts.gov", url: "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
-    notes: "Post-judgment interest under Utah Code Ann. Sec. 15-1-4, currently 5.51% (as of January 1, 2026). (federal postjudgment interest rate as of January 1 of the year the judgment is entered) + 2%. The \"federal postjudgment interest rate\" is defined by Sec. 15-1-4(1) as the… Simple interest. Contract judgments (Sec. 15-1-4(2)(a)): a judgment rendered on a lawful contract conforms to the contract and bears the interest rate agreed by the… Verify the current value at utcourts.gov; not legal advice." },
+  { code: "UT", name: "Utah", slug: "utah-judgment-rate", value: 5.51, value_text: "5.51%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "Utah Code §15-1-4", srcId: "ut-jud", srcName: "Utah post-judgment interest current and historical tables", publisher: "Utah State Courts (official)", url: UTAH_JUDGMENT_CURRENT_URL, confidence: "high", method: "statute-variable-official-table", calculation: UTAH_POSTJUDGMENT_CALCULATION,
+    metadata: { official_history_url: UTAH_JUDGMENT_HISTORY_URL, official_statute_url: UTAH_JUDGMENT_STATUTE_URL },
+    notes: "Utah State Courts publishes a 5.51% general civil and criminal judgment rate for 2026 under Utah Code §15-1-4: the federal post-judgment rate on January 1 (3.51%) plus two percentage points. A qualifying judgment under $10,000 involving goods or services instead uses 13.51% (federal rate plus ten points), while a lawful contract can supply its agreed rate. The applicable annual rate is selected when judgment is entered and remains attached to that judgment. Verify the correct branch; not legal advice." },
   { code: "VT", name: "Vermont", slug: "vermont-judgment-rate", value: 12, value_text: "12%", kind: "fixed", asof: "2026-07-09", statute: "9 V.S.A. § 41a(a)", srcId: "vt-jud", srcName: "Vermont judgment interest (9 V.S.A. § 41a(a))", publisher: "Vermont — legislature.vermont.gov", url: "https://legislature.vermont.gov/statutes/section/09/004/00041a",
     notes: "Post-judgment interest under 9 V.S.A. § 41a(a) — 12% per year, fixed by statute (simple interest). No pre- vs post-judgment split in the rate itself: Vermont applies the same 12% legal rate to prejudgment interest (as of right on… Verify against the statute; not legal advice." },
   { code: "WV", name: "West Virginia", slug: "west-virginia-judgment-rate", value: 6.25, value_text: "6.25%", kind: "variable", asof: "2026-01-01", statute: "W. Va. Code § 56-6-31", srcId: "wv-jud", srcName: "West Virginia judgment interest (W. Va. Code § 56-6-31)", publisher: "West Virginia — courtswv.gov", url: "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
@@ -508,8 +572,8 @@ const PREJUDG = [
     notes: "California has a DUAL prejudgment rate, both simple: 7% for tort and other non-contract claims (including personal injury) — the constitutional default legal rate (Cal. Const. art. XV §1; discretionary tort interest under Civ. Code §3288 also runs at this 7%); and 10% for breach of a contract that stipulates no rate (Civ. Code §3289(b)). Entitlement to interest on liquidated/certain damages is Civ. Code §3287. Verified against the statutes 2026-07-11. Not legal advice." },
   { code: "CO", name: "Colorado", slug: "colorado-prejudgment-rate", value: 8, value_text: "8% / 9%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "C.R.S. §5-12-102 (8% general); §13-21-101 (9% personal injury)", srcId: "co-prejud", srcName: "Colorado Revised Statutes, Titles 5 and 13", publisher: "Colorado General Assembly — Office of Legislative Legal Services (official)", url: "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download",
     notes: "Colorado has TWO prejudgment rates, both compounded annually: 8% for general/contract claims and money or property wrongfully withheld (C.R.S. §5-12-102(1)(b)), and 9% for personal-injury actions (C.R.S. §13-21-101, from the date suit was filed, for actions filed on/after July 1, 1979). §5-12-102 opens \"Except as provided in section 13-21-101,\" carving personal-injury cases out to the 9% rate. Verified against the statute text 2026-07-09. This is PREjudgment interest, separate from Colorado’s post-judgment rate. Not legal advice." },
-  { code: "CT", name: "Connecticut", slug: "connecticut-prejudgment-rate", value: 10, value_text: "10%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "Conn. Gen. Stat. § 37-3a(a)", srcId: "ct-prejud", srcName: "Connecticut prejudgment interest (Conn. Gen. Stat. § 37-3a(a))", publisher: "Connecticut — portal.ct.gov", url: "https://portal.ct.gov/wcc/statutes-and-regulations/do-not-use-related-statutes/2021-related-statutes/37-3a",
-    notes: "Prejudgment interest under Conn. Gen. Stat. § 37-3a(a) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Connecticut’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
+  { code: "CT", name: "Connecticut", slug: "connecticut-prejudgment-rate", value: 10, value_text: "up to 10%", kind: "discretionary-with-cap", method: "statute-discretionary-cap", confidence: "high", asof: "2026-07-09", verifiedOn: "2026-07-26", statute: "Conn. Gen. Stat. §37-3a", srcId: "ct-prejud", srcName: "Connecticut prejudgment interest (§37-3a)", publisher: "Connecticut General Assembly (official)", url: "https://www.cga.ct.gov/current/pub/chap_673.htm",
+    notes: "Connecticut General Statutes §37-3a permits a court to award prejudgment interest of up to 10% per year as damages for detention of money after it becomes payable; the percentage and award are discretionary rather than an automatic 10%. For debt arising from hospital services, both prejudgment and postjudgment interest are capped at 5% and remain discretionary. Verify entitlement and the court-selected rate; not legal advice." },
   { code: "DE", name: "Delaware", slug: "delaware-prejudgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "6 Del. C. § 2301(a)", srcId: "de-prejud", srcName: "Delaware prejudgment interest (6 Del. C. § 2301(a))", publisher: "Delaware — delcode.delaware.gov", url: "https://delcode.delaware.gov/title6/c023/",
     notes: "Prejudgment interest under 6 Del. C. § 2301(a) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Delaware’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at delcode.delaware.gov. Not legal advice." },
   { code: "FL", name: "Florida", slug: "florida-prejudgment-rate", value: 8.06, value_text: "8.06%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Fla. Stat. § 55.03", srcId: "fl-prejud", srcName: "Florida prejudgment interest (Fla. Stat. § 55.03)", publisher: "Florida — myfloridacfo.com", url: "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
@@ -684,6 +748,11 @@ const IA_PREJUDGMENT_ENTITY = {
 export function buildStateFixed({
   texasCurrent = null,
   nebraskaCurrent = null,
+  floridaCfoPoints = [],
+  floridaRetrievedAt = null,
+  utahCourtHistory = [],
+  utahCourtCurrent = null,
+  utahRetrievedAt = null,
   georgiaPrimeChanges = [],
   georgiaRetrievedAt = null,
   daily = [],
@@ -787,6 +856,26 @@ export function buildStateFixed({
       return monthly;
     }
 
+    if (f.entity.slug === 'florida-judgment-rate') {
+      const byDate = new Map(buildFloridaOfficialHistory().map((point) => [point.effective_date, point]));
+      for (const point of floridaCfoPoints) byDate.set(point.effective_date, point);
+      return [...byDate.values()]
+        .sort((a, b) => a.effective_date.localeCompare(b.effective_date))
+        .map((point) => ({
+          ...baseObservation,
+          value_numeric: point.value,
+          value_text: point.value_text,
+          effective_date: point.effective_date,
+          source_url: point.source_url,
+          retrieved_at: floridaRetrievedAt || source.retrieved_at,
+          confidence: 'high',
+          method: 'statute-variable-official-table',
+          notes: point.effective_date === f.effective_date
+            ? baseObservation.notes
+            : `Official Florida CFO judgment-interest rate for the period beginning ${point.effective_date}. The governing schedule and adjustment rules changed during this history; Fla. Stat. §55.03 also preserves rates established by written contract or obligation. Verify the law and branch applicable to the judgment and accrual period. Not legal advice.`,
+        }));
+    }
+
     if (f.entity.slug === 'nebraska-judgment-rate') {
       const history = buildNebraskaOfficialHistory().map((point) => ({
         ...baseObservation,
@@ -820,6 +909,34 @@ export function buildStateFixed({
           ? baseObservation.notes
           : 'The enrolled 2017 Kentucky Act shows the former 12% general judgment rate that applied before the 6% amendment took effect on June 29, 2017. KRS 360.040 contains separate child-support, written-obligation, and unliquidated-judgment branches. Verify the law applicable when the judgment was entered. Not legal advice.',
       }));
+    }
+
+    if (f.entity.slug === 'utah-judgment-rate') {
+      const byDate = new Map(buildUtahOfficialHistory().map((point) => [point.effective_date, point]));
+      for (const point of utahCourtHistory) byDate.set(point.effective_date, point);
+      if (utahCourtCurrent) byDate.set(utahCourtCurrent.effective_date, utahCourtCurrent);
+      return [...byDate.values()]
+        .sort((a, b) => a.effective_date.localeCompare(b.effective_date))
+        .map((point) => {
+          const currentDetails = utahCourtCurrent?.effective_date === point.effective_date
+            ? utahCourtCurrent
+            : null;
+          return {
+            ...baseObservation,
+            value_numeric: point.value,
+            value_text: point.value_text,
+            effective_date: point.effective_date,
+            source_url: point.effective_date === f.effective_date ? f.source_url : point.source_url,
+            retrieved_at: utahRetrievedAt || source.retrieved_at,
+            confidence: 'high',
+            method: 'statute-variable-official-table',
+            notes: point.effective_date === f.effective_date
+              ? baseObservation.notes
+              : currentDetails
+                ? `Utah State Courts publishes ${point.value_text} for general civil and criminal judgments entered in ${point.effective_date.slice(0, 4)}: its ${currentDetails.federal_rate.toFixed(2)}% January 1 federal rate plus two points. Qualifying under-$10,000 goods/services judgments use ${currentDetails.goods_services_under_10000_value_text}; lawful contract judgments can use the agreed rate. Not legal advice.`
+                : `Official Utah State Courts annual post-judgment interest rate for judgments entered in ${point.effective_date.slice(0, 4)}. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice.`,
+          };
+        });
     }
 
     if (f.entity.slug === 'maine-judgment-rate' || f.entity.slug === 'maine-prejudgment-rate') {

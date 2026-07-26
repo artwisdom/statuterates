@@ -72,7 +72,7 @@ export const GUIDES = [
     "dateModified": "2026-07-15",
     "title": "Prejudgment Interest: Rules, Rates, and How to Calculate It",
     "h1": "Prejudgment Interest, Explained",
-    "description": "Prejudgment interest compensates for the wait between a loss and judgment. Learn why it's limited to liquidated claims, how the rate is set, and when it accrues.",
+    "description": "Prejudgment interest covers the wait between a loss and judgment. Learn why it is limited to liquidated claims, how the rate is set, and when it accrues.",
     "intro_html": "<p>When a court finally enters judgment, the money at stake was often owed long before—sometimes years before. <strong>Prejudgment interest</strong> is how the law tries to close that gap: it compensates the winning party for the time value of money lost between the injury or breach and the day the court makes the award. In theory it is simple. In practice it is one of the trickiest numbers in a damages calculation, because whether it is available at all, at what rate, and from what date can turn on the type of claim, the wording of a statute, and even a judge's discretion.</p><p>This guide walks through what prejudgment interest is, why it is harder to pin down than post-judgment interest, the crucial line between liquidated and unliquidated damages, how rates are set (including the common split between a general rate and a separate tort rate), and when the clock starts running. For rates and recorded rules by jurisdiction, use our <a href=\"/prejudgment/\">prejudgment interest reference</a>. Confirm eligibility, accrual date, day count, and compounding before applying the arithmetic.</p>",
     "sections": [
       {
@@ -204,7 +204,7 @@ export const GUIDES = [
     "dateModified": "2026-07-15",
     "title": "How IRS Interest Rates Work (§6621 & §6622 Explained)",
     "h1": "How IRS Interest Rates Work Under §6621 and §6622",
-    "description": "A plain-English guide to IRS interest rates: how §6621 sets the federal short-term rate plus a category spread, quarterly resets, and daily compounding under §6622.",
+    "description": "How IRS interest works: §6621 adds a category spread to the federal short-term rate, resets quarterly, and compounds daily under §6622.",
     "intro_html": "<p>Interest is the quiet line on a tax notice. Penalties get the headlines, but the interest the IRS charges on a late or underpaid balance keeps accruing every single day until the account is paid in full — and it compounds. The good news is that the number is not arbitrary. It follows a formula written into the Internal Revenue Code, resets on a predictable calendar, and can be reconstructed to the penny once you know the rules.</p><p>This guide explains how IRS interest rates are built under <strong>IRC §6621</strong>, why they reset each quarter, and how <strong>§6622</strong> turns a stated annual rate into daily compounding. You will learn the five rate categories, the difference between what you owe and what the IRS pays you, and how to check the live figure. For the current number, see the <a href=\"/rates/irs-underpayment/\">IRS underpayment rate</a> page; to run your own math, use the <a href=\"/calculators/irs-interest/\">IRS interest calculator</a>.</p>",
     "sections": [
       {
@@ -336,7 +336,7 @@ export const GUIDES = [
     "dateModified": "2026-07-15",
     "title": "Statutory Interest Explained: Rates Set by Law vs Contract",
     "h1": "Statutory Interest: A Plain-English Guide",
-    "description": "Statutory interest is a rate set by law, not by your contract. Learn how it is determined for judgments, unpaid tax, and late payments across the US, UK, and EU.",
+    "description": "Statutory interest is set by law, not by contract. Learn how rates are determined for judgments, unpaid tax, and late payments across the US, UK, and EU.",
     "intro_html": "<p><strong>Statutory interest</strong> is interest whose rate is fixed by law rather than negotiated between two parties. It is the number that quietly governs what a court judgment grows by while it goes unpaid, what a tax authority adds to an overdue bill, and what a business can charge a customer who pays a commercial invoice late. Because it is set by legislatures and agencies — not by a contract you signed — it applies whether or not anyone ever bargained for it.</p><p>This guide explains the one distinction that matters most: a rate <em>set by law</em> versus a rate the <em>parties agreed</em>. You will learn where statutory interest shows up, how the actual percentage is determined (some rates are frozen into the statute, others float with a market benchmark), and how the rules differ across the United States, the United Kingdom, and the European Union. For any figure that changes over time, we point you to the live page that records it. StatuteRates keeps these numbers connected to cited sources — see our <a href=\"/methodology/\">methodology</a> for how.</p>",
     "sections": [
       {

@@ -22,14 +22,39 @@ const preSafe = STATE_CALCULATOR_RENDERER_READY
   && import.meta.env.ENABLE_STATE_CALCULATORS === 'true'
   && PREJUDGMENT_CALC_SAFE.includes(base) && isCalculatorReady(pre);
 const theName = base === 'dc' ? 'the District of Columbia' : name;
+const statuteLabel = (value) => (value || '')
+  .replace(/\bSec\.\s*/g, '§ ')
+  .replace(/\s+/g, ' ')
+  .trim();
+const postStatute = post ? statuteLabel(post.metadata?.statute) : null;
+const preStatute = statuteLabel(pre.metadata?.statute);
+const postEffective = postLatest?.effective_date ? prettyDate(postLatest.effective_date) : null;
+const preEffective = prettyDate(preLatest?.effective_date);
+const hubYear = [postLatest, preLatest]
+  .map((value) => String(value?.retrieved_at || value?.effective_date || '').slice(0, 4))
+  .filter(Boolean)
+  .sort()
+  .at(-1);
 
 // Post-judgment basis line (statute-fixed vs derived/formula) for the at-a-glance row.
-const postBasis = post
-  ? ((postLatest?.method || '').startsWith('statute') ? 'Set by statute' : 'Derived / formula')
-  : 'No fixed statutory rate';
+const postMethod = postLatest?.method || '';
+const postBasis = !post
+  ? 'No fixed statutory rate'
+  : postMethod === 'statute-branching'
+    ? 'Statutory branches'
+    : postMethod.startsWith('statute-fixed')
+      ? 'Fixed by statute'
+      : postMethod.startsWith('statute')
+        ? 'Statutory formula / table'
+        : postMethod.startsWith('derived_')
+          ? 'Derived formula'
+          : 'Published reference';
 
-const title = `${name} Judgment Interest Rates | ${meta.title}`;
-const description = `${name} judgment interest: ${post ? `${postLatest?.value_text} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preLatest?.value_text} prejudgment`}. Cited sources, dates, scope, and notes.`;
+const standardTitle = `${name} Judgment Interest Rates ${hubYear}`;
+const title = base === 'oklahoma'
+  ? `Oklahoma Judgment Interest Rates ${hubYear} | 12 O.S. § 727.1`
+  : standardTitle;
+const description = `${hubYear} ${name} judgment interest: ${post ? `${postLatest?.value_text} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preLatest?.value_text} prejudgment`}. Statutes, dates, scope, and official sources.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Real modification date = the later of the two rates' effective dates (never the build date).
 const hubModified = [postLatest?.effective_date, preLatest?.effective_date].filter(Boolean).sort().at(-1);
@@ -57,7 +82,7 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: `${name} judgment & prejudgment interest rates`,
+    name: `${hubYear} ${name} judgment and prejudgment interest rates`,
     url: canonical,
     description,
     isPartOf: { '@type': 'WebSite', name: meta.title, url: new URL('/', Astro.site).href },
@@ -85,7 +110,13 @@ const jsonLd = [
     <a href="/">Rates</a> &rsaquo; <a href="/states/">States</a> &rsaquo; <span>{name}</span>
   </nav>
   <div class="eyebrow">Statutory interest rates · {name}</div>
-  <h1>{name} judgment &amp; prejudgment interest rates</h1>
+  <h1>{hubYear} {name} judgment &amp; prejudgment interest rates</h1>
+  <p class="quick-answer"><strong>Current {hubYear} snapshot:</strong> {post
+    ? <>{name} post-judgment interest is <strong>{postLatest?.value_text}</strong> per year</>
+    : <>{name} has no uniform statewide post-judgment percentage</>}; {preCaseSpecific
+    ? <>prejudgment interest depends on the governing contract or the court</>
+    : <>the recorded prejudgment reference is <strong>{preLatest?.value_text}</strong> per year</>}.
+  </p>
   <p class="lead">Everything {theName} charges in interest on a money judgment or an overdue debt, in one
     place — the rate <em>after</em> judgment and the rate <em>before</em> it, each
     <a href="/editorial-policy/">recorded with a cited source</a> and linked to its full page with observations,
@@ -93,16 +124,20 @@ const jsonLd = [
 
   <div class="scroll-x">
     <table class="glance">
-      <thead><tr><th scope="col">Metric</th><th scope="col">Rate</th><th scope="col">Basis</th></tr></thead>
+      <thead><tr><th scope="col">Metric</th><th scope="col">Rate or rule</th><th scope="col">Effective</th><th scope="col">Authority</th><th scope="col">Basis</th></tr></thead>
       <tbody>
         <tr>
           <td><a href={post ? `/rates/${post.slug}/` : '/methodology/'}>Post-judgment interest</a></td>
           <td class="num">{post ? postLatest?.value_text : '—'}</td>
+          <td>{postEffective || 'Case-specific'}</td>
+          <td class="source-note">{postStatute || 'See methodology'}</td>
           <td class="source-note">{postBasis}</td>
         </tr>
         <tr>
           <td><a href={`/rates/${pre.slug}/`}>Prejudgment interest</a></td>
           <td class="num">{preLatest?.value_text}</td>
+          <td>{preEffective}</td>
+          <td class="source-note">{preStatute || 'See cited source'}</td>
           <td class="source-note">{preCopy.kindLabel}</td>
         </tr>
       </tbody>
@@ -115,7 +150,7 @@ const jsonLd = [
   {post ? (
     <>
       <p><strong>{name}'s post-judgment interest rate is {postLatest?.value_text} per year.</strong> {postCopy.body}</p>
-      <p class="xlink"><a href={`/rates/${post.slug}/`}>→ Full {name} post-judgment page</a> — statute, effective-date history, and source.</p>
+      <p class="xlink"><a href={`/rates/${post.slug}/`}>→ Full {name} post-judgment page</a> — {postStatute}, effective-date history, scope, and official source.</p>
     </>
   ) : (
     <p>{name} does not set a single fixed statutory post-judgment rate; interest on a judgment is
@@ -127,7 +162,7 @@ const jsonLd = [
   <p><strong>{preCaseSpecific
     ? `${name} has no uniform statewide prejudgment percentage (${preCopy.kindLabel?.toLowerCase()}).`
     : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}).`}</strong> {preCopy.body}</p>
-  <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — when it applies, accrual, compounding, and carve-outs.</p>
+  <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — {preStatute}, when it applies, accrual, compounding, and carve-outs.</p>
   {preSafe && (
     <p class="xlink"><a href="/calculators/prejudgment-interest/">→ Calculate {name} prejudgment interest</a></p>
   )}
@@ -156,6 +191,8 @@ const jsonLd = [
     .glance td.num { font-family: var(--nums); white-space: nowrap; }
     .glance td a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
     .glance td a:hover { border-bottom-color: var(--green); }
+    .quick-answer { margin: 12px 0 20px; padding: 14px 16px; border-left: 3px solid var(--green);
+      background: var(--green-wash); color: var(--ink); }
     .xlink { margin: 12px 0; }
     .xlink a { color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
     .xlink a:hover { border-bottom-color: var(--green); }

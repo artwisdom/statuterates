@@ -1,15 +1,17 @@
 # Phase 2 progress — demand-led state verification
 
 **Started:** 2026-07-19
-**Status:** Texas, Nebraska, Iowa, Kentucky, Maine, Georgia, and Mississippi milestone deployed; calculators withheld
-**Deployment status:** production verified 2026-07-25 (2026-07-26 UTC)
+**Status:** Demand-led histories and Search Console page strengthening complete; calculators withheld
+**Deployment status:** release candidate verified locally 2026-07-26
 
 ## Demand-led order without publishing private account data
 
 Authenticated Google Search Console evidence was reviewed read-only to prioritize the first state
 upgrades. Texas, Nebraska, and Iowa were selected because the live site showed real demand while the
 existing pages lacked the official history and legal detail needed to become durable search assets.
-Kentucky, Maine, Georgia, and Mississippi followed as source-accuracy and official-history upgrades.
+Kentucky, Maine, Georgia, Mississippi, Utah, and Florida followed as source-accuracy and
+official-history upgrades. Existing pages already earning impressions were strengthened in place;
+no thin statute-only doorway pages were created.
 Private account metrics, queries, and index-coverage counts are intentionally not stored in this
 repository.
 
@@ -219,9 +221,65 @@ the court's discretion and affirms a 4% simple-interest award in its particular 
 - Removed the fake July 2026 source-review-date observation and added a regression guard.
 - Kept the series `reference_only`; a calculator cannot safely infer the contract or judicial choice.
 
+## Utah
+
+### Official sources reviewed
+
+- [Utah State Courts current judgment rates](https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html)
+- [Utah State Courts historical judgment rates](https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html)
+- [Utah Code §15-1-4](https://le.utah.gov/xcode/Title15/Chapter1/15-1-S4.html)
+
+The State Courts table provides 34 exact annual rates from 1993 through 2026. For 2026, the general
+rate is the January 1 federal postjudgment rate of 3.51% plus two points, or 5.51%. A qualifying
+judgment under $10,000 involving goods or services uses the federal rate plus ten points, or 13.51%;
+a lawful written contract can supply a different rate.
+
+### Implemented
+
+- Added every official annual row with the court's exact displayed precision.
+- Added separate parsers for the current and historical court tables.
+- Added integrity gates for every historical anchor and both current statutory formulas.
+- Added a weekly fail-safe monitor that can append a new annual row only after the current and
+  historical publications reconcile.
+- Added full scope, accrual/rate-lock, branch, and history explanations to the rate and state pages.
+
+## Florida
+
+### Official sources reviewed
+
+- [Florida CFO current and historical judgment rates](https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates)
+- [Fla. Stat. §55.03](https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0055/Sections/0055.03.html)
+
+The CFO publishes every distinct period from October 1, 1981 through the current quarter. The
+current July 1, 2026 rate is 8.06%. Section 55.03 selects the rate in effect when judgment is
+obtained, adjusts it annually each January 1, preserves written-contract rates, and excludes four
+listed clerk-judgment categories from the annual adjustment.
+
+### Implemented
+
+- Added all 78 official effective periods without collapsing repeated quarterly values.
+- Added an HTML parser for the current and historical tables, including legacy date ranges.
+- Reconciled the oldest 360-day factor, the annual schedule's 365-day factors, and the quarterly
+  schedule's leap-year factors without inventing extra precision.
+- Added baseline, cadence, range, and changed-anchor validation before a new quarter can publish.
+- Added a weekly fail-safe monitor and complete source-specific page explanations.
+
+## Search Console page strengthening and legal corrections
+
+- State and rate pages now lead with the year, exact rate/rule, effective date, authority, basis, and
+  recorded-history depth while keeping their existing canonical URLs.
+- Prejudgment pages now receive the same state/year title treatment as postjudgment pages.
+- Washington's RCW 4.56.110 branches, Maryland §§11-106–11-107, Alaska's ADM-505 formula,
+  Wisconsin §815.05(8), Oklahoma §727.1, Pennsylvania §8101, and Connecticut §§37-3a–37-3c now have
+  fuller source-specific explanations.
+- Search-demand regression contracts protect the Texas, Iowa, Nebraska, Washington, Oklahoma, Utah,
+  Florida, Maryland, Wisconsin, Connecticut, state-table, and IRS/refund page language at build time.
+- Every rendered page has a unique title, description, canonical, and H1; state calculators remain
+  withheld.
+
 ## Automation and safety outcome
 
-The weekly pipeline attempts official current updates for Texas, Nebraska, and Iowa, verifies
+The weekly pipeline attempts official current updates for Texas, Nebraska, Iowa, Florida, and Utah, verifies
 Georgia's exact history against the Federal Reserve PRIME feed, and independently reproduces Maine's
 current annual formula from the official H.15 feed. Each live parser is strict about labels, dates,
 ranges, and known historical anchors. A blocked page or unexpected format cannot silently become a
@@ -234,12 +292,12 @@ risk of a calculator that only appears complete.
 
 ## Verification
 
-- Pipeline: 66/66 tests pass.
+- Pipeline: 78/78 tests pass.
 - Shared interest engine: 10/10 tests pass.
 - Site data contract: 2/2 tests pass.
 - MCP server: 3/3 tests pass, including traversal protection and full smoke coverage.
-- Full fetch → hydrate → validate → export: 114 entities and 2,193 observations, no warnings.
-- API conformance: 114 entity endpoints and 2,307 latest/history records checked.
+- Full fetch → hydrate → validate → export: 114 entities and 2,303 observations, no warnings.
+- API conformance: 114 entity endpoints and 2,417 latest/history records checked.
 - Static build: 192 HTML pages; 189 indexable sitemap URLs; SEO metadata, internal links, and
   calculator-indexing gates pass.
 - All 102 state-law entities remain `reference_only`; no unsafe state calculator is generated.

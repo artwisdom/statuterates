@@ -11,6 +11,7 @@ const datasetModified = entities
   .filter(Boolean)
   .sort()
   .at(-1);
+const rateYear = String(datasetModified || '').slice(0, 4);
 const rows = entities.map((e) => {
   const copy = copyFor(e.slug);
   const stateName = e.name.replace(/ Prejudgment Interest Rate$/, '');
@@ -24,25 +25,26 @@ const rows = entities.map((e) => {
   };
 });
 
-// Small legend so readers understand the five categories at a glance.
+// Small legend so readers understand the categories at a glance.
 const KINDS = [
   { key: 'fixed', label: 'Fixed by statute', note: 'a set statutory rate' },
   { key: 'variable', label: 'Formula rate', note: 'indexed to a benchmark; resets periodically' },
   { key: 'same-as-postjudgment', label: 'Same as post-judgment', note: 'same rate as after judgment' },
   { key: 'discretionary-with-default', label: 'Discretionary', note: 'a court may award it; this is the rate it applies' },
+  { key: 'discretionary-with-cap', label: 'Discretionary cap', note: 'a court may award up to the displayed ceiling' },
   { key: 'case-specific', label: 'Case-specific', note: 'the contract or court supplies the percentage' },
 ];
 const counts = Object.fromEntries(KINDS.map((k) => [k.key, rows.filter((r) => r.kind === k.key).length]));
 
-const title = `Prejudgment Interest Rates by State | ${meta.title}`;
-const description = `Compare prejudgment interest rates for all 50 states and D.C., with cited statutes, claim restrictions, accrual notes, and links to each full reference.`;
+const title = `${rateYear} Prejudgment Interest Rates by State (50-State Table)`;
+const description = `${rateYear} prejudgment interest rates for all 50 states and D.C., with cited statutes, claim restrictions, accrual notes, and links to each full reference.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
-    name: 'U.S. prejudgment interest rates by state',
+    name: `${rateYear} U.S. prejudgment interest rates by state`,
     description: 'Recorded prejudgment interest-rate references and claim-type restrictions for all 50 states and the District of Columbia, each with a cited source.',
     url: canonical,
     isAccessibleForFree: true,
@@ -86,7 +88,7 @@ const jsonLd = [
     <a href="/">Rates</a> &rsaquo; <span>Prejudgment interest by state</span>
   </nav>
   <div class="eyebrow">Statutory interest rates · Prejudgment</div>
-  <h1>Prejudgment interest rates by state</h1>
+  <h1>{rateYear} prejudgment interest rates by state</h1>
   <p class="lead">The interest that accrues <em>before</em> a judgment is entered — for all 50 states and
     D.C. Unlike post-judgment interest, the rate is often the <em>second</em> question. The first is
     <strong>whether prejudgment interest applies at all</strong>: most states allow it only on
@@ -157,6 +159,7 @@ const jsonLd = [
     .dot.variable { background: #0e9384; }
     .dot.same-as-postjudgment { background: #4a6d8c; }
     .dot.discretionary-with-default { background: #b5791f; }
+    .dot.discretionary-with-cap { background: #b5791f; }
     .dot.case-specific { background: #7b5aa6; }
     .pj-table { width: 100%; }
     .pj-table td.st a { font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid var(--line); }
@@ -168,6 +171,8 @@ const jsonLd = [
       white-space: nowrap; border: 1px solid var(--line-strong); color: var(--ink-soft); }
     .tag.fixed { background: var(--green-wash); color: var(--accent); border-color: rgba(58,63,166,0.22); }
     .tag.variable { background: #e6f6f3; color: #0e766a; border-color: rgba(14,118,106,0.25); }
+    .tag.discretionary-with-default, .tag.discretionary-with-cap {
+      background: #fbf1df; color: #865d18; border-color: rgba(134,93,24,0.25); }
     .tag.case-specific { background: #f1eafa; color: #68458f; border-color: rgba(104,69,143,0.25); }
   </style>
 </BaseLayout>

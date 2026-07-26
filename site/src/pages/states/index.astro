@@ -13,6 +13,7 @@ const datasetModified = hubs
   .filter(Boolean)
   .sort()
   .at(-1);
+const datasetYear = String(datasetModified || '').slice(0, 4);
 const rows = hubs.map((h) => ({
   base: h.base,
   name: h.name,
@@ -21,15 +22,15 @@ const rows = hubs.map((h) => ({
   preKind: copyFor(h.pre.slug).kindLabel,
 }));
 
-const title = `Judgment Interest Rates by State | ${meta.title}`;
-const description = `Recorded post-judgment and prejudgment interest-rate references for every U.S. state and D.C., side by side with cited sources and scope notes.`;
+const title = `${datasetYear} Judgment Interest Rates by State (50-State Table)`;
+const description = `${datasetYear} post-judgment and prejudgment interest rates for every U.S. state and D.C., side by side with cited statutes, effective dates, scope, and source notes.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Judgment interest rates by state',
+    name: `${datasetYear} judgment interest rates by state`,
     url: canonical,
     description,
     isPartOf: { '@type': 'WebSite', name: meta.title, url: new URL('/', Astro.site).href },
@@ -58,7 +59,7 @@ const jsonLd = [
     <a href="/">Rates</a> &rsaquo; <span>States</span>
   </nav>
   <div class="eyebrow">Statutory interest rates · By state</div>
-  <h1>Judgment interest rates by state</h1>
+  <h1>{datasetYear} judgment interest rates by state</h1>
   <p class="lead">Interest on a money judgment differs in every state — and the rate that runs
     <em>before</em> judgment can be a different rate — or a case-specific rule — from the one that runs
     <em>after</em>. Here are the current recorded references for all 50 states and D.C. Open any state
@@ -85,6 +86,13 @@ const jsonLd = [
   </div>
 
   <AdSlot id="states-bottom" />
+
+  <h2>How to find the right state judgment interest rate</h2>
+  <ol>
+    <li><strong>Start with the judgment date.</strong> Variable rates can reset yearly, quarterly, monthly, or when a benchmark changes.</li>
+    <li><strong>Identify the claim type.</strong> Contracts, torts, consumer debts, government judgments, and prejudgment awards can follow different branches.</li>
+    <li><strong>Open the state page.</strong> Each state hub links to its controlling authority, effective-date history, applicability notes, and official source.</li>
+  </ol>
 
   <h2>Post-judgment vs. prejudgment — why two numbers?</h2>
   <p><strong>Post-judgment interest</strong> accrues on a money judgment from the day it is entered

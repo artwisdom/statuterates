@@ -85,6 +85,42 @@ test('Nebraska exposes the official 1987-present history and a safely withheld r
   assert.equal(nebraska.metadata.calculation.renderer_supported, false);
 });
 
+test('Utah exposes the official 1993-present annual history and monitored branch formulas', () => {
+  const { entities, observations } = buildStateFixed();
+  const utah = entities.find((entity) => entity.slug === 'utah-judgment-rate');
+  const history = observations.filter((observation) => observation.entitySlug === utah.slug);
+  const source = STATE_SOURCES.find((candidate) => candidate.id === 'ut-jud');
+
+  assert.equal(history.length, 34);
+  assert.equal(history[0].effective_date, '1993-01-01');
+  assert.equal(history.find((row) => row.effective_date === '2000-01-01').value_text, '7.670%');
+  assert.equal(history.at(-1).effective_date, '2026-01-01');
+  assert.equal(history.at(-1).value_text, '5.51%');
+  assert.equal(source.publisher, 'Utah State Courts (official)');
+  assert.equal(utah.metadata.calculation.status, 'reference_only');
+  assert.equal(utah.metadata.calculation.rate_behavior, 'fixed_at_entry');
+  assert.equal(utah.metadata.calculation.current_period_monitored, true);
+  assert.equal(utah.metadata.calculation.renderer_supported, false);
+});
+
+test('Florida exposes every official CFO period since 1981 and monitors new quarters', () => {
+  const { entities, observations } = buildStateFixed();
+  const florida = entities.find((entity) => entity.slug === 'florida-judgment-rate');
+  const history = observations.filter((observation) => observation.entitySlug === florida.slug);
+  const source = STATE_SOURCES.find((candidate) => candidate.id === 'fl-cfo');
+
+  assert.equal(history.length, 78);
+  assert.equal(history[0].effective_date, '1981-10-01');
+  assert.equal(history[0].value_text, '12%');
+  assert.equal(history.find((row) => row.effective_date === '2025-07-01').value_text, '8.90%');
+  assert.equal(history.at(-1).effective_date, '2026-07-01');
+  assert.equal(history.at(-1).value_text, '8.06%');
+  assert.equal(source.publisher, 'Florida Department of Financial Services, Chief Financial Officer (official)');
+  assert.equal(florida.metadata.calculation.status, 'reference_only');
+  assert.equal(florida.metadata.calculation.current_period_monitored, true);
+  assert.equal(florida.metadata.calculation.renderer_supported, false);
+});
+
 test('Kentucky and Maine replace review-date placeholders with official histories', () => {
   const { entities, observations } = buildStateFixed({
     today: '2026-07-19',

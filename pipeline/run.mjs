@@ -17,6 +17,8 @@ import { fetchTexasCurrentRate } from './fetchers/texas-occc.mjs';
 import { fetchNebraskaCurrentRate } from './fetchers/nebraska-judicial.mjs';
 import { fetchIowaCourtTable } from './fetchers/iowa-judicial.mjs';
 import { fetchGeorgiaPrimeChanges } from './fetchers/georgia-prime.mjs';
+import { fetchUtahCourtRates } from './fetchers/utah-judicial.mjs';
+import { fetchFloridaCfoRates } from './fetchers/florida-cfo.mjs';
 import { validate } from './lib/validate.mjs';
 import { exportAll } from './lib/exporter.mjs';
 import { seedFromExports } from './lib/seed-exports.mjs';
@@ -49,10 +51,15 @@ function loadBundleIntoDb(db, bundle) {
   return n;
 }
 
-function buildStateBundles({ daily = [], today, retrievedAt, texasCurrent = null, nebraskaCurrent = null, georgiaPrime = null, iowaCourt = null, sourceOverrides = [] } = {}) {
+function buildStateBundles({ daily = [], today, retrievedAt, texasCurrent = null, nebraskaCurrent = null, floridaCfo = null, georgiaPrime = null, iowaCourt = null, utahCourt = null, sourceOverrides = [] } = {}) {
   const stateFixed = buildStateFixed({
     texasCurrent,
     nebraskaCurrent,
+    floridaCfoPoints: floridaCfo?.points || [],
+    floridaRetrievedAt: floridaCfo?.retrieved_at || null,
+    utahCourtHistory: utahCourt?.historyPoints || [],
+    utahCourtCurrent: utahCourt?.current || null,
+    utahRetrievedAt: utahCourt?.retrieved_at || null,
     georgiaPrimeChanges: georgiaPrime?.changePoints || [],
     georgiaRetrievedAt: georgiaPrime?.retrieved_at || null,
     daily,
@@ -103,15 +110,17 @@ async function runAll() {
     const today = new Date().toISOString().slice(0, 10);
 
     // 1) FETCH — US (IRS + Fed H.15), UK (BoE), EU (ECB)
-    const [irs, h15, boe, ecb, texas, nebraska, georgiaPrime, iowaCourt] = await Promise.all([
+    const [irs, h15, boe, ecb, texas, nebraska, floridaCfo, georgiaPrime, iowaCourt, utahCourt] = await Promise.all([
       fetchIrs({ log: console.log }),
       fetchH15({ log: console.log }),
       fetchBoe({ log: console.log }),
       fetchEcb({ log: console.log }),
       fetchTexasCurrentRate({ log: console.log, today }),
       fetchNebraskaCurrentRate({ log: console.log, today }),
+      fetchFloridaCfoRates({ log: console.log, today }),
       fetchGeorgiaPrimeChanges({ log: console.log, today }),
       fetchIowaCourtTable({ log: console.log, today }),
+      fetchUtahCourtRates({ log: console.log, today }),
     ]);
 
     // 2) NORMALIZE
@@ -134,9 +143,12 @@ async function runAll() {
     const ecbBundle = { source: ecb.source, entities: [ecbPub.entity, euRef.entity], observations: [...ecbPub.observations, ...euRef.observations] };
 
     // US states: curated official references. Texas and Nebraska receive live official observations;
+    // Florida checks its official 1981-present CFO table and appends a verified new quarter;
     // Georgia validates and extends its exact Federal Reserve prime-rate change-point history.
     // Iowa uses the Judicial Branch's monthly table (never the federal weekly average) and attempts
-    // a live table refresh. If access is blocked, it retains verified court history without estimating.
+    // a live table refresh. Utah checks both official annual court tables and appends a new calendar
+    // year only after all overlapping values and statutory formula branches reconcile.
+    // If access is blocked, each retains verified court history without estimating.
     // Each state's entities/observations load under ITS OWN source bundle so the source row exists
     // before any observation references it (FK integrity).
     const txPrejudSource = STATE_SOURCES.find((source) => source.id === 'tx-prejud');
@@ -150,12 +162,16 @@ async function runAll() {
       retrievedAt: h15.retrieved_at,
       texasCurrent: texas.observation,
       nebraskaCurrent: nebraska.observation,
+      floridaCfo,
       georgiaPrime,
       iowaCourt,
+      utahCourt,
       sourceOverrides: [
         texas.source,
         nebraska.source,
+        ...(floridaCfo?.source ? [floridaCfo.source] : []),
         ...(iowaCourt?.source ? [iowaCourt.source] : []),
+        ...(utahCourt?.source ? [utahCourt.source] : []),
         {
           ...txPrejudSource,
           robots_status: `official Chapter 304 text verified 2026-07-19; current linked OCCC rate fetched ${texas.retrieved_at}`,

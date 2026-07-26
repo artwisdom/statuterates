@@ -10,6 +10,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
 const errors = [];
 const canonicalOwners = new Map();
+const titleOwners = new Map();
+const descriptionOwners = new Map();
 const expectedOrigin = new URL(process.env.SITE_URL || 'https://statuterates.com').origin;
 let manualCloudflareBeaconFile = null;
 
@@ -43,6 +45,20 @@ function contextAt(html, index) {
   return html.slice(Math.max(0, index - 55), index + 95).replace(/\s+/g, ' ');
 }
 
+function decodeHtmlText(value) {
+  const named = {
+    amp: '&',
+    apos: "'",
+    gt: '>',
+    lt: '<',
+    quot: '"',
+  };
+  return value
+    .replace(/&#(\d+);/g, (_match, code) => String.fromCodePoint(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_match, code) => String.fromCodePoint(Number.parseInt(code, 16)))
+    .replace(/&(amp|apos|gt|lt|quot);/g, (_match, name) => named[name]);
+}
+
 const htmlFiles = walk(DIST).filter((file) => file.endsWith('.html'));
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
@@ -54,10 +70,11 @@ for (const file of htmlFiles) {
     manualCloudflareBeaconFile = file;
   }
 
-  // Technical SEO invariants. These are deliberately structural, not arbitrary character-count
-  // heuristics: a deploy should never create an untitled, non-canonical, or multi-H1 page.
-  const titles = [...html.matchAll(/<title>[^<]+<\/title>/g)];
-  const descriptions = [...html.matchAll(/<meta name="description" content="[^"]+">/g)];
+  // Technical SEO invariants. In addition to structural checks, keep every page's search snippet
+  // distinct and within conservative display lengths so programmatic expansion cannot quietly
+  // create duplicate or routinely truncated results.
+  const titles = [...html.matchAll(/<title>([^<]+)<\/title>/g)];
+  const descriptions = [...html.matchAll(/<meta name="description" content="([^"]+)">/g)];
   const canonicals = [...html.matchAll(/<link rel="canonical" href="(https:\/\/[^\"]+)">/g)];
   const h1s = [...html.matchAll(/<h1(?:\s|>)/g)];
   if (titles.length !== 1) errors.push(`${file}: expected one non-empty title, found ${titles.length}`);
@@ -66,6 +83,22 @@ for (const file of htmlFiles) {
   if (h1s.length !== 1) errors.push(`${file}: expected one H1, found ${h1s.length}`);
   if (!html.includes('<html lang="en">')) errors.push(`${file}: missing html lang="en"`);
   if (!html.includes('<meta name="viewport"')) errors.push(`${file}: missing viewport metadata`);
+  if (titles.length === 1) {
+    const title = decodeHtmlText(titles[0][1]).trim();
+    if (title.length > 65) errors.push(`${file}: title is ${title.length} characters (maximum 65)`);
+    const owner = titleOwners.get(title);
+    if (owner) errors.push(`${file}: duplicate title "${title}" also used by ${owner}`);
+    else titleOwners.set(title, file);
+  }
+  if (descriptions.length === 1) {
+    const description = decodeHtmlText(descriptions[0][1]).trim();
+    if (description.length > 160) {
+      errors.push(`${file}: meta description is ${description.length} characters (maximum 160)`);
+    }
+    const owner = descriptionOwners.get(description);
+    if (owner) errors.push(`${file}: duplicate meta description also used by ${owner}`);
+    else descriptionOwners.set(description, file);
+  }
   if (canonicals.length === 1) {
     const canonical = canonicals[0][1];
     if (!canonical.startsWith(`${expectedOrigin}/`)) {
@@ -126,10 +159,83 @@ if (manualCloudflareBeaconFile) {
   errors.push(`${manualCloudflareBeaconFile}: manual Cloudflare Web Analytics beacon would duplicate edge-managed analytics`);
 }
 
+// Search-demand contracts: protect the exact state/rate language that Google Search Console shows
+// people already use to find these pages. These guard existing trusted URLs; they do not create
+// statute-only doorway pages.
+const demandGuards = [
+  {
+    pathname: '/rates/texas-judgment-rate/',
+    patterns: [/Texas Post-Judgment Interest Rate \d{4}/, /post-judgment interest rate/i],
+  },
+  {
+    pathname: '/rates/texas-prejudgment-rate/',
+    patterns: [/Texas Prejudgment Interest Rate \d{4}/, /Tex\. Fin\. Code §§304\.101–304\.107/],
+  },
+  {
+    pathname: '/rates/iowa-judgment-rate/',
+    patterns: [/Iowa Post-Judgment Interest Rate \d{4}/, /Iowa Code/],
+  },
+  {
+    pathname: '/rates/nebraska-judgment-rate/',
+    patterns: [/Nebraska Post-Judgment Interest Rate \d{4}/, /Neb\. Rev\. Stat/],
+  },
+  {
+    pathname: '/rates/washington-judgment-rate/',
+    patterns: [/RCW 4\.56\.110/, /Washington Judgment Interest Rates \d{4}/],
+  },
+  {
+    pathname: '/rates/florida-judgment-rate/',
+    patterns: [/Florida Post-Judgment Interest Rate \d{4}/, /78 data points/, /October 1, 1981/],
+  },
+  {
+    pathname: '/states/utah/',
+    patterns: [/Utah Judgment Interest Rates \d{4}/, /Utah Code §15-1-4/, /13\.51%/],
+  },
+  {
+    pathname: '/rates/utah-judgment-rate/',
+    patterns: [/Utah Post-Judgment Interest Rate \d{4}/, /34 data points/, /1993 through 2026/],
+  },
+  {
+    pathname: '/rates/connecticut-judgment-rate/',
+    patterns: [/Connecticut Post-Judgment Interest Rate \d{4}: up to 10%/, /does not set one automatic percentage/],
+  },
+  {
+    pathname: '/rates/maryland-judgment-rate/',
+    patterns: [/Maryland Post-Judgment Interest Rate \d{4}/, /residential-rent judgments/, /§11-106/],
+  },
+  {
+    pathname: '/rates/wisconsin-judgment-rate/',
+    patterns: [/Wisconsin Post-Judgment Interest Rate \d{4}/, /Wis\. Stat\. § 815\.05\(8\)/],
+  },
+  {
+    pathname: '/states/oklahoma/',
+    patterns: [/Oklahoma Judgment Interest Rates \d{4}/, /12 O\.S\. § 727\.1/],
+  },
+  {
+    pathname: '/states/',
+    patterns: [/\d{4} Judgment Interest Rates by State \(50-State Table\)/],
+  },
+  {
+    pathname: '/prejudgment/',
+    patterns: [/\d{4} Prejudgment Interest Rates by State \(50-State Table\)/, /Discretionary cap/],
+  },
+  {
+    pathname: '/calculators/irs-interest/',
+    patterns: [/IRS Interest &amp; Refund Calculator \d{4}/, /Calculating interest on an IRS refund/],
+  },
+];
+for (const guard of demandGuards) {
+  const htmlPath = join(DIST, guard.pathname.replace(/^\//, ''), 'index.html');
+  const html = readFileSync(htmlPath, 'utf8');
+  for (const pattern of guard.patterns) {
+    if (!pattern.test(html)) errors.push(`${guard.pathname}: missing search-demand contract ${pattern}`);
+  }
+}
+
 if (errors.length) {
   console.error(`Build verification failed (${errors.length} issue${errors.length === 1 ? '' : 's'}):`);
   for (const error of errors) console.error(`  - ${error}`);
   process.exit(1);
 }
 
-console.log(`Build verification OK: ${htmlFiles.length} HTML pages, technical SEO metadata and internal targets valid, calculator indexing gates intact.`);
+console.log(`Build verification OK: ${htmlFiles.length} HTML pages, unique search snippets and technical SEO valid, internal targets intact, calculator indexing gates intact.`);

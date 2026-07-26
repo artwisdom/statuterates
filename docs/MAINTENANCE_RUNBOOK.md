@@ -12,7 +12,8 @@ them newly verified merely by rebuilding.
 4. Review `data/exports/meta.json` source `retrieved_at` values—not only `generated_at`. The latter is
    compilation time and does not prove that every source was freshly checked.
 5. Once per quarter, review variable state rates and the IRS quarter against their cited sources.
-   Texas is monitored automatically each week, but its failures still require the playbook below.
+   Texas, Florida, and Utah are monitored automatically each week, but failures still require the
+   playbooks below.
 
 ## IRS fetch failure
 
@@ -54,6 +55,22 @@ published month that does not match the current month.
    that Texas prejudgment's monthly value exactly matches it under §304.103.
 5. Keep both calculation statuses `reference_only` unless the separate readiness contract passes.
 
+## Florida CFO or Utah Courts fetch failure
+
+Both sources have complete committed official-history baselines. A temporary network or WAF failure
+must retain that baseline without estimating a replacement.
+
+1. Open the source URL recorded in the relevant fetcher and confirm whether the government page is
+   available.
+2. If markup changed, update the parser and its representative fixture test; never weaken historical
+   anchor, cadence, range, or statutory-formula checks.
+3. Florida must continue quarterly from the last verified CFO period. Its October 1981–1994 row
+   uses 360 days, the 1995–2011 annual schedule uses 365 days even in leap years, and the quarterly
+   schedule uses 366 days in leap years beginning in 2012. Utah must continue annually and both
+   current formula branches must reconcile to the published January 1 federal rate.
+4. Run the full pipeline and build sequence. A source outage may log a fail-safe fallback; validation
+   must still complete without invented observations.
+
 ## Validation failure
 
 - **Range/type:** inspect the parser; a footnote or wrong column was probably captured.
@@ -85,9 +102,10 @@ The build verifier checks internal targets, Astro whitespace regressions, state-
 ## State-law source review
 
 State records live in `pipeline/fetchers/us-states.mjs`. All 102 state entities are currently
-`reference_only`; most contain one observation. Texas postjudgment is the exception, with 515
-official monthly observations and a live current-month fetcher. A source review must not invent
-historical dates or change `retrieved_at` to the build time.
+`reference_only`; most contain one observation. Texas (515 monthly rows), Nebraska (275 change
+points), Iowa (302 monthly selections), Florida (78 official periods), Utah (34 annual rows), Maine,
+Kentucky, and Georgia have deeper verified histories. A source review must not invent historical
+dates or change `retrieved_at` to the build time.
 
 For each state reviewed:
 

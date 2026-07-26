@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T01:52:06.908Z",
+  "generated_at": "2026-07-26T17:35:44.836Z",
   "slug": "connecticut-judgment-rate",
   "name": "Connecticut Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,8 +8,8 @@
   "locale": null,
   "metadata": {
     "state": "CT",
-    "statute": "Conn. Gen. Stat. §37-3a",
-    "basis": "statute-fixed",
+    "statute": "Conn. Gen. Stat. §§37-3a–37-3c",
+    "basis": "statute-variable",
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -23,15 +23,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 10,
-      "value_text": "10%",
+      "value_text": "up to 10%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-01-01",
+      "effective_date": "1997-05-27",
       "source_id": "ct-jud",
       "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "retrieved_at": "2026-07-26T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+      "method": "statute-branching",
+      "notes": "Connecticut does not set one automatic percentage for every judgment. Section 37-3a permits up to 10% as damages for qualifying detention of money and caps hospital-service debt at 5%, with awards discretionary. For covered negligence causes arising on or after May 27, 1997, §37-3b requires 10% from the earlier of 20 days after judgment or 90 days after verdict, subject to plaintiff-motion and appeal tolling. Section 37-3c uses a separate Treasury-linked condemnation formula. Verify the applicable branch; not legal advice."
     }
   },
   "history": {
@@ -39,15 +39,15 @@
       {
         "metric": "annual_rate",
         "value": 10,
-        "value_text": "10%",
+        "value_text": "up to 10%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-01-01",
+        "effective_date": "1997-05-27",
         "source_id": "ct-jud",
         "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "retrieved_at": "2026-07-26T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Post-judgment interest under Conn. Gen. Stat. §37-3a — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+        "method": "statute-branching",
+        "notes": "Connecticut does not set one automatic percentage for every judgment. Section 37-3a permits up to 10% as damages for qualifying detention of money and caps hospital-service debt at 5%, with awards discretionary. For covered negligence causes arising on or after May 27, 1997, §37-3b requires 10% from the earlier of 20 days after judgment or 90 days after verdict, subject to plaintiff-motion and appeal tolling. Section 37-3c uses a separate Treasury-linked condemnation formula. Verify the applicable branch; not legal advice."
       }
     ]
   }

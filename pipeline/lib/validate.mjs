@@ -17,6 +17,8 @@ import { validateIowaOfficialHistory } from '../fetchers/iowa-judgment-history.m
 import { validateKentuckyPostJudgmentHistory } from '../fetchers/kentucky-interest-history.mjs';
 import { validateMaineOfficialHistory, MAINE_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/maine-interest-history.mjs';
 import { validateGeorgiaRateHistory } from '../fetchers/georgia-interest-history.mjs';
+import { validateUtahOfficialHistory, UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/utah-judgment-history.mjs';
+import { validateFloridaOfficialHistory, FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH } from '../fetchers/florida-judgment-history.mjs';
 
 const HARD_MIN = -5;
 const HARD_MAX = 30;
@@ -147,6 +149,56 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     const expectedVariable = latestNebraskaPost.value.toFixed(3);
     if (!String(latestNebraskaPre.value_text || '').includes(`${expectedVariable}%`)) {
       errors.push(`nebraska-prejudgment-rate: composite display does not include current §45-103 rate ${expectedVariable}%`);
+    }
+  }
+
+  // Utah and Florida now preserve complete official agency/court tables. Validate every committed
+  // baseline anchor again at the database boundary, then allow only cadence-correct extensions that
+  // already passed their live-fetch integrity gates.
+  const utahRows = rows
+    .filter((row) => row.entity_slug === 'utah-judgment-rate' && row.source_id === 'ut-jud')
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+  if (stateEntities.some((entity) => entity.slug === 'utah-judgment-rate')) {
+    const baseline = utahRows
+      .filter((row) => row.effective_date <= UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH)
+      .map((row) => ({ effective_date: row.effective_date, value: row.value_numeric, value_text: row.value_text }));
+    for (const problem of validateUtahOfficialHistory(baseline)) {
+      errors.push(`utah-judgment-rate: ${problem}`);
+    }
+    let expectedYear = Number(UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH.slice(0, 4)) + 1;
+    for (const row of utahRows.filter((candidate) => candidate.effective_date > UTAH_OFFICIAL_HISTORY_COMPLETE_THROUGH)) {
+      const expectedDate = `${expectedYear}-01-01`;
+      if (row.effective_date !== expectedDate) {
+        errors.push(`utah-judgment-rate: extension must continue annually with ${expectedDate}, found ${row.effective_date}`);
+      }
+      if (!Number.isFinite(row.value_numeric) || row.value_numeric < 0 || row.value_numeric > 30) {
+        errors.push(`utah-judgment-rate@${row.effective_date}: extension rate is outside the accepted range`);
+      }
+      expectedYear++;
+    }
+  }
+
+  const floridaRows = rows
+    .filter((row) => row.entity_slug === 'florida-judgment-rate' && row.source_id === 'fl-cfo')
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+  if (stateEntities.some((entity) => entity.slug === 'florida-judgment-rate')) {
+    const baseline = floridaRows
+      .filter((row) => row.effective_date <= FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH)
+      .map((row) => ({ effective_date: row.effective_date, value: row.value_numeric, value_text: row.value_text }));
+    for (const problem of validateFloridaOfficialHistory(baseline)) {
+      errors.push(`florida-judgment-rate: ${problem}`);
+    }
+    let expectedDate = FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH;
+    for (const row of floridaRows.filter((candidate) => candidate.effective_date > FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROUGH)) {
+      const cursor = new Date(`${expectedDate}T00:00:00Z`);
+      cursor.setUTCMonth(cursor.getUTCMonth() + 3);
+      expectedDate = cursor.toISOString().slice(0, 10);
+      if (row.effective_date !== expectedDate) {
+        errors.push(`florida-judgment-rate: extension must continue quarterly with ${expectedDate}, found ${row.effective_date}`);
+      }
+      if (!Number.isFinite(row.value_numeric) || row.value_numeric < 0 || row.value_numeric > 30) {
+        errors.push(`florida-judgment-rate@${row.effective_date}: extension rate is outside the accepted range`);
+      }
     }
   }
 
@@ -315,6 +367,21 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     errors.push('mississippi-prejudgment-rate: the retired universal 8% review-date record must not reappear');
   }
 
+  // Connecticut has separate discretionary, negligence, hospital-debt, and condemnation branches.
+  // The inherited flat 10% row was materially misleading and must never outrank the corrected rule.
+  const connecticutPost = rows.filter((row) => row.entity_slug === 'connecticut-judgment-rate');
+  if (stateEntities.some((entity) => entity.slug === 'connecticut-judgment-rate')) {
+    if (connecticutPost.length !== 1
+      || connecticutPost[0].effective_date !== '1997-05-27'
+      || connecticutPost[0].value_text !== 'up to 10%'
+      || connecticutPost[0].method !== 'statute-branching') {
+      errors.push('connecticut-judgment-rate: must remain the branch-dependent up-to-10% rule, not a universal flat rate');
+    }
+  }
+  if (connecticutPost.some((row) => row.effective_date === '2026-01-01' && row.method === 'statute-fixed')) {
+    errors.push('connecticut-judgment-rate: the retired universal flat-10% record must not reappear');
+  }
+
   // Derived-value consistency: post-judgment must equal the CMT weekly average for each shared week.
   const cmt = new Map(
     rows.filter((r) => r.entity_slug === 'treasury-1-year-cmt').map((r) => [r.effective_date, r.value_numeric])
@@ -377,8 +444,8 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     //    fetch throws an HTTP error and fails the run anyway).
     const WEEKLY = new Set(['treasury-1-year-cmt', 'us-federal-post-judgment']);
     const MONTHLY = new Set(['texas-judgment-rate', 'texas-prejudgment-rate', 'iowa-judgment-rate', 'iowa-prejudgment-rate']);
-    const QUARTERLY = new Set(['nebraska-judgment-rate', 'nebraska-prejudgment-rate']);
-    const ANNUAL = new Set(['maine-judgment-rate', 'maine-prejudgment-rate']);
+    const QUARTERLY = new Set(['nebraska-judgment-rate', 'nebraska-prejudgment-rate', 'florida-judgment-rate']);
+    const ANNUAL = new Set(['maine-judgment-rate', 'maine-prejudgment-rate', 'utah-judgment-rate']);
     const POLICY_CHANGEPOINT = new Set([
       'boe-bank-rate', 'ecb-main-refinancing-rate',
       'georgia-judgment-rate', 'georgia-prejudgment-rate',
@@ -389,6 +456,7 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     // the MAINTENANCE_RUNBOOK, not this check.)
     if (arr.at(-1).method.startsWith('statute-fixed')
       || arr.at(-1).method === 'statute-variable'
+      || arr.at(-1).method === 'statute-branching'
       || arr.at(-1).method === 'court-or-contract-rate') continue;
     const isWeekly = WEEKLY.has(slug);
     const isMonthly = MONTHLY.has(slug);

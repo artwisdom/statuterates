@@ -12,12 +12,12 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
 
 ## Current baseline
 
-- 114 rate series and 2,193 recorded observations across U.S. federal/state, U.K., and E.U. sources.
+- 114 rate series and 2,303 recorded observations across U.S. federal/state, U.K., and E.U. sources.
 - 192 static pages plus 114 JSON and 114 CSV entity endpoints.
 - Automated weekly refresh for machine-readable federal, U.K., and E.U. sources; live Texas OCCC,
-  Nebraska Judicial Branch, Iowa Judicial Branch, and Federal Reserve prime-rate checks extend or
-  verify state schedules, while Maine's annual court-chart rate is independently checked against
-  official H.15 inputs.
+  Nebraska Judicial Branch, Iowa Judicial Branch, Florida CFO, Utah State Courts, and Federal
+  Reserve prime-rate checks extend or verify state schedules, while Maine's annual court-chart rate
+  is independently checked against official H.15 inputs.
 - Curated state references carry explicit source tiers and source-check dates.
 - A general fixed-rate judgment/per-diem calculator plus federal §1961, IRS, and U.K./E.U.
   late-payment calculators are available.
@@ -60,6 +60,6 @@ cd ../machine/mcp-server && npm ci && npm test
 
 Start with [STATE.md](STATE.md) for the current handoff,
 [docs/PHASE_1_AUDIT.md](docs/PHASE_1_AUDIT.md) for the research-backed growth roadmap, and
-[docs/PHASE_2_PROGRESS.md](docs/PHASE_2_PROGRESS.md) for the demand-led Texas, Nebraska, Iowa,
-Kentucky, Maine, Georgia, and Mississippi milestone, and
+[docs/PHASE_2_PROGRESS.md](docs/PHASE_2_PROGRESS.md) for the demand-led state-history and
+Search Console page-strengthening milestone, and
 [docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T01:52:06.908Z",
+  "generated_at": "2026-07-26T17:35:44.836Z",
   "slug": "alaska-judgment-rate",
   "name": "Alaska Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -28,10 +28,10 @@
       "effective_date": "2026-01-01",
       "source_id": "ak-jud",
       "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
+      "retrieved_at": "2026-07-26T00:00:00Z",
+      "confidence": "high",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Alaska Stat. 09.30.070(a), currently 6.75% (as of January 1, 2026). Three (3) percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered. Simple interest. Verify the current value at public.courts.alaska.gov; not legal advice."
+      "notes": "Alaska Court System form ADM-505 publishes 6.75% for judgments entered in 2026 under AS 09.30.070(a): three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A controlling contract or another statute can set a different rate. The selected annual rate stays fixed until the judgment is paid, and post-judgment interest begins when the judge signs the judgment. Verify the correct branch; not legal advice."
     }
   },
   "history": {
@@ -44,10 +44,10 @@
         "effective_date": "2026-01-01",
         "source_id": "ak-jud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-07-09T00:00:00Z",
-        "confidence": "medium",
+        "retrieved_at": "2026-07-26T00:00:00Z",
+        "confidence": "high",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Alaska Stat. 09.30.070(a), currently 6.75% (as of January 1, 2026). Three (3) percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the year in which the judgment or decree is entered. Simple interest. Verify the current value at public.courts.alaska.gov; not legal advice."
+        "notes": "Alaska Court System form ADM-505 publishes 6.75% for judgments entered in 2026 under AS 09.30.070(a): three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A controlling contract or another statute can set a different rate. The selected annual rate stays fixed until the judgment is paid, and post-judgment interest begins when the judge signs the judgment. Verify the correct branch; not legal advice."
       }
     ]
   }

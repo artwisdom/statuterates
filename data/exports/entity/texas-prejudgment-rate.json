@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T01:52:06.908Z",
+  "generated_at": "2026-07-26T17:35:44.836Z",
   "slug": "texas-prejudgment-rate",
   "name": "Texas Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -37,11 +37,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-01",
       "source_id": "tx-prejud",
-      "source_url": "https://occc.texas.gov/publications/interest-rates/",
-      "retrieved_at": "2026-07-20T02:35:57.634Z",
+      "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
+      "retrieved_at": "2026-07-19T00:00:00Z",
       "confidence": "high",
-      "method": "derived_tx_304_103_from_occc_postjudgment",
-      "notes": "For a judgment rendered during 2026-07, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
+      "method": "statute-variable",
+      "notes": "For a judgment rendered in July 2026, Texas Finance Code §§304.101–304.104 use the 6.75% OCCC postjudgment rate for qualifying wrongful-death, personal-injury, and property-damage prejudgment interest. It is simple interest from the statutory start date through the day before judgment. Settlement offers can reduce accrual, future damages are excluded, condemnation and common-law claims follow separate branches. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -53,11 +53,11 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-01",
         "source_id": "tx-prejud",
-        "source_url": "https://occc.texas.gov/publications/interest-rates/",
-        "retrieved_at": "2026-07-20T02:35:57.634Z",
+        "source_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
+        "retrieved_at": "2026-07-19T00:00:00Z",
         "confidence": "high",
-        "method": "derived_tx_304_103_from_occc_postjudgment",
-        "notes": "For a judgment rendered during 2026-07, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
+        "method": "statute-variable",
+        "notes": "For a judgment rendered in July 2026, Texas Finance Code §§304.101–304.104 use the 6.75% OCCC postjudgment rate for qualifying wrongful-death, personal-injury, and property-damage prejudgment interest. It is simple interest from the statutory start date through the day before judgment. Settlement offers can reduce accrual, future damages are excluded, condemnation and common-law claims follow separate branches. Verify applicability; not legal advice."
       }
     ]
   }

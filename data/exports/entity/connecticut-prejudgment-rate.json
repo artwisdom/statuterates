@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T01:52:06.908Z",
+  "generated_at": "2026-07-26T17:35:44.836Z",
   "slug": "connecticut-prejudgment-rate",
   "name": "Connecticut Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,10 @@
   "locale": null,
   "metadata": {
     "state": "CT",
-    "statute": "Conn. Gen. Stat. § 37-3a(a)",
-    "basis": "statute-fixed",
+    "statute": "Conn. Gen. Stat. §37-3a",
+    "basis": "statute-discretionary-cap",
     "metric": "prejudgment",
-    "kind": "discretionary-with-default",
+    "kind": "discretionary-with-cap",
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -25,15 +25,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 10,
-      "value_text": "10%",
+      "value_text": "up to 10%",
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "ct-prejud",
-      "source_url": "https://portal.ct.gov/wcc/statutes-and-regulations/do-not-use-related-statutes/2021-related-statutes/37-3a",
-      "retrieved_at": "2026-07-20T13:59:17.350Z",
+      "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
+      "retrieved_at": "2026-07-26T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Prejudgment interest under Conn. Gen. Stat. § 37-3a(a) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Connecticut’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+      "method": "statute-discretionary-cap",
+      "notes": "Connecticut General Statutes §37-3a permits a court to award prejudgment interest of up to 10% per year as damages for detention of money after it becomes payable; the percentage and award are discretionary rather than an automatic 10%. For debt arising from hospital services, both prejudgment and postjudgment interest are capped at 5% and remain discretionary. Verify entitlement and the court-selected rate; not legal advice."
     }
   },
   "history": {
@@ -41,15 +41,15 @@
       {
         "metric": "annual_rate",
         "value": 10,
-        "value_text": "10%",
+        "value_text": "up to 10%",
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "ct-prejud",
-        "source_url": "https://portal.ct.gov/wcc/statutes-and-regulations/do-not-use-related-statutes/2021-related-statutes/37-3a",
-        "retrieved_at": "2026-07-20T13:59:17.350Z",
+        "source_url": "https://www.cga.ct.gov/current/pub/chap_673.htm",
+        "retrieved_at": "2026-07-26T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Prejudgment interest under Conn. Gen. Stat. § 37-3a(a) — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Connecticut’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice."
+        "method": "statute-discretionary-cap",
+        "notes": "Connecticut General Statutes §37-3a permits a court to award prejudgment interest of up to 10% per year as damages for detention of money after it becomes payable; the percentage and award are discretionary rather than an automatic 10%. For debt arising from hospital services, both prejudgment and postjudgment interest are capped at 5% and remain discretionary. Verify entitlement and the court-selected rate; not legal advice."
       }
     ]
   }

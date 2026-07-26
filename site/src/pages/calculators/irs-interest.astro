@@ -20,9 +20,16 @@ const seriesOptions = [
   { key: 'overpayment-corporate', label: 'Overpayment — corporate' },
   { key: 'large-corporate-underpayment', label: 'Large corporate underpayment (LCU)' },
 ];
+const currentRates = [
+  { label: 'Underpayment', entity: getEntity('irs-underpayment') },
+  { label: 'Refund / individual overpayment', entity: getEntity('irs-overpayment-noncorporate') },
+  { label: 'Corporate overpayment', entity: getEntity('irs-overpayment-corporate') },
+  { label: 'Large corporate underpayment', entity: getEntity('irs-large-corporate-underpayment') },
+].map((item) => ({ ...item, latest: latestOf(item.entity) }));
+const rateYear = String(latest?.retrieved_at || latest?.effective_date || '').slice(0, 4);
 
-const title = `IRS Interest Calculator (§6621/§6622) | ${meta.title}`;
-const description = `Calculate IRS underpayment or refund interest using quarterly §6621 rates—currently ${latest?.value_text} for underpayments—and daily compounding under §6622.`;
+const title = `IRS Interest & Refund Calculator ${rateYear} (§6621/§6622)`;
+const description = `Calculate ${rateYear} IRS underpayment or refund interest using quarterly §6621 rates and daily compounding under §6622. Current rates and history included.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [
@@ -50,6 +57,11 @@ const jsonLd = [
         name: 'Does the IRS pay interest on refunds?',
         acceptedAnswer: { '@type': 'Answer', text: 'Yes — overpayments accrue interest at the §6621 overpayment rate (same as the underpayment rate for individuals; one point lower for corporations), also compounded daily.' },
       },
+      {
+        '@type': 'Question',
+        name: 'How do I calculate IRS interest on a delayed tax refund?',
+        acceptedAnswer: { '@type': 'Answer', text: 'Choose the individual or corporate overpayment series, enter the overpayment amount and applicable start and end dates, and the calculator applies each quarterly §6621 rate with §6622 daily compounding.' },
+      },
     ],
   },
   {
@@ -67,7 +79,7 @@ const jsonLd = [
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>IRS interest</span>
   </nav>
-  <h1>IRS interest calculator</h1>
+  <h1>IRS interest and refund calculator</h1>
   <p class="lead">Estimates the interest the IRS charges on late/underpaid tax — or pays on your
     refund — using the real method: the quarterly §6621 rate in force each day, compounded daily
     under §6622, across every rate change on record (back to 2017).</p>
@@ -84,6 +96,27 @@ const jsonLd = [
 
   <AdSlot id="calc-top" />
 
+  <h2>Current {rateYear} IRS interest rates</h2>
+  <p>The calculator automatically changes rates at each quarter boundary. The latest recorded
+    references are:</p>
+  <div class="scroll-x">
+    <table>
+      <thead>
+        <tr><th scope="col">IRS interest category</th><th scope="col">Current rate</th><th scope="col">Effective</th><th scope="col">History</th></tr>
+      </thead>
+      <tbody>
+        {currentRates.map((item) => (
+          <tr>
+            <td><a href={`/rates/${item.entity.slug}/`}>{item.label}</a></td>
+            <td class="num">{item.latest?.value_text}</td>
+            <td>{prettyDate(item.latest?.effective_date)}</td>
+            <td>{historyFor(item.entity.slug).length} recorded quarters</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
   <h2>How it works</h2>
   <p>IRS interest rates reset every calendar quarter — the underpayment rate is currently
     <a href="/rates/irs-underpayment/">{latest?.value_text}</a> — and interest compounds
@@ -94,6 +127,13 @@ const jsonLd = [
     interest), and the estimated-tax additions under §§6654/6655, which use the underpayment rate but as
     simple interest. The IRS computes official amounts with its Rev. Proc. 95-17 factor tables; small
     rounding differences are possible.</p>
+
+  <h2>Calculating interest on an IRS refund</h2>
+  <p>Select <strong>Overpayment — individual</strong> when the IRS owes interest to a person, or the
+    corporate overpayment option for a corporation. Enter the overpayment principal and the applicable
+    interest period. The calculator segments the period by calendar quarter, applies every recorded
+    rate change, and compounds daily. The IRS controls the legal start date and may apply statutory
+    waiting periods, so confirm the dates against the notice or refund rules that apply to the return.</p>
 
   <AdSlot id="calc-bottom" />
 </BaseLayout>

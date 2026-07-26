@@ -10,12 +10,12 @@
 
 ## Current product
 
-- 114 rate-series entities and 2,193 recorded historical observations.
+- 114 rate-series entities and 2,303 recorded historical observations.
 - 192 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
-  extension checks for Texas, Nebraska, Iowa, and Georgia state schedules and an independent Maine
-  annual-formula integrity check.
+  extension checks for Texas, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and an
+  independent Maine annual-formula integrity check.
 - 102 state-law entities across post- and prejudgment interest.
 - Available calculators: general fixed-rate judgment/per-diem arithmetic, federal post-judgment,
   IRS interest, and U.K./E.U. late payment.
@@ -78,6 +78,21 @@ rules. Phase 1 corrected the foundation:
   general postjudgment rate is prime plus three percentage points.
 - Mississippi prejudgment interest is now represented as a case-specific contract-or-court-set rule,
   with no fabricated universal numeric percentage.
+- Utah now preserves all 34 exact State Courts annual rates from 1993 through 2026. Automation checks
+  the official current and historical tables, verifies the federal-plus-two general formula and the
+  federal-plus-ten under-$10,000 goods/services branch, and fails safely on an outage.
+- Florida now preserves all 78 official CFO periods from October 1981 through July 2026. Automation
+  checks the live HTML table, daily factors, quarter cadence, and every historical anchor before a
+  new period can enter the dataset.
+- Connecticut's inherited universal flat-10% postjudgment row was removed. The page and API now
+  preserve its discretionary, negligence, hospital-debt, and condemnation branches as an
+  `up to 10%` reference, with a durable migration preventing the retired row from returning.
+- Washington, Maryland, Alaska, Wisconsin, Oklahoma, Utah, Florida, and Pennsylvania pages now carry
+  fuller source-specific scope, accrual, history, and branch explanations.
+- Existing state/rate URLs with demonstrated Search Console demand now use explicit year/rate titles,
+  quick-answer panels, statutory labels, richer state tables, and stronger internal links. The
+  implementation deliberately strengthens trusted URLs instead of creating thin statute doorway
+  pages.
 - Texas post- and prejudgment calculation rules are structured but remain `reference_only` because
   day count, payment allocation, and every supported branch are not yet deterministic.
 - Nebraska, Iowa, Kentucky, Maine, Georgia, and Mississippi also remain `reference_only`; none of
@@ -86,18 +101,18 @@ rules. Phase 1 corrected the foundation:
 
 ## Verified checks
 
-- Pipeline: 66 tests.
+- Pipeline: 78 tests.
 - Shared interest engine: 10 tests.
 - Site data contract: 2 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
-- API conformance: 114 entity endpoints and 2,307 latest/history records checked.
+- API conformance: 114 entity endpoints and 2,417 latest/history records checked.
 - Static build: 192 pages on Astro 7.
 - Indexable sitemap: 189 URLs.
 - Local mobile Lighthouse: 100 accessibility, 100 best practices, 100 SEO, and 100 agentic browsing.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
-- Production release: GitHub Actions build/deploy passed; the July 26 homepage, general judgment
-  calculator, 2,193-observation API, Iowa 302-point history, sitemap, HSTS, and security headers were
-  verified through the Cloudflare-served domain.
+- Current release candidate: 192 pages, 189 sitemap URLs, unique titles/descriptions/canonicals,
+  2,303-observation API, Florida 78-point history, Utah 34-point history, Iowa 302-point history,
+  and all calculation/indexing safety gates verified locally.
 
 ## Important files
 
@@ -116,10 +131,12 @@ rules. Phase 1 corrected the foundation:
 ## Known limitations / next phase
 
 - Most state entities still have only one recorded observation. Texas, Nebraska, Iowa, Kentucky,
-  Maine, and Georgia now have deeper verified histories, but their calculators remain withheld
+  Maine, Georgia, Utah, and Florida now have deeper verified histories, but their calculators remain withheld
   pending complete arithmetic and legal-branch contracts.
 - Iowa's live court page can intermittently block automation. The system safely retains the last
   exact published history and never substitutes a Federal Reserve estimate.
+- Florida CFO and Utah Courts can also be temporarily unreachable from some runners. Both monitors
+  retain complete verified baselines and never estimate a replacement rate.
 - Georgia and Mississippi use legislature-authorized code portals classified as
   `official_secondary`; the Federal Reserve benchmark underlying Georgia is official primary data.
 - Several government-hosted code reproductions are classified `official_secondary` because the

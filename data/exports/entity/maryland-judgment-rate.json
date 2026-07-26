@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-26T01:52:06.908Z",
+  "generated_at": "2026-07-26T17:35:44.836Z",
   "slug": "maryland-judgment-rate",
   "name": "Maryland Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -31,7 +31,7 @@
       "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+      "notes": "Maryland Courts and Judicial Proceedings §11-107 sets a 10% general judgment rate, a 6% rate for residential-rent judgments, and a delinquent-property-tax rate equal to the greater of 10% or the combined Tax–Property interest and penalty rates. Section 11-106 separately applies the contract rate to unpaid principal for qualifying loan-of-money judgments until originally scheduled maturity, with mortgage, deed-of-trust, and student-loan caveats. Verify the correct branch; not legal advice."
     }
   },
   "history": {
@@ -47,7 +47,7 @@
         "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Post-judgment interest under Md. Code, Courts & Judicial Proceedings Section 11-107(a) — 10% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+        "notes": "Maryland Courts and Judicial Proceedings §11-107 sets a 10% general judgment rate, a 6% rate for residential-rent judgments, and a delinquent-property-tax rate equal to the greater of 10% or the combined Tax–Property interest and penalty rates. Section 11-106 separately applies the contract rate to unpaid principal for qualifying loan-of-money judgments until originally scheduled maturity, with mortgage, deed-of-trust, and student-loan caveats. Verify the correct branch; not legal advice."
       }
     ]
   }
