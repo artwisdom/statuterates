@@ -20,7 +20,7 @@
 - 102 state-law entities across post- and prejudgment interest.
 - Calculator set in the current repository: general fixed-rate judgment/per-diem arithmetic,
   federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U. late payment, and the
-  locally verified Form 1040 penalty-and-interest release candidate described below.
+  deployed Form 1040 penalty-and-interest calculator described below.
 - State calculators: intentionally disabled, `noindex` where legacy comparison routes exist, and
   omitted from the sitemap.
 
@@ -126,10 +126,10 @@ rules. Phase 1 corrected the foundation:
 - Google AdSense Auto Ads is active. Manual ad units remain intentionally unconfigured rather than
   inventing a slot ID or adding page weight before traffic supports the tradeoff.
 
-## Phase 4 Form 1040 calculator release candidate
+## Phase 4 Form 1040 calculator release
 
-The following work is implemented and locally verified but is not recorded as deployed until the
-hosted workflow and Cloudflare-served pages pass live checks.
+The Form 1040 penalty-and-interest calculator and its official-rule monitor are deployed and
+verified in production.
 
 - `/calculators/irs-penalty-and-interest/` models the common individual original Form 1040 case.
   It separates failure-to-file, failure-to-pay, tax interest, and failure-to-file-penalty interest
@@ -178,6 +178,13 @@ hosted workflow and Cloudflare-served pages pass live checks.
   now serves the 30-point Alaska pre/post histories, 2,361-observation API, state crawl paths, honest
   Alaska `lastmod` dates, and stricter deployment safeguards. HTTPS/HSTS/`nosniff`, AdSense, and the
   single Cloudflare analytics beacon were reverified live.
+- Phase 4 release `ca0a017` (GitHub Actions `deploy-site` run 28,
+  [run 30217032320](https://github.com/artwisdom/statuterates/actions/runs/30217032320)) passed on
+  2026-07-26. Production serves the Form 1040 penalty-and-interest calculator, companion guide,
+  five-page IRS rule-monitor metadata, and 191-URL sitemap. A live browser calculation matched the
+  tested `$11,218.50` result; HTTPS/HSTS/`nosniff`, redirects, canonical URL, structured data,
+  AdSense, one Cloudflare analytics beacon, no horizontal overflow at the tested live viewport, and
+  zero browser-console errors were reverified directly on the Cloudflare-served domain.
 
 ## Important files
 
@@ -194,7 +201,7 @@ hosted workflow and Cloudflare-served pages pass live checks.
 - `docs/PHASE_3_PROGRESS.md`: indexing/performance audit, Alaska official history, crawl paths, and
   unattended-operation safeguards.
 - `docs/PHASE_4_PROGRESS.md`: Form 1040 penalty-and-interest scope, source monitoring, tests, and
-  release-candidate safeguards.
+  deployed-release safeguards.
 - `shared/interest-calc.mjs`: calculation engine shared by the site and MCP.
 - `.github/workflows/refresh.yml`: tested weekly data refresh.
 - `.github/workflows/deploy.yml`: tested static deployment plus successful-refresh handoff.
@@ -232,4 +239,5 @@ hosted workflow and Cloudflare-served pages pass live checks.
 
 Continue source by source: use demand evidence to choose the next official state history, preserve
 the state-calculator gate, and let search engines recrawl the strengthened pages before generating
-more URLs. The Phase 4 release candidate still requires deployment and live verification.
+more URLs. Phase 4 is deployed; the next expansion should be selected from fresh Search Console
+demand rather than by generating speculative pages.

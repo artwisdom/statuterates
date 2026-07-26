@@ -10,7 +10,7 @@ This document is self-contained: everything needed to execute is in here + the r
 prior conversation context. Repo: `data-moat-engine/` (site = Astro static → GitHub Pages behind
 Cloudflare, pipeline = Node data refresh weekly via `.github/workflows/refresh.yml`, deploy via
 `deploy.yml` on reviewed pushes and successful refresh completion). Live:
-https://statuterates.com (192-page release candidate as of 2026-07-25).
+https://statuterates.com (194-page deployed release as of 2026-07-26).
 
 ---
 
@@ -236,8 +236,8 @@ after deploy. Commit per phase.
       sitemap (data-driven lastmod = state's latest effective_date), CALC_FOR map in
       `rates/[slug].astro` so rate pages link to their own state calculator instead of the combined
       one. Keep the combined page as a comparison tool (canonical stays self).
-2.2 **Implemented locally 2026-07-26 — IRS penalty + interest calculator**
-    `/calculators/irs-penalty-and-interest/` (deployment pending):
+2.2 **Deployed and verified 2026-07-26 — IRS penalty + interest calculator**
+    `/calculators/irs-penalty-and-interest/`:
     - The tested engine models an individual original Form 1040 balance: 5% failure to file per
       month or partial month with overlap coordination and the indexed **more-than-60-day** minimum;
       0.5% failure to pay with optional dated 0.25% qualifying-installment and 1% post-levy branches;

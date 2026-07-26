@@ -1,7 +1,7 @@
 # Phase 4 progress — Form 1040 penalties, interest, and rule monitoring
 
 **Started:** 2026-07-26
-**Status:** Implemented and locally verified; not yet deployed
+**Status:** Deployed and production-verified
 
 ## Why this phase
 
@@ -83,7 +83,7 @@ and current published-quarter coverage before export.
   guards protect the calculator title, filing rule, AEP explanation, omitted
   failure-to-pay-penalty interest, and “estimate, not an IRS payoff” language.
 
-## Automation and local verification
+## Automation and verification
 
 - Changes under `shared/` now trigger the deploy workflow.
 - The deployment gate runs the shared calculation suite in addition to pipeline and site tests.
@@ -98,5 +98,22 @@ and current published-quarter coverage before export.
 - Build verification: unique search metadata, valid internal links, homepage reachability, content
   floors, calculator indexing gates, and Phase 4 search-demand contracts all pass.
 
-Deployment and production verification are intentionally not recorded here until the release clears
-the hosted workflow and the Cloudflare-served pages are checked directly.
+## Production release
+
+- Feature commit: `ca0a017` (`feat: add monitored Form 1040 penalty calculator`).
+- GitHub Actions `deploy-site` run 28
+  ([run 30217032320](https://github.com/artwisdom/statuterates/actions/runs/30217032320)) completed
+  successfully on 2026-07-26. The build ran site and shared-engine tests, generated and checked the
+  API, verified indexing/internal-link guardrails, uploaded the Pages artifact, submitted IndexNow,
+  and deployed successfully.
+- The Cloudflare-served calculator returned HTTP 200; plain HTTP redirected permanently to HTTPS.
+  HSTS, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, referrer policy, and the
+  permissions policy were present.
+- Production exposed the correct title, H1, canonical, structured data, companion guide, homepage
+  link, five-source rule metadata in the public API, and both new URLs in the 191-URL sitemap.
+- A live browser calculation using `$10,000` due April 15, filed June 15, and calculated through
+  July 15 returned the tested `$11,218.50` modeled total: `$900` failure to file, `$150` failure to
+  pay, `$154.59` tax interest, and `$13.91` filing-penalty interest. The conditional AEP comparison
+  returned `$10,154.59`.
+- The live page loaded one AdSense script and one Cloudflare Analytics beacon, had no horizontal
+  overflow at the tested desktop viewport, and produced no browser-console errors or warnings.

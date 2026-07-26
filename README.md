@@ -21,8 +21,7 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
   five-page IRS integrity monitor protects the Form 1040 penalty rules used by the calculator.
 - Curated state references carry explicit source tiers and source-check dates.
 - The repository includes general fixed-rate judgment/per-diem, federal §1961, U.K./E.U.
-  late-payment, and IRS interest/refund calculators, plus a locally verified individual Form 1040
-  penalty-and-interest release candidate.
+  late-payment, IRS interest/refund, and individual Form 1040 penalty-and-interest calculators.
 - State calculators are intentionally withheld and excluded from the sitemap until complete rate
   histories, branches, accrual rules, day counts, and compounding rules pass validation.
 
