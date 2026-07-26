@@ -137,9 +137,10 @@ and actually being monetized tastefully.
 3. **Description churn**: 16 templates embed `prettyDate(meta.generated_at)` ("Updated <today>") in
    meta descriptions → nightly churn on ~180 URLs, decoupled from real data change.
 4. **Guide schema churn**: `guides/[slug].astro` sets `dateModified: meta.generated_at` (nightly).
-5. **No analytics at all** — cannot measure pages/queries that earn. Privacy page already discloses
-   "privacy-respecting aggregate measurement": Cloudflare Web Analytics (free, cookieless,
-   consent-free, zero-maintenance; domain already on Cloudflare) fits exactly.
+5. **Analytics resolved 2026-07-26** — Cloudflare Web Analytics now uses the zone's automatic,
+   single-beacon injection with EU visitor collection excluded. The repository deliberately ships
+   no manual beacon or token, preventing duplicate counts while keeping measurement free,
+   cookieless, and zero-maintenance.
 6. **No per-state calculator pages** — the #1 gap vs the money queries (see §1.1, §1.8). One combined
    state calculator covers only 19 fixed-simple states + CO dual.
 7. **No IRS penalty math** — "IRS penalty and interest calculator" family is the biggest-volume
@@ -187,9 +188,9 @@ after deploy. Commit per phase.
 0.3 Description churn: replace build-date "Updated <today>" in the 16 templates with either the
     entity's real latest `effective_date` ("As of <date>") on data pages, or no date on
     guides/static. Keep title tags date-free.
-0.4 Analytics: add Cloudflare Web Analytics beacon (single script tag in `BaseLayout.astro` head;
-    token from CF dashboard — owner creates in 2 min, or ship commented + document). Update privacy
-    page "Analytics" section to name it.
+0.4 **Completed 2026-07-26:** Cloudflare Web Analytics is enabled through automatic edge injection
+    with EU visitor collection excluded. The privacy page names it. No repository token or manual
+    script is used because either would create a second beacon.
 0.5 IndexNow: generate a key file into `site/public/`, add a deploy step that POSTs changed URLs
     (diff sitemap vs previous build, or all URLs — ≤10k free) to api.indexnow.org. Document Bing
     Webmaster verification as an owner step.
@@ -315,10 +316,8 @@ after deploy. Commit per phase.
 ---
 
 ## 4. Owner (Michael) quick actions — 15 minutes total, anytime
-1. Cloudflare → Web Analytics → create site token → put it in the repo variable `CF_ANALYTICS_TOKEN`
-   (Opus will wire the beacon to read it like ADSENSE_CLIENT).
-2. Cloudflare → Email Routing → forward hello@ + privacy@statuterates.com → your inbox.
-3. Bing Webmaster Tools → import the site from Google Search Console (one click) — pairs with
+1. Cloudflare → Email Routing → forward hello@ + privacy@statuterates.com → your inbox.
+2. Bing Webmaster Tools → import the site from Google Search Console (one click) — pairs with
    IndexNow.
-4. When the AdSense approval email arrives: create 1 display unit → set `ADSENSE_SLOT` repo var →
+3. When the AdSense approval email arrives: create 1 display unit → set `ADSENSE_SLOT` repo var →
    in AdSense, exclude vignettes/anchors on /calculators/* → rerun deploy.

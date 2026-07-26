@@ -24,7 +24,6 @@ Repository variables used by `.github/workflows/deploy.yml`:
 |---|---:|---|
 | `SITE_URL` | Yes for production | `https://statuterates.com` |
 | `BASE_PATH` | Recommended | `/` for the custom root domain |
-| `CF_ANALYTICS_TOKEN` | Optional | Cloudflare Web Analytics token |
 | `ADSENSE_CLIENT` | Only after approval | `ca-pub-...` client identifier |
 | `ADSENSE_SLOT` | Optional after approval | Responsive display-unit slot |
 
@@ -87,6 +86,16 @@ Current production HSTS configuration, verified on the homepage and API:
 - `Strict-Transport-Security: max-age=15552000` (six months)
 - `includeSubDomains`: off
 - preload: off
+
+Cloudflare Web Analytics is managed at the edge for `statuterates.com`:
+
+- Real User Measurements: enabled with automatic JavaScript injection
+- EU visitor collection: excluded
+- Repository token/manual beacon: intentionally absent to prevent duplicate counting
+
+The site build fails if a manual Cloudflare beacon appears in generated HTML. Manage this setting in
+Cloudflare's account-level **Web Analytics → statuterates.com → Manage site** screen rather than
+through a GitHub repository variable.
 
 A strict Content Security Policy needs separate testing because the site can optionally load AdSense
 and Cloudflare Analytics and currently includes inline JSON-LD/styles. Do not deploy an untested CSP

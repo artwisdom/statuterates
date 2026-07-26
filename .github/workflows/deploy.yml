@@ -66,9 +66,6 @@ jobs:
           # Optional: set ADSENSE_SLOT to a "Display/responsive" ad-unit id to render intentional,
           # labeled in-content ad units (top/bottom of each page). Empty = rely on Auto Ads only.
           ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT || '' }}
-          # Optional: set CF_ANALYTICS_TOKEN to your Cloudflare Web Analytics site token to ship the
-          # cookieless beacon. Empty = no analytics beacon ships.
-          CF_ANALYTICS_TOKEN: ${{ vars.CF_ANALYTICS_TOKEN || '' }}
         run: npm run build
 
       - name: Verify built links and indexing guardrails

@@ -3,7 +3,7 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-07-25 (production release verified 2026-07-26 UTC)
+**Updated:** 2026-07-26
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 22.12+ (Node 24 also verified locally)
@@ -53,6 +53,9 @@ rules. Phase 1 corrected the foundation:
 10. **Reliable refresh deployment.** `deploy-site` follows every successful `refresh-data` run through
     GitHub's native `workflow_run` event, because refresh commits made with `GITHUB_TOKEN` do not
     trigger a second push workflow.
+11. **Single-beacon analytics.** Cloudflare Web Analytics is enabled through automatic edge
+    injection with EU visitor collection excluded. The static site intentionally contains no
+    analytics token or manual beacon, and the build rejects one to prevent duplicate counting.
 
 ## Phase 2 demand-led state milestone
 
@@ -126,6 +129,9 @@ rules. Phase 1 corrected the foundation:
   documented response-header rule, and HSTS with `max-age=15552000`. `includeSubDomains` and
   `preload` remain off intentionally. These controls live at the Cloudflare edge rather than in the
   static HTML.
+- The 2026-07-26 Cloudflare check verified automatic Web Analytics/RUM injection, with EU visitor
+  collection excluded and exactly one beacon on the live homepage. Analytics stays at the edge;
+  there is intentionally no `CF_ANALYTICS_TOKEN` repository variable.
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
 

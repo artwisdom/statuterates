@@ -11,6 +11,7 @@ const DIST = join(__dirname, '..', 'dist');
 const errors = [];
 const canonicalOwners = new Map();
 const expectedOrigin = new URL(process.env.SITE_URL || 'https://statuterates.com').origin;
+let manualCloudflareBeaconFile = null;
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -45,6 +46,13 @@ function contextAt(html, index) {
 const htmlFiles = walk(DIST).filter((file) => file.endsWith('.html'));
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
+
+  // Production Cloudflare Web Analytics uses edge-managed automatic injection. Shipping a second
+  // beacon in the static HTML would double-count visits and bypass the zone's EU exclusion.
+  if (!manualCloudflareBeaconFile
+      && (html.includes('static.cloudflareinsights.com') || html.includes('data-cf-beacon'))) {
+    manualCloudflareBeaconFile = file;
+  }
 
   // Technical SEO invariants. These are deliberately structural, not arbitrary character-count
   // heuristics: a deploy should never create an untitled, non-canonical, or multi-H1 page.
@@ -112,6 +120,10 @@ const stateCalculatorFiles = htmlFiles.filter((file) => {
 });
 if (stateCalculatorFiles.length) {
   errors.push(`unsafe state calculator pages were generated: ${stateCalculatorFiles.join(', ')}`);
+}
+
+if (manualCloudflareBeaconFile) {
+  errors.push(`${manualCloudflareBeaconFile}: manual Cloudflare Web Analytics beacon would duplicate edge-managed analytics`);
 }
 
 if (errors.length) {
