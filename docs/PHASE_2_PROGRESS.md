@@ -2,7 +2,7 @@
 
 **Started:** 2026-07-19
 **Status:** Demand-led histories and Search Console page strengthening complete; calculators withheld
-**Deployment status:** release candidate verified locally 2026-07-26
+**Deployment status:** production verified 2026-07-26 (`76748cb`, `deploy-site` run 26)
 
 ## Demand-led order without publishing private account data
 
@@ -301,6 +301,10 @@ risk of a calculator that only appears complete.
 - Static build: 192 HTML pages; 189 indexable sitemap URLs; SEO metadata, internal links, and
   calculator-indexing gates pass.
 - All 102 state-law entities remain `reference_only`; no unsafe state calculator is generated.
+- Production: the Cloudflare-served priority pages, sitemap, HSTS, and 114-series/2,303-observation
+  API were verified after the successful GitHub Pages deployment. Search Console accepted the
+  refreshed sitemap and indexing validation requests; crawl/indexing changes remain under Google's
+  control and should be reviewed after its reports update.
 
 ## Next work
 

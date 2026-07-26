@@ -110,9 +110,10 @@ rules. Phase 1 corrected the foundation:
 - Indexable sitemap: 189 URLs.
 - Local mobile Lighthouse: 100 accessibility, 100 best practices, 100 SEO, and 100 agentic browsing.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
-- Current release candidate: 192 pages, 189 sitemap URLs, unique titles/descriptions/canonicals,
-  2,303-observation API, Florida 78-point history, Utah 34-point history, Iowa 302-point history,
-  and all calculation/indexing safety gates verified locally.
+- Production release `76748cb` (GitHub Actions `deploy-site` run 26) passed on 2026-07-26.
+  The Cloudflare-served domain was verified across the priority state/rate pages, 189-URL sitemap,
+  HSTS, and the 114-series/2,303-observation API. Google Search Console accepted the refreshed
+  sitemap and started indexing validation; allow Google time to recrawl and update its reports.
 
 ## Important files
 
