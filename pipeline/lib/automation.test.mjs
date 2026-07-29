@@ -33,6 +33,22 @@ test('refresh records whether exports changed without relying on a suppressed pu
   assert.doesNotMatch(refresh, /deploy workflow runs on push to data\/exports/i);
 });
 
+test('refresh validates newly generated exports before the bot can commit them', async () => {
+  const refresh = await readFile(refreshPath, 'utf8');
+  const pipelineIndex = refresh.indexOf('name: Run pipeline (fetch → validate → export)');
+  const verifyIndex = refresh.indexOf('name: Verify refreshed exports before commit');
+  const commitIndex = refresh.indexOf('name: Commit refreshed data (only if exports changed)');
+
+  assert.notEqual(pipelineIndex, -1);
+  assert.notEqual(verifyIndex, -1);
+  assert.notEqual(commitIndex, -1);
+  assert.ok(pipelineIndex < verifyIndex && verifyIndex < commitIndex);
+  const verifyStep = refresh.slice(verifyIndex, commitIndex);
+  assert.match(verifyStep, /working-directory:\s*pipeline/);
+  assert.match(verifyStep, /npm test/);
+  assert.match(verifyStep, /node run\.mjs build/);
+});
+
 test('IndexNow runs only after the production deployment step', async () => {
   const deploy = await readFile(deployPath, 'utf8');
   const deploymentIndex = deploy.indexOf('uses: actions/deploy-pages@v5');

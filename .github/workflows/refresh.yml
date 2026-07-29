@@ -48,6 +48,15 @@ jobs:
         # so broken/stale data can never be committed or deployed.
         run: node run.mjs all
 
+      - name: Verify refreshed exports before commit
+        working-directory: pipeline
+        # Tests run once before network fetches to protect the fetch itself, then again against the
+        # newly generated snapshot. This prevents a valid new quarter/week from exposing a stale
+        # fixture only after the bot has already committed it.
+        run: |
+          npm test
+          node run.mjs build
+
       - name: Commit refreshed data (only if exports changed)
         id: commit
         if: success()
@@ -71,14 +80,16 @@ jobs:
           {
             echo "## ❌ Data refresh failed"
             echo ""
-            echo "The pipeline exited non-zero. Most likely a source changed its HTML/CSV layout or is"
-            echo "temporarily blocking requests. NO data was committed or deployed (fail-loud by design)."
+            echo "The fetch, validation, export recheck, or test suite exited non-zero. A source may"
+            echo "have changed/blocked requests, or a test may need to follow a valid new period."
+            echo "NO data was committed or deployed (fail-loud by design)."
             echo ""
             echo "**Next steps** (see docs/MAINTENANCE_RUNBOOK.md):"
-            echo "1. Open the 'Run pipeline' step log above and find the failing source id + error."
+            echo "1. Open the failed step above and find the source, validation, or test error."
             echo "2. If a source layout changed, update its fetcher in \`pipeline/fetchers/\`."
-            echo "3. If a source is temporarily down/rate-limiting, just re-run this workflow."
-            echo "4. Re-run \`npm test\` and \`node run.mjs all\` locally before pushing the fix."
+            echo "3. If a valid new period exposed a stale fixture, make that test data-relative."
+            echo "4. If a source is temporarily down/rate-limiting, re-run this workflow."
+            echo "5. Re-run \`npm test\`, \`node run.mjs all\`, and \`node run.mjs build\` locally."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record deployment handoff
