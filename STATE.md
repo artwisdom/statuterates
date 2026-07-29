@@ -3,14 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-07-26
+**Updated:** 2026-07-28
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 22.12+ (Node 24 also verified locally)
 
 ## Current product
 
-- 114 rate-series entities and 4,947 recorded historical observations.
+- 114 rate-series entities and 4,949 recorded historical observations.
 - 195 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
@@ -166,7 +166,7 @@ verified in production.
   Package” download. It fetches complete official FRED `DGS1` daily history from January 2000,
   derives Monday-keyed weekly averages with exact decimal rounding, and requires every published
   `WGS1YR` week to reconcile before loading or exporting.
-- The modern §1961 series now contains 1,336 weekly rate records beginning December 11, 2000—the
+- The modern §1961 series now contains 1,337 weekly rate records beginning December 11, 2000—the
   preceding rate week needed for judgments entered when the current formula began on December 21.
   The calculator rejects earlier judgments and refuses to substitute an older rate when the exact
   preceding calendar week is absent.
@@ -195,14 +195,18 @@ verified in production.
 - Current values, years, effective dates, branch rates, and history counts on the monitored
   variable-rate pages are observation-backed. The weekly workflow opens a deduplicated issue 45
   days before a calculator's legal review expires, and IndexNow runs only after production deploys.
+- Sitemap `lastmod` values now advance only for a verified data, source-retrieval, release, or
+  substantial editorial change. Build verification rejects invalid, pre-launch, and future dates.
+- The weekly refresh reruns the complete test suite and exact-export build after fetching and before
+  committing, so new official observations cannot silently make the repository's release gate stale.
 
 ## Verified checks
 
-- Pipeline: 125 tests.
+- Pipeline: 126 tests.
 - Shared interest engine: 36 tests.
-- Site data and copy contracts: 7 tests.
+- Site data and copy contracts: 13 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
-- API conformance: 114 entity endpoints and 5,061 latest/history records checked.
+- API conformance: 114 entity endpoints and 5,063 latest/history records checked.
 - Static build: 195 pages on Astro 7.
 - Indexable sitemap: 192 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
@@ -223,6 +227,14 @@ verified in production.
   tested `$11,218.50` result; HTTPS/HSTS/`nosniff`, redirects, canonical URL, structured data,
   AdSense, one Cloudflare analytics beacon, no horizontal overflow at the tested live viewport, and
   zero browser-console errors were reverified directly on the Cloudflare-served domain.
+- Phase 5 and indexing-safety release `ca392a1` (GitHub Actions `deploy-site` run 31,
+  [run 30413180531](https://github.com/artwisdom/statuterates/actions/runs/30413180531)) passed on
+  2026-07-28. Production serves the audited Florida calculator, 1,337-week federal §1961 history,
+  1,386-week Treasury history, truthful sitemap freshness signals, and 4,949-observation API. Both
+  calculators, exact live calculations, desktop/mobile layout, canonical/schema markup, HTTP-to-HTTPS
+  redirect, security headers, AdSense, one Cloudflare analytics beacon, and the public API were
+  reverified directly. The live sitemap contains 192 unique URLs with no pre-launch or future
+  `lastmod` date, and Search Console reports that sitemap as successful.
 
 ## Important files
 
@@ -233,6 +245,7 @@ verified in production.
 - `pipeline/fetchers/fed-h15.mjs`: complete DGS1 ingestion and mandatory WGS1YR reconciliation.
 - `pipeline/fetchers/us-states.mjs`: curated state values and source-check timestamps.
 - `site/src/lib/data.mjs`: build-time data loader and fail-closed calculator check.
+- `site/src/lib/sitemap.mjs`: truthful significant-change dates for sitemap entries.
 - `site/scripts/check-build.mjs`: broken-link/indexing/rendered-output deployment guard.
 - `docs/PHASE_1_AUDIT.md`: takeover findings, competitor research, keyword map, and growth priorities.
 - `docs/PHASE_2_PROGRESS.md`: demand-led Texas, Nebraska, Iowa, Kentucky, Maine, Georgia, and
@@ -276,6 +289,12 @@ verified in production.
 - The 2026-07-26 Cloudflare check verified automatic Web Analytics/RUM injection, with EU visitor
   collection excluded and exactly one beacon on the live homepage. Analytics stays at the edge;
   there is intentionally no `CF_ANALYTICS_TOKEN` repository variable.
+- Search Console's discovered-page validation remains in progress. The inspected redirect examples
+  are expected old HTTP variants that already consolidate through a one-hop `301`; they are not a
+  reason to change canonicals or request another validation. One isolated retired URL remains a
+  legitimate `404` and is absent from internal links and the sitemap; a future exact redirect may
+  be considered only if external-link evidence makes it worthwhile. Blanket 404 redirects remain
+  prohibited.
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
 

@@ -1,7 +1,7 @@
 # Phase 5 progress — durable federal history and the first audited state calculator
 
 **Started:** 2026-07-26  
-**Status:** Implementation and local release gate complete; production deployment pending
+**Status:** Deployed and verified in production on 2026-07-28
 
 ## Why this phase
 
@@ -30,7 +30,7 @@ freshness, observation counts, and complete cross-feed equality. Either request 
 failure aborts before export. The stable `fed-h15` source ID is retained so a fresh CI database
 hydrates one continuous provenance branch.
 
-The derived CMT history contains 1,385 Monday-keyed weeks. The modern §1961 history contains 1,336
+The derived CMT history contains 1,386 Monday-keyed weeks. The modern §1961 history contains 1,337
 weeks beginning December 11, 2000, which is the rate week required for judgments entered when the
 current formula took effect on December 21. Database validation requires one-to-one dates and values
 between those modern post-judgment rows and the CMT series and rejects any calendar gap.
@@ -99,12 +99,12 @@ an older code baseline over them.
 
 ## Automation and verification
 
-- Pipeline: 125/125 tests passed.
+- Pipeline: 126/126 tests passed.
 - Shared calculation engine: 36/36 tests passed.
-- Site data and copy contracts: 7/7 tests passed.
+- Site data and copy contracts: 13/13 tests passed.
 - MCP server: 3/3 tests passed, including the six-tool smoke test.
-- Full official refresh/export: 114 entities and 4,947 observations.
-- API conformance: 114 entity endpoints and 5,061 latest/history records checked.
+- Full official refresh/export: 114 entities and 4,949 observations.
+- API conformance: 114 entity endpoints and 5,063 latest/history records checked.
 - Static build: 195 HTML pages.
 - Indexable sitemap: 192 URLs.
 - Build verification: unique titles/descriptions/canonicals, internal links, homepage reachability,
@@ -116,12 +116,28 @@ an older code baseline over them.
 - Monitored variable-rate copy derives its current rate, year, branch values, effective date, and
   history count from the selected observation. A 45-day workflow reminder opens before a published
   calculator's legal-review window expires, and IndexNow now runs only after deployment is live.
+- Sitemap dates now reflect only a verified data, retrieval, release, or substantial editorial
+  change. Invalid, pre-launch, and future dates fail the release gate.
+- The refresh workflow reruns tests and the exact export build after fetching and before its bot
+  commit, preventing a valid new observation from exposing a stale test or derived artifact.
 
-## Remaining after deployment
+## Production verification
 
-- Verify both calculators on the Cloudflare-served production domain at desktop and mobile widths.
-- Confirm HTTP→HTTPS, HSTS, security headers, canonical/schema, one Cloudflare Analytics beacon,
-  AdSense behavior, sitemap inclusion, no horizontal overflow, and no browser-console errors.
-- Submit or inspect the new Florida URL in Search Console only after production is confirmed.
-- Measure impressions, clicks, calculator engagement, and page RPM over several recrawls before
-  selecting another state. Do not mass-create state pages.
+- Release `ca392a1` passed
+  [GitHub Actions run 31](https://github.com/artwisdom/statuterates/actions/runs/30413180531).
+- The federal and Florida calculators were verified on the Cloudflare-served production domain at
+  desktop and mobile widths. Tested calculations matched the engine fixtures.
+- HTTP-to-HTTPS, HSTS, security headers, canonical/schema markup, AdSense, one Cloudflare Analytics
+  beacon, sitemap inclusion, and responsive layout were verified live.
+- The public API reports 114 entities and 4,949 observations. The 192-URL sitemap has no duplicate,
+  pre-launch, or future-dated entry, and Search Console reports it as successful.
+- Search Console validation for discovered pages is still in progress. Inspected redirect examples
+  are expected old HTTP variants already consolidated by a one-hop `301`; one isolated retired URL
+  is absent from internal links and the sitemap. Neither finding is a site-wide indexing blocker.
+
+## Next measurement gate
+
+- Allow Google several recrawls to finish its active validation before changing URL structure or
+  asking for another validation.
+- Measure impressions, clicks, calculator engagement, and page RPM before selecting another state.
+  Strengthen pages with demonstrated demand; do not mass-create state pages.
