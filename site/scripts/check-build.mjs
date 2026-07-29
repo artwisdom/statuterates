@@ -6,6 +6,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
+import { isIsoCalendarDate, SITE_LAUNCH_DATE } from '../src/lib/sitemap.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, '..', 'dist');
@@ -14,6 +15,7 @@ const canonicalOwners = new Map();
 const titleOwners = new Map();
 const descriptionOwners = new Map();
 const expectedOrigin = new URL(process.env.SITE_URL || 'https://statuterates.com').origin;
+const verificationDate = new Date().toISOString().slice(0, 10);
 let manualCloudflareBeaconFile = null;
 const linkGraph = new Map();
 
@@ -192,6 +194,16 @@ const sitemapPath = join(DIST, 'sitemap.xml');
 const sitemap = readFileSync(sitemapPath, 'utf8');
 const sitemapRoutes = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)]
   .map((match) => new URL(match[1]).pathname);
+for (const match of sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) {
+  const lastmod = match[1];
+  if (!isIsoCalendarDate(lastmod)) {
+    errors.push(`sitemap.xml: invalid lastmod ${lastmod}`);
+  } else if (lastmod < SITE_LAUNCH_DATE) {
+    errors.push(`sitemap.xml: lastmod ${lastmod} predates the ${SITE_LAUNCH_DATE} site launch`);
+  } else if (lastmod > verificationDate) {
+    errors.push(`sitemap.xml: lastmod ${lastmod} is later than the ${verificationDate} release date`);
+  }
+}
 const reachable = new Set(['/']);
 const queue = ['/'];
 while (queue.length) {

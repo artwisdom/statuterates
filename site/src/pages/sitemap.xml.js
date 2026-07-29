@@ -1,16 +1,18 @@
 // Self-contained sitemap.xml — enumerates every indexable page from the dataset at build time.
-// No integration dependency; the loc URLs use the configured Astro `site` domain. Each URL carries a
-// real per-page <lastmod> (the underlying rate's latest effective date, clamped to the build date) so
-// the date is a genuine change signal for crawlers rather than one shared build stamp.
-import { getAllEntities, getMeta, stateHubs, latestOf, isCalculatorReady, publishedStateCalculators, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
+// No integration dependency; the loc URLs use the configured Astro `site` domain. Data URLs carry a
+// real per-page <lastmod> based on launch, source retrieval, current effect, or substantial editing —
+// never the pre-launch age of the underlying law and never one shared, churning build stamp.
+import { getAllEntities, stateHubs, latestOf, currentOf, isCalculatorReady, publishedStateCalculators, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
 import { GUIDES } from '../lib/guides.mjs';
 import { contentModifiedFor } from '../lib/content.mjs';
+import { significantPageDate } from '../lib/sitemap.mjs';
 
 export function GET({ site }) {
   const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
-  const meta = getMeta();
-  const build = (meta.generated_at || '').slice(0, 10);
-  const clamp = (d) => (d && d <= build ? d : build); // never advertise a future date
+  // The export timestamp controls which observation currentOf() calls current. It is not the page
+  // build time: an editorial improvement may legitimately ship after the last data refresh.
+  const releaseDate = new Date().toISOString().slice(0, 10);
+  const clamp = (d) => (d && d <= releaseDate ? d : null); // ignore mistaken future dates
 
   const entities = getAllEntities();
   const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
@@ -27,10 +29,12 @@ export function GET({ site }) {
     ...(prejudgmentCalculatorReady ? ['/calculators/prejudgment-interest/'] : []),
   ];
 
-  const dateFor = new Map(entities.map((e) => [e.slug, [
-    String(latestOf(e)?.effective_date || '').slice(0, 10),
-    contentModifiedFor(e.slug),
-  ].filter(Boolean).sort().at(-1)]));
+  const dateFor = new Map(entities.map((e) => [e.slug, significantPageDate({
+    currentObservation: currentOf(e),
+    publishedObservation: latestOf(e),
+    contentModified: contentModifiedFor(e.slug),
+    buildDate: releaseDate,
+  })]));
   const calculatorRows = [
     { path: '/calculators/post-judgment-interest/', slugs: ['us-federal-post-judgment'] },
     { path: '/calculators/irs-interest/', slugs: ['irs-underpayment'] },
@@ -59,7 +63,7 @@ export function GET({ site }) {
     ...GUIDES.map((g) => ({ path: `/guides/${g.slug}/`, lastmod: clamp(g.dateModified) })),
     // Data-driven calculators change when their underlying rate contract changes.
     ...calculatorRows,
-    // Rate pages + hubs: the underlying rate's real effective date is a true change signal.
+    // Rate pages + hubs: dates move only when their rendered data or editorial substance changes.
     ...entities.map((e) => ({ path: `/rates/${e.slug}/`, lastmod: clamp(dateFor.get(e.slug)) })),
     ...stateHubs().map((h) => ({
       path: `/states/${h.base}/`,
