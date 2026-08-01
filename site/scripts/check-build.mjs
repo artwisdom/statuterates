@@ -212,6 +212,10 @@ for (const file of htmlFiles) {
 }
 
 const sitemapPath = join(DIST, 'sitemap.xml');
+const deployMarkerPath = join(DIST, 'deploy-marker.txt');
+if (!existsSync(deployMarkerPath) || !readFileSync(deployMarkerPath, 'utf8').trim()) {
+  errors.push('deploy-marker.txt: missing or empty exact-artifact marker');
+}
 const sitemap = readFileSync(sitemapPath, 'utf8');
 const sitemapRoutes = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)]
   .map((match) => new URL(match[1]).pathname);

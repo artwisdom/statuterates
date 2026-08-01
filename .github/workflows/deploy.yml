@@ -83,6 +83,8 @@ jobs:
           # Optional: set ADSENSE_SLOT to a "Display/responsive" ad-unit id to render intentional,
           # labeled in-content ad units (top/bottom of each page). Empty = rely on Auto Ads only.
           ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT || '' }}
+          # Exact artifact identity for the public-edge deployment check.
+          DEPLOY_MARKER: ${{ format('{0}-{1}', github.run_id, github.run_attempt) }}
         run: npm run build
 
       - name: Verify built links and indexing guardrails
@@ -126,6 +128,7 @@ jobs:
         if: ${{ vars.SITE_URL != '' }}
         env:
           SITE_URL: ${{ vars.SITE_URL }}
+          DEPLOY_MARKER: ${{ format('{0}-{1}', github.run_id, github.run_attempt) }}
         run: node machine/check-public-edge.mjs
 
       # Notify IndexNow only after production is live, so every submitted URL resolves to the new

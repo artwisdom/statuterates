@@ -11,6 +11,8 @@ base.search = '';
 base.hash = '';
 const origin = base.origin;
 const releaseId = process.env.GITHUB_RUN_ID || Date.now();
+const expectedMarker = String(process.env.DEPLOY_MARKER || '').trim();
+if (!expectedMarker) throw new Error('DEPLOY_MARKER is required');
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -49,12 +51,9 @@ async function waitForRelease() {
   let lastError;
   for (let attempt = 1; attempt <= 12; attempt += 1) {
     try {
-      const { response, text } = await request('/rates/texas-judgment-rate/', { cacheBust: true });
-      if (response.status === 200
-          && text.includes('rel="alternate" type="application/rss+xml"')
-          && text.includes('/rates/texas-judgment-rate.xml')
-          && text.includes(`${origin}/terms/#data-api-license`)) return;
-      lastError = new Error(`release markers not live (HTTP ${response.status})`);
+      const { response, text } = await request('/deploy-marker.txt', { cacheBust: true });
+      if (response.status === 200 && text.trim() === expectedMarker) return;
+      lastError = new Error(`expected marker ${expectedMarker}, received ${JSON.stringify(text.trim())} (HTTP ${response.status})`);
     } catch (error) {
       lastError = error;
     }
@@ -69,8 +68,9 @@ function requireText(label, text, expected) {
 
 await waitForRelease();
 
-const [home, robots, sitemap, ads, globalFeed, rateFeed] = await Promise.all([
+const [home, texasRate, robots, sitemap, ads, globalFeed, rateFeed] = await Promise.all([
   requestWithRetry('/', { cacheBust: true }),
+  requestWithRetry('/rates/texas-judgment-rate/', { cacheBust: true }),
   requestWithRetry('/robots.txt', { cacheBust: true }),
   requestWithRetry('/sitemap.xml', { cacheBust: true }),
   requestWithRetry('/ads.txt', { cacheBust: true }),
@@ -78,11 +78,13 @@ const [home, robots, sitemap, ads, globalFeed, rateFeed] = await Promise.all([
   requestWithRetry('/rates/texas-judgment-rate.xml', { cacheBust: true }),
 ]);
 
-for (const [label, result] of Object.entries({ home, robots, sitemap, ads, globalFeed, rateFeed })) {
+for (const [label, result] of Object.entries({ home, texasRate, robots, sitemap, ads, globalFeed, rateFeed })) {
   if (result.response.status !== 200) throw new Error(`${label} returned HTTP ${result.response.status}`);
 }
 requireText('homepage', home.text, `<link rel="canonical" href="${origin}/">`);
 requireText('homepage', home.text, 'rel="alternate" type="application/rss+xml"');
+requireText('Texas rate page', texasRate.text, '/rates/texas-judgment-rate.xml');
+requireText('Texas rate page', texasRate.text, `${origin}/terms/#data-api-license`);
 requireText('robots.txt', robots.text, `Sitemap: ${origin}/sitemap.xml`);
 requireText('global RSS feed', globalFeed.text, '<rss version="2.0"');
 requireText('rate RSS feed', rateFeed.text, '<guid isPermaLink="false">texas-judgment-rate@');
