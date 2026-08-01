@@ -200,11 +200,39 @@ verified in production.
 - The weekly refresh reruns the complete test suite and exact-export build after fetching and before
   committing, so new official observations cannot silently make the repository's release gate stale.
 
+## Phase 6 existing-page growth and retention
+
+- The current growth decision is to build the site up, not broadly out. Search Console's July 8–29
+  snapshot showed 74 clicks from 6,173 impressions, 1.2% CTR, and average position 14.9, with several
+  existing state/rate pages already around positions 8–15. At the same time, 85 discovered/crawled
+  URLs remained in active indexing validation. The 192-URL sitemap therefore stays unchanged while
+  Google processes and tests the existing inventory.
+- Every HTML page now advertises the automated rate-change RSS feed to feed readers. The 26 series
+  with more than one real effective-date observation also have focused `/rates/<slug>.xml` feeds and
+  visible “follow recorded updates” links. Feeds exclude future effective dates, deduplicate stable
+  series/date identifiers, cap focused payloads at 50 items, collect no personal data, and remain out
+  of the indexable sitemap.
+- Rate pages now link contextually into the appropriate state comparison, calculator, and explanatory
+  guide cluster. All seven guides use curated related-guide mappings and the reusable citation tool;
+  Article schema now includes the existing publisher URL, logo, and social image.
+- Every Dataset structured-data object now links to the site's data/API terms, addressing Search
+  Console's 43 `license` recommendations. Individual rate datasets also identify the cited source as
+  their basis. Build verification parses all JSON-LD and rejects a missing or different dataset
+  license.
+- Deployment now emits an exact run-and-attempt artifact marker. After GitHub Pages publishes, a
+  retrying read-only check waits for that exact marker, verifies the priority release contracts,
+  robots.txt, ads.txt, the global and focused feeds, and every canonical sitemap URL before search
+  engines are notified. This avoids both silent production drift and mistakenly validating an older
+  cached artifact.
+- The IndexNow ownership key was rotated only after the exact-artifact check was active. The final
+  release submitted all 192 sitemap URLs and received HTTP `202` (accepted for key validation) rather
+  than the inherited `403`.
+
 ## Verified checks
 
-- Pipeline: 126 tests.
+- Pipeline: 127 tests.
 - Shared interest engine: 36 tests.
-- Site data and copy contracts: 13 tests.
+- Site data, copy, and RSS contracts: 15 tests.
 - MCP: 3 tests, including traversal protection and the full six-tool smoke test.
 - API conformance: 114 entity endpoints and 5,063 latest/history records checked.
 - Static build: 195 pages on Astro 7.
@@ -235,6 +263,12 @@ verified in production.
   redirect, security headers, AdSense, one Cloudflare analytics beacon, and the public API were
   reverified directly. The live sitemap contains 192 unique URLs with no pre-launch or future
   `lastmod` date, and Search Console reports that sitemap as successful.
+- Phase 6 release `62fc77a` (GitHub Actions
+  [run 30680225854](https://github.com/artwisdom/statuterates/actions/runs/30680225854)) passed on
+  2026-07-31 Eastern / 2026-08-01 UTC. Production serves sitewide RSS autodiscovery, 26 focused
+  historical-series feeds, the strengthened guide/rate link graph, complete Dataset license markup,
+  and the exact-artifact public-edge monitor. The monitor verified both feeds, public support files,
+  and all 192 sitemap URLs; IndexNow accepted the 192-URL batch with HTTP `202`.
 
 ## Important files
 
@@ -246,7 +280,9 @@ verified in production.
 - `pipeline/fetchers/us-states.mjs`: curated state values and source-check timestamps.
 - `site/src/lib/data.mjs`: build-time data loader and fail-closed calculator check.
 - `site/src/lib/sitemap.mjs`: truthful significant-change dates for sitemap entries.
+- `site/src/lib/changes.mjs` and `site/src/lib/rss.mjs`: future-safe change selection and RSS output.
 - `site/scripts/check-build.mjs`: broken-link/indexing/rendered-output deployment guard.
+- `machine/check-public-edge.mjs`: exact-release and all-sitemap-URL production verification.
 - `docs/PHASE_1_AUDIT.md`: takeover findings, competitor research, keyword map, and growth priorities.
 - `docs/PHASE_2_PROGRESS.md`: demand-led Texas, Nebraska, Iowa, Kentucky, Maine, Georgia, and
   Mississippi source research and the current state-verification roadmap.
