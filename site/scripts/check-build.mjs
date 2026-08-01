@@ -121,6 +121,27 @@ for (const file of htmlFiles) {
   if (h1s.length !== 1) errors.push(`${file}: expected one H1, found ${h1s.length}`);
   if (!html.includes('<html lang="en">')) errors.push(`${file}: missing html lang="en"`);
   if (!html.includes('<meta name="viewport"')) errors.push(`${file}: missing viewport metadata`);
+  const rssLinks = [...html.matchAll(/<link\s+rel="alternate"\s+type="application\/rss\+xml"\s+title="[^"]+"\s+href="([^"]+)">/g)];
+  if (rssLinks.length !== 1) {
+    errors.push(`${file}: expected one RSS autodiscovery link, found ${rssLinks.length}`);
+  } else if (!localTargetExists(rssLinks[0][1])) {
+    errors.push(`${file}: RSS autodiscovery target does not exist: ${rssLinks[0][1]}`);
+  }
+  for (const match of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    let structuredData;
+    try {
+      structuredData = JSON.parse(match[1]);
+    } catch {
+      errors.push(`${file}: invalid JSON-LD near "${contextAt(html, match.index)}"`);
+      continue;
+    }
+    if (structuredData?.['@type'] === 'Dataset') {
+      const expectedLicense = `${expectedOrigin}/terms/#data-api-license`;
+      if (structuredData.license !== expectedLicense) {
+        errors.push(`${file}: Dataset JSON-LD must link to ${expectedLicense}`);
+      }
+    }
+  }
   if (titles.length === 1) {
     const title = decodeHtmlText(titles[0][1]).trim();
     if (title.length > 65) errors.push(`${file}: title is ${title.length} characters (maximum 65)`);

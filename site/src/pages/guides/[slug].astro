@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import CiteThis from '../../components/CiteThis.astro';
 import { getMeta, prettyDate } from '../../lib/data.mjs';
 import { GUIDES, getGuide } from '../../lib/guides.mjs';
 
@@ -11,7 +12,24 @@ export function getStaticPaths() {
 const { guide } = Astro.props;
 const meta = getMeta();
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const related = GUIDES.filter((g) => g.slug !== guide.slug).slice(0, 4);
+const origin = new URL('/', Astro.site).href;
+const logo = new URL('/logo-512.png', Astro.site).href;
+const articleImage = new URL('/og-image.png', Astro.site).href;
+
+// Curated topic clusters keep recommendations genuinely useful instead of depending on array order.
+// Each guide is included in at least one other cluster, creating durable contextual discovery paths.
+const RELATED_GUIDE_SLUGS = {
+  'post-judgment-interest': ['how-to-calculate-judgment-interest', 'prejudgment-interest', 'statutory-interest', 'irs-interest-rates'],
+  'prejudgment-interest': ['post-judgment-interest', 'how-to-calculate-judgment-interest', 'statutory-interest', 'late-payment-interest'],
+  'how-to-calculate-judgment-interest': ['post-judgment-interest', 'prejudgment-interest', 'statutory-interest', 'irs-interest-rates'],
+  'irs-interest-rates': ['irs-penalties-explained', 'statutory-interest', 'how-to-calculate-judgment-interest', 'post-judgment-interest'],
+  'irs-penalties-explained': ['irs-interest-rates', 'statutory-interest', 'how-to-calculate-judgment-interest', 'late-payment-interest'],
+  'late-payment-interest': ['statutory-interest', 'prejudgment-interest', 'how-to-calculate-judgment-interest', 'post-judgment-interest'],
+  'statutory-interest': ['post-judgment-interest', 'prejudgment-interest', 'irs-interest-rates', 'late-payment-interest'],
+};
+const related = (RELATED_GUIDE_SLUGS[guide.slug] || [])
+  .map((slug) => getGuide(slug))
+  .filter(Boolean);
 
 // State calculators are intentionally unavailable until their complete rule models pass validation.
 // Older guide copy linked to the prototypes, so route those links to the honest reference indexes.
@@ -27,8 +45,14 @@ const jsonLd = [
     headline: guide.h1,
     description: guide.description,
     url: canonical,
-    author: { '@type': 'Organization', name: meta.title },
-    publisher: { '@type': 'Organization', name: meta.title },
+    author: { '@type': 'Organization', name: meta.title, url: origin },
+    publisher: {
+      '@type': 'Organization',
+      name: meta.title,
+      url: origin,
+      logo: { '@type': 'ImageObject', url: logo, width: 512, height: 512 },
+    },
+    image: { '@type': 'ImageObject', url: articleImage, width: 1200, height: 630 },
     datePublished: guide.datePublished,
     dateModified: guide.dateModified,
     mainEntityOfPage: canonical,
@@ -88,6 +112,12 @@ const jsonLd = [
       ))}
     </section>
   )}
+
+  <CiteThis
+    title={guide.h1}
+    url={canonical}
+    note={`Last updated ${prettyDate(guide.dateModified)}; confirm the controlling authority before use.`}
+  />
 
   {related.length > 0 && (
     <section class="related">

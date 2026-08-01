@@ -53,6 +53,7 @@ const jsonLd = [
     url: canonical,
     isAccessibleForFree: true,
     creator: { '@type': 'Organization', name: meta.title },
+    license: new URL('/terms/#data-api-license', Astro.site).href,
     dateModified: datasetModified,
     distribution: {
       '@type': 'DataDownload',

@@ -35,7 +35,9 @@ only when they changed.
 The deploy workflow installs and tests the pipeline, validates a fresh database hydrated from the
 committed exports, tests the site data contract and shared engine, rebuilds the static API, builds
 Astro, checks all internal targets and calculator indexing gates, validates the API contract, and
-then publishes to GitHub Pages. It runs for reviewed `main` changes and after every successful refresh through
+then publishes to GitHub Pages. After publication it waits for the custom domain, verifies the key
+release markers and public support files, and checks every sitemap URL before notifying search engines.
+It runs for reviewed `main` changes and after every successful refresh through
 `workflow_run`. The latter is required because GitHub intentionally prevents a push made with the
 workflow's `GITHUB_TOKEN` from triggering another push workflow. A successful no-change refresh still
 runs the inexpensive deployment verification so production cannot silently drift from `main`.

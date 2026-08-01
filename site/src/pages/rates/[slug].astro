@@ -4,6 +4,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
 import { getAllEntities, getEntity, getMeta, currentOf, latestOf, prettyDate, prettyDateTime, isPrejudgment, isCalculatorReady, stateCalculatorReleaseForEntity, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
+import { recordedChangesFor } from '../../lib/changes.mjs';
 
 export function getStaticPaths() {
   return getAllEntities().map((e) => ({ params: { slug: e.slug } }));
@@ -17,6 +18,8 @@ const latestPublished = latestOf(entity);
 const latest = currentOf(entity);
 const history = (entity.history?.annual_rate || []).slice(0, 40); // recent history for the table
 const totalPoints = (entity.history?.annual_rate || []).length;
+const recordedChanges = recordedChangesFor(entity);
+const rateFeedHref = recordedChanges.length > 1 ? `/rates/${slug}.xml` : null;
 const copy = copyFor(slug, { observation: latest, historyPoints: totalPoints });
 
 const isDerived = latest?.confidence !== 'high';
@@ -190,6 +193,33 @@ const factsHeading = isStateRate
   ? `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest at a glance`
   : `${entity.name} at a glance`;
 
+const relatedResources = [];
+const addRelated = (href, label) => {
+  if (!relatedResources.some((item) => item.href === href)) relatedResources.push({ href, label });
+};
+if (isStateRate) {
+  addRelated(
+    pj ? '/guides/prejudgment-interest/' : '/guides/post-judgment-interest/',
+    pj ? 'How prejudgment interest works' : 'How post-judgment interest works',
+  );
+  addRelated(pj ? '/prejudgment/' : '/states/', pj ? 'Compare prejudgment rules by state' : 'Compare judgment rates by state');
+  addRelated('/guides/how-to-calculate-judgment-interest/', 'How to calculate judgment interest');
+  if (!pj) addRelated('/states/highest-lowest/', 'Highest and lowest state judgment rates');
+} else if (slug.startsWith('irs-')) {
+  addRelated('/guides/irs-interest-rates/', 'How IRS interest rates work');
+  addRelated('/guides/irs-penalties-explained/', 'IRS late-filing and late-payment penalties');
+  addRelated('/calculators/irs-interest/', 'IRS interest and refund calculator');
+  addRelated('/calculators/irs-penalty-and-interest/', 'IRS penalty and interest calculator');
+} else if (['uk-late-payment-commercial', 'boe-bank-rate', 'eu-late-payment-reference', 'ecb-main-refinancing-rate'].includes(slug)) {
+  addRelated('/guides/late-payment-interest/', 'UK and EU late-payment interest guide');
+  addRelated('/calculators/late-payment-interest/', 'Late-payment interest calculator');
+  addRelated('/guides/statutory-interest/', 'Statutory interest in plain English');
+} else {
+  addRelated('/guides/post-judgment-interest/', 'How post-judgment interest works');
+  addRelated('/guides/how-to-calculate-judgment-interest/', 'How to calculate judgment interest');
+  addRelated('/guides/statutory-interest/', 'Statutory interest in plain English');
+}
+
 // JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
 const jsonLd = [
   {
@@ -200,6 +230,8 @@ const jsonLd = [
     url: canonical,
     isAccessibleForFree: true,
     creator: { '@type': 'Organization', name: meta.title },
+    license: new URL('/terms/#data-api-license', Astro.site).href,
+    isBasedOn: latest?.source_url,
     dateModified: pageModified,
     variableMeasured: {
       '@type': 'PropertyValue',
@@ -240,7 +272,13 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout
+  title={title}
+  description={description}
+  jsonLd={jsonLd}
+  feedHref={rateFeedHref || '/changes.xml'}
+  feedTitle={rateFeedHref ? `${entity.name} recorded updates` : 'StatuteRates recorded rate changes'}
+>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/">Rates</a> &rsaquo; <span>{entity.name}</span>
   </nav>
@@ -275,6 +313,9 @@ const jsonLd = [
       </span>
       {pj && copy.kindLabel && <span class="kind-chip">{copy.kindLabel}</span>}
     </span>
+    {rateFeedHref && (
+      <p class="rate-follow"><a href={rateFeedHref}>Follow recorded updates to this rate (RSS)</a></p>
+    )}
   </div>
 
   <section class="rate-facts" aria-labelledby="rate-facts-heading">
@@ -412,6 +453,14 @@ const jsonLd = [
     <a href={latest?.source_url} rel="nofollow noopener" target="_blank">{latest?.source_url}</a>
   </p>
 
+  <section class="related-resources" aria-labelledby="related-resources-heading">
+    <h2 id="related-resources-heading">Related resources</h2>
+    <ul class="clean">
+      {relatedResources.map((resource) => <li><a href={resource.href}>{resource.label}</a></li>)}
+      {rateFeedHref && <li><a href={rateFeedHref}>Follow this rate's recorded updates (RSS)</a></li>}
+    </ul>
+  </section>
+
   <CiteThis title={entity.name} url={canonical} note={citeNote} />
 
   <AdSlot id="rate-bottom" />
@@ -452,5 +501,11 @@ const jsonLd = [
     .rate-facts dt { margin: 0 0 3px; font-family: var(--sans); font-size: .68rem;
       font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
     .rate-facts dd { margin: 0; font-weight: 650; overflow-wrap: anywhere; }
+    .rate-follow { margin: 16px 0 0; font-size: .88rem; }
+    .rate-follow a { font-weight: 650; text-decoration: none; border-bottom: 1px solid var(--line-strong); }
+    .rate-follow a:hover { border-bottom-color: var(--green); }
+    .related-resources { margin: 32px 0; padding: 18px 20px; border: 1px solid var(--line); background: var(--paper-2); border-radius: 3px; }
+    .related-resources h2 { margin: 0 0 10px; font-size: 1.2rem; }
+    .related-resources ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 7px 24px; margin: 0; }
   </style>
 </BaseLayout>

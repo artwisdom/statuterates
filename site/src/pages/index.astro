@@ -27,6 +27,7 @@ const jsonLd = {
   url: new URL('/', Astro.site).href,
   isAccessibleForFree: true,
   creator: { '@type': 'Organization', name: meta.title },
+  license: new URL('/terms/#data-api-license', Astro.site).href,
   dateModified: dataModified,
   keywords: ['IRS interest rate', 'post-judgment interest rate', 'statutory interest', 'underpayment rate', 'Treasury 1-year CMT'],
   distribution: {
@@ -64,7 +65,8 @@ const jsonLd = {
     &nbsp;·&nbsp; <a href="/glossary/">Glossary →</a></p>
 
   <p class="trust">Every rate carries a <a href="/editorial-policy/">source, effective date, and confidence label</a>.
-    Primary government sources are preferred; exceptions remain explicitly reference-only.</p>
+    Primary government sources are preferred; exceptions remain explicitly reference-only.
+    <a href="/changes.xml">Follow recorded changes via RSS</a>.</p>
 
   <section class="pj-promo irs-promo">
     <div>

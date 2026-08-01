@@ -10,6 +10,8 @@ const {
   description,
   jsonLd = null,
   noindex = false,
+  feedHref = '/changes.xml',
+  feedTitle = 'StatuteRates recorded rate changes',
 } = Astro.props;
 
 const meta = getMeta();
@@ -52,6 +54,7 @@ const path = Astro.url.pathname;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title={feedTitle} href={feedHref} />
     {noindex && <meta name="robots" content="noindex,follow" />}
     <meta name="theme-color" content="#3a3fa6" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

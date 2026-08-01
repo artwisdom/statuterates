@@ -12,8 +12,11 @@ const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
 
 <BaseLayout title={title} description={description}>
   <h1>Recent rate changes</h1>
-  <p class="lead">Every new effective value across the dataset, newest first.
-    Subscribe: <a href="/changes.xml">RSS feed</a> — one item per change, as the pipeline publishes it.</p>
+  <p class="lead">Every new effective value across the dataset, newest first.</p>
+  <aside class="subscribe" aria-label="Subscribe to rate changes">
+    <strong>Follow verified rate changes without an account.</strong>
+    <span>Subscribe to the <a href="/changes.xml">free RSS feed</a>. Individual rate pages also offer focused feeds when a real change history is available.</span>
+  </aside>
 
   <div class="scroll-x">
     <table>
@@ -38,4 +41,9 @@ const JUR = { US: 'US', GB: 'UK', EU: 'EU' };
     weeks; Iowa and Texas publish monthly selections; Nebraska changes quarterly; the IRS resets
     quarterly; UK/EU statutory rates semi-annually; policy rates on decision dates. Machine consumers:
     the same data is in the <a href="/api/">JSON API</a>.</p>
+
+  <style>
+    .subscribe { display: grid; gap: 3px; margin: 20px 0 28px; padding: 16px 18px; background: var(--green-wash); border: 1px solid var(--line-strong); border-left: 3px solid var(--green); }
+    .subscribe span { color: var(--ink-soft); }
+  </style>
 </BaseLayout>
