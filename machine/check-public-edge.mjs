@@ -10,9 +10,9 @@ base.pathname = '/';
 base.search = '';
 base.hash = '';
 const origin = base.origin;
-const releaseId = process.env.GITHUB_RUN_ID || Date.now();
 const expectedMarker = String(process.env.DEPLOY_MARKER || '').trim();
 if (!expectedMarker) throw new Error('DEPLOY_MARKER is required');
+const releaseId = expectedMarker;
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 

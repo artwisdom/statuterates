@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const deployPath = new URL('../../.github/workflows/deploy.yml', import.meta.url);
 const refreshPath = new URL('../../.github/workflows/refresh.yml', import.meta.url);
+const edgeCheckPath = new URL('../../machine/check-public-edge.mjs', import.meta.url);
 
 test('a successful scheduled refresh has an explicit deployment handoff', async () => {
   const deploy = await readFile(deployPath, 'utf8');
@@ -61,7 +62,10 @@ test('IndexNow runs only after the production deployment step', async () => {
 });
 
 test('the deployed custom domain is verified before search engines are notified', async () => {
-  const deploy = await readFile(deployPath, 'utf8');
+  const [deploy, edgeCheck] = await Promise.all([
+    readFile(deployPath, 'utf8'),
+    readFile(edgeCheckPath, 'utf8'),
+  ]);
   const deploymentIndex = deploy.indexOf('uses: actions/deploy-pages@v5');
   const edgeCheckIndex = deploy.indexOf('name: Verify the public edge after deployment');
   const indexNowIndex = deploy.indexOf('name: Ping IndexNow');
@@ -71,6 +75,8 @@ test('the deployed custom domain is verified before search engines are notified'
   assert.match(deploy, /run:\s*node machine\/check-public-edge\.mjs/);
   assert.match(deploy, /^\s*-\s*"machine\/check-public-edge\.mjs"\s*$/m);
   assert.match(deploy, /DEPLOY_MARKER:\s*\$\{\{ format\('\{0\}-\{1\}', github\.run_id, github\.run_attempt\) \}\}/);
+  assert.match(edgeCheck, /const releaseId = expectedMarker;/);
+  assert.match(edgeCheck, /url\.searchParams\.set\('deploy', releaseId\)/);
 });
 
 test('weekly automation opens one deduplicated calculator legal-review reminder', async () => {
