@@ -59,6 +59,10 @@ test('IndexNow runs only after the production deployment step', async () => {
   assert.notEqual(indexNowIndex, -1);
   assert.ok(indexNowIndex > deploymentIndex);
   assert.match(deploy, /sitemap\.xml\?deploy=/);
+  const key = deploy.match(/^\s*KEY=([a-f0-9]{32,128})\s*$/m)?.[1];
+  assert.ok(key, 'workflow must contain a valid IndexNow key');
+  const keyFile = new URL(`../../site/public/${key}.txt`, import.meta.url);
+  assert.equal((await readFile(keyFile, 'utf8')).trim(), key);
 });
 
 test('the deployed custom domain is verified before search engines are notified', async () => {

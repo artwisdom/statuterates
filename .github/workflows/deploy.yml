@@ -139,7 +139,7 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL }}
         run: |
-          KEY=78e1a4c8dd592144913ffc2f8f1b9478
+          KEY=133250e3ec585df4147c25515d87c5e1
           HOST=$(printf '%s' "$SITE_URL" | sed -E 's#https?://##; s#/.*$##')
           SITEMAP=$(mktemp)
           curl -fsSL --retry 3 --retry-delay 2 \
