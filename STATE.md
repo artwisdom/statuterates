@@ -3,7 +3,7 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-07-28
+**Updated:** 2026-08-02
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 22.12+ (Node 24 also verified locally)
@@ -203,10 +203,10 @@ verified in production.
 ## Phase 6 existing-page growth and retention
 
 - The current growth decision is to build the site up, not broadly out. Search Console's July 8–29
-  snapshot showed 74 clicks from 6,173 impressions, 1.2% CTR, and average position 14.9, with several
-  existing state/rate pages already around positions 8–15. At the same time, 85 discovered/crawled
-  URLs remained in active indexing validation. The 192-URL sitemap therefore stays unchanged while
-  Google processes and tests the existing inventory.
+  private snapshot showed growing visibility, several existing state/rate pages with realistic
+  first-page potential, and a material group of discovered/crawled URLs still in active indexing
+  validation. Exact account metrics stay in the private reporting companion. The 192-URL sitemap
+  therefore stays unchanged while Google processes and tests the existing inventory.
 - Every HTML page now advertises the automated rate-change RSS feed to feed readers. The 26 series
   with more than one real effective-date observation also have focused `/rates/<slug>.xml` feeds and
   visible “follow recorded updates” links. Feeds exclude future effective dates, deduplicate stable
@@ -216,9 +216,9 @@ verified in production.
   guide cluster. All seven guides use curated related-guide mappings and the reusable citation tool;
   Article schema now includes the existing publisher URL, logo, and social image.
 - Every Dataset structured-data object now links to the site's data/API terms, addressing Search
-  Console's 43 `license` recommendations. Individual rate datasets also identify the cited source as
-  their basis. Build verification parses all JSON-LD and rejects a missing or different dataset
-  license.
+  Console's Dataset `license` recommendations. Individual rate datasets also identify the cited
+  source as their basis. Build verification parses all JSON-LD and rejects a missing or different
+  dataset license.
 - Deployment now emits an exact run-and-attempt artifact marker. After GitHub Pages publishes, a
   retrying read-only check waits for that exact marker, verifies the priority release contracts,
   robots.txt, ads.txt, the global and focused feeds, and every canonical sitemap URL before search
@@ -228,12 +228,42 @@ verified in production.
   release submitted all 192 sitemap URLs and received HTTP `202` (accepted for key validation) rather
   than the inherited `403`.
 
+## Phase 7 AI discovery and machine-safety release
+
+- Current-value selection now has one shared definition across the website, static API, and MCP:
+  the newest observation whose effective date is not later than the dataset snapshot. A future
+  announced period can no longer be presented or calculated as current.
+- `/api/v1/latest.json` publishes only current values, while `/api/v1/upcoming.json` separately
+  exposes announced future periods. Per-entity responses retain the backward-compatible `latest`
+  field as an alias of `current` and expose `latest_published` separately.
+- `/openapi.yaml` now documents the complete public JSON/CSV API. The API index, API landing page,
+  `llms.txt`, `llms-full.txt`, and MCP documentation cross-link the same canonical discovery
+  surfaces, source provenance, effective dates, and current/upcoming semantics.
+- Search and answer-engine eligibility uses standards that crawlers already support: accessible
+  rendered HTML, unrestricted wildcard crawl access, full snippet/image/video preview permissions,
+  stable Organization/WebSite/Dataset identifiers, canonical URLs, citations, sitemaps, RSS, and
+  structured data. `llms.txt` remains a low-cost compatibility aid rather than a claimed ranking
+  mechanism; no unsupported AI schema, hidden content, cloaking, or crawler-specific pages exist.
+- The MCP server now exposes only the audited Florida state-specific calculator. It reuses the
+  shared release registry and interest engine, excludes future observations from calculation
+  history, and rejects dates beyond the dataset snapshot. Inherited unaudited California, New York,
+  Massachusetts, and Iowa state-calculation branches are unavailable.
+- The E.U. floating-rate calculator also fails closed beyond its final supported half-year rather
+  than silently carrying an unpublished benchmark forward.
+- The production verifier now checks the AI-discovery files, OpenAPI and API release consistency,
+  current/upcoming separation, representative OpenAI/Anthropic/Perplexity search user agents, and
+  every sitemap URL before a deployment is treated as healthy.
+- A one-time local Codex evidence review is scheduled for August 31, 2026 at 9:00 AM Eastern. It will
+  use finalized private Search Console periods and current official search-provider guidance before
+  deciding whether another page-strengthening release is justified.
+
 ## Verified checks
 
 - Pipeline: 127 tests.
-- Shared interest engine: 36 tests.
+- Shared interest engine and release contracts: 40 tests.
 - Site data, copy, and RSS contracts: 15 tests.
-- MCP: 3 tests, including traversal protection and the full six-tool smoke test.
+- MCP: 5 tests, including traversal protection, future-date refusal, compatibility fields, and the
+  full six-tool smoke test.
 - API conformance: 114 entity endpoints and 5,063 latest/history records checked.
 - Static build: 195 pages on Astro 7.
 - Indexable sitemap: 192 URLs.
@@ -269,6 +299,13 @@ verified in production.
   historical-series feeds, the strengthened guide/rate link graph, complete Dataset license markup,
   and the exact-artifact public-edge monitor. The monitor verified both feeds, public support files,
   and all 192 sitemap URLs; IndexNow accepted the 192-URL batch with HTTP `202`.
+- Phase 7 release `00ea4f1` (GitHub Actions
+  [run 30766460810](https://github.com/artwisdom/statuterates/actions/runs/30766460810)) passed on
+  2026-08-02. The exact public marker `30766460810-1` was verified after deployment. Production
+  serves the OpenAPI contract, current/upcoming API separation, strengthened machine-discovery
+  surfaces, full preview controls, linked entity schema, and the calculator-safety changes. The
+  independent public-edge run verified crawler access, ads.txt, both RSS forms, API consistency,
+  security/content headers, and all 192 canonical sitemap URLs.
 
 ## Important files
 
@@ -281,6 +318,9 @@ verified in production.
 - `site/src/lib/data.mjs`: build-time data loader and fail-closed calculator check.
 - `site/src/lib/sitemap.mjs`: truthful significant-change dates for sitemap entries.
 - `site/src/lib/changes.mjs` and `site/src/lib/rss.mjs`: future-safe change selection and RSS output.
+- `shared/current-values.mjs`: shared current/latest-published/upcoming selection semantics.
+- `shared/state-calculator-releases.mjs`: code-controlled state-calculator release registry.
+- `machine/openapi.yaml`: canonical OpenAPI 3.1 contract copied to `/openapi.yaml` at build time.
 - `site/scripts/check-build.mjs`: broken-link/indexing/rendered-output deployment guard.
 - `machine/check-public-edge.mjs`: exact-release and all-sitemap-URL production verification.
 - `docs/PHASE_1_AUDIT.md`: takeover findings, competitor research, keyword map, and growth priorities.
@@ -292,6 +332,7 @@ verified in production.
   deployed-release safeguards.
 - `docs/PHASE_5_PROGRESS.md`: federal source migration, Florida calculation contract, and release
   verification.
+- `docs/PHASE_7_AI_DISCOVERY.md`: official-provider research, AI-discovery decisions, and safeguards.
 - `shared/interest-calc.mjs`: calculation engine shared by the site and MCP.
 - `.github/workflows/refresh.yml`: tested weekly data refresh.
 - `.github/workflows/deploy.yml`: tested static deployment plus successful-refresh handoff.
@@ -333,6 +374,9 @@ verified in production.
   prohibited.
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
+- Representative user-agent requests prove there is no simple crawler-name block, but only verified
+  provider-IP traffic in Cloudflare logs can prove that a request actually came from an AI search
+  provider. Review that evidence when enough traffic has accumulated.
 
 Continue source by source: measure the federal and Florida tool cluster, use demand evidence to
 choose the next official state contract, preserve the code-controlled calculator gate, and let
