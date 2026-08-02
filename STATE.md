@@ -251,8 +251,14 @@ verified in production.
 - The E.U. floating-rate calculator also fails closed beyond its final supported half-year rather
   than silently carrying an unpublished benchmark forward.
 - The production verifier now checks the AI-discovery files, OpenAPI and API release consistency,
-  current/upcoming separation, representative OpenAI/Anthropic/Perplexity search user agents, and
-  every sitemap URL before a deployment is treated as healthy.
+  current/upcoming separation, `robots.txt` and rendered-page access for ten named OpenAI, Google,
+  Microsoft, Anthropic, and Perplexity search/training/user-request agents, and every sitemap URL
+  before a deployment is treated as healthy. It fails on any non-empty `Disallow`, Cloudflare
+  challenge, or blocking response-header indexing directive.
+- Cloudflare AI Crawl Control was reviewed on 2026-08-02: Search, Agent, and Training are explicitly
+  **Allow**, the legacy AI-bot block and AI Labyrinth are off, and no named crawler has its Block
+  switch enabled. Private Cloudflare metrics showed successful classified requests from every one
+  of the ten named agents in the preceding 24 hours. No spoofable user-agent WAF bypass was added.
 - A one-time local Codex evidence review is scheduled for August 31, 2026 at 9:00 AM Eastern. It will
   use finalized private Search Console periods and current official search-provider guidance before
   deciding whether another page-strengthening release is justified.
@@ -374,9 +380,9 @@ verified in production.
   prohibited.
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
-- Representative user-agent requests prove there is no simple crawler-name block, but only verified
-  provider-IP traffic in Cloudflare logs can prove that a request actually came from an AI search
-  provider. Review that evidence when enough traffic has accumulated.
+- Named user-agent requests prove there is no simple crawler-name block, and Cloudflare's AI metrics
+  already classify live requests from all ten monitored agents. Provider-published IP or DNS
+  verification remains the strongest independent origin check where the provider offers it.
 
 Continue source by source: measure the federal and Florida tool cluster, use demand evidence to
 choose the next official state contract, preserve the code-controlled calculator gate, and let

@@ -241,8 +241,8 @@ if (machineFiles.every((relativePath) => existsSync(join(DIST, relativePath)))) 
   const apiIndex = JSON.parse(readFileSync(join(DIST, 'api/v1/index.json'), 'utf8'));
   const apiLatest = JSON.parse(readFileSync(join(DIST, 'api/v1/latest.json'), 'utf8'));
   const apiUpcoming = JSON.parse(readFileSync(join(DIST, 'api/v1/upcoming.json'), 'utf8'));
-  if (!/^User-agent: \*\nAllow: \/$/m.test(robots) || /^Disallow: \/$/m.test(robots)) {
-    errors.push('robots.txt: sitewide crawler access is no longer explicitly allowed');
+  if (!/^User-agent: \*\nAllow: \/$/m.test(robots) || /^[\t ]*Disallow:[\t ]*\S/im.test(robots)) {
+    errors.push('robots.txt: unrestricted crawler access is no longer explicitly allowed');
   }
   if (!llms.includes(`${expectedOrigin}/openapi.yaml`) || !llms.includes('/api/v1/upcoming.json')) {
     errors.push('llms.txt: missing public OpenAPI or upcoming-period discovery link');

@@ -66,6 +66,28 @@ function requireText(label, text, expected) {
   if (!text.includes(expected)) throw new Error(`${label} is missing ${expected}`);
 }
 
+function requireUnrestrictedRobots(label, text) {
+  requireText(label, text, 'User-agent: *\nAllow: /');
+  if (/^[\t ]*Disallow:[\t ]*\S/im.test(text)) {
+    throw new Error(`${label} contains a non-empty Disallow directive`);
+  }
+}
+
+function rejectEdgeChallenge(label, response) {
+  const mitigation = response.headers.get('cf-mitigated');
+  if (mitigation?.toLowerCase() === 'challenge') {
+    throw new Error(`${label} received a Cloudflare challenge`);
+  }
+}
+
+function requireIndexableResponseHeaders(label, response) {
+  rejectEdgeChallenge(label, response);
+  const xRobotsTag = response.headers.get('x-robots-tag') || '';
+  if (/(?:^|[\s,;:])(?:noindex|none|nosnippet)(?:$|[\s,;:])/i.test(xRobotsTag)) {
+    throw new Error(`${label} received blocking X-Robots-Tag: ${xRobotsTag}`);
+  }
+}
+
 await waitForRelease();
 
 const [
@@ -128,8 +150,8 @@ requireText('Texas rate page', texasRate.text, `${origin}/terms/#data-api-licens
 requireText('robots.txt', robots.text, `Sitemap: ${origin}/sitemap.xml`);
 requireText('global RSS feed', globalFeed.text, '<rss version="2.0"');
 requireText('rate RSS feed', rateFeed.text, '<guid isPermaLink="false">texas-judgment-rate@');
-requireText('robots.txt', robots.text, 'User-agent: *\nAllow: /');
-if (/^Disallow: \/$/m.test(robots.text)) throw new Error('robots.txt blocks sitewide crawling');
+rejectEdgeChallenge('robots.txt', robots.response);
+requireUnrestrictedRobots('robots.txt', robots.text);
 requireText('llms.txt', llms.text, `${origin}/openapi.yaml`);
 requireText('llms.txt', llms.text, `${origin}/api/v1/upcoming.json`);
 requireText('OpenAPI', openapi.text, 'title: StatuteRates Static JSON and CSV API');
@@ -177,18 +199,64 @@ if (JSON.stringify(texasJson.data?.latest) !== JSON.stringify(texasJson.data?.cu
 if (!texasJson.data?.latest_published) throw new Error('Texas entity API lacks latest_published values');
 requireText('llms-full.txt', llmsFull.text, `Current as of: ${currentAsOf}`);
 
-// These checks prove the deployed edge does not apply a simple user-agent block. Verified crawler
-// IP logs remain the definitive evidence for provider-origin traffic.
-const aiCrawlerAgents = ['OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot'];
-const aiCrawlerResults = await Promise.all(aiCrawlerAgents.map((userAgent) => (
-  requestWithRetry('/rates/texas-judgment-rate/', { cacheBust: true, userAgent })
-)));
-for (let index = 0; index < aiCrawlerResults.length; index += 1) {
-  const result = aiCrawlerResults[index];
-  if (result.response.status !== 200) {
-    throw new Error(`${aiCrawlerAgents[index]} received HTTP ${result.response.status}`);
+// These checks prove the deployed edge does not apply a simple user-agent block to the search,
+// training, or user-requested retrieval agents the site intentionally welcomes. Use provider-
+// documented example strings when published; their version fields may change, but the named token
+// is what access rules match. Anthropic documents tokens rather than full strings, so those checks
+// deliberately use the exact tokens a WAF rule matches.
+// Verified crawler IP/DNS logs remain the definitive evidence for provider-origin traffic.
+const crawlerAgents = [
+  {
+    name: 'OAI-SearchBot',
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot',
+  },
+  {
+    name: 'GPTBot',
+    userAgent: 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot',
+  },
+  {
+    name: 'Googlebot',
+    userAgent: 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+  },
+  {
+    name: 'Bingbot',
+    userAgent: 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+  },
+  {
+    name: 'ChatGPT-User',
+    userAgent: 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot',
+  },
+  { name: 'ClaudeBot', userAgent: 'ClaudeBot' },
+  { name: 'Claude-SearchBot', userAgent: 'Claude-SearchBot' },
+  { name: 'Claude-User', userAgent: 'Claude-User' },
+  {
+    name: 'PerplexityBot',
+    userAgent: 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)',
+  },
+  {
+    name: 'Perplexity-User',
+    userAgent: 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Perplexity-User/1.0; +https://perplexity.ai/perplexity-user)',
+  },
+];
+const crawlerResults = await Promise.all(crawlerAgents.map(async (agent) => {
+  const [robotsResult, pageResult] = await Promise.all([
+    requestWithRetry('/robots.txt', { cacheBust: true, userAgent: agent.userAgent }),
+    requestWithRetry('/rates/texas-judgment-rate/', { cacheBust: true, userAgent: agent.userAgent }),
+  ]);
+  return { agent, robotsResult, pageResult };
+}));
+for (const { agent, robotsResult, pageResult } of crawlerResults) {
+  if (robotsResult.response.status !== 200) {
+    throw new Error(`${agent.name} received HTTP ${robotsResult.response.status} for robots.txt`);
   }
-  requireText(aiCrawlerAgents[index], result.text, `<link rel="canonical" href="${origin}/rates/texas-judgment-rate/">`);
+  rejectEdgeChallenge(`${agent.name} robots.txt`, robotsResult.response);
+  requireUnrestrictedRobots(`${agent.name} robots.txt`, robotsResult.text);
+  if (pageResult.response.status !== 200) {
+    throw new Error(`${agent.name} received HTTP ${pageResult.response.status}`);
+  }
+  requireIndexableResponseHeaders(agent.name, pageResult.response);
+  requireText(agent.name, pageResult.text, `<link rel="canonical" href="${origin}/rates/texas-judgment-rate/">`);
+  requireText(agent.name, pageResult.text, '<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">');
 }
 
 const sitemapUrls = [...sitemap.text.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)].map((match) => match[1]);
@@ -212,4 +280,4 @@ for (let index = 0; index < sitemapUrls.length; index += concurrency) {
 }
 if (failures.length) throw new Error(`Public sitemap verification failed:\n${failures.join('\n')}`);
 
-console.log(`Public-edge verification OK: release markers, search/AI discovery files, current/upcoming API semantics, representative crawler requests, ads.txt, both RSS feeds, and all ${sitemapUrls.length} sitemap URLs are healthy.`);
+console.log(`Public-edge verification OK: release markers, search/AI discovery files, current/upcoming API semantics, robots and page access for ${crawlerAgents.length} named crawler/user-fetch agents, ads.txt, both RSS feeds, and all ${sitemapUrls.length} sitemap URLs are healthy.`);

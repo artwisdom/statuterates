@@ -40,8 +40,8 @@ ranking mechanism.
    author, creator, and publisher nodes now share persistent identifiers instead of appearing as
    unrelated name-only objects.
 5. Build and public-edge gates verify robots access, LLM compatibility files, OpenAPI, current versus
-   upcoming API semantics, representative AI-search user agents, and every sitemap URL before
-   IndexNow notification.
+   upcoming API semantics, every intentionally welcomed search, training, and user-requested
+   retrieval agent, and every sitemap URL before IndexNow notification.
 
 ## Evidence baseline
 
@@ -50,10 +50,20 @@ short post-launch history. It established an early private baseline, not a matur
 account-level metrics remain in the private reporting system and are intentionally not committed to
 this public repository.
 
-Pre-release public checks returned HTTP 200 and complete rendered content for representative requests
-using `OAI-SearchBot`, `ChatGPT-User`, `Claude-SearchBot`, `Claude-User`, `PerplexityBot`, Googlebot,
-and Bingbot user agents. That rules out a simple user-agent block; provider-verified IP logs remain
-the definitive evidence of real crawler traffic.
+Public checks returned HTTP 200 and complete rendered content for requests using `OAI-SearchBot`,
+`GPTBot`, `ChatGPT-User`, Googlebot, Bingbot, `ClaudeBot`, `Claude-SearchBot`, `Claude-User`,
+`PerplexityBot`, and `Perplexity-User`. The post-deployment verifier now checks both `robots.txt` and
+an indexable rendered page for every one of those agents, including crawler-specific `Disallow`,
+Cloudflare challenge, and response-header indexing blocks. That rules out a simple user-agent block;
+provider-verified IP or DNS logs remain the definitive evidence of real crawler traffic.
+
+Cloudflare AI Crawl Control was reviewed on 2026-08-02. The zone's Search, Agent, and Training
+policies are all explicitly set to **Allow**, the legacy AI-bot block and AI Labyrinth are off, and
+the per-crawler Block switch is off for all ten agents above. Cloudflare's private live metrics also
+showed successful classified traffic from every named agent during the preceding 24 hours. No
+user-agent bypass or custom WAF exception was added: there is no custom blocking ruleset to bypass,
+and trusting a spoofable name alone would weaken the site's security. The unrestricted wildcard
+robots policy also covers other standards-compliant crawlers without needing a brittle allowlist.
 
 Google Preferred Sources returned no result for `statuterates.com` on 2026-08-02, so no dead
 preference button was added. Eligibility will be checked again during the first evidence review.
