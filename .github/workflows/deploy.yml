@@ -14,8 +14,7 @@ on:
       - "pipeline/**"
       - "shared/**"
       - "site/**"
-      - "machine/build-api.mjs"
-      - "machine/check-public-edge.mjs"
+      - "machine/**"
       - ".github/workflows/deploy.yml"
   workflow_run:
     workflows: ["refresh-data"]
@@ -68,6 +67,12 @@ jobs:
       - name: Run shared calculation tests
         working-directory: shared
         run: node --test
+
+      - name: Install and test the read-only MCP interface
+        working-directory: machine/mcp-server
+        run: |
+          npm ci
+          npm test
 
       - name: Build the static JSON API from the committed exports
         # Regenerate site/public/api/ (git-ignored) from data/exports before building the site.

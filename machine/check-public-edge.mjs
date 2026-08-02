@@ -16,7 +16,7 @@ const releaseId = expectedMarker;
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
-async function request(pathOrUrl, { cacheBust = false } = {}) {
+async function request(pathOrUrl, { cacheBust = false, userAgent = 'StatuteRates-Deploy-Verification/1.0' } = {}) {
   const url = new URL(pathOrUrl, base);
   if (cacheBust) url.searchParams.set('deploy', releaseId);
   const response = await fetch(url, {
@@ -24,7 +24,7 @@ async function request(pathOrUrl, { cacheBust = false } = {}) {
     headers: {
       accept: '*/*',
       'cache-control': 'no-cache',
-      'user-agent': 'StatuteRates-Deploy-Verification/1.0',
+      'user-agent': userAgent,
     },
     signal: AbortSignal.timeout(20_000),
   });
@@ -68,7 +68,23 @@ function requireText(label, text, expected) {
 
 await waitForRelease();
 
-const [home, texasRate, robots, sitemap, ads, globalFeed, rateFeed] = await Promise.all([
+const [
+  home,
+  texasRate,
+  robots,
+  sitemap,
+  ads,
+  globalFeed,
+  rateFeed,
+  llms,
+  llmsFull,
+  openapi,
+  apiIndex,
+  apiMeta,
+  apiLatest,
+  apiUpcoming,
+  apiTexas,
+] = await Promise.all([
   requestWithRetry('/', { cacheBust: true }),
   requestWithRetry('/rates/texas-judgment-rate/', { cacheBust: true }),
   requestWithRetry('/robots.txt', { cacheBust: true }),
@@ -76,9 +92,33 @@ const [home, texasRate, robots, sitemap, ads, globalFeed, rateFeed] = await Prom
   requestWithRetry('/ads.txt', { cacheBust: true }),
   requestWithRetry('/changes.xml', { cacheBust: true }),
   requestWithRetry('/rates/texas-judgment-rate.xml', { cacheBust: true }),
+  requestWithRetry('/llms.txt', { cacheBust: true }),
+  requestWithRetry('/llms-full.txt', { cacheBust: true }),
+  requestWithRetry('/openapi.yaml', { cacheBust: true }),
+  requestWithRetry('/api/v1/index.json', { cacheBust: true }),
+  requestWithRetry('/api/v1/meta.json', { cacheBust: true }),
+  requestWithRetry('/api/v1/latest.json', { cacheBust: true }),
+  requestWithRetry('/api/v1/upcoming.json', { cacheBust: true }),
+  requestWithRetry('/api/v1/entity/texas-judgment-rate.json', { cacheBust: true }),
 ]);
 
-for (const [label, result] of Object.entries({ home, texasRate, robots, sitemap, ads, globalFeed, rateFeed })) {
+for (const [label, result] of Object.entries({
+  home,
+  texasRate,
+  robots,
+  sitemap,
+  ads,
+  globalFeed,
+  rateFeed,
+  llms,
+  llmsFull,
+  openapi,
+  apiIndex,
+  apiMeta,
+  apiLatest,
+  apiUpcoming,
+  apiTexas,
+})) {
   if (result.response.status !== 200) throw new Error(`${label} returned HTTP ${result.response.status}`);
 }
 requireText('homepage', home.text, `<link rel="canonical" href="${origin}/">`);
@@ -88,6 +128,68 @@ requireText('Texas rate page', texasRate.text, `${origin}/terms/#data-api-licens
 requireText('robots.txt', robots.text, `Sitemap: ${origin}/sitemap.xml`);
 requireText('global RSS feed', globalFeed.text, '<rss version="2.0"');
 requireText('rate RSS feed', rateFeed.text, '<guid isPermaLink="false">texas-judgment-rate@');
+requireText('robots.txt', robots.text, 'User-agent: *\nAllow: /');
+if (/^Disallow: \/$/m.test(robots.text)) throw new Error('robots.txt blocks sitewide crawling');
+requireText('llms.txt', llms.text, `${origin}/openapi.yaml`);
+requireText('llms.txt', llms.text, `${origin}/api/v1/upcoming.json`);
+requireText('OpenAPI', openapi.text, 'title: StatuteRates Static JSON and CSV API');
+requireText('OpenAPI', openapi.text, '/api/v1/upcoming.json:');
+
+function parseJson(label, text) {
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error(`${label} is not valid JSON: ${error.message}`);
+  }
+}
+
+const indexJson = parseJson('API index', apiIndex.text);
+const metaJson = parseJson('API metadata', apiMeta.text);
+const latestJson = parseJson('API current values', apiLatest.text);
+const upcomingJson = parseJson('API upcoming values', apiUpcoming.text);
+const texasJson = parseJson('Texas entity API', apiTexas.text);
+const generatedAt = indexJson.generated_at;
+for (const [label, value] of Object.entries({
+  'API metadata': metaJson.generated_at,
+  'API current values': latestJson.generated_at,
+  'API upcoming values': upcomingJson.generated_at,
+  'Texas entity API': texasJson.generated_at,
+})) {
+  if (value !== generatedAt) throw new Error(`${label} release ${value} disagrees with API index ${generatedAt}`);
+}
+const currentAsOf = String(latestJson.data?.current_as_of || '').slice(0, 10);
+if (currentAsOf !== String(generatedAt).slice(0, 10)) {
+  throw new Error(`API current_as_of ${currentAsOf} disagrees with generated_at ${generatedAt}`);
+}
+for (const observation of latestJson.data?.observations || []) {
+  if (observation.effective_date > currentAsOf) {
+    throw new Error(`Current API promotes future value ${observation.entity}@${observation.effective_date}`);
+  }
+}
+for (const observation of upcomingJson.data?.observations || []) {
+  if (observation.effective_date <= currentAsOf) {
+    throw new Error(`Upcoming API contains non-future value ${observation.entity}@${observation.effective_date}`);
+  }
+}
+if (JSON.stringify(texasJson.data?.latest) !== JSON.stringify(texasJson.data?.current)) {
+  throw new Error('Texas entity API latest compatibility alias disagrees with current');
+}
+if (!texasJson.data?.latest_published) throw new Error('Texas entity API lacks latest_published values');
+requireText('llms-full.txt', llmsFull.text, `Current as of: ${currentAsOf}`);
+
+// These checks prove the deployed edge does not apply a simple user-agent block. Verified crawler
+// IP logs remain the definitive evidence for provider-origin traffic.
+const aiCrawlerAgents = ['OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot'];
+const aiCrawlerResults = await Promise.all(aiCrawlerAgents.map((userAgent) => (
+  requestWithRetry('/rates/texas-judgment-rate/', { cacheBust: true, userAgent })
+)));
+for (let index = 0; index < aiCrawlerResults.length; index += 1) {
+  const result = aiCrawlerResults[index];
+  if (result.response.status !== 200) {
+    throw new Error(`${aiCrawlerAgents[index]} received HTTP ${result.response.status}`);
+  }
+  requireText(aiCrawlerAgents[index], result.text, `<link rel="canonical" href="${origin}/rates/texas-judgment-rate/">`);
+}
 
 const sitemapUrls = [...sitemap.text.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)].map((match) => match[1]);
 if (sitemapUrls.length < 100) throw new Error(`Sitemap unexpectedly contains only ${sitemapUrls.length} URLs`);
@@ -110,4 +212,4 @@ for (let index = 0; index < sitemapUrls.length; index += concurrency) {
 }
 if (failures.length) throw new Error(`Public sitemap verification failed:\n${failures.join('\n')}`);
 
-console.log(`Public-edge verification OK: release markers, robots.txt, ads.txt, both RSS feeds, and all ${sitemapUrls.length} sitemap URLs are healthy.`);
+console.log(`Public-edge verification OK: release markers, search/AI discovery files, current/upcoming API semantics, representative crawler requests, ads.txt, both RSS feeds, and all ${sitemapUrls.length} sitemap URLs are healthy.`);

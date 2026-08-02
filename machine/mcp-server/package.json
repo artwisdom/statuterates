@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "MCP server exposing the Data Moat Engine dataset to AI agents over stdio.",
+  "description": "Read-only StatuteRates MCP server for provenance-tracked statutory interest rates.",
   "bin": {
     "data-moat-mcp": "./src/server.mjs"
   },

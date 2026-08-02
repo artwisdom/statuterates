@@ -28,12 +28,14 @@ ${meta.disclaimer ? `Note: ${meta.disclaimer}` : ''}
 ## Machine access (free, no key, static JSON on a CDN)
 - FULL current values inline (one fetch answers current-rate questions): ${base}/llms-full.txt
 - Every current value, one call: ${base}/api/v1/latest.json
+- Announced future periods (never mislabeled as current): ${base}/api/v1/upcoming.json
 - Service index: ${base}/api/v1/index.json
 - Dataset metadata + sources: ${base}/api/v1/meta.json
-- All entities + latest values: ${base}/api/v1/entities.json
-- One entity (latest + all recorded observations + provenance): ${base}/api/v1/entity/{slug}.json
-- OpenAPI 3.1 spec: see machine/openapi.yaml in the source repository
-- MCP server (stdio): tools dataset_info, search_entities, get_entity, get_latest_value, compare_values
+- All entities + current and latest-published values: ${base}/api/v1/entities.json
+- One entity (current + latest published + all recorded observations): ${base}/api/v1/entity/{slug}.json
+- OpenAPI 3.1 spec: ${base}/openapi.yaml
+- MCP server (stdio): https://github.com/artwisdom/statuterates/tree/main/machine/mcp-server
+  Tools: dataset_info, search_entities, get_entity, get_latest_value, compare_values, calculate_interest
 
 Every value carries: value, unit, effective_date, source_url, retrieved_at, confidence, and method.
 These fields describe how an observation was recorded. A state-law value is reference-only unless its

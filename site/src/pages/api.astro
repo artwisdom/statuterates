@@ -7,15 +7,18 @@ const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
 const title = `Statutory Interest Rate API | ${meta.title}`;
 const description = `Free JSON and CSV API for ${meta.entity_count} statutory, judgment, and tax interest-rate series with ${meta.observation_count} dated, cited observations. No key required.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const organizationId = new URL('/#organization', Astro.site).href;
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Dataset',
+  '@id': `${canonical}#dataset`,
+  identifier: canonical,
   name: `${meta.title} — statutory interest rates dataset & API`,
   description: meta.description,
   url: canonical,
   isAccessibleForFree: true,
-  creator: { '@type': 'Organization', name: meta.title },
+  creator: { '@id': organizationId },
   license: new URL('/terms/#data-api-license', Astro.site).href,
   dateModified: meta.generated_at,
   distribution: [
@@ -37,9 +40,10 @@ const jsonLd = {
       <tbody>
         <tr><td><a href="/api/v1/index.json"><code>/api/v1/index.json</code></a></td><td>Service index — links + counts</td></tr>
         <tr><td><a href="/api/v1/meta.json"><code>/api/v1/meta.json</code></a></td><td>Dataset metadata, freshness, sources</td></tr>
-        <tr><td><a href="/api/v1/entities.json"><code>/api/v1/entities.json</code></a></td><td>All series with latest values</td></tr>
+        <tr><td><a href="/api/v1/entities.json"><code>/api/v1/entities.json</code></a></td><td>All series with current and latest-published values</td></tr>
         <tr><td><a href="/api/v1/latest.json"><code>/api/v1/latest.json</code></a></td><td>Flat list of every current value (one call)</td></tr>
-        <tr><td><code>/api/v1/entity/&#123;slug&#125;.json</code></td><td>One series — latest + all recorded observations + provenance</td></tr>
+        <tr><td><a href="/api/v1/upcoming.json"><code>/api/v1/upcoming.json</code></a></td><td>Officially announced future periods, kept separate from current values</td></tr>
+        <tr><td><code>/api/v1/entity/&#123;slug&#125;.json</code></td><td>One series — current, latest published, and full history with provenance</td></tr>
         <tr><td><code>/api/v1/entity/&#123;slug&#125;.csv</code></td><td>Recorded observations as CSV (spreadsheet-ready)</td></tr>
       </tbody>
     </table>
@@ -47,14 +51,26 @@ const jsonLd = {
   <p class="source-note">Every observation carries <code>value</code>, <code>unit</code>,
     <code>effective_date</code>, <code>source_url</code>, <code>retrieved_at</code>,
     <code>confidence</code>, method, and notes. Confidence describes the observation process; it does
-    not make a state rule calculator-ready. OpenAPI 3.1 spec ships in the repository (<code>machine/openapi.yaml</code>).</p>
+    not make a state rule calculator-ready. A preannounced future period remains in
+    <code>latest_published</code> and history, while <code>current</code> always means effective on the
+    snapshot date.</p>
+
+  <h2>Machine discovery</h2>
+  <ul class="clean">
+    <li><a href="/openapi.yaml">OpenAPI 3.1 specification</a> — machine-readable endpoint contract.</li>
+    <li><a href="/llms.txt">Concise machine-readable guide</a> and
+      <a href="/llms-full.txt">all current values with citations</a>.</li>
+    <li><a href="https://github.com/artwisdom/statuterates/tree/main/machine/mcp-server">Read-only MCP server</a>
+      — search, lookup, comparison, and audited calculations for compatible AI tools.</li>
+  </ul>
 
   <h2>For AI agents (MCP)</h2>
   <p>An MCP server exposes the same dataset with tools for search, lookup, comparison, and
     statutory-interest <em>computation</em> (<code>calculate_interest</code>) — so an agent can answer
     "how much interest has accrued on this judgment" with a citable, current figure instead of a stale
-    guess. See the repository's <code>machine/mcp-server/README.md</code> for one-line registration in
-    Claude Desktop / Claude Code, and <a href="/llms.txt">/llms.txt</a> for a machine-readable summary.</p>
+    guess. See the <a href="https://github.com/artwisdom/statuterates/tree/main/machine/mcp-server">MCP setup guide</a>
+    for registration instructions. State calculations use the same fail-closed release registry as
+    the website; today, Florida is the only approved state-specific method.</p>
 
   <h2>Fair use &amp; licensing</h2>
   <ul class="clean">

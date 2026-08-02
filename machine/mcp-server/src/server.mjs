@@ -20,15 +20,18 @@ import {
   searchEntities,
   getEntity,
   latestValue,
+  calculationHistory,
   defaultMetric,
   entitiesIndex,
 } from './data.mjs';
 import {
   federalPostJudgment,
+  floridaPostJudgmentInterest,
   irsInterest,
   fixedSimpleInterest,
   floatingSimpleInterest,
 } from '../../../shared/interest-calc.mjs';
+import { stateCalculatorReleaseForEntity } from '../../../shared/state-calculator-releases.mjs';
 
 const M = meta();
 const DATASET_TITLE = M.title || 'Data Moat Engine dataset';
@@ -37,7 +40,7 @@ const DATASET_DESC =
   'A provenance-tracked reference dataset. Every value carries an effective_date, source_url and retrieved_at.';
 
 const server = new McpServer({
-  name: 'data-moat-engine',
+  name: 'statuterates',
   version: M.version || '0.1.0',
 });
 
@@ -62,6 +65,7 @@ server.registerTool(
     entity_count: M.entity_count ?? entitiesIndex().length,
     observation_count: M.observation_count ?? null,
     generated_at: M.generated_at || null,
+    current_as_of: String(M.generated_at || '').slice(0, 10) || null,
     update_cadence: M.update_cadence || null,
     sources: M.sources || [],
     attribution: M.attribution || null,
@@ -72,7 +76,7 @@ server.registerTool(
   'search_entities',
   {
     title: 'Search entities',
-    description: `Fuzzy-search the ${DATASET_TITLE} for entities by name, slug, jurisdiction (ISO code), or region. Returns matches with their latest values. Use this to resolve a user's phrasing (e.g. "the US", "USA") to a canonical entity slug before calling get_entity or get_latest_value.`,
+    description: `Fuzzy-search the ${DATASET_TITLE} for entities by name, slug, jurisdiction (ISO code), or region. Returns matches with values currently in force as of the dataset snapshot, plus any later published value separately. Use this to resolve a user's phrasing (e.g. "the US", "USA") to a canonical entity slug before calling get_entity or get_latest_value.`,
     inputSchema: {
       query: z.string().describe('Free-text query, e.g. a country name, ISO code, or region.'),
       limit: z.number().int().min(1).max(100).optional().describe('Max results (default 25).'),
@@ -88,7 +92,10 @@ server.registerTool(
         name: e.name,
         jurisdiction: e.jurisdiction,
         region: e.region,
-        latest: e.latest || null,
+        latest: e.latest || e.current || null,
+        current: e.current || null,
+        current_as_of: e.current_as_of || null,
+        latest_published: e.latest_published || null,
       })),
     });
   }
@@ -98,7 +105,7 @@ server.registerTool(
   'get_entity',
   {
     title: 'Get entity',
-    description: `Return the full record for one entity in the ${DATASET_TITLE}: its latest value per metric AND the historical time series, each observation carrying source_url, effective_date, retrieved_at and confidence.`,
+    description: `Return the full record for one entity in the ${DATASET_TITLE}: values currently in force, the latest published values (which can be future-dated), and the historical time series. Each observation carries source_url, effective_date, retrieved_at and confidence.`,
     inputSchema: {
       slug: z.string().describe('The entity slug, e.g. from search_entities (like "united-states").'),
     },
@@ -114,7 +121,7 @@ server.registerTool(
   'get_latest_value',
   {
     title: 'Get latest value',
-    description: `Return the CURRENT value of a metric for one entity, with full provenance (effective_date, source_url, retrieved_at, confidence). This is the high-value call for agents: the value is kept fresh by the pipeline, so it is more reliable than a model's training-time memory. Omit "metric" to get every metric's latest value.`,
+    description: `Return the value CURRENTLY IN FORCE as of the dataset snapshot for one entity and metric, with full provenance (effective_date, source_url, retrieved_at, confidence). A later preannounced period is never promoted early. Omit "metric" to get every metric's current value.`,
     inputSchema: {
       slug: z.string().describe('Entity slug (resolve via search_entities if unsure).'),
       metric: z
@@ -136,7 +143,7 @@ server.registerTool(
   'compare_values',
   {
     title: 'Compare values',
-    description: `Compare one metric across several entities, sorted high-to-low. Useful for "which country has the highest X" style questions. Returns each entity's latest value with provenance.`,
+    description: `Compare one metric currently in force across several entities, sorted high-to-low. Useful for "which jurisdiction has the highest X" questions. Returns each current value with provenance.`,
     inputSchema: {
       slugs: z.array(z.string()).min(2).describe('Two or more entity slugs to compare.'),
       metric: z
@@ -169,11 +176,7 @@ const CALC_RULES = {
   'irs-large-corporate-underpayment': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
   'uk-late-payment-commercial': { kind: 'fixed-simple', label: 'UK Late Payment Act 1998 (simple, fixed at overdue date)' },
   'eu-late-payment-reference': { kind: 'floating-simple', label: 'EU Directive 2011/7/EU (simple, semester re-fixing; add your member-state margin — 8pp floor applied unless specified)', defaultMargin: 8 },
-  'california-judgment-rate': { kind: 'fixed-simple', label: 'CCP §685.010 (simple, daily /365)' },
-  'new-york-judgment-rate': { kind: 'fixed-simple', label: 'CPLR 5004 (simple)' },
-  'new-york-consumer-debt-judgment-rate': { kind: 'fixed-simple', label: 'CPLR 5004 consumer-debt rate (simple)' },
-  'massachusetts-judgment-rate': { kind: 'fixed-simple', label: 'M.G.L. c.231 §§6B–6C (simple)' },
-  'iowa-judgment-rate': { kind: 'fixed-simple', label: 'Iowa Code §668.13 (rate fixed at judgment, computed daily)' },
+  'florida-judgment-rate': { kind: 'florida', label: 'Fla. Stat. §55.03 (simple daily interest; annual January 1 adjustment)', rendererId: 'florida-postjudgment-v1' },
 };
 
 server.registerTool(
@@ -181,21 +184,22 @@ server.registerTool(
   {
     title: 'Calculate statutory interest',
     description:
-      `Compute accrued statutory interest for a series in the ${DATASET_TITLE}, applying the governing statute's ACTUAL method (daily compounding for IRS, annual compounding for federal judgments, simple interest for UK/state rules) with the correct historical rate for each period. Returns the amount, the rate(s) used, and the method — cite it with the series' source_url. Supported slugs: ${Object.keys(CALC_RULES).join(', ')}.`,
+      `Compute accrued statutory interest for an audited series in the ${DATASET_TITLE}, applying its governing method (daily compounding for IRS, annual compounding for federal judgments, period-aware simple interest for UK/EU, and the dedicated Florida §55.03 renderer). State methods fail closed unless the shared website release registry and entity contract both approve them. Returns the amount, rates, method, and source. Supported slugs: ${Object.keys(CALC_RULES).join(', ')}.`,
     inputSchema: {
       slug: z.enum(Object.keys(CALC_RULES)).describe('Which rate series/statute to apply.'),
       principal: z.number().positive().describe('The principal amount (judgment, tax, or invoice).'),
       start_date: z.string().describe('ISO date interest starts (judgment date / due date / overdue date).'),
       end_date: z.string().describe('ISO date to calculate through (e.g. today or payment date).'),
-      margin_percent: z.number().min(0).max(15).optional().describe('EU only: your member state\'s margin over the reference rate (floor 8; e.g. France 10, Germany 9).'),
+      margin_percent: z.number().min(8).max(15).optional().describe('EU only: your member state\'s margin over the reference rate (minimum 8; e.g. France 10, Germany 9).'),
+      include_end_date: z.boolean().optional().describe('Florida only: include the entered through-date in accrual (default true).'),
     },
   },
-  async ({ slug, principal, start_date, end_date, margin_percent }) => {
+  async ({ slug, principal, start_date, end_date, margin_percent, include_end_date }) => {
     const rule = CALC_RULES[slug];
     const rec = getEntity(slug);
     if (!rec) return notFound(`No entity "${slug}".`);
-    const history = (rec.history?.annual_rate || []).map((o) => ({ effective_date: o.effective_date, value: o.value }));
     try {
+      const history = calculationHistory(rec, 'annual_rate', start_date);
       let result;
       if (rule.kind === 'post-judgment') {
         result = federalPostJudgment({ principal, judgmentDate: start_date, endDate: end_date, weeklyHistory: history });
@@ -203,6 +207,18 @@ server.registerTool(
         result = irsInterest({ principal, startDate: start_date, endDate: end_date, quarterlyHistory: history });
       } else if (rule.kind === 'floating-simple') {
         result = floatingSimpleInterest({ principal, startDate: start_date, endDate: end_date, history, marginPercent: margin_percent ?? rule.defaultMargin ?? 0 });
+      } else if (rule.kind === 'florida') {
+        const release = stateCalculatorReleaseForEntity(rec);
+        if (!release || release.rendererId !== rule.rendererId) {
+          throw new Error('Florida calculator is not approved by the shared release contract');
+        }
+        result = floridaPostJudgmentInterest({
+          principal,
+          judgmentDate: start_date,
+          endDate: end_date,
+          history,
+          includeEndDate: include_end_date ?? true,
+        });
       } else {
         result = fixedSimpleInterest({ principal, startDate: start_date, endDate: end_date, history });
       }
@@ -213,7 +229,7 @@ server.registerTool(
         start_date,
         end_date,
         ...result,
-        source_url: rec.latest?.annual_rate?.source_url || null,
+        source_url: rec.current?.annual_rate?.source_url || null,
         disclaimer: 'Estimate for reference; official computations may differ in rounding/conventions. Not legal, tax, or financial advice.',
       });
     } catch (e) {

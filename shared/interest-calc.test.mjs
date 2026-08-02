@@ -6,7 +6,7 @@ import {
   rateOn, mondayOf, daysBetween,
   federalPostJudgment, irsInterest, fixedSimpleInterest, floatingSimpleInterest, fixedCompoundInterest,
   floridaJudgmentCoverage, floridaPostJudgmentInterest,
-  fullOrPartialMonthsLate, irsPenaltyAndInterestEstimate, irsRateCoverageEnd,
+  fullOrPartialMonthsLate, irsPenaltyAndInterestEstimate, irsRateCoverageEnd, euRateCoverageEnd,
 } from './interest-calc.mjs';
 import { buildFloridaOfficialHistory } from '../pipeline/fetchers/florida-judgment-history.mjs';
 
@@ -444,6 +444,21 @@ test('floating simple interest re-fixes across segments (EU style)', () => {
   assert.deepEqual(r.segments.map((s) => s.rate_percent), [10.9, 10.4]);
   // (10000*10.9%*30 + 10000*10.4%*31)/365 = 177.92
   assert.equal(r.interest, 177.92);
+  assert.equal(euRateCoverageEnd(h), '2027-01-01');
+  assert.doesNotThrow(() => floatingSimpleInterest({
+    principal: 10000,
+    startDate: '2026-07-01',
+    endDate: '2027-01-01',
+    history: h,
+    marginPercent: 8,
+  }));
+  assert.throws(() => floatingSimpleInterest({
+    principal: 10000,
+    startDate: '2026-07-01',
+    endDate: '2027-01-02',
+    history: h,
+    marginPercent: 8,
+  }), /only published through 2027-01-01/);
 });
 
 test('errors: bad ranges and missing rates fail loud', () => {

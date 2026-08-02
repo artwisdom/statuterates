@@ -29,12 +29,19 @@ async function main() {
   for (const expected of ['calculate_interest', 'compare_values', 'dataset_info', 'get_entity', 'get_latest_value', 'search_entities']) {
     assert.ok(names.includes(expected), `tool ${expected} registered`);
   }
+  const calculatorTool = tools.find((tool) => tool.name === 'calculate_interest');
+  const calculatorSlugs = calculatorTool.inputSchema.properties.slug.enum;
+  assert.ok(calculatorSlugs.includes('florida-judgment-rate'), 'audited Florida calculator is exposed');
+  for (const withheld of ['california-judgment-rate', 'new-york-judgment-rate', 'massachusetts-judgment-rate', 'iowa-judgment-rate']) {
+    assert.ok(!calculatorSlugs.includes(withheld), `withheld state calculator ${withheld} stays unavailable`);
+  }
 
   // 1) dataset_info returns metrics + entity count
   const info = parse(await client.callTool({ name: 'dataset_info', arguments: {} }));
   assert.ok(Array.isArray(info.metrics) && info.metrics.length >= 1, 'dataset has >=1 metric');
   assert.ok(info.entity_count >= 1, 'dataset has >=1 entity');
   assert.ok(Array.isArray(info.sources) && info.sources.length >= 1, 'dataset lists sources');
+  assert.match(info.current_as_of, /^\d{4}-\d{2}-\d{2}$/);
   const primaryMetric = info.metrics[0];
   console.log(`dataset_info OK: "${info.title}" — ${info.entity_count} entities, metrics=[${info.metrics.join(', ')}]`);
 
@@ -43,6 +50,7 @@ async function main() {
   const browse = parse(await client.callTool({ name: 'search_entities', arguments: { query: '', limit: 50 } }));
   assert.ok(browse.results.length >= 1, 'browse returns entities');
   const seed = browse.results[0];
+  assert.deepEqual(seed.latest, seed.current, 'search result latest alias remains current-safe');
   const token = (seed.slug.split('-').find((w) => w.length >= 3) || seed.slug).toLowerCase();
   const search = parse(await client.callTool({ name: 'search_entities', arguments: { query: token, limit: 10 } }));
   assert.ok(search.results.length >= 1, `search "${token}" returns >=1 entity`);
@@ -51,16 +59,19 @@ async function main() {
   const slug = results[0].slug;
   console.log(`search_entities OK: query "${token}" -> ${results.length} result(s), first "${slug}"`);
 
-  // 3) get_latest_value returns a provenance-carrying value
+  // 3) get_latest_value returns a provenance-carrying value currently in force
   const latest = parse(await client.callTool({ name: 'get_latest_value', arguments: { slug, metric: primaryMetric } }));
   const val = Array.isArray(latest) ? latest[0] : latest;
   assert.ok(val.effective_date, 'latest value has effective_date');
   assert.ok(val.source_url, 'latest value has source_url provenance');
+  assert.ok(val.effective_date <= info.current_as_of, 'current value is not future-dated');
   console.log(`get_latest_value OK: ${slug}/${primaryMetric} = ${val.value ?? val.value_text} ${val.unit} (eff ${val.effective_date})`);
 
   // 4) get_entity returns history
   const entity = parse(await client.callTool({ name: 'get_entity', arguments: { slug } }));
-  assert.ok(entity.latest && Object.keys(entity.latest).length >= 1, 'entity has latest values');
+  assert.ok(entity.current && Object.keys(entity.current).length >= 1, 'entity has current values');
+  assert.deepEqual(entity.latest, entity.current, 'latest compatibility alias is current-safe');
+  assert.ok(entity.latest_published, 'entity distinguishes latest published values');
   assert.ok((entity.history?.annual_rate?.length || 0) >= 1, 'entity exposes history');
   console.log(`get_entity OK: ${entity.name} has ${Object.keys(entity.latest).length} metric(s), ${entity.history.annual_rate.length} history point(s)`);
 
@@ -91,6 +102,35 @@ async function main() {
     assert.match(calc.statute, /1961/);
     console.log(`calculate_interest OK: $100k from ${judgment} to ${through} -> $${calc.interest} at ${calc.rate_percent}%`);
   }
+
+  // 7) the only state-specific MCP calculator is the same audited Florida renderer released on
+  //    the website; its inclusive/exclusive date choice remains explicit.
+  const florida = parse(await client.callTool({
+    name: 'calculate_interest',
+    arguments: {
+      slug: 'florida-judgment-rate',
+      principal: 10000,
+      start_date: '2026-07-01',
+      end_date: '2026-07-02',
+      include_end_date: false,
+    },
+  }));
+  assert.match(florida.statute, /Fla\. Stat\. §55\.03/);
+  assert.equal(florida.end_date_included, false);
+  assert.equal(florida.days, 1);
+  assert.ok(florida.interest > 0);
+
+  const futureFlorida = await client.callTool({
+    name: 'calculate_interest',
+    arguments: {
+      slug: 'florida-judgment-rate',
+      principal: 10000,
+      start_date: '2099-10-15',
+      end_date: '2099-10-16',
+    },
+  });
+  assert.equal(futureFlorida.isError, true, 'future Florida judgment fails closed');
+  assert.match(futureFlorida.content[0].text, /cannot be later than the dataset snapshot/);
 
   await client.close();
   console.log('\nMCP SMOKE TEST PASSED');

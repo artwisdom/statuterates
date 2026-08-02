@@ -15,6 +15,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { withCurrentValues } from '../shared/current-values.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EXPORTS = resolve(__dirname, '..', 'data', 'exports');
@@ -58,6 +59,16 @@ function main() {
 
   const meta = readJson(join(EXPORTS, 'meta.json'));
   const entities = readJson(join(EXPORTS, 'entities.json'));
+  const asOfDate = String(meta.generated_at || '').slice(0, 10);
+  const entityDir = join(EXPORTS, 'entity');
+  const entityRecords = existsSync(entityDir)
+    ? readdirSync(entityDir)
+      .filter((file) => file.endsWith('.json'))
+      .sort()
+      .map((file) => readJson(join(entityDir, file)))
+    : [];
+  const safeRecords = entityRecords.map((record) => withCurrentValues(record, asOfDate));
+  const safeBySlug = new Map(safeRecords.map((record) => [record.slug, record]));
 
   const apiVersion = 'v1';
   const envelope = (data) => ({
@@ -78,35 +89,78 @@ function main() {
       meta: '/api/v1/meta.json',
       entities: '/api/v1/entities.json',
       latest: '/api/v1/latest.json',
+      upcoming: '/api/v1/upcoming.json',
       metrics: '/api/v1/metrics.json',
       entity: '/api/v1/entity/{slug}.json',
       entity_csv: '/api/v1/entity/{slug}.csv',
+      documentation: '/api/',
+      openapi: '/openapi.yaml',
+      llms: '/llms.txt',
+      llms_full: '/llms-full.txt',
     },
+    current_as_of: asOfDate,
     counts: { entities: meta.entity_count, observations: meta.observation_count },
   });
 
   write('meta.json', envelope(meta));
   write('metrics.json', envelope({ metrics: meta.metrics || [] }));
-  write('entities.json', envelope({ count: entities.count, entities: entities.entities }));
+  const safeEntitySummaries = entities.entities.map((summary) => {
+    const safe = safeBySlug.get(summary.slug);
+    return safe ? {
+      ...summary,
+      latest: safe.current,
+      current: safe.current,
+      latest_published: safe.latest_published,
+      current_as_of: asOfDate,
+    } : summary;
+  });
+  write('entities.json', envelope({
+    count: entities.count,
+    current_as_of: asOfDate,
+    entities: safeEntitySummaries,
+  }));
 
   // Flat "every current value in one call" endpoint — the cheapest possible agent integration.
-  const latest = readJson(join(EXPORTS, 'latest.json'));
-  write('latest.json', envelope({ count: latest.count, observations: latest.observations }));
+  // It is deliberately rebuilt from history rather than exports/latest.json because an agency can
+  // publish a future quarter before that quarter is actually in force.
+  const currentObservations = safeRecords.flatMap((record) => Object.values(record.current || {})
+    .map((observation) => ({
+      entity: record.slug,
+      entity_name: record.name,
+      ...observation,
+    })));
+  write('latest.json', envelope({
+    count: currentObservations.length,
+    current_as_of: asOfDate,
+    observations: currentObservations,
+  }));
+
+  // Preserve announced future periods explicitly without ever presenting them as current.
+  const upcomingObservations = entityRecords.flatMap((record) => Object.values(record.history || {})
+    .flat()
+    .filter((observation) => observation.effective_date > asOfDate)
+    .map((observation) => ({
+      entity: record.slug,
+      entity_name: record.name,
+      ...observation,
+    })))
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date) || a.entity.localeCompare(b.entity));
+  write('upcoming.json', envelope({
+    count: upcomingObservations.length,
+    current_as_of: asOfDate,
+    observations: upcomingObservations,
+  }));
 
   // Per-entity endpoints (copied from exports/entity/*.json) + CSV history downloads.
-  const entityDir = join(EXPORTS, 'entity');
   let n = 0;
-  if (existsSync(entityDir)) {
-    for (const f of readdirSync(entityDir)) {
-      if (!f.endsWith('.json')) continue;
-      const rec = readJson(join(entityDir, f));
-      write(join('entity', f), envelope(rec));
-      writeCsv(join(API_DIR, 'entity', f.replace(/\.json$/, '.csv')), rec);
-      n++;
-    }
+  for (const rec of safeRecords) {
+    const file = `${rec.slug}.json`;
+    write(join('entity', file), envelope(rec));
+    writeCsv(join(API_DIR, 'entity', file.replace(/\.json$/, '.csv')), rec);
+    n++;
   }
 
-  console.log(`Static API built: ${n} entity endpoints (JSON+CSV) + index/meta/metrics/entities/latest under ${API_DIR}`);
+  console.log(`Static API built: ${n} entity endpoints (JSON+CSV) + index/meta/metrics/entities/current/upcoming under ${API_DIR}`);
   return n;
 }
 

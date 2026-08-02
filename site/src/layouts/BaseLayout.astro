@@ -17,18 +17,21 @@ const {
 const meta = getMeta();
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const origin = new URL('/', Astro.site).href;
+const organizationId = new URL('/#organization', Astro.site).href;
+const websiteId = new URL('/#website', Astro.site).href;
 const generatedDate = prettyDate(meta.generated_at);
 const jsonLdArray = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
 // Site-wide entity schema on every page — establishes the publisher and site as a recognizable entity
 // (durable SEO signal, enables richer knowledge-graph treatment). Per-page jsonLd is layered on top.
 const siteJsonLd = [
-  { '@context': 'https://schema.org', '@type': 'Organization', name: meta.title, url: origin, description: meta.description, logo: `${origin}logo-512.png`,
+  { '@context': 'https://schema.org', '@type': 'Organization', '@id': organizationId, name: meta.title, url: origin, description: meta.description, logo: `${origin}logo-512.png`,
     foundingDate: '2026',
     knowsAbout: ['Post-judgment interest', 'Prejudgment interest', 'Statutory interest rates', 'IRS interest rates', 'Judgment interest rates by state', '28 U.S.C. §1961', 'Late-payment interest'],
     publishingPrinciples: `${origin}editorial-policy/`,
     contactPoint: { '@type': 'ContactPoint', contactType: 'editorial', email: 'hello@statuterates.com' } },
-  { '@context': 'https://schema.org', '@type': 'WebSite', name: meta.title, url: origin, description: meta.description },
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': websiteId, name: meta.title, url: origin, description: meta.description,
+    inLanguage: 'en', publisher: { '@id': organizationId } },
 ];
 
 // ONE-SWITCH MONETIZATION: set the repo variable ADSENSE_CLIENT = ca-pub-XXXXXXXX (after AdSense
@@ -55,7 +58,9 @@ const path = Astro.url.pathname;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title={feedTitle} href={feedHref} />
-    {noindex && <meta name="robots" content="noindex,follow" />}
+    <meta name="robots" content={noindex
+      ? 'noindex,follow'
+      : 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1'} />
     <meta name="theme-color" content="#3a3fa6" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/logo-512.png" />

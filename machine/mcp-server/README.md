@@ -9,13 +9,17 @@ static API.
 | Tool | Purpose |
 |---|---|
 | `dataset_info` | Dataset title, description, available metrics, freshness, and cited sources. Call first. |
-| `search_entities` | Fuzzy-find rate series by name/slug/jurisdiction; returns latest values. |
-| `get_entity` | Full record for one series: latest value per metric + all recorded observations, each with provenance. |
-| `get_latest_value` | Current value of a metric for one series, with `effective_date`/`source_url`/`confidence`. |
-| `compare_values` | Compare one metric across several series, sorted high→low. |
+| `search_entities` | Fuzzy-find rate series; returns current and latest-published values separately. |
+| `get_entity` | Full record: current, latest published, and all recorded observations with provenance. |
+| `get_latest_value` | Value currently in force as of the snapshot; preannounced future periods are excluded. |
+| `compare_values` | Compare one current metric across several series, sorted high→low. |
+| `calculate_interest` | Audited federal, IRS, UK, EU, and Florida calculations using the shared site engine. |
 
 Every value returned carries `value`, `unit`, `effective_date`, `source_url`, `retrieved_at`,
 `confidence`. `confidence: "medium"` values are **derived** (the `notes` field states the formula).
+For compatibility, `latest` is an alias of `current`; `latest_published` can contain a later,
+officially announced period. State calculations fail closed against the website's shared release
+registry. Florida is currently the only approved state-specific method.
 
 ## Install
 ```bash

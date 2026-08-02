@@ -48,11 +48,13 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
+    '@id': `${canonical}#dataset`,
+    identifier: canonical,
     name: `${rateYear} U.S. prejudgment interest rates by state`,
     description: 'Recorded prejudgment interest-rate references and claim-type restrictions for all 50 states and the District of Columbia, each with a cited source.',
     url: canonical,
     isAccessibleForFree: true,
-    creator: { '@type': 'Organization', name: meta.title },
+    creator: { '@id': new URL('/#organization', Astro.site).href },
     license: new URL('/terms/#data-api-license', Astro.site).href,
     dateModified: datasetModified,
     distribution: {

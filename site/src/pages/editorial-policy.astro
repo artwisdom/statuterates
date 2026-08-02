@@ -10,7 +10,7 @@ const jsonLd = {
   '@type': 'AboutPage',
   name: 'Editorial & data-integrity policy',
   url: new URL('/editorial-policy/', Astro.site).href,
-  publisher: { '@type': 'Organization', name: meta.title },
+  publisher: { '@id': new URL('/#organization', Astro.site).href },
 };
 ---
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>

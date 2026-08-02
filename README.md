@@ -33,6 +33,10 @@ fresh CI database. A clean automation run can no longer erase older observations
 also fail closed instead of carrying the last published quarterly interest rate into an unpublished
 quarter.
 
+The August 2026 machine-discovery baseline publishes a permanent OpenAPI contract, separates values
+currently in force from officially announced future periods, applies the same state-calculator gate
+to the website and MCP server, and verifies every human and machine surface at the public edge.
+
 ## Local setup
 
 Node 22.12 or newer is required. Version files are included for common Node version managers.
@@ -75,4 +79,6 @@ Alaska-history release, and
 IRS rule-monitor milestone,
 [docs/PHASE_5_PROGRESS.md](docs/PHASE_5_PROGRESS.md) for the federal-history migration and first
 audited state calculator, and
+[docs/PHASE_7_AI_DISCOVERY.md](docs/PHASE_7_AI_DISCOVERY.md) for the AI-search, public OpenAPI, and
+machine-interface safety release, and
 [docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.

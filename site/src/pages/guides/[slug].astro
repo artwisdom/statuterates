@@ -45,9 +45,10 @@ const jsonLd = [
     headline: guide.h1,
     description: guide.description,
     url: canonical,
-    author: { '@type': 'Organization', name: meta.title, url: origin },
+    author: { '@id': new URL('/#organization', Astro.site).href },
     publisher: {
       '@type': 'Organization',
+      '@id': new URL('/#organization', Astro.site).href,
       name: meta.title,
       url: origin,
       logo: { '@type': 'ImageObject', url: logo, width: 512, height: 512 },

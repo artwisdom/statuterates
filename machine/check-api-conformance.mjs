@@ -26,6 +26,10 @@ if (!existsSync(join(API, 'index.json'))) {
 const index = readJson('index.json');
 has(index, ['api_version', 'dataset', 'generated_at', 'endpoints', 'counts'], 'index.json');
 if (index.api_version !== 'v1') fail(`index.json: api_version "${index.api_version}" != "v1"`);
+for (const endpoint of ['meta', 'entities', 'latest', 'upcoming', 'metrics', 'entity', 'entity_csv', 'documentation', 'openapi', 'llms', 'llms_full']) {
+  if (!index.endpoints?.[endpoint]) fail(`index.json: missing endpoint "${endpoint}"`);
+}
+const asOfDate = String(index.current_as_of || index.generated_at || '').slice(0, 10);
 
 // enveloped endpoints
 for (const f of ['meta.json', 'metrics.json', 'entities.json']) {
@@ -45,9 +49,24 @@ for (const e of entities) has(e, ['slug', 'name', 'entity_type'], `entities.json
 // flat latest endpoint
 const latest = readJson('latest.json');
 has(latest, ['api_version', 'generated_at', 'data'], 'latest.json');
+has(latest.data, ['count', 'current_as_of', 'observations'], 'latest.json data');
 if (!Array.isArray(latest.data.observations) || latest.data.observations.length < 1) fail('latest.json: data.observations must be non-empty');
 for (const o of latest.data.observations) {
   if (!o.entity || !o.effective_date || !o.source_url) { fail(`latest.json: observation missing entity/effective_date/source_url (${JSON.stringify(o).slice(0, 80)})`); break; }
+  if (o.effective_date > asOfDate) fail(`latest.json: ${o.entity} promotes future value ${o.effective_date} after ${asOfDate}`);
+}
+
+// Announced future periods remain accessible, but only through an explicitly upcoming endpoint.
+const upcoming = readJson('upcoming.json');
+has(upcoming, ['api_version', 'generated_at', 'data'], 'upcoming.json');
+has(upcoming.data, ['count', 'current_as_of', 'observations'], 'upcoming.json data');
+if (!Array.isArray(upcoming.data.observations)) fail('upcoming.json: data.observations must be an array');
+for (const o of upcoming.data.observations || []) {
+  if (!o.entity || !o.effective_date || !o.source_url) {
+    fail(`upcoming.json: observation missing entity/effective_date/source_url (${JSON.stringify(o).slice(0, 80)})`);
+    break;
+  }
+  if (o.effective_date <= asOfDate) fail(`upcoming.json: ${o.entity} contains non-future value ${o.effective_date}`);
 }
 
 // per-entity endpoints
@@ -66,12 +85,16 @@ for (const f of files) {
   const env = readJson(join('entity', f));
   has(env, ['api_version', 'generated_at', 'data'], `entity/${f}`);
   const d = env.data;
-  has(d, ['slug', 'name', 'entity_type', 'latest', 'history'], `entity/${f} data`);
+  has(d, ['slug', 'name', 'entity_type', 'latest', 'current', 'latest_published', 'current_as_of', 'history'], `entity/${f} data`);
   for (const [metric, obs] of Object.entries(d.latest || {})) {
     has(obs, OBS_KEYS, `entity/${f} latest.${metric}`);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(obs.effective_date)) fail(`entity/${f} latest.${metric}: bad effective_date`);
+    if (obs.effective_date > asOfDate) fail(`entity/${f} latest.${metric}: future value ${obs.effective_date} after ${asOfDate}`);
     if (!/^https?:\/\//.test(obs.source_url)) fail(`entity/${f} latest.${metric}: source_url not a URL`);
     if (!['high', 'medium', 'low'].includes(obs.confidence)) fail(`entity/${f} latest.${metric}: bad confidence`);
+    if (JSON.stringify(obs) !== JSON.stringify(d.current?.[metric])) {
+      fail(`entity/${f}: latest.${metric} must be the current-value compatibility alias`);
+    }
     obsChecked++;
   }
   for (const arr of Object.values(d.history || {})) {

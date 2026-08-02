@@ -77,7 +77,7 @@ test('the deployed custom domain is verified before search engines are notified'
   assert.notEqual(edgeCheckIndex, -1);
   assert.ok(deploymentIndex < edgeCheckIndex && edgeCheckIndex < indexNowIndex);
   assert.match(deploy, /run:\s*node machine\/check-public-edge\.mjs/);
-  assert.match(deploy, /^\s*-\s*"machine\/check-public-edge\.mjs"\s*$/m);
+  assert.match(deploy, /^\s*-\s*"machine\/(?:check-public-edge\.mjs|\*\*)"\s*$/m);
   assert.match(deploy, /DEPLOY_MARKER:\s*\$\{\{ format\('\{0\}-\{1\}', github\.run_id, github\.run_attempt\) \}\}/);
   assert.match(edgeCheck, /const releaseId = expectedMarker;/);
   assert.match(edgeCheck, /url\.searchParams\.set\('deploy', releaseId\)/);

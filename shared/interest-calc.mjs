@@ -481,12 +481,29 @@ export function fixedCompoundInterest({ principal, startDate, endDate, history }
  * Simple interest where the underlying rate RE-FIXES over time (EU Directive semesters): accrues
  * segment-by-segment at (reference in force that day + margin). actual/365.
  */
+export function euRateCoverageEnd(history) {
+  const h = sortHistory(history);
+  const latest = h.at(-1);
+  if (!latest) throw new Error('No EU half-year rate history supplied');
+  const d = parseDate(latest.date);
+  if (d.getUTCDate() !== 1 || ![0, 6].includes(d.getUTCMonth())) {
+    throw new Error(`EU reference rate ${latest.date} is not a half-year start`);
+  }
+  return addMonthsClamped(latest.date, 6);
+}
+
 export function floatingSimpleInterest({ principal, startDate, endDate, history, marginPercent = 0 }) {
   assertPositivePrincipal(principal);
   const totalDays = daysBetween(startDate, endDate);
   if (totalDays < 0) throw new Error('End date is before the start date');
   const h = sortHistory(history);
   if (!rateOn(h, startDate)) throw new Error(`No rate on record for ${startDate}`);
+  const coveredThrough = euRateCoverageEnd(h);
+  if (endDate > coveredThrough) {
+    throw new Error(
+      `EU reference rates are only published through ${coveredThrough}; choose an end date on or before that boundary`
+    );
+  }
 
   // Build segments at each rate change between start and end.
   const changes = h.map((p) => p.date).filter((d) => d > startDate && d < endDate);

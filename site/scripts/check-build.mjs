@@ -121,6 +121,15 @@ for (const file of htmlFiles) {
   if (h1s.length !== 1) errors.push(`${file}: expected one H1, found ${h1s.length}`);
   if (!html.includes('<html lang="en">')) errors.push(`${file}: missing html lang="en"`);
   if (!html.includes('<meta name="viewport"')) errors.push(`${file}: missing viewport metadata`);
+  const robotsMeta = [...html.matchAll(/<meta name="robots" content="([^"]+)">/g)];
+  if (robotsMeta.length !== 1) {
+    errors.push(`${file}: expected one robots meta directive, found ${robotsMeta.length}`);
+  } else if (![
+    'noindex,follow',
+    'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1',
+  ].includes(robotsMeta[0][1])) {
+    errors.push(`${file}: unsupported robots meta directive ${robotsMeta[0][1]}`);
+  }
   const rssLinks = [...html.matchAll(/<link\s+rel="alternate"\s+type="application\/rss\+xml"\s+title="[^"]+"\s+href="([^"]+)">/g)];
   if (rssLinks.length !== 1) {
     errors.push(`${file}: expected one RSS autodiscovery link, found ${rssLinks.length}`);
@@ -217,6 +226,50 @@ if (!existsSync(deployMarkerPath) || !readFileSync(deployMarkerPath, 'utf8').tri
   errors.push('deploy-marker.txt: missing or empty exact-artifact marker');
 }
 const sitemap = readFileSync(sitemapPath, 'utf8');
+
+// Machine/AI discovery is part of the release contract. These files are compatibility and
+// integration surfaces—not special ranking shortcuts—and must stay accurate and mutually linked.
+const machineFiles = ['robots.txt', 'llms.txt', 'llms-full.txt', 'openapi.yaml', 'api/v1/index.json', 'api/v1/latest.json', 'api/v1/upcoming.json'];
+for (const relativePath of machineFiles) {
+  if (!existsSync(join(DIST, relativePath))) errors.push(`${relativePath}: missing machine-discovery artifact`);
+}
+if (machineFiles.every((relativePath) => existsSync(join(DIST, relativePath)))) {
+  const robots = readFileSync(join(DIST, 'robots.txt'), 'utf8');
+  const llms = readFileSync(join(DIST, 'llms.txt'), 'utf8');
+  const llmsFull = readFileSync(join(DIST, 'llms-full.txt'), 'utf8');
+  const openapi = readFileSync(join(DIST, 'openapi.yaml'), 'utf8');
+  const apiIndex = JSON.parse(readFileSync(join(DIST, 'api/v1/index.json'), 'utf8'));
+  const apiLatest = JSON.parse(readFileSync(join(DIST, 'api/v1/latest.json'), 'utf8'));
+  const apiUpcoming = JSON.parse(readFileSync(join(DIST, 'api/v1/upcoming.json'), 'utf8'));
+  if (!/^User-agent: \*\nAllow: \/$/m.test(robots) || /^Disallow: \/$/m.test(robots)) {
+    errors.push('robots.txt: sitewide crawler access is no longer explicitly allowed');
+  }
+  if (!llms.includes(`${expectedOrigin}/openapi.yaml`) || !llms.includes('/api/v1/upcoming.json')) {
+    errors.push('llms.txt: missing public OpenAPI or upcoming-period discovery link');
+  }
+  const currentAsOf = String(apiLatest.data?.current_as_of || '').slice(0, 10);
+  if (!llmsFull.includes(`Current as of: ${currentAsOf}`)) {
+    errors.push('llms-full.txt: snapshot date disagrees with the current-values endpoint');
+  }
+  if (!openapi.includes('title: StatuteRates Static JSON and CSV API')
+      || !openapi.includes('https://statuterates.com/terms/#data-api-license')
+      || !openapi.includes('/api/v1/upcoming.json:')) {
+    errors.push('openapi.yaml: public contract is stale or incomplete');
+  }
+  for (const endpoint of ['openapi', 'llms', 'llms_full', 'upcoming']) {
+    if (!apiIndex.endpoints?.[endpoint]) errors.push(`api/v1/index.json: missing ${endpoint} discovery endpoint`);
+  }
+  for (const observation of apiLatest.data?.observations || []) {
+    if (observation.effective_date > currentAsOf) {
+      errors.push(`api/v1/latest.json: ${observation.entity} incorrectly promotes ${observation.effective_date} after ${currentAsOf}`);
+    }
+  }
+  for (const observation of apiUpcoming.data?.observations || []) {
+    if (observation.effective_date <= currentAsOf) {
+      errors.push(`api/v1/upcoming.json: ${observation.entity} is not later than ${currentAsOf}`);
+    }
+  }
+}
 const sitemapRoutes = [...sitemap.matchAll(/<loc>(https:\/\/[^<]+)<\/loc>/g)]
   .map((match) => new URL(match[1]).pathname);
 for (const match of sitemap.matchAll(/<lastmod>([^<]+)<\/lastmod>/g)) {
