@@ -94,7 +94,10 @@ published month that does not match the current month.
 2. If the OCCC has not rolled the page to a new month, do not relabel the prior rate as current. Wait
    for the official publication and re-run.
 3. If markup changed, update `parseTexasCurrentRate` and its fixture tests without bypassing the
-   shared robots/cache/throttle layer.
+   shared robots/cache/throttle layer. OCCC's August 2026 TablePress row rendered the month and year
+   as one text node (`August2026`), so the parser deliberately accepts joined or spaced month/year
+   text but still requires the exact postjudgment label, a known month, four-digit year, current
+   month, and the statutory 5%–15% range.
 4. Confirm `texas-judgment-rate` remains contiguous from September 1983 through the new month and
    that Texas prejudgment's monthly value exactly matches it under §304.103.
 5. Keep both calculation statuses `reference_only` unless the separate readiness contract passes.
@@ -229,7 +232,7 @@ allow Google to recrawl and move them to its intentional `noindex` classificatio
 
 State records live in `pipeline/fetchers/us-states.mjs`. Florida judgment interest is the sole
 `ready` state contract; the other state entities remain `reference_only`, and most contain one
-observation. Texas (515 monthly rows), Nebraska (275 change
+observation. Texas (516 monthly rows), Nebraska (275 change
 points), Iowa (302 monthly selections), Alaska (30 annual rows in each of its pre/post series),
 Florida (78 official periods), Utah (34 annual rows), Maine, Kentucky, and Georgia have deeper
 verified histories. A source review must not invent historical dates or change `retrieved_at` to the

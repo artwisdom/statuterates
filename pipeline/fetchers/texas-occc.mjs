@@ -32,7 +32,10 @@ function htmlToText(html) {
 
 export function parseTexasCurrentRate(html) {
   const text = htmlToText(html);
-  const match = text.match(/post-?judgment\s+interest\s+rate\s*:\s*(\d+(?:\.\d+)?)\s*%\s*([a-z]+)\s+(\d{4})/i);
+  // OCCC's TablePress markup currently renders the month and year as one text node
+  // (for example, `August2026`). Accept either joined or spaced text while retaining
+  // the exact label, statutory rate bounds, known-month lookup, and four-digit year gate.
+  const match = text.match(/post-?judgment\s+interest\s+rate\s*:\s*(\d+(?:\.\d+)?)\s*%\s*([a-z]+)\s*(\d{4})\b/i);
   if (!match) throw new Error('Texas OCCC: current postjudgment rate and month were not found');
 
   const value = Number(match[1]);

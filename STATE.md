@@ -3,14 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-08-02
+**Updated:** 2026-08-08
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 22.12+ (Node 24 also verified locally)
 
 ## Current product
 
-- 114 rate-series entities and 4,949 recorded historical observations.
+- 114 rate-series entities and 4,953 recorded historical observations.
 - 195 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
@@ -64,7 +64,7 @@ rules. Phase 1 corrected the foundation:
 
 - Private Search Console evidence was reviewed read-only to choose the order of work. Account-level
   metrics are intentionally not stored in this repository.
-- Texas now has 515 official monthly postjudgment observations from September 1983 through July
+- Texas now has 516 official monthly postjudgment observations from September 1983 through August
   2026, plus a live OCCC current-month monitor.
 - Nebraska now has all 275 change points in the Judicial Branch's published table from January 1987
   through July 2026, plus a live current-rate monitor.
@@ -166,7 +166,7 @@ verified in production.
   Package” download. It fetches complete official FRED `DGS1` daily history from January 2000,
   derives Monday-keyed weekly averages with exact decimal rounding, and requires every published
   `WGS1YR` week to reconcile before loading or exporting.
-- The modern §1961 series now contains 1,337 weekly rate records beginning December 11, 2000—the
+- The modern §1961 series now contains 1,338 weekly rate records beginning December 11, 2000—the
   preceding rate week needed for judgments entered when the current formula began on December 21.
   The calculator rejects earlier judgments and refuses to substitute an older rate when the exact
   preceding calendar week is absent.
@@ -270,18 +270,24 @@ verified in production.
   `/states/new-york-consumer-debt/` URL to
   `/rates/new-york-consumer-debt-judgment-rate/` with HTTP `301` and preserves query strings. This is
   the narrow externally evidenced exception to the site's prohibition on blanket `404` redirects.
+- The 2026-08-04 scheduled refresh correctly failed closed while OCCC still published July as its
+  current Texas period. After OCCC published August, its TablePress markup joined the month and year
+  as `August2026`; the parser now accepts that exact joined/spaced presentation while retaining the
+  labeled-rate, known-month, four-digit-year, 5%–15%, and current-month gates. A live full refresh on
+  2026-08-09 UTC added the official unchanged 6.75% August Texas observation and the next verified
+  Federal H.15 week, then passed validation at 4,953 observations.
 - A one-time local Codex evidence review is scheduled for August 31, 2026 at 9:00 AM Eastern. It will
   use finalized private Search Console periods and current official search-provider guidance before
   deciding whether another page-strengthening release is justified.
 
 ## Verified checks
 
-- Pipeline: 127 tests.
+- Pipeline: 128 tests.
 - Shared interest engine and release contracts: 40 tests.
 - Site data, copy, and RSS contracts: 15 tests.
 - MCP: 5 tests, including traversal protection, future-date refusal, compatibility fields, and the
   full six-tool smoke test.
-- API conformance: 114 entity endpoints and 5,063 latest/history records checked.
+- API conformance: 114 entity endpoints and 5,067 latest/history records checked.
 - Static build: 195 pages on Astro 7.
 - Indexable sitemap: 192 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77

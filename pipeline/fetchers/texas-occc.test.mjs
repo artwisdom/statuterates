@@ -28,6 +28,13 @@ test('Texas current-page parser tolerates markup between the label, rate, and mo
   assert.deepEqual(parseTexasCurrentRate(html), { value: 6.75, effective_date: '2026-07-01' });
 });
 
+test('Texas current-page parser accepts the agency current-table month and year without a space', () => {
+  const html = `
+    <table><tr><td><strong>Postjudgment Interest Rate: 6.75%</strong><br />August2026</td></tr></table>
+  `;
+  assert.deepEqual(parseTexasCurrentRate(html), { value: 6.75, effective_date: '2026-08-01' });
+});
+
 test('Texas current-page parser and period gate fail closed', () => {
   assert.throws(
     () => parseTexasCurrentRate('<p>Postjudgment Interest Rate: 18.00% July 2026</p>'),
