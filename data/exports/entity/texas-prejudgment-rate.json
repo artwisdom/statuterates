@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T04:56:15.035Z",
+  "generated_at": "2026-08-09T02:49:05.243Z",
   "slug": "texas-prejudgment-rate",
   "name": "Texas Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -35,17 +35,30 @@
       "value": 6.75,
       "value_text": "6.75%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-01",
+      "effective_date": "2026-08-01",
       "source_id": "tx-prejud",
       "source_url": "https://occc.texas.gov/publications/interest-rates/",
-      "retrieved_at": "2026-07-26T01:52:04.277Z",
+      "retrieved_at": "2026-08-09T02:48:46.827Z",
       "confidence": "high",
       "method": "derived_tx_304_103_from_occc_postjudgment",
-      "notes": "For a judgment rendered during 2026-07, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
+      "notes": "For a judgment rendered during 2026-08, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6.75,
+        "value_text": "6.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-08-01",
+        "source_id": "tx-prejud",
+        "source_url": "https://occc.texas.gov/publications/interest-rates/",
+        "retrieved_at": "2026-08-09T02:48:46.827Z",
+        "confidence": "high",
+        "method": "derived_tx_304_103_from_occc_postjudgment",
+        "notes": "For a judgment rendered during 2026-08, Texas Finance Code §304.103 uses the OCCC postjudgment rate (6.75%) for qualifying statutory prejudgment interest. Sections 304.101–304.107 limit scope, set simple interest and the accrual window, and adjust for qualifying settlement offers; future damages are excluded. Verify applicability; not legal advice."
+      },
       {
         "metric": "annual_rate",
         "value": 6.75,
