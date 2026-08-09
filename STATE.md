@@ -259,6 +259,17 @@ verified in production.
   **Allow**, the legacy AI-bot block and AI Labyrinth are off, and no named crawler has its Block
   switch enabled. Private Cloudflare metrics showed successful classified requests from every one
   of the ten named agents in the preceding 24 hours. No spoofable user-agent WAF bypass was added.
+- Search Console's “Crawled — currently not indexed” validation started on 2026-07-26 and failed on
+  2026-08-05 because its inspected examples were raw JSON, CSV, and RSS resources rather than missing
+  human pages. Those machine resources are intentionally linked but remain outside the 192-URL HTML
+  sitemap. On 2026-08-08, a Cloudflare response-header transform began returning
+  `X-Robots-Tag: googlebot: noindex` only for `/api/v1/*`, `/changes.xml`, and `/rates/*.xml`. It keeps
+  wildcard crawl access open and does not apply the Google-scoped header to HTML, `/api/`,
+  `llms.txt`, `llms-full.txt`, or `/openapi.yaml`, preserving the non-Google AI discovery surfaces.
+- A separate Cloudflare exact redirect deployed on 2026-08-08 sends the retired
+  `/states/new-york-consumer-debt/` URL to
+  `/rates/new-york-consumer-debt-judgment-rate/` with HTTP `301` and preserves query strings. This is
+  the narrow externally evidenced exception to the site's prohibition on blanket `404` redirects.
 - A one-time local Codex evidence review is scheduled for August 31, 2026 at 9:00 AM Eastern. It will
   use finalized private Search Console periods and current official search-provider guidance before
   deciding whether another page-strengthening release is justified.
@@ -372,12 +383,11 @@ verified in production.
 - The 2026-07-26 Cloudflare check verified automatic Web Analytics/RUM injection, with EU visitor
   collection excluded and exactly one beacon on the live homepage. Analytics stays at the edge;
   there is intentionally no `CF_ANALYTICS_TOKEN` repository variable.
-- Search Console's discovered-page validation remains in progress. The inspected redirect examples
-  are expected old HTTP variants that already consolidate through a one-hop `301`; they are not a
-  reason to change canonicals or request another validation. One isolated retired URL remains a
-  legitimate `404` and is absent from internal links and the sitemap; a future exact redirect may
-  be considered only if external-link evidence makes it worthwhile. Blanket 404 redirects remain
-  prohibited.
+- Search Console's old-HTTP redirect examples consolidate through a one-hop `301` and do not require
+  canonical changes. The retired New York consumer-debt state URL now has the one exact redirect
+  described above because Search Console supplied URL-specific evidence; blanket `404` redirects
+  remain prohibited. Raw API and RSS resources should be evaluated as machine assets, not as failed
+  HTML index targets, and another blanket “Validate Fix” request is not warranted.
 - IndexNow currently submits the full sitemap on deploy; a later optimization can submit only changed
   URLs.
 - Named user-agent requests prove there is no simple crawler-name block, and Cloudflare's AI metrics

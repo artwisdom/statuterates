@@ -88,11 +88,21 @@ function requireIndexableResponseHeaders(label, response) {
   }
 }
 
+function requireGooglebotNoindexHeader(label, response) {
+  rejectEdgeChallenge(label, response);
+  const xRobotsTag = response.headers.get('x-robots-tag') || '';
+  const normalized = xRobotsTag.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (normalized !== 'googlebot: noindex') {
+    throw new Error(`${label} expected X-Robots-Tag: googlebot: noindex, received ${JSON.stringify(xRobotsTag)}`);
+  }
+}
+
 await waitForRelease();
 
 const [
   home,
   texasRate,
+  apiLanding,
   robots,
   sitemap,
   ads,
@@ -106,9 +116,12 @@ const [
   apiLatest,
   apiUpcoming,
   apiTexas,
+  apiTexasCsv,
+  retiredNewYorkConsumerDebt,
 ] = await Promise.all([
   requestWithRetry('/', { cacheBust: true }),
   requestWithRetry('/rates/texas-judgment-rate/', { cacheBust: true }),
+  requestWithRetry('/api/', { cacheBust: true }),
   requestWithRetry('/robots.txt', { cacheBust: true }),
   requestWithRetry('/sitemap.xml', { cacheBust: true }),
   requestWithRetry('/ads.txt', { cacheBust: true }),
@@ -122,11 +135,14 @@ const [
   requestWithRetry('/api/v1/latest.json', { cacheBust: true }),
   requestWithRetry('/api/v1/upcoming.json', { cacheBust: true }),
   requestWithRetry('/api/v1/entity/texas-judgment-rate.json', { cacheBust: true }),
+  requestWithRetry('/api/v1/entity/texas-judgment-rate.csv', { cacheBust: true }),
+  requestWithRetry('/states/new-york-consumer-debt/?from=gsc&case=old'),
 ]);
 
 for (const [label, result] of Object.entries({
   home,
   texasRate,
+  apiLanding,
   robots,
   sitemap,
   ads,
@@ -140,13 +156,24 @@ for (const [label, result] of Object.entries({
   apiLatest,
   apiUpcoming,
   apiTexas,
+  apiTexasCsv,
 })) {
   if (result.response.status !== 200) throw new Error(`${label} returned HTTP ${result.response.status}`);
+}
+if (retiredNewYorkConsumerDebt.response.status !== 301) {
+  throw new Error(`retired New York consumer-debt URL returned HTTP ${retiredNewYorkConsumerDebt.response.status}, expected 301`);
+}
+rejectEdgeChallenge('retired New York consumer-debt URL', retiredNewYorkConsumerDebt.response);
+const retiredLocation = retiredNewYorkConsumerDebt.response.headers.get('location') || '';
+const expectedRetiredLocation = `${origin}/rates/new-york-consumer-debt-judgment-rate/?from=gsc&case=old`;
+if (retiredLocation !== expectedRetiredLocation) {
+  throw new Error(`retired New York consumer-debt URL redirected to ${JSON.stringify(retiredLocation)}, expected ${expectedRetiredLocation}`);
 }
 requireText('homepage', home.text, `<link rel="canonical" href="${origin}/">`);
 requireText('homepage', home.text, 'rel="alternate" type="application/rss+xml"');
 requireText('Texas rate page', texasRate.text, '/rates/texas-judgment-rate.xml');
 requireText('Texas rate page', texasRate.text, `${origin}/terms/#data-api-license`);
+requireText('API landing page', apiLanding.text, `<link rel="canonical" href="${origin}/api/">`);
 requireText('robots.txt', robots.text, `Sitemap: ${origin}/sitemap.xml`);
 requireText('global RSS feed', globalFeed.text, '<rss version="2.0"');
 requireText('rate RSS feed', rateFeed.text, '<guid isPermaLink="false">texas-judgment-rate@');
@@ -156,6 +183,33 @@ requireText('llms.txt', llms.text, `${origin}/openapi.yaml`);
 requireText('llms.txt', llms.text, `${origin}/api/v1/upcoming.json`);
 requireText('OpenAPI', openapi.text, 'title: StatuteRates Static JSON and CSV API');
 requireText('OpenAPI', openapi.text, '/api/v1/upcoming.json:');
+
+// Google Search Console can discover raw API downloads and RSS feeds through the public data and
+// subscription interfaces. They are useful machine resources, but not standalone web-search pages.
+// The Cloudflare rule therefore gives only Googlebot a noindex response header while leaving the
+// resources crawlable and leaving human HTML plus AI-discovery files untouched.
+for (const [label, result] of Object.entries({
+  'global RSS feed': globalFeed,
+  'rate RSS feed': rateFeed,
+  'API service index': apiIndex,
+  'API metadata': apiMeta,
+  'API current values': apiLatest,
+  'API upcoming values': apiUpcoming,
+  'Texas entity JSON': apiTexas,
+  'Texas entity CSV': apiTexasCsv,
+})) {
+  requireGooglebotNoindexHeader(label, result.response);
+}
+for (const [label, result] of Object.entries({
+  homepage: home,
+  'Texas rate page': texasRate,
+  'API landing page': apiLanding,
+  'llms.txt': llms,
+  'llms-full.txt': llmsFull,
+  OpenAPI: openapi,
+})) {
+  requireIndexableResponseHeaders(label, result.response);
+}
 
 function parseJson(label, text) {
   try {
@@ -280,4 +334,4 @@ for (let index = 0; index < sitemapUrls.length; index += concurrency) {
 }
 if (failures.length) throw new Error(`Public sitemap verification failed:\n${failures.join('\n')}`);
 
-console.log(`Public-edge verification OK: release markers, search/AI discovery files, current/upcoming API semantics, robots and page access for ${crawlerAgents.length} named crawler/user-fetch agents, ads.txt, both RSS feeds, and all ${sitemapUrls.length} sitemap URLs are healthy.`);
+console.log(`Public-edge verification OK: release markers, search/AI discovery files, Google-scoped machine-resource noindex, the retired New York consumer-debt redirect, current/upcoming API semantics, robots and page access for ${crawlerAgents.length} named crawler/user-fetch agents, ads.txt, both RSS feeds, and all ${sitemapUrls.length} sitemap URLs are healthy.`);

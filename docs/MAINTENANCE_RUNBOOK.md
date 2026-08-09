@@ -193,6 +193,38 @@ The build verifier checks internal targets, homepage reachability for every site
 content-depth alarms, Astro whitespace regressions, state-calculator output, `noindex` gates, and
 sitemap exclusions.
 
+## Search Console machine-resource exclusions
+
+Search Console can discover raw JSON, CSV, and RSS URLs through the public API, Dataset structured
+data, visible download links, and RSS autodiscovery. “Crawled — currently not indexed” is the expected
+classification for these non-HTML resources; it does not mean that an HTML sitemap page failed.
+Review the **submitted sitemap pages** separately before treating an indexing report as a site defect.
+
+Two narrow Cloudflare edge rules were deployed on 2026-08-08:
+
+1. A Response Header Transform Rule matches:
+
+   ```text
+   (starts_with(http.request.uri.path, "/api/v1/")) or
+   (http.request.uri.path eq "/changes.xml") or
+   (starts_with(http.request.uri.path, "/rates/") and ends_with(http.request.uri.path, ".xml"))
+   ```
+
+   It sets `X-Robots-Tag: googlebot: noindex`. The Googlebot scope is intentional: these resources
+   stay crawlable, `robots.txt` remains allow-all, and OAI, Anthropic, Perplexity, Bing, and other
+   machine consumers do not receive a generic indexing prohibition. Do not expand the rule to the
+   human `/api/` landing page, HTML pages, `llms.txt`, `llms-full.txt`, or `/openapi.yaml`.
+2. An exact HTTP `301` redirects `/states/new-york-consumer-debt/` to
+   `/rates/new-york-consumer-debt-judgment-rate/` and preserves the original query string. Do not turn
+   this evidence-backed exception into a blanket redirect policy.
+
+`machine/check-public-edge.mjs` fails a production release if representative API or feed resources
+lose the Google-scoped header, if protected human/AI-discovery surfaces gain it, or if the exact
+redirect stops preserving its destination and query string. Do not replace the response header with
+a `robots.txt` disallow: Google must crawl a URL to observe `noindex`, and the machine interfaces must
+remain accessible. Do not repeatedly use Search Console's “Validate Fix” for raw API or RSS URLs;
+allow Google to recrawl and move them to its intentional `noindex` classification.
+
 ## State-law source review
 
 State records live in `pipeline/fetchers/us-states.mjs`. Florida judgment interest is the sole
