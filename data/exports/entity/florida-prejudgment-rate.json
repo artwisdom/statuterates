@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T02:49:05.243Z",
+  "generated_at": "2026-08-13T22:12:04.919Z",
   "slug": "florida-prejudgment-rate",
   "name": "Florida Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -32,7 +32,7 @@
       "effective_date": "2026-07-01",
       "source_id": "fl-prejud",
       "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-      "retrieved_at": "2026-08-09T02:48:48.518Z",
+      "retrieved_at": "2026-08-13T22:11:59.658Z",
       "confidence": "high",
       "method": "statute-variable-official-table",
       "notes": "Florida’s CFO schedule supplies the rate used for qualifying prejudgment interest periods under Fla. Stat. §55.03. Entitlement, the date of loss, claim characterization, offsets, and the correct accrual periods remain case-specific; this reference series does not decide them. Verify the governing law and record. Not legal advice."
@@ -48,7 +48,7 @@
         "effective_date": "2026-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Florida’s CFO schedule supplies the rate used for qualifying prejudgment interest periods under Fla. Stat. §55.03. Entitlement, the date of loss, claim characterization, offsets, and the correct accrual periods remain case-specific; this reference series does not decide them. Verify the governing law and record. Not legal advice."
@@ -61,7 +61,7 @@
         "effective_date": "2026-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2026-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -74,7 +74,7 @@
         "effective_date": "2026-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2026-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -87,7 +87,7 @@
         "effective_date": "2025-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2025-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -100,7 +100,7 @@
         "effective_date": "2025-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2025-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -113,7 +113,7 @@
         "effective_date": "2025-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2025-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -126,7 +126,7 @@
         "effective_date": "2025-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2025-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -139,7 +139,7 @@
         "effective_date": "2024-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2024-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -152,7 +152,7 @@
         "effective_date": "2024-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2024-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -165,7 +165,7 @@
         "effective_date": "2024-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2024-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -178,7 +178,7 @@
         "effective_date": "2024-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2024-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -191,7 +191,7 @@
         "effective_date": "2023-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2023-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -204,7 +204,7 @@
         "effective_date": "2023-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2023-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -217,7 +217,7 @@
         "effective_date": "2023-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2023-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -230,7 +230,7 @@
         "effective_date": "2023-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2023-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -243,7 +243,7 @@
         "effective_date": "2022-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2022-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -256,7 +256,7 @@
         "effective_date": "2022-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2022-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -269,7 +269,7 @@
         "effective_date": "2022-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2022-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -282,7 +282,7 @@
         "effective_date": "2022-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2022-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -295,7 +295,7 @@
         "effective_date": "2021-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2021-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -308,7 +308,7 @@
         "effective_date": "2021-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2021-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -321,7 +321,7 @@
         "effective_date": "2021-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2021-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -334,7 +334,7 @@
         "effective_date": "2021-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2021-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -347,7 +347,7 @@
         "effective_date": "2020-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2020-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -360,7 +360,7 @@
         "effective_date": "2020-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2020-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -373,7 +373,7 @@
         "effective_date": "2020-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2020-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -386,7 +386,7 @@
         "effective_date": "2020-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2020-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -399,7 +399,7 @@
         "effective_date": "2019-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2019-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -412,7 +412,7 @@
         "effective_date": "2019-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2019-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -425,7 +425,7 @@
         "effective_date": "2019-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2019-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -438,7 +438,7 @@
         "effective_date": "2019-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2019-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -451,7 +451,7 @@
         "effective_date": "2018-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2018-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -464,7 +464,7 @@
         "effective_date": "2018-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2018-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -477,7 +477,7 @@
         "effective_date": "2018-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2018-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -490,7 +490,7 @@
         "effective_date": "2018-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2018-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -503,7 +503,7 @@
         "effective_date": "2017-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2017-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -516,7 +516,7 @@
         "effective_date": "2017-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2017-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -529,7 +529,7 @@
         "effective_date": "2017-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2017-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -542,7 +542,7 @@
         "effective_date": "2017-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2017-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -555,7 +555,7 @@
         "effective_date": "2016-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2016-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -568,7 +568,7 @@
         "effective_date": "2016-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2016-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -581,7 +581,7 @@
         "effective_date": "2016-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2016-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -594,7 +594,7 @@
         "effective_date": "2016-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2016-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -607,7 +607,7 @@
         "effective_date": "2015-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2015-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -620,7 +620,7 @@
         "effective_date": "2015-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2015-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -633,7 +633,7 @@
         "effective_date": "2015-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2015-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -646,7 +646,7 @@
         "effective_date": "2015-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2015-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -659,7 +659,7 @@
         "effective_date": "2014-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2014-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -672,7 +672,7 @@
         "effective_date": "2014-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2014-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -685,7 +685,7 @@
         "effective_date": "2014-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2014-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -698,7 +698,7 @@
         "effective_date": "2014-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2014-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -711,7 +711,7 @@
         "effective_date": "2013-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2013-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -724,7 +724,7 @@
         "effective_date": "2013-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2013-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -737,7 +737,7 @@
         "effective_date": "2013-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2013-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -750,7 +750,7 @@
         "effective_date": "2013-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2013-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -763,7 +763,7 @@
         "effective_date": "2012-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2012-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -776,7 +776,7 @@
         "effective_date": "2012-07-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2012-07-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -789,7 +789,7 @@
         "effective_date": "2012-04-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2012-04-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -802,7 +802,7 @@
         "effective_date": "2012-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2012-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -815,7 +815,7 @@
         "effective_date": "2011-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2011-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -828,7 +828,7 @@
         "effective_date": "2011-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2011-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -841,7 +841,7 @@
         "effective_date": "2010-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2010-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -854,7 +854,7 @@
         "effective_date": "2009-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2009-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -867,7 +867,7 @@
         "effective_date": "2008-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2008-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -880,7 +880,7 @@
         "effective_date": "2007-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2007-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -893,7 +893,7 @@
         "effective_date": "2006-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2006-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -906,7 +906,7 @@
         "effective_date": "2005-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2005-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -919,7 +919,7 @@
         "effective_date": "2004-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2004-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -932,7 +932,7 @@
         "effective_date": "2003-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2003-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -945,7 +945,7 @@
         "effective_date": "2002-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2002-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -958,7 +958,7 @@
         "effective_date": "2001-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2001-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -971,7 +971,7 @@
         "effective_date": "2000-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 2000-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -984,7 +984,7 @@
         "effective_date": "1999-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 1999-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -997,7 +997,7 @@
         "effective_date": "1998-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 1998-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -1010,7 +1010,7 @@
         "effective_date": "1997-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 1997-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -1023,7 +1023,7 @@
         "effective_date": "1996-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 1996-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -1036,7 +1036,7 @@
         "effective_date": "1995-01-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 1995-01-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."
@@ -1049,7 +1049,7 @@
         "effective_date": "1981-10-01",
         "source_id": "fl-prejud",
         "source_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
-        "retrieved_at": "2026-08-09T02:48:48.518Z",
+        "retrieved_at": "2026-08-13T22:11:59.658Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Florida CFO rate for the period beginning 1981-10-01. Qualifying prejudgment interest can use this §55.03 schedule, but entitlement, loss date, offsets, and the legally relevant periods are claim-specific. Verify the controlling law and record. Not legal advice."

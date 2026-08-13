@@ -12,7 +12,7 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
 
 ## Current baseline
 
-- 114 rate series and 4,949 recorded observations across U.S. federal/state, U.K., and E.U. sources.
+- 114 rate series and 4,957 recorded observations across U.S. federal/state, U.K., and E.U. sources.
 - 195 static pages plus 114 JSON and 114 CSV entity endpoints.
 - Automated weekly refresh for machine-readable federal, U.K., and E.U. sources; live Texas OCCC,
   Alaska Court System, Nebraska Judicial Branch, Iowa Judicial Branch, Florida CFO, Utah State
@@ -39,7 +39,7 @@ to the website and MCP server, and verifies every human and machine surface at t
 
 ## Local setup
 
-Node 22.12 or newer is required. Version files are included for common Node version managers.
+Node 24 or newer is required. Version files are included for common Node version managers.
 
 ```bash
 ./setup.sh

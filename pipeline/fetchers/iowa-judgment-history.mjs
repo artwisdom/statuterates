@@ -4,7 +4,7 @@
 // interest rate is the selected index value plus two percentage points. The 2001-2017 points were
 // transcribed from the Judicial Branch's official PDF and every PDF page was visually checked. The
 // 2018-2026 points were transcribed from the official Judicial Branch HTML table and rechecked live
-// through July 2026. Two obvious source-format typos are normalized: 3/5/2012 in the 2002 column is stored
+// through August 2026. Two obvious source-format typos are normalized: 3/5/2012 in the 2002 column is stored
 // as 2002-03-05, and 4//23/2018 is stored as 2018-04-23.
 
 export const IOWA_JUDICIAL_TABLE_URL = 'https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/';
@@ -12,14 +12,14 @@ export const IOWA_HISTORY_1982_2000_PDF_URL = 'https://www.iowacourts.gov/static
 export const IOWA_HISTORY_2001_2017_PDF_URL = 'https://www.iowacourts.gov/static/media/cms/post_judgment_interest_rate_table_2_D0E292E4AF18C.pdf';
 export const IOWA_STATUTE_668_13_URL = 'https://www.legis.iowa.gov/docs/code/668.13.pdf';
 export const IOWA_STATUTE_535_URL = 'https://www.legis.iowa.gov/docs/code/535.pdf';
-export const IOWA_HISTORY_VERIFIED_AT = '2026-07-19T00:00:00Z';
+export const IOWA_HISTORY_VERIFIED_AT = '2026-08-13T00:00:00Z';
 
 // The older 1982-2000 PDF is an image-only scan with several damaged/handwritten rows. It remains
 // linked as an official source but is deliberately not converted into calculator data until each
 // row receives a second manual verification. Publishing a shorter exact history is safer than
 // silently turning OCR guesses into legal-rate data.
 export const IOWA_CURATED_HISTORY_START = '2001-03-05';
-export const IOWA_CURATED_HISTORY_COMPLETE_THROUGH = '2026-07-09';
+export const IOWA_CURATED_HISTORY_COMPLETE_THROUGH = '2026-08-10';
 
 function parseRows(text) {
   return text.trim().split(/\s+/).map((token) => {
@@ -59,7 +59,7 @@ const OFFICIAL_INDEX_ROWS = parseRows(`
 2023-01-09:4.78 2023-02-07:4.79 2023-03-08:5.22 2023-04-10:4.51 2023-05-08:4.59 2023-06-08:5.20 2023-07-13:5.44 2023-08-09:5.30 2023-09-13:5.40 2023-10-09:5.39 2023-11-08:5.33 2023-12-13:5.14
 2024-01-09:4.84 2024-02-12:4.83 2024-03-22:5.04 2024-04-09:5.05 2024-05-15:5.10 2024-06-12:5.16 2024-07-09:4.97 2024-08-12:4.48 2024-09-09:4.10 2024-10-09:4.24 2024-11-12:4.28 2024-12-09:4.23
 2025-01-09:4.19 2025-02-07:4.17 2025-03-10:4.02 2025-04-09:3.86 2025-05-09:4.00 2025-06-09:4.08 2025-07-09:4.11 2025-08-11:3.92 2025-09-10:3.64 2025-10-07:3.64 2025-11-10:3.65 2025-12-09:3.61
-2026-01-08:3.48 2026-02-09:3.44 2026-03-09:3.56 2026-04-07:3.72 2026-05-07:3.77 2026-06-08:3.88 2026-07-09:4.06
+2026-01-08:3.48 2026-02-09:3.44 2026-03-09:3.56 2026-04-07:3.72 2026-05-07:3.77 2026-06-08:3.88 2026-07-09:4.06 2026-08-10:4.06
 `);
 
 function sourceUrlFor(date) {
@@ -77,7 +77,7 @@ export function buildIowaOfficialHistory() {
 export function validateIowaOfficialHistory(history) {
   const errors = [];
   const sorted = [...history].sort((a, b) => a.effective_date.localeCompare(b.effective_date));
-  if (sorted.length < 302) errors.push(`official history must contain at least 302 points, found ${sorted.length}`);
+  if (sorted.length < 303) errors.push(`official history must contain at least 303 points, found ${sorted.length}`);
   if (sorted[0]?.effective_date !== IOWA_CURATED_HISTORY_START) {
     errors.push(`history must begin ${IOWA_CURATED_HISTORY_START}, found ${sorted[0]?.effective_date || 'nothing'}`);
   }
@@ -96,6 +96,7 @@ export function validateIowaOfficialHistory(history) {
     ['2020-02-11', 3.49],
     ['2026-03-09', 5.56],
     ['2026-07-09', 6.06],
+    ['2026-08-10', 6.06],
   ]);
   const byDate = new Map(sorted.map((point) => [point.effective_date, point.value]));
   for (const [date, expected] of anchors) {

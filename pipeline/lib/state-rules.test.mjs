@@ -267,9 +267,9 @@ test('Iowa uses the official monthly court selections and remains calculator-wit
   const iowa = entities.find((entity) => entity.slug === 'iowa-judgment-rate');
   const history = observations.filter((observation) => observation.entitySlug === iowa.slug);
 
-  assert.equal(history.length, 302);
+  assert.equal(history.length, 303);
   assert.equal(history[0].effective_date, '2001-03-05');
-  assert.equal(history.at(-1).effective_date, '2026-07-09');
+  assert.equal(history.at(-1).effective_date, '2026-08-10');
   assert.equal(history.at(-1).value_text, '6.06%');
   assert.equal(history.at(-1).confidence, 'high');
   assert.equal(history.at(-1).source_id, 'ia-jud');

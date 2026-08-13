@@ -3,14 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-08-08
+**Updated:** 2026-08-13
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
-**Runtime:** Node 22.12+ (Node 24 also verified locally)
+**Runtime:** Node 24+
 
 ## Current product
 
-- 114 rate-series entities and 4,953 recorded historical observations.
+- 114 rate-series entities and 4,957 recorded historical observations.
 - 195 static HTML pages.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
@@ -50,7 +50,7 @@ rules. Phase 1 corrected the foundation:
 7. **Machine safety.** API links are root-absolute and the MCP file loader rejects traversal/non-slug
    input.
 8. **Dependency/runtime hardening.** Astro is pinned to 7.1.1, better-sqlite3 to 12.11.1, the project
-   uses Node 22.12+, and all three dependency trees audit clean.
+   uses Node 24+, and all three dependency trees audit clean.
 9. **Build guardrails.** Deployment now tests the pipeline/site and checks internal links,
    calculator indexing gates, and rendered prose before publishing.
 10. **Reliable refresh deployment.** `deploy-site` follows every successful `refresh-data` run through
@@ -68,9 +68,9 @@ rules. Phase 1 corrected the foundation:
   2026, plus a live OCCC current-month monitor.
 - Nebraska now has all 275 change points in the Judicial Branch's published table from January 1987
   through July 2026, plus a live current-rate monitor.
-- Iowa's inherited weekly-average model was legally incorrect and has been removed. Iowa now has 302
-  exact monthly Judicial Branch selections from March 2001 through July 2026, including the court's
-  confirmed 6.06% selection effective July 9. The retired 6.02% estimate is purged and rejected.
+- Iowa's inherited weekly-average model was legally incorrect and has been removed. Iowa now has 303
+  exact monthly Judicial Branch selections from March 2001 through August 2026, including the court's
+  confirmed 6.06% selection effective August 10. The retired 6.02% estimate is purged and rejected.
 - Kentucky now preserves the official 12%-to-6% postjudgment change and correctly presents its 8%
   prejudgment figure as claim-dependent rather than automatic.
 - Maine now has all 24 official annual prejudgment and post-judgment rows from July 2003 through
@@ -282,12 +282,12 @@ verified in production.
 
 ## Verified checks
 
-- Pipeline: 128 tests.
+- Pipeline: 130 tests.
 - Shared interest engine and release contracts: 40 tests.
 - Site data, copy, and RSS contracts: 15 tests.
 - MCP: 5 tests, including traversal protection, future-date refusal, compatibility fields, and the
   full six-tool smoke test.
-- API conformance: 114 entity endpoints and 5,067 latest/history records checked.
+- API conformance: 114 entity endpoints and 5,071 latest/history records checked.
 - Static build: 195 pages on Astro 7.
 - Indexable sitemap: 192 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
@@ -362,6 +362,10 @@ verified in production.
 
 ## Known limitations / next phase
 
+- The August 11 scheduled refresh correctly stopped on a valid new Iowa row because a validator
+  still treated the July 2026 point as permanently current. The August repair makes that guard
+  append-safe without weakening verified anchors, moves automation to Node 24, patches all known
+  dependency advisories, and adds a deduplicated GitHub issue that stays open until refresh recovery.
 - Most state entities still have only one recorded observation. Texas, Alaska, Nebraska, Iowa,
   Kentucky, Maine, Georgia, Utah, and Florida have deeper verified histories. Florida's deliberately
   narrow modern scope is released; all other state calculators remain withheld pending complete

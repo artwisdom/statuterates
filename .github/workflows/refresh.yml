@@ -16,7 +16,7 @@ on:
 
 permissions:
   contents: write # to commit refreshed data/exports back to the repo
-  issues: write # open one deduplicated reminder before a calculator's legal-review gate expires
+  issues: write # maintain deduplicated refresh-failure and calculator legal-review issues
 
 concurrency:
   group: refresh-data
@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: "22.12"
+          node-version: "24"
           package-manager-cache: false
 
       - name: Install pipeline dependencies
@@ -73,25 +73,6 @@ jobs:
             echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
-      # ---- Self-healing / diagnostics ----------------------------------------------------------
-      - name: Failure diagnostics
-        if: failure()
-        run: |
-          {
-            echo "## ❌ Data refresh failed"
-            echo ""
-            echo "The fetch, validation, export recheck, or test suite exited non-zero. A source may"
-            echo "have changed/blocked requests, or a test may need to follow a valid new period."
-            echo "NO data was committed or deployed (fail-loud by design)."
-            echo ""
-            echo "**Next steps** (see docs/MAINTENANCE_RUNBOOK.md):"
-            echo "1. Open the failed step above and find the source, validation, or test error."
-            echo "2. If a source layout changed, update its fetcher in \`pipeline/fetchers/\`."
-            echo "3. If a valid new period exposed a stale fixture, make that test data-relative."
-            echo "4. If a source is temporarily down/rate-limiting, re-run this workflow."
-            echo "5. Re-run \`npm test\`, \`node run.mjs all\`, and \`node run.mjs build\` locally."
-          } >> "$GITHUB_STEP_SUMMARY"
-
       - name: Record deployment handoff
         if: success()
         run: |
@@ -111,6 +92,7 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
           REVIEW_TITLE: ${{ steps.legal-review.outputs.title }}
           REVIEW_BODY: ${{ steps.legal-review.outputs.body }}
         run: |
@@ -119,4 +101,106 @@ jobs:
             gh issue create --title "$REVIEW_TITLE" --body "$REVIEW_BODY"
           else
             echo "An open legal-review reminder already exists."
+          fi
+
+      # ---- Self-healing / diagnostics ----------------------------------------------------------
+      - name: Failure diagnostics
+        if: failure()
+        run: |
+          {
+            echo "## ❌ Data refresh failed"
+            echo ""
+            echo "The fetch, validation, export recheck, or test suite exited non-zero. A source may"
+            echo "have changed/blocked requests, or a test may need to follow a valid new period."
+            echo "Unvalidated exports cannot be committed or deployed (fail-loud by design)."
+            echo "A later auxiliary failure also prevents the refresh-triggered deployment."
+            echo ""
+            echo "**Next steps** (see docs/MAINTENANCE_RUNBOOK.md):"
+            echo "1. Open the failed step above and find the source, validation, or test error."
+            echo "2. If a source layout changed, update its fetcher in \`pipeline/fetchers/\`."
+            echo "3. If a valid new period exposed a stale fixture, make that test data-relative."
+            echo "4. If a source is temporarily down/rate-limiting, re-run this workflow."
+            echo "5. Re-run \`npm test\`, \`node run.mjs all\`, and \`node run.mjs build\` locally."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or update refresh failure alert
+        if: ${{ failure() }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ALERT_TITLE: "[automation] StatuteRates data refresh needs attention"
+          ALERT_LABEL: "automation:refresh-data-failure"
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          RUN_EVENT: ${{ github.event_name }}
+          RUN_REF: ${{ github.ref_name }}
+          RUN_SHA: ${{ github.sha }}
+        run: |
+          gh label create "$ALERT_LABEL" \
+            --color "B60205" \
+            --description "The validated StatuteRates data refresh failed" \
+            --force
+
+          BODY=$(printf '%s\n' \
+            "The scheduled or manually triggered StatuteRates refresh workflow did not complete successfully." \
+            "" \
+            "- Latest failed run: [Open the GitHub Actions run]($RUN_URL)" \
+            "- Trigger: \`$RUN_EVENT\`" \
+            "- Ref: \`$RUN_REF\`" \
+            "- Commit: \`$RUN_SHA\`" \
+            "" \
+            "The workflow's data gates fail closed, so unvalidated exports cannot be committed or deployed. Review the Actions run for diagnostics. This issue intentionally contains no fetched data, credentials, or log excerpts.")
+
+          ISSUE_NUMBER=$(gh issue list \
+            --state all \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq 'map(.number) | max // empty')
+
+          if [ -n "$ISSUE_NUMBER" ]; then
+            ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state')
+            if [ "$ISSUE_STATE" = "CLOSED" ]; then
+              gh issue reopen "$ISSUE_NUMBER"
+            fi
+            gh issue edit "$ISSUE_NUMBER" \
+              --title "$ALERT_TITLE" \
+              --body "$BODY" \
+              --add-label "$ALERT_LABEL"
+            gh issue comment "$ISSUE_NUMBER" --body "The refresh failed again: $RUN_URL"
+          else
+            gh issue create \
+              --title "$ALERT_TITLE" \
+              --body "$BODY" \
+              --label "$ALERT_LABEL"
+          fi
+
+      - name: Close recovered refresh failure alert
+        if: ${{ success() }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ALERT_LABEL: "automation:refresh-data-failure"
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create "$ALERT_LABEL" \
+            --color "B60205" \
+            --description "The validated StatuteRates data refresh failed" \
+            --force
+
+          ISSUE_NUMBERS=$(gh issue list \
+            --state open \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq '.[].number')
+
+          if [ -z "$ISSUE_NUMBERS" ]; then
+            echo "No open refresh-failure alert needs to be closed."
+          else
+            for ISSUE_NUMBER in $ISSUE_NUMBERS; do
+              gh issue close "$ISSUE_NUMBER" \
+                --comment "The validated data refresh recovered successfully: $RUN_URL"
+            done
           fi

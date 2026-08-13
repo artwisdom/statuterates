@@ -6,7 +6,7 @@ from historical reports.
 
 ## 1. Local verification
 
-Use Node 22.12 or newer. The repository includes `.node-version` files.
+Use Node 24 or newer. The repository includes `.node-version` files.
 
 ```bash
 ./setup.sh

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T02:49:05.243Z",
+  "generated_at": "2026-08-13T22:12:04.919Z",
   "slug": "georgia-prejudgment-rate",
   "name": "Georgia Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -43,7 +43,7 @@
       "effective_date": "2025-12-11",
       "source_id": "ga-prejud",
       "source_url": "https://fred.stlouisfed.org/series/PRIME",
-      "retrieved_at": "2026-08-09T02:48:52.374Z",
+      "retrieved_at": "2026-08-13T22:12:04.752Z",
       "confidence": "high",
       "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
       "notes": "Georgia has two prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15 from the legally relevant due or demand date. Qualifying unliquidated tort damages under §51-12-14 instead use the Federal Reserve prime rate on the 30th day after the last written notice plus three points; the current benchmark produces 9.75%. Both paths are treated as simple interest, but notice, entitlement, and the correct branch are case-specific. Not legal advice."
@@ -59,7 +59,7 @@
         "effective_date": "2025-12-11",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia has two prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15 from the legally relevant due or demand date. Qualifying unliquidated tort damages under §51-12-14 instead use the Federal Reserve prime rate on the 30th day after the last written notice plus three points; the current benchmark produces 9.75%. Both paths are treated as simple interest, but notice, entitlement, and the correct branch are case-specific. Not legal advice."
@@ -72,7 +72,7 @@
         "effective_date": "2025-10-30",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.00%) plus three points produced 10.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -85,7 +85,7 @@
         "effective_date": "2025-09-17",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.25%) plus three points produced 10.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -98,7 +98,7 @@
         "effective_date": "2024-12-20",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.50%) plus three points produced 10.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -111,7 +111,7 @@
         "effective_date": "2024-11-08",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.75%) plus three points produced 10.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -124,7 +124,7 @@
         "effective_date": "2024-09-19",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (8.00%) plus three points produced 11.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -137,7 +137,7 @@
         "effective_date": "2023-07-27",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (8.50%) plus three points produced 11.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -150,7 +150,7 @@
         "effective_date": "2023-05-04",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (8.25%) plus three points produced 11.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -163,7 +163,7 @@
         "effective_date": "2023-03-23",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (8.00%) plus three points produced 11.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -176,7 +176,7 @@
         "effective_date": "2023-02-02",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.75%) plus three points produced 10.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -189,7 +189,7 @@
         "effective_date": "2022-12-15",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.50%) plus three points produced 10.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -202,7 +202,7 @@
         "effective_date": "2022-11-03",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.00%) plus three points produced 10.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -215,7 +215,7 @@
         "effective_date": "2022-09-22",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.25%) plus three points produced 9.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -228,7 +228,7 @@
         "effective_date": "2022-07-28",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.50%) plus three points produced 8.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -241,7 +241,7 @@
         "effective_date": "2022-06-16",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.75%) plus three points produced 7.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -254,7 +254,7 @@
         "effective_date": "2022-05-05",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.00%) plus three points produced 7.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -267,7 +267,7 @@
         "effective_date": "2022-03-17",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (3.50%) plus three points produced 6.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -280,7 +280,7 @@
         "effective_date": "2020-03-16",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (3.25%) plus three points produced 6.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -293,7 +293,7 @@
         "effective_date": "2020-03-04",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.25%) plus three points produced 7.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -306,7 +306,7 @@
         "effective_date": "2019-10-31",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.75%) plus three points produced 7.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -319,7 +319,7 @@
         "effective_date": "2019-09-19",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.00%) plus three points produced 8.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -332,7 +332,7 @@
         "effective_date": "2019-08-01",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.25%) plus three points produced 8.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -345,7 +345,7 @@
         "effective_date": "2018-12-20",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.50%) plus three points produced 8.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -358,7 +358,7 @@
         "effective_date": "2018-09-27",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.25%) plus three points produced 8.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -371,7 +371,7 @@
         "effective_date": "2018-06-14",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.00%) plus three points produced 8.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -384,7 +384,7 @@
         "effective_date": "2018-03-22",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.75%) plus three points produced 7.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -397,7 +397,7 @@
         "effective_date": "2017-12-14",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.50%) plus three points produced 7.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -410,7 +410,7 @@
         "effective_date": "2017-06-15",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.25%) plus three points produced 7.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -423,7 +423,7 @@
         "effective_date": "2017-03-16",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.00%) plus three points produced 7.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -436,7 +436,7 @@
         "effective_date": "2016-12-15",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (3.75%) plus three points produced 6.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -449,7 +449,7 @@
         "effective_date": "2015-12-17",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (3.50%) plus three points produced 6.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -462,7 +462,7 @@
         "effective_date": "2008-12-16",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (3.25%) plus three points produced 6.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -475,7 +475,7 @@
         "effective_date": "2008-10-29",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.00%) plus three points produced 7.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -488,7 +488,7 @@
         "effective_date": "2008-10-08",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.50%) plus three points produced 7.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -501,7 +501,7 @@
         "effective_date": "2008-04-30",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.00%) plus three points produced 8.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -514,7 +514,7 @@
         "effective_date": "2008-03-18",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.25%) plus three points produced 8.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -527,7 +527,7 @@
         "effective_date": "2008-01-30",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.00%) plus three points produced 9.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -540,7 +540,7 @@
         "effective_date": "2008-01-22",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.50%) plus three points produced 9.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -553,7 +553,7 @@
         "effective_date": "2007-12-11",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.25%) plus three points produced 10.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -566,7 +566,7 @@
         "effective_date": "2007-10-31",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.50%) plus three points produced 10.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -579,7 +579,7 @@
         "effective_date": "2007-09-18",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.75%) plus three points produced 10.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -592,7 +592,7 @@
         "effective_date": "2006-06-29",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (8.25%) plus three points produced 11.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -605,7 +605,7 @@
         "effective_date": "2006-05-10",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (8.00%) plus three points produced 11.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -618,7 +618,7 @@
         "effective_date": "2006-03-28",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.75%) plus three points produced 10.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -631,7 +631,7 @@
         "effective_date": "2006-01-31",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.50%) plus three points produced 10.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -644,7 +644,7 @@
         "effective_date": "2005-12-13",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.25%) plus three points produced 10.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -657,7 +657,7 @@
         "effective_date": "2005-11-01",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (7.00%) plus three points produced 10.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -670,7 +670,7 @@
         "effective_date": "2005-09-20",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.75%) plus three points produced 9.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -683,7 +683,7 @@
         "effective_date": "2005-08-09",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.50%) plus three points produced 9.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -696,7 +696,7 @@
         "effective_date": "2005-06-30",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.25%) plus three points produced 9.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -709,7 +709,7 @@
         "effective_date": "2005-05-03",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (6.00%) plus three points produced 9.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -722,7 +722,7 @@
         "effective_date": "2005-03-22",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.75%) plus three points produced 8.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -735,7 +735,7 @@
         "effective_date": "2005-02-02",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.50%) plus three points produced 8.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -748,7 +748,7 @@
         "effective_date": "2004-12-15",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.25%) plus three points produced 8.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -761,7 +761,7 @@
         "effective_date": "2004-11-10",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (5.00%) plus three points produced 8.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -774,7 +774,7 @@
         "effective_date": "2004-09-21",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.75%) plus three points produced 7.75%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -787,7 +787,7 @@
         "effective_date": "2004-08-11",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.50%) plus three points produced 7.50%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -800,7 +800,7 @@
         "effective_date": "2004-07-01",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.25%) plus three points produced 7.25%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."
@@ -813,7 +813,7 @@
         "effective_date": "2003-07-01",
         "source_id": "ga-prejud",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-09T02:48:52.374Z",
+        "retrieved_at": "2026-08-13T22:12:04.752Z",
         "confidence": "high",
         "method": "composite_ga_7_4_2_7_4_15_and_51_12_14",
         "notes": "Georgia's qualifying liquidated-demand path remains 7% under O.C.G.A. §§7-4-2 and 7-4-15. For a qualifying §51-12-14 unliquidated-tort demand whose benchmark-selection day fell in this period, Federal Reserve prime (4.00%) plus three points produced 7.00%. Entitlement, notice, and the correct branch remain case-specific. Not legal advice."

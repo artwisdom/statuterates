@@ -13,7 +13,7 @@
     "smoke": "node test/smoke.mjs"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24.0.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0"

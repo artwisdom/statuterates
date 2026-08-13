@@ -24,17 +24,17 @@ retrieval time. Source timestamps cannot move backward.
 
 ## 3. Coverage
 
-The current snapshot contains 114 series and 2,193 observations:
+The current snapshot contains 114 series and 4,957 observations:
 
 - IRS §6621/§6603 categories and related federal tax rates.
 - Federal Reserve 1-year Treasury CMT and derived 28 U.S.C. §1961 post-judgment rates.
 - Bank of England and E.C.B. policy series plus U.K./E.U. late-payment references.
 - Post-judgment references for 49 states plus D.C. (Mississippi has no uniform statutory default).
 - Prejudgment references for all 50 states plus D.C.
-- A complete official Texas judgment-month schedule from September 1983 through July 2026.
+- A complete official Texas judgment-month schedule from September 1983 through August 2026.
 - Nebraska's complete published change-point table from January 1987 through July 2026.
-- Iowa's exact monthly Judicial Branch table from March 2001 through July 2026, including the
-  confirmed 6.06% selection effective July 9, 2026.
+- Iowa's exact monthly Judicial Branch table from March 2001 through August 2026, including the
+  confirmed 6.06% selection effective August 10, 2026.
 - Kentucky's official general-rate change points from the 12% era to the 6% amendment effective
   June 29, 2017.
 - Maine's complete official prejudgment and post-judgment annual charts from July 2003 through 2026,
@@ -105,6 +105,6 @@ missing `noindex` gates, or prose whitespace damage after framework upgrades.
 
 ## 7. Runtime and automation
 
-The repository is standardized on Node 22.12+. Both GitHub workflows install from lockfiles with
+The repository is standardized on Node 24+. Both GitHub workflows install from lockfiles with
 `npm ci`. The refresh workflow runs pipeline tests before fetching, and the deploy workflow runs site
 data-contract tests plus static-output verification before publishing.

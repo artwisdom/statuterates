@@ -188,7 +188,7 @@ test('a reference-only state rule is valid but not calculator-ready', () => {
   assert.equal(r.totals.calculatorReadyStateRules, 0);
 });
 
-test('the exact monthly Iowa court history validates through the official July 2026 selection', () => {
+test('the exact monthly Iowa court history validates through the official August 2026 selection', () => {
   const db = openDb({ path: ':memory:' });
   const bundle = buildIowa();
   for (const source of STATE_SOURCES.filter((candidate) => candidate.id === 'ia-jud')) {
@@ -199,10 +199,39 @@ test('the exact monthly Iowa court history validates through the official July 2
     const { entitySlug, ...rest } = observation;
     upsertObservation(db, { entity_id: ids.get(entitySlug), ...rest });
   }
-  const r = validate(db, { today: '2026-07-19' });
+  const r = validate(db, { today: '2026-08-13' });
   assert.equal(r.ok, true, JSON.stringify(r.errors));
-  assert.equal(r.coverage['iowa-judgment-rate'].count, 302);
-  assert.equal(r.coverage['iowa-judgment-rate'].latest, '2026-07-09');
+  assert.equal(r.coverage['iowa-judgment-rate'].count, 303);
+  assert.equal(r.coverage['iowa-judgment-rate'].latest, '2026-08-10');
+  db.close();
+});
+
+test('Iowa validation accepts a later official monthly selection without weakening historical anchors', () => {
+  const db = openDb({ path: ':memory:' });
+  const bundle = buildIowa({
+    courtPoints: [{
+      effective_date: '2026-09-09',
+      index_value: 4.01,
+      value: 6.01,
+      value_text: '6.01%',
+      source_url: 'https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/',
+    }],
+    courtRetrievedAt: '2026-09-10T00:00:00Z',
+  });
+  for (const source of STATE_SOURCES.filter((candidate) => candidate.id === 'ia-jud')) {
+    upsertSource(db, source);
+  }
+  const ids = new Map(bundle.entities.map((entity) => [entity.slug, upsertEntity(db, entity)]));
+  for (const observation of bundle.observations) {
+    const { entitySlug, ...rest } = observation;
+    upsertObservation(db, { entity_id: ids.get(entitySlug), ...rest });
+  }
+
+  const result = validate(db, { today: '2026-09-10' });
+  assert.equal(result.ok, true, JSON.stringify(result.errors));
+  assert.equal(result.coverage['iowa-judgment-rate'].count, 304);
+  assert.equal(result.coverage['iowa-judgment-rate'].latest, '2026-09-09');
+  assert.equal(result.coverage['iowa-prejudgment-rate'].latest, '2026-09-09');
   db.close();
 });
 

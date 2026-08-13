@@ -330,10 +330,19 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
   const iowaPre = rows
     .filter((row) => row.entity_slug === 'iowa-prejudgment-rate')
     .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
-  const iowaPostByDate = new Map(iowaPost.map((row) => [row.effective_date, row]));
-  for (const row of iowaPre) {
-    const post = iowaPostByDate.get(row.effective_date);
-    if (!post || Math.abs(post.value_numeric - row.value_numeric) > 1e-9) {
+  const iowaMethod = 'derived_ia_668_13_official_court_table_plus_2';
+  for (const row of [...iowaPost, ...iowaPre]) {
+    if (row.source_id !== 'ia-jud' || row.method !== iowaMethod || row.confidence !== 'high') {
+      errors.push(`${row.entity_slug}@${row.effective_date}: Iowa rates must retain high-confidence official Judicial Branch provenance`);
+    }
+  }
+  if (iowaPost.length !== iowaPre.length) {
+    errors.push('Iowa post- and prejudgment histories must contain the same number of §668.13 selections');
+  }
+  const iowaPreByDate = new Map(iowaPre.map((row) => [row.effective_date, row]));
+  for (const row of iowaPost) {
+    const pre = iowaPreByDate.get(row.effective_date);
+    if (!pre || Math.abs(pre.value_numeric - row.value_numeric) > 1e-9) {
       errors.push(`iowa-prejudgment-rate@${row.effective_date}: rate must match the §668.13 postjudgment selection`);
     }
   }
@@ -345,12 +354,6 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
   )) {
     errors.push('Iowa post- and prejudgment headlines must use the same §668.13 selection');
   }
-  if (latestIowaPost && (latestIowaPost.source_id !== 'ia-jud'
-    || latestIowaPost.effective_date !== '2026-07-09'
-    || Math.abs(latestIowaPost.value_numeric - 6.06) > 1e-9)) {
-    errors.push('iowa-judgment-rate: current official Judicial Branch selection must remain 6.06% effective 2026-07-09');
-  }
-
   // Kentucky's general post-judgment rate changed from 12% to 6% for judgments entered on or
   // after June 29, 2017. Reject the inherited source-review-date placeholder so it cannot reappear
   // as a false legal change point. The prejudgment 8% record is a claim-dependent ceiling/reference,

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # One-command local bootstrap: install deps, run the pipeline, build the API + site, verify the MCP
-# server. Safe to re-run. Requires Node 22.12+ (no global installs; everything stays local).
+# server. Safe to re-run. Requires Node 24+ (no global installs; everything stays local).
 #
 #   ./setup.sh
 #
 set -euo pipefail
 cd "$(dirname "$0")"
 
-node -e 'const [major, minor] = process.versions.node.split(".").map(Number); if (major < 22 || (major === 22 && minor < 12)) { console.error("Node 22.12 or newer is required. Current: " + process.versions.node); process.exit(1); }'
+node -e 'const [major] = process.versions.node.split(".").map(Number); if (major < 24) { console.error("Node 24 or newer is required. Current: " + process.versions.node); process.exit(1); }'
 
 echo "==> 1/6  Installing locked dependencies (local only)"
 ( cd pipeline && npm ci --no-audit --no-fund )

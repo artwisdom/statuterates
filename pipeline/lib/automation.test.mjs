@@ -92,6 +92,40 @@ test('weekly automation opens one deduplicated calculator legal-review reminder'
   assert.match(refresh, /gh issue create --title/);
 });
 
+test('refresh failures maintain one durable alert and a later success closes it', async () => {
+  const refresh = await readFile(refreshPath, 'utf8');
+  const diagnosticsIndex = refresh.indexOf('name: Failure diagnostics');
+  const failureAlertIndex = refresh.indexOf('name: Open or update refresh failure alert');
+  const successAlertIndex = refresh.indexOf('name: Close recovered refresh failure alert');
+  const legalReviewIndex = refresh.indexOf('name: Check calculator legal-review windows');
+
+  assert.notEqual(diagnosticsIndex, -1);
+  assert.notEqual(failureAlertIndex, -1);
+  assert.notEqual(successAlertIndex, -1);
+  assert.notEqual(legalReviewIndex, -1);
+  assert.ok(legalReviewIndex < diagnosticsIndex);
+  assert.ok(diagnosticsIndex < failureAlertIndex && failureAlertIndex < successAlertIndex);
+
+  const failureAlert = refresh.slice(failureAlertIndex, successAlertIndex);
+  assert.match(failureAlert, /if:\s*\$\{\{ failure\(\) \}\}/);
+  assert.match(failureAlert, /continue-on-error:\s*true/);
+  assert.match(failureAlert, /GH_REPO:\s*\$\{\{ github\.repository \}\}/);
+  assert.match(refresh, /^\s*issues:\s*write\b/m);
+  assert.match(failureAlert, /automation:refresh-data-failure/);
+  assert.match(failureAlert, /actions\/runs\/\$\{\{ github\.run_id \}\}/);
+  assert.match(failureAlert, /gh issue list[\s\S]*--state all/);
+  assert.match(failureAlert, /gh issue reopen/);
+  assert.match(failureAlert, /gh issue edit/);
+  assert.match(failureAlert, /gh issue create/);
+
+  const successAlert = refresh.slice(successAlertIndex);
+  assert.match(successAlert, /if:\s*\$\{\{ success\(\) \}\}/);
+  assert.match(successAlert, /continue-on-error:\s*true/);
+  assert.match(successAlert, /GH_REPO:\s*\$\{\{ github\.repository \}\}/);
+  assert.match(successAlert, /gh issue list[\s\S]*--state open/);
+  assert.match(successAlert, /gh issue close/);
+});
+
 test('automation uses current Node 24 GitHub Actions runtimes', async () => {
   const [deploy, refresh] = await Promise.all([
     readFile(deployPath, 'utf8'),
@@ -101,6 +135,8 @@ test('automation uses current Node 24 GitHub Actions runtimes', async () => {
   for (const workflow of [deploy, refresh]) {
     assert.match(workflow, /actions\/checkout@v7/);
     assert.match(workflow, /actions\/setup-node@v7/);
+    assert.match(workflow, /node-version:\s*["']?24["']?/);
+    assert.doesNotMatch(workflow, /node-version:\s*["']?22\.12["']?/);
     assert.doesNotMatch(workflow, /actions\/(?:checkout|setup-node)@v[1-4]\b/);
   }
   assert.match(deploy, /actions\/upload-pages-artifact@v5/);
