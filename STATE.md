@@ -3,7 +3,7 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-08-13
+**Updated:** 2026-08-16
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
@@ -11,7 +11,7 @@
 ## Current product
 
 - 114 rate-series entities and 4,957 recorded historical observations.
-- 195 static HTML pages.
+- 193 static HTML pages, including the real 404 page; the indexable sitemap remains 192 URLs.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
   extension checks for Texas, Alaska, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and
@@ -21,9 +21,9 @@
 - Calculator set in the current repository: general fixed-rate judgment/per-diem arithmetic,
   full-modern-history federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U.
   late payment, Form 1040 penalty-and-interest, and the narrowly scoped Florida §55.03 calculator.
-- State calculators: Florida is the only dedicated released state calculator. Legacy generic state
-  comparison routes remain `noindex`; every other dedicated state calculator is absent from the
-  build and sitemap.
+- State calculators: Florida is the only dedicated released state calculator. The two unfinished
+  generic state/prejudgment calculator placeholders are absent from the build and sitemap and return
+  a real 404; every other dedicated state calculator is also absent until its fail-closed gate passes.
 
 ## July 2026 safety baseline
 
@@ -125,8 +125,8 @@ rules. Phase 1 corrected the foundation:
 - Performance is not the current growth bottleneck. A production Texas rate page measured 85 ms
   lab LCP, 1 ms TTFB, and 0.00 CLS. Mobile audits scored 100 for accessibility, SEO, and agentic
   browsing; the remaining best-practices findings came from third-party AdSense behavior.
-- Google AdSense Auto Ads is active. Manual ad units remain intentionally unconfigured rather than
-  inventing a slot ID or adding page weight before traffic supports the tradeoff.
+- At this milestone Google AdSense Auto Ads was wired sitewide. The August 16 value repair below
+  supersedes that design with explicit page-level eligibility. Manual ad units remain optional.
 
 ## Phase 4 Form 1040 calculator release
 
@@ -280,15 +280,53 @@ verified in production.
   use finalized private Search Console periods and current official search-provider guidance before
   deciding whether another page-strengthening release is justified.
 
+## August 16 AdSense value and editorial-trust repair
+
+- AdSense rejected the site under the broad “Low value content” category. Ownership and `ads.txt`
+  were already correct; Google did not name a page or provide its review crawl date.
+- The audit found that the AdSense loader appeared on every route, including the 404 and two
+  62-word “verification in progress” calculator placeholders. Those placeholders are now removed,
+  so they return a real 404 instead of presenting unfinished public 200 pages.
+- Monetization is now false by default. Only completed calculators, seven distinct guides, the
+  homepage, two substantive state/rate directories, and rate pages with meaningful history or
+  jurisdiction-specific analysis can load AdSense. All noindex, error, legal, navigation,
+  state-hub, and shallow one-observation state pages remain ad-free.
+- The original audit found 36 shallow state post-judgment references. Tennessee, Ohio, Virginia,
+  and New Mexico now have primary-source-backed scope, accrual, compounding/rate-lock, exception,
+  and history analysis; 32 unfinished one-observation references remain ad-free. Every one-row table
+  says “Current recorded observation” and discloses that it is not a complete historical series.
+- A visible StatuteRates Editorial credit now explains who maintains monetized rate, guide, and
+  calculator pages, how source-backed automation/AI assistance is controlled, and how to report a
+  correction. The About page separately documents who, how, and why without inventing legal
+  credentials.
+- Every state hub now links its authority labels directly to official source pages. Every long guide
+  has a short curated official-authority list. The late-payment calculator links GOV.UK, U.K.
+  legislation, EUR-Lex, and the official EU country-rate table. U.K. calculations refuse dates beyond
+  the recorded half-year, and the E.U. mode is labeled a non-country-specific benchmark.
+- Virginia's inherited source-check placeholder was corrected to the 6% law's July 1, 2004 effective
+  date. New Mexico's was corrected to the 8.75% general branch's June 18, 1993 effective date, its
+  direct official source replaced the portal landing page, and unsupported universal simple-interest
+  wording was removed from both records.
+- Build verification fails if an advertisement appears on a disabled page, if a noindex page is
+  monetized, if any route outside the explicit allowlist opts in, or if the two unfinished calculator
+  routes return as public 200 pages. The AdSense ownership meta remains sitewide when configured.
+- No broad redirect/noindex sweep was made. Current private Search Console evidence does not justify
+  sacrificing an existing state/rate URL; page-level demand must decide whether a weak page is
+  researched or consolidated.
+- AdSense re-review remains blocked after deployment until both live verification and a fresh
+  sitewide content-quality checkpoint pass. Google can review pages that do not carry ad code, so the
+  allowlist is a safety boundary rather than proof that the “Low value content” issue is resolved.
+  See `docs/ADSENSE_VALUE_REPAIR.md`.
+
 ## Verified checks
 
-- Pipeline: 130 tests.
+- Pipeline: 131 tests.
 - Shared interest engine and release contracts: 40 tests.
-- Site data, copy, and RSS contracts: 15 tests.
+- Site data, copy, RSS, and monetization contracts: 18 tests.
 - MCP: 5 tests, including traversal protection, future-date refusal, compatibility fields, and the
   full six-tool smoke test.
 - API conformance: 114 entity endpoints and 5,071 latest/history records checked.
-- Static build: 195 pages on Astro 7.
+- Static build: 193 pages on Astro 7.
 - Indexable sitemap: 192 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
   because of AdSense third-party-cookie/DevTools findings rather than first-party site code.

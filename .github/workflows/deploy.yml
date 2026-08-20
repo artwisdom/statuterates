@@ -83,7 +83,8 @@ jobs:
         env:
           # The owner sets their real domain here (repository variable). Falls back to the Pages URL.
           SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
-          # One-switch ads: set repo variable ADSENSE_CLIENT=ca-pub-XXXX after AdSense approval.
+          # Account-level switch: ADSENSE_CLIENT enables ads only on the source-controlled page
+          # allowlist. Error, noindex, legal, navigation, state-hub, and shallow pages stay ad-free.
           ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT || '' }}
           # Optional: set ADSENSE_SLOT to a "Display/responsive" ad-unit id to render intentional,
           # labeled in-content ad units (top/bottom of each page). Empty = rely on Auto Ads only.

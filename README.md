@@ -13,7 +13,9 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
 ## Current baseline
 
 - 114 rate series and 4,957 recorded observations across U.S. federal/state, U.K., and E.U. sources.
-- 195 static pages plus 114 JSON and 114 CSV entity endpoints.
+- 193 static pages plus 114 JSON and 114 CSV entity endpoints. The two inherited unfinished
+  calculator placeholders are deliberately absent and return a real 404 until their legal models
+  pass the same release gate as Florida.
 - Automated weekly refresh for machine-readable federal, U.K., and E.U. sources; live Texas OCCC,
   Alaska Court System, Nebraska Judicial Branch, Iowa Judicial Branch, Florida CFO, Utah State
   Courts, and Federal Reserve prime-rate checks extend or verify state schedules, while Maine's
@@ -22,8 +24,9 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
   integrity monitor protects the Form 1040 penalty rules used by the calculator.
 - Curated state references carry explicit source tiers and source-check dates.
 - The repository includes general fixed-rate judgment/per-diem, full-modern-history federal §1961,
-  U.K./E.U. late-payment, IRS interest/refund, individual Form 1040 penalty-and-interest, and a
-  narrowly audited Florida §55.03 judgment calculator.
+  fail-closed U.K. late-payment plus a clearly labeled E.U. Directive benchmark, IRS
+  interest/refund, individual Form 1040 penalty-and-interest, and a narrowly audited Florida §55.03
+  judgment calculator.
 - Florida is the only released state-specific calculator. Every other state remains withheld until
   its history, legal branches, accrual rule, day count, compounding, and dedicated renderer pass the
   same fail-closed release contract.
@@ -36,6 +39,13 @@ quarter.
 The August 2026 machine-discovery baseline publishes a permanent OpenAPI contract, separates values
 currently in force from officially announced future periods, applies the same state-calculator gate
 to the website and MCP server, and verifies every human and machine surface at the public edge.
+
+The August 16 AdSense value repair makes advertising opt-in by page. Error, noindex, legal,
+navigation, state-hub, and shallow one-observation pages cannot load the AdSense script; build
+verification enforces that boundary. Completed calculators, distinct guides, useful indexes, and
+rate pages with meaningful history or jurisdiction-specific analysis remain eligible.
+This allowlist does not by itself clear an AdSense site review; the public artifact and remaining
+indexable inventory must pass the separate content-quality checkpoint documented in the repair gate.
 
 ## Local setup
 
@@ -81,4 +91,6 @@ IRS rule-monitor milestone,
 audited state calculator, and
 [docs/PHASE_7_AI_DISCOVERY.md](docs/PHASE_7_AI_DISCOVERY.md) for the AI-search, public OpenAPI, and
 machine-interface safety release, and
+[docs/ADSENSE_VALUE_REPAIR.md](docs/ADSENSE_VALUE_REPAIR.md) for the low-value-content diagnosis,
+inventory policy, and re-review gate, and
 [docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.
