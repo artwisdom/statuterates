@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import FloridaJudgmentCalculator from '../../components/FloridaJudgmentCalculator.astro';
 import {
   getEntity,
@@ -138,7 +139,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Florida judgment interest</span>
   </nav>
@@ -148,6 +149,7 @@ const jsonLd = [
   <p class="lead">Calculate simple post-judgment interest for an ordinary Florida money judgment
     using the official CFO rate in force on the judgment date and the required January 1
     adjustments. The result includes each rate period, interest, total, and current per diem.</p>
+  <EditorialCredit kind="calculator" reviewedOn={MODIFIED} />
 
   <div class="quick-answer">
     <strong>Current rate:</strong> {latest.value_text} per year for the quarter beginning

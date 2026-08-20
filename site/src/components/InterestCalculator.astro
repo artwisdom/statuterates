@@ -11,7 +11,9 @@
 //   marginPercent  for floating-simple (EU margin)
 //   currency       display symbol, default '$'
 //   principalLabel/startLabel/endLabel  input labels
-//   minDate/maxDate optional ISO date limits for both date fields
+//   minDate/maxDate optional legacy ISO date limits for both date fields
+//   maxStartDate/maxEndDate optional per-field inclusive limits
+//   coverageEndExclusive optional start-date/rate-selection boundary for fixed-simple histories
 const {
   kind,
   kinds = null, // optional per-series override: { seriesKey: kind }
@@ -25,10 +27,21 @@ const {
   endLabel = 'End date (e.g. payment date)',
   minDate = undefined,
   maxDate = undefined,
+  maxStartDate = maxDate,
+  maxEndDate = maxDate,
+  coverageEndExclusive = undefined,
   id = null,
 } = Astro.props;
 
-const config = { kind, kinds, histories, defaultSeries, marginPercent, currency };
+const config = {
+  kind,
+  kinds,
+  histories,
+  defaultSeries,
+  marginPercent,
+  currency,
+  coverageEndExclusive,
+};
 // Stable output prevents meaningless HTML churn (and needless CDN/indexing work) on every rebuild.
 const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-').toLowerCase();
 ---
@@ -53,11 +66,11 @@ const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-')
     <div class="calc-row">
       <label class="calc-field">
         <span>{startLabel}</span>
-        <input type="date" data-calc-start min={minDate} max={maxDate} required />
+        <input type="date" data-calc-start min={minDate} max={maxStartDate} required />
       </label>
       <label class="calc-field">
         <span>{endLabel}</span>
-        <input type="date" data-calc-end min={minDate} max={maxDate} required />
+        <input type="date" data-calc-end min={minDate} max={maxEndDate} required />
       </label>
     </div>
     <button type="submit" class="calc-btn">Calculate interest</button>
@@ -116,7 +129,13 @@ const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-')
     if (kind === 'fixed-compound') {
       return fixedCompoundInterest({ principal, startDate: start, endDate: end, history });
     }
-    return fixedSimpleInterest({ principal, startDate: start, endDate: end, history });
+    return fixedSimpleInterest({
+      principal,
+      startDate: start,
+      endDate: end,
+      history,
+      coverageEndExclusive: cfg.coverageEndExclusive || null,
+    });
   }
 
   for (const root of document.querySelectorAll('[data-calc]')) {

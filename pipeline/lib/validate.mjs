@@ -490,6 +490,27 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     errors.push('connecticut-judgment-rate: the retired universal flat-10% record must not reappear');
   }
 
+  // A source-check day is not a legal effective date. Virginia's 6% rate began with the 2004 Act;
+  // New Mexico's 8.75% general branch began with the 1993 amendment. Keep both corrections durable.
+  const virginiaPost = rows.filter((row) => row.entity_slug === 'virginia-judgment-rate');
+  if (stateEntities.some((entity) => entity.slug === 'virginia-judgment-rate')
+      && (virginiaPost.length !== 1
+        || virginiaPost[0].effective_date !== '2004-07-01'
+        || virginiaPost[0].value_numeric !== 6)) {
+    errors.push('virginia-judgment-rate: must preserve the 6% rate effective 2004-07-01');
+  }
+  const newMexicoPost = rows.filter((row) => row.entity_slug === 'new-mexico-judgment-rate');
+  if (stateEntities.some((entity) => entity.slug === 'new-mexico-judgment-rate')
+      && (newMexicoPost.length !== 1
+        || newMexicoPost[0].effective_date !== '1993-06-18'
+        || newMexicoPost[0].value_numeric !== 8.75
+        || newMexicoPost[0].value_text !== '8.75% / 15%')) {
+    errors.push('new-mexico-judgment-rate: must preserve the 8.75% / 15% branches effective 1993-06-18');
+  }
+  if ([...virginiaPost, ...newMexicoPost].some((row) => row.effective_date === '2026-07-09')) {
+    errors.push('Virginia/New Mexico: retired source-review-date observations must not reappear');
+  }
+
   // Federal derivation consistency. The current §1961 formula begins with the rate week
   // 2000-12-11; before that, CMT reference history may exist without a post-judgment counterpart.
   // From the transition forward the two series must have exactly one row per date and equal values.
@@ -716,7 +737,7 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     // Cadence buckets decide staleness thresholds:
     //  - weekly federal series (CMT/post-judgment) should be within ~30 days;
     //  - monthly state-administered series (including Iowa) should be within ~45 days;
-    //  - periodic series (IRS quarterly, semi-annual UK/EU statutory) a new period appears <=~183 days;
+    //  - periodic series (IRS quarterly, semi-annual UK statutory/EU benchmark) a new period appears <=~183 days;
     //  - pure POLICY change-point series (BoE/ECB) can legitimately hold the same value for years, so
     //    an "old" latest change is NOT staleness — skip the effective_date age error for them (a broken
     //    fetch throws an HTTP error and fails the run anyway).

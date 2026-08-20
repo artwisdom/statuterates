@@ -31,9 +31,9 @@ const TERMS = [
   { term: 'Prime rate', def: `A benchmark bank lending rate (published in Fed H.15). Several states peg judgment interest to prime plus a margin (e.g. prime + 3%).` },
   { term: 'Contract rate', def: `An interest rate the parties agreed to in a contract. Where a valid contract rate exists it usually governs instead of the statutory rate.`, id: 'contract-rate' },
   { term: 'Delay damages', def: `Pennsylvania's name (Pa.R.C.P. 238) for prejudgment interest in bodily-injury, death, and property-damage cases — prime + 1%, rather than the 6% contract rate.` },
-  { term: 'Late payment interest', def: `Statutory interest a business can claim on overdue commercial (B2B) invoices. The UK charges base + 8 points; the EU charges its reference rate + at least 8. See the <a href="/calculators/late-payment-interest/">late-payment calculator</a>.` },
+  { term: 'Late payment interest', def: `Interest that may apply to qualifying overdue commercial (B2B) invoices. The UK has a base-plus-eight statutory formula. EU Directive 2011/7/EU sets a minimum framework, but country rates and rules vary; our <a href="/calculators/late-payment-interest/">late-payment tool</a> labels its EU output as a benchmark illustration.` },
   { term: 'Bank of England base rate', def: `The UK's policy interest rate. Statutory late-payment interest on UK commercial debts is this <a href="/rates/uk-late-payment-commercial/">base rate + 8 percentage points</a>, fixed for six-month periods.` },
-  { term: 'ECB reference rate', def: `The European Central Bank main refinancing rate used as the base for the <a href="/rates/eu-late-payment-reference/">EU Late Payment Directive</a> rate (reference + at least 8 points), re-fixed each half-year.` },
+  { term: 'ECB reference rate', def: `The European Central Bank main refinancing rate tracked by our <a href="/rates/eu-late-payment-reference/">Directive benchmark page</a> at each half-year boundary. It can support a minimum-framework illustration, but national statutory rates may use a different base or rule.` },
   { term: 'Usury', def: `An interest rate above the legal maximum a jurisdiction allows. Usury caps limit contract rates but generally do not apply to statutory judgment interest.` },
   { term: 'Wrongful withholding', def: `Keeping money or property that is owed to another. Some states (e.g. Colorado) grant prejudgment interest on wrongfully withheld sums even when the amount is disputed.` },
 ];
@@ -79,7 +79,7 @@ const jsonLd = [
     {sorted.map((t) => <a href={`#${t.id}`}>{t.term}</a>)}
   </nav>
 
-  <AdSlot id="glossary-top" />
+  <AdSlot id="glossary-top" enabled={false} />
 
   <dl class="glossary">
     {sorted.map((t) => (
@@ -90,7 +90,7 @@ const jsonLd = [
     ))}
   </dl>
 
-  <AdSlot id="glossary-bottom" />
+  <AdSlot id="glossary-bottom" enabled={false} />
 
   <p class="source-note">Looking for a specific number? Browse <a href="/">all tracked rates</a>,
     the <a href="/states/">state-by-state table</a>, or run the <a href="/calculators/">calculators</a>.

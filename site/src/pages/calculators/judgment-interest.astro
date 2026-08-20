@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import ManualInterestCalculator from '../../components/ManualInterestCalculator.astro';
 import { getMeta } from '../../lib/data.mjs';
 
@@ -60,7 +61,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Judgment interest calculator</span>
   </nav>
@@ -68,6 +69,7 @@ const jsonLd = [
   <p class="lead">Calculate interest, total payoff, elapsed days, and the starting daily per-diem at
     a rate you have already verified. Choose simple interest or annual compounding and make the
     end-date convention explicit.</p>
+  <EditorialCredit kind="calculator-arithmetic" reviewedOn="2026-08-16" />
 
   <div class="notice">
     <strong>This tool does not choose the legal rate.</strong> Find the recorded rate and rule in the

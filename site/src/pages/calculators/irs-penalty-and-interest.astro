@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import IrsPenaltyInterestCalculator from '../../components/IrsPenaltyInterestCalculator.astro';
 import { getMeta, getEntity, currentOf, historyFor, prettyDate } from '../../lib/data.mjs';
 
@@ -91,7 +92,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>IRS penalty and interest</span>
   </nav>
@@ -100,6 +101,7 @@ const jsonLd = [
     The calculator separates failure-to-file, failure-to-pay, tax interest, and interest on the
     filing penalty; follows partial payments; changes the interest rate by quarter; and shows the
     IRS's new 2026 penalty-relief scenario without promising eligibility.</p>
+  <EditorialCredit kind="calculator" reviewedOn={penaltyRules.verified_at} />
 
   <div class="scope-strip">
     <span><strong>Current underpayment rate:</strong> <a href="/rates/irs-underpayment/">{latest?.value_text}</a></span>

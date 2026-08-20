@@ -5,7 +5,7 @@ export const GUIDES = [
   {
     "slug": "post-judgment-interest",
     "datePublished": "2026-07-15",
-    "dateModified": "2026-07-15",
+    "dateModified": "2026-08-16",
     "title": "Post-Judgment Interest Explained: Federal & State Rules",
     "h1": "Post-Judgment Interest: What It Is and How It Accrues",
     "description": "Learn how post-judgment interest accrues, the federal §1961 rule, how state rules differ, simple vs. compound interest, and how to calculate it.",
@@ -69,7 +69,7 @@ export const GUIDES = [
   {
     "slug": "prejudgment-interest",
     "datePublished": "2026-07-15",
-    "dateModified": "2026-07-15",
+    "dateModified": "2026-08-16",
     "title": "Prejudgment Interest: Rules, Rates, and How to Calculate It",
     "h1": "Prejudgment Interest, Explained",
     "description": "Prejudgment interest covers the wait between a loss and judgment. Learn why it is limited to liquidated claims, how the rate is set, and when it accrues.",
@@ -89,7 +89,7 @@ export const GUIDES = [
       },
       {
         "h2": "How the rate is set—and the general-vs-tort split",
-        "body_html": "<p>There is no single national prejudgment rate. Each jurisdiction sets its own, and the mechanism varies. Some statutes fix a flat percentage that stays put until the legislature changes it. Others peg the rate to a moving market benchmark—a Treasury yield, a central-bank reference rate, or a published index—so it resets periodically. Because these numbers change, this guide will not quote a current figure; look up the live value on the relevant rate page instead. For a sense of how a benchmark-linked rate behaves, see the <a href=\"/rates/us-federal-post-judgment/\">federal post-judgment rate</a>, which is derived from Treasury yields, or the <a href=\"/rates/eu-late-payment-reference/\">EU late-payment reference rate</a> used across commercial claims in Europe.</p><p>A wrinkle that trips up many calculations: a number of states apply <strong>two different rates depending on the claim type</strong>—a general rate for contract and debt matters, and a separate, often higher, rate reserved for tort or personal-injury judgments. Using the general rate on a tort award (or vice versa) is a common and costly error. Confirm which rate your claim type triggers before you compute anything. For how we source and re-verify each rate, see our <a href=\"/methodology/\">methodology</a>.</p>"
+        "body_html": "<p>There is no single national prejudgment rate. Each jurisdiction sets its own, and the mechanism varies. Some statutes fix a flat percentage that stays put until the legislature changes it. Others peg the rate to a moving market benchmark—a Treasury yield, a central-bank reference rate, or a published index—so it resets periodically. Because these numbers change, this guide will not quote a current figure; look up the live value on the relevant rate page instead. For a sense of how a benchmark-linked rate behaves, see the <a href=\"/rates/us-federal-post-judgment/\">federal post-judgment rate</a>, which is derived from Treasury yields, or the <a href=\"/rates/eu-late-payment-reference/\">EU Directive ECB benchmark</a>, which is an illustration rather than a country rate.</p><p>A wrinkle that trips up many calculations: a number of states apply <strong>two different rates depending on the claim type</strong>—a general rate for contract and debt matters, and a separate, often higher, rate reserved for tort or personal-injury judgments. Using the general rate on a tort award (or vice versa) is a common and costly error. Confirm which rate your claim type triggers before you compute anything. For how we source and re-verify each rate, see our <a href=\"/methodology/\">methodology</a>.</p>"
       },
       {
         "h2": "When the clock starts: accrual dates",
@@ -133,7 +133,7 @@ export const GUIDES = [
   {
     "slug": "how-to-calculate-judgment-interest",
     "datePublished": "2026-07-15",
-    "dateModified": "2026-07-15",
+    "dateModified": "2026-08-16",
     "title": "How to Calculate Judgment Interest: Step-by-Step Guide",
     "h1": "How to Calculate Judgment Interest",
     "description": "Learn to calculate judgment interest step by step: find the governing rate, lock it to the judgment date, apply simple vs. compound, and do the daily math.",
@@ -201,7 +201,7 @@ export const GUIDES = [
   {
     "slug": "irs-interest-rates",
     "datePublished": "2026-07-15",
-    "dateModified": "2026-07-15",
+    "dateModified": "2026-08-16",
     "title": "How IRS Interest Rates Work (§6621 & §6622 Explained)",
     "h1": "How IRS Interest Rates Work Under §6621 and §6622",
     "description": "How IRS interest works: §6621 adds a category spread to the federal short-term rate, resets quarterly, and compounds daily under §6622.",
@@ -269,71 +269,71 @@ export const GUIDES = [
   {
     "slug": "late-payment-interest",
     "datePublished": "2026-07-15",
-    "dateModified": "2026-07-15",
-    "title": "Late Payment Interest: UK &amp; EU Commercial Debt Guide",
+    "dateModified": "2026-08-16",
+    "title": "Late Payment Interest: UK & EU Commercial Debt Guide",
     "h1": "Late Payment Interest on Commercial Debts: The UK and EU Rules",
-    "description": "How statutory late payment interest works on overdue B2B invoices in the UK and EU: the base-rate-plus-8 formula, fixed compensation, and how to claim it.",
-    "intro_html": "<p>When a business pays your invoice late, you are not merely owed the money — in the UK and across the European Union you are owed <strong>interest on it</strong>, by statute, whether or not your contract ever mentioned the word. This is one of the quieter powers in commercial law: an implied right that turns a late payment from an annoyance into a bill with a running meter. Yet most suppliers never charge it, because the rules sound more complicated than they are.</p><p>This guide explains how statutory late payment interest is set in both regimes — the UK's <em>Late Payment of Commercial Debts (Interest) Act 1998</em> and the EU's <em>Late Payment Directive 2011/7/EU</em> — how the two formulas differ, what fixed compensation you can add on top, and the practical steps to actually claim it. When you need a live number, use the <a href=\"/rates/uk-late-payment-commercial/\">current UK late-payment rate</a> or the <a href=\"/rates/eu-late-payment-reference/\">current EU reference rate</a>, and run the figures through the <a href=\"/calculators/late-payment-interest/\">late payment interest calculator</a>.</p>",
+    "description": "How qualifying late-payment interest works on overdue B2B invoices in the UK and under the EU minimum framework, including compensation and country checks.",
+    "intro_html": "<p>When a business pays an invoice late, a statutory interest remedy may apply even if the contract is silent. In the UK that remedy comes from the <em>Late Payment of Commercial Debts (Interest) Act 1998</em>; across the European Union it depends on Directive 2011/7/EU as implemented by the governing member state. Eligibility, contractual alternatives, public-authority rules, and national procedure still matter, so a late invoice does not create the same entitlement in every situation.</p><p>This guide explains the UK formula and the EU minimum framework, the separate recovery-cost rules, and the checks to make before claiming. Use the <a href=\"/rates/uk-late-payment-commercial/\">current UK late-payment rate</a> for a qualifying UK debt. The <a href=\"/rates/eu-late-payment-reference/\">EU benchmark page</a> records an ECB reference input, while the <a href=\"/calculators/late-payment-interest/\">late-payment calculator</a> clearly labels its EU output as a non-country-specific illustration.</p>",
     "sections": [
       {
         "h2": "What \"late payment interest\" actually means",
-        "body_html": "<p>Statutory late payment interest is a right that attaches automatically to overdue <strong>business-to-business</strong> debts. It is not the same as the interest a bank charges you, and it is not the interest you might negotiate into a contract — it is a floor, written into law, that applies even to a plain invoice with no interest clause at all.</p><p>Two limits matter up front. First, both the UK and EU regimes cover <em>commercial transactions</em> only: supplies of goods or services where both parties (or a business and a public authority) are acting in the course of a business. Debts owed by consumers are excluded and governed by entirely different consumer-credit rules. Second, the right runs from the day after payment was due — the agreed date, or, absent an agreed date, a default period (30 days after the goods, services, or invoice are received in most cases). Everything below assumes you are a business chasing another business.</p>"
+        "body_html": "<p>Statutory late-payment interest is a legal remedy for qualifying overdue <strong>commercial</strong> debts. It differs from bank interest and from a rate negotiated in a contract: the law can supply a remedy when an agreement is silent, but a substantial contractual remedy, an exclusion, or a national implementing rule can change the result.</p><p>Two limits matter up front. These frameworks concern commercial transactions involving businesses or public authorities, not consumer debts. The legally relevant due date also depends on the agreement and the governing rule; default periods can apply when no date was agreed. Confirm the parties, transaction, contract, due date, and governing law before selecting any rate.</p>"
       },
       {
         "h2": "The UK formula: base rate plus eight, locked for six months",
         "body_html": "<p>Under the 1998 Act, statutory interest on a qualifying commercial debt is the <strong>Bank of England base rate plus 8 percentage points</strong>. The 8-point margin is fixed by statute and never moves. The only variable is the base rate — and here the law does something clever to keep the math stable.</p><p>The base rate is not tracked day by day. Instead, the rate <em>in force on a reference date</em> is locked in for a full six-month run. For debts that become late between 1 January and 30 June, you use the base rate as it stood on the previous <strong>31 December</strong>. For debts that become late between 1 July and 31 December, you use the rate as of <strong>30 June</strong>. That reference rate then governs the entire period, even if the Bank of England changes its base rate in the meantime. So a debt that fell late in, say, March uses the base rate as it stood on the previous 31 December — and that single rate applies for the whole time the debt stays unpaid, even if the Bank of England changes its base rate in a later half-year.</p><p>Each new reference date sets the rate only for debts that first fall overdue in that half-year — not for one already running. Rather than commit a number to memory, pull the live figure from the <a href=\"/rates/uk-late-payment-commercial/\">UK late-payment commercial rate page</a>, which pairs the current base rate with the fixed 8-point margin.</p>"
       },
       {
-        "h2": "The EU formula: ECB reference rate plus at least eight",
-        "body_html": "<p>The EU's Directive 2011/7/EU follows the same shape but with a different anchor. Statutory interest is the <strong>European Central Bank reference rate plus at least 8 percentage points</strong>. The phrase <em>at least</em> is deliberate: 8 points is a minimum the Directive imposes, and individual member states are free to legislate a higher margin. Several do, which is why the effective rate in one country can sit above another's even in the same month.</p><p>The re-fixing rhythm mirrors the UK's half-year logic. The ECB reference rate in force on the <strong>first calendar day of each half-year</strong> — 1 January for the first half, 1 July for the second — applies for the following six months. National transpositions layer their own rules and margins on top, so \"the EU rate\" is really a family of country-specific rates built from a common formula. Check the <a href=\"/rates/eu-late-payment-reference/\">EU late-payment reference rate page</a> for the current ECB anchor, then confirm your specific country's margin.</p>"
+        "h2": "The EU minimum framework and country rates",
+        "body_html": "<p>Directive 2011/7/EU defines a minimum framework based on a reference rate plus at least 8 percentage points. For euro-area states the Directive identifies an ECB reference, while other member states use the equivalent reference set by their national central bank. National law may be more favourable to the creditor and can supply a different effective base, rate, or procedural rule.</p><p>That is why there is no safe single \"EU rate\" for every claim. The <a href=\"/rates/eu-late-payment-reference/\">StatuteRates ECB benchmark</a> records the ECB main refinancing rate at each half-year boundary and can illustrate an eight-point minimum addition. It is not a country entitlement. Confirm the <a href=\"https://europa.eu/youreurope/business/finance-and-tax/making-receiving-payments/late-payment/index_en.htm\">official EU country-rate table</a> and the member state's implementing law.</p>"
       },
       {
         "h2": "A worked example (illustrative figures)",
-        "body_html": "<p>The arithmetic is simple interest — not compound — which keeps it honest and easy to reproduce. Suppose you are owed £10,000, the invoice was due 60 days ago, and — <strong>for example only</strong> — the applicable rate works out to a round 12% per year. The daily rate is 12% ÷ 365 = roughly 0.0329% a day, or about £3.29 on £10,000. Across 60 days that is roughly <strong>£197</strong> in interest, on top of the £10,000 principal and any fixed compensation.</p><p>The EU calculation runs identically: take principal × rate × (days late ÷ 365). The rates above are placeholders chosen for clean math — do <em>not</em> treat 12% as the real figure. Feed the live rate and your actual dates into the <a href=\"/calculators/late-payment-interest/\">late payment interest calculator</a>, which handles the day count for you. If you routinely work out interest across other regimes too, the full <a href=\"/calculators/\">calculator index</a> covers judgment and tax interest as well.</p>"
+        "body_html": "<p>Once the legally correct annual rate and dates are known, simple-interest arithmetic is principal × rate × days ÷ 365. Suppose a qualifying £10,000 debt uses an illustrative 12% annual rate for 60 days. That is about £3.29 per day and roughly <strong>£197</strong> in interest, before any separate recovery compensation.</p><p>The 12% figure is deliberately fictional. The <a href=\"/calculators/late-payment-interest/\">late-payment calculator</a> can estimate a supported UK period; its EU mode only illustrates the recorded ECB benchmark plus eight and must not replace the official country rate. The full <a href=\"/calculators/\">calculator index</a> covers other carefully bounded scenarios.</p>"
       },
       {
         "h2": "Fixed compensation and recovery costs",
-        "body_html": "<p>Interest is only part of the entitlement. Both regimes add a <strong>fixed sum</strong> to compensate you for the trouble of chasing payment — and it stacks per invoice, on top of the interest.</p><ul><li><strong>United Kingdom:</strong> a fixed charge that scales with the size of the debt — £40 for debts under £1,000, £70 for debts from £1,000 up to £9,999.99, and £100 for debts of £10,000 or more. If your reasonable costs of recovering the debt (for example, a debt-collection agency's fee) exceed the fixed sum, you can claim the difference too.</li><li><strong>European Union:</strong> a minimum of <strong>€40</strong> per invoice as automatic compensation for recovery costs, again with reasonable additional recovery costs claimable on top. Member states may set the fixed sum higher.</li></ul><p>These sums are automatic — you do not have to prove hardship — and they apply to each late invoice separately, so a customer who is habitually late accrues them repeatedly.</p>"
+        "body_html": "<p>For a qualifying claim, the applicable framework can provide a <strong>fixed sum</strong> for recovery costs in addition to interest.</p><ul><li><strong>United Kingdom:</strong> a fixed charge that scales with the size of the debt — £40 for debts under £1,000, £70 for debts from £1,000 up to £9,999.99, and £100 for debts of £10,000 or more. Reasonable recovery costs above that fixed sum can also be available.</li><li><strong>European Union:</strong> the Directive provides a minimum €40 recovery-cost framework, while the governing member state's implementation controls the entitlement, amount, and procedure and may be more favourable to the creditor.</li></ul><p>These remedies do not require proof of hardship, but transaction eligibility, national law, contractual terms, and enforcement procedure still have to be checked for each invoice.</p>"
       },
       {
         "h2": "How to claim it — and a word of caution",
-        "body_html": "<p>The mechanics are refreshingly light. There is no form to file and no permission to seek; the right already exists in the contract by operation of law. In practice:</p><ul><li>Confirm the debt qualifies — a B2B (or business-to-public-authority) supply of goods or services, not a consumer transaction.</li><li>Identify the date interest starts: the day after the agreed due date, or after the statutory default period if none was agreed.</li><li>Pull the correct rate for the period the debt became late, remembering the six-month lock, and calculate simple interest day by day.</li><li>Add the fixed compensation (and any excess reasonable recovery costs), then send a clear statement or demand showing principal, interest, and compensation separately.</li><li>If it remains unpaid, the same figures form the backbone of a formal claim.</li></ul><p><em>This is general information, not legal advice.</em> Rates, reference dates, and national margins change, and edge cases — disputed sums, contractual \"substantial remedy\" clauses, cross-border deals — can shift the analysis. Always verify against the official source before relying on a number, and see the <a href=\"/methodology/\">methodology</a> for how these rates are tracked. American businesses reading this will find no direct equivalent — the closest U.S. analogue is <a href=\"/prejudgment/\">prejudgment interest</a> on an unpaid claim; use the state reference to identify the applicable rule before calculating.</p>"
+        "body_html": "<p>A careful claim starts with the rule, not the arithmetic:</p><ul><li>Confirm the debt is a qualifying commercial transaction and identify the governing country.</li><li>Check whether the contract supplies a different substantial remedy or other controlling term.</li><li>Identify the legally correct due and accrual dates.</li><li>Use the official UK rate or the official EU country rate for the relevant period.</li><li>Keep principal, interest, fixed compensation, and any documented recovery costs separate in a demand.</li><li>Follow the governing national procedure if the debt remains unpaid.</li></ul><p><em>This is general information, not legal advice.</em> Cross-border deals, disputed sums, public authorities, and contractual remedies can change the analysis. Verify the current official source and see the <a href=\"/methodology/\">methodology</a> for the site's data boundaries. American businesses will find no direct equivalent; <a href=\"/prejudgment/\">prejudgment interest</a> is a different, claim-specific concept.</p>"
       }
     ],
     "faqs": [
       {
         "q": "Can I charge interest on a late invoice if my contract doesn't mention it?",
-        "a": "Yes. In both the UK and EU, statutory late payment interest is implied into qualifying business-to-business contracts by law. You do not need an interest clause — the right exists automatically the day after payment falls due. It does not, however, apply to debts owed by consumers."
+        "a": "Often, for a qualifying commercial debt—but not universally. UK law can supply statutory interest when the contract lacks a substantial remedy, while each EU member state applies its national implementation of the Directive. Consumer debts are outside these commercial frameworks."
       },
       {
         "q": "Does statutory late payment interest compound?",
-        "a": "No. Both the UK's 1998 Act and the EU Directive contemplate simple interest — principal times the annual rate times the fraction of the year the debt is overdue. Interest does not itself accrue further interest, which keeps the calculation transparent and easy to reproduce."
+        "a": "The supported UK statutory method is simple interest: principal times the annual rate times the fraction of the year overdue. The EU Directive defines a minimum framework, but a member state's implementing law controls the claim and calculation; the site's EU mode is only a non-country-specific benchmark illustration."
       },
       {
         "q": "What if we agreed a different interest rate in the contract?",
-        "a": "A contract can set its own remedy for late payment, and a genuine, substantial contractual remedy can displace the statutory rate. But terms that are grossly unfair to the supplier can be struck down, in which case the statutory rate applies. Where the drafting is silent or unfair, the statutory floor controls."
+        "a": "A contract can set its own late-payment remedy. In the UK, a substantial contractual remedy can displace the statutory remedy; across the EU, national law determines how contractual terms and grossly unfair exclusions are treated. Check the governing law rather than assuming one statutory fallback applies everywhere."
       },
       {
         "q": "How is the rate fixed if it changes during the time I'm owed money?",
-        "a": "Both regimes lock the rate for six-month windows. The UK uses the Bank of England base rate in force on 31 December or 30 June; the EU uses the ECB reference rate on 1 January or 1 July. That reference rate governs the whole half-year, even if the underlying rate moves before the debt is paid."
+        "a": "The UK selects a half-year reference rate when the debt becomes overdue and fixes it for that debt. The Directive uses half-year reference periods, but the country rate and application come from national law. Do not assume the site's ECB benchmark equals the governing member-state rate."
       },
       {
         "q": "Is this the same as prejudgment interest in the United States?",
-        "a": "No. UK and EU late payment interest is a statutory right on overdue commercial invoices, claimable without going to court. The nearest U.S. concept is prejudgment interest, which compensates a claimant for the time value of money on an unpaid claim and is set by state or federal rules rather than a base-rate-plus-eight formula."
+        "a": "No. A qualifying UK commercial debt, or a remedy under the governing EU member state's implementation, can accrue late-payment interest without first obtaining a judgment, although enforcement may still require proceedings. U.S. prejudgment interest is a different, claim-specific concept governed by state or federal rules."
       }
     ],
     "key_takeaways": [
-      "Statutory late payment interest is an automatic right on overdue B2B invoices in the UK and EU — no interest clause required, but it never applies to consumer debts.",
-      "The UK rate is the Bank of England base rate plus a fixed 8 points; the EU rate is the ECB reference rate plus at least 8 points, with member states free to add margins.",
-      "Both regimes lock the reference rate for six-month periods, so a debt is calculated on the rate in force at the start of its half-year, not the day it's paid.",
+      "A statutory remedy can apply to qualifying overdue commercial invoices even when a contract is silent, but eligibility and contractual alternatives must be checked.",
+      "The UK uses a Bank of England reference plus 8 points; EU claims require the official country rate and national implementing law.",
+      "The site's EU calculator is an ECB-plus-eight benchmark illustration, not a member-state entitlement.",
       "On top of interest you can claim fixed compensation — £40/£70/£100 by debt size in the UK, a €40 minimum in the EU — plus reasonable recovery costs, per invoice.",
-      "The interest is simple, not compound; pull the live rate from the UK or EU rate page and let the late payment calculator handle the day count."
+      "Use the supported UK calculator for qualifying UK arithmetic; use the EU mode only as a benchmark and verify the official country table before a claim."
     ]
   },
   {
     "slug": "statutory-interest",
     "datePublished": "2026-07-15",
-    "dateModified": "2026-07-15",
+    "dateModified": "2026-08-16",
     "title": "Statutory Interest Explained: Rates Set by Law vs Contract",
     "h1": "Statutory Interest: A Plain-English Guide",
     "description": "Statutory interest is set by law, not by contract. Learn how rates are determined for judgments, unpaid tax, and late payments across the US, UK, and EU.",
@@ -361,7 +361,7 @@ export const GUIDES = [
       },
       {
         "h2": "Across the water: the UK and EU late-payment regimes",
-        "body_html": "<p>Outside the courtroom, the clearest modern example of statutory interest is the right to charge it on late commercial invoices. The UK's Late Payment of Commercial Debts (Interest) Act 1998 lets a business charge statutory interest on an overdue B2B debt at the Bank of England base rate <em>plus a fixed statutory addition</em>, with the base-rate component locked to a reference date twice a year rather than the live rate. The current figure lives on our <a href=\"/rates/uk-late-payment-commercial/\">UK late payment rate</a> page.</p><p>The EU's Late Payment Directive follows the same architecture: a reference rate (the European Central Bank's main refinancing rate) plus a statutory margin, refreshed at set points in the year. See the <a href=\"/rates/eu-late-payment-reference/\">EU late payment reference rate</a> for the current basis. Both regimes share a design principle — a public benchmark plus a fixed spread — but they use different benchmarks and different reset dates, so a UK figure is never a stand-in for an EU one. The <a href=\"/calculators/late-payment-interest/\">late payment interest calculator</a> handles the period math for either.</p>"
+        "body_html": "<p>Outside the courtroom, the clearest modern example of statutory interest is the remedy for qualifying late commercial invoices. The UK's Late Payment of Commercial Debts (Interest) Act 1998 uses the Bank of England base rate <em>plus a fixed statutory addition</em>, with the base component selected at a half-year reference date. The current figure lives on our <a href=\"/rates/uk-late-payment-commercial/\">UK late-payment page</a>.</p><p>Directive 2011/7/EU sets a minimum framework that member states implement through national law. The site's <a href=\"/rates/eu-late-payment-reference/\">ECB benchmark page</a> records one transparent reference input, but it is not a universal EU statutory rate. The <a href=\"/calculators/late-payment-interest/\">late-payment calculator</a> therefore treats its EU output as an illustration and points readers to the official country table.</p>"
       },
       {
         "h2": "Doing the math (and a necessary caveat)",
@@ -379,7 +379,7 @@ export const GUIDES = [
       },
       {
         "q": "Can I charge statutory interest if my contract does not mention interest?",
-        "a": "In many jurisdictions, yes. The UK Late Payment Act and the EU Late Payment Directive both grant businesses a statutory right to charge interest on overdue B2B invoices even when the contract is silent. The rules, rate, and eligibility vary by country and by the type of transaction, so verify the governing statute for your situation."
+        "a": "In many jurisdictions, yes, for a qualifying commercial debt. The UK Act and EU member-state implementations can supply a remedy when a contract is silent, but eligibility, contractual alternatives, rate, and procedure vary. Verify the governing law before making a claim."
       },
       {
         "q": "What is the difference between prejudgment and post-judgment interest?",
@@ -387,21 +387,21 @@ export const GUIDES = [
       },
       {
         "q": "Does the statutory interest rate change over time?",
-        "a": "Some do and some do not. Rates fixed by statute stay put until lawmakers amend them, which can be years. Benchmark-linked rates — like the US federal post-judgment rate, the IRS underpayment rate, and the UK and EU late-payment rates — reset on a weekly, quarterly, or semiannual schedule, so a figure can go stale quickly. Always check the live rate page for the current number."
+        "a": "Some do and some do not. Rates fixed by statute stay put until lawmakers amend them, which can be years. Benchmark-linked series — like the US federal post-judgment rate and IRS underpayment rate — can reset weekly or quarterly; the UK late-payment rate and this site's separate EU Directive benchmark update semiannually. Always check the live page and, for an EU claim, the official country rate."
       }
     ],
     "key_takeaways": [
       "Statutory interest is a rate set by law; a contract rate is one the parties negotiated — and statutory rates apply by default when no valid contract rate governs.",
       "It shows up in three main arenas: court judgments (pre- and post-judgment), unpaid tax, and late commercial invoices.",
       "Some statutory rates are frozen into the statute; others float with a market benchmark and reset weekly, quarterly, or twice a year.",
-      "The US has no single rate — it varies by federal vs. state court and by litigation stage — while the UK and EU use a public benchmark plus a fixed statutory margin.",
+      "The US has no single rate. The UK uses a statutory base-plus-eight formula, while EU member states implement a minimum framework through country-specific rates and rules.",
       "Never rely on a remembered number: confirm compounding and pull the current rate from the official source before you calculate."
     ]
   },
   {
     "slug": "irs-penalties-explained",
     "datePublished": "2026-07-26",
-    "dateModified": "2026-07-26",
+    "dateModified": "2026-08-16",
     "title": "IRS Late-Filing & Late-Payment Penalties Explained",
     "h1": "IRS Late-Filing and Late-Payment Penalties, Explained",
     "description": "Learn how Form 1040 late-filing and late-payment penalties interact, how IRS interest grows, what changed in 2026, and what an estimate excludes.",

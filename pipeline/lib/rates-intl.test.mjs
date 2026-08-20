@@ -46,6 +46,8 @@ test('EU reference = ECB MRO in force on the first day of the half-year', () => 
   const { observations } = buildEuReference(ecb, { ...src, today: '2026-07-08' });
   const h2 = observations.find((o) => o.effective_date === '2026-07-01');
   assert.equal(h2.value_numeric, 2.4); // ECB MRO on 1 Jul 2026
-  assert.match(h2.notes, /10\.4/); // note surfaces the 8pp-floor statutory example
+  assert.match(h2.notes, /10\.4/); // note surfaces the 8pp-floor benchmark illustration
+  assert.match(h2.notes, /not a member-state statutory rate/i);
+  assert.doesNotMatch(h2.notes, /France|Germany/);
   assert.equal(h2.confidence, 'medium');
 });

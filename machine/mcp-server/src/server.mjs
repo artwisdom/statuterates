@@ -30,6 +30,7 @@ import {
   irsInterest,
   fixedSimpleInterest,
   floatingSimpleInterest,
+  halfYearRateCoverageEnd,
 } from '../../../shared/interest-calc.mjs';
 import { stateCalculatorReleaseForEntity } from '../../../shared/state-calculator-releases.mjs';
 
@@ -174,23 +175,23 @@ const CALC_RULES = {
   'irs-overpayment-noncorporate': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
   'irs-overpayment-corporate': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
   'irs-large-corporate-underpayment': { kind: 'irs', label: 'IRC §6621/§6622 (quarterly rates, compounded daily)' },
-  'uk-late-payment-commercial': { kind: 'fixed-simple', label: 'UK Late Payment Act 1998 (simple, fixed at overdue date)' },
-  'eu-late-payment-reference': { kind: 'floating-simple', label: 'EU Directive 2011/7/EU (simple, semester re-fixing; add your member-state margin — 8pp floor applied unless specified)', defaultMargin: 8 },
+  'uk-late-payment-commercial': { kind: 'fixed-simple', label: 'UK Late Payment Act 1998 (simple, fixed at overdue date)', halfYearCoverage: true },
+  'eu-late-payment-reference': { kind: 'floating-simple', label: 'EU Directive 2011/7/EU ECB benchmark illustration (simple, semester re-fixing; not a country-specific entitlement)', defaultMargin: 8 },
   'florida-judgment-rate': { kind: 'florida', label: 'Fla. Stat. §55.03 (simple daily interest; annual January 1 adjustment)', rendererId: 'florida-postjudgment-v1' },
 };
 
 server.registerTool(
   'calculate_interest',
   {
-    title: 'Calculate statutory interest',
+    title: 'Calculate statutory interest or benchmark',
     description:
-      `Compute accrued statutory interest for an audited series in the ${DATASET_TITLE}, applying its governing method (daily compounding for IRS, annual compounding for federal judgments, period-aware simple interest for UK/EU, and the dedicated Florida §55.03 renderer). State methods fail closed unless the shared website release registry and entity contract both approve them. Returns the amount, rates, method, and source. Supported slugs: ${Object.keys(CALC_RULES).join(', ')}.`,
+      `Compute interest for an audited series in the ${DATASET_TITLE}, applying its recorded method (daily compounding for IRS, annual compounding for federal judgments, period-aware simple interest for UK, an explicitly non-country-specific EU benchmark illustration, and the dedicated Florida §55.03 renderer). State methods fail closed unless the shared website release registry and entity contract both approve them. Returns the amount, rates, method, and source. Supported slugs: ${Object.keys(CALC_RULES).join(', ')}.`,
     inputSchema: {
       slug: z.enum(Object.keys(CALC_RULES)).describe('Which rate series/statute to apply.'),
       principal: z.number().positive().describe('The principal amount (judgment, tax, or invoice).'),
       start_date: z.string().describe('ISO date interest starts (judgment date / due date / overdue date).'),
       end_date: z.string().describe('ISO date to calculate through (e.g. today or payment date).'),
-      margin_percent: z.number().min(8).max(15).optional().describe('EU only: your member state\'s margin over the reference rate (minimum 8; e.g. France 10, Germany 9).'),
+      margin_percent: z.number().min(8).max(15).optional().describe('EU benchmark only: an explicitly selected illustrative addition to the recorded ECB series. Do not treat the result as a member-state statutory rate.'),
       include_end_date: z.boolean().optional().describe('Florida only: include the entered through-date in accrual (default true).'),
     },
   },
@@ -199,7 +200,11 @@ server.registerTool(
     const rec = getEntity(slug);
     if (!rec) return notFound(`No entity "${slug}".`);
     try {
-      const history = calculationHistory(rec, 'annual_rate', start_date);
+      const snapshotHistory = calculationHistory(rec, 'annual_rate');
+      const startDateEndExclusive = rule.halfYearCoverage
+        ? halfYearRateCoverageEnd(snapshotHistory, 'UK statutory')
+        : null;
+      const history = calculationHistory(rec, 'annual_rate', start_date, { startDateEndExclusive });
       let result;
       if (rule.kind === 'post-judgment') {
         result = federalPostJudgment({ principal, judgmentDate: start_date, endDate: end_date, weeklyHistory: history });
@@ -220,17 +225,28 @@ server.registerTool(
           includeEndDate: include_end_date ?? true,
         });
       } else {
-        result = fixedSimpleInterest({ principal, startDate: start_date, endDate: end_date, history });
+        result = fixedSimpleInterest({
+          principal,
+          startDate: start_date,
+          endDate: end_date,
+          history,
+          coverageEndExclusive: startDateEndExclusive,
+        });
       }
       return json({
         series: rec.name,
+        basis: rule.label,
+        // Backwards-compatible response key for existing MCP clients. New consumers should use
+        // the neutral `basis` field because the EU branch is a benchmark, not a statutory rate.
         statute: rule.label,
         principal,
         start_date,
         end_date,
         ...result,
         source_url: rec.current?.annual_rate?.source_url || null,
-        disclaimer: 'Estimate for reference; official computations may differ in rounding/conventions. Not legal, tax, or financial advice.',
+        disclaimer: slug === 'eu-late-payment-reference'
+          ? 'ECB-plus-margin benchmark illustration only; not a member-state statutory entitlement. Confirm the official country table and governing national law.'
+          : 'Estimate for reference; official computations may differ in rounding/conventions. Not legal, tax, or financial advice.',
       });
     } catch (e) {
       return notFound(`Cannot compute: ${e.message}`);

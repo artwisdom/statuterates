@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getMeta, currentOf, latestOf, prettyDate, stateHubs, stateCalculatorReleaseForEntity, PREJUDGMENT_CALC_SAFE, isCalculatorReady, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
+import { getMeta, currentOf, latestOf, prettyDate, stateHubs, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -31,9 +31,6 @@ const postCopy = post ? copyFor(post.slug, {
   historyPoints: post.history?.annual_rate?.length,
 }) : null;
 const preCaseSpecific = preLatest?.method === 'court-or-contract-rate';
-const preSafe = STATE_CALCULATOR_RENDERER_READY
-  && import.meta.env.ENABLE_STATE_CALCULATORS === 'true'
-  && PREJUDGMENT_CALC_SAFE.includes(base) && isCalculatorReady(pre);
 const theName = base === 'dc' ? 'the District of Columbia' : name;
 const statuteLabel = (value) => (value || '')
   .replace(/\bSec\.\s*/g, '§ ')
@@ -149,21 +146,23 @@ const jsonLd = [
           <td><a href={post ? `/rates/${post.slug}/` : '/methodology/'}>Post-judgment interest</a></td>
           <td class="num">{post ? postLatest?.value_text : '—'}</td>
           <td>{postEffective || 'Case-specific'}</td>
-          <td class="source-note">{postStatute || 'See methodology'}</td>
+          <td class="source-note">{post
+            ? <a href={postLatest?.source_url} rel="noopener" target="_blank">{postStatute || 'Official source'}</a>
+            : <a href="/methodology/">See methodology</a>}</td>
           <td class="source-note">{postBasis}</td>
         </tr>
         <tr>
           <td><a href={`/rates/${pre.slug}/`}>Prejudgment interest</a></td>
           <td class="num">{preLatest?.value_text}</td>
           <td>{preEffective}</td>
-          <td class="source-note">{preStatute || 'See cited source'}</td>
+          <td class="source-note"><a href={preLatest?.source_url} rel="noopener" target="_blank">{preStatute || 'Official source'}</a></td>
           <td class="source-note">{preCopy.kindLabel}</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <AdSlot id="state-top" />
+  <AdSlot id="state-top" enabled={false} />
 
   <h2>Post-judgment interest{post ? '' : ' — case by case'}</h2>
   {post ? (
@@ -185,11 +184,7 @@ const jsonLd = [
     ? `${name} has no uniform statewide prejudgment percentage (${preCopy.kindLabel?.toLowerCase()}).`
     : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}).`}</strong> {preCopy.body}</p>
   <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — {preStatute}, when it applies, accrual, compounding, and carve-outs.</p>
-  {preSafe && (
-    <p class="xlink"><a href="/calculators/prejudgment-interest/">→ Calculate {name} prejudgment interest</a></p>
-  )}
-
-  <AdSlot id="state-bottom" />
+  <AdSlot id="state-bottom" enabled={false} />
 
   <h2>Frequently asked</h2>
   <div class="faq">

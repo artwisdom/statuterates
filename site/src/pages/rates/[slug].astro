@@ -2,9 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getAllEntities, getEntity, getMeta, currentOf, latestOf, prettyDate, prettyDateTime, isPrejudgment, isCalculatorReady, stateCalculatorReleaseForEntity, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../../lib/data.mjs';
+import EditorialCredit from '../../components/EditorialCredit.astro';
+import { getAllEntities, getEntity, getMeta, currentOf, latestOf, prettyDate, prettyDateTime, isPrejudgment, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 import { recordedChangesFor } from '../../lib/changes.mjs';
+import { ratePageMayRunAds } from '../../lib/monetization.mjs';
 
 export function getStaticPaths() {
   return getAllEntities().map((e) => ({ params: { slug: e.slug } }));
@@ -28,6 +30,7 @@ const isStatutory = (latest?.method || '').startsWith('statute'); // fixed OR ag
 const isProvisional = (latest?.method || '').includes('provisional');
 const isCaseSpecific = latest?.method === 'court-or-contract-rate';
 const isFormulaDerived = (latest?.method || '').startsWith('derived_');
+const isEuBenchmark = slug === 'eu-late-payment-reference';
 const unitLabel = 'per year';
 
 // Which calculator (if any) uses this series — internal linking both helps users and SEO.
@@ -42,43 +45,13 @@ const CALC_FOR = {
   'boe-bank-rate': '/calculators/late-payment-interest/',
   'eu-late-payment-reference': '/calculators/late-payment-interest/',
   'ecb-main-refinancing-rate': '/calculators/late-payment-interest/',
-  'california-judgment-rate': '/calculators/state-judgment-interest/',
-  'new-york-judgment-rate': '/calculators/state-judgment-interest/',
-  'new-york-consumer-debt-judgment-rate': '/calculators/state-judgment-interest/',
-  'massachusetts-judgment-rate': '/calculators/state-judgment-interest/',
-  'pennsylvania-judgment-rate': '/calculators/state-judgment-interest/',
-  'illinois-judgment-rate': '/calculators/state-judgment-interest/',
-  'north-carolina-judgment-rate': '/calculators/state-judgment-interest/',
-  'virginia-judgment-rate': '/calculators/state-judgment-interest/',
-  'alabama-judgment-rate': '/calculators/state-judgment-interest/',
-  'hawaii-judgment-rate': '/calculators/state-judgment-interest/',
-  'indiana-judgment-rate': '/calculators/state-judgment-interest/',
-  'maryland-judgment-rate': '/calculators/state-judgment-interest/',
-  'new-mexico-judgment-rate': '/calculators/state-judgment-interest/',
-  'oregon-judgment-rate': '/calculators/state-judgment-interest/',
-  'rhode-island-judgment-rate': '/calculators/state-judgment-interest/',
-  'south-dakota-judgment-rate': '/calculators/state-judgment-interest/',
-  'vermont-judgment-rate': '/calculators/state-judgment-interest/',
-  'wyoming-judgment-rate': '/calculators/state-judgment-interest/',
-  'iowa-judgment-rate': '/calculators/state-judgment-interest/',
 };
-// Prejudgment slugs get the calculator link only for the fixed-simple "safe" states (single source
-// of truth in data.mjs); everything else uses the explicit CALC_FOR map.
-const candidateCalcHref = CALC_FOR[slug]
-  || (slug.endsWith('-prejudgment-rate') && PREJUDGMENT_CALC_SAFE.includes(slug.replace('-prejudgment-rate', ''))
-        ? '/calculators/prejudgment-interest/'
-        : null);
+const candidateCalcHref = CALC_FOR[slug] || null;
 const dedicatedStateCalcHref = stateCalculatorReleaseForEntity(entity)?.path || null;
-const isStateCalculator = candidateCalcHref === '/calculators/state-judgment-interest/'
-  || candidateCalcHref === '/calculators/prejudgment-interest/';
 const manualStateCalcHref = !isPrejudgment(entity) && slug.endsWith('-judgment-rate')
   ? '/calculators/judgment-interest/'
   : null;
-const calcHref = dedicatedStateCalcHref || (isStateCalculator
-  ? (STATE_CALCULATOR_RENDERER_READY && import.meta.env.ENABLE_STATE_CALCULATORS === 'true' && isCalculatorReady(entity)
-      ? candidateCalcHref
-      : manualStateCalcHref)
-  : (candidateCalcHref || manualStateCalcHref));
+const calcHref = dedicatedStateCalcHref || candidateCalcHref || manualStateCalcHref;
 
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.
@@ -86,6 +59,16 @@ const pj = isPrejudgment(entity);
 const stateName = entity.name.replace(/ (?:Pre|Post-)?[Jj]udgment Interest Rate$/, '');
 const isStateRate = String(entity.region || '').startsWith('US States')
   && (slug.endsWith('-judgment-rate') || slug.endsWith('-prejudgment-rate'));
+// State pages with only a single headline observation and no fully researched rule section remain
+// useful, indexable references, but they are not monetized. This prevents Auto Ads from treating a
+// shallow programmatic reference as advertising inventory while deeper histories, state-specific
+// applicability analysis, and non-state datasets remain eligible.
+const monetizationReady = ratePageMayRunAds({
+  isStateRate,
+  isPrejudgment: pj,
+  hasDetailedRules: Boolean(copy.postDetails),
+  observationCount: totalPoints,
+});
 const rateYear = String(latest?.retrieved_at || latest?.effective_date || '').slice(0, 4);
 const statuteLabel = (entity.metadata?.statute || '')
   .replace(/\bSec\.\s*/g, '§ ')
@@ -141,6 +124,8 @@ const description = isStateRate
     : `${rateYear} ${stateName} post-judgment interest rate: ${latest?.value_text} per year. See ${seoStatuteLabel}, effective date, exceptions, history, and official source.`
   : slug === 'uk-late-payment-commercial'
   ? `${rateYear} UK statutory interest on late commercial payments: ${latest?.value_text} per year. See the current rate, effective dates, calculation rules, and cited source.`
+  : isEuBenchmark
+  ? `${rateYear} ECB reference input for the EU Directive minimum benchmark: ${latest?.value_text}. This is not a member-state statutory rate; use the official country table.`
   : isProvisional
   ? `${stateName} judgment interest estimate: ${latest?.value_text} ${unitLabel} from official H.15 inputs, pending confirmation in the ${provisionalConfirmation}. Statute, caveats, and official history.`
   : isCaseSpecific
@@ -167,14 +152,21 @@ const citeNote = isProvisional
   ? `Provisional H.15-based calculation dated ${prettyDate(latest?.effective_date)}; pending ${provisionalConfirmation} confirmation.`
   : isCaseSpecific
   ? `Case-specific rule recorded under ${citeStatute}; no uniform numeric percentage is published.`
+  : isEuBenchmark
+  ? `ECB reference input recorded for the Directive minimum-benchmark illustration; not a member-state statutory rate.`
   : citeStatute
   ? `Rate recorded under ${citeStatute}${latest?.effective_date ? `, effective ${prettyDate(latest.effective_date)}` : ''}.`
   : (latest?.effective_date ? `Value effective ${prettyDate(latest.effective_date)}.` : '');
 const sourceRecord = (meta.sources || []).find((source) => source.id === latest?.source_id);
+const officialAuthorities = Array.isArray(entity.metadata?.official_authorities)
+  ? entity.metadata.official_authorities.filter((item) => item?.label && /^https:\/\//.test(item?.url || ''))
+  : [];
 const basisLabel = isCaseSpecific
   ? 'Case-specific rule'
   : isProvisional
     ? 'Provisional estimate'
+    : isEuBenchmark
+      ? 'Directive benchmark input'
     : latest?.method === 'statute-branching'
       ? 'Statutory branches'
       : isStatuteFixed
@@ -191,6 +183,8 @@ const pageHeading = isStateRate
   : entity.name;
 const factsHeading = isStateRate
   ? `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest at a glance`
+  : isEuBenchmark
+  ? `${entity.name} input at a glance`
   : `${entity.name} at a glance`;
 
 const relatedResources = [];
@@ -258,6 +252,8 @@ const jsonLd = [
           '@type': 'Answer',
           text: isCaseSpecific
             ? `${entity.name} has no uniform statewide percentage: the governing contract or the judge supplies the rate. ${copy.tagline}`
+            : isEuBenchmark
+            ? `As of ${prettyDate(latest?.effective_date)}, the recorded ECB reference input is ${latest?.value_text}. It supports a non-country-specific Directive minimum-benchmark illustration and is not a member-state statutory rate.`
             : `${isProvisional ? 'Provisional estimate' : `As of ${prettyDate(latest?.effective_date)}`}: ${entity.name} is ${latest?.value_text} ${unitLabel}. ${copy.tagline}`,
         },
       },
@@ -278,6 +274,7 @@ const jsonLd = [
   title={title}
   description={description}
   jsonLd={jsonLd}
+  monetize={monetizationReady}
   feedHref={rateFeedHref || '/changes.xml'}
   feedTitle={rateFeedHref ? `${entity.name} recorded updates` : 'StatuteRates recorded rate changes'}
 >
@@ -285,19 +282,28 @@ const jsonLd = [
     <a href="/">Rates</a> &rsaquo; <span>{entity.name}</span>
   </nav>
   <h1>{pageHeading}</h1>
+  <EditorialCredit kind="rate" reviewedOn={latest?.retrieved_at || pageModified} />
   <p class="lead"><span class="chip">{JUR[entity.jurisdiction] || entity.jurisdiction}</span> &nbsp;{copy.tagline}</p>
   {hubHref && (
     <p class="hublink"><a href={hubHref}>→ All {stateName} judgment &amp; prejudgment interest rates</a></p>
   )}
 
   <div class="rate-hero">
-    <div class="eyebrow">{isCaseSpecific ? 'Current rule' : isProvisional ? 'Provisional current estimate' : 'Current rate'}</div>
+    <div class="eyebrow">{isCaseSpecific
+      ? 'Current rule'
+      : isProvisional
+      ? 'Provisional current estimate'
+      : isEuBenchmark
+      ? 'Current ECB benchmark input'
+      : 'Current rate'}</div>
     <span class="value">{latest?.value_text}</span>
     <span class="asof">
       {isCaseSpecific
         ? <>— no uniform statewide percentage</>
         : isProvisional
         ? <>per year — official H.15 input, pending {provisionalConfirmation} confirmation</>
+        : isEuBenchmark
+        ? <>ECB reference input, effective {prettyDate(latest?.effective_date)} — not a country rate</>
         : pj
         ? (copy.kind?.startsWith('discretionary-')
             ? <>per year — a statutory reference or ceiling when prejudgment interest is awarded</>
@@ -324,8 +330,8 @@ const jsonLd = [
     <h2 id="rate-facts-heading">{factsHeading}</h2>
     <dl>
       <div>
-        <dt>{isCaseSpecific ? 'Current rule' : 'Current rate'}</dt>
-        <dd>{latest?.value_text}{isCaseSpecific ? '' : ' per year'}</dd>
+        <dt>{isCaseSpecific ? 'Current rule' : isEuBenchmark ? 'Current benchmark input' : 'Current rate'}</dt>
+        <dd>{latest?.value_text}{isCaseSpecific ? '' : isEuBenchmark ? ' ECB reference input' : ' per year'}</dd>
       </div>
       <div>
         <dt>Effective date</dt>
@@ -373,6 +379,16 @@ const jsonLd = [
           <p>{copy.postDetails.history}</p>
         </div>
       </div>
+      {officialAuthorities.length > 0 && (
+        <div class="official-authorities" data-official-authorities>
+          <h3>Official authorities used for this analysis</h3>
+          <ul class="clean">
+            {officialAuthorities.map((authority) => (
+              <li><a href={authority.url} rel="noopener" target="_blank">{authority.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   )}
 
@@ -380,6 +396,8 @@ const jsonLd = [
     <p><a href={calcHref}><strong>
       {slug === 'irs-underpayment'
         ? '→ Estimate Form 1040 penalties and interest'
+        : isEuBenchmark
+          ? '→ Explore the clearly labeled EU benchmark illustration'
         : dedicatedStateCalcHref
           ? `→ Calculate ${stateName} judgment interest with the audited statutory tool`
         : '→ Calculate interest at this rate'}
@@ -424,13 +442,15 @@ const jsonLd = [
     </div>
   )}
 
-  <AdSlot id="rate-top" />
+  <AdSlot id="rate-top" enabled={monetizationReady} />
 
-  <h2>Effective-date history</h2>
+  <h2>{totalPoints === 1 ? 'Current recorded observation' : 'Effective-date history'}</h2>
   <div class="scroll-x">
     <table>
       <caption>
-        {totalPoints} data point{totalPoints === 1 ? '' : 's'} on record{totalPoints > history.length ? ` (showing the most recent ${history.length})` : ''}.
+        {totalPoints === 1
+          ? 'One current observation is on record; this page does not claim complete historical coverage.'
+          : `${totalPoints} data points on record${totalPoints > history.length ? ` (showing the most recent ${history.length})` : ''}.`}
         All recorded observations are in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.
       </caption>
       <thead>
@@ -465,7 +485,7 @@ const jsonLd = [
 
   <CiteThis title={entity.name} url={canonical} note={citeNote} />
 
-  <AdSlot id="rate-bottom" />
+  <AdSlot id="rate-bottom" enabled={monetizationReady} />
 
   <div class="disclaimer">
     Reference data only — not legal, tax, or financial advice. Always confirm the controlling value

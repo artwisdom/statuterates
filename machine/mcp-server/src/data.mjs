@@ -84,10 +84,13 @@ export function latestValue(slug, metric) {
 // Calculators may project an already-governing rate through a legally covered future payoff date,
 // but the triggering date itself cannot be later than the dataset snapshot and a preannounced rate
 // must never enter the calculation early.
-export function calculationHistory(record, metric, startDate) {
+export function calculationHistory(record, metric, startDate, { startDateEndExclusive = null } = {}) {
   const asOf = String(record?.current_as_of || meta().generated_at || '').slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(asOf)) throw new Error('Dataset current_as_of is invalid');
-  if (/^\d{4}-\d{2}-\d{2}$/.test(String(startDate || '')) && startDate > asOf) {
+  const normalizedStart = String(startDate || '');
+  const recordedFutureStartIsCovered = /^\d{4}-\d{2}-\d{2}$/.test(String(startDateEndExclusive || ''))
+    && normalizedStart < startDateEndExclusive;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(normalizedStart) && normalizedStart > asOf && !recordedFutureStartIsCovered) {
     throw new Error(`Start date cannot be later than the dataset snapshot (${asOf})`);
   }
   return (record?.history?.[metric] || [])

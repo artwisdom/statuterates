@@ -43,6 +43,8 @@ function isSupersededCuratedObservation(record, observation) {
     || (['kentucky-judgment-rate', 'kentucky-prejudgment-rate', 'maine-prejudgment-rate'].includes(record.slug)
       && observation.effective_date === '2026-07-09')
     || (record.slug === 'georgia-judgment-rate' && observation.effective_date === '2026-07-08')
+    || (['virginia-judgment-rate', 'new-mexico-judgment-rate'].includes(record.slug)
+      && observation.effective_date === '2026-07-09')
     || (['georgia-prejudgment-rate', 'mississippi-prejudgment-rate'].includes(record.slug)
       && observation.effective_date === '2026-07-09');
 }
@@ -54,6 +56,14 @@ function purgeSupersededCuratedObservations(db) {
     DELETE FROM observations
     WHERE effective_date = '2026-07-09'
       AND entity_id IN (SELECT id FROM entities WHERE slug = 'texas-prejudgment-rate')
+  `).run();
+  db.prepare(`
+    DELETE FROM observations
+    WHERE effective_date = '2026-07-09'
+      AND entity_id IN (
+        SELECT id FROM entities
+        WHERE slug IN ('virginia-judgment-rate', 'new-mexico-judgment-rate')
+      )
   `).run();
   db.prepare(`
     DELETE FROM observations

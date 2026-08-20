@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
 import { getMeta, getEntity, currentOf, historyFor, latestOf, prettyDate } from '../../lib/data.mjs';
 import {
@@ -108,7 +109,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Federal post-judgment interest</span>
   </nav>
@@ -117,6 +118,7 @@ const jsonLd = [
   <p class="lead">Calculate interest on a supported U.S. federal court money judgment using the
     exact weekly-average 1-year Treasury yield for the calendar week before judgment, with daily
     accrual and annual compounding.</p>
+  <EditorialCredit kind="calculator" reviewedOn={MODIFIED} />
 
   <div class="quick-answer">
     <strong>Latest recorded weekly value:</strong> {latest.value_text} for the week beginning

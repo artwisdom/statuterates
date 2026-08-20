@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import { getMeta, prettyDate } from '../../lib/data.mjs';
 import { GUIDES, getGuide } from '../../lib/guides.mjs';
 
@@ -31,6 +32,46 @@ const related = (RELATED_GUIDE_SLUGS[guide.slug] || [])
   .map((slug) => getGuide(slug))
   .filter(Boolean);
 
+// Primary authorities make the research behind each guide visible to readers. These are curated,
+// not generated from keywords, and intentionally stay short enough for a person to verify.
+const GUIDE_AUTHORITIES = {
+  'post-judgment-interest': [
+    ['28 U.S.C. § 1961 — interest on federal money judgments', 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title28-section1961&num=0&edition=prelim'],
+    ['Federal Reserve / FRED — one-year Treasury constant maturity (DGS1)', 'https://fred.stlouisfed.org/series/DGS1'],
+  ],
+  'prejudgment-interest': [
+    ['Texas Finance Code Chapter 304 — a claim-specific prejudgment example', 'https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf'],
+    ['Nebraska Chapter 45 — separate liquidated and offer-of-settlement paths', 'https://nebraskalegislature.gov/laws/laws-index/chap45-full.html'],
+    ['New Jersey Courts — post- and prejudgment rate schedule', 'https://www.njcourts.gov/sites/default/files/courts/civil/postprejudgmentrates.pdf'],
+  ],
+  'how-to-calculate-judgment-interest': [
+    ['28 U.S.C. § 1961 — federal rate selection and annual compounding', 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title28-section1961&num=0&edition=prelim'],
+    ['Florida CFO — official judgment-interest schedule and daily rates', 'https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates'],
+  ],
+  'irs-interest-rates': [
+    ['IRS — quarterly interest rates', 'https://www.irs.gov/payments/quarterly-interest-rates'],
+    ['26 U.S.C. § 6621 — determination of rate of interest', 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section6621&num=0&edition=prelim'],
+    ['26 U.S.C. § 6622 — daily compounding', 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title26-section6622&num=0&edition=prelim'],
+  ],
+  'irs-penalties-explained': [
+    ['IRS — failure-to-file penalty', 'https://www.irs.gov/payments/failure-to-file-penalty'],
+    ['IRS — failure-to-pay penalty', 'https://www.irs.gov/payments/failure-to-pay-penalty'],
+    ['IRS — interest on underpayments and overpayments', 'https://www.irs.gov/payments/interest'],
+  ],
+  'late-payment-interest': [
+    ['GOV.UK — late commercial payments, interest, and debt recovery', 'https://www.gov.uk/late-commercial-payments-interest-debt-recovery'],
+    ['UK legislation — Late Payment of Commercial Debts (Interest) Act 1998', 'https://www.legislation.gov.uk/ukpga/1998/20/contents'],
+    ['EUR-Lex — Directive 2011/7/EU on combating late payment', 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011L0007'],
+    ['Your Europe — official late-payment rates by EU country', 'https://europa.eu/youreurope/business/finance-and-tax/making-receiving-payments/late-payment/index_en.htm'],
+  ],
+  'statutory-interest': [
+    ['28 U.S.C. § 1961 — federal statutory judgment interest', 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title28-section1961&num=0&edition=prelim'],
+    ['Texas Finance Code Chapter 304 — state statutory rate branches', 'https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf'],
+    ['UK legislation — Late Payment of Commercial Debts (Interest) Act 1998', 'https://www.legislation.gov.uk/ukpga/1998/20/contents'],
+  ],
+};
+const authorities = GUIDE_AUTHORITIES[guide.slug] || [];
+
 // State calculators are intentionally unavailable until their complete rule models pass validation.
 // Older guide copy linked to the prototypes, so route those links to the honest reference indexes.
 const safeGuideHtml = (html = '') => html
@@ -45,7 +86,12 @@ const jsonLd = [
     headline: guide.h1,
     description: guide.description,
     url: canonical,
-    author: { '@id': new URL('/#organization', Astro.site).href },
+    author: {
+      '@type': 'Organization',
+      '@id': new URL('/#organization', Astro.site).href,
+      name: 'StatuteRates Editorial',
+      url: new URL('/about/', Astro.site).href,
+    },
     publisher: {
       '@type': 'Organization',
       '@id': new URL('/#organization', Astro.site).href,
@@ -74,12 +120,13 @@ const jsonLd = [
   },
 ].filter(Boolean);
 ---
-<BaseLayout title={guide.title} description={guide.description} jsonLd={jsonLd}>
+<BaseLayout title={guide.title} description={guide.description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/">Home</a> &rsaquo; <a href="/guides/">Guides</a> &rsaquo; <span>{guide.h1}</span>
   </nav>
   <div class="eyebrow">Statutory interest rates · Guide</div>
   <h1>{guide.h1}</h1>
+  <EditorialCredit kind="guide" reviewedOn={guide.dateModified} />
   <div class="lead" set:html={safeGuideHtml(guide.intro_html)} />
 
   {guide.key_takeaways?.length > 0 && (
@@ -114,6 +161,17 @@ const jsonLd = [
     </section>
   )}
 
+  {authorities.length > 0 && (
+    <section class="authorities">
+      <h2>Official authorities and sources</h2>
+      <p>These primary materials support the rules described above. Jurisdiction-specific pages link
+        directly to the authority used for each recorded rate.</p>
+      <ul class="clean">
+        {authorities.map(([label, href]) => <li><a href={href} rel="noopener" target="_blank">{label}</a></li>)}
+      </ul>
+    </section>
+  )}
+
   <CiteThis
     title={guide.h1}
     url={canonical}
@@ -144,6 +202,9 @@ const jsonLd = [
     .faq summary { cursor: pointer; font-weight: 600; font-family: var(--serif); font-size: 1.05rem; }
     .faq p { margin: 8px 0 0; color: var(--ink-soft); }
     .related ul { columns: 2; }
+    .authorities { margin-top: 34px; padding: 18px 20px; border: 1px solid var(--line); background: var(--paper-2); border-radius: 8px; }
+    .authorities h2 { margin: 0 0 8px; font-size: 1.25rem; }
+    .authorities p { color: var(--ink-soft); font-size: .9rem; }
     @media (max-width: 520px) { .related ul { columns: 1; } }
   </style>
 </BaseLayout>

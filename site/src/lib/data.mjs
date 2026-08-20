@@ -122,7 +122,7 @@ export const GROUPS = [
   {
     id: 'eu',
     title: 'European Union',
-    blurb: 'The ECB main refinancing rate and the EU Late Payment Directive reference rate.',
+    blurb: 'The ECB main refinancing rate and a non-country-specific EU Directive minimum benchmark.',
     match: (e) => e.jurisdiction === 'EU',
   },
 ];

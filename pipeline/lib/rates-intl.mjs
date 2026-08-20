@@ -4,9 +4,11 @@
 //   - UK statutory late-payment interest (Late Payment of Commercial Debts (Interest) Act 1998) is
 //     FIXED for six-month periods at the Bank of England base rate in force on the reference date
 //     (31 Dec for Jan–Jun; 30 Jun for Jul–Dec) PLUS 8 percentage points — not the live base rate.
-//   - EU Late Payment Directive 2011/7/EU reference rate is the ECB Main Refinancing rate in force on
-//     the FIRST calendar day of the half-year (1 Jan / 1 Jul); the statutory rate is that reference
-//     PLUS at least 8pp, with the exact margin set per member state (floor 8; e.g. FR +10, DE +9).
+//   - EU Late Payment Directive 2011/7/EU uses a half-year reference-rate framework. This series
+//     records the ECB Main Refinancing rate in force on the FIRST calendar day of the half-year
+//     (1 Jan / 1 Jul) and can illustrate the Directive's 8-point minimum addition. It is not a
+//     country-specific statutory rate: national implementations can use different reference bases
+//     or more creditor-favourable rules.
 
 function round2(n) {
   return Math.round(n * 100) / 100;
@@ -95,7 +97,7 @@ export function buildUkLatePayment(bankRateChangePoints, { source_id, source_url
 
 const EU_REF_ENTITY = {
   slug: 'eu-late-payment-reference',
-  name: 'EU Late Payment Directive Reference Rate',
+  name: 'EU Late Payment Directive ECB Reference Benchmark',
   entity_type: 'rate_series',
   jurisdiction: 'EU',
   region: 'European Union',
@@ -104,9 +106,10 @@ const EU_REF_ENTITY = {
 
 const EU_NOTE = (refDate, ref) =>
   `Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in ` +
-  `force on the first calendar day of the half-year (${refDate}: ${ref}%). A member state's statutory ` +
-  `late-payment rate is this reference + at least 8 percentage points (e.g. ${round2(ref + 8)}% at the ` +
-  `8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice.`;
+  `force on the first calendar day of the half-year (${refDate}: ${ref}%). Adding 8 percentage points ` +
+  `gives ${round2(ref + 8)}% as a Directive-minimum benchmark illustration for this period. This is not a ` +
+  `member-state statutory rate: national implementations may use different reference bases or more ` +
+  `creditor-favourable rules. Confirm the official country table. Reference, not legal advice.`;
 
 export function buildEuReference(ecbChangePoints, { source_id, source_url, retrieved_at, today }) {
   const startYear = Number(ecbChangePoints[0].date.slice(0, 4));

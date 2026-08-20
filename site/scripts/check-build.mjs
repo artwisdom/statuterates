@@ -5,6 +5,9 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getAllEntities, isPrejudgment } from '../src/lib/data.mjs';
+import { copyFor } from '../src/lib/content.mjs';
+import { ratePageMayRunAds } from '../src/lib/monetization.mjs';
 import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
 import { isIsoCalendarDate, SITE_LAUNCH_DATE } from '../src/lib/sitemap.mjs';
 
@@ -18,6 +21,46 @@ const expectedOrigin = new URL(process.env.SITE_URL || 'https://statuterates.com
 const verificationDate = new Date().toISOString().slice(0, 10);
 let manualCloudflareBeaconFile = null;
 const linkGraph = new Map();
+let anyAdsenseLoader = false;
+const pagesMissingAdsenseAccountMeta = [];
+const eligiblePagesMissingAdsenseLoader = [];
+
+const explicitlyMonetizableRoutes = new Set([
+  '/',
+  '/prejudgment/',
+  '/states/',
+  '/calculators/florida-judgment-interest/',
+  '/calculators/irs-interest/',
+  '/calculators/irs-penalty-and-interest/',
+  '/calculators/judgment-interest/',
+  '/calculators/late-payment-interest/',
+  '/calculators/post-judgment-interest/',
+]);
+const researchedStateAuthorityRoutes = new Set([
+  '/rates/new-mexico-judgment-rate/',
+  '/rates/ohio-judgment-rate/',
+  '/rates/tennessee-judgment-rate/',
+  '/rates/virginia-judgment-rate/',
+]);
+const unmonetizableRateRoutes = new Set(getAllEntities()
+  .filter((entity) => {
+    const isStateRate = String(entity.region || '').startsWith('US States')
+      && (entity.slug.endsWith('-judgment-rate') || entity.slug.endsWith('-prejudgment-rate'));
+    return !ratePageMayRunAds({
+      isStateRate,
+      isPrejudgment: isPrejudgment(entity),
+      hasDetailedRules: Boolean(copyFor(entity.slug).postDetails),
+      observationCount: (entity.history?.annual_rate || []).length,
+    });
+  })
+  .map((entity) => `/rates/${entity.slug}/`));
+
+function routeMayRunAds(route) {
+  if (explicitlyMonetizableRoutes.has(route)) return true;
+  if (/^\/guides\/[^/]+\/$/.test(route)) return true;
+  if (/^\/rates\/[^/]+\/$/.test(route)) return !unmonetizableRateRoutes.has(route);
+  return false;
+}
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
@@ -130,6 +173,65 @@ for (const file of htmlFiles) {
   ].includes(robotsMeta[0][1])) {
     errors.push(`${file}: unsupported robots meta directive ${robotsMeta[0][1]}`);
   }
+
+  // AdSense is opt-in publishing inventory, not a site-wide switch. A future template or route must
+  // be explicitly approved here before it can load ads. This protects error/noindex, legal,
+  // navigation, state-hub, and shallow one-observation pages from accidental Auto Ads exposure.
+  const monetizationModes = [...html.matchAll(/<body\b[^>]*\bdata-monetization="([^"]+)"/g)];
+  const monetizationMode = monetizationModes[0]?.[1];
+  const hasAdsenseLoader = html.includes('pagead2.googlesyndication.com/pagead/js/adsbygoogle.js');
+  const hasAdsenseUnit = /<ins\b[^>]*\bclass="[^"]*\badsbygoogle\b[^"]*"/i.test(html);
+  const hasAdsenseAccountMeta = /<meta name="google-adsense-account" content="ca-pub-[0-9]+">/.test(html);
+  if (monetizationModes.length !== 1 || !['eligible', 'disabled'].includes(monetizationMode)) {
+    errors.push(`${file}: expected one valid data-monetization body policy`);
+  }
+  if (monetizationMode === 'disabled' && (hasAdsenseLoader || hasAdsenseUnit)) {
+    errors.push(`${file}: disabled page contains AdSense loader or ad inventory`);
+  }
+  if (robotsMeta[0]?.[1] === 'noindex,follow' && monetizationMode !== 'disabled') {
+    errors.push(`${file}: noindex page must disable monetization`);
+  }
+  if (!routeMayRunAds(route) && monetizationMode !== 'disabled') {
+    errors.push(`${file}: route is outside the explicit monetization allowlist`);
+  }
+  if (hasAdsenseLoader && monetizationMode !== 'eligible') {
+    errors.push(`${file}: AdSense loader is present without eligible monetization policy`);
+  }
+  if (hasAdsenseUnit && !hasAdsenseLoader) {
+    errors.push(`${file}: rendered ad unit is missing the AdSense loader`);
+  }
+  const isEditorialContentRoute = /^\/rates\/[^/]+\/$/.test(route)
+    || /^\/guides\/[^/]+\/$/.test(route)
+    || /^\/calculators\/[^/]+\/$/.test(route);
+  if (isEditorialContentRoute
+      && !html.includes('aria-label="Publisher and review information"')) {
+    errors.push(`${file}: editorial content is missing visible publisher/review accountability`);
+  }
+  if (researchedStateAuthorityRoutes.has(route)
+      && !html.includes('data-official-authorities')) {
+    errors.push(`${file}: researched state analysis is missing its visible official-authority list`);
+  }
+  const externalSourceLinkCount = [...html.matchAll(/<a\b[^>]*href="https:\/\/[^\"]+"[^>]*target="_blank"/g)].length;
+  const minimumStateSourceLinks = route === '/states/mississippi/' ? 1 : 2;
+  if (/^\/states\/[^/]+\/$/.test(route)
+      && route !== '/states/highest-lowest/'
+      && externalSourceLinkCount < minimumStateSourceLinks) {
+    errors.push(`${file}: state hub must link every available rate row directly to its cited source`);
+  }
+  if (/^\/guides\/[^/]+\/$/.test(route)
+      && (!html.includes('Official authorities and sources') || externalSourceLinkCount < 2)) {
+    errors.push(`${file}: guide is missing its curated official-authority section`);
+  }
+  if (route === '/calculators/late-payment-interest/'
+      && (!html.includes('www.gov.uk/late-commercial-payments-interest-debt-recovery')
+        || !html.includes('www.legislation.gov.uk/ukpga/1998/20')
+        || !html.includes('eur-lex.europa.eu/eli/dir/2011/7')
+        || !html.includes('europa.eu/youreurope/business/finance-and-tax/making-receiving-payments/late-payment/index_en.htm'))) {
+    errors.push(`${file}: late-payment calculator is missing its four primary authorities`);
+  }
+  if (hasAdsenseLoader) anyAdsenseLoader = true;
+  if (!hasAdsenseAccountMeta) pagesMissingAdsenseAccountMeta.push(file);
+  if (monetizationMode === 'eligible' && !hasAdsenseLoader) eligiblePagesMissingAdsenseLoader.push(file);
   const rssLinks = [...html.matchAll(/<link\s+rel="alternate"\s+type="application\/rss\+xml"\s+title="[^"]+"\s+href="([^"]+)">/g)];
   if (rssLinks.length !== 1) {
     errors.push(`${file}: expected one RSS autodiscovery link, found ${rssLinks.length}`);
@@ -220,6 +322,13 @@ for (const file of htmlFiles) {
   }
 }
 
+if (anyAdsenseLoader && pagesMissingAdsenseAccountMeta.length) {
+  errors.push(`AdSense account meta is missing from ${pagesMissingAdsenseAccountMeta.length} HTML page(s), including ${pagesMissingAdsenseAccountMeta[0]}`);
+}
+if (anyAdsenseLoader && eligiblePagesMissingAdsenseLoader.length) {
+  errors.push(`AdSense loader is missing from ${eligiblePagesMissingAdsenseLoader.length} eligible page(s), including ${eligiblePagesMissingAdsenseLoader[0]}`);
+}
+
 const sitemapPath = join(DIST, 'sitemap.xml');
 const deployMarkerPath = join(DIST, 'deploy-marker.txt');
 if (!existsSync(deployMarkerPath) || !readFileSync(deployMarkerPath, 'utf8').trim()) {
@@ -299,17 +408,14 @@ for (const route of sitemapRoutes) {
     errors.push(`sitemap.xml: indexable route ${route} is not reachable through HTML links from the homepage`);
   }
 }
-const withheld = [
+const removedUnfinishedRoutes = [
   '/calculators/state-judgment-interest/',
   '/calculators/prejudgment-interest/',
 ];
-for (const pathname of withheld) {
+for (const pathname of removedUnfinishedRoutes) {
   const htmlPath = join(DIST, pathname.replace(/^\//, ''), 'index.html');
-  const html = readFileSync(htmlPath, 'utf8');
-  if (!html.includes('<meta name="robots" content="noindex,follow">')) {
-    errors.push(`${pathname}: withheld calculator is missing noindex,follow`);
-  }
-  if (sitemap.includes(pathname)) errors.push(`${pathname}: withheld calculator appears in sitemap.xml`);
+  if (existsSync(htmlPath)) errors.push(`${pathname}: unfinished calculator must not generate a public 200 page`);
+  if (sitemapRoutes.includes(pathname)) errors.push(`${pathname}: removed unfinished calculator appears in sitemap.xml`);
 }
 
 const stateCalculatorRoutes = htmlFiles.filter((file) => {
@@ -478,4 +584,4 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`Build verification OK: ${htmlFiles.length} HTML pages, unique search snippets and technical SEO valid, every sitemap page homepage-reachable, content-depth floors met, internal targets intact, calculator indexing gates intact.`);
+console.log(`Build verification OK: ${htmlFiles.length} HTML pages, unique search snippets and technical SEO valid, every sitemap page homepage-reachable, content-depth floors met, internal targets intact, calculator release gates intact, and AdSense inventory is allowlisted.`);

@@ -226,6 +226,33 @@ test('Kentucky and Maine replace review-date placeholders with official historie
   assert.equal(entityBySlug.get('maine-judgment-rate').metadata.calculation.future_period_formula_monitored, true);
 });
 
+test('Virginia and New Mexico use legal effective dates rather than source-review dates', () => {
+  const { entities, observations } = buildStateFixed();
+  const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+  const virginia = history('virginia-judgment-rate');
+  const newMexico = history('new-mexico-judgment-rate');
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+
+  assert.deepEqual(virginia.map((row) => row.effective_date), ['2004-07-01']);
+  assert.equal(virginia[0].value_text, '6%');
+  assert.doesNotMatch(virginia[0].notes, /simple interest/i);
+  assert.deepEqual(newMexico.map((row) => row.effective_date), ['1993-06-18']);
+  assert.equal(newMexico[0].value_text, '8.75% / 15%');
+  assert.equal(newMexico[0].source_url, 'https://nmonesource.com/nmos/nmsa/en/item/4418/index.do');
+  assert.doesNotMatch(newMexico[0].notes, /simple interest|plaintiff…/i);
+
+  for (const slug of [
+    'ohio-judgment-rate',
+    'virginia-judgment-rate',
+    'tennessee-judgment-rate',
+    'new-mexico-judgment-rate',
+  ]) {
+    const authorities = entityBySlug.get(slug)?.metadata?.official_authorities;
+    assert.ok(Array.isArray(authorities) && authorities.length >= 4, `${slug} official authorities`);
+    assert.ok(authorities.every((authority) => authority.label && /^https:\/\//.test(authority.url)), `${slug} authority URLs`);
+  }
+});
+
 test('Georgia uses exact Federal Reserve prime change points and authorized code portals', () => {
   const { entities, observations } = buildStateFixed();
   const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);

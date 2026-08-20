@@ -3,15 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getMeta, getEntity, currentOf, publishedStateCalculators } from '../../lib/data.mjs';
 
 const meta = getMeta();
-const title = `Statutory Interest Calculators | ${meta.title}`;
-const description = `Free calculators for Florida and federal judgment interest, IRS penalties and tax interest, and UK/EU late-payment interest.`;
+const title = `Interest Calculators & Benchmarks | ${meta.title}`;
+const description = `Free Florida and federal judgment, IRS, UK statutory late-payment, and clearly labeled EU benchmark calculators.`;
 
 const CALCS = [
   { href: '/calculators/judgment-interest/', name: 'Judgment interest & per diem', desc: 'Enter a verified rate to calculate simple or annually compounded interest, total payoff, accrual days, and per diem.', label: 'Enter your rate' },
   { href: '/calculators/post-judgment-interest/', name: 'Federal post-judgment interest', desc: 'The §1961 method: H.15 weekly rate for the week before judgment, daily accrual, compounded annually.', slug: 'us-federal-post-judgment' },
   { href: '/calculators/irs-penalty-and-interest/', name: 'IRS penalty & interest (Form 1040)', desc: 'Estimate failure-to-file and failure-to-pay penalties, partial payments, and daily interest—with the important exclusions shown.', label: 'Form 1040' },
   { href: '/calculators/irs-interest/', name: 'IRS interest (underpayment & refund)', desc: 'Quarterly §6621 rates compounded daily per §6622, across every rate change since 2017.', slug: 'irs-underpayment' },
-  { href: '/calculators/late-payment-interest/', name: 'Late payment interest (UK & EU)', desc: 'UK Late Payment Act 1998 (base + 8pp, fixed at overdue date) and the EU Directive rate.', slug: 'uk-late-payment-commercial' },
+  { href: '/calculators/late-payment-interest/', name: 'Late payment interest (UK & EU)', desc: 'UK Late Payment Act 1998 (base + 8pp, fixed at overdue date) plus a clearly labeled EU Directive minimum-benchmark illustration.', slug: 'uk-late-payment-commercial' },
 ];
 const STATE_CALCS = publishedStateCalculators().map((release) => ({
   href: release.path,
@@ -25,17 +25,18 @@ const withRates = [...STATE_CALCS, ...CALCS]
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  name: 'Statutory interest calculators',
+  name: 'Interest calculators and benchmarks',
   url: new URL('/calculators/', Astro.site).href,
   hasPart: [...STATE_CALCS, ...CALCS].map((c) => ({ '@type': 'WebApplication', name: c.name, url: new URL(c.href, Astro.site).href, applicationCategory: 'FinanceApplication' })),
 };
 ---
 
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <h1>Statutory interest calculators</h1>
-  <p class="lead">Every calculator applies the governing statute's actual method — the right rate for
-    the right period, the right compounding rule, with the source cited. Powered by the same dataset
-    behind our <a href="/api/">free API</a>.</p>
+  <h1>Interest calculators and benchmarks</h1>
+  <p class="lead">Law-specific tools apply their audited statutory method and cite the controlling
+    source. The general tool performs transparent arithmetic using a rate you verify, while the EU
+    mode is explicitly a non-country-specific benchmark illustration. All use the same versioned
+    foundation behind our <a href="/api/">free API</a>.</p>
 
   <h2>Choose a calculator</h2>
   <div class="grid">
@@ -49,8 +50,9 @@ const jsonLd = {
   </div>
 
   <h2>Why these are different</h2>
-  <p>Most online calculators hardcode a rate that quietly goes stale. The available calculators use
-    versioned observations from scheduled primary-source fetches and implement the statutory computation — daily
-    compounding for the IRS, annual compounding for federal judgments, fixed-at-overdue-date for UK
-    late payment — rather than a generic percentage formula.</p>
+  <p>Most online calculators hardcode a rate that quietly goes stale. The law-specific tools use
+    versioned observations from scheduled primary-source fetches: daily compounding for the IRS,
+    annual compounding for federal judgments, and a fixed-at-overdue-date rate for qualifying UK late
+    payments. The general calculator and EU benchmark keep their narrower scope visible instead of
+    implying a statutory entitlement.</p>
 </BaseLayout>

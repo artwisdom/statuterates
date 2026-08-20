@@ -7,10 +7,10 @@
 //     in-content placement earns the most and reads cleanest. Create one "Display / responsive" ad
 //     unit in AdSense, put its slot id in the ADSENSE_SLOT repo variable, redeploy.
 // Nothing renders until an ad account is configured, so this is inert by default.
-const { id = 'ad' } = Astro.props;
+const { id = 'ad', enabled = true } = Astro.props;
 const client = (process.env.ADSENSE_CLIENT || '').trim();
 const slot = (process.env.ADSENSE_SLOT || '').trim();
-const active = client && slot;
+const active = enabled && client && slot;
 ---
 {active ? (
   <aside class="ad-slot" data-ad-slot={id} aria-label="Advertisement">

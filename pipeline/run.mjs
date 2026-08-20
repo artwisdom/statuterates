@@ -41,9 +41,9 @@ import {
 export const DATASET_META = {
   title: 'StatuteRates',
   description:
-    'A provenance-tracked reference dataset of statutory, judgment and tax interest rates across the US, UK and EU — with effective dates, methods, and a cited source for each observation. Primary government sources are preferred; any secondary source is identified in its source record.',
+    'A provenance-tracked reference dataset of US and UK statutory, judgment, and tax interest series, plus a clearly labeled EU Directive benchmark — with effective dates, methods, and a cited source for each observation. Primary government sources are preferred; any secondary source is identified in its source record.',
   version: '0.3.0',
-  update_cadence: 'IRS quarterly; US Treasury/post-judgment weekly; UK/EU statutory rates semi-annual; BoE/ECB policy rates on decision. Refreshed weekly.',
+  update_cadence: 'IRS quarterly; US Treasury/post-judgment weekly; UK statutory and EU Directive benchmark series semi-annual; BoE/ECB policy rates on decision. Refreshed weekly.',
   attribution: 'Compiled by StatuteRates from government publications, statutory texts, and identified secondary legal sources.',
   license: 'StatuteRates compilation; underlying source rights vary. Government edicts are not subject to copyright, while statistical publications and third-party pages may have their own terms. See each source record.',
   sample_query: 'irs',

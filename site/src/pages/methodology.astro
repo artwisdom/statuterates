@@ -60,12 +60,13 @@ const description = `The formulas, cited sources, confidence levels, validation 
     Bank of England base rate directly (published) and compute the semi-annual statutory rate from it
     (derived), applying the correct reference date for each period.</p>
 
-  <h2>EU Late Payment Directive reference rate (2011/7/EU)</h2>
-  <p>The Directive's reference rate is the ECB main refinancing rate in force on the first calendar day of
-    each half-year (1 January / 1 July); a member state's statutory rate is that reference plus at least 8
-    percentage points (the floor most states use; some add more). We track the ECB main refinancing rate
-    directly (published) and compute the semi-annual reference (derived). Apply your member state's margin
-    to get the statutory rate.</p>
+  <h2>EU Directive ECB minimum-framework benchmark (2011/7/EU)</h2>
+  <p>We track the ECB main refinancing rate in force on the first calendar day of each half-year
+    (1 January / 1 July) and preserve it as a derived benchmark. Adding eight points provides a
+    transparent illustration of the Directive's minimum framework, not a member-state statutory rate.
+    National implementations can use different reference bases or more creditor-favourable rules. Use
+    the <a href="https://europa.eu/youreurope/business/finance-and-tax/making-receiving-payments/late-payment/index_en.htm">official EU country-rate table</a>
+    and the governing national law for a country-specific figure.</p>
 
   <h2>Data sources</h2>
   <ul class="clean">
@@ -97,10 +98,10 @@ const description = `The formulas, cited sources, confidence levels, validation 
     rates (49 states + D.C. — every jurisdiction except Mississippi, which sets judgment interest case
     by case rather than by a fixed statutory default); U.S. state <a href="/prejudgment/">prejudgment
     interest rates</a> (all 50 states + D.C.); U.K. statutory late-commercial-payment interest and the
-    Bank of England base rate; and the EU Late Payment Directive reference rate and ECB main refinancing
-    rate. Federal, IRS, UK, and EU calculators remain available. State calculators are withheld until
+    Bank of England base rate; and a non-country-specific EU Directive benchmark built from the ECB main
+    refinancing rate. Federal, IRS, UK, and EU benchmark calculators remain available. State calculators are withheld until
     each included rule passes the calculator-safety contract. Planned expansion: calculator-ready state
-    histories and per-EU-country late-payment margins.</p>
+    histories and primary-source, per-country EU late-payment models.</p>
 
   <div class="disclaimer">Reference data, not legal, tax, or financial advice.</div>
 </BaseLayout>

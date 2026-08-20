@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
 import { getMeta, getEntity, currentOf, historyFor, prettyDate } from '../../lib/data.mjs';
 
 const meta = getMeta();
+const RULES_REVIEWED_ON = '2026-07-26';
 const under = getEntity('irs-underpayment');
 const latest = currentOf(under);
 
@@ -86,7 +88,7 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>IRS interest</span>
   </nav>
@@ -94,6 +96,7 @@ const jsonLd = [
   <p class="lead">Estimates the interest the IRS charges on late/underpaid tax — or pays on your
     refund — using the real method: the quarterly §6621 rate in force each day, compounded daily
     under §6622, across every rate change on record (back to 2017).</p>
+  <EditorialCredit kind="calculator" reviewedOn={RULES_REVIEWED_ON} />
 
   <aside class="penalty-callout">
     <strong>Filed or paid Form 1040 late?</strong>

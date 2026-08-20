@@ -1,0 +1,40 @@
+---
+import { prettyDate } from '../lib/data.mjs';
+
+const {
+  kind = 'rate',
+  reviewedOn = null,
+} = Astro.props;
+
+const summaries = {
+  rate: 'The recorded value and history come from the cited source. Scope and rule notes are curated against those authorities; missing periods and unsupported calculation rules are never filled by guessing.',
+  guide: 'This is original StatuteRates explanatory content based on cited primary authorities. Research, automation, and AI-assisted work remain subject to the documented source-review and correction process.',
+  calculator: 'This tool runs in the browser and uses tested, source-specific rules. Unsupported date ranges are refused; legal eligibility and excluded branches are disclosed for the user to verify.',
+  'calculator-arithmetic': 'This browser-based tool performs transparent arithmetic from the rate and dates you enter. It does not choose a governing law, validate a legal entitlement, or supply a missing statutory rule.',
+};
+const dateLabel = kind === 'rate'
+  ? 'source checked'
+  : kind === 'calculator'
+    ? 'calculation rules reviewed'
+    : 'reviewed';
+const correctionSubject = encodeURIComponent(`Correction for ${Astro.url.pathname}`);
+---
+
+<aside class="editorial-credit" aria-label="Publisher and review information">
+  <p><strong>Maintained by <a href="/about/">StatuteRates Editorial</a></strong>{reviewedOn
+    ? <> · {dateLabel} {prettyDate(reviewedOn)}</>
+    : null}</p>
+  <p>{summaries[kind] || summaries.rate}</p>
+  <p class="editorial-links"><a href="/editorial-policy/">How we verify pages</a> ·
+    <a href={`mailto:hello@statuterates.com?subject=${correctionSubject}`}>Report a correction</a></p>
+</aside>
+
+<style>
+  .editorial-credit { margin: 16px 0 22px; padding: 13px 16px; border: 1px solid var(--line);
+    border-radius: 8px; background: var(--paper-2); color: var(--ink-soft); font-size: .84rem; }
+  .editorial-credit p { margin: 0 0 5px; }
+  .editorial-credit p:last-child { margin-bottom: 0; }
+  .editorial-credit strong { color: var(--ink); }
+  .editorial-credit a { font-weight: 600; }
+  .editorial-links { font-size: .8rem; }
+</style>

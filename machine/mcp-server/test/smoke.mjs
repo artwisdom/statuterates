@@ -132,6 +132,58 @@ async function main() {
   assert.equal(futureFlorida.isError, true, 'future Florida judgment fails closed');
   assert.match(futureFlorida.content[0].text, /cannot be later than the dataset snapshot/);
 
+  // 8) a fixed half-year UK rate may never be carried into an unpublished future period.
+  const futureUk = await client.callTool({
+    name: 'calculate_interest',
+    arguments: {
+      slug: 'uk-late-payment-commercial',
+      principal: 10000,
+      start_date: '2030-01-01',
+      end_date: '2030-02-01',
+    },
+  });
+  assert.equal(futureUk.isError, true, 'future UK late-payment calculation fails closed');
+  assert.match(
+    futureUk.content[0].text,
+    /cannot be later than the dataset snapshot|does not support a start date/,
+    'future UK periods are refused by either the dataset horizon or the half-year coverage gate',
+  );
+
+  const supportedUkStart = parse(await client.callTool({
+    name: 'calculate_interest',
+    arguments: {
+      slug: 'uk-late-payment-commercial',
+      principal: 10000,
+      start_date: '2026-07-01',
+      end_date: '2030-01-01',
+    },
+  }));
+  assert.equal(supportedUkStart.rate_effective_date, '2026-07-01');
+  assert.equal(supportedUkStart.rate_selection_coverage_end_exclusive, '2027-01-01');
+
+  const recordedFutureUkStart = parse(await client.callTool({
+    name: 'calculate_interest',
+    arguments: {
+      slug: 'uk-late-payment-commercial',
+      principal: 10000,
+      start_date: '2026-09-01',
+      end_date: '2030-01-01',
+    },
+  }));
+  assert.equal(recordedFutureUkStart.rate_effective_date, '2026-07-01');
+  assert.equal(recordedFutureUkStart.rate_selection_coverage_end_exclusive, '2027-01-01');
+
+  const uncoveredUkStart = await client.callTool({
+    name: 'calculate_interest',
+    arguments: {
+      slug: 'uk-late-payment-commercial',
+      principal: 10000,
+      start_date: '2027-01-01',
+      end_date: '2027-01-02',
+    },
+  });
+  assert.equal(uncoveredUkStart.isError, true, 'UK start at the next unpublished half-year fails closed');
+
   await client.close();
   console.log('\nMCP SMOKE TEST PASSED');
 }

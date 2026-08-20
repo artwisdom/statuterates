@@ -7,6 +7,7 @@ import {
   federalPostJudgment, irsInterest, fixedSimpleInterest, floatingSimpleInterest, fixedCompoundInterest,
   floridaJudgmentCoverage, floridaPostJudgmentInterest,
   fullOrPartialMonthsLate, irsPenaltyAndInterestEstimate, irsRateCoverageEnd, euRateCoverageEnd,
+  halfYearRateCoverageEnd,
 } from './interest-calc.mjs';
 import { buildFloridaOfficialHistory } from '../pipeline/fetchers/florida-judgment-history.mjs';
 
@@ -419,6 +420,30 @@ test('fixed simple interest (UK LPA style)', () => {
   assert.equal(r.interest, 321.92);
   assert.equal(r.daily_amount, 3.22);
   assert.equal(r.rate_effective_date, '2026-01-01');
+  assert.equal(halfYearRateCoverageEnd(h, 'UK statutory'), '2027-01-01');
+  assert.doesNotThrow(() => fixedSimpleInterest({
+    principal: 10000,
+    startDate: '2026-12-31',
+    endDate: '2027-01-01',
+    history: h,
+    coverageEndExclusive: '2027-01-01',
+  }));
+  assert.throws(() => fixedSimpleInterest({
+    principal: 10000,
+    startDate: '2030-01-01',
+    endDate: '2030-02-01',
+    history: h,
+    coverageEndExclusive: '2027-01-01',
+  }), /does not support a start date/);
+  const laterPayment = fixedSimpleInterest({
+    principal: 10000,
+    startDate: '2026-12-31',
+    endDate: '2030-01-01',
+    history: h,
+    coverageEndExclusive: '2027-01-01',
+  });
+  assert.equal(laterPayment.rate_effective_date, '2026-07-01');
+  assert.equal(laterPayment.rate_selection_coverage_end_exclusive, '2027-01-01');
 });
 
 test('fixed compound interest compounds annually (Colorado style)', () => {

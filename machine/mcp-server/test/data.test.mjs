@@ -42,4 +42,16 @@ test('MCP calculation history excludes announced future periods and rejects a fu
     () => calculationHistory(synthetic, 'annual_rate', '2026-10-15'),
     /cannot be later than the dataset snapshot \(2026-08-02\)/,
   );
+  assert.deepEqual(
+    calculationHistory(synthetic, 'annual_rate', '2026-09-01', {
+      startDateEndExclusive: '2027-01-01',
+    }),
+    [{ effective_date: '2026-07-01', value: 8.06 }],
+  );
+  assert.throws(
+    () => calculationHistory(synthetic, 'annual_rate', '2027-01-01', {
+      startDateEndExclusive: '2027-01-01',
+    }),
+    /cannot be later than the dataset snapshot \(2026-08-02\)/,
+  );
 });

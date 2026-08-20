@@ -2,7 +2,7 @@
 // No integration dependency; the loc URLs use the configured Astro `site` domain. Data URLs carry a
 // real per-page <lastmod> based on launch, source retrieval, current effect, or substantial editing —
 // never the pre-launch age of the underlying law and never one shared, churning build stamp.
-import { getAllEntities, stateHubs, latestOf, currentOf, isCalculatorReady, publishedStateCalculators, PREJUDGMENT_CALC_SAFE, STATE_CALCULATOR_RENDERER_READY } from '../lib/data.mjs';
+import { getAllEntities, stateHubs, latestOf, currentOf, publishedStateCalculators } from '../lib/data.mjs';
 import { GUIDES } from '../lib/guides.mjs';
 import { contentModifiedFor } from '../lib/content.mjs';
 import { significantPageDate } from '../lib/sitemap.mjs';
@@ -15,18 +15,12 @@ export function GET({ site }) {
   const clamp = (d) => (d && d <= releaseDate ? d : null); // ignore mistaken future dates
 
   const entities = getAllEntities();
-  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
   const stateCalculators = publishedStateCalculators();
-  const stateCalculatorsEnabled = STATE_CALCULATOR_RENDERER_READY
-    && import.meta.env.ENABLE_STATE_CALCULATORS === 'true';
-  const prejudgmentCalculatorReady = stateCalculatorsEnabled
-    && PREJUDGMENT_CALC_SAFE.every((key) => isCalculatorReady(entityBySlug.get(`${key}-prejudgment-rate`)));
 
   const staticPaths = [
     '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
     '/calculators/', '/calculators/judgment-interest/',
-    ...(prejudgmentCalculatorReady ? ['/calculators/prejudgment-interest/'] : []),
   ];
 
   const dateFor = new Map(entities.map((e) => [e.slug, significantPageDate({
@@ -36,21 +30,26 @@ export function GET({ site }) {
     buildDate: releaseDate,
   })]));
   const calculatorRows = [
-    { path: '/calculators/post-judgment-interest/', slugs: ['us-federal-post-judgment'] },
-    { path: '/calculators/irs-interest/', slugs: ['irs-underpayment'] },
-    { path: '/calculators/irs-penalty-and-interest/', slugs: ['irs-underpayment'] },
+    { path: '/calculators/post-judgment-interest/', slugs: ['us-federal-post-judgment'], contentModified: '2026-08-16' },
+    { path: '/calculators/irs-interest/', slugs: ['irs-underpayment'], contentModified: '2026-08-16' },
+    { path: '/calculators/irs-penalty-and-interest/', slugs: ['irs-underpayment'], contentModified: '2026-08-16' },
     {
       path: '/calculators/late-payment-interest/',
       slugs: ['uk-late-payment-commercial', 'eu-late-payment-reference'],
+      contentModified: '2026-08-16',
     },
     ...stateCalculators.map((release) => ({
       path: release.path,
       slugs: [release.entitySlug],
+      contentModified: '2026-08-16',
     })),
   ].map((calculator) => ({
     path: calculator.path,
     lastmod: clamp(
-      calculator.slugs.map((slug) => dateFor.get(slug)).filter(Boolean).sort().at(-1),
+      [calculator.contentModified, ...calculator.slugs.map((slug) => dateFor.get(slug))]
+        .filter(Boolean)
+        .sort()
+        .at(-1),
     ),
   }));
 

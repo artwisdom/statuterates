@@ -84,8 +84,9 @@ history so you can pick the right rate for the period your debt fell due.`,
     tagline: 'The ECB’s main policy interest rate.',
     q: 'What is the current ECB main refinancing rate?',
     body: `The ECB main refinancing operations (MRO) rate is the European Central Bank's headline policy rate.
-It is the reference from which the EU Late Payment Directive statutory interest rate is built. This page
-tracks the official MRO rate and every change, straight from the ECB Data Portal.`,
+The Directive identifies an ECB reference for euro-area minimum-framework calculations, but member-state
+statutory rates can use different national bases or more creditor-favourable rules. This page tracks the
+official MRO rate and every change, straight from the ECB Data Portal.`,
   },
   'california-judgment-rate': {
     tagline: 'Interest on money judgments in California courts.',
@@ -198,9 +199,16 @@ for decades. A judgment on a loan or contract can carry a higher lawful contract
   'ohio-judgment-rate': {
     tagline: 'Ohio’s judgment rate, reset annually by the Tax Commissioner.',
     q: 'What is the current Ohio judgment interest rate?',
-    body: `Ohio sets its judgment interest rate once a year: under R.C. §1343.03(B) and §5703.47 it’s the federal
-short-term rate plus 3 points, rounded — currently {{current_rate}} for {{current_year}} — computed as simple interest. A written contract
-that specifies a different rate controls instead.`,
+    body: `Ohio sets its general civil money-judgment rate once a year under R.C. §§1343.03(B) and
+5703.47 — currently {{current_rate}} for judgments rendered in {{current_year}}. The selected annual
+rate stays fixed until payment. A qualifying written instrument, another statute, specified tort
+settlement conduct, state Court of Claims matter, or workers’ compensation case can follow a different rule.`,
+    postDetails: {
+      scope: 'The headline is the general R.C. 1343.03(B) rate for a civil money judgment rendered in {{current_year}} when no qualifying written contract or other statute supplies a different rate. Division (C) provides a separate path for specified tort actions involving failure to make a good-faith settlement effort. Division (D) excludes periods controlled by another law, actions against the state in the Court of Claims, and workers’ compensation cases.',
+      accrual: 'Under R.C. 1343.03(B), the general rate runs from the date the judgment, decree, or order is rendered until payment. The rate in effect on the rendition date remains fixed until satisfaction. For a revived judgment, R.C. 2325.18(B) excludes the period from dormancy through revival.',
+      compounding: 'The Supreme Court of Ohio states that, absent a statute or specific agreement authorizing compounding, only simple interest accrues under R.C. 1343.03. Written-instrument judgments can use the agreed rate and require separate terms analysis, so a full payoff calculator remains withheld.',
+      history: 'The Tax Commissioner’s official {{current_year}} journal entry certifies {{current_rate}}. Ohio publishes annual journal entries rather than a verified consolidated history on the source reviewed here. The dataset currently contains only the {{current_year}} observation, so the page does not claim a complete historical series.',
+    },
   },
   'illinois-judgment-rate': {
     tagline: 'Illinois’ 9% statutory judgment rate.',
@@ -235,8 +243,15 @@ on judgments over $20,000 — simple interest.`,
   'virginia-judgment-rate': {
     tagline: 'Virginia’s flat 6% judgment rate.',
     q: 'What is the Virginia judgment interest rate?',
-    body: `Virginia judgments carry 6% per year by default under Va. Code §6.2-302 (applied via §8.01-382), as
-simple interest. A judgment on a contract carries the higher of the lawful contract rate or 6%.`,
+    body: `Virginia’s general judgment interest rate is 6% per year under Va. Code §6.2-302. A money
+judgment arising from a contract carries the lawfully charged contract rate or 6%, whichever is higher.
+The rate in effect when judgment is entered remains fixed despite later statutory changes.`,
+    postDetails: {
+      scope: 'The 6% headline is Virginia’s general judgment rate. A money judgment arising from a contract carries the lawfully charged contract rate or 6%, whichever is higher. A negotiable instrument with a stated rate follows its separate statutory branch. Under §6.2-302(C), the rate in effect when judgment is entered remains fixed despite later changes to the statutory rate.',
+      accrual: 'The final order, verdict, judgment, or decree may fix when interest begins. If it does not provide for interest, §8.01-382 runs interest from entry of the final order or judgment, or from the date the jury verdict was rendered, and continues until the principal sum is paid.',
+      compounding: 'Virginia law describes interest on the principal sum awarded, and the Court of Appeals has said post-judgment interest does not accrue on prejudgment interest awarded to the plaintiff. The statutes do not provide every day-count, partial-payment, allocation, and special-judgment rule needed for a dependable payoff calculator, so StatuteRates does not describe a universal calculation method or enable a Virginia calculator.',
+      history: 'Official Virginia records show that Chapter 646 of the 2004 Acts reduced the general judgment rate from 9% to 6%, effective July 1, 2004. Chapter 550 of the 2010 Acts added the rule fixing the applicable rate at judgment entry. Earlier amendments appear in the current Code history, but the page does not claim a complete earlier timeline until every effective period is independently digitized.',
+    },
   },
   'washington-judgment-rate': {
     tagline: 'Washington’s claim-specific judgment rates under RCW 4.56.110.',
@@ -269,9 +284,15 @@ variable rate certified each January by the Secretary of State.`,
   'tennessee-judgment-rate': {
     tagline: 'Tennessee judgment interest — the formula rate minus 2 points.',
     q: 'What is the current Tennessee post-judgment interest rate?',
-    body: `Tennessee post-judgment interest under Tenn. Code §47-14-121 is the "formula rate" (the weekly-average
-prime rate announced by the state Commissioner of Financial Institutions) minus 2 percentage points, fixed when
-the judgment is entered — currently 8.75%, as simple interest.`,
+    body: `Tennessee’s general rate for a judgment entered from July 1 through December 31, 2026 is
+8.75%. Tenn. Code §47-14-121 uses the Department of Financial Institutions formula rate for June
+(10.75%) less two percentage points. A statute, note, contract, or other writing can supply a different lawful rate.`,
+    postDetails: {
+      scope: 'For a general judgment entered from July 1 through December 31, 2026, the rate is 8.75%. Tenn. Code §47-14-121(a)(1) uses the Department of Financial Institutions formula rate for June, less two percentage points; the official June 2026 history shows 10.75%. A statute, note, contract, or other writing can supply a different lawful rate under subsection (c).',
+      accrual: 'The judgment-entry date selects the applicable six-month rate. Section 47-14-122 runs interest from the verdict. In a nonjury case, Tennessee appellate authority treats the practical equivalent of a verdict as the point when the court’s findings make the award sufficiently certain; that point can precede formal judgment entry. Remands and other procedural postures require separate analysis.',
+      compounding: 'The selected rate is fixed for that judgment rather than changing with later six-month rates. Tennessee appellate opinions use the Code’s simple-interest definition in ordinary judgment-interest analysis, while contract cases require express agreement for compounding. The statutes do not state one universal postjudgment compounding method, so a payoff calculator remains withheld until day count, partial-payment allocation, and every exception branch are verified.',
+      history: 'Section 47-14-121(b)(3) requires the Administrative Office of the Courts to publish every six-month rate back to July 1, 2012. The local dataset currently contains only one observation, so it does not claim a complete history. The July 1, 2026 value can be reproduced from the official June formula-rate history: 10.75% less two points equals 8.75%.',
+    },
   },
   "alabama-judgment-rate": {
     tagline: "Alabama’s statutory judgment interest rate.",
@@ -405,7 +426,13 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
   "new-mexico-judgment-rate": {
     tagline: "New Mexico’s statutory judgment interest rate.",
     q: "What is the current New Mexico post-judgment interest rate?",
-    body: "New Mexico money judgments carry a fixed statutory rate of 8.75% per year under N.M. Stat. Ann. § 56-8-4, as simple interest. If the judgment is based on tortious conduct, bad faith, or intentional or willful acts, post-judgment interest is 15% (not 8.75%); plaintiff…",
+    body: "New Mexico generally applies 8.75% per year from entry to judgments and decrees for payment of money under NMSA 1978 §56-8-4. A written instrument may supply a different rate no higher than the rate it states. Judgments based on tortious conduct—including negligence under published New Mexico decisions—bad faith, or intentional or willful acts use 15%. The state and its political subdivisions are exempt unless another statute or common-law rule provides otherwise.",
+    postDetails: {
+      scope: 'The general rate is 8.75% on judgments and decrees for the payment of money. A judgment rendered on a written instrument may use a different rate, but no higher than the instrument specifies. A judgment based on tortious conduct, bad faith, or intentional or willful acts uses 15%; published New Mexico authority says tortious conduct includes negligence. The state and its political subdivisions are exempt unless another statute or common-law rule provides otherwise.',
+      accrual: 'Section 56-8-4(A) makes post-judgment interest run from entry of a judgment or decree for payment of money. Published New Mexico authority treats that award as mandatory for a qualifying money judgment, although another statute, common law, or a special payment schedule can alter the result for a particular judgment.',
+      compounding: 'Section 56-8-4 states annual rates but does not specify a universal post-judgment compounding method, day-count denominator, or partial-payment allocation rule. Its official annotations reject monthly compounding for prejudgment interest and interest-on-interest before judgment without separate authorization, but those decisions do not establish every post-judgment calculation rule. The calculator remains disabled. An annotation about selecting the statutory rate when an action became pending concerns prejudgment interest and is not presented here as a universal post-judgment rule.',
+      history: 'The official annotated statute says the amendment effective June 18, 1993 reduced the general rate from 15% to 8.75%. The May 19, 2004 amendment changed the unpaid-child-support proviso in the prejudgment subsection, not the general 8.75% post-judgment rate. NMOneSource provides historical statutory editions dating to 1989, but the page does not infer a complete older timeline until those editions and session laws are independently reviewed.',
+    },
   },
   "north-dakota-judgment-rate": {
     tagline: "North Dakota judgment interest — a formula rate, reset each year.",
@@ -1178,13 +1205,14 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     compound: "Simple. The 6% legal rate under § 28-3302(a) is simple interest; DC prejudgment interest is not compounded absent a contract term providing otherwise.",
   },
   'eu-late-payment-reference': {
-    tagline: 'The EU reference rate for late-payment interest.',
-    q: 'What is the current EU Late Payment Directive reference rate?',
-    body: `Under EU Late Payment Directive 2011/7/EU, the statutory interest rate on overdue commercial debts is
-a "reference rate" plus at least 8 percentage points. The reference rate is the ECB main refinancing rate
-in force on the first day of each half-year (1 January / 1 July). This page tracks that semi-annual
-reference; a member state's actual statutory rate is the reference plus its national margin (the 8-point
-floor in most states — for example France adds 10 points, Germany 9).`,
+    tagline: 'The ECB benchmark used for a Directive-minimum late-payment illustration.',
+    q: 'What is the current EU Late Payment Directive ECB reference benchmark?',
+    body: `Directive 2011/7/EU sets a minimum framework for interest on qualifying overdue commercial debts.
+This page records the ECB main refinancing rate in force on the first day of each half-year (1 January /
+1 July) and shows it as a transparent benchmark. Adding eight points can illustrate the Directive's
+minimum framework, but it does not produce every member state's statutory rate. National implementing
+laws can use different reference bases or more creditor-favourable rules. Confirm the official EU
+country-rate table and the governing national law before relying on a figure.`,
   },
 };
 
@@ -1250,6 +1278,7 @@ export const CONTENT_MODIFIED = Object.freeze({
   'alaska-prejudgment-rate': '2026-07-26',
   'florida-judgment-rate': '2026-07-26',
   'florida-prejudgment-rate': '2026-07-26',
+  'eu-late-payment-reference': '2026-08-16',
   'georgia-judgment-rate': '2026-07-26',
   'iowa-judgment-rate': '2026-07-26',
   'maine-judgment-rate': '2026-07-26',
@@ -1258,13 +1287,17 @@ export const CONTENT_MODIFIED = Object.freeze({
   'michigan-prejudgment-rate': '2026-07-26',
   'new-jersey-judgment-rate': '2026-07-26',
   'new-jersey-prejudgment-rate': '2026-07-26',
-  'ohio-judgment-rate': '2026-07-26',
+  'new-mexico-judgment-rate': '2026-08-16',
+  'ohio-judgment-rate': '2026-08-16',
   'ohio-prejudgment-rate': '2026-07-26',
   'texas-judgment-rate': '2026-07-26',
   'texas-prejudgment-rate': '2026-07-26',
+  'tennessee-judgment-rate': '2026-08-16',
   'us-federal-post-judgment': '2026-07-26',
+  'uk-late-payment-commercial': '2026-08-16',
   'utah-judgment-rate': '2026-07-26',
   'washington-judgment-rate': '2026-07-26',
+  'virginia-judgment-rate': '2026-08-16',
   'wisconsin-judgment-rate': '2026-07-26',
 });
 

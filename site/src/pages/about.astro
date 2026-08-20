@@ -2,13 +2,48 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
-const title = `How this data is collected — ${meta.title}`;
-const description = `How ${meta.title} collects statutory, judgment, and tax interest rates using cited sources, automated refreshes, effective dates, and explicit data limits.`;
+const title = `About StatuteRates: sources, review & automation`;
+const description = `Why StatuteRates exists, who maintains it, and how official sources, editorial review, automation, AI assistance, validation, and corrections are handled.`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About StatuteRates',
+  url: new URL('/about/', Astro.site).href,
+  dateModified: '2026-08-16',
+  mainEntity: { '@id': new URL('/#organization', Astro.site).href },
+};
 ---
-<BaseLayout title={title} description={description}>
-  <h1>How this data is collected</h1>
-  <p class="lead">Trust comes from provenance. Here is exactly where every number comes from, how
-    often it refreshes, and what we do and don't guarantee.</p>
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <h1>About StatuteRates</h1>
+  <p class="lead">StatuteRates exists to make a difficult legal-rate question easier to verify: what
+    figure applies, when did it take effect, and where did it come from?</p>
+
+  <h2>Why this publication exists</h2>
+  <p>Interest-rate rules are scattered across statutes, court schedules, agency notices, and changing
+    market benchmarks. A search result often supplies a percentage without the date, legal branch, or
+    source needed to decide whether it is relevant. StatuteRates records those pieces together and
+    leaves uncertain branches unsupported rather than presenting a convenient guess.</p>
+  <p>The project is independently maintained, free to use, and not affiliated with a court, government
+    agency, law firm, or advertising provider. Its purpose is reference and verification—not legal
+    representation, lead generation, or replacing the controlling authority.</p>
+
+  <h2>Who maintains and reviews the pages</h2>
+  <p><strong>StatuteRates Editorial</strong> is the publishing identity used on the site's data pages
+    and guides. Source-specific data changes must pass the automated validation contract before they
+    can publish; editorial explanations and calculator releases are reviewed against the linked
+    authorities and tested before deployment. The project does not claim a lawyer, accountant, or tax
+    professional reviewed a page unless that page explicitly says so.</p>
+  <p>Questions and correction reports go to
+    <a href="mailto:hello@statuterates.com">hello@statuterates.com</a>. The
+    <a href="/editorial-policy/">editorial and data-integrity policy</a> explains the correction and
+    calculator-release standards in detail.</p>
+
+  <h2>How automation and AI assistance are used</h2>
+  <p>Automation retrieves selected official publications, preserves effective-date history, checks
+    expected ranges and cross-series relationships, and rebuilds the public dataset. AI-assisted tools
+    may help organize research, draft explanations, or review software, but they cannot independently
+    authorize a missing rate, invent a historical period, or release a legal calculator. Public values
+    must retain a cited source and provenance record; unsupported calculation paths fail closed.</p>
 
   <h2>Sources and source quality</h2>
   <p>Primary government sources are preferred. An authorized code portal or court publication that is
@@ -20,7 +55,8 @@ const description = `How ${meta.title} collects statutory, judgment, and tax int
     ))}
   </ul>
   <p>We store the extracted <em>values</em> and their provenance (source URL, effective date, retrieval
-    time) — never the source's prose. All site copy is written by us.</p>
+    time), not republished source prose. Page explanations are original StatuteRates editorial content
+    produced through the disclosed research and review process.</p>
 
   <h2>How the pipeline works</h2>
   <ol class="clean">

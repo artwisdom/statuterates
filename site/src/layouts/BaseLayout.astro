@@ -10,6 +10,7 @@ const {
   description,
   jsonLd = null,
   noindex = false,
+  monetize = false,
   feedHref = '/changes.xml',
   feedTitle = 'StatuteRates recorded rate changes',
 } = Astro.props;
@@ -34,9 +35,11 @@ const siteJsonLd = [
     inLanguage: 'en', publisher: { '@id': organizationId } },
 ];
 
-// ONE-SWITCH MONETIZATION: set the repo variable ADSENSE_CLIENT = ca-pub-XXXXXXXX (after AdSense
-// approval) and redeploy — that turns on Google Auto Ads site-wide. Empty by default = no ad code ships.
-const adsenseClient = process.env.ADSENSE_CLIENT || '';
+// AdSense is deliberately opt-in per page. Google does not allow ads on dead-end, navigational,
+// noindex, or low-value screens, so a future page must earn monetization eligibility explicitly.
+// `noindex` always wins even if a caller accidentally asks to monetize the page.
+const adsenseAccount = (process.env.ADSENSE_CLIENT || '').trim();
+const adsenseClient = monetize && !noindex ? adsenseAccount : '';
 
 const NAV = [
   { href: '/', label: 'Rates' },
@@ -66,6 +69,8 @@ const path = Astro.url.pathname;
     <link rel="apple-touch-icon" href="/logo-512.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
+
+    {adsenseAccount && <meta name="google-adsense-account" content={adsenseAccount} />}
 
     {adsenseClient && (
       <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossorigin="anonymous"></script>
@@ -250,7 +255,7 @@ const path = Astro.url.pathname;
       }
     </style>
   </head>
-  <body>
+  <body data-monetization={monetize && !noindex ? 'eligible' : 'disabled'}>
     <a class="skip" href="#main">Skip to content</a>
     <header class="site">
       <div class="wrap">

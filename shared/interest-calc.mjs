@@ -10,8 +10,9 @@
 //     calendar quarter; the daily factor uses the actual length of that day's year (365/366).
 //   - UK Late Payment of Commercial Debts (Interest) Act 1998: SIMPLE interest, actual/365, at the
 //     statutory rate applicable when the debt became overdue.
-//   - EU Late Payment Directive 2011/7/EU: SIMPLE interest, actual/365, reference rate + member-state
-//     margin, where the reference re-fixes each half-year (segment-accurate accrual).
+//   - EU Late Payment Directive 2011/7/EU: SIMPLE interest, actual/365, using the recorded ECB
+//     reference plus a caller-supplied margin. This is arithmetic for an explicitly selected
+//     benchmark, not a country-specific statutory-rate lookup.
 //
 // All functions take rate HISTORY as [{effective_date:'YYYY-MM-DD', value:Number}] (any order) and
 // ISO date strings. Every result includes the rate(s) used and a method string for transparency.
@@ -421,10 +422,24 @@ export function floridaPostJudgmentInterest({
  * Simple interest at a FIXED rate (UK LPA 1998 style): the statutory rate applicable when the debt
  * became overdue applies for the whole period. actual/365.
  */
-export function fixedSimpleInterest({ principal, startDate, endDate, history }) {
+export function fixedSimpleInterest({
+  principal,
+  startDate,
+  endDate,
+  history,
+  coverageEndExclusive = null,
+}) {
   assertPositivePrincipal(principal);
   const days = daysBetween(startDate, endDate);
   if (days < 0) throw new Error('End date is before the start date');
+  if (coverageEndExclusive) {
+    parseDate(coverageEndExclusive);
+    if (startDate >= coverageEndExclusive) {
+      throw new Error(
+        `Fixed-rate history does not support a start date on or after ${coverageEndExclusive}`
+      );
+    }
+  }
   const r = rateOn(history, startDate);
   if (!r) throw new Error(`No rate on record for ${startDate}`);
   const interest = (principal * (r.value / 100) * days) / 365;
@@ -436,6 +451,7 @@ export function fixedSimpleInterest({ principal, startDate, endDate, history }) 
     interest: round2(interest),
     total: round2(principal + interest),
     daily_amount: round2((principal * (r.value / 100)) / 365),
+    rate_selection_coverage_end_exclusive: coverageEndExclusive,
   };
 }
 
@@ -481,15 +497,19 @@ export function fixedCompoundInterest({ principal, startDate, endDate, history }
  * Simple interest where the underlying rate RE-FIXES over time (EU Directive semesters): accrues
  * segment-by-segment at (reference in force that day + margin). actual/365.
  */
-export function euRateCoverageEnd(history) {
+export function halfYearRateCoverageEnd(history, label = 'Half-year') {
   const h = sortHistory(history);
   const latest = h.at(-1);
-  if (!latest) throw new Error('No EU half-year rate history supplied');
+  if (!latest) throw new Error(`No ${label.toLowerCase()} rate history supplied`);
   const d = parseDate(latest.date);
   if (d.getUTCDate() !== 1 || ![0, 6].includes(d.getUTCMonth())) {
-    throw new Error(`EU reference rate ${latest.date} is not a half-year start`);
+    throw new Error(`${label} rate ${latest.date} is not a half-year start`);
   }
   return addMonthsClamped(latest.date, 6);
+}
+
+export function euRateCoverageEnd(history) {
+  return halfYearRateCoverageEnd(history, 'EU reference');
 }
 
 export function floatingSimpleInterest({ principal, startDate, endDate, history, marginPercent = 0 }) {
@@ -521,7 +541,7 @@ export function floatingSimpleInterest({ principal, startDate, endDate, history,
     segments.push({ from: segStart, to: segEnd, days, reference_percent: ref, rate_percent: round2(rate) });
   }
   return {
-    method: `Simple interest (actual/365), reference rate re-fixing over time${marginPercent ? ` + ${marginPercent}pp margin` : ''}`,
+    method: `Simple interest (actual/365), reference rate re-fixing over time${marginPercent ? ` + ${marginPercent} percentage-point selected addition` : ''}`,
     days: totalDays,
     segments,
     interest: round2(interest),

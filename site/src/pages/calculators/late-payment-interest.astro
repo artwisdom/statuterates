@@ -1,28 +1,51 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
 import InterestCalculator from '../../components/InterestCalculator.astro';
 import { getMeta, getEntity, currentOf, historyFor, prettyDate } from '../../lib/data.mjs';
+import { euRateCoverageEnd, halfYearRateCoverageEnd } from '../../../../shared/interest-calc.mjs';
 
 const meta = getMeta();
 const uk = getEntity('uk-late-payment-commercial');
 const ukLatest = currentOf(uk);
 const euLatest = currentOf(getEntity('eu-late-payment-reference'));
+const GOV_UK_GUIDE = 'https://www.gov.uk/late-commercial-payments-interest-debt-recovery';
+const UK_ACT = 'https://www.legislation.gov.uk/ukpga/1998/20';
+const EU_DIRECTIVE = 'https://eur-lex.europa.eu/eli/dir/2011/7';
+const EU_COUNTRY_TABLE = 'https://europa.eu/youreurope/business/finance-and-tax/making-receiving-payments/late-payment/index_en.htm';
 
-const title = `UK & EU Late Payment Interest Calculator | ${meta.title}`;
-const description = `Calculate statutory interest on overdue B2B invoices using the UK Late Payment Act rate (${ukLatest?.value_text}) or EU reference rate (${euLatest?.value_text} plus margin).`;
+const ukHistory = historyFor('uk-late-payment-commercial');
+const euHistory = historyFor('eu-late-payment-reference');
+const ukCoverageEndExclusive = halfYearRateCoverageEnd(ukHistory, 'UK statutory');
+const euCoverageEndExclusive = euRateCoverageEnd(euHistory);
+const earliestDate = (history) => [...history]
+  .map((row) => row.effective_date)
+  .sort()[0];
+const ukCoverageStart = earliestDate(ukHistory);
+const euCoverageStart = earliestDate(euHistory);
+const dayBefore = (iso) => new Date(Date.parse(`${iso}T00:00:00Z`) - 86400000)
+  .toISOString()
+  .slice(0, 10);
+const ukLastSupportedStart = dayBefore(ukCoverageEndExclusive);
+const euLastSupportedStart = dayBefore(euCoverageEndExclusive);
+
+const title = `UK Late Payment & EU Benchmark Calculator | ${meta.title}`;
+const description = `Estimate qualifying UK late-payment interest (${ukLatest?.value_text}) or run an illustrative EU Directive minimum benchmark from the recorded ECB reference (${euLatest?.value_text}).`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'Late Payment Interest Calculator (UK & EU)',
+    name: 'UK Late Payment Interest and EU Directive Benchmark Calculator',
     applicationCategory: 'FinanceApplication',
     operatingSystem: 'Web',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'GBP' },
     url: canonical,
-    description: 'Computes statutory interest on overdue commercial invoices under the UK Late Payment Act 1998 and EU Directive 2011/7/EU.',
+    description: 'Estimates qualifying UK statutory late-payment interest and provides a clearly labeled, non-country-specific EU Directive minimum benchmark illustration.',
+    isAccessibleForFree: true,
+    dateModified: '2026-08-16',
   },
   {
     '@context': 'https://schema.org',
@@ -38,6 +61,11 @@ const jsonLd = [
         name: 'Is UK statutory late-payment interest simple or compound?',
         acceptedAnswer: { '@type': 'Answer', text: 'Simple — the Act implies a term of simple interest, computed daily (annual rate ÷ 365), fixed at the rate applicable when the debt became overdue. You may also claim fixed debt-recovery compensation (£40/£70/£100 by debt size).' },
       },
+      {
+        '@type': 'Question',
+        name: 'Can I use the EU result in every member state?',
+        acceptedAnswer: { '@type': 'Answer', text: 'No. The EU output is an ECB-plus-eight benchmark illustration, not a member-state statutory rate. Official country rates can use different national reference bases or more creditor-favorable rules, so confirm the country table and governing national law.' },
+      },
     ],
   },
   {
@@ -51,13 +79,15 @@ const jsonLd = [
 ];
 ---
 
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
   <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
     <a href="/calculators/">Calculators</a> &rsaquo; <span>Late payment interest</span>
   </nav>
-  <h1>Late payment interest calculator (UK &amp; EU)</h1>
-  <p class="lead">What you can lawfully charge on an overdue B2B invoice — UK statutory interest under
-    the Late Payment of Commercial Debts (Interest) Act 1998, and the EU Late Payment Directive rate.</p>
+  <h1>Late payment interest calculator (UK + EU benchmark)</h1>
+  <p class="lead">Estimate qualifying UK statutory interest on an overdue B2B invoice, or explore an
+    explicitly non-country-specific EU Directive minimum benchmark. The EU result is not a statement
+    of what a creditor may lawfully charge in any member state.</p>
+  <EditorialCredit kind="calculator" reviewedOn="2026-08-16" />
 
   <h2>United Kingdom</h2>
   <p>The statutory rate is the Bank of England base rate on the reference date (30 June / 31 December)
@@ -66,36 +96,108 @@ const jsonLd = [
     <a href="/rates/uk-late-payment-commercial/">{ukLatest?.value_text}</a>.</p>
   <InterestCalculator
     kind="fixed-simple"
-    histories={{ uk: historyFor('uk-late-payment-commercial') }}
+    histories={{ uk: ukHistory }}
     defaultSeries="uk"
     currency="£"
     principalLabel="Invoice amount"
     startLabel="Date payment became overdue"
-    endLabel="Calculated through (e.g. payment date)"
+    endLabel="End boundary (interest accrues up to, not including, this date)"
+    minDate={ukCoverageStart}
+    maxStartDate={ukLastSupportedStart}
+    coverageEndExclusive={ukCoverageEndExclusive}
   />
   <p class="source-note">B2B (and business-to-public-authority) contracts only; consumer contracts are
     outside the Act. You can also claim fixed compensation per invoice: £40 (debt under £1,000), £70
-    (£1,000–£9,999.99), or £100 (£10,000+).</p>
+    (£1,000–£9,999.99), or £100 (£10,000+). Confirm eligibility and the date payment became late in the
+    <a href={GOV_UK_GUIDE}>current GOV.UK guidance</a>.</p>
+  <p class="source-note"><strong>Recorded rate-selection coverage:</strong> overdue dates from
+    {` ${prettyDate(ukCoverageStart)}`} through {prettyDate(ukLastSupportedStart)}. A supported
+    overdue date fixes its recorded rate for the whole late period, so the payment/end date may be
+    later. New overdue dates on or after {prettyDate(ukCoverageEndExclusive)} are refused until the
+    next official half-year rate is recorded.</p>
 
   <AdSlot id="calc-top" />
 
-  <h2>European Union</h2>
-  <p>Under Directive 2011/7/EU, the statutory rate is the ECB reference rate for the half-year
-    (currently <a href="/rates/eu-late-payment-reference/">{euLatest?.value_text}</a>) plus your member
-    state's margin — at least 8 points (the floor used below; France applies +10, Germany +9). Unlike
-    the UK, the reference re-fixes each half-year, and this calculator accrues each period at its own rate.</p>
+  <h2>European Union Directive minimum benchmark</h2>
+  <p>Directive 2011/7/EU establishes a minimum framework for commercial late-payment interest. The
+    illustration below adds eight points to this site's recorded ECB half-year benchmark (currently
+    <a href="/rates/eu-late-payment-reference/">{euLatest?.value_text}</a>) and re-segments the arithmetic
+    when that benchmark changes. It does <strong>not</strong> select a member state's national reference
+    base, statutory rate, eligibility rule, or remedy.</p>
   <InterestCalculator
     kind="floating-simple"
-    histories={{ eu: historyFor('eu-late-payment-reference') }}
+    histories={{ eu: euHistory }}
     defaultSeries="eu"
     marginPercent={8}
     currency="€"
     principalLabel="Invoice amount"
     startLabel="Date payment became overdue"
-    endLabel="Calculated through (e.g. payment date)"
+    endLabel="End boundary (interest accrues up to, not including, this date)"
+    minDate={euCoverageStart}
+    maxStartDate={euLastSupportedStart}
+    maxEndDate={euCoverageEndExclusive}
   />
-  <p class="source-note">Computed at the 8-point Directive floor; if your member state applies a higher
-    margin, your entitlement is higher. Check the national implementing law for the exact margin.</p>
+  <p class="source-note"><strong>Benchmark only:</strong> the official
+    <a href={EU_COUNTRY_TABLE}>EU country-rate table</a> shows that national statutory rates can differ
+    from this ECB-plus-eight illustration. Confirm the listed country rate and national implementing
+    law before using a figure in a demand or claim. The current benchmark history supports start dates
+    through {prettyDate(euLastSupportedStart)} and an end boundary through
+    {` ${prettyDate(euCoverageEndExclusive)}`}, beginning {prettyDate(euCoverageStart)}.</p>
 
   <AdSlot id="calc-bottom" />
+
+  <h2>What this calculator does—and does not decide</h2>
+  <p>The tool performs date-segmented interest arithmetic from the recorded reference-rate history.
+    It does not decide whether a debt is a qualifying commercial transaction, whether a contract
+    supplies a different substantial remedy, when an invoice legally became overdue, or which
+    national rule applies to a cross-border dispute. Those are legal inputs, not calculator outputs.</p>
+  <ul class="clean">
+    <li><strong>UK calculation:</strong> uses the recorded half-year reference rate plus eight points,
+      fixed for the late period and accrued as simple daily interest.</li>
+    <li><strong>EU benchmark:</strong> adds eight points to the recorded ECB series and re-segments at
+      each half-year change. It is deliberately labeled an illustration, not a national entitlement.</li>
+    <li><strong>Source coverage:</strong> the U.K. calculator refuses an overdue date whose applicable
+      half-year rate is not recorded; after a supported overdue date selects the rate, that fixed rate
+      can continue to a later payment date. The E.U. benchmark stops at its last recorded reference
+      period because that illustration re-fixes over time.</li>
+  </ul>
+
+  <h2>Official authorities and source checks</h2>
+  <p>Before sending a demand or filing a claim, compare the result with the
+    <a href={GOV_UK_GUIDE}>GOV.UK late-commercial-payment guide</a>, the
+    <a href={UK_ACT}>Late Payment of Commercial Debts (Interest) Act 1998</a>, or
+    <a href={EU_DIRECTIVE}>Directive 2011/7/EU on EUR-Lex</a>, as applicable. For EU claims, also use
+    the <a href={EU_COUNTRY_TABLE}>official country-rate table</a>. The Directive sets a minimum
+    framework; each EU country implements it through national law.</p>
+
+  <h2>Frequently asked questions</h2>
+  <div class="faq-list">
+    <details>
+      <summary>How much interest can I charge on a late invoice in the UK?</summary>
+      <p>For a qualifying commercial debt, the published statutory formula is the Bank of England
+        base rate for the relevant reference period plus eight percentage points. Verify that the
+        debt qualifies and that no contractual remedy changes the statutory entitlement.</p>
+    </details>
+    <details>
+      <summary>Is UK statutory late-payment interest simple or compound?</summary>
+      <p>The calculator applies simple daily interest and does not add accrued interest back to the
+        invoice principal. It reports fixed recovery compensation separately from interest.</p>
+    </details>
+    <details>
+      <summary>Can I use the EU result in every member state?</summary>
+      <p>No. It is an ECB-plus-eight benchmark illustration only. Country rates can use a different
+        national reference base or more creditor-favorable rule. Use the official country table and
+        the member state's implementing law to determine the relevant rate and remedy.</p>
+    </details>
+  </div>
+
+  <div class="disclaimer">Reference arithmetic only—not legal or financial advice. Verify the parties,
+    contract, due date, governing law, principal, recovery costs, and current official sources before
+    relying on a demand or court filing.</div>
+
+  <style>
+    .faq-list details { border-top: 1px solid var(--line); padding: 12px 0; }
+    .faq-list summary { cursor: pointer; font: 600 1.05rem var(--sans); }
+    .faq-list p { margin: 8px 0 0; color: var(--ink-soft); }
+  </style>
 </BaseLayout>
