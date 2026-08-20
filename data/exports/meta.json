@@ -7,7 +7,7 @@
   "license": "StatuteRates compilation; underlying source rights vary. Government edicts are not subject to copyright, while statistical publications and third-party pages may have their own terms. See each source record.",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-08-20T13:37:41.659Z",
+  "generated_at": "2026-08-20T13:46:39.401Z",
   "entity_count": 114,
   "observation_count": 4959,
   "metrics": [
@@ -20,8 +20,8 @@
       "publisher": "Alaska Court System (official)",
       "home_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official ADM-505 annual table fetched and verified 2026-08-20T13:37:15.692Z",
-      "retrieved_at": "2026-08-20T13:37:15.692Z"
+      "robots_status": "official ADM-505 annual table fetched and verified 2026-08-20T13:46:17.199Z",
+      "retrieved_at": "2026-08-20T13:46:17.199Z"
     },
     {
       "id": "ak-prejud",
@@ -29,8 +29,8 @@
       "publisher": "Alaska Court System (official)",
       "home_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official ADM-505 annual table fetched and verified 2026-08-20T13:37:15.692Z",
-      "retrieved_at": "2026-08-20T13:37:15.692Z"
+      "robots_status": "official ADM-505 annual table fetched and verified 2026-08-20T13:46:17.199Z",
+      "retrieved_at": "2026-08-20T13:46:17.199Z"
     },
     {
       "id": "al-jud",
@@ -93,7 +93,7 @@
       "home_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "license": "Bank of England statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-08-20T13:37:15.867Z"
+      "retrieved_at": "2026-08-20T13:46:17.519Z"
     },
     {
       "id": "ca-leginfo",
@@ -192,7 +192,7 @@
       "home_url": "https://data.ecb.europa.eu/data/datasets/FM/FM.B.U2.EUR.4F.KR.MRR_FR.LEV",
       "license": "ECB statistical data, free to reuse with attribution.",
       "robots_status": "allowed",
-      "retrieved_at": "2026-08-20T13:37:15.615Z"
+      "retrieved_at": "2026-08-20T13:46:17.197Z"
     },
     {
       "id": "fed-h15",
@@ -201,7 +201,7 @@
       "home_url": "https://fred.stlouisfed.org/series/DGS1",
       "license": "U.S. federal government work — public domain. FRED requests source attribution.",
       "robots_status": "allowed; DGS1 daily history independently cross-checked against WGS1YR; official 28 U.S.C. §1961 phrase contract verified live",
-      "retrieved_at": "2026-08-20T13:37:19.027Z"
+      "retrieved_at": "2026-08-20T13:46:20.765Z"
     },
     {
       "id": "fl-cfo",
@@ -209,8 +209,8 @@
       "publisher": "Florida Department of Financial Services, Chief Financial Officer (official)",
       "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official HTML table fetched 2026-08-20T13:37:15.821Z; §55.03 legal anchors checked 2026-08-20T13:37:18.972Z",
-      "retrieved_at": "2026-08-20T13:37:15.821Z"
+      "robots_status": "official HTML table fetched 2026-08-20T13:46:18.408Z; §55.03 legal anchors checked 2026-08-20T13:46:21.509Z",
+      "retrieved_at": "2026-08-20T13:46:18.408Z"
     },
     {
       "id": "fl-prejud",
@@ -218,8 +218,8 @@
       "publisher": "Florida Department of Financial Services, Chief Financial Officer (official)",
       "home_url": "https://myfloridacfo.com/division/aa/audits-reports/judgment-interest-rates",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official CFO schedule and §55.03 contract fetched and verified 2026-08-20T13:37:15.821Z",
-      "retrieved_at": "2026-08-20T13:37:15.821Z"
+      "robots_status": "official CFO schedule and §55.03 contract fetched and verified 2026-08-20T13:46:18.408Z",
+      "retrieved_at": "2026-08-20T13:46:18.408Z"
     },
     {
       "id": "ga-code",
@@ -227,8 +227,8 @@
       "publisher": "Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED",
       "home_url": "https://www.lexisnexis.com/hottopics/gacode",
       "license": "Georgia statutory text is a government edict; the FRED PRIME series requests citation to its Federal Reserve source.",
-      "robots_status": "Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched 2026-08-20T13:37:29.162Z",
-      "retrieved_at": "2026-08-20T13:37:29.162Z"
+      "robots_status": "Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched 2026-08-20T13:46:26.971Z",
+      "retrieved_at": "2026-08-20T13:46:26.971Z"
     },
     {
       "id": "ga-prejud",
@@ -236,8 +236,8 @@
       "publisher": "Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED",
       "home_url": "https://www.lexisnexis.com/hottopics/gacode",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched 2026-08-20T13:37:29.162Z",
-      "retrieved_at": "2026-08-20T13:37:29.162Z"
+      "robots_status": "Georgia General Assembly-authorized Code portal verified 2026-07-19; complete Federal Reserve/FRED PRIME history fetched 2026-08-20T13:46:26.971Z",
+      "retrieved_at": "2026-08-20T13:46:26.971Z"
     },
     {
       "id": "hi-jud",
@@ -263,8 +263,8 @@
       "publisher": "Iowa Judicial Branch (official)",
       "home_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official table fetched 2026-08-20T13:37:13.523Z",
-      "retrieved_at": "2026-08-20T13:37:13.523Z"
+      "robots_status": "official table fetched 2026-08-20T13:46:14.844Z",
+      "retrieved_at": "2026-08-20T13:46:14.844Z"
     },
     {
       "id": "id-jud",
@@ -327,7 +327,7 @@
       "home_url": "https://www.irs.gov/payments/quarterly-interest-rates",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
       "robots_status": "allowed",
-      "retrieved_at": "2026-08-20T13:37:15.611Z"
+      "retrieved_at": "2026-08-20T13:46:17.099Z"
     },
     {
       "id": "irs-penalty-rules",
@@ -335,8 +335,8 @@
       "publisher": "U.S. Internal Revenue Service",
       "home_url": "https://www.irs.gov/payments/failure-to-file-penalty",
       "license": "U.S. federal government work — not subject to copyright (public domain).",
-      "robots_status": "five official IRS pages fetched through the shared robots gate 2026-08-20T13:37:41.396Z",
-      "retrieved_at": "2026-08-20T13:37:41.396Z"
+      "robots_status": "five official IRS pages fetched through the shared robots gate 2026-08-20T13:46:39.119Z",
+      "retrieved_at": "2026-08-20T13:46:39.119Z"
     },
     {
       "id": "ks-jud",
@@ -434,8 +434,8 @@
       "publisher": "Federal Reserve Board and Maine Legislature (official inputs)",
       "home_url": "https://www.federalreserve.gov/datadownload/Download.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&filetype=csv&label=include&layout=seriescolumn",
       "license": "U.S. government publication and government edict.",
-      "robots_status": "future-year fallback only after the official Maine Judicial Branch chart ends; official H.15 input fetched 2026-08-20T13:37:19.027Z",
-      "retrieved_at": "2026-08-20T13:37:19.027Z"
+      "robots_status": "future-year fallback only after the official Maine Judicial Branch chart ends; official H.15 input fetched 2026-08-20T13:46:20.765Z",
+      "retrieved_at": "2026-08-20T13:46:20.765Z"
     },
     {
       "id": "me-jud",
@@ -579,7 +579,7 @@
       "home_url": "https://nebraskajudicial.gov/rules/administrative-policies-schedules/judgment-interest-rate",
       "license": "Nebraska government publication - not subject to copyright.",
       "robots_status": "allowed; current rate fetched through the shared robots-respecting cache",
-      "retrieved_at": "2026-08-20T13:37:21.977Z"
+      "retrieved_at": "2026-08-20T13:46:17.322Z"
     },
     {
       "id": "ne-prejud",
@@ -587,8 +587,8 @@
       "publisher": "Nebraska Legislature (official)",
       "home_url": "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official Chapter 45 text verified 2026-07-19; current linked Judicial Branch rate fetched 2026-08-20T13:37:21.977Z",
-      "retrieved_at": "2026-08-20T13:37:21.977Z"
+      "robots_status": "official Chapter 45 text verified 2026-07-19; current linked Judicial Branch rate fetched 2026-08-20T13:46:17.322Z",
+      "retrieved_at": "2026-08-20T13:46:17.322Z"
     },
     {
       "id": "nh-jud",
@@ -831,7 +831,7 @@
       "home_url": "https://occc.texas.gov/publications/interest-rates/",
       "license": "Texas government publication — not subject to copyright.",
       "robots_status": "allowed; current rate fetched through the shared robots-respecting cache",
-      "retrieved_at": "2026-08-20T13:37:15.775Z"
+      "retrieved_at": "2026-08-20T13:46:17.296Z"
     },
     {
       "id": "tx-prejud",
@@ -839,8 +839,8 @@
       "publisher": "Texas Legislature and Office of Consumer Credit Commissioner (official)",
       "home_url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official Chapter 304 text verified 2026-07-19; current linked OCCC rate fetched 2026-08-20T13:37:15.775Z",
-      "retrieved_at": "2026-08-20T13:37:15.775Z"
+      "robots_status": "official Chapter 304 text verified 2026-07-19; current linked OCCC rate fetched 2026-08-20T13:46:17.296Z",
+      "retrieved_at": "2026-08-20T13:46:17.296Z"
     },
     {
       "id": "ut-jud",
@@ -848,8 +848,8 @@
       "publisher": "Utah State Courts (official)",
       "home_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "official current/history tables fetched 2026-08-20T13:37:16.135Z",
-      "retrieved_at": "2026-08-20T13:37:16.135Z"
+      "robots_status": "official current/history tables fetched 2026-08-20T13:46:17.314Z",
+      "retrieved_at": "2026-08-20T13:46:17.314Z"
     },
     {
       "id": "ut-prejud",
