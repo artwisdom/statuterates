@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T02:48:08.570Z",
+  "generated_at": "2026-08-20T13:37:41.659Z",
   "slug": "tennessee-judgment-rate",
   "name": "Tennessee Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,6 +10,38 @@
     "state": "TN",
     "statute": "Tenn. Code §47-14-121",
     "basis": "statute-variable",
+    "official_formula_history_url": "https://www.tn.gov/content/tn/tdfi/tdfi-how-do-i/info/formula-rate/formula-rate-history.html",
+    "official_history_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
+    "official_authorities": [
+      {
+        "label": "Tennessee AOC judgment-interest rate history",
+        "url": "https://www.tncourts.gov/tennessee-judgment-interest-rates"
+      },
+      {
+        "label": "Tennessee DFI formula-rate history",
+        "url": "https://www.tn.gov/content/tn/tdfi/tdfi-how-do-i/info/formula-rate/formula-rate-history.html"
+      },
+      {
+        "label": "Public Chapter 1043 conference report for §47-14-121",
+        "url": "https://www.capitol.tn.gov/Bills/107/CCRReports/CC0016.pdf"
+      },
+      {
+        "label": "Tennessee Rule of Appellate Procedure 41",
+        "url": "https://www.tncourts.gov/courts/rules-appellate-procedure/rules/rules-appellate-procedure-rules/rule-41-interest-judgments"
+      },
+      {
+        "label": "Baker v. Grace (Tennessee Court of Appeals)",
+        "url": "https://www.tncourts.gov/sites/default/files/elizabeth_ann_baker_v._jonathan_garrett_grace_-_m2021-00116-coa-r3-cv.pdf"
+      },
+      {
+        "label": "Beaty v. Beaty (Tennessee Court of Appeals)",
+        "url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/961/BEATYJL.pdf"
+      },
+      {
+        "label": "In re Estate of Hawkins (Tennessee Court of Appeals)",
+        "url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/044/HawkinsJ.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -28,10 +60,10 @@
       "effective_date": "2026-07-01",
       "source_id": "tn-courts",
       "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "retrieved_at": "2026-08-16T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Tenn. Code §47-14-121: the \"formula rate\" (the weekly-average prime loan rate published by the Fed, announced by the TN Commissioner of Financial Institutions) minus 2 percentage points, fixed at judgment — currently 8.75% (judgments entered in the quarter beginning July 1, 2026). Simple interest. Verify the current rate at tncourts.gov; not legal advice."
+      "notes": "Tenn. Code §47-14-121 sets the general six-month judgment rate at the Department of Financial Institutions formula rate for the preceding June or December, less two percentage points. The official June 2026 formula history reports 10.75%, producing 8.75% for a general judgment entered July 1 through December 31, 2026. Another statute, note, contract, or writing can control. Tennessee appellate opinions use the Code’s simple-interest definition in ordinary judgment-interest analysis, while contract cases require express agreement for compounding; the statutes do not state one universal postjudgment compounding method. Calculator-grade day count, payment allocation, and every exception remain unmodeled. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -44,10 +76,10 @@
         "effective_date": "2026-07-01",
         "source_id": "tn-courts",
         "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "retrieved_at": "2026-08-16T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Tenn. Code §47-14-121: the \"formula rate\" (the weekly-average prime loan rate published by the Fed, announced by the TN Commissioner of Financial Institutions) minus 2 percentage points, fixed at judgment — currently 8.75% (judgments entered in the quarter beginning July 1, 2026). Simple interest. Verify the current rate at tncourts.gov; not legal advice."
+        "notes": "Tenn. Code §47-14-121 sets the general six-month judgment rate at the Department of Financial Institutions formula rate for the preceding June or December, less two percentage points. The official June 2026 formula history reports 10.75%, producing 8.75% for a general judgment entered July 1 through December 31, 2026. Another statute, note, contract, or writing can control. Tennessee appellate opinions use the Code’s simple-interest definition in ordinary judgment-interest analysis, while contract cases require express agreement for compounding; the statutes do not state one universal postjudgment compounding method. Calculator-grade day count, payment allocation, and every exception remain unmodeled. Verify applicability; not legal advice."
       }
     ]
   }

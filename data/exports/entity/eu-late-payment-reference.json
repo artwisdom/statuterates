@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-18T02:48:08.570Z",
+  "generated_at": "2026-08-20T13:37:41.659Z",
   "slug": "eu-late-payment-reference",
-  "name": "EU Late Payment Directive Reference Rate",
+  "name": "EU Late Payment Directive ECB Reference Benchmark",
   "entity_type": "rate_series",
   "jurisdiction": "EU",
   "region": "European Union",
@@ -22,10 +22,10 @@
       "effective_date": "2026-07-01",
       "source_id": "ecb-mro",
       "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-      "retrieved_at": "2026-08-18T02:47:47.093Z",
+      "retrieved_at": "2026-08-20T13:37:15.615Z",
       "confidence": "medium",
       "method": "derived_eu_directive_2011_7_reference",
-      "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-07-01: 2.4%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.4% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+      "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-07-01: 2.4%). Adding 8 percentage points gives 10.4% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
     }
   },
   "history": {
@@ -38,10 +38,10 @@
         "effective_date": "2026-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-07-01: 2.4%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.4% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-07-01: 2.4%). Adding 8 percentage points gives 10.4% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -51,10 +51,10 @@
         "effective_date": "2026-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-01-01: 2.15%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.15% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2026-01-01: 2.15%). Adding 8 percentage points gives 10.15% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -64,10 +64,10 @@
         "effective_date": "2025-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2025-07-01: 2.15%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.15% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2025-07-01: 2.15%). Adding 8 percentage points gives 10.15% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -77,10 +77,10 @@
         "effective_date": "2025-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2025-01-01: 3.15%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 11.15% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2025-01-01: 3.15%). Adding 8 percentage points gives 11.15% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -90,10 +90,10 @@
         "effective_date": "2024-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2024-07-01: 4.25%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 12.25% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2024-07-01: 4.25%). Adding 8 percentage points gives 12.25% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -103,10 +103,10 @@
         "effective_date": "2024-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2024-01-01: 4.5%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 12.5% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2024-01-01: 4.5%). Adding 8 percentage points gives 12.5% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -116,10 +116,10 @@
         "effective_date": "2023-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2023-07-01: 4%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 12% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2023-07-01: 4%). Adding 8 percentage points gives 12% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -129,10 +129,10 @@
         "effective_date": "2023-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2023-01-01: 2.5%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 10.5% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2023-01-01: 2.5%). Adding 8 percentage points gives 10.5% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -142,10 +142,10 @@
         "effective_date": "2022-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2022-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2022-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -155,10 +155,10 @@
         "effective_date": "2022-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2022-01-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2022-01-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -168,10 +168,10 @@
         "effective_date": "2021-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2021-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2021-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -181,10 +181,10 @@
         "effective_date": "2021-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2021-01-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2021-01-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -194,10 +194,10 @@
         "effective_date": "2020-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2020-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2020-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -207,10 +207,10 @@
         "effective_date": "2020-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2020-01-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2020-01-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -220,10 +220,10 @@
         "effective_date": "2019-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2019-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2019-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -233,10 +233,10 @@
         "effective_date": "2019-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2019-01-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2019-01-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -246,10 +246,10 @@
         "effective_date": "2018-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2018-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2018-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -259,10 +259,10 @@
         "effective_date": "2018-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2018-01-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2018-01-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -272,10 +272,10 @@
         "effective_date": "2017-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2017-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2017-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -285,10 +285,10 @@
         "effective_date": "2017-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2017-01-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2017-01-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -298,10 +298,10 @@
         "effective_date": "2016-07-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2016-07-01: 0%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2016-07-01: 0%). Adding 8 percentage points gives 8% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       },
       {
         "metric": "annual_rate",
@@ -311,10 +311,10 @@
         "effective_date": "2016-01-01",
         "source_id": "ecb-mro",
         "source_url": "https://data-api.ecb.europa.eu/service/data/FM/B.U2.EUR.4F.KR.MRR_FR.LEV?format=csvdata&startPeriod=2015-01-01",
-        "retrieved_at": "2026-08-18T02:47:47.093Z",
+        "retrieved_at": "2026-08-20T13:37:15.615Z",
         "confidence": "medium",
         "method": "derived_eu_directive_2011_7_reference",
-        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2016-01-01: 0.05%). A member state's statutory late-payment rate is this reference + at least 8 percentage points (e.g. 8.05% at the 8pp floor; some states add more — France +10, Germany +9). Reference, not legal advice."
+        "notes": "Derived: EU Late Payment Directive (2011/7/EU) reference rate = the ECB main refinancing rate in force on the first calendar day of the half-year (2016-01-01: 0.05%). Adding 8 percentage points gives 8.05% as a Directive-minimum benchmark illustration for this period. This is not a member-state statutory rate: national implementations may use different reference bases or more creditor-favourable rules. Confirm the official country table. Reference, not legal advice."
       }
     ]
   }

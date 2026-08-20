@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T02:48:08.570Z",
+  "generated_at": "2026-08-20T13:37:41.659Z",
   "slug": "utah-judgment-rate",
   "name": "Utah Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -47,7 +47,7 @@
       "effective_date": "2026-01-01",
       "source_id": "ut-jud",
       "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
-      "retrieved_at": "2026-08-18T02:47:47.083Z",
+      "retrieved_at": "2026-08-20T13:37:16.135Z",
       "confidence": "high",
       "method": "statute-variable-official-table",
       "notes": "Utah State Courts publishes a 5.51% general civil and criminal judgment rate for 2026 under Utah Code §15-1-4: the federal post-judgment rate on January 1 (3.51%) plus two percentage points. A qualifying judgment under $10,000 involving goods or services instead uses 13.51% (federal rate plus ten points), while a lawful contract can supply its agreed rate. The applicable annual rate is selected when judgment is entered and remains attached to that judgment. Verify the correct branch; not legal advice."
@@ -63,7 +63,7 @@
         "effective_date": "2026-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/interestrates.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Utah State Courts publishes a 5.51% general civil and criminal judgment rate for 2026 under Utah Code §15-1-4: the federal post-judgment rate on January 1 (3.51%) plus two percentage points. A qualifying judgment under $10,000 involving goods or services instead uses 13.51% (federal rate plus ten points), while a lawful contract can supply its agreed rate. The applicable annual rate is selected when judgment is entered and remains attached to that judgment. Verify the correct branch; not legal advice."
@@ -76,7 +76,7 @@
         "effective_date": "2025-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2025. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -89,7 +89,7 @@
         "effective_date": "2024-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2024. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -102,7 +102,7 @@
         "effective_date": "2023-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2023. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -115,7 +115,7 @@
         "effective_date": "2022-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2022. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -128,7 +128,7 @@
         "effective_date": "2021-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2021. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -141,7 +141,7 @@
         "effective_date": "2020-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2020. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -154,7 +154,7 @@
         "effective_date": "2019-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2019. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -167,7 +167,7 @@
         "effective_date": "2018-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2018. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -180,7 +180,7 @@
         "effective_date": "2017-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2017. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -193,7 +193,7 @@
         "effective_date": "2016-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2016. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -206,7 +206,7 @@
         "effective_date": "2015-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2015. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -219,7 +219,7 @@
         "effective_date": "2014-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2014. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -232,7 +232,7 @@
         "effective_date": "2013-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2013. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -245,7 +245,7 @@
         "effective_date": "2012-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2012. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -258,7 +258,7 @@
         "effective_date": "2011-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2011. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -271,7 +271,7 @@
         "effective_date": "2010-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2010. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -284,7 +284,7 @@
         "effective_date": "2009-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2009. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -297,7 +297,7 @@
         "effective_date": "2008-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2008. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -310,7 +310,7 @@
         "effective_date": "2007-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2007. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -323,7 +323,7 @@
         "effective_date": "2006-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2006. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -336,7 +336,7 @@
         "effective_date": "2005-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2005. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -349,7 +349,7 @@
         "effective_date": "2004-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2004. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -362,7 +362,7 @@
         "effective_date": "2003-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2003. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -375,7 +375,7 @@
         "effective_date": "2002-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2002. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -388,7 +388,7 @@
         "effective_date": "2001-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2001. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -401,7 +401,7 @@
         "effective_date": "2000-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 2000. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -414,7 +414,7 @@
         "effective_date": "1999-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1999. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -427,7 +427,7 @@
         "effective_date": "1998-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1998. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -440,7 +440,7 @@
         "effective_date": "1997-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1997. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -453,7 +453,7 @@
         "effective_date": "1996-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1996. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -466,7 +466,7 @@
         "effective_date": "1995-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1995. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -479,7 +479,7 @@
         "effective_date": "1994-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1994. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."
@@ -492,7 +492,7 @@
         "effective_date": "1993-01-01",
         "source_id": "ut-jud",
         "source_url": "https://www.utcourts.gov/en/court-records-publications/resources/interest-rates/historic.html",
-        "retrieved_at": "2026-08-18T02:47:47.083Z",
+        "retrieved_at": "2026-08-20T13:37:16.135Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Official Utah State Courts annual post-judgment interest rate for judgments entered in 1993. Utah Code §15-1-4 includes separate lawful-contract and qualifying under-$10,000 goods/services branches. Verify the branch applicable to the judgment. Not legal advice."

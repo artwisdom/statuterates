@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T02:48:08.570Z",
+  "generated_at": "2026-08-20T13:37:41.659Z",
   "slug": "new-mexico-judgment-rate",
   "name": "New Mexico Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,6 +10,37 @@
     "state": "NM",
     "statute": "N.M. Stat. Ann. § 56-8-4",
     "basis": "statute-fixed",
+    "official_statute_url": "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do",
+    "official_authorities": [
+      {
+        "label": "NMSA 1978 Chapter 56 annotated (§§56-8-3 and 56-8-4)",
+        "url": "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do"
+      },
+      {
+        "label": "Official NMSA 1978 Chapter 56 PDF",
+        "url": "https://nmonesource.com/nmos/nmsa/en/4418/1/document.do"
+      },
+      {
+        "label": "Sandoval v. Baker Hughes Oilfield Operations, Inc.",
+        "url": "https://nmonesource.com/nmos/nmca/en/item/391262/index.do"
+      },
+      {
+        "label": "Sunwest Bank of Albuquerque v. Colucci",
+        "url": "https://nmonesource.com/nmos/nmsc/en/item/387200/index.do"
+      },
+      {
+        "label": "Weststar Mortgage Corp. v. Jackson",
+        "url": "https://nmonesource.com/nmos/nmca/en/item/390009/index.do"
+      },
+      {
+        "label": "Southern Union Exploration Co. v. Wynn Exploration Co.",
+        "url": "https://nmonesource.com/nmos/nmca/en/item/384711/index.do"
+      },
+      {
+        "label": "Consolidated Oil & Gas, Inc. v. Southern Union Co.",
+        "url": "https://nmonesource.com/nmos/nmsc/en/item/371086/index.do"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -25,13 +56,13 @@
       "value": 8.75,
       "value_text": "8.75% / 15%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "1993-06-18",
       "source_id": "nm-jud",
-      "source_url": "https://nmonesource.com/nmos/en/nav.do",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "source_url": "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do",
+      "retrieved_at": "2026-08-16T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
-      "notes": "Post-judgment interest under N.M. Stat. Ann. § 56-8-4 — 8.75% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+      "notes": "The amendment effective June 18, 1993 reduced New Mexico’s general money-judgment rate from 15% to 8.75% under NMSA 1978 §56-8-4. A written instrument can supply a different rate no higher than it states; judgments based on tortious conduct, bad faith, or intentional or willful acts use 15%; government defendants are generally exempt unless another authority controls. The statute does not supply one universal calculator-grade compounding, day-count, or partial-payment method. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -41,13 +72,13 @@
         "value": 8.75,
         "value_text": "8.75% / 15%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "1993-06-18",
         "source_id": "nm-jud",
-        "source_url": "https://nmonesource.com/nmos/en/nav.do",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "source_url": "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do",
+        "retrieved_at": "2026-08-16T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",
-        "notes": "Post-judgment interest under N.M. Stat. Ann. § 56-8-4 — 8.75% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+        "notes": "The amendment effective June 18, 1993 reduced New Mexico’s general money-judgment rate from 15% to 8.75% under NMSA 1978 §56-8-4. A written instrument can supply a different rate no higher than it states; judgments based on tortious conduct, bad faith, or intentional or willful acts use 15%; government defendants are generally exempt unless another authority controls. The statute does not supply one universal calculator-grade compounding, day-count, or partial-payment method. Verify applicability; not legal advice."
       }
     ]
   }

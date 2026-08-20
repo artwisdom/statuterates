@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-18T02:48:08.570Z",
+  "generated_at": "2026-08-20T13:37:41.659Z",
   "slug": "ohio-judgment-rate",
   "name": "Ohio Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,6 +10,33 @@
     "state": "OH",
     "statute": "Ohio Rev. Code §1343.03(B) / §5703.47",
     "basis": "statute-variable",
+    "official_statute_urls": [
+      "https://codes.ohio.gov/ohio-revised-code/section-1343.03",
+      "https://codes.ohio.gov/ohio-revised-code/section-5703.47"
+    ],
+    "official_annual_entry_url": "https://dam.assets.ohio.gov/image/upload/tax.ohio.gov/individual/2026_Interest_Rates.pdf",
+    "official_authorities": [
+      {
+        "label": "Ohio Rev. Code §1343.03",
+        "url": "https://codes.ohio.gov/ohio-revised-code/section-1343.03"
+      },
+      {
+        "label": "Ohio Rev. Code §5703.47",
+        "url": "https://codes.ohio.gov/ohio-revised-code/section-5703.47"
+      },
+      {
+        "label": "Ohio Rev. Code §2325.18",
+        "url": "https://codes.ohio.gov/ohio-revised-code/section-2325.18"
+      },
+      {
+        "label": "Mayer v. Medancic, 2009-Ohio-6190 (Supreme Court of Ohio)",
+        "url": "https://www.supremecourt.ohio.gov/rod/docs/pdf/0/2009/2009-Ohio-6190.pdf"
+      },
+      {
+        "label": "Ohio Tax Commissioner 2026 interest-rate journal entry",
+        "url": "https://dam.assets.ohio.gov/image/upload/tax.ohio.gov/individual/2026_Interest_Rates.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -27,11 +54,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-01-01",
       "source_id": "oh-tax",
-      "source_url": "https://tax.ohio.gov/individual/resources/annual-interest-rates",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "source_url": "https://dam.assets.ohio.gov/image/upload/tax.ohio.gov/individual/2026_Interest_Rates.pdf",
+      "retrieved_at": "2026-08-16T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Ohio Rev. Code §1343.03(B), at the rate the Ohio Tax Commissioner sets annually under §5703.47 (the federal short-term rate for the year, rounded, + 3 percentage points) — currently 7% for 2026. Simple interest. A written contract specifying a different rate controls (§1343.03(A)). Verify the current year at tax.ohio.gov; not legal advice."
+      "notes": "The Ohio Tax Commissioner’s official 2026 journal entry certifies 7% under R.C. §5703.47. For the general R.C. §1343.03(B) path, that rate runs from rendition until payment and remains fixed for the judgment. Written instruments, specified tort settlement conduct, another controlling law, Court of Claims matters, workers’ compensation, and periods of dormancy require separate treatment. Ohio Supreme Court authority applies simple interest absent express authority to compound. Verify the applicable branch; not legal advice."
     }
   },
   "history": {
@@ -43,11 +70,11 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-01-01",
         "source_id": "oh-tax",
-        "source_url": "https://tax.ohio.gov/individual/resources/annual-interest-rates",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "source_url": "https://dam.assets.ohio.gov/image/upload/tax.ohio.gov/individual/2026_Interest_Rates.pdf",
+        "retrieved_at": "2026-08-16T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Ohio Rev. Code §1343.03(B), at the rate the Ohio Tax Commissioner sets annually under §5703.47 (the federal short-term rate for the year, rounded, + 3 percentage points) — currently 7% for 2026. Simple interest. A written contract specifying a different rate controls (§1343.03(A)). Verify the current year at tax.ohio.gov; not legal advice."
+        "notes": "The Ohio Tax Commissioner’s official 2026 journal entry certifies 7% under R.C. §5703.47. For the general R.C. §1343.03(B) path, that rate runs from rendition until payment and remains fixed for the judgment. Written instruments, specified tort settlement conduct, another controlling law, Court of Claims matters, workers’ compensation, and periods of dormancy require separate treatment. Ohio Supreme Court authority applies simple interest absent express authority to compound. Verify the applicable branch; not legal advice."
       }
     ]
   }
