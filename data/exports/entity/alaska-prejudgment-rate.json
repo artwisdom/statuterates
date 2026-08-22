@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T16:31:34.329Z",
+  "generated_at": "2026-08-22T01:49:13.601Z",
   "slug": "alaska-prejudgment-rate",
   "name": "Alaska Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -43,7 +43,7 @@
       "effective_date": "2026-01-01",
       "source_id": "ak-prejud",
       "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-      "retrieved_at": "2026-08-20T16:12:55.323Z",
+      "retrieved_at": "2026-08-22T01:48:52.982Z",
       "confidence": "high",
       "method": "statute-variable-official-table",
       "notes": "Alaska Court System form ADM-505 publishes 6.75% for both general pre- and post-judgment interest when judgment is entered in 2026. Prejudgment interest generally begins when the claimant could first sue, but a controlling contract, another statute, the claim, and the older 1980–1997 transition can change the result. Verify the correct rate and accrual branch; not legal advice."
@@ -59,7 +59,7 @@
         "effective_date": "2026-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 6.75% for both general pre- and post-judgment interest when judgment is entered in 2026. Prejudgment interest generally begins when the claimant could first sue, but a controlling contract, another statute, the claim, and the older 1980–1997 transition can change the result. Verify the correct rate and accrual branch; not legal advice."
@@ -72,7 +72,7 @@
         "effective_date": "2025-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 7.5% as the general pre- and post-judgment rate selected for a judgment entered in 2025. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -85,7 +85,7 @@
         "effective_date": "2024-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 8.5% as the general pre- and post-judgment rate selected for a judgment entered in 2024. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -98,7 +98,7 @@
         "effective_date": "2023-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 7.5% as the general pre- and post-judgment rate selected for a judgment entered in 2023. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -111,7 +111,7 @@
         "effective_date": "2022-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.25% as the general pre- and post-judgment rate selected for a judgment entered in 2022. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -124,7 +124,7 @@
         "effective_date": "2021-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.25% as the general pre- and post-judgment rate selected for a judgment entered in 2021. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -137,7 +137,7 @@
         "effective_date": "2020-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 5.25% as the general pre- and post-judgment rate selected for a judgment entered in 2020. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -150,7 +150,7 @@
         "effective_date": "2019-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 6% as the general pre- and post-judgment rate selected for a judgment entered in 2019. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -163,7 +163,7 @@
         "effective_date": "2018-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 5% as the general pre- and post-judgment rate selected for a judgment entered in 2018. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -176,7 +176,7 @@
         "effective_date": "2017-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 4.25% as the general pre- and post-judgment rate selected for a judgment entered in 2017. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -189,7 +189,7 @@
         "effective_date": "2016-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 4% as the general pre- and post-judgment rate selected for a judgment entered in 2016. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -202,7 +202,7 @@
         "effective_date": "2015-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.75% as the general pre- and post-judgment rate selected for a judgment entered in 2015. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -215,7 +215,7 @@
         "effective_date": "2014-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.75% as the general pre- and post-judgment rate selected for a judgment entered in 2014. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -228,7 +228,7 @@
         "effective_date": "2013-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.75% as the general pre- and post-judgment rate selected for a judgment entered in 2013. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -241,7 +241,7 @@
         "effective_date": "2012-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.75% as the general pre- and post-judgment rate selected for a judgment entered in 2012. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -254,7 +254,7 @@
         "effective_date": "2011-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.75% as the general pre- and post-judgment rate selected for a judgment entered in 2011. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -267,7 +267,7 @@
         "effective_date": "2010-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.5% as the general pre- and post-judgment rate selected for a judgment entered in 2010. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -280,7 +280,7 @@
         "effective_date": "2009-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.5% as the general pre- and post-judgment rate selected for a judgment entered in 2009. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -293,7 +293,7 @@
         "effective_date": "2008-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 7.75% as the general pre- and post-judgment rate selected for a judgment entered in 2008. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -306,7 +306,7 @@
         "effective_date": "2007-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 9.25% as the general pre- and post-judgment rate selected for a judgment entered in 2007. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -319,7 +319,7 @@
         "effective_date": "2006-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 8.25% as the general pre- and post-judgment rate selected for a judgment entered in 2006. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -332,7 +332,7 @@
         "effective_date": "2005-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 6.25% as the general pre- and post-judgment rate selected for a judgment entered in 2005. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -345,7 +345,7 @@
         "effective_date": "2004-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 5% as the general pre- and post-judgment rate selected for a judgment entered in 2004. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -358,7 +358,7 @@
         "effective_date": "2003-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 3.75% as the general pre- and post-judgment rate selected for a judgment entered in 2003. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -371,7 +371,7 @@
         "effective_date": "2002-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 4.25% as the general pre- and post-judgment rate selected for a judgment entered in 2002. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -384,7 +384,7 @@
         "effective_date": "2001-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 9% as the general pre- and post-judgment rate selected for a judgment entered in 2001. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -397,7 +397,7 @@
         "effective_date": "2000-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 8% as the general pre- and post-judgment rate selected for a judgment entered in 2000. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -410,7 +410,7 @@
         "effective_date": "1999-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 7.5% as the general pre- and post-judgment rate selected for a judgment entered in 1999. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -423,7 +423,7 @@
         "effective_date": "1998-01-01",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 8% as the general pre- and post-judgment rate selected for a judgment entered in 1998. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."
@@ -436,7 +436,7 @@
         "effective_date": "1997-08-07",
         "source_id": "ak-prejud",
         "source_url": "https://public.courts.alaska.gov/web/forms/docs/adm-505.pdf",
-        "retrieved_at": "2026-08-20T16:12:55.323Z",
+        "retrieved_at": "2026-08-22T01:48:52.982Z",
         "confidence": "high",
         "method": "statute-variable-official-table",
         "notes": "Alaska Court System form ADM-505 publishes 8% as the general pre- and post-judgment rate selected for a judgment entered in 1997. Prejudgment interest generally begins when the claimant could first sue; contracts, other statutes, and the 1980–1997 transition can control. Not legal advice."

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T16:31:34.329Z",
+  "generated_at": "2026-08-22T01:49:13.601Z",
   "slug": "georgia-judgment-rate",
   "name": "Georgia Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -46,7 +46,7 @@
       "effective_date": "2025-12-11",
       "source_id": "ga-code",
       "source_url": "https://fred.stlouisfed.org/series/PRIME",
-      "retrieved_at": "2026-08-20T16:13:01.774Z",
+      "retrieved_at": "2026-08-22T01:49:00.486Z",
       "confidence": "high",
       "method": "derived_ga_7_4_12_prime_plus_3",
       "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate on the day judgment is entered plus three percentage points, fixed for that judgment. The prime rate has been 6.75% since December 11, 2025, producing a 9.75% general reference. A judgment on a written contract that specifies a rate uses the contract rate instead under §7-4-12(b). Verify applicability; not legal advice."
@@ -62,7 +62,7 @@
         "effective_date": "2025-12-11",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate on the day judgment is entered plus three percentage points, fixed for that judgment. The prime rate has been 6.75% since December 11, 2025, producing a 9.75% general reference. A judgment on a written contract that specifies a rate uses the contract rate instead under §7-4-12(b). Verify applicability; not legal advice."
@@ -75,7 +75,7 @@
         "effective_date": "2025-10-30",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.00%) plus three percentage points, producing 10.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -88,7 +88,7 @@
         "effective_date": "2025-09-17",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.25%) plus three percentage points, producing 10.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -101,7 +101,7 @@
         "effective_date": "2024-12-20",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.50%) plus three percentage points, producing 10.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -114,7 +114,7 @@
         "effective_date": "2024-11-08",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.75%) plus three percentage points, producing 10.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -127,7 +127,7 @@
         "effective_date": "2024-09-19",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (8.00%) plus three percentage points, producing 11.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -140,7 +140,7 @@
         "effective_date": "2023-07-27",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (8.50%) plus three percentage points, producing 11.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -153,7 +153,7 @@
         "effective_date": "2023-05-04",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (8.25%) plus three percentage points, producing 11.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -166,7 +166,7 @@
         "effective_date": "2023-03-23",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (8.00%) plus three percentage points, producing 11.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -179,7 +179,7 @@
         "effective_date": "2023-02-02",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.75%) plus three percentage points, producing 10.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -192,7 +192,7 @@
         "effective_date": "2022-12-15",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.50%) plus three percentage points, producing 10.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -205,7 +205,7 @@
         "effective_date": "2022-11-03",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.00%) plus three percentage points, producing 10.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -218,7 +218,7 @@
         "effective_date": "2022-09-22",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.25%) plus three percentage points, producing 9.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -231,7 +231,7 @@
         "effective_date": "2022-07-28",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.50%) plus three percentage points, producing 8.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -244,7 +244,7 @@
         "effective_date": "2022-06-16",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.75%) plus three percentage points, producing 7.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -257,7 +257,7 @@
         "effective_date": "2022-05-05",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.00%) plus three percentage points, producing 7.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -270,7 +270,7 @@
         "effective_date": "2022-03-17",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (3.50%) plus three percentage points, producing 6.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -283,7 +283,7 @@
         "effective_date": "2020-03-16",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (3.25%) plus three percentage points, producing 6.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -296,7 +296,7 @@
         "effective_date": "2020-03-04",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.25%) plus three percentage points, producing 7.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -309,7 +309,7 @@
         "effective_date": "2019-10-31",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.75%) plus three percentage points, producing 7.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -322,7 +322,7 @@
         "effective_date": "2019-09-19",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.00%) plus three percentage points, producing 8.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -335,7 +335,7 @@
         "effective_date": "2019-08-01",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.25%) plus three percentage points, producing 8.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -348,7 +348,7 @@
         "effective_date": "2018-12-20",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.50%) plus three percentage points, producing 8.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -361,7 +361,7 @@
         "effective_date": "2018-09-27",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.25%) plus three percentage points, producing 8.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -374,7 +374,7 @@
         "effective_date": "2018-06-14",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.00%) plus three percentage points, producing 8.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -387,7 +387,7 @@
         "effective_date": "2018-03-22",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.75%) plus three percentage points, producing 7.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -400,7 +400,7 @@
         "effective_date": "2017-12-14",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.50%) plus three percentage points, producing 7.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -413,7 +413,7 @@
         "effective_date": "2017-06-15",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.25%) plus three percentage points, producing 7.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -426,7 +426,7 @@
         "effective_date": "2017-03-16",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.00%) plus three percentage points, producing 7.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -439,7 +439,7 @@
         "effective_date": "2016-12-15",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (3.75%) plus three percentage points, producing 6.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -452,7 +452,7 @@
         "effective_date": "2015-12-17",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (3.50%) plus three percentage points, producing 6.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -465,7 +465,7 @@
         "effective_date": "2008-12-16",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (3.25%) plus three percentage points, producing 6.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -478,7 +478,7 @@
         "effective_date": "2008-10-29",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.00%) plus three percentage points, producing 7.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -491,7 +491,7 @@
         "effective_date": "2008-10-08",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.50%) plus three percentage points, producing 7.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -504,7 +504,7 @@
         "effective_date": "2008-04-30",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.00%) plus three percentage points, producing 8.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -517,7 +517,7 @@
         "effective_date": "2008-03-18",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.25%) plus three percentage points, producing 8.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -530,7 +530,7 @@
         "effective_date": "2008-01-30",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.00%) plus three percentage points, producing 9.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -543,7 +543,7 @@
         "effective_date": "2008-01-22",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.50%) plus three percentage points, producing 9.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -556,7 +556,7 @@
         "effective_date": "2007-12-11",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.25%) plus three percentage points, producing 10.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -569,7 +569,7 @@
         "effective_date": "2007-10-31",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.50%) plus three percentage points, producing 10.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -582,7 +582,7 @@
         "effective_date": "2007-09-18",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.75%) plus three percentage points, producing 10.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -595,7 +595,7 @@
         "effective_date": "2006-06-29",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (8.25%) plus three percentage points, producing 11.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -608,7 +608,7 @@
         "effective_date": "2006-05-10",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (8.00%) plus three percentage points, producing 11.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -621,7 +621,7 @@
         "effective_date": "2006-03-28",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.75%) plus three percentage points, producing 10.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -634,7 +634,7 @@
         "effective_date": "2006-01-31",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.50%) plus three percentage points, producing 10.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -647,7 +647,7 @@
         "effective_date": "2005-12-13",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.25%) plus three percentage points, producing 10.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -660,7 +660,7 @@
         "effective_date": "2005-11-01",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (7.00%) plus three percentage points, producing 10.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -673,7 +673,7 @@
         "effective_date": "2005-09-20",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.75%) plus three percentage points, producing 9.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -686,7 +686,7 @@
         "effective_date": "2005-08-09",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.50%) plus three percentage points, producing 9.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -699,7 +699,7 @@
         "effective_date": "2005-06-30",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.25%) plus three percentage points, producing 9.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -712,7 +712,7 @@
         "effective_date": "2005-05-03",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (6.00%) plus three percentage points, producing 9.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -725,7 +725,7 @@
         "effective_date": "2005-03-22",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.75%) plus three percentage points, producing 8.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -738,7 +738,7 @@
         "effective_date": "2005-02-02",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.50%) plus three percentage points, producing 8.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -751,7 +751,7 @@
         "effective_date": "2004-12-15",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.25%) plus three percentage points, producing 8.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -764,7 +764,7 @@
         "effective_date": "2004-11-10",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (5.00%) plus three percentage points, producing 8.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -777,7 +777,7 @@
         "effective_date": "2004-09-21",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.75%) plus three percentage points, producing 7.75%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -790,7 +790,7 @@
         "effective_date": "2004-08-11",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.50%) plus three percentage points, producing 7.50%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -803,7 +803,7 @@
         "effective_date": "2004-07-01",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.25%) plus three percentage points, producing 7.25%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
@@ -816,7 +816,7 @@
         "effective_date": "2003-07-01",
         "source_id": "ga-code",
         "source_url": "https://fred.stlouisfed.org/series/PRIME",
-        "retrieved_at": "2026-08-20T16:13:01.774Z",
+        "retrieved_at": "2026-08-22T01:49:00.486Z",
         "confidence": "high",
         "method": "derived_ga_7_4_12_prime_plus_3",
         "notes": "For civil actions filed on or after July 1, 2003, O.C.G.A. §7-4-12(a) uses the Federal Reserve prime rate in force on the judgment date (4.00%) plus three percentage points, producing 7.00%. The rate then stays fixed for that judgment; a written-contract rate can control under subsection (b). Not legal advice."
