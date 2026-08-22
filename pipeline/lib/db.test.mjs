@@ -59,11 +59,31 @@ test('changed observation records the new retrieval time', () => {
 
 test('source upsert cannot move its last-check time backwards', () => {
   const { db } = fixture();
+  db.prepare('UPDATE sources SET robots_status = ? WHERE id = ?')
+    .run('newer source receipt', 'src');
   upsertSource(db, {
     id: 'src', name: 'Source', publisher: 'Publisher', home_url: 'https://example.test',
+    robots_status: 'older cached receipt',
     retrieved_at: '2026-07-01T00:00:00Z',
   });
-  assert.equal(db.prepare('SELECT retrieved_at FROM sources WHERE id = ?').get('src').retrieved_at, '2026-07-08T00:00:00Z');
+  assert.deepEqual(
+    db.prepare('SELECT retrieved_at, robots_status FROM sources WHERE id = ?').get('src'),
+    { retrieved_at: '2026-07-08T00:00:00Z', robots_status: 'newer source receipt' },
+  );
+  db.close();
+});
+
+test('source upsert replaces receipt fields together when the check is newer', () => {
+  const { db } = fixture();
+  upsertSource(db, {
+    id: 'src', name: 'Source', publisher: 'Publisher', home_url: 'https://example.test',
+    robots_status: 'newer source receipt',
+    retrieved_at: '2026-07-09T00:00:00Z',
+  });
+  assert.deepEqual(
+    db.prepare('SELECT retrieved_at, robots_status FROM sources WHERE id = ?').get('src'),
+    { retrieved_at: '2026-07-09T00:00:00Z', robots_status: 'newer source receipt' },
+  );
   db.close();
 });
 

@@ -149,6 +149,19 @@ async function runAll() {
     // Keep the calculation-rule pages sequential with the quarterly-rate page: all live on the
     // same IRS host, and our crawler intentionally leaves at least three seconds between requests.
     const irsPenaltyRules = await fetchIrsPenaltyRules({ log: console.log });
+    const priorIrsPenaltySource = db.prepare(
+      'SELECT retrieved_at FROM sources WHERE id = ?',
+    ).get(irsPenaltyRules.source.id);
+    const penaltyRulesRetrievedAt = [
+      priorIrsPenaltySource?.retrieved_at,
+      irsPenaltyRules.retrieved_at,
+    ].filter(Boolean).sort().at(-1);
+    irsPenaltyRules.retrieved_at = penaltyRulesRetrievedAt;
+    irsPenaltyRules.source = {
+      ...irsPenaltyRules.source,
+      retrieved_at: penaltyRulesRetrievedAt,
+      robots_status: `five official IRS pages fetched through the shared robots gate ${penaltyRulesRetrievedAt}`,
+    };
     const irsUnderpaymentEntity = irs.entities.find((entity) => entity.slug === 'irs-underpayment');
     if (!irsUnderpaymentEntity) {
       throw new Error('IRS quarterly fetch did not return the underpayment series');
@@ -156,7 +169,9 @@ async function runAll() {
     irsUnderpaymentEntity.metadata = {
       ...irsUnderpaymentEntity.metadata,
       penalty_rules: irsPenaltyRules.rules,
-      penalty_rules_retrieved_at: irsPenaltyRules.retrieved_at,
+      // A cache hit may carry an older page receipt than the durable source row. Preserve the
+      // newest successful check so entity metadata and exported source provenance cannot diverge.
+      penalty_rules_retrieved_at: penaltyRulesRetrievedAt,
     };
 
     // 2) NORMALIZE

@@ -88,7 +88,13 @@ export function upsertSource(db, s) {
      VALUES (@id, @name, @publisher, @home_url, @license, @robots_status, @retrieved_at)
      ON CONFLICT(id) DO UPDATE SET
        name=excluded.name, publisher=excluded.publisher, home_url=excluded.home_url,
-       license=excluded.license, robots_status=excluded.robots_status,
+       license=excluded.license,
+       robots_status=CASE
+         WHEN excluded.retrieved_at IS NULL THEN sources.robots_status
+         WHEN sources.retrieved_at IS NULL OR excluded.retrieved_at >= sources.retrieved_at
+           THEN COALESCE(excluded.robots_status, sources.robots_status)
+         ELSE sources.robots_status
+       END,
        retrieved_at=CASE
          WHEN excluded.retrieved_at IS NULL THEN sources.retrieved_at
          WHEN sources.retrieved_at IS NULL OR excluded.retrieved_at > sources.retrieved_at
