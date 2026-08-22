@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T01:49:13.601Z",
+  "generated_at": "2026-08-22T02:35:47.079Z",
   "slug": "california-judgment-rate",
   "name": "California Post-Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,13 +8,155 @@
   "locale": null,
   "metadata": {
     "state": "CA",
-    "statute": "CCP §685.010",
-    "basis": "statute-fixed",
+    "statute": "Cal. Code Civ. Proc. §§685.010–685.030",
+    "basis": "statute-branching",
+    "verified_on": "2026-08-21",
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
-    }
+      "reason": "The 10%, 5%, 7%, Treasury-linked, and annual-reset branches; balance-threshold transitions; public-entity accrual rules; renewal capitalization; costs; payments; special judgments; and cent-rounding mechanics are not modeled end-to-end.",
+      "renderer_supported": false
+    },
+    "history_coverage": {
+      "default_branch_verified_from": "1983-01-01",
+      "default_branch_verified_through": "2026-08-21",
+      "qualifying_debt_branch_verified_from": "2023-01-01",
+      "prior_general_rate": {
+        "value": 7,
+        "effective_from": null,
+        "effective_to": "1982-12-31",
+        "machine_publish": false,
+        "reason": "The preceding 7% rate is official, but its complete historical start was not established."
+      }
+    },
+    "rate_behavior": {
+      "ordinary_calendar_reset": false,
+      "selection": "Select by debtor type, claim type, unsatisfied principal, and judgment-entry or renewal-application date.",
+      "renewal": "Reevaluate the applicable branch and capitalize unpaid accrued interest into renewed principal.",
+      "future_legislation": "A later statute may change only interest accruing after that statute’s operative date.",
+      "entry_lock_boolean_safe": false
+    },
+    "rate_branches": [
+      {
+        "id": "general",
+        "value": 10,
+        "effective_from": "1983-01-01",
+        "applies_unless": [
+          "qualifying_medical_debt",
+          "qualifying_personal_debt",
+          "public_entity",
+          "special_statute_or_judgment"
+        ]
+      },
+      {
+        "id": "qualifying_medical_debt",
+        "value": 5,
+        "effective_from": "2023-01-01",
+        "debtor_type": "natural_person",
+        "claim_type": "medical_expenses",
+        "unsatisfied_principal": {
+          "currency": "USD",
+          "operator": "lt",
+          "amount": 200000
+        },
+        "entry_or_renewal_gate": "2023-01-01",
+        "exclusions": [
+          "tortious_conduct",
+          "fraudulent_conduct",
+          "employee_wages_damages_or_penalties"
+        ]
+      },
+      {
+        "id": "qualifying_personal_debt",
+        "value": 5,
+        "effective_from": "2023-01-01",
+        "debtor_type": "natural_person",
+        "claim_type": "personal_family_or_household_transaction",
+        "unsatisfied_principal": {
+          "currency": "USD",
+          "operator": "lt",
+          "amount": 50000
+        },
+        "entry_or_renewal_gate": "2023-01-01",
+        "exclusions": [
+          "tortious_conduct",
+          "fraudulent_conduct",
+          "employee_wages_damages_or_penalties"
+        ]
+      },
+      {
+        "id": "public_entity_general",
+        "value": 7,
+        "effective_from": null,
+        "current": true,
+        "calculation_status": "reference_only"
+      },
+      {
+        "id": "public_entity_tax_or_fee",
+        "value": null,
+        "effective_from": "2014-01-01",
+        "calculation_status": "not_modeled"
+      },
+      {
+        "id": "public_entity_periodic_payment",
+        "value": null,
+        "calculation_status": "not_modeled"
+      }
+    ],
+    "official_authorities": [
+      {
+        "label": "Cal. Code Civ. Proc. §685.010 — current 10% and 5% branches",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010"
+      },
+      {
+        "label": "Cal. Code Civ. Proc. §§685.010–685.110 — accrual, satisfaction, and costs",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.&division=1.&lawCode=CCP&part=2.&title=9."
+      },
+      {
+        "label": "Cal. Code Civ. Proc. §683.150 — renewed judgment amount",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=683.150"
+      },
+      {
+        "label": "Cal. Code Civ. Proc. §§695.210–695.220 — satisfaction and payment allocation",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=2.&chapter=1.&division=2.&lawCode=CCP&part=2.&title=9."
+      },
+      {
+        "label": "California Constitution, article XV, §1",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=XV&chapter=&division=&lawCode=CONS&part=&title="
+      },
+      {
+        "label": "Government Code §965.5 — state judgments",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=965.5."
+      },
+      {
+        "label": "Government Code §970.1 — local public entities",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=970.1."
+      },
+      {
+        "label": "Civil Code §3287(c) — public-entity tax and fee claims",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=3287."
+      },
+      {
+        "label": "Government Code §984 — public-entity periodic payments",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=984."
+      },
+      {
+        "label": "Civil Code §3289 — contract interest before a superseding obligation",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=3289"
+      },
+      {
+        "label": "SB 1200, Chapter 883 of 2022 — 5% branches",
+        "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202120220SB1200"
+      },
+      {
+        "label": "Judicial Council form MC-013-INFO",
+        "url": "https://courts.ca.gov/publication/information-sheet-calculating-interest-and-amount-owed-judgment"
+      },
+      {
+        "label": "California Attorney General Opinion 82-1206 — January 1, 1983 transition",
+        "url": "https://oag.ca.gov/system/files/opinions/pdfs/82-1206_0.pdf"
+      }
+    ]
   },
   "metrics": [
     "annual_rate"
@@ -25,13 +167,13 @@
       "value": 10,
       "value_text": "10%",
       "unit": "percent_per_annum",
-      "effective_date": "2024-01-01",
+      "effective_date": "1983-01-01",
       "source_id": "ca-leginfo",
       "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010",
-      "retrieved_at": "2026-07-08T00:00:00Z",
+      "retrieved_at": "2026-08-21T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Default rate on money judgments under CCP §685.010(a)(1); simple interest, accruing daily (/365) on unpaid principal from entry of judgment. Carve-outs: 5% under §685.010(a)(2) for judgments entered/renewed on or after Jan 1, 2023 against a natural person on medical debt (principal < $200,000) or personal debt (< $50,000) — SB 1200 (2022); 7% where the judgment debtor is a state or local government entity (Cal. Const. art. XV §1). Effective date shown is the current statutory text (amended eff. Jan 1, 2024); the 10% default has applied since the early 1980s. Verify against the statute; not legal advice."
+      "method": "statute-branching-official-history",
+      "notes": "California’s ordinary state-court money-judgment rate is 10% per year, effective January 1, 1983. A 5% branch applies to qualifying medical-expense or personal-debt judgments against natural persons that meet strict date, balance, and claim requirements. Public entities, tax or fee claims, periodic payments, renewals, costs, and special statutes follow separate rules. Ordinary interest is calculated daily, while allowed costs and renewal can increase principal. Reference only; not legal advice."
     }
   },
   "history": {
@@ -41,13 +183,13 @@
         "value": 10,
         "value_text": "10%",
         "unit": "percent_per_annum",
-        "effective_date": "2024-01-01",
+        "effective_date": "1983-01-01",
         "source_id": "ca-leginfo",
         "source_url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010",
-        "retrieved_at": "2026-07-08T00:00:00Z",
+        "retrieved_at": "2026-08-21T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Default rate on money judgments under CCP §685.010(a)(1); simple interest, accruing daily (/365) on unpaid principal from entry of judgment. Carve-outs: 5% under §685.010(a)(2) for judgments entered/renewed on or after Jan 1, 2023 against a natural person on medical debt (principal < $200,000) or personal debt (< $50,000) — SB 1200 (2022); 7% where the judgment debtor is a state or local government entity (Cal. Const. art. XV §1). Effective date shown is the current statutory text (amended eff. Jan 1, 2024); the 10% default has applied since the early 1980s. Verify against the statute; not legal advice."
+        "method": "statute-branching-official-history",
+        "notes": "California’s ordinary state-court money-judgment rate is 10% per year, effective January 1, 1983. A 5% branch applies to qualifying medical-expense or personal-debt judgments against natural persons that meet strict date, balance, and claim requirements. Public entities, tax or fee claims, periodic payments, renewals, costs, and special statutes follow separate rules. Ordinary interest is calculated daily, while allowed costs and renewal can increase principal. Reference only; not legal advice."
       }
     ]
   }

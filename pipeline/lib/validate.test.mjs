@@ -188,6 +188,26 @@ test('a reference-only state rule is valid but not calculator-ready', () => {
   assert.equal(r.totals.calculatorReadyStateRules, 0);
 });
 
+test('a source-checked statutory branch may retain its true historical effective date', () => {
+  const db = seed();
+  const id = upsertEntity(db, {
+    slug: 'historical-branch-rate', name: 'Historical branch', entity_type: 'rate_series', jurisdiction: 'US',
+    region: 'US States', metadata: { state: 'EX', calculation: { status: 'reference_only', source_tier: 'official_primary', reason: 'Other branches remain reference-only.' } },
+  });
+  upsertObservation(db, {
+    ...base,
+    entity_id: id,
+    value_numeric: 10,
+    value_text: '10%',
+    effective_date: '1983-01-01',
+    method: 'statute-branching-official-history',
+  });
+  const r = validate(db, { today: '2026-08-21' });
+  assert.equal(r.ok, true, JSON.stringify(r.errors));
+  assert.equal(r.warnings.some((warning) => /historical-branch-rate/.test(warning)), false);
+  db.close();
+});
+
 test('the exact monthly Iowa court history validates through the official August 2026 selection', () => {
   const db = openDb({ path: ':memory:' });
   const bundle = buildIowa();

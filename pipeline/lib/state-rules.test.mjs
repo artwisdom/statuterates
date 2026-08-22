@@ -1,8 +1,23 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 
 import { STATE_SOURCES, buildIowa, buildStateFixed } from '../fetchers/us-states.mjs';
+import {
+  buildMichiganOfficialHistory,
+  buildNewJerseyPostJudgmentHistory,
+  buildNewJerseyPrejudgmentHistory,
+} from '../fetchers/michigan-new-jersey-interest-history.mjs';
 import { classifyStateSource, validateStateCalculationMetadata } from './state-rules.mjs';
+
+const historyChecksum = (rows) => createHash('sha256')
+  .update(JSON.stringify(rows.map(({ effective_date, index_value, value, value_text }) => ({
+    effective_date,
+    index_value,
+    value,
+    value_text,
+  }))))
+  .digest('hex');
 
 test('source tiers distinguish official, judicial, and third-party legal references', () => {
   assert.equal(classifyStateSource({
@@ -56,6 +71,114 @@ test('only the audited Florida scope is calculator-ready and observations use ac
     assert.equal(observation.retrieved_at, source.retrieved_at, observation.entitySlug);
     assert.equal(observation.notes.includes('…'), false, observation.entitySlug);
   }
+});
+
+test('New York separates the 1981 general rate from the 2022 consumer-debt transition', () => {
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const history = (slug) => observations
+    .filter((observation) => observation.entitySlug === slug)
+    .map((observation) => [observation.effective_date, observation.value_text]);
+
+  assert.deepEqual(history('new-york-judgment-rate'), [['1981-06-15', '9%']]);
+  assert.deepEqual(history('new-york-consumer-debt-judgment-rate'), [
+    ['1981-06-15', '9%'],
+    ['2022-04-30', '2%'],
+  ]);
+  for (const slug of ['new-york-judgment-rate', 'new-york-consumer-debt-judgment-rate']) {
+    const entity = entityBySlug.get(slug);
+    assert.equal(entity.metadata.basis, 'statute-branching');
+    assert.equal(entity.metadata.calculation.status, 'reference_only');
+    assert.equal(entity.metadata.calculation.renderer_supported, false);
+    assert.ok(entity.metadata.official_authorities.length >= 6);
+  }
+});
+
+test('California uses the 1983 default-rate transition and keeps simultaneous branches in metadata', () => {
+  const { entities, observations } = buildStateFixed();
+  const entity = entities.find((candidate) => candidate.slug === 'california-judgment-rate');
+  const history = observations.filter((observation) => observation.entitySlug === entity.slug);
+
+  assert.deepEqual(history.map((row) => [row.effective_date, row.value_text]), [['1983-01-01', '10%']]);
+  assert.equal(history[0].method, 'statute-branching-official-history');
+  assert.equal(entity.metadata.basis, 'statute-branching');
+  assert.deepEqual(entity.metadata.rate_branches.map((branch) => branch.id), [
+    'general',
+    'qualifying_medical_debt',
+    'qualifying_personal_debt',
+    'public_entity_general',
+    'public_entity_tax_or_fee',
+    'public_entity_periodic_payment',
+  ]);
+  assert.equal(entity.metadata.calculation.status, 'reference_only');
+  assert.ok(entity.metadata.official_authorities.length >= 10);
+});
+
+test('Michigan and New Jersey expose verified official histories without enabling calculators', () => {
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+
+  const michiganPost = history('michigan-judgment-rate');
+  const michiganPre = history('michigan-prejudgment-rate');
+  assert.equal(michiganPost.length, 80);
+  assert.equal(michiganPre.length, 80);
+  assert.equal(michiganPost[0].effective_date, '1987-01-01');
+  assert.equal(michiganPost.at(-1).effective_date, '2026-07-01');
+  assert.equal(michiganPost.at(-1).value_text, '4.959%');
+  assert.ok(michiganPost.every((row) => row.confidence === 'high'));
+
+  const newJerseyPost = history('new-jersey-judgment-rate');
+  const newJerseyPre = history('new-jersey-prejudgment-rate');
+  assert.equal(newJerseyPost.length, 44);
+  assert.equal(newJerseyPre.length, 40);
+  assert.equal(newJerseyPost[0].effective_date, '1975-04-01');
+  assert.equal(newJerseyPre[0].effective_date, '1988-01-01');
+  assert.equal(
+    newJerseyPost.find((row) => row.effective_date === '1996-09-01')?.value_text,
+    '5.5% / 7.5%',
+  );
+  assert.equal(
+    newJerseyPre.find((row) => row.effective_date === '1996-09-01')?.value_text,
+    '5.5% / 7.5%',
+  );
+  assert.equal(newJerseyPost.at(-1).value_text, '4.5% / 6.5%');
+  assert.equal(newJerseyPre.at(-1).value_text, '4.5% / 6.5%');
+
+  // These checksums protect every manually transcribed official date and percentage, not just the
+  // boundary rows. A future source extension must be reviewed and update the checksum deliberately.
+  assert.equal(
+    historyChecksum(buildMichiganOfficialHistory()),
+    '02afa579cf562161503e85366e2517f8ccffa07a0ffc26df73a57c010ab0c818',
+  );
+  assert.equal(
+    historyChecksum(buildNewJerseyPostJudgmentHistory()),
+    '232f788588e7c0f21524c1c2fb33aa8b9f36ba2522070f7926bded3f494be451',
+  );
+  assert.equal(
+    historyChecksum(buildNewJerseyPrejudgmentHistory()),
+    '598e9d8b273a999a33943e50a5f56e74ac620d387f242deb4a3d225164af6740',
+  );
+
+  for (const slug of [
+    'michigan-judgment-rate',
+    'michigan-prejudgment-rate',
+    'new-jersey-judgment-rate',
+    'new-jersey-prejudgment-rate',
+  ]) {
+    const entity = entityBySlug.get(slug);
+    assert.equal(entity.metadata.calculation.status, 'reference_only');
+    assert.equal(entity.metadata.calculation.renderer_supported, false);
+    assert.ok(entity.metadata.official_authorities.length >= 4);
+  }
+  assert.equal(
+    entityBySlug.get('new-jersey-prejudgment-rate').metadata.calculation.history_start,
+    '1988-01-01',
+  );
+  assert.match(
+    entityBySlug.get('new-jersey-prejudgment-rate').metadata.calculation.accrual_trigger,
+    /later_of_action_institution_or_six_months_after_cause_of_action_accrual/,
+  );
 });
 
 test('Texas exposes official monthly history and a structured but safely withheld rule model', () => {

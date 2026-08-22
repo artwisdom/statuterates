@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T01:49:13.601Z",
+  "generated_at": "2026-08-22T02:35:47.079Z",
   "slug": "new-york-judgment-rate",
   "name": "New York Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,13 +8,53 @@
   "locale": null,
   "metadata": {
     "state": "NY",
-    "statute": "CPLR 5004(a)",
-    "basis": "statute-fixed",
+    "statute": "CPLR 5003 and 5004(a)",
+    "basis": "statute-branching",
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
-    }
+      "reason": "Consumer-debt, specific-statute, public-defendant, explicit-contract, partial-payment, tolling, and transition branches are not fully deterministic.",
+      "rate_behavior": "changes_by_statute",
+      "compounding": "simple",
+      "day_count": "statewide_rule_not_fully_verified",
+      "valid_from": "1981-06-15",
+      "history_start": "1981-06-15",
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "payments_supported": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-08-21T00:00:00Z"
+    },
+    "official_authorities": [
+      {
+        "label": "CPLR 5004",
+        "url": "https://www.nysenate.gov/legislation/laws/CVP/5004"
+      },
+      {
+        "label": "CPLR 5003",
+        "url": "https://www.nysenate.gov/legislation/laws/CVP/5003"
+      },
+      {
+        "label": "CPLR 5002",
+        "url": "https://www.nysenate.gov/legislation/laws/CVP/5002"
+      },
+      {
+        "label": "Matter of HSBC Bank USA",
+        "url": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_04954.htm"
+      },
+      {
+        "label": "520 E. 81st St. Associates v Roughton-Hester",
+        "url": "https://www.nycourts.gov/Reporter/3dseries/2005/2005_02956.htm"
+      },
+      {
+        "label": "IRB-Brasil Resseguros v Inepar Investments",
+        "url": "https://www.nycourts.gov/reporter/3dseries/2011/2011_04306.htm"
+      },
+      {
+        "label": "Denio v State of New York",
+        "url": "https://www.nycourts.gov/reporter/3dseries/2006/2006_04454.htm"
+      }
+    ]
   },
   "metrics": [
     "annual_rate"
@@ -25,13 +65,13 @@
       "value": 9,
       "value_text": "9%",
       "unit": "percent_per_annum",
-      "effective_date": "2022-04-30",
+      "effective_date": "1981-06-15",
       "source_id": "ny-senate",
       "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-      "retrieved_at": "2026-07-08T00:00:00Z",
+      "retrieved_at": "2026-08-21T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "General rate under CPLR 5004(a): 9% per annum \"except where otherwise provided by statute\". Treated as simple interest in NY practice. For judgments arising out of CONSUMER DEBT against a natural person the rate is 2% (see the companion consumer-debt series). Effective date shown is when the current statutory scheme took effect (L.2021 ch.831, eff. Apr 30, 2022); the 9% general rate long predates it. Verify against the statute; not legal advice."
+      "method": "statute-branching",
+      "notes": "CPLR 5004(a) supplies a 9% annual general rate, which official published appellate authority identifies as effective June 15, 1981. Covered consumer debt against a natural person uses 2% from April 30, 2022; a specific statute or sufficiently explicit post-judgment contract term can also control. New York courts treat the CPLR 5001–5004 framework as simple interest. Verify the applicable branch; not legal advice."
     }
   },
   "history": {
@@ -41,13 +81,13 @@
         "value": 9,
         "value_text": "9%",
         "unit": "percent_per_annum",
-        "effective_date": "2022-04-30",
+        "effective_date": "1981-06-15",
         "source_id": "ny-senate",
         "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-        "retrieved_at": "2026-07-08T00:00:00Z",
+        "retrieved_at": "2026-08-21T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "General rate under CPLR 5004(a): 9% per annum \"except where otherwise provided by statute\". Treated as simple interest in NY practice. For judgments arising out of CONSUMER DEBT against a natural person the rate is 2% (see the companion consumer-debt series). Effective date shown is when the current statutory scheme took effect (L.2021 ch.831, eff. Apr 30, 2022); the 9% general rate long predates it. Verify against the statute; not legal advice."
+        "method": "statute-branching",
+        "notes": "CPLR 5004(a) supplies a 9% annual general rate, which official published appellate authority identifies as effective June 15, 1981. Covered consumer debt against a natural person uses 2% from April 30, 2022; a specific statute or sufficiently explicit post-judgment contract term can also control. New York courts treat the CPLR 5001–5004 framework as simple interest. Verify the applicable branch; not legal advice."
       }
     ]
   }

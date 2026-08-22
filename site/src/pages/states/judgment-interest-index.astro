@@ -1,0 +1,331 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import CiteThis from '../../components/CiteThis.astro';
+import {
+  currentOf,
+  getMeta,
+  prettyDate,
+  stateCalculatorReleaseForEntity,
+  stateHubs,
+} from '../../lib/data.mjs';
+import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
+
+const meta = getMeta();
+const dataDate = String(meta.generated_at || '').slice(0, 10);
+const year = dataDate.slice(0, 4);
+const hubs = stateHubs();
+
+const basisFor = (entity, observation) => {
+  if (!entity || !observation) return 'Case-specific / no single rate';
+  if (String(entity.metadata?.basis || '').includes('branching')
+      || Array.isArray(entity.metadata?.rate_branches)
+      || entity.metadata?.calculation?.tier_basis
+      || String(observation.value_text || '').includes(' / ')
+      || observation.method === 'statute-branching') {
+    return 'Multiple statutory branches';
+  }
+  if ((observation.method || '').startsWith('statute-fixed')) return 'Fixed statutory reference';
+  if ((observation.method || '').startsWith('statute')) return 'Variable statutory formula or table';
+  if (observation.method === 'court-or-contract-rate') return 'Contract or court-selected';
+  return observation.confidence === 'high' ? 'Published reference' : 'Derived reference';
+};
+
+const rows = hubs.map((hub) => {
+  const entity = hub.post;
+  if (!entity) {
+    return {
+      base: hub.base,
+      name: hub.name,
+      value: 'No uniform default',
+      basis: 'Case-specific / no single rate',
+      sourceUrl: `/states/${hub.base}/`,
+      sourceLabel: 'Open state analysis',
+      historyCount: 0,
+      historyLabel: 'No numeric series',
+      detailed: false,
+      analysisLabel: 'Case-specific reference',
+      calculatorReady: false,
+      calculatorLabel: 'Not released',
+      updated: dataDate,
+    };
+  }
+
+  const current = currentOf(entity, dataDate);
+  const history = (entity.history?.annual_rate || [])
+    .filter((point) => /^\d{4}-\d{2}-\d{2}$/.test(point.effective_date || ''))
+    .slice()
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+  const copy = copyFor(entity.slug, { observation: current, historyPoints: history.length });
+  const calculator = stateCalculatorReleaseForEntity(entity);
+  const sourceUrl = current?.source_url || `/rates/${entity.slug}/`;
+  const sourceTier = String(entity.metadata?.calculation?.source_tier || '');
+  const earliest = history[0]?.effective_date;
+
+  return {
+    base: hub.base,
+    name: hub.name,
+    slug: entity.slug,
+    value: current?.value_text || 'See state analysis',
+    basis: basisFor(entity, current),
+    sourceUrl,
+    sourceLabel: sourceTier.startsWith('official_') ? 'Official source' : 'Recorded source',
+    historyCount: history.length,
+    historyLabel: history.length > 1
+      ? `${history.length} points since ${prettyDate(earliest)}`
+      : 'Current observation only',
+    detailed: Boolean(copy.postDetails),
+    analysisLabel: copy.postDetails ? 'Detailed rule analysis' : 'Rate reference; deeper review pending',
+    calculatorReady: Boolean(calculator),
+    calculatorLabel: calculator ? 'Audited calculator available' : 'Reference only',
+    calculatorPath: calculator?.path,
+    updated: [
+      String(current?.retrieved_at || current?.effective_date || '').slice(0, 10),
+      contentModifiedFor(entity.slug),
+    ].filter(Boolean).sort().at(-1),
+  };
+});
+
+const numericRows = rows.filter((row) => row.historyCount > 0);
+const detailedCount = rows.filter((row) => row.detailed).length;
+const historyCount = rows.filter((row) => row.historyCount > 1).length;
+const calculatorCount = rows.filter((row) => row.calculatorReady).length;
+const variableCount = rows.filter((row) => row.basis.includes('Variable')).length;
+const fixedCount = rows.filter((row) => row.basis.includes('Fixed')).length;
+const branchingCount = rows.filter((row) => row.basis.includes('branches')).length;
+const pageModified = [dataDate, ...rows.map((row) => row.updated).filter(Boolean)].sort().at(-1);
+
+const title = `${year} State Judgment Interest Rules & Data Index`;
+const description = `Compare ${year} judgment-interest references for all 50 states and D.C., with cited sources, rate type, history depth, rule status, and calculator readiness.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    '@id': `${canonical}#dataset`,
+    identifier: canonical,
+    name: `${year} State Judgment Interest Rules and Data Coverage Index`,
+    description,
+    url: canonical,
+    isAccessibleForFree: true,
+    creator: { '@id': new URL('/#organization', Astro.site).href },
+    license: new URL('/terms/#data-api-license', Astro.site).href,
+    dateModified: pageModified,
+    temporalCoverage: `${year}`,
+    spatialCoverage: 'United States',
+    distribution: {
+      '@type': 'DataDownload',
+      encodingFormat: 'application/json',
+      contentUrl: new URL('/api/v1/entities.json', Astro.site).href,
+    },
+    variableMeasured: [
+      'Current recorded annual rate',
+      'Rate basis',
+      'Recorded history count',
+      'Rule-analysis status',
+      'Calculator release status',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${year} state judgment interest coverage`,
+    numberOfItems: rows.length,
+    itemListElement: rows.map((row, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `${row.name}: ${row.value}`,
+      url: new URL(`/states/${row.base}/`, Astro.site).href,
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'States', item: new URL('/states/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Rules and data index', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/states/">States</a> &rsaquo; <span>Rules and data index</span>
+  </nav>
+  <div class="eyebrow">50 states + D.C. · Transparent coverage</div>
+  <h1>{year} state judgment interest rules &amp; data index</h1>
+  <p class="lead">Compare the current recorded post-judgment reference, cited source, rate type,
+    historical depth, and research status for every state and the District of Columbia. Missing legal
+    mechanics stay labeled as unmodeled; they are never filled with a generic assumption.</p>
+
+  <div class="index-stats" aria-label="Coverage summary">
+    <div><strong>{rows.length}</strong><span>jurisdictions</span></div>
+    <div><strong>{detailedCount}</strong><span>detailed rule analyses</span></div>
+    <div><strong>{historyCount}</strong><span>multi-period histories</span></div>
+    <div><strong>{calculatorCount}</strong><span>audited state calculator</span></div>
+  </div>
+
+  <p class="source-note">Dataset compiled {prettyDate(dataDate)}. The index currently includes
+    {numericRows.length} numeric state or D.C. series and one jurisdiction without a uniform numeric
+    default. A rate reference is not automatically a complete payoff rule.</p>
+
+  <AdSlot id="state-coverage-index-top" />
+
+  <section class="controls" aria-labelledby="coverage-filter-heading">
+    <h2 id="coverage-filter-heading">Filter the coverage index</h2>
+    <div class="control-grid">
+      <label>
+        <span>State or rate</span>
+        <input type="search" data-index-search placeholder="Search states, rates, or rule types" autocomplete="off" />
+      </label>
+      <label>
+        <span>Coverage</span>
+        <select data-index-filter>
+          <option value="all">All jurisdictions</option>
+          <option value="detailed">Detailed rule analysis</option>
+          <option value="history">Multi-period history</option>
+          <option value="calculator">Audited calculator available</option>
+          <option value="pending">Deeper rule review pending</option>
+        </select>
+      </label>
+    </div>
+    <p class="filter-status" data-index-status aria-live="polite">Showing all {rows.length} jurisdictions.</p>
+  </section>
+
+  <div class="scroll-x coverage-table">
+    <table>
+      <caption>Every row is rendered in the page before filtering so users, search engines, and answer
+        systems can inspect the same cited coverage.</caption>
+      <thead>
+        <tr>
+          <th scope="col">Jurisdiction</th>
+          <th scope="col">Current reference</th>
+          <th scope="col">Rate type</th>
+          <th scope="col">Recorded history</th>
+          <th scope="col">Research status</th>
+          <th scope="col">Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr
+            data-index-row
+            data-search={`${row.name} ${row.value} ${row.basis} ${row.analysisLabel}`.toLowerCase()}
+            data-detailed={row.detailed ? 'true' : 'false'}
+            data-history={row.historyCount > 1 ? 'true' : 'false'}
+            data-calculator={row.calculatorReady ? 'true' : 'false'}
+          >
+            <th scope="row"><a href={`/states/${row.base}/`}>{row.name}</a></th>
+            <td class="num">{row.value}</td>
+            <td>{row.basis}</td>
+            <td>{row.historyLabel}</td>
+            <td>
+              <span class:list={['status-chip', row.detailed ? 'complete' : 'pending']}>
+                {row.analysisLabel}
+              </span>
+              {row.calculatorReady && row.calculatorPath && (
+                <><br /><a class="calculator-link" href={row.calculatorPath}>{row.calculatorLabel}</a></>
+              )}
+            </td>
+            <td><a href={row.sourceUrl} rel="noopener" target={row.sourceUrl.startsWith('http') ? '_blank' : undefined}>{row.sourceLabel}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2>What this index establishes</h2>
+  <ul class="clean">
+    <li><strong>Current reference coverage:</strong> {numericRows.length} numeric post-judgment series
+      are recorded; Mississippi is labeled case-specific instead of being assigned an invented rate.</li>
+    <li><strong>Rate behavior:</strong> the current inventory includes {fixedCount} fixed references,
+      {variableCount} variable formulas or official tables, and {branchingCount} explicitly branching
+      headline series. A branch label warns that another rate may control.</li>
+    <li><strong>Historical depth:</strong> {historyCount} jurisdictions have more than one verified
+      effective-date observation. A one-row reference is never presented as a complete history.</li>
+    <li><strong>Calculation safety:</strong> only {calculatorCount} state-specific calculator is
+      released. Other states remain reference-only until the rate selection, accrual, interest base,
+      compounding, day count, payments, and material exceptions are deterministic.</li>
+  </ul>
+
+  <h2>What “deeper rule review pending” means</h2>
+  <p>It does not mean the displayed source or current reference is known to be wrong. It means the
+    page has not yet earned a complete jurisdiction-specific explanation of scope, accrual, rate lock
+    or reset, compounding, and official history. StatuteRates preserves that limitation rather than
+    copying the same generic paragraph across every state.</p>
+
+  <h2>Use the data without losing the caveats</h2>
+  <p>Open a state page for its post- and prejudgment references, then open the rate page for the
+    effective date, source receipt, structured rule analysis when available, JSON, and CSV. The
+    <a href="/calculators/historical-rate-lookup/">historical rate lookup</a> supports only reviewed
+    series with enough official coverage to answer an old-date request without substituting today’s
+    percentage. Developers can start with the <a href="/api/">API documentation</a> or download the
+    <a href="/api/v1/entities.json">entity index as JSON</a>.</p>
+
+  <CiteThis
+    title={`${year} State Judgment Interest Rules and Data Index`}
+    url={canonical}
+    note={`Coverage compiled ${prettyDate(dataDate)} from the linked cited sources; official sources are identified in the table. Reference data, not legal advice.`}
+  />
+
+  <AdSlot id="state-coverage-index-bottom" />
+
+  <div class="disclaimer">Reference data only—not legal advice or a payoff calculation. Confirm the
+    applicable judgment type, date, contract, governing statute, court rule, and official source.</div>
+
+  <style>
+    .breadcrumb { font-size: .9rem; color: var(--ink-soft); margin-bottom: 6px; }
+    .index-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
+      margin: 28px 0 12px; border: 1px solid var(--line); background: var(--line); }
+    .index-stats div { padding: 18px; background: var(--paper); }
+    .index-stats strong { display: block; color: var(--accent); font: 720 2rem/1 var(--nums); }
+    .index-stats span { display: block; margin-top: 7px; color: var(--ink-soft); font-size: .82rem; }
+    .controls { margin: 30px 0 16px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-2); }
+    .controls h2 { margin: 0 0 12px; font-size: 1.15rem; }
+    .control-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
+    .control-grid label span { display: block; margin-bottom: 5px; color: var(--ink-soft); font: 600 .68rem var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+    .control-grid input, .control-grid select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--paper); color: var(--ink); font: inherit; }
+    .filter-status { margin: 10px 0 0; color: var(--ink-soft); font-size: .84rem; }
+    .coverage-table table { min-width: 1120px; }
+    .coverage-table th[scope='row'] { font-family: var(--sans); font-size: .9rem; text-transform: none; letter-spacing: 0; }
+    .coverage-table td { vertical-align: top; font-size: .84rem; }
+    .coverage-table td.num { font-size: .95rem; white-space: nowrap; }
+    .status-chip { display: inline-block; padding: 3px 7px; border-radius: 999px; font-size: .72rem; line-height: 1.35; }
+    .status-chip.complete { color: var(--accent); background: var(--green-wash); }
+    .status-chip.pending { color: var(--ink-soft); background: var(--paper-3); }
+    .calculator-link { display: inline-block; margin-top: 5px; font-size: .76rem; }
+    @media (max-width: 720px) {
+      .index-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .control-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <script>
+    const search = document.querySelector('[data-index-search]');
+    const filter = document.querySelector('[data-index-filter]');
+    const status = document.querySelector('[data-index-status]');
+    const rows = [...document.querySelectorAll('[data-index-row]')];
+
+    const applyFilters = () => {
+      const query = String(search?.value || '').trim().toLowerCase();
+      const mode = String(filter?.value || 'all');
+      let shown = 0;
+      for (const row of rows) {
+        const matchesQuery = !query || String(row.dataset.search || '').includes(query);
+        const matchesMode = mode === 'all'
+          || (mode === 'detailed' && row.dataset.detailed === 'true')
+          || (mode === 'history' && row.dataset.history === 'true')
+          || (mode === 'calculator' && row.dataset.calculator === 'true')
+          || (mode === 'pending' && row.dataset.detailed !== 'true');
+        row.hidden = !(matchesQuery && matchesMode);
+        if (!row.hidden) shown += 1;
+      }
+      if (status) status.textContent = `Showing ${shown} of ${rows.length} jurisdictions.`;
+    };
+
+    search?.addEventListener('input', applyFilters);
+    filter?.addEventListener('change', applyFilters);
+  </script>
+</BaseLayout>

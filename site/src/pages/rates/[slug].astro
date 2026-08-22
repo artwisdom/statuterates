@@ -202,6 +202,7 @@ if (isStateRate) {
     pj ? 'How prejudgment interest works' : 'How post-judgment interest works',
   );
   addRelated(pj ? '/prejudgment/' : '/states/', pj ? 'Compare prejudgment rules by state' : 'Compare judgment rates by state');
+  if (!pj) addRelated('/states/judgment-interest-index/', 'State judgment rules and data coverage index');
   addRelated('/guides/how-to-calculate-judgment-interest/', 'How to calculate judgment interest');
   if (!pj) addRelated('/states/highest-lowest/', 'Highest and lowest state judgment rates');
 } else if (slug.startsWith('irs-')) {

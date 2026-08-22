@@ -36,10 +36,17 @@ const COMPLETE_STATE_SNAPSHOT_ENTITIES = Object.freeze({
 // Replacing rather than merging prevents retired source-review placeholders from surviving beside
 // corrected legal effective dates or complete official tables.
 const CURATED_COMPLETE_STATE_ENTITIES = Object.freeze([
+  'california-judgment-rate',
   'idaho-judgment-rate',
   'indiana-judgment-rate',
   'louisiana-judgment-rate',
   'louisiana-prejudgment-rate',
+  'michigan-judgment-rate',
+  'michigan-prejudgment-rate',
+  'new-jersey-judgment-rate',
+  'new-jersey-prejudgment-rate',
+  'new-york-consumer-debt-judgment-rate',
+  'new-york-judgment-rate',
   'north-dakota-judgment-rate',
   'oregon-judgment-rate',
   'west-virginia-judgment-rate',

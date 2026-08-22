@@ -39,11 +39,43 @@ test('dual-rate and formula copy derives every volatile branch from the observat
     historyPoints: 35,
   });
 
-  assert.match(newJersey.body, /5% on judgments up to \$20,000 and 7%/);
+  assert.match(newJersey.body, /5% for a judgment not exceeding.*7% for a judgment exceeding/s);
   assert.match(newJersey.body, /2027/);
   assert.match(utah.body, /4\.25%/);
   assert.match(utah.body, /14\.25%/);
   assert.doesNotMatch(text({ newJersey, utah }), /\{\{/);
+});
+
+test('New York pages disclose verified branches, transition history, and calculator limits', () => {
+  const general = copyFor('new-york-judgment-rate', {
+    observation: { value: 9, value_text: '9%', effective_date: '1981-06-15' },
+    historyPoints: 1,
+  });
+  const consumer = copyFor('new-york-consumer-debt-judgment-rate', {
+    observation: { value: 2, value_text: '2%', effective_date: '2022-04-30' },
+    historyPoints: 2,
+  });
+
+  assert.match(general.postDetails.scope, /9% headline/);
+  assert.match(general.postDetails.history, /June 15, 1981/);
+  assert.match(general.postDetails.compounding, /reference-only/);
+  assert.match(consumer.postDetails.scope, /natural person/);
+  assert.match(consumer.postDetails.history, /April 30, 2022/);
+  assert.match(consumer.postDetails.compounding, /does not refund/);
+  assert.doesNotMatch(text({ general, consumer }), /LLMs and older guides/);
+});
+
+test('California copy distinguishes statutory branches and capitalization events', () => {
+  const copy = copyFor('california-judgment-rate', {
+    observation: { value: 10, value_text: '10%', effective_date: '1983-01-01' },
+    historyPoints: 1,
+  });
+
+  assert.match(copy.body, /natural persons/);
+  assert.match(copy.postDetails.scope, /strictly below/);
+  assert.match(copy.postDetails.compounding, /simple between capitalization events/);
+  assert.match(copy.postDetails.history, /January 1, 1983/);
+  assert.match(copy.postDetails.history, /nonsubstantive/);
 });
 
 test('all monitored composite-rate explanations follow future observations', () => {
@@ -113,4 +145,32 @@ test('repaired state pages keep complete structured legal explanations', () => {
   }
   assert.equal(copyFor('indiana-judgment-rate').monetizationReady, false);
   assert.equal(copyFor('louisiana-prejudgment-rate').kind, 'claim-dependent');
+});
+
+test('Michigan and New Jersey copy preserves branch mechanics and removes truncated legal prose', () => {
+  const michigan = copyFor('michigan-judgment-rate', {
+    observation: { value: 4.959, value_text: '4.959%', effective_date: '2026-07-01' },
+    historyPoints: 80,
+  });
+  const michiganPre = copyFor('michigan-prejudgment-rate', {
+    observation: { value: 4.959, value_text: '4.959%', effective_date: '2026-07-01' },
+    historyPoints: 80,
+  });
+  const newJersey = copyFor('new-jersey-judgment-rate', {
+    observation: { value: 4.5, value_text: '4.5% / 6.5%', effective_date: '2026-01-01' },
+    historyPoints: 44,
+  });
+  const newJerseyPre = copyFor('new-jersey-prejudgment-rate', {
+    observation: { value: 4.5, value_text: '4.5% / 6.5%', effective_date: '2026-01-01' },
+    historyPoints: 40,
+  });
+
+  assert.match(michigan.postDetails.accrual, /future-damages component.*begins accruing at judgment/);
+  assert.match(michigan.postDetails.history, /80 semiannual/);
+  assert.match(michiganPre.accrual, /does not allow interest on future damages/);
+  assert.match(newJersey.body, /whole-judgment categories/);
+  assert.match(newJersey.postDetails.history, /43 base-rate entries/);
+  assert.match(newJersey.postDetails.history, /September 1, 1996/);
+  assert.match(newJerseyPre.applies, /future economic losses/);
+  assert.doesNotMatch(text({ michigan, michiganPre, newJersey, newJerseyPre }), /…|marginal brackets?\s+apply/);
 });

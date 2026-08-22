@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T01:49:13.601Z",
+  "generated_at": "2026-08-22T02:35:47.079Z",
   "slug": "new-york-consumer-debt-judgment-rate",
   "name": "New York Consumer-Debt Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,13 +8,50 @@
   "locale": null,
   "metadata": {
     "state": "NY",
-    "statute": "CPLR 5004(b)",
-    "basis": "statute-fixed",
+    "statute": "CPLR 5003 and 5004(a)–(c)",
+    "basis": "statute-branching",
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
-    }
+      "reason": "The 2% rate and transition are verified, but consumer-debt classification, pre-effective balance treatment, payment allocation, statewide day count, tolling, and contract or specific-statute interactions are not fully deterministic.",
+      "rate_behavior": "changes_by_statute",
+      "compounding": "simple",
+      "day_count": "statewide_rule_not_fully_verified",
+      "valid_from": "1981-06-15",
+      "history_start": "1981-06-15",
+      "transition_date": "2022-04-30",
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "payments_supported": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-08-21T00:00:00Z"
+    },
+    "official_authorities": [
+      {
+        "label": "CPLR 5004",
+        "url": "https://www.nysenate.gov/legislation/laws/CVP/5004"
+      },
+      {
+        "label": "CPLR 5003",
+        "url": "https://www.nysenate.gov/legislation/laws/CVP/5003"
+      },
+      {
+        "label": "Fair Consumer Judgment Interest Act (S5724A)",
+        "url": "https://www.nysenate.gov/legislation/bills/2021/S5724"
+      },
+      {
+        "label": "Enacted L.2021, ch.831",
+        "url": "https://legislation.nysenate.gov/pdf/bills/2021/S5724A"
+      },
+      {
+        "label": "New York Courts consumer-credit reform guidance",
+        "url": "https://www.nycourts.gov/consumer-credit-reform"
+      },
+      {
+        "label": "Dugg Construction v Pal",
+        "url": "https://www.nycourts.gov/reporter/current/3dseries/2026/2026_51196.shtml"
+      }
+    ]
   },
   "metrics": [
     "annual_rate"
@@ -28,10 +65,10 @@
       "effective_date": "2022-04-30",
       "source_id": "ny-senate",
       "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-      "retrieved_at": "2026-07-08T00:00:00Z",
+      "retrieved_at": "2026-08-21T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "CPLR 5004 as amended by the Fair Consumer Judgment Interest Act (L.2021 ch.831, eff. Apr 30, 2022): 2% per annum where a natural person is a defendant in an action arising out of consumer debt (obligations from transactions primarily for personal, family or household purposes). Also applies from Apr 30, 2022 forward to the unpaid portion of earlier consumer-debt judgments. Verify against the statute; not legal advice."
+      "method": "statute-branching",
+      "notes": "Beginning April 30, 2022, CPLR 5004 applies 2% per year in a covered action arising out of consumer debt when the defendant is a natural person. It also applies prospectively to the unpaid portion of an older covered judgment, without refunding accrued or paid pre-effective interest or reallocating earlier payments. Consumer classification and other controlling law remain fact-specific. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -44,10 +81,23 @@
         "effective_date": "2022-04-30",
         "source_id": "ny-senate",
         "source_url": "https://www.nysenate.gov/legislation/laws/CVP/5004",
-        "retrieved_at": "2026-07-08T00:00:00Z",
+        "retrieved_at": "2026-08-21T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "CPLR 5004 as amended by the Fair Consumer Judgment Interest Act (L.2021 ch.831, eff. Apr 30, 2022): 2% per annum where a natural person is a defendant in an action arising out of consumer debt (obligations from transactions primarily for personal, family or household purposes). Also applies from Apr 30, 2022 forward to the unpaid portion of earlier consumer-debt judgments. Verify against the statute; not legal advice."
+        "method": "statute-branching",
+        "notes": "Beginning April 30, 2022, CPLR 5004 applies 2% per year in a covered action arising out of consumer debt when the defendant is a natural person. It also applies prospectively to the unpaid portion of an older covered judgment, without refunding accrued or paid pre-effective interest or reallocating earlier payments. Consumer classification and other controlling law remain fact-specific. Verify applicability; not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 9,
+        "value_text": "9%",
+        "unit": "percent_per_annum",
+        "effective_date": "1981-06-15",
+        "source_id": "ny-courts-hsbc",
+        "source_url": "https://www.nycourts.gov/REPORTER/3dseries/2012/2012_04954.htm",
+        "retrieved_at": "2026-08-21T00:00:00Z",
+        "confidence": "high",
+        "method": "historical-general-default",
+        "notes": "New York’s 9% general CPLR 5004 rate applied before the special consumer-debt branch. Official published appellate authority identifies June 15, 1981 as the 9% rate’s effective date. Other specific statutes or qualifying contract terms could still control. Not legal advice."
       }
     ]
   }

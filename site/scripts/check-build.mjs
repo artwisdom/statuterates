@@ -30,6 +30,7 @@ const explicitlyMonetizableRoutes = new Set([
   '/',
   '/prejudgment/',
   '/states/',
+  '/states/judgment-interest-index/',
   '/calculators/florida-judgment-interest/',
   '/calculators/historical-rate-lookup/',
   '/calculators/irs-interest/',
@@ -39,11 +40,18 @@ const explicitlyMonetizableRoutes = new Set([
   '/calculators/post-judgment-interest/',
 ]);
 const researchedStateAuthorityRoutes = new Set([
+  '/rates/california-judgment-rate/',
   '/rates/idaho-judgment-rate/',
   '/rates/indiana-judgment-rate/',
   '/rates/louisiana-judgment-rate/',
   '/rates/louisiana-prejudgment-rate/',
+  '/rates/michigan-judgment-rate/',
+  '/rates/michigan-prejudgment-rate/',
   '/rates/new-mexico-judgment-rate/',
+  '/rates/new-jersey-judgment-rate/',
+  '/rates/new-jersey-prejudgment-rate/',
+  '/rates/new-york-consumer-debt-judgment-rate/',
+  '/rates/new-york-judgment-rate/',
   '/rates/new-hampshire-judgment-rate/',
   '/rates/north-dakota-judgment-rate/',
   '/rates/ohio-judgment-rate/',
@@ -228,6 +236,34 @@ for (const file of htmlFiles) {
         || html.includes('>Fixed by statute<'))) {
     errors.push(`${file}: Indiana must display its 8% value as a statutory branch, not a universal fixed rate`);
   }
+  if (route === '/rates/california-judgment-rate/'
+      && (!html.includes('January 1, 1983')
+        || !html.includes('simple between capitalization events')
+        || !html.includes('natural-person debtor'))) {
+    errors.push(`${file}: California must preserve the verified 1983 transition and branching calculation limits`);
+  }
+  if (route === '/rates/michigan-judgment-rate/'
+      && (!html.includes('80 semiannual')
+        || !html.includes('future-damages component')
+        || html.includes('interest runs from filing only to the date of judgment'))) {
+    errors.push(`${file}: Michigan must preserve official history and the corrected future-damages rule`);
+  }
+  if (route === '/rates/new-jersey-judgment-rate/'
+      && (!html.includes('whole-judgment categories')
+        || !html.includes('43 base-rate entries')
+        || !html.includes('September 1, 1996')
+        || html.includes('on amounts up to $20,000'))) {
+    errors.push(`${file}: New Jersey must present whole-judgment tiers and official history`);
+  }
+  if (route === '/rates/new-york-judgment-rate/'
+      && (!html.includes('June 15, 1981') || !html.includes('general branch'))) {
+    errors.push(`${file}: New York general page must preserve the 1981 effective date and branch warning`);
+  }
+  if (route === '/rates/new-york-consumer-debt-judgment-rate/'
+      && (!html.includes('April 30, 2022')
+        || !html.includes('does not refund interest accrued or paid before'))) {
+    errors.push(`${file}: New York consumer page must preserve its prospective 2022 transition`);
+  }
   const externalSourceLinkCount = [...html.matchAll(/<a\b[^>]*href="https:\/\/[^\"]+"[^>]*target="_blank"/g)].length;
   const minimumStateSourceLinks = route === '/states/mississippi/' ? 1 : 2;
   if (/^\/states\/[^/]+\/$/.test(route)
@@ -348,6 +384,24 @@ for (const file of htmlFiles) {
       if (!html.includes(required)) errors.push(`${file}: historical lookup is missing ${required}`);
     }
   }
+  if (route === '/states/judgment-interest-index/') {
+    if (words < 650) {
+      errors.push(`${file}: state coverage index has only ${words} visible words (minimum safety floor 650)`);
+    }
+    for (const required of [
+      '50 states + D.C.',
+      'Transparent coverage',
+      'Detailed rule analysis',
+      'Rate reference; deeper review pending',
+      'A rate reference is not automatically a complete payoff rule',
+      'Mississippi is labeled case-specific',
+      '/api/v1/entities.json',
+    ]) {
+      if (!html.includes(required)) errors.push(`${file}: state coverage index is missing ${required}`);
+    }
+    const indexRows = (html.match(/<tr\s+data-index-row(?:\s|>)/g) || []).length;
+    if (indexRows !== 51) errors.push(`${file}: expected 51 jurisdiction rows, found ${indexRows}`);
+  }
 
   // Regression alarms for legal-copy fragments that previously survived ellipsis cleanup because
   // an abbreviation looked like a sentence ending. These phrases must never reach a public page or
@@ -414,6 +468,10 @@ if (machineFiles.every((relativePath) => existsSync(join(DIST, relativePath)))) 
   }
   if (!llms.includes(`${expectedOrigin}/openapi.yaml`) || !llms.includes('/api/v1/upcoming.json')) {
     errors.push('llms.txt: missing public OpenAPI or upcoming-period discovery link');
+  }
+  if (!llms.includes('/states/judgment-interest-index/')
+      || !llmsFull.includes('/states/judgment-interest-index/')) {
+    errors.push('AI guides: missing the 50-state rules and data coverage index');
   }
   const currentAsOf = String(apiLatest.data?.current_as_of || '').slice(0, 10);
   if (!llmsFull.includes(`Current as of: ${currentAsOf}`)) {

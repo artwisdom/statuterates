@@ -89,30 +89,50 @@ statutory rates can use different national bases or more creditor-favourable rul
 official MRO rate and every change, straight from the ECB Data Portal.`,
   },
   'california-judgment-rate': {
-    tagline: 'Interest on money judgments in California courts.',
+    tagline: 'California’s 10% default, 5% qualifying-debt branches, and public-entity exceptions.',
     q: 'What is the current California post-judgment interest rate?',
-    body: `California money judgments accrue simple interest at 10% per year on unpaid principal under Code of
-Civil Procedure §685.010 — but the right rate depends on the case: judgments entered or renewed since
-January 1, 2023 against individuals accrue only 5% when the debt is medical (under $200,000) or personal
-(under $50,000), and judgments against state or local government entities accrue 7%. Interest accrues
-daily (annual rate ÷ 365) from entry of judgment.`,
+    body: `California’s ordinary state-court money-judgment rate is 10% per year on unpaid principal. A 5%
+branch applies to qualifying judgments against natural persons entered on or after January 1, 2023—or
+renewed by an application filed on or after that date—when unsatisfied principal is under $200,000 for
+medical-expense claims or under $50,000 for personal debt. Tort, fraud, and specified employee claims
+are excluded. State and local public-entity judgments generally use 7%, but special timing and rate
+rules govern several public branches. This page is a legal-rate reference, not a payoff calculator.`,
+    postDetails: {
+      scope: 'The 10% headline is California’s default state-court money-judgment rate. The 5% branch requires a natural-person debtor, a qualifying medical-expense or personal-debt claim, the statutory entry-or-renewal date, and unsatisfied principal strictly below the applicable threshold. Tort, fraud, and employee-wage, damages, or penalty judgments do not qualify. Public entities and special statutes require separate treatment.',
+      accrual: 'Ordinary interest begins on judgment entry. Unless the judgment provides otherwise, an installment begins accruing when that installment becomes due. Interest stops on the satisfied portion at the statutory receipt, tender, deposit, performance, levy, or collection date. State judgments and settlements, local public-entity judgments, and public tax-or-fee claims have separate finality, enforceability, and accrual rules.',
+      compounding: 'Ordinary interest is calculated daily at the annual rate divided by 365 on unsatisfied principal. It is simple between capitalization events, but allowed enforcement costs become principal and renewal adds unpaid accrued interest to renewed principal. For ordinary non-support judgments, payments generally apply to accrued interest before principal after specified officer and court costs. Because rounding and all exceptions are not modeled, the calculator remains disabled.',
+      history: 'California’s default rate changed from 7% to 10% effective January 1, 1983, including interest accruing after that date on earlier judgments. The qualifying 5% branches began January 1, 2023. The January 1, 2024 amendment was nonsubstantive code maintenance and is not a rate-history change. The earlier 7% rate is disclosed without inventing an unsupported start date.',
+    },
   },
   'new-york-judgment-rate': {
-    tagline: 'The default interest rate on New York judgments.',
+    tagline: 'New York’s general judgment rate and the branches that can displace it.',
     q: 'What is the current New York judgment interest rate?',
-    body: `New York judgments generally accrue interest at 9% per year under CPLR 5004 — one of the highest
-statutory rates in the country. The major exception: since April 30, 2022, judgments arising out of
-consumer debt against individuals accrue only 2% (see the companion consumer-debt series). Other
-statutes can set different rates for specific defendants, so always check the governing provision.`,
+    body: `CPLR 5004(a) sets a 9% annual general rate, and CPLR 5003 starts post-judgment interest when a
+money judgment is entered—or when a payment order is docketed as a judgment. This is a general branch,
+not a universal answer: covered consumer-debt actions against natural persons use 2% from April 30,
+2022, specific statutes can control, and an agreement must clearly preserve a different post-judgment
+rate to displace the statutory rate.`,
+    postDetails: {
+      scope: 'The 9% headline is the CPLR 5004(a) general rate. A covered consumer-debt action against a natural person uses the separate 2% branch beginning April 30, 2022. A statute governing a particular claim or defendant can supersede the default, and a contract must clearly, unambiguously, and unequivocally preserve a different post-judgment rate to displace it.',
+      accrual: 'CPLR 5003 starts interest on a money judgment when the judgment is entered, or when a payment order is docketed as a judgment. CPLR 5002 separately governs interest from a verdict, report, or decision until judgment entry; the legally relevant dates therefore depend on the procedural record.',
+      compounding: 'New York appellate authority says CPLR 5001–5004 does not provide compound interest. The entered judgment can include pre-entry interest incorporated under CPLR 5002, but partial payments, tolling, contract survival, and special statutory branches still prevent a universal payoff calculator. StatuteRates therefore keeps this series reference-only.',
+      history: 'Official published appellate authority identifies June 15, 1981 as the effective date of New York’s 9% rate. The Fair Consumer Judgment Interest Act created the 2% natural-person consumer-debt branch beginning April 30, 2022. The dataset does not claim a complete pre-1981 timeline.',
+    },
   },
   'new-york-consumer-debt-judgment-rate': {
-    tagline: 'The reduced rate on NY consumer-debt judgments since 2022.',
+    tagline: 'The reduced New York branch for covered consumer debt against natural persons.',
     q: 'What is the interest rate on consumer debt judgments in New York?',
-    body: `Since April 30, 2022 (the Fair Consumer Judgment Interest Act), New York judgments arising out of
-consumer debt against a natural person accrue interest at 2% per year instead of the general 9% —
-"consumer debt" meaning obligations from transactions primarily for personal, family, or household
-purposes. The 2% rate also applies from that date forward to the unpaid portion of consumer-debt
-judgments entered earlier. LLMs and older guides routinely still quote 9% for these cases.`,
+    body: `Beginning April 30, 2022, CPLR 5004 applies 2% per year in an action arising out of consumer debt
+when the defendant is a natural person. Consumer debt turns on whether the transaction’s money,
+property, insurance, or services were primarily personal, family, or household. The rate also applies
+prospectively to unpaid portions of covered judgments entered earlier; it does not refund or reallocate
+amounts paid before the change.`,
+    postDetails: {
+      scope: 'Both statutory conditions matter: the action must arise from consumer debt as CPLR 5004(b) defines it, and the defendant must be a natural person. Classification is transaction- and fact-specific; this page does not assume every credit, rent, medical, or household dispute qualifies. Another specific statute or legal branch can require separate analysis.',
+      accrual: 'For a covered money judgment, CPLR 5003 supplies the entry-or-docketing post-judgment trigger. Official New York decisions have also applied the 2% branch to prejudgment interest in covered consumer-debt actions, but entitlement and the dates supplied by CPLR 5001 and 5002 must be resolved from the claim and record.',
+      compounding: 'The CPLR framework provides simple rather than compound interest. The 2022 law does not refund interest accrued or paid before April 30, 2022, disturb satisfied judgments, or reallocate earlier payments. Consumer classification, payment allocation, tolling, and other-law interactions remain too fact-specific for a released calculator.',
+      history: 'The recorded series shows the 9% general rate from June 15, 1981, followed by the special 2% branch on April 30, 2022. On that transition date, 2% began applying prospectively to the unpaid portion of an older covered judgment; earlier accrued or paid interest remained undisturbed.',
+    },
   },
   'massachusetts-judgment-rate': {
     tagline: 'Interest on Massachusetts tort and contract judgments.',
@@ -225,20 +245,34 @@ judgment interest to the §24-1 legal rate — or the contract rate for a judgme
 statutory rate applied as simple interest.`,
   },
   'michigan-judgment-rate': {
-    tagline: 'Michigan’s judgment rate — 5-year Treasury + 1 point, compounded.',
+    tagline: 'Michigan’s Treasury-based general branch, complaint-date rules, and exceptions.',
     q: 'What is the current Michigan judgment interest rate?',
-    body: `Michigan is unusual: interest runs from the day you file the complaint, not just after judgment. Under
-MCL §600.6013 the general rate is 1 point above the six-month average of 5-year Treasury auctions, reset every
-January 1 and July 1 and compounded annually — currently {{current_rate}}. Judgments on a written instrument use a separate
-rate capped at 13%.`,
+    body: `For the general MCL 600.6013(8) branch, Michigan’s current rate is {{current_rate}}: the State
+Treasurer’s five-year Treasury benchmark for the period beginning {{effective_date}}, plus one percentage
+point. General interest usually runs from complaint filing through satisfaction and compounds annually.
+Written instruments, future damages, tort settlement offers, medical-malpractice cases, and older complaint
+dates can follow different rules, so this page is a verified reference rather than a payoff calculator.`,
+    postDetails: {
+      scope: 'The headline is Michigan’s general MCL 600.6013(8) branch. Complaint-date rules, written instruments, tort settlement offers, medical-malpractice provisions, and future damages can change the applicable treatment. For current written-instrument complaints, a specified lawful rate can govern, subject to the statutory 13% ceiling and other conditions.',
+      accrual: 'The general statute runs interest from complaint filing through satisfaction. For covered complaints, subsection (1) excludes the future-damages component between complaint filing and judgment entry; that component begins accruing at judgment.',
+      compounding: 'Interest under the general and current written-instrument branches compounds annually. The statute calculates the general path in six-month intervals from complaint filing using benchmark rates certified for January 1 and July 1. Exact interval, anniversary, day-count, partial-payment, and branch mechanics remain withheld from calculation.',
+      history: 'Michigan Treasury publishes 80 semiannual five-year Treasury benchmark observations from January 1, 1987 through July 1, 2026. The general statutory rate is each benchmark plus one percentage point. Older complaint-date branches are documented separately rather than being flattened into this series.',
+    },
   },
   'new-jersey-judgment-rate': {
     tagline: 'New Jersey’s two-tier judgment rate, set yearly by the courts.',
     q: 'What is the current New Jersey post-judgment interest rate?',
-    body: `New Jersey’s post-judgment interest is set annually by the Judiciary under Court Rule R. 4:42-11, based
-on the State Cash Management Fund’s prior-year return. For {{current_year}} it’s
-{{current_rate_part_1}} on judgments up to $20,000 and {{current_rate_part_2}} (the base plus 2 points)
-on judgments over $20,000 — simple interest.`,
+    body: `For calendar year {{current_year}}, New Jersey Rule 4:42-11 sets simple interest at
+{{current_rate_part_1}} for a judgment not exceeding the Special Civil Part monetary limit at entry and
+{{current_rate_part_2}} for a judgment exceeding it. The current limit is $20,000. These are
+whole-judgment categories—not marginal brackets—and the annual schedule can change while a judgment
+remains unpaid. Contracts, court orders, public entities, and specialized statutes can require different treatment.`,
+    postDetails: {
+      scope: 'For {{current_year}}, Rule 4:42-11 supplies {{current_rate_part_1}} for a judgment not exceeding the Special Civil Part monetary limit at entry and {{current_rate_part_2}} for a judgment exceeding it. The current limit is $20,000. These are whole-judgment categories, not marginal brackets.',
+      accrual: 'Postjudgment interest presumptively begins when the judgment is entered. The applicable schedule changes by calendar year rather than locking permanently at entry, but another law, enforceable contract treatment, equitable ruling, or court order can alter the result.',
+      compounding: 'Rule 4:42-11 specifies simple interest. The general rule includes judgments, awards, orders, taxed costs, and attorney fees, subject to contract, equitable, public-entity, and specialized statutory treatment. Partial-payment and exact day-count mechanics remain outside the calculator.',
+      history: 'The official Judiciary schedule supplies 43 base-rate entries from April 1, 1975 through {{current_year}}. The dataset also records the September 1, 1996 start of the two-point over-limit branch as a separate effective-date transition. A 6% period before April 1, 1975 is disclosed without inventing a start date; historical monetary-limit changes still need separate curation.',
+    },
   },
   'virginia-judgment-rate': {
     tagline: 'Virginia’s flat 6% judgment rate.',
@@ -847,18 +881,18 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     compound: "Simple.",
   },
   "michigan-prejudgment-rate": {
-    tagline: "Michigan prejudgment interest — a formula rate, reset twice a year.",
+    tagline: "Michigan complaint-to-judgment interest under the Treasury-based statutory formula.",
     q: "What is the Michigan prejudgment interest rate?",
-    body: "Michigan prejudgment interest is currently {{current_rate}} per year — a statutory formula rate under MCL 600.6013 that resets twice a year, compounded annually. Michigan has NO separate general prejudgment-interest statute; instead MCL 600.6013 (nominally the \"interest on money judgments\" statute) runs interest FROM THE DATE THE COMPLAINT IS FILED,…",
+    body: "Michigan uses MCL 600.6013 for the complaint-to-judgment portion as well as post-judgment interest. The general subsection (8) reference is currently {{current_rate}}: the official five-year Treasury benchmark plus one point, compounded annually. The statute applies calculation intervals from complaint filing; the January and July dates are certificate dates, not a complete payoff schedule.",
     prejudgment: true,
     kind: "variable",
     kindLabel: "Formula rate",
     postSlug: "michigan-judgment-rate",
-    appliesShort: "Michigan has NO separate general prejudgment-interest statute; instead MCL 600.6013 (nominally the \"interest on money judgments\" statute) runs interest FROM THE DATE THE COMPLAINT IS FILED,…",
-    applies: "Michigan has NO separate general prejudgment-interest statute; instead MCL 600.6013 (nominally the \"interest on money judgments\" statute) runs interest FROM THE DATE THE COMPLAINT IS FILED, so the complaint-to-judgment portion functions as statutory prejudgment interest. It is available broadly and is NOT limited to liquidated/ascertainable claims — it applies to tort AND contract, and to unliquidated/tort damages (e.g., personal injury).",
-    accrual: "From the date the complaint is filed (for complaints filed on/after Jan 1, 1987) to the date of satisfaction of the judgment — MCL 600.6013(8). Exception for future damages: interest runs from filing only to the date of judgment (subsection (6)).",
-    compound: "Compound — compounded annually (MCL 600.6013(8); the written-instrument rate under (7) is also compounded annually).",
-    formula: "Variable, published by the Michigan State Treasurer. General/default rate = 1% + average 5-yr U.S. Treasury note auction yield for the preceding 6 months, re-certified each Jan 1 and Jul 1, compounded annually. Current (effective {{effective_date}}): {{rate_minus_1}} + 1% = {{current_rate}}.",
+    appliesShort: "The general MCL 600.6013 path runs from complaint filing, but complaint vintage, written instruments, future damages, tort settlement offers, and medical-malpractice provisions can change the treatment.",
+    applies: "For the general current branch, MCL 600.6013 runs interest from complaint filing through satisfaction and is not limited to liquidated claims. Complaint dates before July 1, 2002, qualifying written instruments, tort settlement offers, medical-malpractice cases, and future damages have separate statutory treatment.",
+    accrual: "For covered complaints, subsection (1) does not allow interest on future damages from complaint filing through judgment entry. Interest on that future-damages component begins at judgment. Other covered amounts in the general subsection (8) path run from complaint filing through satisfaction.",
+    compound: "Annual compounding is specified for the general subsection (8) and current written-instrument subsection (7) branches. Exact six-month application intervals, annual anniversaries, day count, payments, and every older complaint-vintage branch remain outside the calculator.",
+    formula: "Michigan Treasury certifies a five-year Treasury benchmark for January 1 and July 1. The general subsection (8) rate adds one point, but the statute applies the rates in six-month intervals from complaint filing. Current certificate (effective {{effective_date}}): {{rate_minus_1}} + 1% = {{current_rate}}.",
   },
   "minnesota-prejudgment-rate": {
     tagline: "Minnesota prejudgment interest — {{current_rate_part_1}}, or {{current_rate_part_2}} on awards over $50,000.",
@@ -957,18 +991,18 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     formula: "26-week U.S. Treasury bill discount rate at last auction preceding Sept 30 + 2 percentage points, rounded to nearest 0.1%; State Treasurer determines by Dec 1, effective Jan 1–Dec 31 of following year.",
   },
   "new-jersey-prejudgment-rate": {
-    tagline: "New Jersey prejudgment interest — 4.5%, or 6.5% on amounts over $20,000.",
+    tagline: "New Jersey tort prejudgment interest under the annual court schedule.",
     q: "What is the New Jersey prejudgment interest rate?",
-    body: "New Jersey tort prejudgment interest tracks post-judgment interest: {{current_rate_part_1}} on amounts up to $20,000 and {{current_rate_part_2}} above it for {{current_year}} (N.J. Ct. R. 4:42-11(b)), as simple interest. Rule 4:42-11(b) prejudgment interest is MANDATORY in TORT actions, including products liability actions (\"the court shall…",
+    body: "For {{current_year}} tort actions under Rule 4:42-11(b), simple prejudgment interest uses {{current_rate_part_1}} when the resulting judgment does not exceed the Special Civil Part monetary limit at entry and {{current_rate_part_2}} when it exceeds that limit. The current limit is $20,000. These are whole-judgment categories, not marginal brackets.",
     prejudgment: true,
     kind: "same-as-postjudgment",
     kindLabel: "Same rate as post-judgment",
     postSlug: "new-jersey-judgment-rate",
-    appliesShort: "Rule 4:42-11(b) prejudgment interest is MANDATORY in TORT actions, including products liability actions (\"the court shall…",
-    applies: "Rule 4:42-11(b) prejudgment interest is MANDATORY in TORT actions, including products liability actions (\"the court shall… include in the judgment simple interest\"). CRITICAL EXCLUSION: prejudgment interest is NOT allowed on any recovery for FUTURE economic losses.",
+    appliesShort: "Rule 4:42-11(b) generally directs simple prejudgment interest in tort actions, but future economic losses, exceptional-case suspension, contract claims, equitable claims, and specialized law require separate treatment.",
+    applies: "Rule 4:42-11(b) generally directs the court to include simple prejudgment interest in tort actions, including products-liability actions. It excludes recovery for future economic losses. Contract and equitable prejudgment interest arise under different judicial principles and are not represented as an automatic tort-rule entitlement.",
     accrual: "From the date of institution of the action, OR from a date 6 months after the date the cause of action arises, whichever is LATER (R. 4:42-11(b)). Court may suspend the running in exceptional cases.",
     compound: "Simple.",
-    formula: "Same as post-judgment rate. Base rate = average rate of return of the NJ Cash Management Fund for the preceding fiscal year (ending June 30), rounded to the nearest whole or one-half percent, not less than 0.25% (R. 4:42-11(a)(ii)).",
+    formula: "The tort schedule uses the post-judgment base rate: the New Jersey Cash Management Fund’s prior fiscal-year average return, rounded to the nearest whole or half percent and subject to the rule’s floor. A judgment exceeding the applicable Special Civil Part limit receives the two-point addition as a whole-judgment category.",
   },
   "new-mexico-prejudgment-rate": {
     tagline: "New Mexico prejudgment interest — up to 10% (discretionary) for tort, 15% for liquidated/contract.",
@@ -1320,6 +1354,7 @@ export function copyFor(slug, { observation = null, historyPoints = null } = {})
 export const CONTENT_MODIFIED = Object.freeze({
   'alaska-judgment-rate': '2026-07-26',
   'alaska-prejudgment-rate': '2026-07-26',
+  'california-judgment-rate': '2026-08-21',
   'florida-judgment-rate': '2026-07-26',
   'florida-prejudgment-rate': '2026-07-26',
   'eu-late-payment-reference': '2026-08-16',
@@ -1327,11 +1362,13 @@ export const CONTENT_MODIFIED = Object.freeze({
   'iowa-judgment-rate': '2026-07-26',
   'maine-judgment-rate': '2026-07-26',
   'maine-prejudgment-rate': '2026-07-26',
-  'michigan-judgment-rate': '2026-07-26',
-  'michigan-prejudgment-rate': '2026-07-26',
-  'new-jersey-judgment-rate': '2026-07-26',
-  'new-jersey-prejudgment-rate': '2026-07-26',
+  'michigan-judgment-rate': '2026-08-21',
+  'michigan-prejudgment-rate': '2026-08-21',
+  'new-jersey-judgment-rate': '2026-08-21',
+  'new-jersey-prejudgment-rate': '2026-08-21',
   'new-mexico-judgment-rate': '2026-08-16',
+  'new-york-consumer-debt-judgment-rate': '2026-08-21',
+  'new-york-judgment-rate': '2026-08-21',
   'ohio-judgment-rate': '2026-08-16',
   'ohio-prejudgment-rate': '2026-07-26',
   'oregon-judgment-rate': '2026-08-20',

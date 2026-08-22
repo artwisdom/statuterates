@@ -19,7 +19,7 @@ export function GET({ site }) {
 
   const staticPaths = [
     '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
-    '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
+    '/states/highest-lowest/', '/states/judgment-interest-index/', '/guides/', '/glossary/', '/privacy/', '/terms/',
     '/calculators/', '/calculators/judgment-interest/', '/calculators/historical-rate-lookup/',
   ];
 

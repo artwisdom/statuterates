@@ -751,7 +751,12 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     ]);
     const ANNUAL = new Set([
       'alaska-judgment-rate', 'alaska-prejudgment-rate',
-      'maine-judgment-rate', 'maine-prejudgment-rate', 'utah-judgment-rate',
+      'louisiana-judgment-rate',
+      'maine-judgment-rate', 'maine-prejudgment-rate',
+      'new-hampshire-judgment-rate', 'new-hampshire-prejudgment-rate',
+      'new-jersey-judgment-rate', 'new-jersey-prejudgment-rate',
+      'north-dakota-judgment-rate', 'utah-judgment-rate',
+      'west-virginia-judgment-rate',
     ]);
     const POLICY_CHANGEPOINT = new Set([
       'boe-bank-rate', 'ecb-main-refinancing-rate',
@@ -762,8 +767,8 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     // resets; an old effective_date is not staleness. (Freshness = the re-verification schedule in
     // the MAINTENANCE_RUNBOOK, not this check.)
     if (arr.at(-1).method.startsWith('statute-fixed')
+      || arr.at(-1).method.startsWith('statute-branching')
       || arr.at(-1).method === 'statute-variable'
-      || arr.at(-1).method === 'statute-branching'
       || arr.at(-1).method === 'court-or-contract-rate') continue;
     const isWeekly = WEEKLY.has(slug);
     const isMonthly = MONTHLY.has(slug);

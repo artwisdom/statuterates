@@ -1,7 +1,8 @@
 // US state judgment-interest rates.
 //
 // Two kinds of series here:
-//   1. STATUTE-FIXED (CA, NY, NY-consumer, MA): the rate is a number written into the statute. These
+//   1. CURATED STATUTORY REFERENCES (CA, NY, NY-consumer, MA): the headline rate is written into
+//      statute, but California and New York have material statutory branches. These
 //      are curated values, each verified against the OFFICIAL statute text (leginfo.legislature.ca.gov,
 //      nysenate.gov, malegislature.gov) on the date in `VERIFIED_ON`, with the citation and carve-outs
 //      recorded in notes. method='statute-fixed'. They change only when the legislature acts — the
@@ -121,12 +122,75 @@ import {
   WEST_VIRGINIA_OFFICIAL_HISTORY_COMPLETE_THROUGH,
   WEST_VIRGINIA_OFFICIAL_HISTORY_START,
 } from './north-dakota-west-virginia-judgment-history.mjs';
+import {
+  buildMichiganOfficialHistory,
+  buildNewJerseyPostJudgmentHistory,
+  buildNewJerseyPrejudgmentHistory,
+} from './michigan-new-jersey-interest-history.mjs';
 
 const VERIFIED_ON = '2026-07-08';
+const CALIFORNIA_RULES_VERIFIED_AT = '2026-08-21T00:00:00Z';
+const CALIFORNIA_SECTION_685_010_URL = 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010';
+const CALIFORNIA_JUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The 10%, 5%, 7%, Treasury-linked, and annual-reset branches; balance-threshold transitions; public-entity accrual rules; renewal capitalization; costs; payments; special judgments; and cent-rounding mechanics are not modeled end-to-end.',
+  renderer_supported: false,
+};
+const CALIFORNIA_AUTHORITIES = [
+  { label: 'Cal. Code Civ. Proc. §685.010 — current 10% and 5% branches', url: CALIFORNIA_SECTION_685_010_URL },
+  { label: 'Cal. Code Civ. Proc. §§685.010–685.110 — accrual, satisfaction, and costs', url: 'https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=&chapter=5.&division=1.&lawCode=CCP&part=2.&title=9.' },
+  { label: 'Cal. Code Civ. Proc. §683.150 — renewed judgment amount', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=683.150' },
+  { label: 'Cal. Code Civ. Proc. §§695.210–695.220 — satisfaction and payment allocation', url: 'https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=2.&chapter=1.&division=2.&lawCode=CCP&part=2.&title=9.' },
+  { label: 'California Constitution, article XV, §1', url: 'https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?article=XV&chapter=&division=&lawCode=CONS&part=&title=' },
+  { label: 'Government Code §965.5 — state judgments', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=965.5.' },
+  { label: 'Government Code §970.1 — local public entities', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=970.1.' },
+  { label: 'Civil Code §3287(c) — public-entity tax and fee claims', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=3287.' },
+  { label: 'Government Code §984 — public-entity periodic payments', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=984.' },
+  { label: 'Civil Code §3289 — contract interest before a superseding obligation', url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=3289' },
+  { label: 'SB 1200, Chapter 883 of 2022 — 5% branches', url: 'https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202120220SB1200' },
+  { label: 'Judicial Council form MC-013-INFO', url: 'https://courts.ca.gov/publication/information-sheet-calculating-interest-and-amount-owed-judgment' },
+  { label: 'California Attorney General Opinion 82-1206 — January 1, 1983 transition', url: 'https://oag.ca.gov/system/files/opinions/pdfs/82-1206_0.pdf' },
+];
+const NY_RULES_VERIFIED_AT = '2026-08-21T00:00:00Z';
+
+const NEW_YORK_GENERAL_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'Consumer-debt, specific-statute, public-defendant, explicit-contract, partial-payment, tolling, and transition branches are not fully deterministic.',
+  rate_behavior: 'changes_by_statute',
+  compounding: 'simple',
+  day_count: 'statewide_rule_not_fully_verified',
+  valid_from: '1981-06-15',
+  history_start: '1981-06-15',
+  branches_complete: false,
+  accrual_rule_verified: true,
+  payments_supported: false,
+  renderer_supported: false,
+  rule_verified_at: NY_RULES_VERIFIED_AT,
+};
+
+const NEW_YORK_CONSUMER_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The 2% rate and transition are verified, but consumer-debt classification, pre-effective balance treatment, payment allocation, statewide day count, tolling, and contract or specific-statute interactions are not fully deterministic.',
+  rate_behavior: 'changes_by_statute',
+  compounding: 'simple',
+  day_count: 'statewide_rule_not_fully_verified',
+  valid_from: '1981-06-15',
+  history_start: '1981-06-15',
+  transition_date: '2022-04-30',
+  branches_complete: false,
+  accrual_rule_verified: true,
+  payments_supported: false,
+  renderer_supported: false,
+  rule_verified_at: NY_RULES_VERIFIED_AT,
+};
 
 export const STATE_SOURCES = [
-  { id: 'ca-leginfo', name: 'California Code of Civil Procedure §685.010', publisher: 'California Legislative Information (official)', home_url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010', license: 'Government edict — not subject to copyright.', robots_status: `curated statutory value; official text verified ${VERIFIED_ON}`, retrieved_at: `${VERIFIED_ON}T00:00:00Z` },
-  { id: 'ny-senate', name: 'New York CPLR 5004', publisher: 'New York State Senate (official statute text)', home_url: 'https://www.nysenate.gov/legislation/laws/CVP/5004', license: 'Government edict — not subject to copyright.', robots_status: `curated statutory value; official text verified ${VERIFIED_ON}`, retrieved_at: `${VERIFIED_ON}T00:00:00Z` },
+  { id: 'ca-leginfo', name: 'California judgment-interest statutes and official transition authority', publisher: 'California Legislative Information and Attorney General (official)', home_url: CALIFORNIA_SECTION_685_010_URL, license: 'Government edict — not subject to copyright.', robots_status: 'curated statutory branches and default-rate transition; official sources verified 2026-08-21', retrieved_at: CALIFORNIA_RULES_VERIFIED_AT },
+  { id: 'ny-senate', name: 'New York CPLR 5001–5004 and Fair Consumer Judgment Interest Act', publisher: 'New York State Senate (official statute and enacted bill text)', home_url: 'https://www.nysenate.gov/legislation/laws/CVP/5004', license: 'Government edict — not subject to copyright.', robots_status: 'curated statutory branches and transition; official text verified 2026-08-21', retrieved_at: NY_RULES_VERIFIED_AT },
+  { id: 'ny-courts-hsbc', name: 'Matter of HSBC Bank USA — 9% rate effective June 15, 1981', publisher: 'New York State Law Reporting Bureau (official court opinion)', home_url: 'https://www.nycourts.gov/REPORTER/3dseries/2012/2012_04954.htm', license: 'Official judicial opinion.', robots_status: 'official appellate effective-date authority verified 2026-08-21', retrieved_at: NY_RULES_VERIFIED_AT },
   { id: 'ma-legislature', name: 'Massachusetts G.L. c.231 §§6B–6C', publisher: 'Massachusetts Legislature (official)', home_url: 'https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6B', license: 'Government edict — not subject to copyright.', robots_status: `curated statutory value; official text verified ${VERIFIED_ON}`, retrieved_at: `${VERIFIED_ON}T00:00:00Z` },
   { id: 'ia-jud', name: 'Iowa §668.13 post-judgment interest table', publisher: 'Iowa Judicial Branch (official)', home_url: IOWA_JUDICIAL_TABLE_URL, license: 'Government edict — not subject to copyright.', robots_status: `official HTML/PDF history verified through ${IOWA_CURATED_HISTORY_COMPLETE_THROUGH}; live page rechecked ${IOWA_HISTORY_VERIFIED_AT.slice(0, 10)}`, retrieved_at: IOWA_HISTORY_VERIFIED_AT },
   { id: 'me-h15-provisional', name: 'Maine annual judgment-interest provisional H.15 calculation', publisher: 'Federal Reserve Board and Maine Legislature (official inputs)', home_url: MAINE_H15_SOURCE_URL, license: 'U.S. government publication and government edict.', robots_status: `future-year fallback only after the official Maine Judicial Branch chart ends; formula verified ${MAINE_HISTORY_VERIFIED_AT.slice(0, 10)}`, retrieved_at: MAINE_HISTORY_VERIFIED_AT },
@@ -134,37 +198,67 @@ export const STATE_SOURCES = [
 
 const FIXED = [
   {
-    entity: { slug: 'california-judgment-rate', name: 'California Post-Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: { state: 'CA', statute: 'CCP §685.010', basis: 'statute-fixed' } },
+    entity: { slug: 'california-judgment-rate', name: 'California Post-Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: {
+      state: 'CA', statute: 'Cal. Code Civ. Proc. §§685.010–685.030', basis: 'statute-branching', verified_on: '2026-08-21', calculation: CALIFORNIA_JUDGMENT_CALCULATION,
+      history_coverage: { default_branch_verified_from: '1983-01-01', default_branch_verified_through: '2026-08-21', qualifying_debt_branch_verified_from: '2023-01-01', prior_general_rate: { value: 7, effective_from: null, effective_to: '1982-12-31', machine_publish: false, reason: 'The preceding 7% rate is official, but its complete historical start was not established.' } },
+      rate_behavior: { ordinary_calendar_reset: false, selection: 'Select by debtor type, claim type, unsatisfied principal, and judgment-entry or renewal-application date.', renewal: 'Reevaluate the applicable branch and capitalize unpaid accrued interest into renewed principal.', future_legislation: 'A later statute may change only interest accruing after that statute’s operative date.', entry_lock_boolean_safe: false },
+      rate_branches: [
+        { id: 'general', value: 10, effective_from: '1983-01-01', applies_unless: ['qualifying_medical_debt', 'qualifying_personal_debt', 'public_entity', 'special_statute_or_judgment'] },
+        { id: 'qualifying_medical_debt', value: 5, effective_from: '2023-01-01', debtor_type: 'natural_person', claim_type: 'medical_expenses', unsatisfied_principal: { currency: 'USD', operator: 'lt', amount: 200000 }, entry_or_renewal_gate: '2023-01-01', exclusions: ['tortious_conduct', 'fraudulent_conduct', 'employee_wages_damages_or_penalties'] },
+        { id: 'qualifying_personal_debt', value: 5, effective_from: '2023-01-01', debtor_type: 'natural_person', claim_type: 'personal_family_or_household_transaction', unsatisfied_principal: { currency: 'USD', operator: 'lt', amount: 50000 }, entry_or_renewal_gate: '2023-01-01', exclusions: ['tortious_conduct', 'fraudulent_conduct', 'employee_wages_damages_or_penalties'] },
+        { id: 'public_entity_general', value: 7, effective_from: null, current: true, calculation_status: 'reference_only' },
+        { id: 'public_entity_tax_or_fee', value: null, effective_from: '2014-01-01', calculation_status: 'not_modeled' },
+        { id: 'public_entity_periodic_payment', value: null, calculation_status: 'not_modeled' },
+      ],
+      official_authorities: CALIFORNIA_AUTHORITIES,
+    } },
     value: 10,
-    effective_date: '2024-01-01', // current statutory text (as amended by Stats. 2023 ch. 131, eff. Jan 1, 2024); the 10% default long predates this
+    effective_date: '1983-01-01',
     source_id: 'ca-leginfo',
     source_url: 'https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=685.010',
-    notes:
-      'Default rate on money judgments under CCP §685.010(a)(1); simple interest, accruing daily (/365) on unpaid principal from entry of judgment. ' +
-      'Carve-outs: 5% under §685.010(a)(2) for judgments entered/renewed on or after Jan 1, 2023 against a natural person on medical debt (principal < $200,000) or personal debt (< $50,000) — SB 1200 (2022); ' +
-      '7% where the judgment debtor is a state or local government entity (Cal. Const. art. XV §1). ' +
-      'Effective date shown is the current statutory text (amended eff. Jan 1, 2024); the 10% default has applied since the early 1980s. Verify against the statute; not legal advice.',
+    method: 'statute-branching-official-history',
+    notes: 'California’s ordinary state-court money-judgment rate is 10% per year, effective January 1, 1983. A 5% branch applies to qualifying medical-expense or personal-debt judgments against natural persons that meet strict date, balance, and claim requirements. Public entities, tax or fee claims, periodic payments, renewals, costs, and special statutes follow separate rules. Ordinary interest is calculated daily, while allowed costs and renewal can increase principal. Reference only; not legal advice.',
   },
   {
-    entity: { slug: 'new-york-judgment-rate', name: 'New York Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: { state: 'NY', statute: 'CPLR 5004(a)', basis: 'statute-fixed' } },
+    entity: { slug: 'new-york-judgment-rate', name: 'New York Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: {
+      state: 'NY', statute: 'CPLR 5003 and 5004(a)', basis: 'statute-branching', calculation: NEW_YORK_GENERAL_CALCULATION,
+      official_authorities: [
+        { label: 'CPLR 5004', url: 'https://www.nysenate.gov/legislation/laws/CVP/5004' },
+        { label: 'CPLR 5003', url: 'https://www.nysenate.gov/legislation/laws/CVP/5003' },
+        { label: 'CPLR 5002', url: 'https://www.nysenate.gov/legislation/laws/CVP/5002' },
+        { label: 'Matter of HSBC Bank USA', url: 'https://www.nycourts.gov/REPORTER/3dseries/2012/2012_04954.htm' },
+        { label: '520 E. 81st St. Associates v Roughton-Hester', url: 'https://www.nycourts.gov/Reporter/3dseries/2005/2005_02956.htm' },
+        { label: 'IRB-Brasil Resseguros v Inepar Investments', url: 'https://www.nycourts.gov/reporter/3dseries/2011/2011_04306.htm' },
+        { label: 'Denio v State of New York', url: 'https://www.nycourts.gov/reporter/3dseries/2006/2006_04454.htm' },
+      ],
+    } },
     value: 9,
-    effective_date: '2022-04-30', // current statutory scheme (Fair Consumer Judgment Interest Act took effect); the 9% general rate long predates this
+    effective_date: '1981-06-15',
     source_id: 'ny-senate',
     source_url: 'https://www.nysenate.gov/legislation/laws/CVP/5004',
+    method: 'statute-branching',
     notes:
-      'General rate under CPLR 5004(a): 9% per annum "except where otherwise provided by statute". Treated as simple interest in NY practice. ' +
-      'For judgments arising out of CONSUMER DEBT against a natural person the rate is 2% (see the companion consumer-debt series). ' +
-      'Effective date shown is when the current statutory scheme took effect (L.2021 ch.831, eff. Apr 30, 2022); the 9% general rate long predates it. Verify against the statute; not legal advice.',
+      'CPLR 5004(a) supplies a 9% annual general rate, which official published appellate authority identifies as effective June 15, 1981. Covered consumer debt against a natural person uses 2% from April 30, 2022; a specific statute or sufficiently explicit post-judgment contract term can also control. New York courts treat the CPLR 5001–5004 framework as simple interest. Verify the applicable branch; not legal advice.',
   },
   {
-    entity: { slug: 'new-york-consumer-debt-judgment-rate', name: 'New York Consumer-Debt Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: { state: 'NY', statute: 'CPLR 5004(b)', basis: 'statute-fixed' } },
+    entity: { slug: 'new-york-consumer-debt-judgment-rate', name: 'New York Consumer-Debt Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: {
+      state: 'NY', statute: 'CPLR 5003 and 5004(a)–(c)', basis: 'statute-branching', calculation: NEW_YORK_CONSUMER_CALCULATION,
+      official_authorities: [
+        { label: 'CPLR 5004', url: 'https://www.nysenate.gov/legislation/laws/CVP/5004' },
+        { label: 'CPLR 5003', url: 'https://www.nysenate.gov/legislation/laws/CVP/5003' },
+        { label: 'Fair Consumer Judgment Interest Act (S5724A)', url: 'https://www.nysenate.gov/legislation/bills/2021/S5724' },
+        { label: 'Enacted L.2021, ch.831', url: 'https://legislation.nysenate.gov/pdf/bills/2021/S5724A' },
+        { label: 'New York Courts consumer-credit reform guidance', url: 'https://www.nycourts.gov/consumer-credit-reform' },
+        { label: 'Dugg Construction v Pal', url: 'https://www.nycourts.gov/reporter/current/3dseries/2026/2026_51196.shtml' },
+      ],
+    } },
     value: 2,
     effective_date: '2022-04-30',
     source_id: 'ny-senate',
     source_url: 'https://www.nysenate.gov/legislation/laws/CVP/5004',
+    method: 'statute-branching',
     notes:
-      'CPLR 5004 as amended by the Fair Consumer Judgment Interest Act (L.2021 ch.831, eff. Apr 30, 2022): 2% per annum where a natural person is a defendant in an action arising out of consumer debt ' +
-      '(obligations from transactions primarily for personal, family or household purposes). Also applies from Apr 30, 2022 forward to the unpaid portion of earlier consumer-debt judgments. Verify against the statute; not legal advice.',
+      'Beginning April 30, 2022, CPLR 5004 applies 2% per year in a covered action arising out of consumer debt when the defendant is a natural person. It also applies prospectively to the unpaid portion of an older covered judgment, without refunding accrued or paid pre-effective interest or reallocating earlier payments. Consumer classification and other controlling law remain fact-specific. Verify applicability; not legal advice.',
   },
   {
     entity: { slug: 'massachusetts-judgment-rate', name: 'Massachusetts Judgment Interest Rate', entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: { state: 'MA', statute: 'M.G.L. c. 235 §8', basis: 'statute-fixed' } },
@@ -531,6 +625,82 @@ const WEST_VIRGINIA_POSTJUDGMENT_CALCULATION = {
   renderer_supported: false,
   rule_verified_at: WEST_VIRGINIA_HISTORY_VERIFIED_AT,
 };
+
+const MICHIGAN_HISTORY_URL = 'https://www.michigan.gov/taxes/interest-rates-for-money-judgments';
+const MICHIGAN_STATUTE_URL = 'https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013';
+const MICHIGAN_STATUTE_PDF_URL = 'https://www.legislature.mi.gov/documents/mcl/pdf/mcl-600-6013.pdf';
+const MICHIGAN_RULES_VERIFIED_AT = '2026-08-21T00:00:00Z';
+const MICHIGAN_AUTHORITIES = [
+  { label: 'MCL 600.6013 — current statute', url: MICHIGAN_STATUTE_URL },
+  { label: 'MCL 600.6013 — official PDF', url: MICHIGAN_STATUTE_PDF_URL },
+  { label: 'Michigan Treasury — Interest Rates for Money Judgments', url: MICHIGAN_HISTORY_URL },
+  { label: 'Michigan Business Court opinion addressing subsections (7) and (8)', url: 'https://www.courts.michigan.gov/4a6ea6/siteassets/business-court-opinions/c17-2018-07744-cbb%28september13%2C2021%29.pdf' },
+];
+const MICHIGAN_JUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The general formula, official benchmark history, accrual rule, annual compounding, and major statutory branches are verified. Exact six-month application intervals, day count, partial-payment allocation, annual compounding anniversaries, and every complaint-vintage, tort-offer, medical-malpractice, and written-instrument branch are not calculator-complete.',
+  rate_behavior: 'six_month_intervals_from_complaint_filing_using_january_and_july_treasurer_certificates',
+  rate_schedule: 'five_year_treasury_six_month_average_plus_1_point',
+  compounding: 'annual',
+  accrual_trigger: 'complaint_filing',
+  future_damages: 'for_covered_complaints_no_preentry_interest_begins_at_judgment',
+  interest_base: 'entire_money_judgment_including_attorney_fees_and_costs_under_subsection_8_subject_to_exceptions',
+  history_start: '1987-01-01',
+  curated_history_complete_through: '2026-07-01',
+  current_benchmark: 3.959,
+  current_general_rate: 4.959,
+  current_certificate_start: '2026-07-01',
+  branches_complete: false,
+  payment_allocation: 'not_verified_for_calculator',
+  day_count: 'not_verified_for_calculator',
+  accrual_rule_verified: true,
+  renderer_supported: false,
+  rule_verified_at: MICHIGAN_RULES_VERIFIED_AT,
+};
+const MICHIGAN_PREJUDGMENT_CALCULATION = {
+  ...MICHIGAN_JUDGMENT_CALCULATION,
+  reason: 'The complaint-to-judgment formula, official benchmark history, annual compounding, and future-damages exclusion are verified, but complaint-vintage branches, exact six-month intervals, tort offers, medical-malpractice treatment, day count, payments, and written-instrument treatment are not calculator-complete.',
+};
+
+const NEW_JERSEY_HISTORY_URL = 'https://www.njcourts.gov/sites/default/files/courts/civil/postprejudgmentrates.pdf';
+const NEW_JERSEY_CURRENT_URL = 'https://www.njcourts.gov/notices/notice-post-judgment-interest-rate-calendar-year-2026-rule-442-11';
+const NEW_JERSEY_RULE_URL = 'https://www.njcourts.gov/attorneys/rules-of-court/442-11-interest-rate-judgments-tort-actions';
+const NEW_JERSEY_RULES_VERIFIED_AT = '2026-08-21T00:00:00Z';
+const NEW_JERSEY_AUTHORITIES = [
+  { label: 'Rule 4:42-11 — Interest on Judgments and Tort Actions', url: NEW_JERSEY_RULE_URL },
+  { label: '2026 Post-Judgment Interest Rate Notice', url: NEW_JERSEY_CURRENT_URL },
+  { label: 'Official Pre- and Post-Judgment Interest Rate History', url: NEW_JERSEY_HISTORY_URL },
+  { label: 'Special Civil Part monetary limit', url: 'https://www.njcourts.gov/node/242446' },
+];
+const NEW_JERSEY_JUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The annual base schedule, current whole-judgment tiers, simple-interest rule, and major exceptions are verified. Historical Special Civil Part limits, day count, partial-payment allocation, equitable modifications, contract treatment, and special statutory branches are not calculator-complete.',
+  rate_behavior: 'annual_calendar_reset',
+  tier_basis: 'whole_judgment_amount_vs_special_civil_part_limit_at_entry',
+  current_special_civil_part_limit: 20000,
+  current_base_rate: 4.5,
+  current_over_limit_rate: 6.5,
+  over_limit_addition_points: 2,
+  over_limit_branch_effective: '1996-09-01',
+  compounding: 'simple',
+  accrual_trigger: 'judgment_entry_presumptive_subject_to_court_order',
+  history_start: '1975-04-01',
+  curated_history_complete_through: '2026-12-31',
+  historical_thresholds_complete: false,
+  branches_complete: false,
+  payment_allocation: 'not_verified_for_calculator',
+  day_count: 'not_verified_for_calculator',
+  renderer_supported: false,
+  rule_verified_at: NEW_JERSEY_RULES_VERIFIED_AT,
+};
+const NEW_JERSEY_PREJUDGMENT_CALCULATION = {
+  ...NEW_JERSEY_JUDGMENT_CALCULATION,
+  reason: 'The official tort prejudgment schedule and simple-interest rule are verified, but entitlement outside tort, historical monetary limits, accrual exceptions, day count, payments, and court or contract modifications are not calculator-complete.',
+  accrual_trigger: 'for_qualifying_tort_claims_later_of_action_institution_or_six_months_after_cause_of_action_accrual_subject_to_rule_exceptions',
+  history_start: '1988-01-01',
+};
 const STATES_2 = [
   { code: 'TX', name: 'Texas', slug: 'texas-judgment-rate', value: 6.75, kind: 'variable', asof: '2026-07-01',
     statute: 'Tex. Fin. Code §304.003', srcId: 'tx-occc', srcName: 'Texas post-judgment interest rate (Fin. Code §304.003)',
@@ -577,14 +747,16 @@ const STATES_2 = [
     statute: 'N.C.G.S. §24-5 / §24-1', srcId: 'nc-ncleg', srcName: 'North Carolina judgment interest (N.C.G.S. §24-5 / §24-1)',
     publisher: 'North Carolina General Assembly (official)', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html',
     notes: 'Post-judgment interest at North Carolina’s legal rate of 8% per annum — N.C.G.S. §24-5 pegs judgment interest to the §24-1 legal rate (8%), or the contract rate for judgments on a contract. Fixed by statute; simple interest. Verify against the statute; not legal advice.' },
-  { code: 'MI', name: 'Michigan', slug: 'michigan-judgment-rate', value: 4.959, kind: 'variable', asof: '2026-07-01',
-    statute: 'MCL §600.6013', srcId: 'mi-legislature', srcName: 'Michigan judgment interest (MCL §600.6013)',
-    publisher: 'Michigan Legislature (official)', url: 'https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013',
-    notes: 'Post-judgment interest under MCL §600.6013 (Michigan’s judgment interest runs from the filing of the complaint): the general rate is 1 percentage point above the six-month average of 5-year U.S. Treasury note auctions, certified by the State Treasurer and reset each January 1 and July 1, COMPOUNDED ANNUALLY — currently 4.959% (period beginning July 1, 2026). Judgments on a written instrument use a separate rate (the instrument’s rate, capped at 13%). Verify the current period at legislature.mi.gov; not legal advice.' },
-  { code: 'NJ', name: 'New Jersey', slug: 'new-jersey-judgment-rate', value: 4.5, value_text: '4.5% / 6.5%', kind: 'variable', asof: '2026-01-01',
-    statute: 'N.J. Court Rule R. 4:42-11', srcId: 'nj-courts', srcName: 'New Jersey post-judgment interest (R. 4:42-11)',
-    publisher: 'New Jersey Courts (official)', url: 'https://www.njcourts.gov/notices/notice-post-judgment-interest-rate-calendar-year-2026-rule-442-11',
-    notes: 'Post-judgment interest set annually by the New Jersey Judiciary under Court Rule R. 4:42-11: a base rate tied to the State Cash Management Fund’s prior-year return — for 2026, 4.5% on judgments up to $20,000, and 6.5% (base + 2%) on judgments over $20,000. Simple interest. Verify the current year’s Notice to the Bar at njcourts.gov; not legal advice.' },
+  { code: 'MI', name: 'Michigan', slug: 'michigan-judgment-rate', value: 4.959, value_text: '4.959%', kind: 'variable', asof: '2026-07-01', verifiedOn: '2026-08-21',
+    statute: 'MCL §600.6013', srcId: 'mi-treasury', srcName: 'Michigan official money-judgment interest benchmark history',
+    publisher: 'Michigan Department of Treasury (official)', url: MICHIGAN_HISTORY_URL, confidence: 'high', method: 'official_treasury_benchmark_plus_statutory_1_point', calculation: MICHIGAN_JUDGMENT_CALCULATION,
+    metadata: { basis: 'statute-branching-official-treasury-history', official_history_url: MICHIGAN_HISTORY_URL, official_statute_urls: [MICHIGAN_STATUTE_URL, MICHIGAN_STATUTE_PDF_URL], official_authorities: MICHIGAN_AUTHORITIES },
+    notes: 'For the general MCL 600.6013(8) branch, Michigan’s current rate is 4.959%: the State Treasurer certified a 3.959% five-year Treasury benchmark for the period beginning July 1, 2026, and the statute adds one percentage point. General interest usually runs from complaint filing through satisfaction and compounds annually. Written instruments, future damages, tort settlement offers, medical-malpractice cases, and older complaint dates can follow different rules. Reference only; not legal advice.' },
+  { code: 'NJ', name: 'New Jersey', slug: 'new-jersey-judgment-rate', value: 4.5, value_text: '4.5% / 6.5%', kind: 'variable', asof: '2026-01-01', verifiedOn: '2026-08-21',
+    statute: 'N.J. Court Rule R. 4:42-11', srcId: 'nj-courts', srcName: 'New Jersey official post- and prejudgment interest schedule',
+    publisher: 'New Jersey Courts (official)', url: NEW_JERSEY_CURRENT_URL, confidence: 'high', method: 'court-rule-annual-official-history', calculation: NEW_JERSEY_JUDGMENT_CALCULATION,
+    metadata: { basis: 'court-rule-annual-official-history', official_history_url: NEW_JERSEY_HISTORY_URL, official_current_rate_url: NEW_JERSEY_CURRENT_URL, official_authorities: NEW_JERSEY_AUTHORITIES },
+    notes: 'For calendar year 2026, New Jersey Rule 4:42-11 sets simple interest at 4.5% for a judgment not exceeding the Special Civil Part monetary limit at entry and 6.5% for a judgment exceeding it. The current limit is $20,000. These are whole-judgment categories, not marginal brackets, and the annual schedule can change while a judgment remains unpaid. Contracts, court orders, public entities, and specialized statutes can require different treatment. Not legal advice.' },
   { code: 'VA', name: 'Virginia', slug: 'virginia-judgment-rate', value: 6, kind: 'fixed', asof: '2004-07-01', verifiedOn: '2026-08-16',
     statute: 'Va. Code §6.2-302 / §8.01-382', srcId: 'va-code', srcName: 'Virginia judgment interest (Va. Code §6.2-302)',
     publisher: 'Virginia General Assembly (official)', url: 'https://law.lis.virginia.gov/vacode/title6.2/chapter3/section6.2-302/',
@@ -859,8 +1031,9 @@ const PREJUDG = [
     notes: "Prejudgment interest under Md. Const. Art. III, sec. 57 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Maryland’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
   { code: "MA", name: "Massachusetts", slug: "massachusetts-prejudgment-rate", value: 12, value_text: "12%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "M.G.L. c. 231, § 6B", srcId: "ma-prejud", srcName: "Massachusetts prejudgment interest (M.G.L. c. 231, § 6B)", publisher: "Massachusetts — malegislature.gov", url: "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6B",
     notes: "Prejudgment interest under M.G.L. c. 231, § 6B — 12% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Massachusetts’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
-  { code: "MI", name: "Michigan", slug: "michigan-prejudgment-rate", value: 4.959, value_text: "4.959%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-01", statute: "MCL 600.6013", srcId: "mi-prejud", srcName: "Michigan prejudgment interest (MCL 600.6013)", publisher: "Michigan — legislature.mi.gov", url: "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-600-6013",
-    notes: "Prejudgment interest under MCL §600.6013 (Michigan interest runs from the filing of the complaint), COMPOUNDED ANNUALLY: the general rate is 1% above the six-month average of 5-year Treasury auctions, reset each Jan 1 / Jul 1 — currently 4.959% (period beginning July 1, 2026 = 1% + 3.959%). Judgments on a written instrument use a separate rate (the instrument's rate, capped at 13%, also compounded). Verify the current period at legislature.mi.gov. Not legal advice." },
+  { code: "MI", name: "Michigan", slug: "michigan-prejudgment-rate", value: 4.959, value_text: "4.959%", kind: "variable", method: "official_treasury_benchmark_plus_statutory_1_point", confidence: "high", asof: "2026-07-01", verifiedOn: "2026-08-21", statute: "MCL 600.6013", srcId: "mi-prejud", srcName: "Michigan official money-judgment interest benchmark history and MCL 600.6013", publisher: "Michigan Department of Treasury and Legislature (official)", url: MICHIGAN_HISTORY_URL, calculation: MICHIGAN_PREJUDGMENT_CALCULATION,
+    metadata: { basis: 'statute-branching-official-treasury-history', official_history_url: MICHIGAN_HISTORY_URL, official_statute_urls: [MICHIGAN_STATUTE_URL, MICHIGAN_STATUTE_PDF_URL], official_authorities: MICHIGAN_AUTHORITIES },
+    notes: "For the general MCL 600.6013(8) path, Michigan's complaint-to-judgment interest uses the official Treasury benchmark plus one point and compounds annually. For covered complaints, future damages do not earn interest before judgment; that component begins at judgment. Written instruments, tort settlement offers, medical-malpractice rules, older complaint dates, and exact six-month application intervals require separate treatment. Reference only; not legal advice." },
   { code: "MN", name: "Minnesota", slug: "minnesota-prejudgment-rate", value: 4, value_text: "4% / 10%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Minn. Stat. § 549.09, subd. 1(b)–(c)", srcId: "mn-prejud", srcName: "Minnesota prejudgment interest (Minn. Stat. § 549.09, subd. 1(b))", publisher: "Minnesota — revisor.mn.gov", url: "https://www.revisor.mn.gov/statutes/cite/549.09",
     notes: "Minnesota preverdict interest under Minn. Stat. §549.09 subd. 1(b) is computed per subd. 1(c): the default rate (currently 4%) applies, but judgments/awards OVER $50,000 (other than certain categories) accrue 10% — the same two-tier split as post-judgment interest. Current value as of 2026-07-09; verify at revisor.mn.gov. Not legal advice." },
   { code: "MS", name: "Mississippi", slug: "mississippi-prejudgment-rate", value: null, value_text: "contract rate / court-set", kind: "case-specific", method: "court-or-contract-rate", confidence: "high", asof: "1989-07-01", verifiedOn: "2026-07-19", statute: "Miss. Code Ann. §§75-17-7 and 75-17-1", srcId: "ms-prejud", srcName: "Mississippi judgment and prejudgment interest rules (Miss. Code Ann. §§75-17-7 and 75-17-1)", publisher: "Mississippi Legislature-authorized Code portal (LexisNexis)", url: "https://www.lexisnexis.com/hottopics/mscode/", calculation: MISSISSIPPI_PREJUDGMENT_CALCULATION,
@@ -876,8 +1049,9 @@ const PREJUDG = [
     notes: "Prejudgment interest under NRS 99.040 — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Nevada’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at leg.state.nv.us. Not legal advice." },
   { code: "NH", name: "New Hampshire", slug: "new-hampshire-prejudgment-rate", value: 5.7, value_text: "5.7%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-01-01", statute: "RSA 336:1, II", srcId: "nh-prejud", srcName: "New Hampshire prejudgment interest (RSA 336:1, II)", publisher: "New Hampshire — courts.nh.gov", url: "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
     notes: "Prejudgment interest under RSA 336:1, II — 5.7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Hampshire’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at courts.nh.gov. Not legal advice." },
-  { code: "NJ", name: "New Jersey", slug: "new-jersey-prejudgment-rate", value: 4.5, value_text: "4.5% / 6.5%", kind: "same-as-postjudgment", method: "statute-variable", confidence: "medium", asof: "2026-01-01", statute: "N.J. Ct. R. 4:42-11(b)", srcId: "nj-prejud", srcName: "New Jersey prejudgment interest (N.J. Ct. R. 4:42-11(b))", publisher: "New Jersey — njcourts.gov", url: "https://www.njcourts.gov/sites/default/files/courts/civil/postprejudgmentrates.pdf",
-    notes: "New Jersey tort prejudgment interest is calculated 'in the same amount and manner' as post-judgment interest (R. 4:42-11(b)): for 2026, 4.5% on amounts up to the Special Civil Part limit ($20,000) and 6.5% (base + 2%) above it. Simple interest. Verify the current Notice to the Bar at njcourts.gov. Not legal advice." },
+  { code: "NJ", name: "New Jersey", slug: "new-jersey-prejudgment-rate", value: 4.5, value_text: "4.5% / 6.5%", kind: "same-as-postjudgment", method: "court-rule-annual-official-history", confidence: "high", asof: "2026-01-01", verifiedOn: "2026-08-21", statute: "N.J. Ct. R. 4:42-11(b)", srcId: "nj-prejud", srcName: "New Jersey official pre- and postjudgment interest schedule", publisher: "New Jersey Courts (official)", url: NEW_JERSEY_HISTORY_URL, calculation: NEW_JERSEY_PREJUDGMENT_CALCULATION,
+    metadata: { basis: 'court-rule-annual-official-history', official_history_url: NEW_JERSEY_HISTORY_URL, official_rule_url: NEW_JERSEY_RULE_URL, official_authorities: NEW_JERSEY_AUTHORITIES },
+    notes: "For 2026 tort actions under Rule 4:42-11(b), the relevant simple-interest schedule is 4.5% for a judgment not exceeding the Special Civil Part monetary limit at entry and 6.5% for a judgment exceeding it. The current limit is $20,000. These are whole-judgment categories, not marginal brackets. Contract and equitable prejudgment interest follow separate judicial rules, and accrual exceptions can apply. Reference only; not legal advice." },
   { code: "NM", name: "New Mexico", slug: "new-mexico-prejudgment-rate", value: 10, value_text: "10% / 15%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "NMSA 1978 §56-8-4(B) (≤10% discretionary); §56-8-3 (15% liquidated/contract)", srcId: "nm-prejud", srcName: "New Mexico prejudgment interest (NMSA 1978 §§ 56-8-3, 56-8-4)", publisher: "New Mexico Compilation Commission — NMOneSource (official)", url: "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do",
     notes: "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice." },
   { code: "NY", name: "New York", slug: "new-york-prejudgment-rate", value: 9, value_text: "9%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "N.Y. C.P.L.R. 5004", srcId: "ny-prejud", srcName: "New York prejudgment interest (N.Y. C.P.L.R. 5004)", publisher: "New York — nysenate.gov", url: "https://www.nysenate.gov/legislation/laws/CVP/5004",
@@ -1074,6 +1248,67 @@ export function buildStateFixed({
       method: f.method || 'statute-fixed',
       notes: removeTruncatedFragments(f.notes),
     };
+
+    if (f.entity.slug === 'new-york-consumer-debt-judgment-rate') {
+      const priorSource = STATE_SOURCES.find((candidate) => candidate.id === 'ny-courts-hsbc');
+      return [
+        {
+          ...baseObservation,
+          value_numeric: 9,
+          value_text: '9%',
+          effective_date: '1981-06-15',
+          source_id: priorSource.id,
+          source_url: priorSource.home_url,
+          retrieved_at: priorSource.retrieved_at,
+          method: 'historical-general-default',
+          notes: 'New York’s 9% general CPLR 5004 rate applied before the special consumer-debt branch. Official published appellate authority identifies June 15, 1981 as the 9% rate’s effective date. Other specific statutes or qualifying contract terms could still control. Not legal advice.',
+        },
+        baseObservation,
+      ];
+    }
+
+    if (f.entity.slug === 'michigan-judgment-rate'
+        || f.entity.slug === 'michigan-prejudgment-rate') {
+      const prejudgment = f.entity.slug === 'michigan-prejudgment-rate';
+      return buildMichiganOfficialHistory().map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_url: point.source_url,
+        confidence: 'high',
+        method: 'official_treasury_benchmark_plus_statutory_1_point',
+        notes: point.effective_date === f.effective_date
+          ? baseObservation.notes
+          : prejudgment
+            ? `Michigan Treasury certified a ${point.index_value.toFixed(3)}% five-year Treasury benchmark for the period beginning ${point.effective_date}; adding one point gives the ${point.value_text} general MCL 600.6013 reference used for covered complaint-to-judgment intervals. Complaint-vintage and special branches may differ. Not legal advice.`
+            : `Michigan Treasury certified a ${point.index_value.toFixed(3)}% five-year Treasury benchmark for the period beginning ${point.effective_date}; adding one point gives the ${point.value_text} general MCL 600.6013 reference. Complaint-vintage, written-instrument, and other statutory branches may differ. Not legal advice.`,
+      }));
+    }
+
+    if (f.entity.slug === 'new-jersey-judgment-rate'
+        || f.entity.slug === 'new-jersey-prejudgment-rate') {
+      const prejudgment = f.entity.slug === 'new-jersey-prejudgment-rate';
+      const history = prejudgment
+        ? buildNewJerseyPrejudgmentHistory()
+        : buildNewJerseyPostJudgmentHistory();
+      return history.map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_url: !prejudgment && point.effective_date === f.effective_date
+          ? f.source_url
+          : point.source_url,
+        confidence: 'high',
+        method: 'court-rule-annual-official-history',
+        notes: point.effective_date === f.effective_date
+          ? baseObservation.notes
+          : prejudgment
+            ? `Official New Jersey Judiciary tort prejudgment schedule beginning ${point.effective_date}. The annual base follows Rule 4:42-11; the two-point over-limit branch is shown only for periods after it began and depends on the Special Civil Part limit then applicable. Contract and equitable claims follow separate treatment. Not legal advice.`
+            : `Official New Jersey Judiciary Rule 4:42-11 base schedule beginning ${point.effective_date}. The two-point over-limit branch is shown only for periods after it began and depends on the Special Civil Part monetary limit applicable at entry. This is not a marginal bracket. Not legal advice.`,
+      }));
+    }
 
     const officialAnnualHistory = {
       'idaho-judgment-rate': buildIdahoOfficialHistory,

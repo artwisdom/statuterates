@@ -42,6 +42,11 @@ These fields describe how an observation was recorded. A state-law value is refe
 entity metadata explicitly marks calculation.status as "ready". Confirm legal applicability against
 the controlling authority.
 
+## Human reference tools
+- 50-state + D.C. rules and data coverage index: ${base}/states/judgment-interest-index/
+- State-by-state reference hub: ${base}/states/
+- Fail-closed historical rate lookup: ${base}/calculators/historical-rate-lookup/
+
 ## Rate series
 ${rateList}
 
