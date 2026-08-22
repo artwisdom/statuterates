@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "west-virginia-judgment-rate",
   "name": "West Virginia Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,10 +10,40 @@
     "state": "WV",
     "statute": "W. Va. Code § 56-6-31",
     "basis": "statute-variable",
+    "official_history_url": "https://www.courtswv.gov/legal-community/court-rules",
+    "official_authorities": [
+      {
+        "label": "W. Va. Code §56-6-31",
+        "url": "https://code.wvlegislature.gov/56-6-31/"
+      },
+      {
+        "label": "West Virginia annual interest-rate orders",
+        "url": "https://www.courtswv.gov/legal-community/court-rules"
+      },
+      {
+        "label": "2026 signed interest-rate order",
+        "url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2026%20Interest%20Rates%20Order.pdf"
+      },
+      {
+        "label": "2025 signed interest-rate order",
+        "url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2025%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The official annual orders, entry-year rate lock, and simple-interest rule are modeled, but day count, partial-payment allocation, contract branches, and all special judgments are not deterministic.",
+      "rate_behavior": "fixed_at_entry",
+      "rate_schedule": "official_annual_supreme_court_orders",
+      "compounding": "simple",
+      "day_count": "not_verified_for_calculator",
+      "history_start": "2007-01-02",
+      "curated_history_complete_through": "2026-12-31",
+      "current_period_monitored": false,
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-08-20T00:00:00Z"
     }
   },
   "metrics": [
@@ -27,11 +57,11 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-01-01",
       "source_id": "wv-jud",
-      "source_url": "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Post-judgment interest under W. Va. Code § 56-6-31, currently 6.25% (as of January 1, 2026). Simple interest. Formula and rate apply to both (unified by 2017 amendment eff. Verify the current value at courtswv.gov; not legal advice."
+      "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2026%20Interest%20Rates%20Order.pdf",
+      "retrieved_at": "2026-08-20T00:00:00Z",
+      "confidence": "high",
+      "method": "statute-variable-official-table",
+      "notes": "The West Virginia court’s signed 2026 order sets 6.25% under W. Va. Code §56-6-31. The court sets one annual rate from the Fifth Federal Reserve District secondary discount rate plus two points, subject to statutory limits. The rate in force when judgment is entered stays fixed and bears simple interest. The dataset preserves 20 signed annual orders from 2007 through 2026, including the signed 7.00% 2025 order. Not legal advice."
     }
   },
   "history": {
@@ -43,11 +73,258 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-01-01",
         "source_id": "wv-jud",
-        "source_url": "https://www.courtswv.gov/public-resources/news-publications/press-page/press-releases/supreme-court-sets-2026-interest-rate",
-        "retrieved_at": "2026-07-09T00:00:00Z",
-        "confidence": "medium",
-        "method": "statute-variable",
-        "notes": "Post-judgment interest under W. Va. Code § 56-6-31, currently 6.25% (as of January 1, 2026). Simple interest. Formula and rate apply to both (unified by 2017 amendment eff. Verify the current value at courtswv.gov; not legal advice."
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2026%20Interest%20Rates%20Order.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "The West Virginia court’s signed 2026 order sets 6.25% under W. Va. Code §56-6-31. The court sets one annual rate from the Fifth Federal Reserve District secondary discount rate plus two points, subject to statutory limits. The rate in force when judgment is entered stays fixed and bears simple interest. The dataset preserves 20 signed annual orders from 2007 through 2026, including the signed 7.00% 2025 order. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2025-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2025%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 8,
+        "value_text": "8.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2024-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2024%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2023-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2023%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 4,
+        "value_text": "4.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2022-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2022%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees_0.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 4,
+        "value_text": "4.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2021-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2021%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees_1.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 4.75,
+        "value_text": "4.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2020-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2020%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 5.5,
+        "value_text": "5.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2019-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2019%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 4.5,
+        "value_text": "4.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2018-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2018%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2017-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2017%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2016-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2016%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees_0.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2015-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2015%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2014-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2014%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2013-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2013%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2012-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2012%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2011-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2011%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2010-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2010%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2009-01-01",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2009%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 8.25,
+        "value_text": "8.25%",
+        "unit": "percent_per_annum",
+        "effective_date": "2008-01-02",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2008%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 9.75,
+        "value_text": "9.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2007-01-02",
+        "source_id": "wv-jud",
+        "source_url": "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2007%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees_0.pdf",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official annual West Virginia judgment-interest order. The entry date selects the rate and the statutory general path keeps it fixed for that judgment. Contract and special-judgment branches require separate review. Not legal advice."
       }
     ]
   }

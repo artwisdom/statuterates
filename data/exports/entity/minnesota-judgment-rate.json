@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "minnesota-judgment-rate",
   "name": "Minnesota Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -31,7 +31,7 @@
       "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026)., set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Simple interest. Verify the current value at revisor.mn.gov; not legal advice."
+      "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026), set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Simple interest. Verify the current value at revisor.mn.gov; not legal advice."
     }
   },
   "history": {
@@ -47,7 +47,7 @@
         "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026)., set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Simple interest. Verify the current value at revisor.mn.gov; not legal advice."
+        "notes": "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026), set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Simple interest. Verify the current value at revisor.mn.gov; not legal advice."
       }
     ]
   }

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "louisiana-prejudgment-rate",
   "name": "Louisiana Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,44 @@
   "locale": null,
   "metadata": {
     "state": "LA",
-    "statute": "La. R.S. 13:4202",
-    "basis": "statute-variable",
+    "statute": "La. R.S. 9:3500, 13:4202, 13:4203, and 13:5112; Civil Code art. 2000",
+    "basis": "composite-la-9-3500-13-4202-13-4203-13-5112-cc-2000",
     "metric": "prejudgment",
-    "kind": "same-as-postjudgment",
+    "kind": "claim-dependent",
+    "official_authorities": [
+      {
+        "label": "Louisiana OFI judicial-interest schedule",
+        "url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/"
+      },
+      {
+        "label": "La. R.S. 13:4202",
+        "url": "https://www.legis.la.gov/legis/LawPrint.aspx?d=77702"
+      },
+      {
+        "label": "La. R.S. 13:4203",
+        "url": "https://www.legis.la.gov/legis/LawPrint.aspx?d=77703"
+      },
+      {
+        "label": "La. R.S. 9:3500",
+        "url": "https://www.legis.la.gov/legis/Law.aspx?d=285199"
+      },
+      {
+        "label": "La. R.S. 13:5112",
+        "url": "https://www.legis.la.gov/legis/Law.aspx?d=77944"
+      },
+      {
+        "label": "2026 Louisiana Act 13",
+        "url": "https://www.legis.la.gov/Legis/ViewDocument.aspx?d=1467975"
+      },
+      {
+        "label": "Louisiana Civil Code art. 2000",
+        "url": "https://www.legis.la.gov/legis/Law.aspx?d=109256"
+      },
+      {
+        "label": "Louisiana Civil Code art. 2001",
+        "url": "https://www.legis.la.gov/legis/Law.aspx?d=109257"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -25,15 +59,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 7.5,
-      "value_text": "7.5%",
+      "value_text": "7.5% general / up to 6% government PI-WD",
       "unit": "percent_per_annum",
-      "effective_date": "2026-01-01",
+      "effective_date": "2026-08-01",
       "source_id": "la-prejud",
       "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Prejudgment interest under La. R.S. 13:4202 — 7.5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Louisiana’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at ofi.la.gov. Not legal advice."
+      "retrieved_at": "2026-08-20T00:00:00Z",
+      "confidence": "high",
+      "method": "composite-la-9-3500-13-4202-13-4203-13-5112-cc-2000",
+      "notes": "Louisiana prejudgment interest is claim-dependent. General ex delicto judgments ordinarily use the annual R.S. 13:4202 judicial rate from judicial demand under R.S. 13:4203. Effective August 1, 2026, R.S. 13:5112(C) caps the covered state or political-subdivision personal-injury and wrongful-death prejudgment branch at the lesser of 6% or the applicable judicial rate. A monetary contract can use Civil Code art. 2000. Automatic compounding is not assumed. Not legal advice."
     }
   },
   "history": {
@@ -41,15 +75,15 @@
       {
         "metric": "annual_rate",
         "value": 7.5,
-        "value_text": "7.5%",
+        "value_text": "7.5% general / up to 6% government PI-WD",
         "unit": "percent_per_annum",
-        "effective_date": "2026-01-01",
+        "effective_date": "2026-08-01",
         "source_id": "la-prejud",
         "source_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
-        "retrieved_at": "2026-07-09T00:00:00Z",
-        "confidence": "medium",
-        "method": "statute-variable",
-        "notes": "Prejudgment interest under La. R.S. 13:4202 — 7.5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Louisiana’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at ofi.la.gov. Not legal advice."
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "composite-la-9-3500-13-4202-13-4203-13-5112-cc-2000",
+        "notes": "Louisiana prejudgment interest is claim-dependent. General ex delicto judgments ordinarily use the annual R.S. 13:4202 judicial rate from judicial demand under R.S. 13:4203. Effective August 1, 2026, R.S. 13:5112(C) caps the covered state or political-subdivision personal-injury and wrongful-death prejudgment branch at the lesser of 6% or the applicable judicial rate. A monetary contract can use Civil Code art. 2000. Automatic compounding is not assumed. Not legal advice."
       }
     ]
   }

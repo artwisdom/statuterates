@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "north-dakota-judgment-rate",
   "name": "North Dakota Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,10 +10,44 @@
     "state": "ND",
     "statute": "N.D.C.C. § 28-20-34",
     "basis": "statute-variable",
+    "official_history_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+    "official_authorities": [
+      {
+        "label": "North Dakota Courts judgment-interest history",
+        "url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments"
+      },
+      {
+        "label": "North Dakota Courts 2026 rate announcement",
+        "url": "https://www.ndcourts.gov/news/north-dakota/north-dakota-supreme-court/general-news/interest-rate-set-for-2026-judgments"
+      },
+      {
+        "label": "N.D.C.C. chapter 28-20",
+        "url": "https://ndlegis.gov/cencode/t28c20.pdf"
+      },
+      {
+        "label": "N.D.C.C. chapter 47-14",
+        "url": "https://ndlegis.gov/cencode/t47c14.pdf"
+      },
+      {
+        "label": "Orwig v. Orwig, 2023 ND 113",
+        "url": "https://www.ndcourts.gov/supreme-court/opinions/8318"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The official post-2005 annual history, annual reset, no-compounding rule, and original-instrument branch are modeled, but the pre-2006 transition, day count, payment sequence, and all special judgments are not deterministic.",
+      "rate_behavior": "resets_by_calendar_year_for_post_2005_judgments",
+      "rate_schedule": "official_annual_judicial_branch_table",
+      "compounding": "prohibited_for_general_statutory_path",
+      "day_count": "not_verified_for_calculator",
+      "history_start": "2006-01-01",
+      "curated_history_complete_through": "2026-12-31",
+      "current_period_monitored": false,
+      "branches_complete": false,
+      "accrual_rule_verified": true,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-08-20T00:00:00Z"
     }
   },
   "metrics": [
@@ -23,15 +57,15 @@
     "annual_rate": {
       "metric": "annual_rate",
       "value": 10,
-      "value_text": "10%",
+      "value_text": "10.00%",
       "unit": "percent_per_annum",
       "effective_date": "2026-01-01",
       "source_id": "nd-jud",
       "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Post-judgment interest under N.D.C.C. § 28-20-34, currently 10% (as of January 1, 2026)., reset annually. Rate = (U.S. Simple interest. Verify the current value at ndcourts.gov; not legal advice."
+      "retrieved_at": "2026-08-20T00:00:00Z",
+      "confidence": "high",
+      "method": "statute-variable-official-table",
+      "notes": "North Dakota Courts publishes 10% for 2026 under N.D.C.C. §28-20-34. The post-2005 formula uses the prior December prime rate plus three points, rounded up to the next half point. Orwig v. Orwig holds the statute does not require a post-2005 judgment to retain its entry-year statutory rate in later years. The general path prohibits compounding; an original instrument can state a different rate, and pre-2006 judgments follow a transition rule. Not legal advice."
     }
   },
   "history": {
@@ -39,15 +73,275 @@
       {
         "metric": "annual_rate",
         "value": 10,
-        "value_text": "10%",
+        "value_text": "10.00%",
         "unit": "percent_per_annum",
         "effective_date": "2026-01-01",
         "source_id": "nd-jud",
         "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
-        "retrieved_at": "2026-07-09T00:00:00Z",
-        "confidence": "medium",
-        "method": "statute-variable",
-        "notes": "Post-judgment interest under N.D.C.C. § 28-20-34, currently 10% (as of January 1, 2026)., reset annually. Rate = (U.S. Simple interest. Verify the current value at ndcourts.gov; not legal advice."
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "North Dakota Courts publishes 10% for 2026 under N.D.C.C. §28-20-34. The post-2005 formula uses the prior December prime rate plus three points, rounded up to the next half point. Orwig v. Orwig holds the statute does not require a post-2005 judgment to retain its entry-year statutory rate in later years. The general path prohibits compounding; an original instrument can state a different rate, and pre-2006 judgments follow a transition rule. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 11,
+        "value_text": "11.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2025-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 11.5,
+        "value_text": "11.50%",
+        "unit": "percent_per_annum",
+        "effective_date": "2024-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10%",
+        "unit": "percent_per_annum",
+        "effective_date": "2023-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2022-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2021-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 8,
+        "value_text": "8.0%",
+        "unit": "percent_per_annum",
+        "effective_date": "2020-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 8.5,
+        "value_text": "8.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2019-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7.5,
+        "value_text": "7.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2018-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2017-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2016-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2015-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2014-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2013-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2012-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2011-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 6.5,
+        "value_text": "6.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2010-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 7,
+        "value_text": "7.0%",
+        "unit": "percent_per_annum",
+        "effective_date": "2009-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 10.5,
+        "value_text": "10.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2008-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 11.5,
+        "value_text": "11.5%",
+        "unit": "percent_per_annum",
+        "effective_date": "2007-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
+      },
+      {
+        "metric": "annual_rate",
+        "value": 10,
+        "value_text": "10.0%",
+        "unit": "percent_per_annum",
+        "effective_date": "2006-01-01",
+        "source_id": "nd-jud",
+        "source_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+        "retrieved_at": "2026-08-20T00:00:00Z",
+        "confidence": "high",
+        "method": "statute-variable-official-table",
+        "notes": "Official North Dakota Courts annual rate for post-2005 judgments. The statutory percentage can change by calendar year; an original-instrument rate and the pre-2006 transition require separate treatment. Not legal advice."
       }
     ]
   }

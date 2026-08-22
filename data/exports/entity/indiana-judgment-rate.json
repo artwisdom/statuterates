@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "indiana-judgment-rate",
   "name": "Indiana Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,7 +9,29 @@
   "metadata": {
     "state": "IN",
     "statute": "Ind. Code § 24-4.6-1-101",
-    "basis": "statute-fixed",
+    "basis": "statute-branching",
+    "official_authorities": [
+      {
+        "label": "Indiana Code §24-4.6-1-0.1 — amendment application dates",
+        "url": "https://iga.in.gov/laws/current/ic/titles/24#24-4.6-1-0.1"
+      },
+      {
+        "label": "Indiana Code §24-4.6-1-101 — money judgments",
+        "url": "https://iga.in.gov/laws/current/ic/titles/24#24-4.6-1-101"
+      },
+      {
+        "label": "Indiana Code §24-4.6-1-104 — computation methods",
+        "url": "https://iga.in.gov/laws/current/ic/titles/24#24-4.6-1-104"
+      },
+      {
+        "label": "Indiana Code §24-4.6-1-102 — agreed-interest loans",
+        "url": "https://iga.in.gov/laws/current/ic/titles/24#24-4.6-1-102"
+      },
+      {
+        "label": "Indiana Acts historical archive",
+        "url": "https://iga.in.gov/laws/acts/archive"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -25,13 +47,13 @@
       "value": 8,
       "value_text": "8%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-01-01",
+      "effective_date": "1994-01-01",
       "source_id": "in-jud",
-      "source_url": "https://iga.in.gov/laws/2025/ic/titles/24",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "source_url": "https://iga.in.gov/laws/current/ic/titles/24#24-4.6-1-101",
+      "retrieved_at": "2026-08-20T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Post-judgment interest under Ind. Code § 24-4.6-1-101 — 8% per year, fixed by statute (simple interest). This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind. Verify against the statute; not legal advice."
+      "method": "statute-fixed-official-history",
+      "notes": "Indiana Code §24-4.6-1-101 sets 8% for its no-contract money-judgment branch. The original contract’s stated rate governs after judgment when present, capped at 8%. Interest generally runs from verdict or finding until satisfaction. Section 24-4.6-1-104 can continue an agreed computation method, so a universal simple-interest claim is not made. Section 24-4.6-1-0.1 applies the 1993 amendment to interest accruing after December 31, 1993, including unpaid earlier judgments, so January 1, 1994 is the legal change point recorded here. The page remains ad-free and calculator-disabled. Not legal advice."
     }
   },
   "history": {
@@ -41,13 +63,13 @@
         "value": 8,
         "value_text": "8%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-01-01",
+        "effective_date": "1994-01-01",
         "source_id": "in-jud",
-        "source_url": "https://iga.in.gov/laws/2025/ic/titles/24",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "source_url": "https://iga.in.gov/laws/current/ic/titles/24#24-4.6-1-101",
+        "retrieved_at": "2026-08-20T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Post-judgment interest under Ind. Code § 24-4.6-1-101 — 8% per year, fixed by statute (simple interest). This 8% is POST-judgment (from verdict/finding to satisfaction). Prejudgment interest is separate — under the Tort Prejudgment Interest Statute, Ind. Verify against the statute; not legal advice."
+        "method": "statute-fixed-official-history",
+        "notes": "Indiana Code §24-4.6-1-101 sets 8% for its no-contract money-judgment branch. The original contract’s stated rate governs after judgment when present, capped at 8%. Interest generally runs from verdict or finding until satisfaction. Section 24-4.6-1-104 can continue an agreed computation method, so a universal simple-interest claim is not made. Section 24-4.6-1-0.1 applies the 1993 amendment to interest accruing after December 31, 1993, including unpaid earlier judgments, so January 1, 1994 is the legal change point recorded here. The page remains ad-free and calculator-disabled. Not legal advice."
       }
     ]
   }

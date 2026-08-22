@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "oklahoma-judgment-rate",
   "name": "Oklahoma Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -31,7 +31,7 @@
       "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-variable",
-      "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026).. Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Verify the current value at oscn.net; not legal advice."
+      "notes": "For judgments governed by 12 O.S. §727.1, the 2026 post-judgment rate is 8.75%. The annual formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year plus two percentage points. The statute uses simple interest and supplies a separate formula for qualifying prejudgment interest. Another controlling law or judgment category can require a different rule. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -47,7 +47,7 @@
         "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-variable",
-        "notes": "Post-judgment interest under 12 O.S. Sec. 727.1, currently 8.75% (as of January 1, 2026).. Simple interest. Different formulas. Postjudgment = WSJ prime + 2% (8.75% for 2026). Prejudgment = average U.S. Verify the current value at oscn.net; not legal advice."
+        "notes": "For judgments governed by 12 O.S. §727.1, the 2026 post-judgment rate is 8.75%. The annual formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year plus two percentage points. The statute uses simple interest and supplies a separate formula for qualifying prejudgment interest. Another controlling law or judgment category can require a different rule. Verify applicability; not legal advice."
       }
     ]
   }

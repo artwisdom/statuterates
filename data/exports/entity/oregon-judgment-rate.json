@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "oregon-judgment-rate",
   "name": "Oregon Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,6 +10,25 @@
     "state": "OR",
     "statute": "ORS 82.010(2)",
     "basis": "statute-fixed",
+    "official_statute_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
+    "official_authorities": [
+      {
+        "label": "ORS 82.010 — current judgment-interest rule",
+        "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html"
+      },
+      {
+        "label": "Oregon Laws 1979, chapter 794 — 9% amendment and emergency clause",
+        "url": "https://www.oregonlegislature.gov/bills_laws/lawsstatutes/1979.pdf"
+      },
+      {
+        "label": "1979 ORS Chapter 82 — 9% amendment",
+        "url": "https://archives.oregonlegislature.gov/ORS_Archives/1979-Chapter-082.pdf"
+      },
+      {
+        "label": "1977 ORS Chapter 82 — former 6% rule",
+        "url": "https://archives.oregonlegislature.gov/ORS_Archives/1977-Chapter-082.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -25,13 +44,13 @@
       "value": 9,
       "value_text": "9%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "1979-07-25",
       "source_id": "or-jud",
       "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "retrieved_at": "2026-08-20T00:00:00Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees. Carve-out: judgments for professional negligence of Oregon Medical Board or State Board of Nursing licensees bear the lesser of 5% or the federal discount rate + 3% (ORS 82.010(2)(f)), not 9%. Verify against the statute; not legal advice."
+      "method": "statute-fixed-official-history",
+      "notes": "Oregon Laws 1979, chapter 794, effective immediately on July 25, 1979, raised the general money-judgment rate from 6% to 9%. ORS 82.010(2) ordinarily runs simple interest from entry unless the judgment specifies another date or a contract provides otherwise. Post-entry interest also accrues on prejudgment interest accrued before entry and on attorney fees and costs entered in the judgment. A contract above 9% and qualifying medical-professional-negligence judgments follow separate statutory branches. Verify applicability; not legal advice."
     }
   },
   "history": {
@@ -41,13 +60,13 @@
         "value": 9,
         "value_text": "9%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "1979-07-25",
         "source_id": "or-jud",
         "source_url": "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "retrieved_at": "2026-08-20T00:00:00Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Post-judgment interest under ORS 82.010(2) — 9% per year, fixed by statute (simple interest). 9%/yr simple (ORS 82.010(2)(a)). Applies to money judgments; also accrues on pre-judgment interest that accrued before entry, and on attorney fees. Carve-out: judgments for professional negligence of Oregon Medical Board or State Board of Nursing licensees bear the lesser of 5% or the federal discount rate + 3% (ORS 82.010(2)(f)), not 9%. Verify against the statute; not legal advice."
+        "method": "statute-fixed-official-history",
+        "notes": "Oregon Laws 1979, chapter 794, effective immediately on July 25, 1979, raised the general money-judgment rate from 6% to 9%. ORS 82.010(2) ordinarily runs simple interest from entry unless the judgment specifies another date or a contract provides otherwise. Post-entry interest also accrues on prejudgment interest accrued before entry and on attorney fees and costs entered in the judgment. A contract above 9% and qualifying medical-professional-negligence judgments follow separate statutory branches. Verify applicability; not legal advice."
       }
     ]
   }

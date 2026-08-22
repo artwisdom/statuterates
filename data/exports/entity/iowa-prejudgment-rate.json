@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T13:46:39.401Z",
+  "generated_at": "2026-08-20T16:31:34.329Z",
   "slug": "iowa-prejudgment-rate",
   "name": "Iowa Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -43,7 +43,7 @@
       "effective_date": "2026-08-10",
       "source_id": "ia-jud",
       "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-      "retrieved_at": "2026-08-20T13:46:14.844Z",
+      "retrieved_at": "2026-08-20T16:31:34.160Z",
       "confidence": "high",
       "method": "derived_ia_668_13_official_court_table_plus_2",
       "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.06% one-year Treasury CMT for this date; adding two points gives 6.06%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -59,7 +59,7 @@
         "effective_date": "2026-08-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.06% one-year Treasury CMT for this date; adding two points gives 6.06%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -72,7 +72,7 @@
         "effective_date": "2026-07-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.06% one-year Treasury CMT for this date; adding two points gives 6.06%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -85,7 +85,7 @@
         "effective_date": "2026-06-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.88% one-year Treasury CMT for this date; adding two points gives 5.88%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -98,7 +98,7 @@
         "effective_date": "2026-05-07",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.77% one-year Treasury CMT for this date; adding two points gives 5.77%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -111,7 +111,7 @@
         "effective_date": "2026-04-07",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.72% one-year Treasury CMT for this date; adding two points gives 5.72%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -124,7 +124,7 @@
         "effective_date": "2026-03-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.56% one-year Treasury CMT for this date; adding two points gives 5.56%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -137,7 +137,7 @@
         "effective_date": "2026-02-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.44% one-year Treasury CMT for this date; adding two points gives 5.44%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -150,7 +150,7 @@
         "effective_date": "2026-01-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.48% one-year Treasury CMT for this date; adding two points gives 5.48%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -163,7 +163,7 @@
         "effective_date": "2025-12-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.61% one-year Treasury CMT for this date; adding two points gives 5.61%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -176,7 +176,7 @@
         "effective_date": "2025-11-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.65% one-year Treasury CMT for this date; adding two points gives 5.65%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -189,7 +189,7 @@
         "effective_date": "2025-10-07",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.64% one-year Treasury CMT for this date; adding two points gives 5.64%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -202,7 +202,7 @@
         "effective_date": "2025-09-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.64% one-year Treasury CMT for this date; adding two points gives 5.64%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -215,7 +215,7 @@
         "effective_date": "2025-08-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.92% one-year Treasury CMT for this date; adding two points gives 5.92%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -228,7 +228,7 @@
         "effective_date": "2025-07-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.11% one-year Treasury CMT for this date; adding two points gives 6.11%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -241,7 +241,7 @@
         "effective_date": "2025-06-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.08% one-year Treasury CMT for this date; adding two points gives 6.08%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -254,7 +254,7 @@
         "effective_date": "2025-05-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4% one-year Treasury CMT for this date; adding two points gives 6%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -267,7 +267,7 @@
         "effective_date": "2025-04-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.86% one-year Treasury CMT for this date; adding two points gives 5.86%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -280,7 +280,7 @@
         "effective_date": "2025-03-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.02% one-year Treasury CMT for this date; adding two points gives 6.02%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -293,7 +293,7 @@
         "effective_date": "2025-02-07",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.17% one-year Treasury CMT for this date; adding two points gives 6.17%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -306,7 +306,7 @@
         "effective_date": "2025-01-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.19% one-year Treasury CMT for this date; adding two points gives 6.19%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -319,7 +319,7 @@
         "effective_date": "2024-12-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.23% one-year Treasury CMT for this date; adding two points gives 6.23%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -332,7 +332,7 @@
         "effective_date": "2024-11-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.28% one-year Treasury CMT for this date; adding two points gives 6.28%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -345,7 +345,7 @@
         "effective_date": "2024-10-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.24% one-year Treasury CMT for this date; adding two points gives 6.24%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -358,7 +358,7 @@
         "effective_date": "2024-09-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.1% one-year Treasury CMT for this date; adding two points gives 6.1%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -371,7 +371,7 @@
         "effective_date": "2024-08-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.48% one-year Treasury CMT for this date; adding two points gives 6.48%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -384,7 +384,7 @@
         "effective_date": "2024-07-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.97% one-year Treasury CMT for this date; adding two points gives 6.97%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -397,7 +397,7 @@
         "effective_date": "2024-06-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.16% one-year Treasury CMT for this date; adding two points gives 7.16%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -410,7 +410,7 @@
         "effective_date": "2024-05-15",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.1% one-year Treasury CMT for this date; adding two points gives 7.1%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -423,7 +423,7 @@
         "effective_date": "2024-04-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.05% one-year Treasury CMT for this date; adding two points gives 7.05%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -436,7 +436,7 @@
         "effective_date": "2024-03-22",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.04% one-year Treasury CMT for this date; adding two points gives 7.04%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -449,7 +449,7 @@
         "effective_date": "2024-02-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.83% one-year Treasury CMT for this date; adding two points gives 6.83%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -462,7 +462,7 @@
         "effective_date": "2024-01-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.84% one-year Treasury CMT for this date; adding two points gives 6.84%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -475,7 +475,7 @@
         "effective_date": "2023-12-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.14% one-year Treasury CMT for this date; adding two points gives 7.14%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -488,7 +488,7 @@
         "effective_date": "2023-11-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.33% one-year Treasury CMT for this date; adding two points gives 7.33%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -501,7 +501,7 @@
         "effective_date": "2023-10-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.39% one-year Treasury CMT for this date; adding two points gives 7.39%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -514,7 +514,7 @@
         "effective_date": "2023-09-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.4% one-year Treasury CMT for this date; adding two points gives 7.4%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -527,7 +527,7 @@
         "effective_date": "2023-08-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.3% one-year Treasury CMT for this date; adding two points gives 7.3%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -540,7 +540,7 @@
         "effective_date": "2023-07-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.44% one-year Treasury CMT for this date; adding two points gives 7.44%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -553,7 +553,7 @@
         "effective_date": "2023-06-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.2% one-year Treasury CMT for this date; adding two points gives 7.2%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -566,7 +566,7 @@
         "effective_date": "2023-05-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.59% one-year Treasury CMT for this date; adding two points gives 6.59%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -579,7 +579,7 @@
         "effective_date": "2023-04-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.51% one-year Treasury CMT for this date; adding two points gives 6.51%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -592,7 +592,7 @@
         "effective_date": "2023-03-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 5.22% one-year Treasury CMT for this date; adding two points gives 7.22%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -605,7 +605,7 @@
         "effective_date": "2023-02-07",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.79% one-year Treasury CMT for this date; adding two points gives 6.79%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -618,7 +618,7 @@
         "effective_date": "2023-01-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.78% one-year Treasury CMT for this date; adding two points gives 6.78%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -631,7 +631,7 @@
         "effective_date": "2022-12-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.73% one-year Treasury CMT for this date; adding two points gives 6.73%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -644,7 +644,7 @@
         "effective_date": "2022-11-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.76% one-year Treasury CMT for this date; adding two points gives 6.76%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -657,7 +657,7 @@
         "effective_date": "2022-10-20",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 4.5% one-year Treasury CMT for this date; adding two points gives 6.5%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -670,7 +670,7 @@
         "effective_date": "2022-09-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.61% one-year Treasury CMT for this date; adding two points gives 5.61%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -683,7 +683,7 @@
         "effective_date": "2022-08-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 3.26% one-year Treasury CMT for this date; adding two points gives 5.26%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -696,7 +696,7 @@
         "effective_date": "2022-07-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.82% one-year Treasury CMT for this date; adding two points gives 4.82%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -709,7 +709,7 @@
         "effective_date": "2022-06-20",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.88% one-year Treasury CMT for this date; adding two points gives 4.88%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -722,7 +722,7 @@
         "effective_date": "2022-05-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.08% one-year Treasury CMT for this date; adding two points gives 4.08%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -735,7 +735,7 @@
         "effective_date": "2022-04-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.78% one-year Treasury CMT for this date; adding two points gives 3.78%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -748,7 +748,7 @@
         "effective_date": "2022-03-18",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.35% one-year Treasury CMT for this date; adding two points gives 3.35%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -761,7 +761,7 @@
         "effective_date": "2022-02-15",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.13% one-year Treasury CMT for this date; adding two points gives 3.13%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -774,7 +774,7 @@
         "effective_date": "2022-01-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.46% one-year Treasury CMT for this date; adding two points gives 2.46%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -787,7 +787,7 @@
         "effective_date": "2021-12-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.28% one-year Treasury CMT for this date; adding two points gives 2.28%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -800,7 +800,7 @@
         "effective_date": "2021-11-20",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.16% one-year Treasury CMT for this date; adding two points gives 2.16%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -813,7 +813,7 @@
         "effective_date": "2021-10-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.1% one-year Treasury CMT for this date; adding two points gives 2.1%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -826,7 +826,7 @@
         "effective_date": "2021-09-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.08% one-year Treasury CMT for this date; adding two points gives 2.08%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -839,7 +839,7 @@
         "effective_date": "2021-08-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.08% one-year Treasury CMT for this date; adding two points gives 2.08%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -852,7 +852,7 @@
         "effective_date": "2021-07-07",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.08% one-year Treasury CMT for this date; adding two points gives 2.08%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -865,7 +865,7 @@
         "effective_date": "2021-06-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.05% one-year Treasury CMT for this date; adding two points gives 2.05%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -878,7 +878,7 @@
         "effective_date": "2021-05-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.05% one-year Treasury CMT for this date; adding two points gives 2.05%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -891,7 +891,7 @@
         "effective_date": "2021-04-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.06% one-year Treasury CMT for this date; adding two points gives 2.06%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -904,7 +904,7 @@
         "effective_date": "2021-03-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.09% one-year Treasury CMT for this date; adding two points gives 2.09%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -917,7 +917,7 @@
         "effective_date": "2021-02-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.06% one-year Treasury CMT for this date; adding two points gives 2.06%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -930,7 +930,7 @@
         "effective_date": "2021-01-19",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.1% one-year Treasury CMT for this date; adding two points gives 2.1%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -943,7 +943,7 @@
         "effective_date": "2020-12-23",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.09% one-year Treasury CMT for this date; adding two points gives 2.09%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -956,7 +956,7 @@
         "effective_date": "2020-11-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.12% one-year Treasury CMT for this date; adding two points gives 2.12%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -969,7 +969,7 @@
         "effective_date": "2020-10-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.13% one-year Treasury CMT for this date; adding two points gives 2.13%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -982,7 +982,7 @@
         "effective_date": "2020-09-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.14% one-year Treasury CMT for this date; adding two points gives 2.14%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -995,7 +995,7 @@
         "effective_date": "2020-08-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.14% one-year Treasury CMT for this date; adding two points gives 2.14%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1008,7 +1008,7 @@
         "effective_date": "2020-07-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.15% one-year Treasury CMT for this date; adding two points gives 2.15%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1021,7 +1021,7 @@
         "effective_date": "2020-06-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.18% one-year Treasury CMT for this date; adding two points gives 2.18%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1034,7 +1034,7 @@
         "effective_date": "2020-05-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.15% one-year Treasury CMT for this date; adding two points gives 2.15%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1047,7 +1047,7 @@
         "effective_date": "2020-04-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.25% one-year Treasury CMT for this date; adding two points gives 2.25%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1060,7 +1060,7 @@
         "effective_date": "2020-03-24",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 0.15% one-year Treasury CMT for this date; adding two points gives 2.15%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1073,7 +1073,7 @@
         "effective_date": "2020-02-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.49% one-year Treasury CMT for this date; adding two points gives 3.49%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1086,7 +1086,7 @@
         "effective_date": "2020-01-14",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.53% one-year Treasury CMT for this date; adding two points gives 3.53%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1099,7 +1099,7 @@
         "effective_date": "2019-12-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.57% one-year Treasury CMT for this date; adding two points gives 3.57%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1112,7 +1112,7 @@
         "effective_date": "2019-11-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.58% one-year Treasury CMT for this date; adding two points gives 3.58%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1125,7 +1125,7 @@
         "effective_date": "2019-10-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.59% one-year Treasury CMT for this date; adding two points gives 3.59%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1138,7 +1138,7 @@
         "effective_date": "2019-09-10",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.73% one-year Treasury CMT for this date; adding two points gives 3.73%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1151,7 +1151,7 @@
         "effective_date": "2019-08-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.78% one-year Treasury CMT for this date; adding two points gives 3.78%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1164,7 +1164,7 @@
         "effective_date": "2019-07-19",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.95% one-year Treasury CMT for this date; adding two points gives 3.95%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1177,7 +1177,7 @@
         "effective_date": "2019-06-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.97% one-year Treasury CMT for this date; adding two points gives 3.97%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1190,7 +1190,7 @@
         "effective_date": "2019-05-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.37% one-year Treasury CMT for this date; adding two points gives 4.37%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1203,7 +1203,7 @@
         "effective_date": "2019-04-09",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.43% one-year Treasury CMT for this date; adding two points gives 4.43%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1216,7 +1216,7 @@
         "effective_date": "2019-03-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.53% one-year Treasury CMT for this date; adding two points gives 4.53%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1229,7 +1229,7 @@
         "effective_date": "2019-02-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.54% one-year Treasury CMT for this date; adding two points gives 4.54%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1242,7 +1242,7 @@
         "effective_date": "2019-01-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.59% one-year Treasury CMT for this date; adding two points gives 4.59%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1255,7 +1255,7 @@
         "effective_date": "2018-12-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.68% one-year Treasury CMT for this date; adding two points gives 4.68%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1268,7 +1268,7 @@
         "effective_date": "2018-11-13",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.74% one-year Treasury CMT for this date; adding two points gives 4.74%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1281,7 +1281,7 @@
         "effective_date": "2018-10-08",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.63% one-year Treasury CMT for this date; adding two points gives 4.63%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1294,7 +1294,7 @@
         "effective_date": "2018-09-26",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.58% one-year Treasury CMT for this date; adding two points gives 4.58%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1307,7 +1307,7 @@
         "effective_date": "2018-08-27",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.44% one-year Treasury CMT for this date; adding two points gives 4.44%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1320,7 +1320,7 @@
         "effective_date": "2018-07-16",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.39% one-year Treasury CMT for this date; adding two points gives 4.39%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1333,7 +1333,7 @@
         "effective_date": "2018-06-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.24% one-year Treasury CMT for this date; adding two points gives 4.24%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1346,7 +1346,7 @@
         "effective_date": "2018-05-21",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.32% one-year Treasury CMT for this date; adding two points gives 4.32%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1359,7 +1359,7 @@
         "effective_date": "2018-04-23",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.21% one-year Treasury CMT for this date; adding two points gives 4.21%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1372,7 +1372,7 @@
         "effective_date": "2018-03-12",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.05% one-year Treasury CMT for this date; adding two points gives 4.05%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1385,7 +1385,7 @@
         "effective_date": "2018-02-22",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 2.01% one-year Treasury CMT for this date; adding two points gives 4.01%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
@@ -1398,7 +1398,7 @@
         "effective_date": "2018-01-11",
         "source_id": "ia-jud",
         "source_url": "https://www.iowacourts.gov/iowa-courts/district-court/post-judgment-interest-table/",
-        "retrieved_at": "2026-08-20T13:46:14.844Z",
+        "retrieved_at": "2026-08-20T16:31:34.160Z",
         "confidence": "high",
         "method": "derived_ia_668_13_official_court_table_plus_2",
         "notes": "Iowa's §668.13 rate selected at judgment is also used for qualifying prejudgment interest. The Judicial Branch table selected a 1.78% one-year Treasury CMT for this date; adding two points gives 3.78%. Interest generally begins at commencement, while future damages begin at judgment. Contract and other statutory paths may differ. Not legal advice."
