@@ -5,7 +5,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getAllEntities, isPrejudgment } from '../src/lib/data.mjs';
+import { getAllEntities, getMeta, isPrejudgment } from '../src/lib/data.mjs';
 import { copyFor } from '../src/lib/content.mjs';
 import { ratePageMayRunAds } from '../src/lib/monetization.mjs';
 import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
@@ -18,6 +18,7 @@ const canonicalOwners = new Map();
 const titleOwners = new Map();
 const descriptionOwners = new Map();
 const expectedOrigin = new URL(process.env.SITE_URL || 'https://statuterates.com').origin;
+const expectedDatasetModified = getMeta().generated_at;
 const verificationDate = new Date().toISOString().slice(0, 10);
 let manualCloudflareBeaconFile = null;
 const linkGraph = new Map();
@@ -30,6 +31,7 @@ const explicitlyMonetizableRoutes = new Set([
   '/prejudgment/',
   '/states/',
   '/calculators/florida-judgment-interest/',
+  '/calculators/historical-rate-lookup/',
   '/calculators/irs-interest/',
   '/calculators/irs-penalty-and-interest/',
   '/calculators/judgment-interest/',
@@ -37,10 +39,18 @@ const explicitlyMonetizableRoutes = new Set([
   '/calculators/post-judgment-interest/',
 ]);
 const researchedStateAuthorityRoutes = new Set([
+  '/rates/idaho-judgment-rate/',
+  '/rates/indiana-judgment-rate/',
+  '/rates/louisiana-judgment-rate/',
+  '/rates/louisiana-prejudgment-rate/',
   '/rates/new-mexico-judgment-rate/',
+  '/rates/new-hampshire-judgment-rate/',
+  '/rates/north-dakota-judgment-rate/',
   '/rates/ohio-judgment-rate/',
+  '/rates/oregon-judgment-rate/',
   '/rates/tennessee-judgment-rate/',
   '/rates/virginia-judgment-rate/',
+  '/rates/west-virginia-judgment-rate/',
 ]);
 const unmonetizableRateRoutes = new Set(getAllEntities()
   .filter((entity) => {
@@ -51,6 +61,7 @@ const unmonetizableRateRoutes = new Set(getAllEntities()
       isPrejudgment: isPrejudgment(entity),
       hasDetailedRules: Boolean(copyFor(entity.slug).postDetails),
       observationCount: (entity.history?.annual_rate || []).length,
+      explicitlyWithheld: copyFor(entity.slug).monetizationReady === false,
     });
   })
   .map((entity) => `/rates/${entity.slug}/`));
@@ -211,6 +222,12 @@ for (const file of htmlFiles) {
       && !html.includes('data-official-authorities')) {
     errors.push(`${file}: researched state analysis is missing its visible official-authority list`);
   }
+  if (route === '/rates/indiana-judgment-rate/'
+      && (!html.includes('Headline statutory branch')
+        || !html.includes('Statutory branches')
+        || html.includes('>Fixed by statute<'))) {
+    errors.push(`${file}: Indiana must display its 8% value as a statutory branch, not a universal fixed rate`);
+  }
   const externalSourceLinkCount = [...html.matchAll(/<a\b[^>]*href="https:\/\/[^\"]+"[^>]*target="_blank"/g)].length;
   const minimumStateSourceLinks = route === '/states/mississippi/' ? 1 : 2;
   if (/^\/states\/[^/]+\/$/.test(route)
@@ -250,6 +267,9 @@ for (const file of htmlFiles) {
       const expectedLicense = `${expectedOrigin}/terms/#data-api-license`;
       if (structuredData.license !== expectedLicense) {
         errors.push(`${file}: Dataset JSON-LD must link to ${expectedLicense}`);
+      }
+      if (route === '/' && structuredData.dateModified !== expectedDatasetModified) {
+        errors.push(`${file}: homepage Dataset dateModified must equal the versioned export timestamp`);
       }
     }
   }
@@ -308,6 +328,42 @@ for (const file of htmlFiles) {
   if (route === '/calculators/post-judgment-interest/' && words < 700) {
     errors.push(`${file}: federal calculator has only ${words} visible words (minimum safety floor 700)`);
   }
+  if (route === '/calculators/historical-rate-lookup/') {
+    if (words < 400) {
+      errors.push(`${file}: historical lookup has only ${words} visible words (minimum safety floor 400)`);
+    }
+    for (const required of [
+      'Verified historical observations',
+      'Branch shown',
+      'Supported series and official sources',
+      'It does not calculate a payoff',
+      'It fails closed',
+      'texas-judgment-rate',
+      'iowa-judgment-rate',
+      'utah-judgment-rate',
+      'alaska-judgment-rate',
+      'maine-judgment-rate',
+      '/api/v1/entity/',
+    ]) {
+      if (!html.includes(required)) errors.push(`${file}: historical lookup is missing ${required}`);
+    }
+  }
+
+  // Regression alarms for legal-copy fragments that previously survived ellipsis cleanup because
+  // an abbreviation looked like a sentence ending. These phrases must never reach a public page or
+  // its structured data again.
+  for (const broken of [
+    'Base rate = weekly average yield on U.S.',
+    'under the Tort Prejudgment Interest Statute, Ind.',
+    'judicial interest (= &quot;legal interest&quot;) rate; La. R.S.',
+    'prevailing discount rate on 26-week U.S.',
+    'Rate = (U.S.',
+    'unified by 2017 amendment eff.',
+    'Prejudgment = average U.S.',
+  ]) {
+    if (html.includes(broken)) errors.push(`${file}: rendered legal copy contains a known truncated fragment`);
+  }
+  if (/\)\.\.|\)\.,/.test(html)) errors.push(`${file}: rendered legal copy contains broken double punctuation`);
 
   // Astro 7 deliberately removes some newline whitespace around inline elements. Requiring an
   // explicit source space prevents rendered phrases such as "the<a>source</a>" and "</a>for".
@@ -315,9 +371,12 @@ for (const file of htmlFiles) {
     /[A-Za-z0-9)]<(?:a|em|strong|code)\b/g,
     /<\/(?:a|em|strong|code)>[A-Za-z0-9]/g,
   ];
+  const proseHtml = html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ');
   for (const pattern of prosePatterns) {
-    for (const match of html.matchAll(pattern)) {
-      errors.push(`${file}: missing prose whitespace near "${contextAt(html, match.index)}"`);
+    for (const match of proseHtml.matchAll(pattern)) {
+      errors.push(`${file}: missing prose whitespace near "${contextAt(proseHtml, match.index)}"`);
     }
   }
 }

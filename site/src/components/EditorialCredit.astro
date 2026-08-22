@@ -11,11 +11,14 @@ const summaries = {
   guide: 'This is original StatuteRates explanatory content based on cited primary authorities. Research, automation, and AI-assisted work remain subject to the documented source-review and correction process.',
   calculator: 'This tool runs in the browser and uses tested, source-specific rules. Unsupported date ranges are refused; legal eligibility and excluded branches are disclosed for the user to verify.',
   'calculator-arithmetic': 'This browser-based tool performs transparent arithmetic from the rate and dates you enter. It does not choose a governing law, validate a legal entitlement, or supply a missing statutory rule.',
+  'calculator-lookup': 'This browser-based lookup selects only from reviewed, dated rate histories. It refuses dates outside verified coverage and does not decide legal applicability or calculate a payoff.',
 };
 const dateLabel = kind === 'rate'
   ? 'source checked'
   : kind === 'calculator'
     ? 'calculation rules reviewed'
+    : kind === 'calculator-lookup'
+      ? 'lookup rules reviewed'
     : 'reviewed';
 const correctionSubject = encodeURIComponent(`Correction for ${Astro.url.pathname}`);
 ---

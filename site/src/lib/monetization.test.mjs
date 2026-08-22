@@ -39,3 +39,13 @@ test('original federal, tax, and international datasets remain eligible', () => 
     observationCount: 1,
   }), true);
 });
+
+test('an explicit editorial hold overrides automatic state-page eligibility', () => {
+  assert.equal(ratePageMayRunAds({
+    isStateRate: true,
+    isPrejudgment: false,
+    hasDetailedRules: true,
+    observationCount: 5,
+    explicitlyWithheld: true,
+  }), false);
+});

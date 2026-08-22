@@ -26,6 +26,8 @@ const copy = copyFor(slug, { observation: latest, historyPoints: totalPoints });
 
 const isDerived = latest?.confidence !== 'high';
 const isStatuteFixed = (latest?.method || '').startsWith('statute-fixed');
+const isStatuteBranching = entity.metadata?.basis === 'statute-branching'
+  || latest?.method === 'statute-branching';
 const isStatutory = (latest?.method || '').startsWith('statute'); // fixed OR agency-set variable
 const isProvisional = (latest?.method || '').includes('provisional');
 const isCaseSpecific = latest?.method === 'court-or-contract-rate';
@@ -68,12 +70,15 @@ const monetizationReady = ratePageMayRunAds({
   isPrejudgment: pj,
   hasDetailedRules: Boolean(copy.postDetails),
   observationCount: totalPoints,
+  explicitlyWithheld: copy.monetizationReady === false,
 });
 const rateYear = String(latest?.retrieved_at || latest?.effective_date || '').slice(0, 4);
 const statuteLabel = (entity.metadata?.statute || '')
   .replace(/\bSec\.\s*/g, '§ ')
   .replace(/\s+/g, ' ')
   .trim();
+const effectiveDateLabel = entity.metadata?.effective_date_label || 'Effective date';
+const effectiveDateIsReference = entity.metadata?.effective_date_is_reference === true;
 const seoStatuteLabel = {
   'iowa-judgment-rate': 'Iowa Code §668.13',
   'maryland-judgment-rate': 'Md. Code Cts. & Jud. Proc. §11-107',
@@ -120,8 +125,8 @@ const statePreDescriptionDetailed = `${rateYear} ${stateName} prejudgment intere
 const statePreDescriptionCompact = `${rateYear} ${stateName} prejudgment interest ${isCaseSpecific ? 'rule' : `rate: ${latest?.value_text}`}. See applicability, accrual, compounding, exceptions, and the cited official source.`;
 const description = isStateRate
   ? pj
-    ? (statePreDescriptionDetailed.length <= 160 ? statePreDescriptionDetailed : statePreDescriptionCompact)
-    : `${rateYear} ${stateName} post-judgment interest rate: ${latest?.value_text} per year. See ${seoStatuteLabel}, effective date, exceptions, history, and official source.`
+    ? (copy.seoDescription || (statePreDescriptionDetailed.length <= 160 ? statePreDescriptionDetailed : statePreDescriptionCompact))
+    : `${rateYear} ${stateName} post-judgment interest rate: ${latest?.value_text} per year. See ${seoStatuteLabel}, ${effectiveDateIsReference ? 'reference date' : 'effective date'}, exceptions, history, and official source.`
   : slug === 'uk-late-payment-commercial'
   ? `${rateYear} UK statutory interest on late commercial payments: ${latest?.value_text} per year. See the current rate, effective dates, calculation rules, and cited source.`
   : isEuBenchmark
@@ -155,7 +160,7 @@ const citeNote = isProvisional
   : isEuBenchmark
   ? `ECB reference input recorded for the Directive minimum-benchmark illustration; not a member-state statutory rate.`
   : citeStatute
-  ? `Rate recorded under ${citeStatute}${latest?.effective_date ? `, effective ${prettyDate(latest.effective_date)}` : ''}.`
+  ? `Rate recorded under ${citeStatute}${latest?.effective_date ? effectiveDateIsReference ? `; current-code reference checked for ${prettyDate(latest.effective_date)}` : `, effective ${prettyDate(latest.effective_date)}` : ''}.`
   : (latest?.effective_date ? `Value effective ${prettyDate(latest.effective_date)}.` : '');
 const sourceRecord = (meta.sources || []).find((source) => source.id === latest?.source_id);
 const officialAuthorities = Array.isArray(entity.metadata?.official_authorities)
@@ -167,7 +172,7 @@ const basisLabel = isCaseSpecific
     ? 'Provisional estimate'
     : isEuBenchmark
       ? 'Directive benchmark input'
-    : latest?.method === 'statute-branching'
+    : isStatuteBranching
       ? 'Statutory branches'
       : isStatuteFixed
         ? 'Fixed by statute'
@@ -295,6 +300,8 @@ const jsonLd = [
       ? 'Provisional current estimate'
       : isEuBenchmark
       ? 'Current ECB benchmark input'
+      : isStatuteBranching
+      ? 'Headline statutory branch'
       : 'Current rate'}</div>
     <span class="value">{latest?.value_text}</span>
     <span class="asof">
@@ -304,6 +311,8 @@ const jsonLd = [
         ? <>per year — official H.15 input, pending {provisionalConfirmation} confirmation</>
         : isEuBenchmark
         ? <>ECB reference input, effective {prettyDate(latest?.effective_date)} — not a country rate</>
+        : isStatuteBranching
+        ? <>per year — headline statutory branch; another branch may control</>
         : pj
         ? (copy.kind?.startsWith('discretionary-')
             ? <>per year — a statutory reference or ceiling when prejudgment interest is awarded</>
@@ -330,11 +339,11 @@ const jsonLd = [
     <h2 id="rate-facts-heading">{factsHeading}</h2>
     <dl>
       <div>
-        <dt>{isCaseSpecific ? 'Current rule' : isEuBenchmark ? 'Current benchmark input' : 'Current rate'}</dt>
-        <dd>{latest?.value_text}{isCaseSpecific ? '' : isEuBenchmark ? ' ECB reference input' : ' per year'}</dd>
+        <dt>{isCaseSpecific ? 'Current rule' : isEuBenchmark ? 'Current benchmark input' : isStatuteBranching ? 'Headline branch' : 'Current rate'}</dt>
+        <dd>{latest?.value_text}{isCaseSpecific ? '' : isEuBenchmark ? ' ECB reference input' : isStatuteBranching ? ' per year (branch shown)' : ' per year'}</dd>
       </div>
       <div>
-        <dt>Effective date</dt>
+        <dt>{effectiveDateLabel}</dt>
         <dd>{prettyDate(latest?.effective_date)}</dd>
       </div>
       <div>
@@ -379,16 +388,6 @@ const jsonLd = [
           <p>{copy.postDetails.history}</p>
         </div>
       </div>
-      {officialAuthorities.length > 0 && (
-        <div class="official-authorities" data-official-authorities>
-          <h3>Official authorities used for this analysis</h3>
-          <ul class="clean">
-            {officialAuthorities.map((authority) => (
-              <li><a href={authority.url} rel="noopener" target="_blank">{authority.label}</a></li>
-            ))}
-          </ul>
-        </div>
-      )}
     </section>
   )}
 
@@ -442,6 +441,17 @@ const jsonLd = [
     </div>
   )}
 
+  {officialAuthorities.length > 0 && (
+    <section class="official-authorities" data-official-authorities>
+      <h2>Official authorities used for this analysis</h2>
+      <ul class="clean">
+        {officialAuthorities.map((authority) => (
+          <li><a href={authority.url} rel="noopener" target="_blank">{authority.label}</a></li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <AdSlot id="rate-top" enabled={monetizationReady} />
 
   <h2>{totalPoints === 1 ? 'Current recorded observation' : 'Effective-date history'}</h2>
@@ -454,7 +464,7 @@ const jsonLd = [
         All recorded observations are in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.
       </caption>
       <thead>
-        <tr><th scope="col">Effective date</th><th scope="col">Rate</th><th scope="col">Basis</th></tr>
+        <tr><th scope="col">{effectiveDateLabel}</th><th scope="col">Rate</th><th scope="col">Basis</th></tr>
       </thead>
       <tbody>
         {history.map((o) => (

@@ -1,13 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { getMeta, getEntity, groupedEntities, currentOf, latestOf, prettyDate } from '../lib/data.mjs';
+import { getMeta, getEntity, groupedEntities, currentOf, prettyDate } from '../lib/data.mjs';
 import { copyFor } from '../lib/content.mjs';
 
 const meta = getMeta();
 const groups = groupedEntities();
-// Real dataset modification date = the newest effective date across all series (never the build date).
-const dataModified = groups.flatMap((g) => g.entities.map((e) => latestOf(e)?.effective_date)).filter(Boolean).sort().at(-1);
+// The normalized dataset changes when a weekly source check updates provenance even if no legal
+// percentage changes. The versioned export timestamp is therefore the truthful Dataset
+// dateModified; sitemap page dates remain separately protected from build-time churn.
+const dataModified = meta.generated_at;
 
 // A featured strip of the most-searched current rates, one per jurisdiction where possible.
 const FEATURED = ['irs-underpayment', 'us-federal-post-judgment', 'uk-late-payment-commercial', 'eu-late-payment-reference'];

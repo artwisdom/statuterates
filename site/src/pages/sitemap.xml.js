@@ -20,7 +20,7 @@ export function GET({ site }) {
   const staticPaths = [
     '/', '/about/', '/methodology/', '/editorial-policy/', '/api/', '/changes/', '/prejudgment/', '/states/',
     '/states/highest-lowest/', '/guides/', '/glossary/', '/privacy/', '/terms/',
-    '/calculators/', '/calculators/judgment-interest/',
+    '/calculators/', '/calculators/judgment-interest/', '/calculators/historical-rate-lookup/',
   ];
 
   const dateFor = new Map(entities.map((e) => [e.slug, significantPageDate({

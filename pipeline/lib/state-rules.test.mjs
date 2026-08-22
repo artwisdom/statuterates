@@ -253,6 +253,53 @@ test('Virginia and New Mexico use legal effective dates rather than source-revie
   }
 });
 
+test('new official state histories preserve exact boundaries and remain calculator-withheld', () => {
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+
+  const idaho = history('idaho-judgment-rate');
+  assert.equal(idaho.length, 41);
+  assert.deepEqual([idaho[0].effective_date, idaho.at(-1).effective_date], ['1986-07-01', '2026-07-01']);
+  assert.equal(idaho.at(-1).value_text, '8.875%');
+
+  const louisiana = history('louisiana-judgment-rate');
+  assert.equal(louisiana.length, 42);
+  assert.deepEqual([louisiana[0].effective_date, louisiana.at(-1).effective_date], ['1980-09-12', '2026-01-01']);
+  assert.equal(louisiana.at(-1).value_text, '7.50%');
+
+  const northDakota = history('north-dakota-judgment-rate');
+  assert.equal(northDakota.length, 21);
+  assert.deepEqual([northDakota[0].effective_date, northDakota.at(-1).effective_date], ['2006-01-01', '2026-01-01']);
+  assert.equal(northDakota.at(-1).value_text, '10.00%');
+
+  const westVirginia = history('west-virginia-judgment-rate');
+  assert.equal(westVirginia.length, 20);
+  assert.equal(westVirginia[0].effective_date, '2007-01-02');
+  assert.equal(westVirginia[1].effective_date, '2008-01-02');
+  assert.equal(westVirginia.find((row) => row.effective_date === '2025-01-01').value_text, '7.00%');
+  assert.equal(westVirginia.at(-1).value_text, '6.25%');
+
+  for (const slug of [
+    'idaho-judgment-rate',
+    'louisiana-judgment-rate',
+    'north-dakota-judgment-rate',
+    'west-virginia-judgment-rate',
+  ]) {
+    const metadata = entityBySlug.get(slug).metadata;
+    assert.equal(metadata.calculation.status, 'reference_only');
+    assert.equal(metadata.calculation.renderer_supported, false);
+    assert.ok(metadata.official_authorities.length >= 4);
+  }
+
+  const indiana = entityBySlug.get('indiana-judgment-rate');
+  assert.equal(indiana.metadata.basis, 'statute-branching');
+  assert.equal(history('indiana-judgment-rate')[0].effective_date, '1994-01-01');
+  assert.equal(indiana.metadata.effective_date_is_reference, undefined);
+  assert.equal(entityBySlug.get('new-hampshire-judgment-rate').metadata.official_authorities.length, 6);
+  assert.equal(entityBySlug.get('louisiana-prejudgment-rate').metadata.kind, 'claim-dependent');
+});
+
 test('Georgia uses exact Federal Reserve prime change points and authorized code portals', () => {
   const { entities, observations } = buildStateFixed();
   const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);

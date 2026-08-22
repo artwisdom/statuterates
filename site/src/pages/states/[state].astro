@@ -50,7 +50,7 @@ const hubYear = [postLatest, preLatest]
 const postMethod = postLatest?.method || '';
 const postBasis = !post
   ? 'No fixed statutory rate'
-  : postMethod === 'statute-branching'
+  : post.metadata?.basis === 'statute-branching' || postMethod === 'statute-branching'
     ? 'Statutory branches'
     : postMethod.startsWith('statute-fixed')
       ? 'Fixed by statute'

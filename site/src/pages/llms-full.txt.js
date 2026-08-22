@@ -1,6 +1,7 @@
 // /llms-full.txt — the expanded machine-readable companion to /llms.txt: every current value inline
 // with provenance, so an LLM/agent that fetches ONE file can answer current-rate questions citably.
 import { getMeta, getAllEntities, currentOf } from '../lib/data.mjs';
+import { copyFor } from '../lib/content.mjs';
 
 export function GET({ site }) {
   const base = (site?.href || 'https://statuterates.com/').replace(/\/$/, '');
@@ -10,6 +11,8 @@ export function GET({ site }) {
   const sections = entities.map((e) => {
     const l = currentOf(e, String(meta.generated_at).slice(0, 10));
     if (!l) return `## ${e.name}\n(no current value)`;
+    const historyPoints = (e.history?.annual_rate || []).length;
+    const copy = copyFor(e.slug, { observation: l, historyPoints });
     const caseSpecific = l.method === 'court-or-contract-rate';
     const basis = caseSpecific
       ? 'case-specific rule; no uniform numeric percentage'
@@ -25,6 +28,13 @@ export function GET({ site }) {
       `Source: ${l.source_url}`,
       `Retrieved: ${l.retrieved_at}`,
       l.notes ? `Notes: ${l.notes}` : null,
+      copy.postDetails ? `Verified scope: ${copy.postDetails.scope}` : null,
+      copy.postDetails ? `Accrual and rate selection: ${copy.postDetails.accrual}` : null,
+      copy.postDetails ? `Compounding and calculation boundary: ${copy.postDetails.compounding}` : null,
+      copy.postDetails ? `History coverage: ${copy.postDetails.history}` : null,
+      Array.isArray(e.metadata?.official_authorities) && e.metadata.official_authorities.length
+        ? `Additional official authorities: ${e.metadata.official_authorities.map((authority) => `${authority.label} — ${authority.url}`).join('; ')}`
+        : null,
       `Page: ${base}/rates/${e.slug}/`,
       `JSON (all recorded observations): ${base}/api/v1/entity/${e.slug}.json`,
     ].filter(Boolean);

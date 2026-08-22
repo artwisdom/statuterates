@@ -51,8 +51,15 @@ test('only complete authoritative histories replace prior snapshots', () => {
     [
       'florida-judgment-rate',
       'florida-prejudgment-rate',
+      'idaho-judgment-rate',
+      'indiana-judgment-rate',
+      'louisiana-judgment-rate',
+      'louisiana-prejudgment-rate',
+      'north-dakota-judgment-rate',
+      'oregon-judgment-rate',
       'treasury-1-year-cmt',
       'us-federal-post-judgment',
+      'west-virginia-judgment-rate',
     ],
   );
   assert.equal(replacementSlugs.includes('texas-judgment-rate'), false);

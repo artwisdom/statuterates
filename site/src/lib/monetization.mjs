@@ -6,7 +6,9 @@ export function ratePageMayRunAds({
   isPrejudgment,
   hasDetailedRules,
   observationCount,
+  explicitlyWithheld = false,
 }) {
+  if (explicitlyWithheld) return false;
   if (!isStateRate) return true;
   return Boolean(isPrejudgment || hasDetailedRules || observationCount > 1);
 }

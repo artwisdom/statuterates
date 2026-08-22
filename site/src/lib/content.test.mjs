@@ -92,3 +92,25 @@ test('monitored single-rate state explanations follow future rate and year', () 
     assert.doesNotMatch(rendered, /\{\{/);
   }
 });
+
+test('repaired state pages keep complete structured legal explanations', () => {
+  const cases = [
+    ['idaho-judgment-rate', '8.875%', 41],
+    ['indiana-judgment-rate', '8%', 1],
+    ['louisiana-judgment-rate', '7.5%', 42],
+    ['new-hampshire-judgment-rate', '5.7%', 1],
+    ['north-dakota-judgment-rate', '10%', 21],
+    ['west-virginia-judgment-rate', '6.25%', 20],
+  ];
+  for (const [slug, valueText, historyPoints] of cases) {
+    const copy = copyFor(slug, {
+      observation: { value_text: valueText, effective_date: '2026-01-01' },
+      historyPoints,
+    });
+    assert.ok(copy.body.length > 200, slug);
+    assert.ok(copy.postDetails?.scope && copy.postDetails?.accrual && copy.postDetails?.compounding && copy.postDetails?.history, slug);
+    assert.doesNotMatch(text(copy), /…|\)\.\.|\)\.,/, slug);
+  }
+  assert.equal(copyFor('indiana-judgment-rate').monetizationReady, false);
+  assert.equal(copyFor('louisiana-prejudgment-rate').kind, 'claim-dependent');
+});

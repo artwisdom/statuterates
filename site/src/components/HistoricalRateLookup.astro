@@ -1,0 +1,221 @@
+---
+const { series, currentAsOf } = Astro.props;
+const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003c');
+---
+
+<section class="lookup" data-rate-lookup aria-labelledby="historical-rate-lookup-heading">
+  <script type="application/json" data-rate-lookup-config set:html={configJson} />
+
+  <div class="lookup-heading">
+    <div>
+      <span class="eyebrow">Verified historical observations</span>
+      <h2 id="historical-rate-lookup-heading">Find the recorded rate for a judgment date</h2>
+    </div>
+    <span class="private-badge">Your selected date stays in this browser</span>
+  </div>
+
+  <p class="scope" id="historical-rate-lookup-scope">
+    This lookup identifies the rate recorded for a supported jurisdiction and date. It does not
+    decide whether that rate applies to a particular judgment or calculate interest.
+  </p>
+
+  <form data-rate-lookup-form aria-describedby="historical-rate-lookup-scope" novalidate>
+    <div class="field-grid">
+      <label class="field">
+        <span>Jurisdiction and rate series</span>
+        <select data-series required>
+          {series.map((item) => (
+            <option value={item.slug}>{item.label}</option>
+          ))}
+        </select>
+      </label>
+      <label class="field">
+        <span>Judgment or rate-selection date</span>
+        <input type="date" data-date max={currentAsOf} required />
+      </label>
+    </div>
+    <p class="coverage" data-coverage></p>
+    <button type="submit" class="lookup-button">Look up historical rate</button>
+    <p class="error" data-error role="alert" tabindex="-1" hidden></p>
+  </form>
+
+  <section class="result" data-result aria-live="polite" tabindex="-1" hidden>
+    <span class="eyebrow">Recorded result</span>
+    <div class="result-value" data-value></div>
+    <p data-summary></p>
+    <dl>
+      <div><dt>Series</dt><dd data-name></dd></div>
+      <div><dt>Requested date</dt><dd data-requested></dd></div>
+      <div><dt>Recorded period began</dt><dd data-effective></dd></div>
+      <div><dt>Selection rule</dt><dd data-rule></dd></div>
+      <div><dt>Branch shown</dt><dd data-branch></dd></div>
+    </dl>
+    <p class="result-links">
+      <a data-page-link>Open the full rate page</a>
+      <span aria-hidden="true"> · </span>
+      <a data-source-link rel="noopener" target="_blank">Open the official source</a>
+      <span aria-hidden="true"> · </span>
+      <a data-csv-link>Download the recorded history (CSV)</a>
+    </p>
+    <button type="button" class="copy-button" data-copy>Copy result with citation</button>
+    <span class="copy-status" data-copy-status role="status"></span>
+  </section>
+
+  <p class="fineprint">Reference lookup only—not legal advice or a payoff calculation. Contract
+    rates, claim type, judgment amount, debtor type, special statutes, and the exact entry or accrual
+    event can change the controlling rule. Confirm the result against the linked authority.</p>
+</section>
+
+<style>
+  .lookup { margin: 22px 0; padding: 24px; border: 1px solid var(--line); border-top: 3px solid var(--accent);
+    border-radius: 14px; background: var(--paper-2); box-shadow: var(--shadow-sm); }
+  .lookup-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+  .lookup-heading h2 { margin: 3px 0 10px; }
+  .eyebrow { display: block; color: var(--green); font-family: var(--mono); font-size: .69rem;
+    font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+  .private-badge { flex: 0 0 auto; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px;
+    background: var(--paper); color: var(--ink-soft); font-size: .75rem; white-space: nowrap; }
+  .scope { margin: 8px 0 18px; padding: 12px 14px; border-left: 3px solid var(--accent);
+    background: var(--paper); color: var(--ink-soft); font-size: .9rem; }
+  .field-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  .field { display: block; margin: 12px 0; }
+  .field span { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: .7rem;
+    font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .08em; }
+  .field select, .field input { width: 100%; min-height: 46px; padding: 11px 13px;
+    border: 1px solid var(--line-strong); border-radius: 9px; background: var(--paper); color: var(--ink); font: inherit; }
+  .field select:focus, .field input:focus { outline: 2px solid var(--gold); outline-offset: 1px; border-color: var(--green); }
+  .coverage { min-height: 1.4em; margin: 0; color: var(--ink-soft); font-size: .82rem; }
+  .lookup-button, .copy-button { min-height: 44px; margin-top: 12px; padding: 11px 18px; border-radius: 9px;
+    cursor: pointer; font: 650 .9rem var(--sans); }
+  .lookup-button { border: 0; background: var(--accent); color: #fff; box-shadow: var(--shadow-sm); }
+  .lookup-button:hover { background: var(--green-2); }
+  .copy-button { border: 1px solid var(--line-strong); background: var(--paper); color: var(--ink); }
+  .error { margin: 14px 0 0; color: #9a2b26; font-weight: 650; }
+  .result { margin-top: 22px; padding: 20px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--paper); }
+  .result-value { margin: 6px 0; color: var(--accent); font-family: var(--nums); font-size: clamp(2.4rem, 7vw, 4rem);
+    font-weight: 720; line-height: 1; letter-spacing: -.04em; }
+  .result dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 18px 0;
+    background: var(--line); border: 1px solid var(--line); }
+  .result dl div { padding: 11px 13px; background: var(--paper); }
+  .result dt { color: var(--ink-soft); font: 650 .68rem var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+  .result dd { margin: 4px 0 0; }
+  .result-links { font-size: .9rem; }
+  .copy-status { margin-left: 9px; color: var(--green); font-size: .82rem; }
+  .fineprint { margin: 16px 0 0; color: var(--ink-soft); font: italic .8rem var(--serif); }
+  @media (max-width: 620px) {
+    .lookup { padding: 18px; }
+    .lookup-heading { display: block; }
+    .private-badge { display: inline-block; margin-bottom: 10px; }
+    .field-grid, .result dl { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  import { historicalRateAtDate } from '../lib/historical-rate-lookup.mjs';
+
+  const displayDate = (iso) => new Intl.DateTimeFormat('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC',
+  }).format(new Date(`${iso}T00:00:00Z`));
+
+  for (const root of document.querySelectorAll('[data-rate-lookup]')) {
+    const config = JSON.parse(root.querySelector('[data-rate-lookup-config]').textContent || '{}');
+    const bySlug = new Map((config.series || []).map((item) => [item.slug, item]));
+    const form = root.querySelector('[data-rate-lookup-form]');
+    const seriesInput = root.querySelector('[data-series]');
+    const dateInput = root.querySelector('[data-date]');
+    const coverage = root.querySelector('[data-coverage]');
+    const result = root.querySelector('[data-result]');
+    const error = root.querySelector('[data-error]');
+    const copyStatus = root.querySelector('[data-copy-status]');
+    let copyText = '';
+
+    const invalidateResult = () => {
+      result.hidden = true;
+      error.hidden = true;
+      error.textContent = '';
+      copyStatus.textContent = '';
+      copyText = '';
+    };
+
+    const updateCoverage = () => {
+      const selected = bySlug.get(seriesInput.value);
+      if (!selected) return;
+      dateInput.min = selected.minDate;
+      dateInput.max = selected.maxDate;
+      if (!dateInput.value || dateInput.value < selected.minDate || dateInput.value > selected.maxDate) {
+        dateInput.value = selected.maxDate;
+      }
+      coverage.textContent = `Verified lookup coverage: ${displayDate(selected.minDate)} through ${displayDate(selected.maxDate)}. ${selected.coverageNote}`;
+    };
+
+    seriesInput.addEventListener('change', () => {
+      invalidateResult();
+      updateCoverage();
+    });
+    dateInput.addEventListener('input', invalidateResult);
+    updateCoverage();
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      error.hidden = true;
+      result.hidden = true;
+      copyStatus.textContent = '';
+
+      try {
+        const selected = bySlug.get(seriesInput.value);
+        const requested = dateInput.value;
+        if (!selected || !requested) throw new Error('Choose a series and date.');
+        if (requested < selected.minDate || requested > selected.maxDate) {
+          throw new Error(`Choose a date from ${selected.minDate} through ${selected.maxDate}.`);
+        }
+        const point = historicalRateAtDate(selected.history, requested, {
+          coverageThrough: selected.maxDate,
+        });
+        const sourceUrl = point.source_url;
+        if (!String(sourceUrl || '').startsWith('https://')) {
+          throw new Error('The official source for this observation is unavailable.');
+        }
+
+        root.querySelector('[data-value]').textContent = point.value_text;
+        root.querySelector('[data-summary]').textContent =
+          `${selected.label} records ${point.value_text} per year for the selected ${displayDate(requested)} date. ${selected.branchScope}`;
+        root.querySelector('[data-name]').textContent = selected.label;
+        root.querySelector('[data-requested]').textContent = displayDate(requested);
+        root.querySelector('[data-effective]').textContent = displayDate(point.effective_date);
+        root.querySelector('[data-rule]').textContent = selected.selectionRule;
+        root.querySelector('[data-branch]').textContent = selected.branchScope;
+        root.querySelector('[data-page-link]').href = `/rates/${selected.slug}/`;
+        root.querySelector('[data-source-link]').href = sourceUrl;
+        root.querySelector('[data-csv-link]').href = `/api/v1/entity/${selected.slug}.csv`;
+
+        copyText = [
+          `${selected.label}: ${point.value_text} per year`,
+          `Requested date: ${requested}`,
+          `Recorded period began: ${point.effective_date}`,
+          `Branch shown: ${selected.branchScope}`,
+          `Selection rule: ${selected.selectionRule}`,
+          `Official source: ${sourceUrl}`,
+          `StatuteRates page: https://statuterates.com/rates/${selected.slug}/`,
+          'Reference lookup only — confirm legal applicability against the controlling authority.',
+        ].join('\n');
+
+        result.hidden = false;
+        result.focus();
+      } catch (cause) {
+        error.textContent = cause instanceof Error ? cause.message : 'Unable to look up that date.';
+        error.hidden = false;
+        error.focus();
+      }
+    });
+
+    root.querySelector('[data-copy]').addEventListener('click', async () => {
+      if (!copyText) return;
+      try {
+        await navigator.clipboard.writeText(copyText);
+        copyStatus.textContent = 'Copied';
+      } catch {
+        copyStatus.textContent = 'Copy unavailable in this browser';
+      }
+    });
+  }
+</script>

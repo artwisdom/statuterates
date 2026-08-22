@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import EditorialCredit from '../../components/EditorialCredit.astro';
+import HistoricalRateLookup from '../../components/HistoricalRateLookup.astro';
+import { currentOf, getEntity, getMeta } from '../../lib/data.mjs';
+
+const meta = getMeta();
+const currentAsOf = String(meta.generated_at).slice(0, 10);
+const releases = [
+  {
+    slug: 'texas-judgment-rate',
+    label: 'Texas post-judgment interest',
+    branchScope: 'General noncontract Texas money-judgment series; contract, tax, child-support, and other branches can differ.',
+    selectionRule: 'The OCCC rate assigned to the calendar month in which judgment is rendered.',
+    coverageNote: 'Monthly OCCC history begins September 1983.',
+    coverageKind: 'published-month',
+  },
+  {
+    slug: 'iowa-judgment-rate',
+    label: 'Iowa post-judgment interest',
+    branchScope: 'General Iowa §668.13 court-table series; qualifying contract and separate statutory branches can differ.',
+    selectionRule: 'The Iowa Judicial Branch table selection in effect when judgment is entered.',
+    coverageNote: 'Digitized Judicial Branch selections begin March 2001.',
+    coverageKind: 'source-check',
+  },
+  {
+    slug: 'utah-judgment-rate',
+    label: 'Utah post-judgment interest',
+    branchScope: 'General Utah civil and criminal judgment series; qualifying under-$10,000 goods/services and contract branches can differ.',
+    selectionRule: 'The Utah Courts annual rate for the calendar year judgment is entered.',
+    coverageNote: 'The complete official annual table begins January 1993.',
+    coverageKind: 'published-year',
+  },
+  {
+    slug: 'alaska-judgment-rate',
+    label: 'Alaska judgment interest',
+    branchScope: 'General Alaska AS 09.30.070(a) judgment series; a controlling contract and other statutory branches can differ.',
+    selectionRule: 'The Alaska Court System annual rate selected by the year judgment is entered.',
+    coverageNote: 'The official ADM-505 history begins August 1997.',
+    coverageKind: 'published-year',
+  },
+  {
+    slug: 'maine-judgment-rate',
+    label: 'Maine post-judgment interest',
+    branchScope: 'General Maine §1602-C post-judgment series; written contract, note, and other statutory branches can differ.',
+    selectionRule: 'The annual Maine rate for the calendar year in which post-judgment interest begins.',
+    coverageNote: 'The complete Judicial Branch chart begins July 2003.',
+    coverageKind: 'published-year',
+  },
+];
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const periodEnd = (effectiveDate, kind) => {
+  if (!ISO_DATE.test(effectiveDate)) throw new Error(`Invalid latest effective date: ${effectiveDate}`);
+  if (kind === 'published-year') return `${effectiveDate.slice(0, 4)}-12-31`;
+  if (kind === 'published-month') {
+    const date = new Date(`${effectiveDate}T00:00:00Z`);
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 0))
+      .toISOString().slice(0, 10);
+  }
+  throw new Error(`Unsupported historical lookup coverage kind: ${kind}`);
+};
+
+const series = releases.map((release) => {
+  const entity = getEntity(release.slug);
+  const history = (entity.history?.annual_rate || [])
+    .map((point) => ({
+      effective_date: point.effective_date,
+      value: point.value,
+      value_text: point.value_text,
+      source_url: point.source_url,
+    }))
+    .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
+  const current = currentOf(entity, currentAsOf);
+  if (!current || !history.length) throw new Error(`${release.slug}: reviewed history is unavailable`);
+  for (const point of history) {
+    if (!ISO_DATE.test(point.effective_date) || !Number.isFinite(point.value)
+        || !String(point.source_url || '').startsWith('https://')) {
+      throw new Error(`${release.slug}: every lookup observation requires a dated value and HTTPS official source`);
+    }
+  }
+  const coverageThrough = release.coverageKind === 'source-check'
+    ? String(current.retrieved_at || '').slice(0, 10)
+    : periodEnd(current.effective_date, release.coverageKind);
+  if (!ISO_DATE.test(coverageThrough) || coverageThrough < current.effective_date) {
+    throw new Error(`${release.slug}: invalid source-aware coverage end`);
+  }
+  const maxDate = [currentAsOf, coverageThrough].sort()[0];
+  return {
+    ...release,
+    history,
+    minDate: history[0].effective_date,
+    maxDate,
+    coverageThrough,
+    sourceUrl: current?.source_url,
+  };
+});
+
+const title = `Historical Judgment Interest Rate Lookup | StatuteRates`;
+const description = `Find the recorded Texas, Iowa, Utah, Alaska, or Maine judgment interest rate for a past date, with the effective period, official source, and CSV history.`;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Historical Judgment Interest Rate Lookup',
+    applicationCategory: 'ReferenceApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    isAccessibleForFree: true,
+    url: canonical,
+    description,
+    dateModified: currentAsOf,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Calculators', item: new URL('/calculators/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: 'Historical rate lookup', item: canonical },
+    ],
+  },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd} monetize={true}>
+  <nav aria-label="Breadcrumb" style="font-size:.9rem;color:var(--ink-soft);margin-bottom:6px">
+    <a href="/calculators/">Calculators</a> &rsaquo; <span>Historical rate lookup</span>
+  </nav>
+  <h1>Historical judgment interest rate lookup</h1>
+  <p class="lead">Choose a supported jurisdiction and date to retrieve the exact recorded annual
+    rate, effective period, official source, and downloadable history. The tool refuses dates outside
+    verified coverage rather than substituting today’s rate.</p>
+  <EditorialCredit kind="calculator-lookup" reviewedOn="2026-08-20" />
+
+  <HistoricalRateLookup {series} {currentAsOf} />
+
+  <AdSlot id="historical-lookup-top" />
+
+  <h2>Why a historical lookup matters</h2>
+  <p>A current percentage is often the wrong answer for an older judgment. Texas assigns a rate by
+    judgment month, while Alaska, Maine, and Utah select annual periods and Iowa publishes dated
+    court-table selections. This tool searches the stored official history for the period covering
+    the date you enter; it never applies a later value retroactively.</p>
+
+  <h2>What this tool does—and does not decide</h2>
+  <ul class="clean">
+    <li><strong>It identifies a recorded period rate.</strong> The result includes the period start,
+      official source, full rate page, and CSV history.</li>
+    <li><strong>It does not calculate a payoff.</strong> Accrual date, principal, interest-bearing
+      costs, compounding, partial payments, and end-date treatment remain separate questions.</li>
+    <li><strong>It does not choose a legal branch.</strong> A contract, claim type, judgment size,
+      debtor category, or another statute can supply a different rate.</li>
+    <li><strong>It fails closed.</strong> Dates before the verified history or after the current data
+      snapshot are rejected instead of estimated.</li>
+  </ul>
+
+  <h2>Why these five jurisdictions are available first</h2>
+  <p>Each released series has a reviewed official history and a rule that selects a rate by a judgment
+    or calendar period. Other states remain available as current reference pages, but they will not
+    appear in this lookup until their historical coverage and selection rule are complete enough to
+    support an old-date answer without guessing.</p>
+
+  <h2>Supported series and official sources</h2>
+  <ul class="clean">
+    {series.map((item) => (
+      <li>
+        <a href={`/rates/${item.slug}/`}><strong>{item.label}</strong></a> — {item.branchScope}
+        {' '}<a href={item.sourceUrl} rel="noopener" target="_blank">Official source</a>.
+        Verified lookup coverage currently ends {item.maxDate}.
+      </li>
+    ))}
+  </ul>
+
+  <AdSlot id="historical-lookup-bottom" />
+
+  <div class="disclaimer">Reference information only—not legal advice. Confirm the judgment date,
+    applicable branch, official source, and calculation method before relying on a historical rate.</div>
+</BaseLayout>

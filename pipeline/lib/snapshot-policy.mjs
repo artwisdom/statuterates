@@ -32,6 +32,19 @@ const COMPLETE_STATE_SNAPSHOT_ENTITIES = Object.freeze({
   ]),
 });
 
+// These source-backed curated builders return the complete intended snapshot for the named series.
+// Replacing rather than merging prevents retired source-review placeholders from surviving beside
+// corrected legal effective dates or complete official tables.
+const CURATED_COMPLETE_STATE_ENTITIES = Object.freeze([
+  'idaho-judgment-rate',
+  'indiana-judgment-rate',
+  'louisiana-judgment-rate',
+  'louisiana-prejudgment-rate',
+  'north-dakota-judgment-rate',
+  'oregon-judgment-rate',
+  'west-virginia-judgment-rate',
+]);
+
 function hasCompleteSnapshot(key, result) {
   if (!result) return false;
   if (key === 'alaskaCourt') return Array.isArray(result.historyPoints) && result.historyPoints.length > 0;
@@ -62,10 +75,10 @@ export function completeSnapshotEntitySlugs(coreBundles, liveResults = {}) {
   const slugs = new Set(
     coreBundles.flatMap((bundle) => bundle.entities.map((entity) => entity.slug)),
   );
+  for (const slug of CURATED_COMPLETE_STATE_ENTITIES) slugs.add(slug);
   for (const [key, entitySlugs] of Object.entries(COMPLETE_STATE_SNAPSHOT_ENTITIES)) {
     if (!hasCompleteSnapshot(key, liveResults[key])) continue;
     for (const slug of entitySlugs) slugs.add(slug);
   }
   return [...slugs];
 }
-
