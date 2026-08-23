@@ -8,7 +8,28 @@ import {
   buildNewJerseyPostJudgmentHistory,
   buildNewJerseyPrejudgmentHistory,
 } from '../fetchers/michigan-new-jersey-interest-history.mjs';
+import {
+  buildMinnesotaOfficialHistory,
+  buildWisconsinOfficialHistory,
+  findPublishedWisconsinRateForEntryDate,
+  MINNESOTA_BRANCH_TUPLES,
+  MINNESOTA_BRANCH_TUPLES_SHA256,
+  MINNESOTA_HISTORY_PROJECTION_SHA256,
+  MINNESOTA_SCOPE_EVENTS,
+  MINNESOTA_SCOPE_EVENTS_SHA256,
+  WISCONSIN_HISTORY_PROJECTION_SHA256,
+  WISCONSIN_TUPLES,
+  WISCONSIN_TUPLES_SHA256,
+} from '../fetchers/minnesota-wisconsin-interest-history.mjs';
+import {
+  OKLAHOMA_2025_HISTORY_NOTICE_URL,
+  OKLAHOMA_2026_NOTICE_URL,
+} from '../fetchers/nevada-oklahoma-judgment-history.mjs';
 import { classifyStateSource, validateStateCalculationMetadata } from './state-rules.mjs';
+
+const jsonChecksum = (value) => createHash('sha256')
+  .update(JSON.stringify(value))
+  .digest('hex');
 
 const historyChecksum = (rows) => createHash('sha256')
   .update(JSON.stringify(rows.map(({ effective_date, index_value, value, value_text }) => ({
@@ -181,6 +202,89 @@ test('Michigan and New Jersey expose verified official histories without enablin
   );
 });
 
+test('Minnesota and Wisconsin preserve official branch histories without enabling payoff renderers', () => {
+  const minnesota = buildMinnesotaOfficialHistory();
+  const wisconsin = buildWisconsinOfficialHistory();
+
+  assert.equal(jsonChecksum(MINNESOTA_BRANCH_TUPLES), MINNESOTA_BRANCH_TUPLES_SHA256);
+  assert.equal(MINNESOTA_BRANCH_TUPLES_SHA256, '48332c43ffb05d1420da5297045ce32ee6b34d6e3202c2f5643eaecebb2e294c');
+  assert.equal(jsonChecksum(MINNESOTA_SCOPE_EVENTS), MINNESOTA_SCOPE_EVENTS_SHA256);
+  assert.equal(MINNESOTA_SCOPE_EVENTS_SHA256, '652beacf7070be8b7122f08a231f4c61b30c85cc7b0f58a4400c02289607deda');
+  assert.equal(
+    jsonChecksum(minnesota.map(({ effective_date, value, value_text }) => ({ effective_date, value, value_text }))),
+    MINNESOTA_HISTORY_PROJECTION_SHA256,
+  );
+  assert.equal(MINNESOTA_HISTORY_PROJECTION_SHA256, '50a4df4216ce82d1ffa67f671c69f7e72be80ed0a62d1804ccb08a89eb510467');
+  assert.equal(jsonChecksum(WISCONSIN_TUPLES), WISCONSIN_TUPLES_SHA256);
+  assert.equal(WISCONSIN_TUPLES_SHA256, '1f02d53d546911cf5312251ecbf51c56ce843e998ca29e3b55f5c62433f5c13a');
+  assert.equal(
+    jsonChecksum(wisconsin.map(({ effective_date, value, value_text }) => ({ effective_date, value, value_text }))),
+    WISCONSIN_HISTORY_PROJECTION_SHA256,
+  );
+  assert.equal(WISCONSIN_HISTORY_PROJECTION_SHA256, 'f59bcc964ee650acf47abfe7177df390735fdd864361820c998a07843cc6e116');
+
+  assert.equal(minnesota.length, 39);
+  assert.deepEqual(
+    [minnesota[0].effective_date, minnesota.at(-1).effective_date],
+    ['1990-01-01', '2026-01-01'],
+  );
+  assert.deepEqual(
+    minnesota
+      .filter((row) => ['2009-01-01', '2009-08-01', '2022-01-01', '2022-08-01'].includes(row.effective_date))
+      .map((row) => [row.effective_date, row.qualifying_over_50000_value, row.child_support_cell]),
+    [
+      ['2009-01-01', null, 'follow_549_09_capped_18'],
+      ['2009-08-01', 10, 'follow_549_09_capped_18'],
+      ['2022-01-01', 10, 4],
+      ['2022-08-01', 10, 0],
+    ],
+  );
+  assert.deepEqual(MINNESOTA_SCOPE_EVENTS, [
+    ['2009-08-01', 'qualifying_over_50000_10_percent_branch_begins'],
+    ['2010-04-16', 'state_or_political_subdivision_excluded_from_10_percent_branch'],
+    ['2015-08-01', 'family_court_action_excluded_from_10_percent_branch'],
+    ['2022-08-01', 'child_support_zero_percent_branch_begins'],
+  ]);
+
+  assert.equal(wisconsin.length, 31);
+  assert.deepEqual(
+    [wisconsin[0].effective_date, wisconsin.at(-1).effective_date],
+    ['2011-12-02', '2026-07-01'],
+  );
+  assert.equal(findPublishedWisconsinRateForEntryDate('2011-12-01'), null);
+  assert.equal(findPublishedWisconsinRateForEntryDate('2011-12-02')?.value, 4.25);
+  assert.equal(findPublishedWisconsinRateForEntryDate('2017-06-30')?.value, 4.75);
+  assert.equal(findPublishedWisconsinRateForEntryDate('2017-07-01')?.value, 5.25);
+  assert.equal(findPublishedWisconsinRateForEntryDate('2017-12-31')?.value, 5.25);
+  assert.equal(findPublishedWisconsinRateForEntryDate('2026-08-22')?.value, 7.75);
+
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+  assert.equal(history('minnesota-judgment-rate').length, 39);
+  assert.equal(history('wisconsin-judgment-rate').length, 31);
+  assert.equal(history('minnesota-judgment-rate').at(-1).value_text, '4% / 10%');
+  assert.equal(history('wisconsin-judgment-rate').at(-1).effective_date, '2026-07-01');
+  assert.equal(history('wisconsin-judgment-rate').at(-1).method, 'court-statute-half-year-official-history');
+
+  for (const slug of ['minnesota-judgment-rate', 'wisconsin-judgment-rate']) {
+    const metadata = entityBySlug.get(slug).metadata;
+    assert.equal(metadata.calculation.status, 'reference_only');
+    assert.equal(metadata.calculation.renderer_supported, false);
+    assert.equal(metadata.calculation.payments_supported, false);
+    assert.ok(metadata.official_authorities.length >= 5);
+    assert.deepEqual(validateStateCalculationMetadata(metadata).errors, []);
+  }
+  assert.equal(
+    entityBySlug.get('minnesota-judgment-rate').metadata.calculation.rate_behavior,
+    'branch_dependent_annual_reset_or_fixed_at_entry',
+  );
+  assert.equal(
+    entityBySlug.get('wisconsin-judgment-rate').metadata.calculation.rate_behavior,
+    'fixed_at_entry',
+  );
+});
+
 test('Texas exposes official monthly history and a structured but safely withheld rule model', () => {
   const { entities, observations } = buildStateFixed();
   const texas = entities.find((entity) => entity.slug === 'texas-judgment-rate');
@@ -347,6 +451,73 @@ test('Kentucky and Maine replace review-date placeholders with official historie
   assert.equal(history('maine-prejudgment-rate').some((row) => row.effective_date === '2026-07-09'), false);
   assert.equal(entityBySlug.get('kentucky-judgment-rate').metadata.calculation.renderer_supported, false);
   assert.equal(entityBySlug.get('maine-judgment-rate').metadata.calculation.future_period_formula_monitored, true);
+});
+
+test('Nevada and Oklahoma publish official histories while preserving reset, compounding, and branch gates', () => {
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const history = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+  const nevada = entityBySlug.get('nevada-judgment-rate');
+  const oklahoma = entityBySlug.get('oklahoma-judgment-rate');
+  const nevadaHistory = history(nevada.slug);
+  const oklahomaHistory = history(oklahoma.slug);
+
+  assert.equal(nevadaHistory.length, 79);
+  assert.deepEqual(
+    [nevadaHistory[0].effective_date, nevadaHistory.at(-1).effective_date],
+    ['1987-07-01', '2026-07-01'],
+  );
+  assert.equal(nevadaHistory.find((row) => row.effective_date === '2025-07-01').value_text, '9.5%');
+  assert.equal(nevadaHistory.at(-1).method, 'official_nevada_fid_prime_plus_2_points');
+  assert.equal(nevada.metadata.calculation.status, 'reference_only');
+  assert.equal(nevada.metadata.calculation.rate_behavior, 'semiannual_calendar_reset');
+  assert.equal(nevada.metadata.calculation.compounding, 'simple');
+  assert.equal(nevada.metadata.calculation.accrual_rule_verified, true);
+  assert.equal(nevada.metadata.calculation.renderer_supported, false);
+  assert.deepEqual(nevada.metadata.calculation.unavailable_official_rows, [{
+    effective_date: '1987-01-01',
+    status: 'not_available',
+  }]);
+  assert.deepEqual(Object.keys(nevada.metadata.calculation.branches), [
+    'general_default',
+    'contract_other_law_or_judgment',
+    'consumer_form_debt',
+    'future_damages',
+    'offer_of_judgment_and_special_rules',
+  ]);
+  assert.ok(nevada.metadata.official_authorities.length >= 6);
+
+  assert.equal(oklahomaHistory.length, 41);
+  assert.deepEqual(
+    [oklahomaHistory[0].effective_date, oklahomaHistory.at(-1).effective_date],
+    ['1986-11-01', '2026-01-01'],
+  );
+  assert.equal(oklahomaHistory.find((row) => row.effective_date === '2004-01-01').value_text, '5.01%');
+  assert.equal(oklahomaHistory.find((row) => row.effective_date === '2005-01-01').value_text, '7.25%');
+  assert.ok(oklahomaHistory.slice(0, -1).every((row) => row.source_url === OKLAHOMA_2025_HISTORY_NOTICE_URL));
+  assert.equal(oklahomaHistory.at(-1).source_url, OKLAHOMA_2026_NOTICE_URL);
+  assert.equal(oklahomaHistory.at(-1).method, 'official_administrative_director_certification');
+  assert.equal(oklahoma.metadata.calculation.status, 'reference_only');
+  assert.equal(oklahoma.metadata.calculation.source_tier, 'official_primary');
+  assert.equal(oklahoma.metadata.calculation.rate_behavior, 'annual_calendar_reset');
+  assert.equal(oklahoma.metadata.calculation.compounding, 'annual');
+  assert.match(oklahoma.metadata.calculation.interest_base, /previously_accrued_postjudgment_interest/);
+  assert.equal(oklahoma.metadata.calculation.current_formula_from, '2013-11-01');
+  assert.deepEqual(
+    oklahoma.metadata.calculation.legal_regime_events.map((event) => [event.effective_date, event.postjudgment_rate]),
+    [['2013-01-01', 5.25], ['2013-07-01', 5.25], ['2013-11-01', 5.25]],
+  );
+  assert.equal(oklahoma.metadata.calculation.renderer_supported, false);
+  assert.deepEqual(Object.keys(oklahoma.metadata.calculation.branches), [
+    'general',
+    'costs_and_attorney_fees',
+    'lawful_contract_rate',
+    'government_judgment',
+    'older_unpaid_judgments',
+    'specific_other_law',
+  ]);
+  assert.ok(oklahoma.metadata.official_authorities.length >= 6);
+  assert.doesNotMatch(oklahomaHistory.map((row) => row.notes).join(' '), /statute uses simple interest/i);
 });
 
 test('Virginia and New Mexico use legal effective dates rather than source-review dates', () => {

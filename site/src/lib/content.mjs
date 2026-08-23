@@ -437,9 +437,15 @@ variable rate certified each January by the Secretary of State.`,
     },
   },
   "minnesota-judgment-rate": {
-    tagline: "Minnesota judgment interest — a formula rate, reset each year.",
+    tagline: "Minnesota’s annual general rate, fixed 10% branch, and child-support history.",
     q: "What is the current Minnesota post-judgment interest rate?",
-    body: "Minnesota post-judgment interest is currently {{current_rate_part_1}} / {{current_rate_part_2}} — a statutory formula rate under Minn. Stat. § 549.09, subd. 1(c) that resets each year. The standard variable Treasury-indexed rate (currently {{current_rate_part_1}}) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the…",
+    body: "Minnesota does not have one universal judgment-interest percentage. For 2026, the general rate under Minn. Stat. §549.09, subd. 1(c) is {{current_rate_part_1}}. A qualifying judgment or award over $50,000 can instead use {{current_rate_part_2}}, subject to entry-date and statutory exclusions. The general percentage resets by calendar year while the qualifying 10% branch is generally fixed at entry until paid.",
+    postDetails: {
+      scope: "The {{current_rate_part_2}} branch began August 1, 2009 for qualifying judgments or awards over $50,000, but it does not apply universally. The statute excludes specified public-party matters and later excluded family-court actions; tax, condemnation, arbitration, child-support, and other special paths require separate review. Beginning August 1, 2022, interest does not accrue on past, current, or future child-support judgments. The statute’s separate discretion to lower interest in other family-court actions expressly does not apply to child-support judgments.",
+      accrual: "The general branch follows each calendar year’s published rate rather than staying at the percentage from entry. The qualifying-over-$50,000 branch generally keeps the 10% rate in effect when the judgment was entered until paid. Interest ordinarily runs from entry, but statutory exclusions and special judgment types can change the start date or applicable path.",
+      compounding: "The official materials describe simple interest using a 365-day year and direct payments first to taxable disbursements, then accrued interest, then principal. StatuteRates still withholds a payoff calculator because it does not yet determine every entry-vintage, family-court, public-party, exception, and payment scenario safely.",
+      history: "The dataset publishes {{history_points}} official dated general-rate change points from 1990 through 2026 and shows the qualifying-over-$50,000 branch in paired values from its August 2009 transition. The official tables leave the 1990–1992 child-support cells blank and later direct that branch to follow §549.09 subject to an 18% cap; those child-support details are disclosed here but are not flattened into a numeric historical lookup. The August 2022 zero-rate transition is recorded in the rule metadata. An official pre-1990 document is linked for research but is not machine-ingested until its older periods are independently verified.",
+    },
   },
   "missouri-judgment-rate": {
     tagline: "Missouri judgment interest — a formula rate, reset periodically.",
@@ -467,9 +473,15 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     },
   },
   "nevada-judgment-rate": {
-    tagline: "Nevada judgment interest — a formula rate, reset twice a year.",
+    tagline: "Nevada’s official semiannual prime-plus-two judgment-rate history.",
     q: "What is the current Nevada post-judgment interest rate?",
-    body: "Nevada post-judgment interest is currently 8.75% — a statutory formula rate under Nev. Rev. Stat. 17.130(2) that resets twice a year. Interest runs from time of SERVICE of the summons and complaint until satisfied, EXCEPT amounts representing FUTURE damages, which draw interest only…",
+    body: "For the six-month period beginning {{effective_date}}, Nevada’s general judgment-interest rate is {{current_rate}}. Under NRS 17.130(2), the default path uses the Nevada Financial Institutions Division prime rate immediately preceding judgment plus two percentage points, then resets each January 1 and July 1 while the judgment remains unpaid. A lawful contract, another law, the judgment itself, or qualifying consumer-form debt can require a different path.",
+    postDetails: {
+      scope: "The headline is the general NRS 17.130(2) default when no contract, other law, or judgment-specified rate controls. NRS 97B.150 supplies a separate branch for qualifying consumer-form debt: it uses the lesser lawful contract rate or prime plus two, fixes that selected rate at judgment, bars compounding, and contains exemptions. Offer-of-judgment and other special rules also require separate analysis.",
+      accrual: "General NRS 17.130 interest ordinarily runs from service of the summons and complaint until satisfaction. Amounts representing future damages begin accruing only when judgment is entered. The current formula applies to causes of action arising on or after July 1, 1987; earlier matters should not be forced into this history.",
+      compounding: "Nevada Supreme Court authority treats the general NRS 17.130 path as simple interest, while its rate resets every January 1 and July 1. StatuteRates keeps the payoff calculator disabled because day count, partial-payment allocation, contracts, consumer debt, offer-of-judgment consequences, future damages, and every special-law branch are not calculator-complete.",
+      history: "The official FID table supplies {{history_points}} dated six-month selections from July 1, 1987 through {{effective_date}}. Its January 1, 1987 row says Not Available, so StatuteRates preserves that gap instead of inventing a rate. Every stored general rate is the published prime value plus exactly two percentage points.",
+    },
   },
   "new-hampshire-judgment-rate": {
     tagline: "New Hampshire’s annual simple rate, fixed for a judgment at verdict or finding.",
@@ -505,14 +517,14 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     },
   },
   "oklahoma-judgment-rate": {
-    tagline: "Oklahoma’s annual 12 O.S. § 727.1 post-judgment rate.",
+    tagline: "Oklahoma’s court-certified annual judgment rates, with calendar-year compounding.",
     q: "What is the current Oklahoma post-judgment interest rate?",
-    body: "For judgments governed by 12 O.S. § 727.1, Oklahoma’s {{current_year}} post-judgment interest rate is {{current_rate}} per year. The annual post-judgment formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year, plus two percentage points. Oklahoma uses a different formula for qualifying prejudgment interest, and separate laws can govern other judgment categories.",
+    body: "Oklahoma’s {{current_year}} general post-judgment rate is {{current_rate}}. Under 12 O.S. §727.1, a covered judgment begins at the certified rate for the calendar year in which it is rendered and reprices each January 1 while unpaid. Previously accrued post-judgment interest joins the interest-bearing balance, so the statutory path compounds annually rather than using simple interest.",
     postDetails: {
-      scope: "The {{current_rate}} headline is the {{current_year}} § 727.1 general post-judgment reference. The statute contains distinct prejudgment provisions and does not replace a different rate supplied by another controlling law or judgment category.",
-      accrual: "The formula is selected by calendar year: the first Wall Street Journal prime rate published for that year plus two percentage points. Confirm the rate for the judgment’s applicable year rather than applying the latest rate automatically to an older judgment.",
-      compounding: "StatuteRates keeps the Oklahoma calculator disabled because the current data does not yet model every covered judgment branch, day-count convention, compounding treatment, and partial-payment rule at calculator-grade certainty.",
-      history: "The page records the current verified annual reference and cites the controlling Oklahoma authority. Historical annual certifications are the next data-depth target; no missing years are inferred from market data.",
+      scope: "The {{current_rate}} headline is the {{current_year}} general §727.1 reference. A lawful contract rate controls when it is stated in the judgment and accrues in the same annual manner. Judgments against Oklahoma or its political subdivisions remain subject to the Governmental Tort Claims Act total-liability cap, and a more specific statute or judgment category can displace the general path.",
+      accrual: "General post-judgment interest begins on the earlier of the expressly stated rendition date or filing with the court clerk. Allowed costs and attorney fees use their own earlier-of-pronouncement-or-filing trigger. The balance then reprices each January 1 at the certified rate for the new calendar year.",
+      compounding: "Section 727.1(C) expressly applies each new year’s rate to the judgment together with post-judgment interest previously accrued. That is annual compounding. StatuteRates keeps the calculator disabled because day count, partial-payment allocation, every special-law judgment, government-cap application, contract terms, and older statutory regimes are not calculator-complete.",
+      history: "The official Oklahoma notices provide {{history_points}} post-judgment values from November 1, 1986 through {{current_year}}. Historical rows retain the values calculated under the statute then in effect; the current first-publication Wall Street Journal prime-plus-two formula is not back-applied to earlier years. Three 2013 legal periods are preserved as regime metadata, but because all publish the same 5.25% post-judgment rate they are not shown as false rate changes.",
     },
   },
   "oregon-judgment-rate": {
@@ -573,10 +585,10 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     q: "What is the current Wisconsin post-judgment interest rate?",
     body: "For judgments entered on or after {{effective_date}} in the current recorded half-year, Wisconsin’s post-judgment interest rate is {{current_rate}} per year under Wis. Stat. § 815.05(8). The rate is one percentage point above the Federal Reserve H.15 bank prime rate in effect on the January 1 or July 1 immediately preceding entry of judgment, and it runs from entry until the judgment is paid.",
     postDetails: {
-      scope: "Section 815.05(8) governs interest after entry of a Wisconsin judgment. Prejudgment interest on a verdict, decision, or report is addressed separately in Wis. Stat. § 814.04(4), so the 7.75% post-judgment headline should not be treated as a universal prejudgment rate.",
-      accrual: "The judgment-entry date selects the controlling half-year benchmark: use the H.15 bank prime rate in effect on the immediately preceding January 1 or July 1, then add one percentage point. Interest runs from entry until the judgment is paid.",
-      compounding: "StatuteRates does not enable a Wisconsin payoff calculator yet because the dataset has not verified every day-count, compounding, partial-payment, and judgment-branch rule needed for a dependable result.",
-      history: "The current half-year reference is recorded with its statute and official source. A complete historical half-year schedule remains a future data-depth project; missing periods are not backfilled from assumptions.",
+      scope: "Section 815.05(8) supplies the general post-judgment rule. Wis. Stat. §807.01(4), another statute, or a distinct judgment category can supersede that path. Prejudgment interest on a verdict, decision, or report is addressed separately in §814.04(4), so the {{current_rate}} headline is not a universal prejudgment rate.",
+      accrual: "The judgment-entry date selects the controlling half-year benchmark: for January through June entries, use the H.15 bank prime rate in effect on the immediately preceding January 1; for July through December entries, use the rate in effect on the immediately preceding July 1. Add one percentage point. That selected annual rate remains fixed from entry until the judgment is paid.",
+      compounding: "The statute and official table establish the entry-date rate, but StatuteRates does not enable a Wisconsin payoff calculator because calculator-grade day count, compounding, partial-payment allocation, and every superseding branch have not been fully verified.",
+      history: "The dataset preserves all {{history_points}} official half-year rows from the special December 2, 2011 Act 69 transition through the current period. The former 12% rule is retained only as pre-transition context, not as a machine history row, because its complete historical start was not established from the bounded official sources.",
     },
   },
   "wyoming-judgment-rate": {
@@ -1364,13 +1376,16 @@ export const CONTENT_MODIFIED = Object.freeze({
   'maine-prejudgment-rate': '2026-07-26',
   'michigan-judgment-rate': '2026-08-21',
   'michigan-prejudgment-rate': '2026-08-21',
+  'minnesota-judgment-rate': '2026-08-22',
   'new-jersey-judgment-rate': '2026-08-21',
   'new-jersey-prejudgment-rate': '2026-08-21',
   'new-mexico-judgment-rate': '2026-08-16',
+  'nevada-judgment-rate': '2026-08-22',
   'new-york-consumer-debt-judgment-rate': '2026-08-21',
   'new-york-judgment-rate': '2026-08-21',
   'ohio-judgment-rate': '2026-08-16',
   'ohio-prejudgment-rate': '2026-07-26',
+  'oklahoma-judgment-rate': '2026-08-22',
   'oregon-judgment-rate': '2026-08-20',
   'idaho-judgment-rate': '2026-08-20',
   'indiana-judgment-rate': '2026-08-20',
@@ -1387,7 +1402,7 @@ export const CONTENT_MODIFIED = Object.freeze({
   'utah-judgment-rate': '2026-07-26',
   'washington-judgment-rate': '2026-07-26',
   'virginia-judgment-rate': '2026-08-16',
-  'wisconsin-judgment-rate': '2026-07-26',
+  'wisconsin-judgment-rate': '2026-08-22',
 });
 
 export function contentModifiedFor(slug) {

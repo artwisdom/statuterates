@@ -10,6 +10,7 @@ import {
   stateHubs,
 } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
+import { APPROVED_HISTORICAL_RATE_SLUGS } from '../../lib/historical-rate-lookup.mjs';
 
 const meta = getMeta();
 const dataDate = String(meta.generated_at || '').slice(0, 10);
@@ -259,9 +260,10 @@ const jsonLd = [
   <h2>Use the data without losing the caveats</h2>
   <p>Open a state page for its post- and prejudgment references, then open the rate page for the
     effective date, source receipt, structured rule analysis when available, JSON, and CSV. The
-    <a href="/calculators/historical-rate-lookup/">historical rate lookup</a> supports only reviewed
-    series with enough official coverage to answer an old-date request without substituting today’s
-    percentage. Developers can start with the <a href="/api/">API documentation</a> or download the
+    <a href="/calculators/historical-rate-lookup/">historical rate lookup</a> currently supports
+    {APPROVED_HISTORICAL_RATE_SLUGS.length} reviewed series with enough official coverage to answer
+    an old-date request without substituting today’s percentage. Developers can start with the
+    <a href="/api/">API documentation</a> or download the
     <a href="/api/v1/entities.json">entity index as JSON</a>.</p>
 
   <CiteThis

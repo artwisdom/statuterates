@@ -6,6 +6,10 @@ import EditorialCredit from '../../components/EditorialCredit.astro';
 import { getAllEntities, getEntity, getMeta, currentOf, latestOf, prettyDate, prettyDateTime, isPrejudgment, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 import { recordedChangesFor } from '../../lib/changes.mjs';
+import {
+  historicalRateReleaseForEntitySlug,
+  historicalRateSeriesForEntity,
+} from '../../lib/historical-rate-lookup.mjs';
 import { ratePageMayRunAds } from '../../lib/monetization.mjs';
 
 export function getStaticPaths() {
@@ -54,6 +58,10 @@ const manualStateCalcHref = !isPrejudgment(entity) && slug.endsWith('-judgment-r
   ? '/calculators/judgment-interest/'
   : null;
 const calcHref = dedicatedStateCalcHref || candidateCalcHref || manualStateCalcHref;
+const historicalLookupRelease = historicalRateReleaseForEntitySlug(slug);
+const historicalLookupSeries = historicalLookupRelease
+  ? historicalRateSeriesForEntity(entity, String(meta.generated_at).slice(0, 10), { sources: meta.sources })
+  : null;
 
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.
@@ -203,6 +211,9 @@ if (isStateRate) {
   );
   addRelated(pj ? '/prejudgment/' : '/states/', pj ? 'Compare prejudgment rules by state' : 'Compare judgment rates by state');
   if (!pj) addRelated('/states/judgment-interest-index/', 'State judgment rules and data coverage index');
+  if (historicalLookupRelease) {
+    addRelated('/calculators/historical-rate-lookup/', 'Look up this series for a verified historical date');
+  }
   addRelated('/guides/how-to-calculate-judgment-interest/', 'How to calculate judgment interest');
   if (!pj) addRelated('/states/highest-lowest/', 'Highest and lowest state judgment rates');
 } else if (slug.startsWith('irs-')) {
@@ -479,6 +490,24 @@ const jsonLd = [
     </table>
   </div>
 
+  {historicalLookupSeries && (
+    <section class="history-tools" data-historical-lookup-coverage>
+      <div>
+        <span class="history-tools-label">Verified historical lookup released</span>
+        <h2>Use this recorded history</h2>
+        <p>{historicalLookupSeries.historyCount} source-backed periods are released from
+          {' '}{historicalLookupSeries.minDate} through {historicalLookupSeries.maxDate}.
+          {' '}For this series, the date input means <strong>{historicalLookupSeries.inputMeaning.toLowerCase()}</strong>.
+          {' '}{historicalLookupSeries.branchScope}</p>
+      </div>
+      <ul class="clean">
+        <li><a href="/calculators/historical-rate-lookup/"><strong>Look up the value for a past date</strong></a></li>
+        <li><a href={`/api/v1/entity/${slug}.csv`}>Download the full CSV history</a></li>
+        <li><a href={`/api/v1/entity/${slug}.json`}>Open the source-backed JSON record</a></li>
+      </ul>
+    </section>
+  )}
+
   <h2>Source &amp; provenance</h2>
   <p class="source-note">
     Observation recorded {prettyDateTime(latest?.retrieved_at)} from the cited source{sourceRecord?.publisher ? ` (${sourceRecord.publisher})` : ''}:
@@ -537,6 +566,15 @@ const jsonLd = [
     .rate-follow { margin: 16px 0 0; font-size: .88rem; }
     .rate-follow a { font-weight: 650; text-decoration: none; border-bottom: 1px solid var(--line-strong); }
     .rate-follow a:hover { border-bottom-color: var(--green); }
+    .history-tools { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(220px, .7fr);
+      gap: 18px 28px; margin: 22px 0 30px; padding: 20px 22px; border: 1px solid var(--line-strong);
+      border-left: 3px solid var(--accent); background: var(--green-wash); border-radius: 3px; }
+    .history-tools h2 { margin: 4px 0 8px; font-size: 1.22rem; }
+    .history-tools p, .history-tools ul { margin: 0; }
+    .history-tools-label { color: var(--green); font-family: var(--mono); font-size: .68rem;
+      font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .history-tools ul { align-self: center; }
+    @media (max-width: 700px) { .history-tools { grid-template-columns: 1fr; } }
     .related-resources { margin: 32px 0; padding: 18px 20px; border: 1px solid var(--line); background: var(--paper-2); border-radius: 3px; }
     .related-resources h2 { margin: 0 0 10px; font-size: 1.2rem; }
     .related-resources ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 7px 24px; margin: 0; }

@@ -2,7 +2,18 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import { buildIowaOfficialHistory, validateIowaOfficialHistory } from './iowa-judgment-history.mjs';
-import { assertIowaCourtTable, fetchIowaCourtTable, parseIowaCourtTable } from './iowa-judicial.mjs';
+import {
+  assertIowaCourtTable,
+  fetchIowaCourtTable,
+  IOWA_SOURCE_NAME,
+  IOWA_STATIC_SOURCE,
+  parseIowaCourtTable,
+} from './iowa-judicial.mjs';
+
+test('Iowa live and static provenance share one stable descriptive source name', () => {
+  assert.equal(IOWA_SOURCE_NAME, 'Iowa §668.13 post-judgment interest table');
+  assert.equal(IOWA_STATIC_SOURCE.name, IOWA_SOURCE_NAME);
+});
 
 test('official Iowa history contains 303 exact court-table selections through August 2026', () => {
   const history = buildIowaOfficialHistory();

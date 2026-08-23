@@ -23,6 +23,7 @@ const jsonLd = {
   dateModified: meta.generated_at,
   distribution: [
     { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: new URL('/api/v1/entities.json', Astro.site).href },
+    { '@type': 'DataDownload', encodingFormat: 'application/json', contentUrl: new URL('/api/v1/history-coverage.json', Astro.site).href },
     { '@type': 'DataDownload', encodingFormat: 'text/csv', contentUrl: new URL('/api/v1/entity/us-federal-post-judgment.csv', Astro.site).href },
   ],
 };
@@ -43,6 +44,7 @@ const jsonLd = {
         <tr><td><a href="/api/v1/entities.json"><code>/api/v1/entities.json</code></a></td><td>All series with current and latest-published values</td></tr>
         <tr><td><a href="/api/v1/latest.json"><code>/api/v1/latest.json</code></a></td><td>Flat list of every current value (one call)</td></tr>
         <tr><td><a href="/api/v1/upcoming.json"><code>/api/v1/upcoming.json</code></a></td><td>Officially announced future periods, kept separate from current values</td></tr>
+        <tr><td><a href="/api/v1/history-coverage.json"><code>/api/v1/history-coverage.json</code></a></td><td>Code-reviewed historical lookup series, date meanings, verified boundaries, and known gaps</td></tr>
         <tr><td><code>/api/v1/entity/&#123;slug&#125;.json</code></td><td>One series — current, latest published, and full history with provenance</td></tr>
         <tr><td><code>/api/v1/entity/&#123;slug&#125;.csv</code></td><td>Recorded observations as CSV (spreadsheet-ready)</td></tr>
       </tbody>
@@ -61,16 +63,18 @@ const jsonLd = {
     <li><a href="/llms.txt">Concise machine-readable guide</a> and
       <a href="/llms-full.txt">all current values with citations</a>.</li>
     <li><a href="https://github.com/artwisdom/statuterates/tree/main/machine/mcp-server">Read-only MCP server</a>
-      — search, lookup, comparison, and audited calculations for compatible AI tools.</li>
+      — search, fail-closed historical lookup, comparison, and audited calculations for compatible AI tools.</li>
   </ul>
 
   <h2>For AI agents (MCP)</h2>
-  <p>An MCP server exposes the same dataset with tools for search, lookup, comparison, and
-    statutory-interest <em>computation</em> (<code>calculate_interest</code>) — so an agent can answer
+  <p>An MCP server exposes the same dataset with tools for search, verified historical lookup
+    (<code>get_historical_value</code>), comparison, and statutory-interest <em>computation</em>
+    (<code>calculate_interest</code>) — so an agent can answer
     "how much interest has accrued on this judgment" with a citable, current figure instead of a stale
     guess. See the <a href="https://github.com/artwisdom/statuterates/tree/main/machine/mcp-server">MCP setup guide</a>
-    for registration instructions. State calculations use the same fail-closed release registry as
-    the website; today, Florida is the only approved state-specific method.</p>
+    for registration instructions. Historical lookup and state calculations use separate fail-closed
+    release registries shared with the website; today, Florida is the only approved state-specific
+    calculation method.</p>
 
   <h2>Fair use &amp; licensing</h2>
   <ul class="clean">

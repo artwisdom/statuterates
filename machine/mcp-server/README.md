@@ -12,6 +12,7 @@ static API.
 | `search_entities` | Fuzzy-find rate series; returns current and latest-published values separately. |
 | `get_entity` | Full record: current, latest published, and all recorded observations with provenance. |
 | `get_latest_value` | Value currently in force as of the snapshot; preannounced future periods are excluded. |
+| `get_historical_value` | One released historical observation for a date, with date meaning, branch scope, boundaries, gaps, and provenance. |
 | `compare_values` | Compare one current metric across several series, sorted high→low. |
 | `calculate_interest` | Audited federal, IRS, UK, EU, and Florida calculations using the shared site engine. |
 
@@ -19,7 +20,12 @@ Every value returned carries `value`, `unit`, `effective_date`, `source_url`, `r
 `confidence`. `confidence: "medium"` values are **derived** (the `notes` field states the formula).
 For compatibility, `latest` is an alias of `current`; `latest_published` can contain a later,
 officially announced period. State calculations fail closed against the website's shared release
-registry. Florida is currently the only approved state-specific method.
+registry. Historical lookup has a separate shared allowlist and refuses dates outside verified
+coverage or inside a documented gap. Florida is currently the only approved state-specific
+calculation method.
+
+The same reviewed-series catalog and exact coverage boundaries are published without a key at
+`https://statuterates.com/api/v1/history-coverage.json`.
 
 ## Install
 ```bash

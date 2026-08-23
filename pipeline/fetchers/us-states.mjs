@@ -28,6 +28,7 @@ import {
   buildTexasOfficialMonthlyHistory,
   TEXAS_HISTORY_VERIFIED_AT,
   TEXAS_OCCC_CURRENT_URL,
+  TEXAS_OCCC_HISTORY_PAGE_URL,
 } from './texas-occc-history.mjs';
 import {
   ALASKA_ADM_505_URL,
@@ -41,6 +42,8 @@ import {
   buildNebraskaOfficialHistory,
   NEBRASKA_HISTORY_VERIFIED_AT,
   NEBRASKA_JUDICIAL_CURRENT_URL,
+  NEBRASKA_JUDICIAL_HISTORY_PDF_URL,
+  NEBRASKA_STATUTE_URL,
 } from './nebraska-judgment-history.mjs';
 import {
   buildIowaOfficialHistory,
@@ -123,10 +126,52 @@ import {
   WEST_VIRGINIA_OFFICIAL_HISTORY_START,
 } from './north-dakota-west-virginia-judgment-history.mjs';
 import {
+  buildNevadaOfficialHistory,
+  buildOklahomaOfficialHistory,
+  NEVADA_1987_ACT_URL,
+  NEVADA_FID_2026_JULY_NOTICE_URL,
+  NEVADA_FID_HISTORY_URL,
+  NEVADA_HISTORY_VERIFIED_AT,
+  NEVADA_NRS_17_URL,
+  NEVADA_NRS_97B_URL,
+  NEVADA_TORRES_OPINION_URL,
+  NEVADA_UNAVAILABLE_OFFICIAL_ROWS,
+  OKLAHOMA_2013_AMENDED_NOTICE_URL,
+  OKLAHOMA_2013_NOTICE_URL,
+  OKLAHOMA_2013_REGIME_EVENTS,
+  OKLAHOMA_2025_HISTORY_NOTICE_URL,
+  OKLAHOMA_2026_NOTICE_URL,
+  OKLAHOMA_HISTORY_VERIFIED_AT,
+  OKLAHOMA_NOTICE_INDEX_URL,
+  OKLAHOMA_SECTION_727_1_URL,
+  OKLAHOMA_SECTION_727_URL,
+} from './nevada-oklahoma-judgment-history.mjs';
+import {
   buildMichiganOfficialHistory,
   buildNewJerseyPostJudgmentHistory,
   buildNewJerseyPrejudgmentHistory,
 } from './michigan-new-jersey-interest-history.mjs';
+import {
+  buildMinnesotaOfficialHistory,
+  buildWisconsinOfficialHistory,
+  FEDERAL_RESERVE_H15_URL,
+  MINNESOTA_BRANCH_TUPLES,
+  MINNESOTA_CURRENT_RULE_URL,
+  MINNESOTA_HISTORY_1990_2008_URL,
+  MINNESOTA_HISTORY_2009_2015_URL,
+  MINNESOTA_HISTORY_2016_2026_URL,
+  MINNESOTA_HISTORY_VERIFIED_AT,
+  MINNESOTA_JUDGMENT_FAQ_URL,
+  MINNESOTA_PRE_1990_HISTORY_URL,
+  MINNESOTA_SCOPE_EVENTS,
+  MINNESOTA_STATUTE_548_091_URL,
+  MINNESOTA_STATUTE_549_09_URL,
+  WISCONSIN_2011_ACT_69_URL,
+  WISCONSIN_APPELLATE_SCOPE_URL,
+  WISCONSIN_HISTORY_URL,
+  WISCONSIN_HISTORY_VERIFIED_AT,
+  WISCONSIN_STATUTE_815_05_URL,
+} from './minnesota-wisconsin-interest-history.mjs';
 
 const VERIFIED_ON = '2026-07-08';
 const CALIFORNIA_RULES_VERIFIED_AT = '2026-08-21T00:00:00Z';
@@ -609,6 +654,70 @@ const NORTH_DAKOTA_POSTJUDGMENT_CALCULATION = {
   renderer_supported: false,
   rule_verified_at: NORTH_DAKOTA_HISTORY_VERIFIED_AT,
 };
+const NEVADA_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official semiannual history, prime-plus-two formula, reset schedule, simple-interest rule, and general accrual trigger are verified, but contract, judgment-specified, other-law, consumer-form-debt, offer-of-judgment, future-damages, day-count, and payment-allocation branches are not calculator-complete.',
+  rate_behavior: 'semiannual_calendar_reset',
+  rate_schedule: 'official_nevada_fid_prime_plus_2_points',
+  compounding: 'simple',
+  accrual_trigger: 'service_of_summons_and_complaint_except_future_damages_begin_at_judgment',
+  history_start: '1987-07-01',
+  curated_history_complete_through: '2026-12-31',
+  legal_scheme_cause_date_from: '1987-07-01',
+  unavailable_official_rows: NEVADA_UNAVAILABLE_OFFICIAL_ROWS.map(([effective_date, status]) => ({
+    effective_date,
+    status,
+  })),
+  day_count: 'not_verified_for_calculator',
+  payments_supported: false,
+  branches_complete: false,
+  accrual_rule_verified: true,
+  renderer_supported: false,
+  rule_verified_at: NEVADA_HISTORY_VERIFIED_AT,
+  branches: {
+    general_default: 'NRS 17.130(2): FID prime immediately preceding judgment plus two points, resetting each January 1 and July 1 while unpaid',
+    contract_other_law_or_judgment: 'A lawful contract, another law, or the judgment itself can specify a different rate',
+    consumer_form_debt: 'NRS 97B.150 uses the lesser qualifying contract rate or prime plus two, fixes the selected rate at judgment, bars compounding, and has exemptions',
+    future_damages: 'Interest on future-damages amounts begins at judgment rather than service',
+    offer_of_judgment_and_special_rules: 'NRS Chapter 17 contains additional offer-of-judgment and special-interest branches that are not modeled here',
+  },
+};
+const OKLAHOMA_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official annual history, calendar-year reset, accrued-interest balance, general accrual trigger, contract-rate method, and government-liability branch are verified, but day count, payment allocation, every special-law judgment, and all historical statutory regimes are not calculator-complete.',
+  rate_behavior: 'annual_calendar_reset',
+  rate_schedule: 'official_administrative_director_certification',
+  history_method: 'official_values_calculated_under_statute_in_effect_for_each_period',
+  compounding: 'annual',
+  interest_base: 'judgment_including_prejudgment_interest_plus_previously_accrued_postjudgment_interest',
+  accrual_trigger: 'earlier_of_expressly_stated_rendition_or_clerk_filing',
+  costs_and_fees_accrual_trigger: 'earlier_of_expressly_stated_pronouncement_or_clerk_filing',
+  history_start: '1986-11-01',
+  curated_history_complete_through: '2026-12-31',
+  current_formula_from: '2013-11-01',
+  current_formula: 'first_WSJ_prime_rate_of_calendar_year_plus_2_points',
+  legal_regime_events: OKLAHOMA_2013_REGIME_EVENTS.map(([effective_date, event, rate]) => ({
+    effective_date,
+    event,
+    postjudgment_rate: rate,
+  })),
+  day_count: 'not_verified_for_calculator',
+  payments_supported: false,
+  branches_complete: false,
+  accrual_rule_verified: true,
+  renderer_supported: false,
+  rule_verified_at: OKLAHOMA_HISTORY_VERIFIED_AT,
+  branches: {
+    general: '12 O.S. §727.1(C): annual certified rate, repriced each January 1 on the judgment plus previously accrued post-judgment interest',
+    costs_and_attorney_fees: 'Allowed costs and attorney fees use their own earlier-of-pronouncement-or-filing accrual trigger',
+    lawful_contract_rate: 'The lawful contract rate controls when stated in the judgment and accrues in the same annual manner',
+    government_judgment: 'Judgments plus post-judgment interest remain subject to the Governmental Tort Claims Act total-liability cap',
+    older_unpaid_judgments: 'Beginning January 1, 2005, §727.1 methodology also applies to unpaid judgments rendered before that date',
+    specific_other_law: 'A more specific statute or judgment category can displace the general §727.1 path',
+  },
+};
 const WEST_VIRGINIA_POSTJUDGMENT_CALCULATION = {
   status: 'reference_only',
   source_tier: 'official_primary',
@@ -701,11 +810,80 @@ const NEW_JERSEY_PREJUDGMENT_CALCULATION = {
   accrual_trigger: 'for_qualifying_tort_claims_later_of_action_institution_or_six_months_after_cause_of_action_accrual_subject_to_rule_exceptions',
   history_start: '1988-01-01',
 };
+
+const MINNESOTA_AUTHORITIES = [
+  { label: 'Minn. Stat. §549.09 — judgment-interest branches', url: MINNESOTA_STATUTE_549_09_URL },
+  { label: 'Minn. Stat. §548.091 — child-support judgments', url: MINNESOTA_STATUTE_548_091_URL },
+  { label: 'Minnesota State Court Administrator — current interest rule', url: MINNESOTA_CURRENT_RULE_URL },
+  { label: 'Official 1990–2008 interest-rate history', url: MINNESOTA_HISTORY_1990_2008_URL },
+  { label: 'Official 2009–2015 interest-rate history', url: MINNESOTA_HISTORY_2009_2015_URL },
+  { label: 'Official 2016–2026 interest-rate history', url: MINNESOTA_HISTORY_2016_2026_URL },
+  { label: 'Minnesota Judicial Branch judgment-interest FAQ', url: MINNESOTA_JUDGMENT_FAQ_URL },
+  { label: 'Official pre-1990 history document (linked, not machine-ingested)', url: MINNESOTA_PRE_1990_HISTORY_URL },
+];
+const MINNESOTA_JUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official general, qualifying-over-$50,000, and child-support histories are preserved, but entry-vintage tests, non-child-support family-court discretion, public-party and special-judgment branches, and payment rendering are not calculator-complete.',
+  rate_behavior: 'branch_dependent_annual_reset_or_fixed_at_entry',
+  standard_branch_behavior: 'resets_each_calendar_year',
+  qualifying_over_50000_branch_behavior: '10_percent_fixed_at_entry_until_paid',
+  compounding: 'simple',
+  day_count: 'actual_365',
+  history_start: '1990-01-01',
+  curated_history_complete_through: '2026-12-31',
+  earlier_history_status: 'official_pre_1980_through_1991_pdf_linked_but_not_machine_verified',
+  current_standard_rate: 4,
+  current_over_50000_rate: 10,
+  current_child_support_rate: 0,
+  branches_complete: false,
+  accrual_rule_verified: true,
+  payment_allocation: 'taxable_disbursements_then_accrued_interest_then_principal_but_payment_renderer_not_implemented',
+  payments_supported: false,
+  renderer_supported: false,
+  rule_verified_at: MINNESOTA_HISTORY_VERIFIED_AT,
+};
+
+const WISCONSIN_AUTHORITIES = [
+  { label: 'Wis. Stat. §815.05(8) — post-judgment interest', url: WISCONSIN_STATUTE_815_05_URL },
+  { label: 'Wisconsin Court System — official half-year rate history', url: WISCONSIN_HISTORY_URL },
+  { label: '2011 Wisconsin Act 69 — prime-plus-one transition', url: WISCONSIN_2011_ACT_69_URL },
+  { label: 'Wisconsin Court of Appeals — scope and superseding-law discussion', url: WISCONSIN_APPELLATE_SCOPE_URL },
+  { label: 'Federal Reserve H.15 bank prime loan rate', url: FEDERAL_RESERVE_H15_URL },
+];
+const WISCONSIN_JUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official half-year history, entry-date selection, and lock-until-paid rule are verified, but day count, compounding, partial-payment allocation, prejudgment interaction, and every superseding statutory branch are not calculator-complete.',
+  rate_behavior: 'fixed_at_entry',
+  rate_schedule: 'january_or_july_h15_prime_plus_1_point',
+  compounding: 'not_verified_for_calculator',
+  day_count: 'not_verified_for_calculator',
+  history_start: '2011-12-02',
+  curated_history_complete_through: '2026-12-31',
+  prior_rate_context: {
+    value: 12,
+    effective_from: null,
+    effective_to: '2011-12-01',
+    machine_publish: false,
+    reason: 'The former 12% rule is official context, but a complete machine-safe start date was not established.',
+  },
+  branches_complete: false,
+  accrual_rule_verified: true,
+  payments_supported: false,
+  renderer_supported: false,
+  rule_verified_at: WISCONSIN_HISTORY_VERIFIED_AT,
+};
 const STATES_2 = [
   { code: 'TX', name: 'Texas', slug: 'texas-judgment-rate', value: 6.75, kind: 'variable', asof: '2026-07-01',
     statute: 'Tex. Fin. Code §304.003', srcId: 'tx-occc', srcName: 'Texas post-judgment interest rate (Fin. Code §304.003)',
     publisher: 'Texas Office of Consumer Credit Commissioner (official)', url: TEXAS_OCCC_CURRENT_URL,
     verifiedOn: '2026-07-19', confidence: 'high', method: 'statute-variable-official-table', calculation: TEXAS_POSTJUDGMENT_CALCULATION,
+    metadata: { official_authorities: [
+      { label: 'Texas Finance Code Chapter 304', url: 'https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf' },
+      { label: 'Texas OCCC current interest rates', url: TEXAS_OCCC_CURRENT_URL },
+      { label: 'Texas OCCC historical interest-rate summaries', url: TEXAS_OCCC_HISTORY_PAGE_URL },
+    ] },
     notes: 'Texas OCCC published 6.75% for money judgments rendered during July 2026. Under Texas Finance Code §§304.003, 304.005, and 304.006, the general noncontract rate is fixed at judgment, accrues from rendition through satisfaction (subject to the appeal-extension exception), and compounds annually. An interest-bearing contract instead uses §304.002 (the lesser of its rate or 18%); specified tax and child-support interest are outside Chapter 304. Verify applicability; not legal advice.' },
   { code: 'FL', name: 'Florida', slug: 'florida-judgment-rate', value: 8.06, kind: 'variable', asof: '2026-07-01',
     statute: 'Fla. Stat. §55.03', srcId: 'fl-cfo', srcName: 'Florida judgment interest current and historical rates',
@@ -867,9 +1045,9 @@ const STATES_3 = [
     metadata: { official_statute_urls: [KENTUCKY_KRS_360_040_URL], official_act_url: KENTUCKY_2017_ACT_URL },
     notes: "For general judgments entered on or after June 29, 2017, KRS 360.040(1) sets 6% interest compounded annually from entry. The enrolled 2017 Act changed the prior 12% general rate and expressly applies the change by judgment-entry date. Unpaid child-support judgments remain 12%; a written contract, note, or obligation uses its stated rate; an unliquidated judgment may receive less than 6% after notice and a hearing. Verify applicability; not legal advice." },
   { code: "LA", name: "Louisiana", slug: "louisiana-judgment-rate", value: 7.5, value_text: "7.5%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-08-20", statute: "La. R.S. 13:4202(B)", srcId: "la-jud", srcName: "Louisiana official judicial-interest schedule", publisher: "Louisiana Office of Financial Institutions (official)", url: LOUISIANA_JUDICIAL_RATE_URL, confidence: "high", method: "statute-variable-official-table", calculation: LOUISIANA_POSTJUDGMENT_CALCULATION,
-    metadata: { official_history_url: LOUISIANA_JUDICIAL_RATE_URL, official_authorities: [
-      { label: "Louisiana OFI judicial-interest schedule", url: LOUISIANA_JUDICIAL_RATE_URL },
+    metadata: { official_history_url: LOUISIANA_JUDICIAL_RATE_URL, official_statute_url: "https://www.legis.la.gov/legis/LawPrint.aspx?d=77702", official_authorities: [
       { label: "La. R.S. 13:4202", url: "https://www.legis.la.gov/legis/LawPrint.aspx?d=77702" },
+      { label: "Louisiana OFI judicial-interest schedule", url: LOUISIANA_JUDICIAL_RATE_URL },
       { label: "La. R.S. 13:4203", url: "https://www.legis.la.gov/legis/LawPrint.aspx?d=77703" },
       { label: "La. R.S. 9:3500", url: "https://www.legis.la.gov/legis/Law.aspx?d=285199" },
       { label: "Louisiana Civil Code art. 2000", url: "https://www.legis.la.gov/legis/Law.aspx?d=109256" },
@@ -878,17 +1056,41 @@ const STATES_3 = [
     notes: "Louisiana OFI publishes a 7.5% judicial rate for calendar year 2026 under R.S. 13:4202(B). The schedule changes by calendar year rather than locking at judgment. Contracts, tort accrual, government defendants, and other statutes can alter the applicable path. Civil Code art. 2001 permits interest on accrued interest only through a new agreement after accrual, so automatic compounding is not assumed. The official dated history begins September 12, 1980. Not legal advice." },
   { code: "MD", name: "Maryland", slug: "maryland-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "Md. Code, Courts & Judicial Proceedings Section 11-107(a)", srcId: "md-jud", srcName: "Maryland judgment interest (Md. Code, Courts & Judicial Proceedings Section 11-107(a))", publisher: "Maryland — mgaleg.maryland.gov", url: "https://mgaleg.maryland.gov/mgawebsite/laws/StatuteText?article=gcj&section=11-107",
     notes: "Maryland Courts and Judicial Proceedings §11-107 sets a 10% general judgment rate, a 6% rate for residential-rent judgments, and a delinquent-property-tax rate equal to the greater of 10% or the combined Tax–Property interest and penalty rates. Section 11-106 separately applies the contract rate to unpaid principal for qualifying loan-of-money judgments until originally scheduled maturity, with mortgage, deed-of-trust, and student-loan caveats. Verify the correct branch; not legal advice." },
-  { code: "MN", name: "Minnesota", slug: "minnesota-judgment-rate", value: 4, value_text: "4% / 10%", kind: "variable", asof: "2026-01-01", statute: "Minn. Stat. § 549.09, subd. 1(c)", srcId: "mn-jud", srcName: "Minnesota judgment interest (Minn. Stat. § 549.09, subd. 1(c))", publisher: "Minnesota — revisor.mn.gov", url: "https://www.revisor.mn.gov/court_rules/rule/msinte/",
-    notes: "Post-judgment interest under Minn. Stat. § 549.09, subd. 1(c), currently 4% / 10% (as of January 1, 2026), set annually by the Minnesota State Court Administrator by December 20 for the succeeding calendar year. Rate = the secondary market yield / one-year constant maturity… Simple interest. Standard variable Treasury-indexed rate (4% floor) applies to judgments/awards of $50,000 or less, and to ALL judgments/awards for or against the… Verify the current value at revisor.mn.gov; not legal advice." },
+  { code: "MN", name: "Minnesota", slug: "minnesota-judgment-rate", value: 4, value_text: "4% / 10%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-08-22", statute: "Minn. Stat. § 549.09, subd. 1(c)", srcId: "mn-jud", srcName: "Minnesota official judgment-interest branches and history", publisher: "Minnesota Judicial Branch and Revisor of Statutes (official)", url: MINNESOTA_CURRENT_RULE_URL, confidence: "high", method: "court-rule-branching-official-history", calculation: MINNESOTA_JUDGMENT_CALCULATION,
+    metadata: {
+      basis: "court-rule-branching-official-history",
+      official_history_urls: [MINNESOTA_HISTORY_1990_2008_URL, MINNESOTA_HISTORY_2009_2015_URL, MINNESOTA_HISTORY_2016_2026_URL],
+      official_authorities: MINNESOTA_AUTHORITIES,
+      history_schema: {
+        columns: ["effective_date", "general_rate", "qualifying_over_50000_rate", "child_support_cell"],
+        child_support_formula_token: "follow_549_09_capped_18",
+        row_count: MINNESOTA_BRANCH_TUPLES.length,
+      },
+      scope_events: MINNESOTA_SCOPE_EVENTS.map(([effective_date, event]) => ({ effective_date, event })),
+    },
+    notes: "Minnesota publishes a 4% general rate for 2026 under §549.09, subd. 1(c). Qualifying judgments or awards over $50,000 use a separate 10% branch that is generally fixed at entry until paid, subject to public-party, non-child-support family-court, tax, condemnation, arbitration, and other statutory exceptions. The general branch resets each calendar year. Beginning August 1, 2022, interest does not accrue on past, current, or future child-support judgments; the separate family-court discretion rule does not apply to child-support judgments. This page is a branch-preserving reference, not a payoff calculator. Not legal advice." },
   { code: "MO", name: "Missouri", slug: "missouri-judgment-rate", value: 9, value_text: "9% / 8.75%", kind: "variable", asof: "2026-07-09", statute: "Mo. Rev. Stat. §408.040", srcId: "mo-jud", srcName: "Missouri judgment interest (Mo. Rev. Stat. §408.040)", publisher: "Missouri — revisor.mo.gov", url: "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
     notes: "Post-judgment interest under Mo. Rev. Stat. §408.040: NON-TORT/contract judgments bear 9% fixed (or the contract rate if higher); TORT judgments bear the intended Federal Funds rate + 5% — currently about 8.75% (variable). Simple interest. Verify at revisor.mo.gov; not legal advice." },
   { code: "MT", name: "Montana", slug: "montana-judgment-rate", value: 9.75, value_text: "9.75%", kind: "variable", asof: "2026-01-01", statute: "Mont. Code Ann. § 25-9-205", srcId: "mt-jud", srcName: "Montana judgment interest (Mont. Code Ann. § 25-9-205)", publisher: "Montana — mca.legmt.gov", url: "https://mca.legmt.gov/bills/mca/title_0250/chapter_0090/part_0020/section_0050/0250-0090-0020-0050.html",
     notes: "Post-judgment interest under Mont. Code Ann. § 25-9-205, currently 9.75% (as of January 1, 2026). Rate = (bank prime loan rate published in the Federal Reserve System's H.15 \"Selected Interest Rates\" release, or any superseding publication, on the day judgment is entered)… Simple interest. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the… Verify the current value at mca.legmt.gov; not legal advice." },
   { code: "NE", name: "Nebraska", slug: "nebraska-judgment-rate", value: 5.970, value_text: "5.970%", kind: "variable", asof: "2026-07-16", statute: "Neb. Rev. Stat. §§ 45-103 and 45-103.01", srcId: "ne-jud", srcName: "Nebraska judgment interest rate and official history (Neb. Rev. Stat. §45-103)", publisher: "Nebraska Judicial Branch (official)", url: NEBRASKA_JUDICIAL_CURRENT_URL,
     verifiedOn: "2026-07-19", confidence: "high", method: "statute-variable-official-table", calculation: NEBRASKA_POSTJUDGMENT_CALCULATION,
+    metadata: { official_statute_url: NEBRASKA_STATUTE_URL, official_authorities: [
+      { label: "Neb. Rev. Stat. §45-103", url: NEBRASKA_STATUTE_URL },
+      { label: "Nebraska Judicial Branch current judgment-interest rate", url: NEBRASKA_JUDICIAL_CURRENT_URL },
+      { label: "Nebraska Judicial Branch official rate history", url: NEBRASKA_JUDICIAL_HISTORY_PDF_URL },
+    ] },
     notes: "The Nebraska Judicial Branch publishes a 5.970% judgment rate effective July 16, 2026. For judgments entered on or after July 20, 2002, Neb. Rev. Stat. §45-103 fixes the rate at the first quarterly 26-week Treasury-bill bond investment yield plus two percentage points; the court's notice becomes effective two weeks after publication. Section 45-103.01 runs interest from entry until satisfaction. Another law or an agreed contract rate can control instead. The statute does not state the day-count or calculator-grade compounding mechanics; verify applicability. Not legal advice." },
-  { code: "NV", name: "Nevada", slug: "nevada-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-07-01", statute: "Nev. Rev. Stat. 17.130(2)", srcId: "nv-jud", srcName: "Nevada judgment interest (Nev. Rev. Stat. 17.130(2))", publisher: "Nevada — fid.nv.gov", url: "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201,%202026.pdf",
-    notes: "Post-judgment interest under Nev. Rev. Stat. 17.130(2), currently 8.75% (as of July 1, 2026). Post-judgment rate = (prime rate at the largest bank in Nevada as ascertained by the Commissioner of Financial Institutions on the Jan 1 or Jul 1 immediately preceding the… Simple interest. Interest runs from time of SERVICE of the summons and complaint until satisfied, EXCEPT amounts representing FUTURE damages, which draw interest only… Verify the current value at fid.nv.gov; not legal advice." },
+  { code: "NV", name: "Nevada", slug: "nevada-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-07-01", verifiedOn: "2026-08-22", statute: "NRS 17.130(2)", srcId: "nv-jud", srcName: "Nevada FID prime-rate and NRS 17.130 judgment-rate history", publisher: "Nevada Financial Institutions Division (official)", url: NEVADA_FID_2026_JULY_NOTICE_URL, confidence: "high", method: "statute-variable-official-table", calculation: NEVADA_POSTJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-history", official_history_url: NEVADA_FID_HISTORY_URL, official_statute_url: NEVADA_NRS_17_URL, official_authorities: [
+      { label: "NRS 17.130 — computation and interest on judgments", url: NEVADA_NRS_17_URL },
+      { label: "Nevada FID prime-interest-rate history", url: NEVADA_FID_HISTORY_URL },
+      { label: "Nevada FID July 1, 2026 prime-rate notice", url: NEVADA_FID_2026_JULY_NOTICE_URL },
+      { label: "1987 Nevada act — current formula's cause-of-action transition", url: NEVADA_1987_ACT_URL },
+      { label: "NRS 97B.150 — qualifying consumer-form debt branch", url: NEVADA_NRS_97B_URL },
+      { label: "Torres v. Goodyear — Nevada Supreme Court simple-interest authority", url: NEVADA_TORRES_OPINION_URL },
+    ] },
+    notes: "Nevada FID publishes a 6.75% prime rate for July 1 through December 31, 2026, producing an 8.75% general NRS 17.130(2) judgment rate. The general rate resets each January 1 and July 1 while unpaid and accrues as simple interest. Interest ordinarily begins at service of the summons and complaint; the future-damages component begins at judgment. A lawful contract, another law, the judgment itself, or qualifying consumer-form debt can require a different path. Reference only; not legal advice." },
   { code: "NH", name: "New Hampshire", slug: "new-hampshire-judgment-rate", value: 5.7, value_text: "5.7%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-08-20", statute: "N.H. Rev. Stat. Ann. 336:1, II", srcId: "nh-jud", srcName: "New Hampshire civil interest rates", publisher: "New Hampshire Judicial Branch (official)", url: "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates", confidence: "high", method: "statute-variable-official-table",
     metadata: { official_authorities: [
       { label: "New Hampshire Judicial Branch civil interest rates", url: "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates" },
@@ -914,16 +1116,25 @@ const STATES_3 = [
     },
     notes: "The amendment effective June 18, 1993 reduced New Mexico’s general money-judgment rate from 15% to 8.75% under NMSA 1978 §56-8-4. A written instrument can supply a different rate no higher than it states; judgments based on tortious conduct, bad faith, or intentional or willful acts use 15%; government defendants are generally exempt unless another authority controls. The statute does not supply one universal calculator-grade compounding, day-count, or partial-payment method. Verify applicability; not legal advice." },
   { code: "ND", name: "North Dakota", slug: "north-dakota-judgment-rate", value: 10, value_text: "10%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-08-20", statute: "N.D.C.C. § 28-20-34", srcId: "nd-jud", srcName: "North Dakota official judgment-interest table", publisher: "North Dakota Courts (official)", url: NORTH_DAKOTA_JUDGMENT_HISTORY_URL, confidence: "high", method: "statute-variable-official-table", calculation: NORTH_DAKOTA_POSTJUDGMENT_CALCULATION,
-    metadata: { official_history_url: NORTH_DAKOTA_JUDGMENT_HISTORY_URL, official_authorities: [
+    metadata: { official_history_url: NORTH_DAKOTA_JUDGMENT_HISTORY_URL, official_statute_url: "https://ndlegis.gov/cencode/t28c20.pdf", official_authorities: [
+      { label: "N.D.C.C. chapter 28-20", url: "https://ndlegis.gov/cencode/t28c20.pdf" },
       { label: "North Dakota Courts judgment-interest history", url: NORTH_DAKOTA_JUDGMENT_HISTORY_URL },
       { label: "North Dakota Courts 2026 rate announcement", url: "https://www.ndcourts.gov/news/north-dakota/north-dakota-supreme-court/general-news/interest-rate-set-for-2026-judgments" },
-      { label: "N.D.C.C. chapter 28-20", url: "https://ndlegis.gov/cencode/t28c20.pdf" },
       { label: "N.D.C.C. chapter 47-14", url: "https://ndlegis.gov/cencode/t47c14.pdf" },
       { label: "Orwig v. Orwig, 2023 ND 113", url: "https://www.ndcourts.gov/supreme-court/opinions/8318" },
     ] },
     notes: "North Dakota Courts publishes 10% for 2026 under N.D.C.C. §28-20-34. The post-2005 formula uses the prior December prime rate plus three points, rounded up to the next half point. Orwig v. Orwig holds the statute does not require a post-2005 judgment to retain its entry-year statutory rate in later years. The general path prohibits compounding; an original instrument can state a different rate, and pre-2006 judgments follow a transition rule. Not legal advice." },
-  { code: "OK", name: "Oklahoma", slug: "oklahoma-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-01-01", statute: "12 O.S. Sec. 727.1", srcId: "ok-jud", srcName: "Oklahoma judgment interest (12 O.S. Sec. 727.1)", publisher: "Oklahoma — oscn.net", url: "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=551111",
-    notes: "For judgments governed by 12 O.S. §727.1, the 2026 post-judgment rate is 8.75%. The annual formula uses the prime rate listed in the first Wall Street Journal edition published for the calendar year plus two percentage points. The statute uses simple interest and supplies a separate formula for qualifying prejudgment interest. Another controlling law or judgment category can require a different rule. Verify applicability; not legal advice." },
+  { code: "OK", name: "Oklahoma", slug: "oklahoma-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-08-22", statute: "12 O.S. §727.1", srcId: "ok-jud", srcName: "Oklahoma Administrative Director-certified judgment-interest history", publisher: "Oklahoma State Courts Network (official judicial publication)", url: OKLAHOMA_2026_NOTICE_URL, confidence: "high", method: "statute-variable-official-table", calculation: OKLAHOMA_POSTJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-history", official_history_url: OKLAHOMA_NOTICE_INDEX_URL, official_statute_url: OKLAHOMA_SECTION_727_1_URL, official_authorities: [
+      { label: "12 O.S. §727.1 — postjudgment interest after January 1, 2005", url: OKLAHOMA_SECTION_727_1_URL },
+      { label: "Oklahoma 2025 Administrative Director notice — full 1986–2025 history", url: OKLAHOMA_2025_HISTORY_NOTICE_URL },
+      { label: "Oklahoma annual interest-on-judgments notice index", url: OKLAHOMA_NOTICE_INDEX_URL },
+      { label: "Oklahoma 2026 interest-on-judgments notice", url: OKLAHOMA_2026_NOTICE_URL },
+      { label: "12 O.S. §727 — prior judgment-interest statute", url: OKLAHOMA_SECTION_727_URL },
+      { label: "Oklahoma original 2013 interest notice", url: OKLAHOMA_2013_NOTICE_URL },
+      { label: "Oklahoma amended 2013 interest notice", url: OKLAHOMA_2013_AMENDED_NOTICE_URL },
+    ] },
+    notes: "Oklahoma's Administrative Director certifies an 8.75% general post-judgment rate for 2026. Under 12 O.S. §727.1(C), the applicable rate resets each January 1, and the judgment plus post-judgment interest already accrued bears the new year's rate; this is annual compounding, not simple interest. A lawful contract rate accrues in the same manner. Government liability caps, allowed costs and fees, older unpaid judgments, and specific other laws require separate branch analysis. Reference only; not legal advice." },
   { code: "OR", name: "Oregon", slug: "oregon-judgment-rate", value: 9, value_text: "9%", kind: "fixed", asof: "1979-07-25", verifiedOn: "2026-08-20", statute: "ORS 82.010(2)", srcId: "or-jud", srcName: "Oregon judgment interest (ORS 82.010(2))", publisher: "Oregon Legislative Assembly (official)", url: "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html", confidence: "high", method: "statute-fixed-official-history",
     metadata: {
       official_statute_url: "https://www.oregonlegislature.gov/bills_laws/ors/ors082.html",
@@ -954,8 +1165,9 @@ const STATES_3 = [
       { label: "2025 signed interest-rate order", url: "https://www.courtswv.gov/sites/default/pubfilesmnt/2026-02/2025%20-%20Rate%20of%20Interest%20on%20Judgements%20and%20Decrees.pdf" },
     ] },
     notes: "The West Virginia court’s signed 2026 order sets 6.25% under W. Va. Code §56-6-31. The court sets one annual rate from the Fifth Federal Reserve District secondary discount rate plus two points, subject to statutory limits. The rate in force when judgment is entered stays fixed and bears simple interest. The dataset preserves 20 signed annual orders from 2007 through 2026, including the signed 7.00% 2025 order. Not legal advice." },
-  { code: "WI", name: "Wisconsin", slug: "wisconsin-judgment-rate", value: 7.75, value_text: "7.75%", kind: "variable", asof: "2026-07-09", statute: "Wis. Stat. § 815.05(8)", srcId: "wi-jud", srcName: "Wisconsin judgment interest (Wis. Stat. § 815.05(8))", publisher: "Wisconsin — docs.legis.wisconsin.gov", url: "https://docs.legis.wisconsin.gov/document/statutes/815.05(8)",
-    notes: "Post-judgment interest under Wis. Stat. § 815.05(8), currently 7.75% (as of July 9, 2026). Annual rate = 1% + prime rate. Prime rate is the bank prime loan rate published by the Federal Reserve Board in statistical release H.15… Simple interest. § 815.05(8) governs POST-judgment interest (from date of entry until paid); prejudgment interest on the verdict/costs is under § 814.04(4), which… Verify the current value at docs.legis.wisconsin.gov; not legal advice." },
+  { code: "WI", name: "Wisconsin", slug: "wisconsin-judgment-rate", value: 7.75, value_text: "7.75%", kind: "variable", asof: "2026-07-01", verifiedOn: "2026-08-22", statute: "Wis. Stat. § 815.05(8)", srcId: "wi-jud", srcName: "Wisconsin official judgment-interest half-year history", publisher: "Wisconsin Court System and Legislature (official)", url: WISCONSIN_HISTORY_URL, confidence: "high", method: "court-statute-half-year-official-history", calculation: WISCONSIN_JUDGMENT_CALCULATION,
+    metadata: { basis: "court-statute-half-year-official-history", official_history_url: WISCONSIN_HISTORY_URL, official_authorities: WISCONSIN_AUTHORITIES },
+    notes: "Wisconsin’s official court table publishes 7.75% for judgments entered July 1 through December 31, 2026 under Wis. Stat. §815.05(8). The entry date selects one percentage point above the Federal Reserve H.15 bank prime rate in effect on the immediately preceding January 1 or July 1, and that selected rate remains attached from entry until the judgment is paid. Section 807.01(4), another statute, or a separate prejudgment rule can supersede or supplement this general post-judgment path. Day count, compounding, payments, and all special branches remain calculator-withheld. Not legal advice." },
   { code: "WY", name: "Wyoming", slug: "wyoming-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "Wyo. Stat. Ann. 1-16-102", srcId: "wy-jud", srcName: "Wyoming judgment interest (Wyo. Stat. Ann. 1-16-102)", publisher: "Wyoming — wyoleg.gov", url: "https://wyoleg.gov/statutes/compress/title01.pdf",
     notes: "Post-judgment interest under Wyo. Stat. Ann. 1-16-102 — 10% per year, fixed by statute (simple interest). POST-judgment only (this statute governs interest on decrees/judgments from date of rendition; prejudgment interest is a separate common-law/contract… Verify against the statute; not legal advice." },
   { code: "ME", name: "Maine", slug: "maine-judgment-rate", value: 9.51, value_text: "9.51%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-07-19", statute: "14 M.R.S. §1602-C", srcId: "me-jud", srcName: "Maine post-judgment interest official annual chart (OTH-156)", publisher: "Maine Judicial Branch (official)", url: MAINE_POSTJUDGMENT_CHART_URL, confidence: "high", method: "derived_me_1602_c_official_judicial_chart", calculation: MAINE_POSTJUDGMENT_CALCULATION,
@@ -1249,6 +1461,46 @@ export function buildStateFixed({
       notes: removeTruncatedFragments(f.notes),
     };
 
+    if (f.entity.slug === 'minnesota-judgment-rate') {
+      return buildMinnesotaOfficialHistory().map((point) => {
+        const childSupportDetail = point.child_support_cell === null
+          ? 'The official table leaves the child-support cell blank; StatuteRates does not infer zero.'
+          : point.child_support_cell === 'follow_549_09_capped_18'
+            ? 'The official table directs child-support interest to follow §549.09 subject to an 18% cap; it is preserved as a formula rather than flattened to one number.'
+            : `The official table publishes ${point.child_support_cell}% for the child-support cell.`;
+        const largeJudgmentDetail = point.qualifying_over_50000_value === null
+          ? 'The separate qualifying-over-$50,000 10% branch was not yet in force.'
+          : 'The table preserves the separate 10% qualifying-over-$50,000 branch, whose entry-vintage and exclusions must be checked.';
+        return {
+          ...baseObservation,
+          value_numeric: point.value,
+          value_text: point.value_text,
+          effective_date: point.effective_date,
+          source_url: point.source_url,
+          confidence: 'high',
+          method: 'court-rule-branching-official-history',
+          notes: point.effective_date === f.effective_date
+            ? baseObservation.notes
+            : `Official Minnesota judgment-interest period beginning ${point.effective_date}. ${largeJudgmentDetail} ${childSupportDetail} The general schedule resets by calendar year; special branches can differ. Reference only; not legal advice.`,
+        };
+      });
+    }
+
+    if (f.entity.slug === 'wisconsin-judgment-rate') {
+      return buildWisconsinOfficialHistory().map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_url: point.source_url,
+        confidence: 'high',
+        method: 'court-statute-half-year-official-history',
+        notes: point.effective_date === f.effective_date
+          ? baseObservation.notes
+          : `Wisconsin’s official court table publishes ${point.value_text} for judgments entered in the half-year beginning ${point.effective_date}. Section 815.05(8) fixes that entry-selected rate until the judgment is paid; §807.01(4), another statute, or a separate prejudgment rule can control a different path. Reference only; not legal advice.`,
+      }));
+    }
+
     if (f.entity.slug === 'new-york-consumer-debt-judgment-rate') {
       const priorSource = STATE_SOURCES.find((candidate) => candidate.id === 'ny-courts-hsbc');
       return [
@@ -1307,6 +1559,36 @@ export function buildStateFixed({
           : prejudgment
             ? `Official New Jersey Judiciary tort prejudgment schedule beginning ${point.effective_date}. The annual base follows Rule 4:42-11; the two-point over-limit branch is shown only for periods after it began and depends on the Special Civil Part limit then applicable. Contract and equitable claims follow separate treatment. Not legal advice.`
             : `Official New Jersey Judiciary Rule 4:42-11 base schedule beginning ${point.effective_date}. The two-point over-limit branch is shown only for periods after it began and depends on the Special Civil Part monetary limit applicable at entry. This is not a marginal bracket. Not legal advice.`,
+      }));
+    }
+
+    if (f.entity.slug === 'nevada-judgment-rate') {
+      return buildNevadaOfficialHistory().map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_url: point.source_url,
+        confidence: 'high',
+        method: 'official_nevada_fid_prime_plus_2_points',
+        notes: point.effective_date === f.effective_date
+          ? baseObservation.notes
+          : `Nevada FID published a ${point.prime_rate.toFixed(2).replace(/\.?0+$/, '')}% prime rate for the six-month period beginning ${point.effective_date}; adding two points gives the ${point.value_text} general NRS 17.130 reference. The rate resets each January 1 and July 1 while unpaid. Contracts, another law, the judgment, consumer-form debt, and future damages can follow different branches. Not legal advice.`,
+      }));
+    }
+
+    if (f.entity.slug === 'oklahoma-judgment-rate') {
+      return buildOklahomaOfficialHistory().map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_url: point.source_url,
+        confidence: 'high',
+        method: 'official_administrative_director_certification',
+        notes: point.effective_date === f.effective_date
+          ? baseObservation.notes
+          : `Oklahoma's official judgment-interest history publishes ${point.value_text} beginning ${point.effective_date}. Use the law in effect for that period: the current first-publication Wall Street Journal prime-plus-two formula should not be back-described as the formula for every historical row. Under current §727.1(C), the balance reprices each January 1 and includes previously accrued post-judgment interest. Not legal advice.`,
       }));
     }
 

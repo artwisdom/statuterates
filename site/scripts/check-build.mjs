@@ -9,6 +9,7 @@ import { getAllEntities, getMeta, isPrejudgment } from '../src/lib/data.mjs';
 import { copyFor } from '../src/lib/content.mjs';
 import { ratePageMayRunAds } from '../src/lib/monetization.mjs';
 import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
+import { APPROVED_HISTORICAL_RATE_SLUGS } from '../src/lib/historical-rate-lookup.mjs';
 import { isIsoCalendarDate, SITE_LAUNCH_DATE } from '../src/lib/sitemap.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -39,6 +40,9 @@ const explicitlyMonetizableRoutes = new Set([
   '/calculators/late-payment-interest/',
   '/calculators/post-judgment-interest/',
 ]);
+const historicalLookupRateRoutes = new Set(
+  APPROVED_HISTORICAL_RATE_SLUGS.map((slug) => `/rates/${slug}/`),
+);
 const researchedStateAuthorityRoutes = new Set([
   '/rates/california-judgment-rate/',
   '/rates/idaho-judgment-rate/',
@@ -264,6 +268,12 @@ for (const file of htmlFiles) {
         || !html.includes('does not refund interest accrued or paid before'))) {
     errors.push(`${file}: New York consumer page must preserve its prospective 2022 transition`);
   }
+  if (historicalLookupRateRoutes.has(route)
+      && (!html.includes('data-historical-lookup-coverage')
+        || !html.includes('/calculators/historical-rate-lookup/')
+        || !html.includes(`/api/v1/entity/${route.split('/')[2]}.csv`))) {
+    errors.push(`${file}: released historical series is missing lookup and download tools`);
+  }
   const externalSourceLinkCount = [...html.matchAll(/<a\b[^>]*href="https:\/\/[^\"]+"[^>]*target="_blank"/g)].length;
   const minimumStateSourceLinks = route === '/states/mississippi/' ? 1 : 2;
   if (/^\/states\/[^/]+\/$/.test(route)
@@ -371,17 +381,19 @@ for (const file of htmlFiles) {
     for (const required of [
       'Verified historical observations',
       'Branch shown',
+      'Date input means',
       'Supported series and official sources',
       'It does not calculate a payoff',
       'It fails closed',
-      'texas-judgment-rate',
-      'iowa-judgment-rate',
-      'utah-judgment-rate',
-      'alaska-judgment-rate',
-      'maine-judgment-rate',
+      `Why only these ${APPROVED_HISTORICAL_RATE_SLUGS.length} series are released`,
       '/api/v1/entity/',
     ]) {
       if (!html.includes(required)) errors.push(`${file}: historical lookup is missing ${required}`);
+    }
+    for (const slug of APPROVED_HISTORICAL_RATE_SLUGS) {
+      if (!html.includes(`/rates/${slug}/`)) {
+        errors.push(`${file}: historical lookup is missing released series ${slug}`);
+      }
     }
   }
   if (route === '/states/judgment-interest-index/') {

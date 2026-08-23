@@ -6,6 +6,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withCurrentValues } from '../../../shared/current-values.mjs';
+import { releasedHistoricalValue } from '../../../shared/historical-rate-releases.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -79,6 +80,45 @@ export function latestValue(slug, metric) {
   if (metric) return metrics[metric] ? { slug, name: rec.name, ...metrics[metric] } : null;
   // all metrics
   return Object.entries(metrics).map(([m, v]) => ({ slug, name: rec.name, ...v }));
+}
+
+// Historical lookup is a narrower product than raw entity history. The shared registry supplies
+// the reviewed date meaning, legal branch, exact coverage end, and known refusal gaps. Keeping the
+// selection here makes MCP and the static website/API consume the same fail-closed contract.
+export function historicalValue(slug, date) {
+  const rec = getEntity(slug);
+  if (!rec) return null;
+  const snapshotDate = String(meta().generated_at || '').slice(0, 10);
+  const lookupDate = String(date || '');
+  const { series, observation } = releasedHistoricalValue(rec, lookupDate, snapshotDate, {
+    sources: meta().sources,
+  });
+  return {
+    entity_slug: rec.slug,
+    entity_name: rec.name,
+    lookup_date: lookupDate,
+    metric: series.metric,
+    usage: 'reference_only',
+    calculation_supported: false,
+    input_meaning: series.inputMeaning,
+    branch_scope: series.branchScope,
+    selection_rule: series.selectionRule,
+    coverage: {
+      begins: series.minDate,
+      through: series.maxDate,
+      note: series.coverageNote,
+      gaps: series.gaps.map((gap) => ({ ...gap })),
+    },
+    observation: { ...observation },
+    source_url: observation.source_url,
+    official_authorities: series.officialAuthorities.map((authority) => ({ ...authority })),
+    links: {
+      page: `https://statuterates.com/rates/${rec.slug}/`,
+      entity_json: `https://statuterates.com/api/v1/entity/${rec.slug}.json`,
+      historical_lookup: 'https://statuterates.com/calculators/historical-rate-lookup/',
+    },
+    disclaimer: 'Reference-only historical observation. Confirm the legal branch and controlling authority; this does not calculate accrued interest or a payoff.',
+  };
 }
 
 // Calculators may project an already-governing rate through a legally covered future payoff date,

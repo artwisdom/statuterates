@@ -8,6 +8,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import assert from 'node:assert/strict';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { APPROVED_HISTORICAL_RATE_SLUGS } from '../../../shared/historical-rate-releases.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const serverPath = resolve(__dirname, '..', 'src', 'server.mjs');
@@ -26,15 +27,25 @@ async function main() {
   const { tools } = await client.listTools();
   const names = tools.map((t) => t.name).sort();
   console.log('tools:', names.join(', '));
-  for (const expected of ['calculate_interest', 'compare_values', 'dataset_info', 'get_entity', 'get_latest_value', 'search_entities']) {
+  for (const expected of ['calculate_interest', 'compare_values', 'dataset_info', 'get_entity', 'get_historical_value', 'get_latest_value', 'search_entities']) {
     assert.ok(names.includes(expected), `tool ${expected} registered`);
   }
   const calculatorTool = tools.find((tool) => tool.name === 'calculate_interest');
   const calculatorSlugs = calculatorTool.inputSchema.properties.slug.enum;
   assert.ok(calculatorSlugs.includes('florida-judgment-rate'), 'audited Florida calculator is exposed');
-  for (const withheld of ['california-judgment-rate', 'new-york-judgment-rate', 'massachusetts-judgment-rate', 'iowa-judgment-rate']) {
-    assert.ok(!calculatorSlugs.includes(withheld), `withheld state calculator ${withheld} stays unavailable`);
+  for (const historicalSlug of APPROVED_HISTORICAL_RATE_SLUGS) {
+    if (historicalSlug === 'florida-judgment-rate') continue;
+    assert.ok(!calculatorSlugs.includes(historicalSlug), `historical reference ${historicalSlug} stays unavailable as a calculator`);
   }
+  const historicalTool = tools.find((tool) => tool.name === 'get_historical_value');
+  const historicalSlugs = historicalTool.inputSchema.properties.slug.enum;
+  assert.deepEqual(
+    [...historicalSlugs].sort(),
+    [...APPROVED_HISTORICAL_RATE_SLUGS].sort(),
+    'MCP exposes exactly the reviewed historical registry',
+  );
+  assert.ok(historicalSlugs.includes('nebraska-judgment-rate'));
+  assert.ok(!historicalSlugs.includes('california-judgment-rate'), 'unreviewed historical series stays unavailable');
 
   // 1) dataset_info returns metrics + entity count
   const info = parse(await client.callTool({ name: 'dataset_info', arguments: {} }));
@@ -66,6 +77,38 @@ async function main() {
   assert.ok(val.source_url, 'latest value has source_url provenance');
   assert.ok(val.effective_date <= info.current_as_of, 'current value is not future-dated');
   console.log(`get_latest_value OK: ${slug}/${primaryMetric} = ${val.value ?? val.value_text} ${val.unit} (eff ${val.effective_date})`);
+
+  // 3a) reviewed historical lookup preserves branch transitions and refuses known gaps.
+  const njBefore = parse(await client.callTool({
+    name: 'get_historical_value',
+    arguments: { slug: 'new-jersey-judgment-rate', date: '1996-08-31' },
+  }));
+  const njAfter = parse(await client.callTool({
+    name: 'get_historical_value',
+    arguments: { slug: 'new-jersey-judgment-rate', date: '1996-09-01' },
+  }));
+  assert.equal(njBefore.observation.value_text, '5.5%');
+  assert.equal(njAfter.observation.value_text, '5.5% / 7.5%');
+  assert.equal(njAfter.input_meaning, 'Accrual calendar date');
+
+  const nyBefore = parse(await client.callTool({
+    name: 'get_historical_value',
+    arguments: { slug: 'new-york-consumer-debt-judgment-rate', date: '2022-04-29' },
+  }));
+  const nyAfter = parse(await client.callTool({
+    name: 'get_historical_value',
+    arguments: { slug: 'new-york-consumer-debt-judgment-rate', date: '2022-04-30' },
+  }));
+  assert.equal(nyBefore.observation.value, 9);
+  assert.equal(nyAfter.observation.value, 2);
+  assert.match(nyAfter.branch_scope, /natural person/i);
+
+  const nebraskaGap = await client.callTool({
+    name: 'get_historical_value',
+    arguments: { slug: 'nebraska-judgment-rate', date: '2001-04-01' },
+  });
+  assert.equal(nebraskaGap.isError, true, 'documented Nebraska publication gap fails closed');
+  assert.match(nebraskaGap.content[0].text, /no verified observation covering this interval/i);
 
   // 4) get_entity returns history
   const entity = parse(await client.callTool({ name: 'get_entity', arguments: { slug } }));

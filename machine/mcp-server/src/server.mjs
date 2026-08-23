@@ -10,6 +10,7 @@
 //   search_entities    — fuzzy-find entities by name/slug/jurisdiction
 //   get_entity         — full record for one entity (latest values + history)
 //   get_latest_value   — the current value of a metric for an entity, with provenance
+//   get_historical_value — a released value for one reviewed historical date/branch
 //   compare_values     — compare one metric across several entities
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
@@ -20,10 +21,12 @@ import {
   searchEntities,
   getEntity,
   latestValue,
+  historicalValue,
   calculationHistory,
   defaultMetric,
   entitiesIndex,
 } from './data.mjs';
+import { APPROVED_HISTORICAL_RATE_SLUGS } from '../../../shared/historical-rate-releases.mjs';
 import {
   federalPostJudgment,
   floridaPostJudgmentInterest,
@@ -65,6 +68,7 @@ server.registerTool(
     metrics: M.metrics || [],
     entity_count: M.entity_count ?? entitiesIndex().length,
     observation_count: M.observation_count ?? null,
+    historical_lookup_series_count: APPROVED_HISTORICAL_RATE_SLUGS.length,
     generated_at: M.generated_at || null,
     current_as_of: String(M.generated_at || '').slice(0, 10) || null,
     update_cadence: M.update_cadence || null,
@@ -137,6 +141,28 @@ server.registerTool(
       return notFound(`No value for slug "${slug}"${metric ? ` metric "${metric}"` : ''}.`);
     }
     return json(v);
+  }
+);
+
+server.registerTool(
+  'get_historical_value',
+  {
+    title: 'Get a verified historical value',
+    description:
+      `Return the recorded annual-rate observation selected for one historical reference date. This is reference-only, not an interest calculation. The response explains what the date means, the reviewed legal branch, selection rule, verified coverage, known gaps, and source provenance. Dates outside verified coverage or inside a documented gap are refused. Released slugs: ${APPROVED_HISTORICAL_RATE_SLUGS.join(', ')}.`,
+    inputSchema: {
+      slug: z.enum([...APPROVED_HISTORICAL_RATE_SLUGS]).describe('A code-reviewed historical lookup series.'),
+      date: z.string().describe('Historical reference date in YYYY-MM-DD format. Read input_meaning in the response before applying it.'),
+    },
+  },
+  async ({ slug, date }) => {
+    try {
+      const result = historicalValue(slug, date);
+      if (!result) return notFound(`No entity with slug "${slug}" in this dataset snapshot.`);
+      return json(result);
+    } catch (e) {
+      return notFound(`Cannot look up historical value: ${e.message}`);
+    }
   }
 );
 

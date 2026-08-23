@@ -2,6 +2,8 @@
 // Read-only post-deploy verification. It waits for the custom domain to expose the release contract,
 // then checks every canonical sitemap URL so a broken public deployment cannot pass silently.
 
+import { APPROVED_HISTORICAL_RATE_SLUGS } from '../shared/historical-rate-releases.mjs';
+
 const configuredUrl = process.env.SITE_URL;
 if (!configuredUrl) throw new Error('SITE_URL is required');
 
@@ -115,6 +117,7 @@ const [
   apiMeta,
   apiLatest,
   apiUpcoming,
+  apiHistoryCoverage,
   apiTexas,
   apiTexasCsv,
   retiredNewYorkConsumerDebt,
@@ -134,6 +137,7 @@ const [
   requestWithRetry('/api/v1/meta.json', { cacheBust: true }),
   requestWithRetry('/api/v1/latest.json', { cacheBust: true }),
   requestWithRetry('/api/v1/upcoming.json', { cacheBust: true }),
+  requestWithRetry('/api/v1/history-coverage.json', { cacheBust: true }),
   requestWithRetry('/api/v1/entity/texas-judgment-rate.json', { cacheBust: true }),
   requestWithRetry('/api/v1/entity/texas-judgment-rate.csv', { cacheBust: true }),
   requestWithRetry('/states/new-york-consumer-debt/?from=gsc&case=old'),
@@ -155,6 +159,7 @@ for (const [label, result] of Object.entries({
   apiMeta,
   apiLatest,
   apiUpcoming,
+  apiHistoryCoverage,
   apiTexas,
   apiTexasCsv,
 })) {
@@ -181,8 +186,10 @@ rejectEdgeChallenge('robots.txt', robots.response);
 requireUnrestrictedRobots('robots.txt', robots.text);
 requireText('llms.txt', llms.text, `${origin}/openapi.yaml`);
 requireText('llms.txt', llms.text, `${origin}/api/v1/upcoming.json`);
+requireText('llms.txt', llms.text, `${origin}/api/v1/history-coverage.json`);
 requireText('OpenAPI', openapi.text, 'title: StatuteRates Static JSON and CSV API');
 requireText('OpenAPI', openapi.text, '/api/v1/upcoming.json:');
+requireText('OpenAPI', openapi.text, '/api/v1/history-coverage.json:');
 
 // Google Search Console can discover raw API downloads and RSS feeds through the public data and
 // subscription interfaces. They are useful machine resources, but not standalone web-search pages.
@@ -195,6 +202,7 @@ for (const [label, result] of Object.entries({
   'API metadata': apiMeta,
   'API current values': apiLatest,
   'API upcoming values': apiUpcoming,
+  'API historical lookup coverage': apiHistoryCoverage,
   'Texas entity JSON': apiTexas,
   'Texas entity CSV': apiTexasCsv,
 })) {
@@ -223,12 +231,14 @@ const indexJson = parseJson('API index', apiIndex.text);
 const metaJson = parseJson('API metadata', apiMeta.text);
 const latestJson = parseJson('API current values', apiLatest.text);
 const upcomingJson = parseJson('API upcoming values', apiUpcoming.text);
+const historyCoverageJson = parseJson('API historical lookup coverage', apiHistoryCoverage.text);
 const texasJson = parseJson('Texas entity API', apiTexas.text);
 const generatedAt = indexJson.generated_at;
 for (const [label, value] of Object.entries({
   'API metadata': metaJson.generated_at,
   'API current values': latestJson.generated_at,
   'API upcoming values': upcomingJson.generated_at,
+  'API historical lookup coverage': historyCoverageJson.generated_at,
   'Texas entity API': texasJson.generated_at,
 })) {
   if (value !== generatedAt) throw new Error(`${label} release ${value} disagrees with API index ${generatedAt}`);
@@ -246,6 +256,17 @@ for (const observation of upcomingJson.data?.observations || []) {
   if (observation.effective_date <= currentAsOf) {
     throw new Error(`Upcoming API contains non-future value ${observation.entity}@${observation.effective_date}`);
   }
+}
+if (historyCoverageJson.data?.count !== APPROVED_HISTORICAL_RATE_SLUGS.length
+    || historyCoverageJson.data?.series?.length !== APPROVED_HISTORICAL_RATE_SLUGS.length) {
+  throw new Error(`Historical lookup coverage does not expose the exact ${APPROVED_HISTORICAL_RATE_SLUGS.length}-series reviewed release`);
+}
+if (historyCoverageJson.data?.current_as_of !== currentAsOf) {
+  throw new Error(`Historical lookup coverage date ${historyCoverageJson.data?.current_as_of} disagrees with ${currentAsOf}`);
+}
+const nebraskaCoverage = historyCoverageJson.data.series.find((series) => series.entity_slug === 'nebraska-judgment-rate');
+if (nebraskaCoverage?.gaps?.[0]?.start !== '2001-03-14' || nebraskaCoverage?.gaps?.[0]?.end !== '2002-07-19') {
+  throw new Error('Historical lookup coverage is missing the verified Nebraska publication gap');
 }
 if (JSON.stringify(texasJson.data?.latest) !== JSON.stringify(texasJson.data?.current)) {
   throw new Error('Texas entity API latest compatibility alias disagrees with current');

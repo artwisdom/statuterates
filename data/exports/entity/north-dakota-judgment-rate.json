@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T02:35:47.079Z",
+  "generated_at": "2026-08-22T23:49:11.810Z",
   "slug": "north-dakota-judgment-rate",
   "name": "North Dakota Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,7 +11,12 @@
     "statute": "N.D.C.C. § 28-20-34",
     "basis": "statute-variable",
     "official_history_url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments",
+    "official_statute_url": "https://ndlegis.gov/cencode/t28c20.pdf",
     "official_authorities": [
+      {
+        "label": "N.D.C.C. chapter 28-20",
+        "url": "https://ndlegis.gov/cencode/t28c20.pdf"
+      },
       {
         "label": "North Dakota Courts judgment-interest history",
         "url": "https://www.ndcourts.gov/state-court-administration/interest-rate-on-judgments"
@@ -19,10 +24,6 @@
       {
         "label": "North Dakota Courts 2026 rate announcement",
         "url": "https://www.ndcourts.gov/news/north-dakota/north-dakota-supreme-court/general-news/interest-rate-set-for-2026-judgments"
-      },
-      {
-        "label": "N.D.C.C. chapter 28-20",
-        "url": "https://ndlegis.gov/cencode/t28c20.pdf"
       },
       {
         "label": "N.D.C.C. chapter 47-14",

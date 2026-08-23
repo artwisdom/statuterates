@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T02:35:47.079Z",
+  "generated_at": "2026-08-22T23:49:11.810Z",
   "slug": "louisiana-judgment-rate",
   "name": "Louisiana Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -11,14 +11,15 @@
     "statute": "La. R.S. 13:4202(B)",
     "basis": "statute-variable",
     "official_history_url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/",
+    "official_statute_url": "https://www.legis.la.gov/legis/LawPrint.aspx?d=77702",
     "official_authorities": [
-      {
-        "label": "Louisiana OFI judicial-interest schedule",
-        "url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/"
-      },
       {
         "label": "La. R.S. 13:4202",
         "url": "https://www.legis.la.gov/legis/LawPrint.aspx?d=77702"
+      },
+      {
+        "label": "Louisiana OFI judicial-interest schedule",
+        "url": "https://ofi.la.gov/legal/statutes-rules-policies-opinions/judicial-interest-rates/"
       },
       {
         "label": "La. R.S. 13:4203",

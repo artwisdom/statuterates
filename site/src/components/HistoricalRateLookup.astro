@@ -9,7 +9,7 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
   <div class="lookup-heading">
     <div>
       <span class="eyebrow">Verified historical observations</span>
-      <h2 id="historical-rate-lookup-heading">Find the recorded rate for a judgment date</h2>
+      <h2 id="historical-rate-lookup-heading">Find the recorded value for a historical date</h2>
     </div>
     <span class="private-badge">Your selected date stays in this browser</span>
   </div>
@@ -30,7 +30,7 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
         </select>
       </label>
       <label class="field">
-        <span>Judgment or rate-selection date</span>
+        <span>Historical reference date</span>
         <input type="date" data-date max={currentAsOf} required />
       </label>
     </div>
@@ -45,6 +45,7 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
     <p data-summary></p>
     <dl>
       <div><dt>Series</dt><dd data-name></dd></div>
+      <div><dt>Date input means</dt><dd data-input-meaning></dd></div>
       <div><dt>Requested date</dt><dd data-requested></dd></div>
       <div><dt>Recorded period began</dt><dd data-effective></dd></div>
       <div><dt>Selection rule</dt><dd data-rule></dd></div>
@@ -54,6 +55,8 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
       <a data-page-link>Open the full rate page</a>
       <span aria-hidden="true"> · </span>
       <a data-source-link rel="noopener" target="_blank">Open the official source</a>
+      <span data-authority-separator aria-hidden="true" hidden> · </span>
+      <a data-authority-link rel="noopener" target="_blank" hidden>Open the governing authority</a>
       <span aria-hidden="true"> · </span>
       <a data-csv-link>Download the recorded history (CSV)</a>
     </p>
@@ -63,7 +66,8 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
 
   <p class="fineprint">Reference lookup only—not legal advice or a payoff calculation. Contract
     rates, claim type, judgment amount, debtor type, special statutes, and the exact entry or accrual
-    event can change the controlling rule. Confirm the result against the linked authority.</p>
+    event can change the controlling rule. Confirm the result against the linked official source and
+    governing authority.</p>
 </section>
 
 <style>
@@ -145,7 +149,10 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
       if (!dateInput.value || dateInput.value < selected.minDate || dateInput.value > selected.maxDate) {
         dateInput.value = selected.maxDate;
       }
-      coverage.textContent = `Verified lookup coverage: ${displayDate(selected.minDate)} through ${displayDate(selected.maxDate)}. ${selected.coverageNote}`;
+      const gapText = (selected.gaps || []).length
+        ? ` Documented gap: ${(selected.gaps || []).map((gap) => `${displayDate(gap.start)} through ${displayDate(gap.end)}`).join('; ')}.`
+        : '';
+      coverage.textContent = `${selected.inputMeaning}. Verified lookup coverage: ${displayDate(selected.minDate)} through ${displayDate(selected.maxDate)}.${gapText} ${selected.coverageNote}`;
     };
 
     seriesInput.addEventListener('change', () => {
@@ -170,6 +177,7 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
         }
         const point = historicalRateAtDate(selected.history, requested, {
           coverageThrough: selected.maxDate,
+          gaps: selected.gaps,
         });
         const sourceUrl = point.source_url;
         if (!String(sourceUrl || '').startsWith('https://')) {
@@ -180,6 +188,7 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
         root.querySelector('[data-summary]').textContent =
           `${selected.label} records ${point.value_text} per year for the selected ${displayDate(requested)} date. ${selected.branchScope}`;
         root.querySelector('[data-name]').textContent = selected.label;
+        root.querySelector('[data-input-meaning]').textContent = selected.inputMeaning;
         root.querySelector('[data-requested]').textContent = displayDate(requested);
         root.querySelector('[data-effective]').textContent = displayDate(point.effective_date);
         root.querySelector('[data-rule]').textContent = selected.selectionRule;
@@ -187,14 +196,26 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
         root.querySelector('[data-page-link]').href = `/rates/${selected.slug}/`;
         root.querySelector('[data-source-link]').href = sourceUrl;
         root.querySelector('[data-csv-link]').href = `/api/v1/entity/${selected.slug}.csv`;
+        const authority = (selected.officialAuthorities || []).find((item) =>
+          String(item?.url || '').startsWith('https://'));
+        const authorityLink = root.querySelector('[data-authority-link]');
+        const authoritySeparator = root.querySelector('[data-authority-separator]');
+        authorityLink.hidden = !authority;
+        authoritySeparator.hidden = !authority;
+        if (authority) {
+          authorityLink.href = authority.url;
+          authorityLink.textContent = `Open ${authority.label}`;
+        }
 
         copyText = [
           `${selected.label}: ${point.value_text} per year`,
           `Requested date: ${requested}`,
+          `Date input means: ${selected.inputMeaning}`,
           `Recorded period began: ${point.effective_date}`,
           `Branch shown: ${selected.branchScope}`,
           `Selection rule: ${selected.selectionRule}`,
           `Official source: ${sourceUrl}`,
+          ...(authority ? [`Governing authority: ${authority.label} — ${authority.url}`] : []),
           `StatuteRates page: https://statuterates.com/rates/${selected.slug}/`,
           'Reference lookup only — confirm legal applicability against the controlling authority.',
         ].join('\n');

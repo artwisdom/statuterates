@@ -43,13 +43,17 @@ const CURATED_COMPLETE_STATE_ENTITIES = Object.freeze([
   'louisiana-prejudgment-rate',
   'michigan-judgment-rate',
   'michigan-prejudgment-rate',
+  'minnesota-judgment-rate',
+  'nevada-judgment-rate',
   'new-jersey-judgment-rate',
   'new-jersey-prejudgment-rate',
   'new-york-consumer-debt-judgment-rate',
   'new-york-judgment-rate',
   'north-dakota-judgment-rate',
+  'oklahoma-judgment-rate',
   'oregon-judgment-rate',
   'west-virginia-judgment-rate',
+  'wisconsin-judgment-rate',
 ]);
 
 function hasCompleteSnapshot(key, result) {

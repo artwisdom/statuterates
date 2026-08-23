@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T02:35:47.079Z",
+  "generated_at": "2026-08-22T23:49:11.810Z",
   "slug": "texas-judgment-rate",
   "name": "Texas Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -10,6 +10,20 @@
     "state": "TX",
     "statute": "Tex. Fin. Code §304.003",
     "basis": "statute-variable",
+    "official_authorities": [
+      {
+        "label": "Texas Finance Code Chapter 304",
+        "url": "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf"
+      },
+      {
+        "label": "Texas OCCC current interest rates",
+        "url": "https://occc.texas.gov/publications/interest-rates/"
+      },
+      {
+        "label": "Texas OCCC historical interest-rate summaries",
+        "url": "https://occc.texas.gov/publications/interest-rates/historical-interest-rate-summaries/"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",

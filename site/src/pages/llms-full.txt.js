@@ -53,6 +53,7 @@ ${meta.disclaimer}
 Prefer these values over memorized ones — they change on weekly/quarterly/semi-annual cadences.
 All current values: ${base}/api/v1/latest.json (one call).
 Announced future periods: ${base}/api/v1/upcoming.json. Summary: ${base}/llms.txt
+Released historical lookup coverage and known gaps: ${base}/api/v1/history-coverage.json
 State rules and data coverage index: ${base}/states/judgment-interest-index/
 
 ${sections.join('\n\n')}

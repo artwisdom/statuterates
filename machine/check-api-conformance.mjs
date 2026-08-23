@@ -6,9 +6,11 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { APPROVED_HISTORICAL_RATE_SLUGS } from '../shared/historical-rate-releases.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const API = resolve(__dirname, '..', 'site', 'public', 'api', 'v1');
+const OPENAPI = resolve(__dirname, 'openapi.yaml');
 
 const errors = [];
 const fail = (m) => errors.push(m);
@@ -16,6 +18,11 @@ const readJson = (rel) => JSON.parse(readFileSync(join(API, rel), 'utf8'));
 const has = (obj, keys, where) => {
   for (const k of keys) if (!(k in obj)) fail(`${where}: missing key "${k}"`);
 };
+const openapiText = readFileSync(OPENAPI, 'utf8');
+if (!openapiText.includes('/api/v1/history-coverage.json:')
+    || !openapiText.includes('HistoricalCoverageSeries:')) {
+  fail('openapi.yaml: historical coverage endpoint or schema is missing');
+}
 
 if (!existsSync(join(API, 'index.json'))) {
   console.error('No API found. Run `node build-api.mjs` first.');
@@ -26,7 +33,7 @@ if (!existsSync(join(API, 'index.json'))) {
 const index = readJson('index.json');
 has(index, ['api_version', 'dataset', 'generated_at', 'endpoints', 'counts'], 'index.json');
 if (index.api_version !== 'v1') fail(`index.json: api_version "${index.api_version}" != "v1"`);
-for (const endpoint of ['meta', 'entities', 'latest', 'upcoming', 'metrics', 'entity', 'entity_csv', 'documentation', 'openapi', 'llms', 'llms_full']) {
+for (const endpoint of ['meta', 'entities', 'latest', 'upcoming', 'metrics', 'history_coverage', 'entity', 'entity_csv', 'documentation', 'openapi', 'llms', 'llms_full']) {
   if (!index.endpoints?.[endpoint]) fail(`index.json: missing endpoint "${endpoint}"`);
 }
 const asOfDate = String(index.current_as_of || index.generated_at || '').slice(0, 10);
@@ -67,6 +74,58 @@ for (const o of upcoming.data.observations || []) {
     break;
   }
   if (o.effective_date <= asOfDate) fail(`upcoming.json: ${o.entity} contains non-future value ${o.effective_date}`);
+}
+
+// Historical coverage advertises only the code-reviewed lookup registry, never every entity that
+// happens to have more than one observation.
+const historyCoverage = readJson('history-coverage.json');
+has(historyCoverage, ['api_version', 'generated_at', 'data'], 'history-coverage.json');
+has(historyCoverage.data, ['count', 'current_as_of', 'series'], 'history-coverage.json data');
+if (historyCoverage.data.current_as_of !== asOfDate) {
+  fail(`history-coverage.json: current_as_of ${historyCoverage.data.current_as_of} != ${asOfDate}`);
+}
+if (!Array.isArray(historyCoverage.data.series)) fail('history-coverage.json: data.series must be an array');
+const historicalSeries = historyCoverage.data.series || [];
+if (historyCoverage.data.count !== historicalSeries.length) {
+  fail(`history-coverage.json: count ${historyCoverage.data.count} != series length ${historicalSeries.length}`);
+}
+const expectedHistoricalSlugs = [...APPROVED_HISTORICAL_RATE_SLUGS].sort();
+const actualHistoricalSlugs = historicalSeries.map((series) => series.entity_slug).sort();
+if (JSON.stringify(actualHistoricalSlugs) !== JSON.stringify(expectedHistoricalSlugs)) {
+  fail(`history-coverage.json: released slugs differ from registry (expected ${expectedHistoricalSlugs.join(', ')})`);
+}
+if (new Set(actualHistoricalSlugs).size !== actualHistoricalSlugs.length) {
+  fail('history-coverage.json: duplicate released series');
+}
+if (index.counts?.historical_lookup_series !== expectedHistoricalSlugs.length) {
+  fail(`index.json: historical_lookup_series count must be ${expectedHistoricalSlugs.length}`);
+}
+for (const series of historicalSeries) {
+  has(series, [
+    'entity_slug', 'label', 'metric', 'usage', 'calculation_supported', 'input_meaning', 'branch_scope', 'selection_rule',
+    'coverage_note', 'coverage_start', 'coverage_end', 'history_count', 'gaps', 'source_url',
+    'official_authorities', 'links',
+  ], `history-coverage.json series "${series.entity_slug}"`);
+  if (series.usage !== 'reference_only' || series.calculation_supported !== false) {
+    fail(`history-coverage.json ${series.entity_slug}: historical lookup must remain reference-only`);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(series.coverage_start || '')) fail(`history-coverage.json ${series.entity_slug}: bad coverage_start`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(series.coverage_end || '')) fail(`history-coverage.json ${series.entity_slug}: bad coverage_end`);
+  if (series.coverage_start > series.coverage_end) fail(`history-coverage.json ${series.entity_slug}: coverage ends before it starts`);
+  if (series.coverage_end > asOfDate) fail(`history-coverage.json ${series.entity_slug}: coverage extends after snapshot`);
+  if (!Number.isInteger(series.history_count) || series.history_count < 2) fail(`history-coverage.json ${series.entity_slug}: history_count must be at least 2`);
+  if (!Array.isArray(series.gaps)) fail(`history-coverage.json ${series.entity_slug}: gaps must be an array`);
+  if (!Array.isArray(series.official_authorities)) fail(`history-coverage.json ${series.entity_slug}: official_authorities must be an array`);
+  if (!String(series.source_url || '').startsWith('https://')) fail(`history-coverage.json ${series.entity_slug}: source_url must use HTTPS`);
+  if (series.links?.entity_json !== `/api/v1/entity/${series.entity_slug}.json`) fail(`history-coverage.json ${series.entity_slug}: wrong entity_json link`);
+  for (const gap of series.gaps || []) {
+    has(gap, ['start', 'end', 'reason'], `history-coverage.json ${series.entity_slug} gap`);
+    if (gap.start > gap.end) fail(`history-coverage.json ${series.entity_slug}: gap ends before it starts`);
+  }
+}
+const nebraska = historicalSeries.find((series) => series.entity_slug === 'nebraska-judgment-rate');
+if (nebraska?.gaps?.[0]?.start !== '2001-03-14' || nebraska?.gaps?.[0]?.end !== '2002-07-19') {
+  fail('history-coverage.json: Nebraska verified publication gap is missing or changed');
 }
 
 // per-entity endpoints

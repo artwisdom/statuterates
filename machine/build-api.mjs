@@ -10,12 +10,17 @@
 //   GET /api/v1/meta.json             -> dataset metadata + freshness + sources
 //   GET /api/v1/entities.json         -> collection index (all entities + latest values)
 //   GET /api/v1/metrics.json          -> list of metrics
+//   GET /api/v1/history-coverage.json -> released historical lookup series + verified boundaries
 //   GET /api/v1/entity/{slug}.json    -> one entity: latest + recorded observations + provenance
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withCurrentValues } from '../shared/current-values.mjs';
+import {
+  HISTORICAL_RATE_RELEASES,
+  historicalRateSeriesForEntity,
+} from '../shared/historical-rate-releases.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EXPORTS = resolve(__dirname, '..', 'data', 'exports');
@@ -69,6 +74,34 @@ function main() {
     : [];
   const safeRecords = entityRecords.map((record) => withCurrentValues(record, asOfDate));
   const safeBySlug = new Map(safeRecords.map((record) => [record.slug, record]));
+  const historicalCoverage = HISTORICAL_RATE_RELEASES.map((release) => {
+    const record = safeBySlug.get(release.entitySlug);
+    if (!record) throw new Error(`Released historical lookup entity is missing: ${release.entitySlug}`);
+    const series = historicalRateSeriesForEntity(record, asOfDate, { sources: meta.sources });
+    return {
+      entity_slug: release.entitySlug,
+      label: series.label,
+      metric: series.metric,
+      usage: 'reference_only',
+      calculation_supported: false,
+      input_meaning: series.inputMeaning,
+      branch_scope: series.branchScope,
+      selection_rule: series.selectionRule,
+      coverage_note: series.coverageNote,
+      coverage_start: series.minDate,
+      coverage_end: series.maxDate,
+      history_count: series.historyCount,
+      gaps: series.gaps.map((gap) => ({ ...gap })),
+      source_url: series.sourceUrl,
+      official_authorities: series.officialAuthorities.map((authority) => ({ ...authority })),
+      links: {
+        page: `/rates/${release.entitySlug}/`,
+        entity_json: `/api/v1/entity/${release.entitySlug}.json`,
+        entity_csv: `/api/v1/entity/${release.entitySlug}.csv`,
+        historical_lookup: '/calculators/historical-rate-lookup/',
+      },
+    };
+  });
 
   const apiVersion = 'v1';
   const envelope = (data) => ({
@@ -91,6 +124,7 @@ function main() {
       latest: '/api/v1/latest.json',
       upcoming: '/api/v1/upcoming.json',
       metrics: '/api/v1/metrics.json',
+      history_coverage: '/api/v1/history-coverage.json',
       entity: '/api/v1/entity/{slug}.json',
       entity_csv: '/api/v1/entity/{slug}.csv',
       documentation: '/api/',
@@ -99,7 +133,11 @@ function main() {
       llms_full: '/llms-full.txt',
     },
     current_as_of: asOfDate,
-    counts: { entities: meta.entity_count, observations: meta.observation_count },
+    counts: {
+      entities: meta.entity_count,
+      observations: meta.observation_count,
+      historical_lookup_series: historicalCoverage.length,
+    },
   });
 
   write('meta.json', envelope(meta));
@@ -151,6 +189,15 @@ function main() {
     observations: upcomingObservations,
   }));
 
+  // The historical lookup is deliberately narrower than the full dataset. This endpoint advertises
+  // only code-reviewed series and their exact fail-closed coverage boundaries; historical values
+  // remain available through the existing per-entity endpoints.
+  write('history-coverage.json', envelope({
+    count: historicalCoverage.length,
+    current_as_of: asOfDate,
+    series: historicalCoverage,
+  }));
+
   // Per-entity endpoints (copied from exports/entity/*.json) + CSV history downloads.
   let n = 0;
   for (const rec of safeRecords) {
@@ -160,7 +207,7 @@ function main() {
     n++;
   }
 
-  console.log(`Static API built: ${n} entity endpoints (JSON+CSV) + index/meta/metrics/entities/current/upcoming under ${API_DIR}`);
+  console.log(`Static API built: ${n} entity endpoints (JSON+CSV) + index/meta/metrics/entities/current/upcoming/history coverage under ${API_DIR}`);
   return n;
 }
 

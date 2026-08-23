@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { copyFor } from './content.mjs';
+import { contentModifiedFor, copyFor } from './content.mjs';
 
 function text(value) {
   return JSON.stringify(value);
@@ -173,4 +173,69 @@ test('Michigan and New Jersey copy preserves branch mechanics and removes trunca
   assert.match(newJersey.postDetails.history, /September 1, 1996/);
   assert.match(newJerseyPre.applies, /future economic losses/);
   assert.doesNotMatch(text({ michigan, michiganPre, newJersey, newJerseyPre }), /…|marginal brackets?\s+apply/);
+});
+
+test('Nevada and Oklahoma copy exposes verified histories without implying a released calculator', () => {
+  const nevada = copyFor('nevada-judgment-rate', {
+    observation: { value: 8.75, value_text: '8.75%', effective_date: '2026-07-01' },
+    historyPoints: 79,
+  });
+  const oklahoma = copyFor('oklahoma-judgment-rate', {
+    observation: { value: 8.75, value_text: '8.75%', effective_date: '2026-01-01' },
+    historyPoints: 41,
+  });
+
+  assert.match(nevada.body, /resets each January 1 and July 1/);
+  assert.match(nevada.postDetails.scope, /NRS 97B\.150.*consumer-form debt/s);
+  assert.match(nevada.postDetails.accrual, /future damages begin accruing only when judgment is entered/);
+  assert.match(nevada.postDetails.compounding, /simple interest/);
+  assert.match(nevada.postDetails.history, /79 dated six-month selections/);
+  assert.match(nevada.postDetails.history, /January 1, 1987 row says Not Available/);
+
+  assert.match(oklahoma.body, /compounds annually rather than using simple interest/);
+  assert.match(oklahoma.postDetails.accrual, /earlier of the expressly stated rendition date or filing/);
+  assert.match(oklahoma.postDetails.compounding, /judgment together with post-judgment interest previously accrued/);
+  assert.match(oklahoma.postDetails.history, /41 post-judgment values/);
+  assert.match(oklahoma.postDetails.history, /Three 2013 legal periods/);
+  assert.doesNotMatch(text(oklahoma), /statute uses simple interest|is simple interest|as simple interest/i);
+
+  assert.doesNotMatch(text({ nevada, oklahoma }), /…|\.\.\.|\{\{/);
+  assert.equal(contentModifiedFor('nevada-judgment-rate'), '2026-08-22');
+  assert.equal(contentModifiedFor('oklahoma-judgment-rate'), '2026-08-22');
+});
+
+test('Minnesota and Wisconsin explain complete official histories without implying a universal calculator', () => {
+  const minnesota = copyFor('minnesota-judgment-rate', {
+    observation: { value: 4, value_text: '4% / 10%', effective_date: '2026-01-01' },
+    historyPoints: 39,
+  });
+  const wisconsin = copyFor('wisconsin-judgment-rate', {
+    observation: { value: 7.75, value_text: '7.75%', effective_date: '2026-07-01' },
+    historyPoints: 31,
+  });
+
+  assert.ok(minnesota.body.length > 300);
+  assert.match(minnesota.body, /general percentage resets by calendar year/);
+  assert.match(minnesota.postDetails.scope, /August 1, 2009/);
+  assert.match(minnesota.postDetails.scope, /August 1, 2022/);
+  assert.match(minnesota.postDetails.scope, /does not accrue on past, current, or future child-support judgments/);
+  assert.match(minnesota.postDetails.scope, /does not apply to child-support judgments/);
+  assert.doesNotMatch(minnesota.postDetails.scope, /unless the family court orders otherwise/);
+  assert.match(minnesota.postDetails.accrual, /keeps the 10% rate in effect when.*entered until paid/);
+  assert.match(minnesota.postDetails.compounding, /simple interest using a 365-day year/);
+  assert.match(minnesota.postDetails.history, /39 official dated general-rate change points/);
+  assert.match(minnesota.postDetails.history, /1990–1992 child-support cells blank/);
+  assert.match(minnesota.postDetails.history, /not flattened into a numeric historical lookup/);
+  assert.match(minnesota.postDetails.history, /18% cap/);
+
+  assert.ok(wisconsin.body.length > 250);
+  assert.match(wisconsin.body, /7\.75%/);
+  assert.match(wisconsin.body, /July 1, 2026/);
+  assert.match(wisconsin.postDetails.accrual, /remains fixed from entry until the judgment is paid/);
+  assert.match(wisconsin.postDetails.scope, /§807\.01\(4\)/);
+  assert.match(wisconsin.postDetails.history, /31 official half-year rows/);
+  assert.match(wisconsin.postDetails.history, /December 2, 2011/);
+  assert.match(wisconsin.postDetails.compounding, /does not enable a Wisconsin payoff calculator/);
+
+  assert.doesNotMatch(text({ minnesota, wisconsin }), /…|\.\.\.|against the…|remains a future data-depth project/);
 });

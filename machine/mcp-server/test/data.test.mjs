@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { calculationHistory, getEntity, latestValue, meta } from '../src/data.mjs';
+import { calculationHistory, getEntity, historicalValue, latestValue, meta } from '../src/data.mjs';
 
 test('getEntity rejects path traversal and non-slug input', () => {
   for (const value of ['../meta', '../../exports/meta', '/etc/passwd', 'valid.json', 'UPPER', 'a/b', '']) {
@@ -53,5 +53,40 @@ test('MCP calculation history excludes announced future periods and rejects a fu
       startDateEndExclusive: '2027-01-01',
     }),
     /cannot be later than the dataset snapshot \(2026-08-02\)/,
+  );
+});
+
+test('historical lookup preserves reviewed New Jersey and New York branch transitions', () => {
+  const njBefore = historicalValue('new-jersey-judgment-rate', '1996-08-31');
+  assert.equal(njBefore.observation.effective_date, '1996-01-01');
+  assert.equal(njBefore.observation.value_text, '5.5%');
+  const njAfter = historicalValue('new-jersey-judgment-rate', '1996-09-01');
+  assert.equal(njAfter.observation.effective_date, '1996-09-01');
+  assert.equal(njAfter.observation.value_text, '5.5% / 7.5%');
+  assert.match(njAfter.branch_scope, /never chooses a tier/i);
+
+  const nyBefore = historicalValue('new-york-consumer-debt-judgment-rate', '2022-04-29');
+  assert.equal(nyBefore.observation.value, 9);
+  const nyAfter = historicalValue('new-york-consumer-debt-judgment-rate', '2022-04-30');
+  assert.equal(nyAfter.observation.value, 2);
+  assert.match(nyAfter.branch_scope, /consumer-debt branch against a natural person/i);
+});
+
+test('historical lookup refuses a documented gap, unreviewed series, and dates outside coverage', () => {
+  assert.throws(
+    () => historicalValue('nebraska-judgment-rate', '2001-03-14'),
+    /no verified observation covering this interval/i,
+  );
+  assert.throws(
+    () => historicalValue('california-judgment-rate', '2020-01-01'),
+    /historical lookup is not released/i,
+  );
+  assert.throws(
+    () => historicalValue('new-york-consumer-debt-judgment-rate', '1981-06-14'),
+    /verified coverage begins 1981-06-15/i,
+  );
+  assert.throws(
+    () => historicalValue('new-york-consumer-debt-judgment-rate', '2099-01-01'),
+    /verified coverage ends/i,
   );
 });

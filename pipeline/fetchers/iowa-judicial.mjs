@@ -5,6 +5,8 @@ import {
   IOWA_JUDICIAL_TABLE_URL,
 } from './iowa-judgment-history.mjs';
 
+export const IOWA_SOURCE_NAME = 'Iowa §668.13 post-judgment interest table';
+
 function textContent(value) {
   return value
     .replace(/<[^>]*>/g, ' ')
@@ -82,7 +84,7 @@ export async function fetchIowaCourtTable({ fetchImpl = fetch, log = () => {}, t
       retrieved_at,
       source: {
         id: 'ia-jud',
-        name: 'Iowa post-judgment interest table',
+        name: IOWA_SOURCE_NAME,
         publisher: 'Iowa Judicial Branch (official)',
         home_url: IOWA_JUDICIAL_TABLE_URL,
         license: 'Government edict — not subject to copyright.',
@@ -101,7 +103,7 @@ export async function fetchIowaCourtTable({ fetchImpl = fetch, log = () => {}, t
 
 export const IOWA_STATIC_SOURCE = Object.freeze({
   id: 'ia-jud',
-  name: 'Iowa post-judgment interest table and historical PDFs',
+  name: IOWA_SOURCE_NAME,
   publisher: 'Iowa Judicial Branch (official)',
   home_url: IOWA_JUDICIAL_TABLE_URL,
   license: 'Government edict — not subject to copyright.',
