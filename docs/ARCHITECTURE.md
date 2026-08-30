@@ -24,10 +24,13 @@ retrieval time. Source timestamps cannot move backward.
 
 ## 3. Coverage
 
-The current snapshot contains 114 series and 4,957 observations:
+The 2026-08-30 release baseline contains 114 series and 5,508 observations. The generated
+`data/exports/meta.json` is authoritative for the live count after automatic refreshes:
 
 - IRS §6621/§6603 categories and related federal tax rates.
-- Federal Reserve 1-year Treasury CMT and derived 28 U.S.C. §1961 post-judgment rates.
+- Federal Reserve 1-year Treasury CMT and derived 28 U.S.C. §1961 post-judgment rates. Treasury
+  observations retain the H.15 source-week Monday; each derived §1961 observation is keyed to the
+  following Monday when the rate applies to supported judgments.
 - Bank of England and E.C.B. policy series plus U.K./E.U. late-payment references.
 - Post-judgment references for 49 states plus D.C. (Mississippi has no uniform statutory default).
 - Prejudgment references for all 50 states plus D.C.
@@ -55,17 +58,19 @@ Every observation stores a source URL, effective date, retrieval/source-check ti
 method. State sources are classified as `official_primary`, `official_secondary`,
 `third_party_secondary`, or `unclassified`.
 
-All 102 state-law entities currently have `metadata.calculation.status = "reference_only"`.
-`pipeline/lib/state-rules.mjs` and the validator require an official primary source plus structured
-rate behavior, compounding, day count, validity date, complete branches, and verified accrual rules
-before a state rule can become `ready`. Missing metadata is unsafe by default.
+Of the 102 state-law entities, 101 currently have
+`metadata.calculation.status = "reference_only"`. Florida post-judgment is the sole `ready` state
+entity and the sole state-specific calculator release. `pipeline/lib/state-rules.mjs` and the
+validator require an official primary source plus structured rate behavior, compounding, day count,
+validity date, complete branches, and verified accrual rules before another state rule can become
+`ready`. Missing metadata is unsafe by default.
 
-The state calculator routes have four independent protections:
+State-specific calculator routes have four independent protections:
 
-1. The prototype renderer has a hard-disabled code-level readiness flag.
-2. They require an explicit build environment switch.
-3. They require calculator-ready entity metadata.
-4. Withheld comparison pages render `noindex` and are excluded from the sitemap.
+1. The code-controlled release registry must name a dedicated renderer and route.
+2. The matching entity must carry calculator-ready metadata.
+3. The entity renderer ID must exactly match the registry entry.
+4. Build and shared-contract checks reject an unapproved state calculator route.
 
 ## 5. Pipeline
 
@@ -95,7 +100,8 @@ Important modules:
 
 ## 6. Outputs
 
-- Human site: Astro 7 static build in `site/dist/` (191 HTML pages in the current baseline).
+- Human site: Astro 7 static build in `site/dist/` (195 HTML pages, including the real 404 page, and
+  194 indexable sitemap URLs in the current local baseline).
 - Static API: `machine/build-api.mjs` writes `site/public/api/v1/` from committed exports.
 - MCP: six read/calculation tools over the same snapshots, with slug validation before file access.
 - Search discovery: sitemap, robots, RSS changes feed, `llms.txt`, and `llms-full.txt`.
@@ -106,5 +112,10 @@ missing `noindex` gates, or prose whitespace damage after framework upgrades.
 ## 7. Runtime and automation
 
 The repository is standardized on Node 24+. Both GitHub workflows install from lockfiles with
-`npm ci`. The refresh workflow runs pipeline tests before fetching, and the deploy workflow runs site
-data-contract tests plus static-output verification before publishing.
+`npm ci`. The refresh workflow runs each Wednesday at 12:00 UTC, tests before fetching, and tests the
+newly generated snapshot again in a read-only job. An immutable, data-only artifact then crosses to
+a fresh commit job that installs no dependencies, executes no fetched content, validates artifact
+shape/scope, and has narrowly job-scoped repository-write permission. Its pinned, non-persisting
+checkout uses that permission internally, while `GH_TOKEN` is exposed to a shell only in the final
+commit/push step. Issue access is isolated in separate notification jobs. The deploy workflow runs
+site data-contract tests plus static-output verification before publishing.

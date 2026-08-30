@@ -74,8 +74,9 @@ historical anchor, a `DGS1`/`WGS1YR` mismatch, or a missing federal/CMT week in 
 4. Preserve source ID `fed-h15` so durable-history hydration remains one provenance branch. Do not
    hand-edit exported federal weeks or substitute a nearby week.
 5. Run `node --test fetchers/fed-h15.test.mjs`, the full pipeline suite, and `node run.mjs all`.
-   The current-formula post-judgment series must begin with rate week `2000-12-11`; from that week
-   forward it must have exact one-to-one dates and values with the CMT weekly series.
+   The current-formula post-judgment series must begin with application week `2000-12-18`. Every
+   derived observation must have the exact value of the CMT source-week observation seven days
+   earlier; identical-date pairing is incorrect because §1961 applies the preceding week's yield.
 
 ## Bank of England or E.C.B. failure
 

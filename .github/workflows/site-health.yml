@@ -1,0 +1,122 @@
+# Lightweight recurring production monitor. The deploy workflow retains the exhaustive exact-artifact
+# and all-sitemap-URL checks; this monitor watches the small public contract between releases.
+name: production-health
+
+on:
+  schedule:
+    # Off-minute and every six hours to reduce peak-hour scheduler delays.
+    - cron: "17 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: production-health
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Test the health checker
+        run: node --test machine/check-site-health.test.mjs
+
+      - name: Check the production contract
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://statuterates.com' }}
+          # Ten days covers a weekly refresh plus weekends, U.S. Monday holidays, and normal
+          # scheduled-run delay while still detecting a missed weekly data release promptly.
+          MAX_DATA_AGE_HOURS: "240"
+        run: node machine/check-site-health.mjs
+
+      - name: Open or update production-health alert
+        if: ${{ failure() }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ALERT_TITLE: "[automation] StatuteRates production health needs attention"
+          ALERT_LABEL: "automation:production-health"
+          ALERT_ASSIGNEE: ${{ github.repository_owner }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          CHECKED_SITE: ${{ vars.SITE_URL || 'https://statuterates.com' }}
+        run: |
+          gh label create "$ALERT_LABEL" \
+            --color "B60205" \
+            --description "The read-only StatuteRates production health check failed" \
+            --force
+
+          BODY=$(printf '%s\n' \
+            "The scheduled read-only StatuteRates production health check did not pass." \
+            "" \
+            "- Latest failed run: [Open the GitHub Actions run]($RUN_URL)" \
+            "- Checked site: \`$CHECKED_SITE\`" \
+            "" \
+            "The check is fail-closed and performs no deployment, data refresh, or upstream-source fetch. Review the failed step to identify the affected public resource.")
+
+          ISSUE_NUMBER=$(gh issue list \
+            --state all \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq 'map(.number) | max // empty')
+
+          if [ -n "$ISSUE_NUMBER" ]; then
+            ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state')
+            if [ "$ISSUE_STATE" = "CLOSED" ]; then
+              gh issue reopen "$ISSUE_NUMBER"
+            fi
+            gh issue edit "$ISSUE_NUMBER" \
+              --title "$ALERT_TITLE" \
+              --body "$BODY" \
+              --add-label "$ALERT_LABEL" \
+              --add-assignee "$ALERT_ASSIGNEE"
+          else
+            gh issue create \
+              --title "$ALERT_TITLE" \
+              --body "$BODY" \
+              --label "$ALERT_LABEL" \
+              --assignee "$ALERT_ASSIGNEE"
+          fi
+
+      - name: Close recovered production-health alert
+        if: ${{ success() }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ALERT_LABEL: "automation:production-health"
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create "$ALERT_LABEL" \
+            --color "B60205" \
+            --description "The read-only StatuteRates production health check failed" \
+            --force
+
+          ISSUE_NUMBERS=$(gh issue list \
+            --state open \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq '.[].number')
+
+          if [ -z "$ISSUE_NUMBERS" ]; then
+            echo "No open production-health alert needs to be closed."
+          else
+            for ISSUE_NUMBER in $ISSUE_NUMBERS; do
+              gh issue close "$ISSUE_NUMBER" \
+                --comment "The read-only production health check recovered successfully: $RUN_URL"
+            done
+          fi

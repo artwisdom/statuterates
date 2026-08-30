@@ -27,10 +27,13 @@ Repository variables used by `.github/workflows/deploy.yml`:
 | `ADSENSE_CLIENT` | Only after approval | `ca-pub-...` client identifier |
 | `ADSENSE_SLOT` | Optional after approval | Responsive display-unit slot |
 
-The refresh workflow runs weekly on Tuesday at 02:00 UTC (Monday evening in U.S. Eastern time),
-after the official weekly Federal Reserve publication. It tests the pipeline, hydrates a fresh
-SQLite database from committed JSON history, fetches permitted sources, validates, and commits exports
-only when they changed.
+The refresh workflow runs weekly on Wednesday at 12:00 UTC (Wednesday morning in U.S. Eastern time).
+That buffer covers the normal Monday Federal Reserve publication plus Tuesday releases delayed by a
+Monday federal holiday. It tests the pipeline, hydrates a fresh SQLite database from committed JSON
+history, fetches permitted sources, and validates without write authority. Only its immutable
+`data/exports` artifact crosses to a fresh commit job, which executes no dependency or fetched code,
+revalidates the artifact boundary, and commits exports only when they changed. A stale `main` base or
+any non-data path fails closed and requires a safe rerun.
 
 The deploy workflow installs and tests the pipeline, validates a fresh database hydrated from the
 committed exports, tests the site data contract and shared engine, rebuilds the static API, builds

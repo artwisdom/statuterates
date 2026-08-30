@@ -1,0 +1,63 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: deps(actions)
+
+  - package-ecosystem: npm
+    directory: /pipeline
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:15"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    groups:
+      pipeline-nonmajor:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: deps(pipeline)
+
+  - package-ecosystem: npm
+    directory: /site
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:30"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    groups:
+      site-nonmajor:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: deps(site)
+
+  - package-ecosystem: npm
+    directory: /machine/mcp-server
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:45"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    groups:
+      mcp-nonmajor:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: deps(mcp)

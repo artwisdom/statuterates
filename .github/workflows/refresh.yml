@@ -1,22 +1,25 @@
 # ============================================================================================
-# ACTIVE: refreshes official sources every Monday evening (U.S. Eastern) and commits validated
-# exports to main.
+# ACTIVE: refreshes official sources every Wednesday morning (U.S. Eastern) and commits validated
+# exports to main through a fresh, narrowly authorized job.
 #
-# Estimated usage: weekly run × ~3 min = ~13 min/month (GitHub free tier is 2,000 min/month).
+# The network/parser job is read-only. Its immutable data-only artifact crosses into a new runner
+# that installs no dependencies and executes no fetched content. GitHub permissions are job-scoped;
+# only the final commit/push shell step receives GH_TOKEN in its environment.
+# Estimated usage: weekly run x ~5 min = ~22 min/month (well inside the GitHub free tier).
 # ============================================================================================
 name: refresh-data
 
 on:
   schedule:
-    # Tuesday 02:00 UTC is Monday 22:00 EDT / 21:00 EST, after the Federal Reserve's weekly H.15
-    # publication window. DGS1 may already contain a partial newer week, but only WGS1YR-backed
-    # weeks can be exported.
-    - cron: "0 2 * * 2"
-  workflow_dispatch: {} # allow manual runs from the Actions tab
+    # Wednesday 12:00 UTC is 08:00 EDT / 07:00 EST. H.15 normally publishes Monday at 16:15
+    # Eastern, but federal holidays can delay the weekly release until Tuesday. The extra buffer
+    # protects against delayed downstream availability before WGS1YR is fetched. DGS1 may already
+    # contain a partial newer week, but only current WGS1YR-backed weeks can be exported.
+    - cron: "0 12 * * 3"
+  workflow_dispatch: {}
 
-permissions:
-  contents: write # to commit refreshed data/exports back to the repo
-  issues: write # maintain deduplicated refresh-failure and calculator legal-review issues
+# Every job declares only the authority it needs.
+permissions: {}
 
 concurrency:
   group: refresh-data
@@ -24,11 +27,17 @@ concurrency:
 
 jobs:
   refresh:
+    name: Fetch and validate without write authority
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version: "24"
           package-manager-cache: false
@@ -41,32 +50,143 @@ jobs:
         working-directory: pipeline
         run: npm test
 
-      - name: Run pipeline (fetch → validate → export)
+      - name: Run pipeline (fetch -> validate -> export)
         id: pipeline
         working-directory: pipeline
-        # `node run.mjs all` FAILS LOUD: a validation error exits non-zero and does NOT export,
-        # so broken/stale data can never be committed or deployed.
+        # `all` fails closed: a fetch, provenance, freshness, or validation error exits non-zero
+        # before an artifact can cross into the commit job.
         run: node run.mjs all
 
-      - name: Verify refreshed exports before commit
+      - name: Verify refreshed exports before handoff
         working-directory: pipeline
-        # Tests run once before network fetches to protect the fetch itself, then again against the
-        # newly generated snapshot. This prevents a valid new quarter/week from exposing a stale
-        # fixture only after the bot has already committed it.
         run: |
           npm test
           node run.mjs build
 
-      - name: Commit refreshed data (only if exports changed)
-        id: commit
-        if: success()
+      - name: Upload only the validated exports
+        id: upload
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: validated-data-exports-${{ github.run_id }}
+          path: data/exports
+          if-no-files-found: error
+          retention-days: 2
+
+  commit:
+    name: Commit validated exports from a fresh runner
+    needs: refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Refuse a stale or non-main refresh base
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
         run: |
+          set -euo pipefail
+          ACTUAL_SHA=$(git rev-parse HEAD)
+          if [ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]; then
+            echo "main moved after this refresh started, or this run did not start from main." >&2
+            echo "Expected $EXPECTED_SHA but fresh main is $ACTUAL_SHA. Re-run safely from main." >&2
+            exit 1
+          fi
+
+      - name: Download the immutable validated artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: validated-data-exports-${{ github.run_id }}
+          # Keep the untrusted staging tree physically outside the checkout. This also ensures the
+          # later git-scope assertion sees only changes actually applied to data/exports.
+          path: ${{ runner.temp }}/validated-exports
+
+      - name: Verify the data-only artifact boundary
+        env:
+          VALIDATED_EXPORTS: ${{ runner.temp }}/validated-exports
+        run: |
+          set -euo pipefail
+
+          for REQUIRED in entities.json latest.json meta.json; do
+            test -f "$VALIDATED_EXPORTS/$REQUIRED"
+          done
+          test -d "$VALIDATED_EXPORTS/entity"
+
+          SPECIAL=$(find "$VALIDATED_EXPORTS" -mindepth 1 ! -type d ! -type f -print -quit)
+          if [ -n "$SPECIAL" ]; then
+            echo "Artifact contains a symlink or special file: $SPECIAL" >&2
+            exit 1
+          fi
+
+          while IFS= read -r -d '' FILE; do
+            RELATIVE=${FILE#"$VALIDATED_EXPORTS"/}
+            case "$RELATIVE" in
+              entities.json|latest.json|meta.json) ;;
+              entity/*.json)
+                BASENAME=${RELATIVE#entity/}
+                if [[ ! "$BASENAME" =~ ^[a-z0-9-]+\.json$ ]]; then
+                  echo "Artifact contains an invalid entity filename: $RELATIVE" >&2
+                  exit 1
+                fi
+                ;;
+              *)
+                echo "Artifact escaped the data/exports contract: $RELATIVE" >&2
+                exit 1
+                ;;
+            esac
+          done < <(find "$VALIDATED_EXPORTS" -type f -print0)
+
+          find "$VALIDATED_EXPORTS" -type f -name '*.json' -print0 | xargs -0 -n 1 jq -e . >/dev/null
+
+          META_COUNT=$(jq -er '.entity_count | select(type == "number" and . > 0)' "$VALIDATED_EXPORTS/meta.json")
+          META_OBSERVATIONS=$(jq -er '.observation_count | select(type == "number" and . >= 0)' "$VALIDATED_EXPORTS/meta.json")
+          ENTITY_FILES=$(find "$VALIDATED_EXPORTS/entity" -maxdepth 1 -type f -name '*.json' | wc -l | tr -d ' ')
+          INDEX_COUNT=$(jq -er '.count' "$VALIDATED_EXPORTS/entities.json")
+          INDEX_LENGTH=$(jq -er '.entities | length' "$VALIDATED_EXPORTS/entities.json")
+          LATEST_COUNT=$(jq -er '.count' "$VALIDATED_EXPORTS/latest.json")
+          LATEST_LENGTH=$(jq -er '.observations | length' "$VALIDATED_EXPORTS/latest.json")
+
+          if [ "$ENTITY_FILES" != "$META_COUNT" ] || [ "$INDEX_COUNT" != "$META_COUNT" ] \
+             || [ "$INDEX_LENGTH" != "$META_COUNT" ] || [ "$LATEST_COUNT" != "$META_COUNT" ] \
+             || [ "$LATEST_LENGTH" != "$META_COUNT" ]; then
+            echo "Artifact entity counts disagree with meta.json ($META_COUNT)." >&2
+            exit 1
+          fi
+          if [ "$META_OBSERVATIONS" -lt "$META_COUNT" ]; then
+            echo "Artifact observation count is impossible." >&2
+            exit 1
+          fi
+
+          rsync --archive --delete "$VALIDATED_EXPORTS/" data/exports/
+          if [ -n "$(git status --porcelain -- . ':(exclude)data/exports/**')" ]; then
+            echo "Artifact application changed a path outside data/exports:" >&2
+            git status --short >&2
+            exit 1
+          fi
+
+      - name: Commit refreshed data only when exports changed
+        id: commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
           git config user.name "statuterates-bot"
           git config user.email "bot@users.noreply.github.com"
-          if [ -n "$(git status --porcelain data/exports)" ]; then
-            git add data/exports
-            git commit -m "data: weekly refresh $(date -u +%Y-%m-%d)"
-            git push
+          if [ -n "$(git status --porcelain -- data/exports)" ]; then
+            git add -- data/exports
+            if [ -n "$(git diff --cached --name-only -- . ':(exclude)data/exports/**')" ]; then
+              echo "Refusing to commit a path outside data/exports." >&2
+              exit 1
+            fi
+            git -c core.hooksPath=/dev/null commit -m "data: weekly refresh $(date -u +%Y-%m-%d)"
+            gh auth setup-git
+            git -c core.hooksPath=/dev/null push origin HEAD:main
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "No data changes this run."
@@ -74,67 +194,104 @@ jobs:
           fi
 
       - name: Record deployment handoff
-        if: success()
+        env:
+          EXPORTS_CHANGED: ${{ steps.commit.outputs.changed }}
         run: |
-          if [ "${{ steps.commit.outputs.changed }}" = "true" ]; then
-            echo "Validated exports changed and were pushed. deploy-site will run after this workflow completes."
+          if [ "$EXPORTS_CHANGED" = "true" ]; then
+            echo "Validated exports changed and were pushed. deploy-site runs after this workflow completes."
           else
-            echo "No export changes. deploy-site will still verify production from main after this workflow completes."
+            echo "No export changes. deploy-site still verifies production after this workflow completes."
           fi
+
+  legal-review-check:
+    name: Check calculator legal-review windows read-only
+    needs: commit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      due: ${{ steps.legal-review.outputs.due }}
+      title: ${{ steps.legal-review.outputs.title }}
+      body: ${{ steps.legal-review.outputs.body }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
 
       - name: Check calculator legal-review windows
         id: legal-review
-        if: success()
         run: node machine/legal-review-reminder.mjs
 
-      - name: Open calculator legal-review reminder
-        if: success() && steps.legal-review.outputs.due == 'true'
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          REVIEW_TITLE: ${{ steps.legal-review.outputs.title }}
-          REVIEW_BODY: ${{ steps.legal-review.outputs.body }}
-        run: |
-          OPEN_COUNT=$(gh issue list --state open --search "$REVIEW_TITLE in:title" --json number --jq length)
-          if [ "$OPEN_COUNT" = "0" ]; then
-            gh issue create --title "$REVIEW_TITLE" --body "$REVIEW_BODY"
-          else
-            echo "An open legal-review reminder already exists."
-          fi
-
-      # ---- Self-healing / diagnostics ----------------------------------------------------------
-      - name: Failure diagnostics
-        if: failure()
-        run: |
-          {
-            echo "## ❌ Data refresh failed"
-            echo ""
-            echo "The fetch, validation, export recheck, or test suite exited non-zero. A source may"
-            echo "have changed/blocked requests, or a test may need to follow a valid new period."
-            echo "Unvalidated exports cannot be committed or deployed (fail-loud by design)."
-            echo "A later auxiliary failure also prevents the refresh-triggered deployment."
-            echo ""
-            echo "**Next steps** (see docs/MAINTENANCE_RUNBOOK.md):"
-            echo "1. Open the failed step above and find the source, validation, or test error."
-            echo "2. If a source layout changed, update its fetcher in \`pipeline/fetchers/\`."
-            echo "3. If a valid new period exposed a stale fixture, make that test data-relative."
-            echo "4. If a source is temporarily down/rate-limiting, re-run this workflow."
-            echo "5. Re-run \`npm test\`, \`node run.mjs all\`, and \`node run.mjs build\` locally."
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Open or update refresh failure alert
-        if: ${{ failure() }}
+  legal-review-notify:
+    name: Open calculator legal-review reminder when due
+    needs: legal-review-check
+    if: ${{ needs.legal-review-check.outputs.due == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - name: Open one deduplicated legal-review reminder
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          ALERT_TITLE: "[automation] StatuteRates data refresh needs attention"
-          ALERT_LABEL: "automation:refresh-data-failure"
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          RUN_EVENT: ${{ github.event_name }}
-          RUN_REF: ${{ github.ref_name }}
-          RUN_SHA: ${{ github.sha }}
+          REVIEW_TITLE: ${{ needs.legal-review-check.outputs.title }}
+          REVIEW_BODY: ${{ needs.legal-review-check.outputs.body }}
+          REVIEW_ASSIGNEE: ${{ github.repository_owner }}
+        run: |
+          OPEN_COUNT=$(gh issue list --state open --search "$REVIEW_TITLE in:title" --json number --jq length)
+          if [ "$OPEN_COUNT" = "0" ]; then
+            gh issue create \
+              --title "$REVIEW_TITLE" \
+              --body "$REVIEW_BODY" \
+              --assignee "$REVIEW_ASSIGNEE"
+          else
+            echo "An open legal-review reminder already exists."
+          fi
+
+  refresh-alert:
+    name: Maintain the refresh health alert
+    needs: [refresh, commit, legal-review-check]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ALERT_TITLE: "[automation] StatuteRates data refresh needs attention"
+      ALERT_LABEL: "automation:refresh-data-failure"
+      ALERT_ASSIGNEE: ${{ github.repository_owner }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      RUN_EVENT: ${{ github.event_name }}
+      RUN_REF: ${{ github.ref_name }}
+      RUN_SHA: ${{ github.sha }}
+      REFRESH_RESULT: ${{ needs.refresh.result }}
+      COMMIT_RESULT: ${{ needs.commit.result }}
+      REVIEW_RESULT: ${{ needs.legal-review-check.result }}
+    steps:
+      - name: Write failure diagnostics
+        if: ${{ needs.refresh.result != 'success' || needs.commit.result != 'success' || needs.legal-review-check.result != 'success' }}
+        run: |
+          {
+            echo "## Data refresh failed closed"
+            echo ""
+            echo "Fetch/validate: $REFRESH_RESULT; artifact commit: $COMMIT_RESULT; legal review check: $REVIEW_RESULT."
+            echo "Unvalidated exports cannot be committed or deployed. See docs/MAINTENANCE_RUNBOOK.md."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open or update refresh failure alert
+        if: ${{ needs.refresh.result != 'success' || needs.commit.result != 'success' || needs.legal-review-check.result != 'success' }}
+        continue-on-error: true
         run: |
           gh label create "$ALERT_LABEL" \
             --color "B60205" \
@@ -145,11 +302,14 @@ jobs:
             "The scheduled or manually triggered StatuteRates refresh workflow did not complete successfully." \
             "" \
             "- Latest failed run: [Open the GitHub Actions run]($RUN_URL)" \
+            "- Fetch/validate job: \`$REFRESH_RESULT\`" \
+            "- Fresh commit job: \`$COMMIT_RESULT\`" \
+            "- Legal-review check: \`$REVIEW_RESULT\`" \
             "- Trigger: \`$RUN_EVENT\`" \
             "- Ref: \`$RUN_REF\`" \
             "- Commit: \`$RUN_SHA\`" \
             "" \
-            "The workflow's data gates fail closed, so unvalidated exports cannot be committed or deployed. Review the Actions run for diagnostics. This issue intentionally contains no fetched data, credentials, or log excerpts.")
+            "The workflow fails closed and crosses only a validated data artifact into its fresh commit runner. Review the Actions run for diagnostics.")
 
           ISSUE_NUMBER=$(gh issue list \
             --state all \
@@ -166,23 +326,20 @@ jobs:
             gh issue edit "$ISSUE_NUMBER" \
               --title "$ALERT_TITLE" \
               --body "$BODY" \
-              --add-label "$ALERT_LABEL"
+              --add-label "$ALERT_LABEL" \
+              --add-assignee "$ALERT_ASSIGNEE"
             gh issue comment "$ISSUE_NUMBER" --body "The refresh failed again: $RUN_URL"
           else
             gh issue create \
               --title "$ALERT_TITLE" \
               --body "$BODY" \
-              --label "$ALERT_LABEL"
+              --label "$ALERT_LABEL" \
+              --assignee "$ALERT_ASSIGNEE"
           fi
 
       - name: Close recovered refresh failure alert
-        if: ${{ success() }}
+        if: ${{ needs.refresh.result == 'success' && needs.commit.result == 'success' && needs.legal-review-check.result == 'success' }}
         continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          ALERT_LABEL: "automation:refresh-data-failure"
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           gh label create "$ALERT_LABEL" \
             --color "B60205" \

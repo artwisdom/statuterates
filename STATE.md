@@ -3,20 +3,25 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-08-16
+**Updated:** 2026-08-30
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
 
 ## Current product
 
-- 114 rate-series entities and 4,957 recorded historical observations.
-- 193 static HTML pages, including the real 404 page; the indexable sitemap remains 192 URLs.
+- Baseline captured 2026-08-30: 114 rate-series entities and 5,508 recorded historical observations.
+  The generated `data/exports/meta.json` is the live count between release-document updates.
+- 195 static HTML pages, including the real 404 page; the indexable sitemap contains 194 URLs.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
-- Weekly automated refresh for IRS, Federal Reserve, Bank of England, and E.C.B. data, plus live
+- Weekly automated refresh each Wednesday at 12:00 UTC for IRS, Federal Reserve, Bank of England,
+  and E.C.B. data, plus live
   extension checks for Texas, Alaska, Nebraska, Iowa, Florida, Utah, and Georgia state schedules and
   an independent Maine annual-formula integrity check. Five official IRS pages are also checked
   against the committed Form 1040 penalty-rule contract.
+- Refresh sandbox: network fetchers, parsers, dependencies, and validation run without write
+  authority. Only an immutable validated `data/exports` artifact reaches a fresh commit job, which
+  rejects stale bases, special files, invalid JSON, count mismatches, and out-of-scope paths.
 - 102 state-law entities across post- and prejudgment interest.
 - Calculator set in the current repository: general fixed-rate judgment/per-diem arithmetic,
   full-modern-history federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U.
@@ -164,12 +169,13 @@ verified in production.
 
 - The federal H.15 ingestion no longer depends on the Federal Reserve Board's retiring “Build Your
   Package” download. It fetches complete official FRED `DGS1` daily history from January 2000,
-  derives Monday-keyed weekly averages with exact decimal rounding, and requires every published
+  derives source-week Monday averages with exact decimal rounding, and requires every published
   `WGS1YR` week to reconcile before loading or exporting.
-- The modern §1961 series now contains 1,338 weekly rate records beginning December 11, 2000—the
-  preceding rate week needed for judgments entered when the current formula began on December 21.
-  The calculator rejects earlier judgments and refuses to substitute an older rate when the exact
-  preceding calendar week is absent.
+- The modern §1961 export records each derived rate under the following judgment-applicability week:
+  a post-judgment `effective_date` is seven days after its H.15 source-week Monday. Source history
+  begins December 11, 2000; the corresponding application history begins December 18, 2000. The
+  calculator selects the exact application week for a supported judgment, rejects judgments before
+  the December 21, 2000 formula transition, and never substitutes a nearby or older week.
 - `/calculators/post-judgment-interest/` now explains the formula transition, full source history,
   daily computation, annual compounding, exclusions, and the dual-feed integrity check. It remains
   browser-local and fail-closed.
@@ -320,14 +326,16 @@ verified in production.
 
 ## Verified checks
 
-- Pipeline: 131 tests.
-- Shared interest engine and release contracts: 40 tests.
-- Site data, copy, RSS, and monetization contracts: 18 tests.
-- MCP: 5 tests, including traversal protection, future-date refusal, compatibility fields, and the
+- Pipeline: 146 tests.
+- Shared interest engine and release contracts: 47 tests.
+- Site data, copy, RSS, and monetization contracts: 32 tests.
+- MCP: 7 tests, including traversal protection, future-date refusal, compatibility fields, and the
   full six-tool smoke test.
-- API conformance: 114 entity endpoints and 5,071 latest/history records checked.
-- Static build: 193 pages on Astro 7.
-- Indexable sitemap: 192 URLs.
+- Production health monitor: 8 fail-closed contract tests plus the live read-only check.
+- 2026-08-30 generated API baseline: 114 entity endpoints and 5,508 observations; the generated
+  metadata is authoritative for the live count after automatic refreshes.
+- Current local static build: 195 pages on Astro 7.
+- Current local indexable sitemap: 194 URLs.
 - Local mobile audits: 100 accessibility, 100 SEO, and 100 agentic browsing. Best practices is 77
   because of AdSense third-party-cookie/DevTools findings rather than first-party site code.
 - npm audit: zero known vulnerabilities in site, pipeline, and MCP production dependencies.
@@ -394,6 +402,7 @@ verified in production.
 - `docs/PHASE_5_PROGRESS.md`: federal source migration, Florida calculation contract, and release
   verification.
 - `docs/PHASE_7_AI_DISCOVERY.md`: official-provider research, AI-discovery decisions, and safeguards.
+- `docs/ROADMAP_TO_100.md`: evidence-gated Now/Next/Later plan and measurable exit criteria.
 - `shared/interest-calc.mjs`: calculation engine shared by the site and MCP.
 - `.github/workflows/refresh.yml`: tested weekly data refresh.
 - `.github/workflows/deploy.yml`: tested static deployment plus successful-refresh handoff.

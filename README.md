@@ -12,16 +12,24 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
 
 ## Current baseline
 
-- 114 rate series and 4,957 recorded observations across U.S. federal/state, U.K., and E.U. sources.
-- 193 static pages plus 114 JSON and 114 CSV entity endpoints. The two inherited unfinished
+- Baseline captured 2026-08-30: 114 rate series and 5,508 recorded observations across U.S.
+  federal/state, U.K., and E.U. sources. The generated `data/exports/meta.json` is the live count and
+  can grow during automatic refreshes without making this dated release receipt inaccurate.
+- 195 static HTML pages (including the real 404 page), a 194-URL indexable sitemap, and 114 JSON plus
+  114 CSV entity endpoints. The two inherited unfinished
   calculator placeholders are deliberately absent and return a real 404 until their legal models
   pass the same release gate as Florida.
-- Automated weekly refresh for machine-readable federal, U.K., and E.U. sources; live Texas OCCC,
+- Automated weekly refresh each Wednesday at 12:00 UTC for machine-readable federal, U.K., and E.U.
+  sources; live Texas OCCC,
   Alaska Court System, Nebraska Judicial Branch, Iowa Judicial Branch, Florida CFO, Utah State
   Courts, and Federal Reserve prime-rate checks extend or verify state schedules, while Maine's
   annual court-chart rate is independently checked against official H.15 inputs. Federal DGS1
-  history is independently reconciled against WGS1YR before publication. A separate five-page IRS
+  history is independently reconciled against WGS1YR before publication. The Treasury series keeps
+  the source-week Monday; the derived federal post-judgment series records the following Monday when
+  that rate applies to supported judgments. A separate five-page IRS
   integrity monitor protects the Form 1040 penalty rules used by the calculator.
+  The fetch/test job is read-only; only its immutable validated `data/exports` artifact crosses to a
+  fresh commit job with narrowly scoped repository-write authority.
 - Curated state references carry explicit source tiers and source-check dates.
 - The repository includes general fixed-rate judgment/per-diem, full-modern-history federal §1961,
   fail-closed U.K. late-payment plus a clearly labeled E.U. Directive benchmark, IRS
@@ -77,9 +85,11 @@ cd ../machine/mcp-server && npm ci && npm test
 | `shared/` | Dependency-free interest calculation engine and tests |
 | `machine/` | Static API generator, OpenAPI contract, and MCP server |
 | `docs/` | Architecture, deployment, maintenance, risk, and historical planning records |
+| `scratchpad/` | Retained, non-production research snapshots and one-time audit helpers; see its README |
 | `.github/workflows/` | Weekly data refresh and GitHub Pages deployment automation |
 
 Start with [STATE.md](STATE.md) for the current handoff,
+[docs/ROADMAP_TO_100.md](docs/ROADMAP_TO_100.md) for the evidence-gated improvement sequence,
 [docs/PHASE_1_AUDIT.md](docs/PHASE_1_AUDIT.md) for the research-backed growth roadmap, and
 [docs/PHASE_2_PROGRESS.md](docs/PHASE_2_PROGRESS.md) for the demand-led state-history and
 Search Console page-strengthening milestone,
