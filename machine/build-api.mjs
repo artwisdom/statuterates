@@ -98,7 +98,7 @@ function main() {
         page: `/rates/${release.entitySlug}/`,
         entity_json: `/api/v1/entity/${release.entitySlug}.json`,
         entity_csv: `/api/v1/entity/${release.entitySlug}.csv`,
-        historical_lookup: '/calculators/historical-rate-lookup/',
+        historical_lookup: `/calculators/historical-rate-lookup/?series=${encodeURIComponent(release.entitySlug)}`,
       },
     };
   });

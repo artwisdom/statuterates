@@ -133,6 +133,11 @@ const configJson = JSON.stringify({ series, currentAsOf }).replace(/</g, '\\u003
     const copyStatus = root.querySelector('[data-copy-status]');
     let copyText = '';
 
+    // Rate pages link here with a reviewed series slug. Ignore unknown query values rather than
+    // allowing them to alter the released lookup registry or manufacture an unsupported option.
+    const requestedSeries = new URLSearchParams(window.location.search).get('series');
+    if (requestedSeries && bySlug.has(requestedSeries)) seriesInput.value = requestedSeries;
+
     const invalidateResult = () => {
       result.hidden = true;
       error.hidden = true;

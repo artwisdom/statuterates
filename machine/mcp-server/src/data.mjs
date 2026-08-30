@@ -115,7 +115,7 @@ export function historicalValue(slug, date) {
     links: {
       page: `https://statuterates.com/rates/${rec.slug}/`,
       entity_json: `https://statuterates.com/api/v1/entity/${rec.slug}.json`,
-      historical_lookup: 'https://statuterates.com/calculators/historical-rate-lookup/',
+      historical_lookup: `https://statuterates.com/calculators/historical-rate-lookup/?series=${encodeURIComponent(rec.slug)}`,
     },
     disclaimer: 'Reference-only historical observation. Confirm the legal branch and controlling authority; this does not calculate accrued interest or a payoff.',
   };

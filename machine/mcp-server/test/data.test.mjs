@@ -60,6 +60,10 @@ test('historical lookup preserves reviewed New Jersey and New York branch transi
   const njBefore = historicalValue('new-jersey-judgment-rate', '1996-08-31');
   assert.equal(njBefore.observation.effective_date, '1996-01-01');
   assert.equal(njBefore.observation.value_text, '5.5%');
+  assert.equal(
+    njBefore.links.historical_lookup,
+    'https://statuterates.com/calculators/historical-rate-lookup/?series=new-jersey-judgment-rate',
+  );
   const njAfter = historicalValue('new-jersey-judgment-rate', '1996-09-01');
   assert.equal(njAfter.observation.effective_date, '1996-09-01');
   assert.equal(njAfter.observation.value_text, '5.5% / 7.5%');

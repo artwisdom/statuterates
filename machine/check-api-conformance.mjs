@@ -15,6 +15,11 @@ const OPENAPI = resolve(__dirname, 'openapi.yaml');
 const errors = [];
 const fail = (m) => errors.push(m);
 const readJson = (rel) => JSON.parse(readFileSync(join(API, rel), 'utf8'));
+const shiftIsoDays = (date, days) => {
+  const shifted = new Date(`${date}T00:00:00Z`);
+  shifted.setUTCDate(shifted.getUTCDate() + days);
+  return shifted.toISOString().slice(0, 10);
+};
 const has = (obj, keys, where) => {
   for (const k of keys) if (!(k in obj)) fail(`${where}: missing key "${k}"`);
 };
@@ -118,6 +123,9 @@ for (const series of historicalSeries) {
   if (!Array.isArray(series.official_authorities)) fail(`history-coverage.json ${series.entity_slug}: official_authorities must be an array`);
   if (!String(series.source_url || '').startsWith('https://')) fail(`history-coverage.json ${series.entity_slug}: source_url must use HTTPS`);
   if (series.links?.entity_json !== `/api/v1/entity/${series.entity_slug}.json`) fail(`history-coverage.json ${series.entity_slug}: wrong entity_json link`);
+  if (series.links?.historical_lookup !== `/calculators/historical-rate-lookup/?series=${encodeURIComponent(series.entity_slug)}`) {
+    fail(`history-coverage.json ${series.entity_slug}: historical lookup link must preselect the released series`);
+  }
   for (const gap of series.gaps || []) {
     has(gap, ['start', 'end', 'reason'], `history-coverage.json ${series.entity_slug} gap`);
     if (gap.start > gap.end) fail(`history-coverage.json ${series.entity_slug}: gap ends before it starts`);
@@ -158,6 +166,37 @@ for (const f of files) {
   }
   for (const arr of Object.values(d.history || {})) {
     for (const obs of arr) { has(obs, OBS_KEYS, `entity/${f} history`); obsChecked++; }
+  }
+}
+
+// The federal legal series uses judgment-applicability Mondays, while the Treasury reference
+// series uses the preceding H.15 source-week Mondays. Lock that seven-day contract at the API edge
+// so a valid-shaped but legally mislabeled snapshot cannot ship.
+const cmtFederal = readJson('entity/treasury-1-year-cmt.json').data;
+const pjFederal = readJson('entity/us-federal-post-judgment.json').data;
+const cmtFederalHistory = cmtFederal.history?.annual_rate || [];
+const pjFederalHistory = pjFederal.history?.annual_rate || [];
+const cmtFederalByDate = new Map(
+  cmtFederalHistory.map((observation) => [observation.effective_date, observation.value])
+);
+if (pjFederal.metadata?.date_semantics !== 'judgment-applicability-week-start'
+    || pjFederal.metadata?.source_week_offset_days !== -7) {
+  fail('federal post-judgment API metadata does not declare judgment-week/source-week semantics');
+}
+if (pjFederalHistory.length !== cmtFederalHistory.filter(
+  (observation) => observation.effective_date >= '2000-12-11'
+).length) {
+  fail('federal post-judgment API history is not one-to-one with eligible CMT source weeks');
+}
+for (const observation of pjFederalHistory) {
+  const sourceWeek = shiftIsoDays(observation.effective_date, -7);
+  if (!cmtFederalByDate.has(sourceWeek)) {
+    fail(`federal post-judgment ${observation.effective_date}: missing CMT source week ${sourceWeek}`);
+  } else if (Math.abs(cmtFederalByDate.get(sourceWeek) - observation.value) > 1e-9) {
+    fail(
+      `federal post-judgment ${observation.effective_date}: ${observation.value}% does not match ` +
+      `CMT source week ${sourceWeek}: ${cmtFederalByDate.get(sourceWeek)}%`
+    );
   }
 }
 

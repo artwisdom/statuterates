@@ -62,6 +62,9 @@ const historicalLookupRelease = historicalRateReleaseForEntitySlug(slug);
 const historicalLookupSeries = historicalLookupRelease
   ? historicalRateSeriesForEntity(entity, String(meta.generated_at).slice(0, 10), { sources: meta.sources })
   : null;
+const historicalLookupHref = historicalLookupSeries
+  ? `/calculators/historical-rate-lookup/?series=${encodeURIComponent(slug)}`
+  : null;
 
 // Prejudgment interest is a distinct metric with claim-type restrictions front and center, plus
 // two-way cross-links to the state's post-judgment page.
@@ -211,8 +214,8 @@ if (isStateRate) {
   );
   addRelated(pj ? '/prejudgment/' : '/states/', pj ? 'Compare prejudgment rules by state' : 'Compare judgment rates by state');
   if (!pj) addRelated('/states/judgment-interest-index/', 'State judgment rules and data coverage index');
-  if (historicalLookupRelease) {
-    addRelated('/calculators/historical-rate-lookup/', 'Look up this series for a verified historical date');
+  if (historicalLookupHref) {
+    addRelated(historicalLookupHref, 'Look up this series for a verified historical date');
   }
   addRelated('/guides/how-to-calculate-judgment-interest/', 'How to calculate judgment interest');
   if (!pj) addRelated('/states/highest-lowest/', 'Highest and lowest state judgment rates');
@@ -501,7 +504,7 @@ const jsonLd = [
           {' '}{historicalLookupSeries.branchScope}</p>
       </div>
       <ul class="clean">
-        <li><a href="/calculators/historical-rate-lookup/"><strong>Look up the value for a past date</strong></a></li>
+        <li><a href={historicalLookupHref}><strong>Look up the value for a past date</strong></a></li>
         <li><a href={`/api/v1/entity/${slug}.csv`}>Download the full CSV history</a></li>
         <li><a href={`/api/v1/entity/${slug}.json`}>Open the source-backed JSON record</a></li>
       </ul>

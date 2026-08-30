@@ -268,11 +268,12 @@ for (const file of htmlFiles) {
         || !html.includes('does not refund interest accrued or paid before'))) {
     errors.push(`${file}: New York consumer page must preserve its prospective 2022 transition`);
   }
+  const historicalSlug = route.split('/')[2];
   if (historicalLookupRateRoutes.has(route)
       && (!html.includes('data-historical-lookup-coverage')
-        || !html.includes('/calculators/historical-rate-lookup/')
-        || !html.includes(`/api/v1/entity/${route.split('/')[2]}.csv`))) {
-    errors.push(`${file}: released historical series is missing lookup and download tools`);
+        || !html.includes(`/calculators/historical-rate-lookup/?series=${historicalSlug}`)
+        || !html.includes(`/api/v1/entity/${historicalSlug}.csv`))) {
+    errors.push(`${file}: released historical series is missing its preselected lookup and download tools`);
   }
   const externalSourceLinkCount = [...html.matchAll(/<a\b[^>]*href="https:\/\/[^\"]+"[^>]*target="_blank"/g)].length;
   const minimumStateSourceLinks = route === '/states/mississippi/' ? 1 : 2;
