@@ -199,6 +199,24 @@ test('integrity check fails closed on a daily gap, cross-source mismatch, or wee
     .some((error) => /trails DGS1 by 2 weeks/.test(error)));
 });
 
+test('integrity check rejects a weekly feed that is one published period stale', () => {
+  const fixture = syntheticFullHistory({ today: '2026-01-14' });
+  const daily = parseFredCsv(fixture.dailyCsv, 'DGS1', { allowMissing: true });
+  const weekly = parseFredCsv(fixture.weeklyCsv, 'WGS1YR');
+  const staleWeekly = {
+    ...weekly,
+    rows: weekly.rows.slice(0, -1),
+    observations: weekly.observations.slice(0, -1),
+  };
+
+  assert.ok(
+    validateFredH15Integrity(daily, staleWeekly, { today: fixture.today })
+      .some((error) =>
+        /WGS1YR latest observation 2026-01-02 is 12 days old .* latest published weekly period may be missing/.test(error)
+      )
+  );
+});
+
 test('fetchH15 requires both feeds and returns only fully cross-checked daily history', async () => {
   const fixture = syntheticFullHistory();
   const responses = successfulResponses(fixture);

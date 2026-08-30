@@ -15,7 +15,7 @@ const COURTS_URL = 'https://www.uscourts.gov/court-programs/fees/post-judgment-i
 const FRED_DAILY_URL = 'https://fred.stlouisfed.org/series/DGS1';
 const FRED_WEEKLY_URL = 'https://fred.stlouisfed.org/series/WGS1YR';
 const FED_ANNOUNCEMENT_URL = 'https://www.federalreserve.gov/datadownload/Download.aspx?rel=H15';
-const MODIFIED = '2026-07-26';
+const MODIFIED = '2026-08-30';
 
 const meta = getMeta();
 const entity = getEntity('us-federal-post-judgment');
@@ -25,6 +25,12 @@ const weekly = historyFor('us-federal-post-judgment')
   .sort((a, b) => a.effective_date.localeCompare(b.effective_date));
 const buildDate = String(meta.generated_at || MODIFIED).slice(0, 10);
 const firstWeek = weekly[0];
+const sourceWeekFor = (applicabilityWeek) => {
+  const date = new Date(`${applicabilityWeek}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() - 7);
+  return date.toISOString().slice(0, 10);
+};
+const latestSourceWeek = sourceWeekFor(latest.effective_date);
 const schemaModified = [
   MODIFIED,
   String(latestPublished?.effective_date || '').slice(0, 10),
@@ -54,7 +60,7 @@ const faqs = [
   },
   {
     q: 'What is the current federal post-judgment interest rate?',
-    a: `The most recent recorded weekly value is ${latest.value_text} for the week beginning ${prettyDate(latest.effective_date)}. A specific judgment does not automatically use that latest number; it uses the exact preceding calendar week.`,
+    a: `The latest recorded rate is ${latest.value_text} for supported judgments in the week beginning ${prettyDate(latest.effective_date)}. It comes from the H.15 source week beginning ${prettyDate(latestSourceWeek)}. A specific judgment uses the exact applicability period containing its entry date.`,
   },
   {
     q: 'Does the federal judgment interest rate change after judgment?',
@@ -121,10 +127,11 @@ const jsonLd = [
   <EditorialCredit kind="calculator" reviewedOn={MODIFIED} />
 
   <div class="quick-answer">
-    <strong>Latest recorded weekly value:</strong> {latest.value_text} for the week beginning
-    {prettyDate(latest.effective_date)}. Coverage begins with judgments entered on
-    <strong>December 21, 2000</strong>. A specific judgment uses its exact preceding calendar week,
-    and the calculator stops rather than substitute an older week’s rate if that week is missing.
+    <strong>Latest recorded applicable rate:</strong> {latest.value_text} for supported judgments in
+    the week beginning {prettyDate(latest.effective_date)}, derived from the H.15 source week
+    beginning {prettyDate(latestSourceWeek)}. Coverage begins with judgments entered on
+    <strong>December 21, 2000</strong>. If the required applicability period is missing, the
+    calculator stops; it will not substitute an older week.
   </div>
 
   <InterestCalculator
@@ -170,8 +177,9 @@ const jsonLd = [
   <h2>Worked federal example</h2>
   <p>For a <strong>{money(100000)}</strong> judgment entered on
     <strong>January 8, 2025</strong>, the calculator selects the
-    <strong>{example.rate_percent}%</strong> weekly average for the week beginning
-    <strong>{prettyDate(example.rate_week_monday)}</strong>. Calculated to January 8, 2026, the
+    <strong>{example.rate_percent}%</strong> rate applicable in the judgment week beginning
+    <strong>{prettyDate(example.rate_effective_monday)}</strong>, based on the H.15 source week
+    beginning <strong>{prettyDate(example.rate_week_monday)}</strong>. Calculated to January 8, 2026, the
     {example.days}-day estimate is <strong>{money(example.interest)}</strong> of interest and
     <strong>{money(example.total)}</strong> total.</p>
   <p>That example spans one anniversary. A longer calculation compounds at each later anniversary
@@ -184,7 +192,8 @@ const jsonLd = [
     post-judgment rates used a different 52-week Treasury-bill auction method, so this calculator
     rejects earlier judgments rather than applying the modern formula backward.</p>
   <p>The dataset contains <strong>{weekly.length.toLocaleString('en-US')} exact weekly
-    observations</strong>, beginning {prettyDate(firstWeek.effective_date)}. Daily 1-year Treasury
+    applicability periods</strong>, beginning {prettyDate(firstWeek.effective_date)}. Each period is
+    paired with the preceding H.15 source week. Daily 1-year Treasury
     values come from the Federal Reserve’s FRED <a href={FRED_DAILY_URL}>DGS1 series</a>. The
     pipeline derives the calendar-week averages and independently compares them with the official
     <a href={FRED_WEEKLY_URL}>WGS1YR weekly series</a>. A missing or mismatched week blocks unsafe

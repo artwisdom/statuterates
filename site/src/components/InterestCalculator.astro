@@ -163,7 +163,8 @@ const uid = id || `calc-${kind}-${defaultSeries}`.replace(/[^a-z0-9_-]+/gi, '-')
         const cur = cfg.currency || '$';
         const rateLine = r.rate_percent !== undefined
           ? `Rate applied: ${r.rate_percent}%` +
-            (r.rate_week_monday ? ` (H.15 weekly average for the week beginning ${r.rate_week_monday})` : '') +
+            (r.rate_effective_monday ? ` for judgments in the week beginning ${r.rate_effective_monday}` : '') +
+            (r.rate_week_monday ? ` (H.15 source week beginning ${r.rate_week_monday})` : '') +
             (r.rate_effective_date ? ` (in force since ${r.rate_effective_date})` : '')
           : r.rates_used
             ? `Rates applied: ${r.rates_used.map((x) => `${x.value}% from ${x.effective_date}`).join(' · ')}`

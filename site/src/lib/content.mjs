@@ -62,7 +62,7 @@ under 28 U.S.C. §1961, which is why it is tracked here as a weekly series along
 U.S. federal courts. By statute (28 U.S.C. §1961) it equals the weekly-average 1-year Treasury constant
 maturity yield for the calendar week preceding the judgment — a value the U.S. Courts publish only as a
 formula, not a number, and that changes every week. This page computes it from the official Federal
-Reserve H.15 series and shows the weekly history.`,
+Reserve H.15 series and records each value under the following judgment-applicability week.`,
   },
   'boe-bank-rate': {
     tagline: 'The Bank of England’s headline interest rate.',

@@ -3,6 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  FEDERAL_PJ_FIRST_SOURCE_WEEK,
   FEDERAL_PJ_FIRST_RATE_WEEK,
   buildWeeklyAverages,
   buildCmtRecords,
@@ -39,7 +40,7 @@ test('Sunday dates fold back into the prior Monday week', () => {
   assert.deepEqual(weeks.map((w) => w.week), ['2026-06-29', '2026-07-06']);
 });
 
-test('post-judgment records equal the CMT weekly averages (the §1961 invariant)', () => {
+test('post-judgment records shift CMT source weeks to the following judgment week', () => {
   const weeks = buildWeeklyAverages([
     { date: '2026-06-29', value: 3.5 },
     { date: '2026-07-06', value: 4.2 },
@@ -48,13 +49,16 @@ test('post-judgment records equal the CMT weekly averages (the §1961 invariant)
   const pj = buildPostJudgmentRecords(weeks, src);
   assert.equal(cmt.observations.length, pj.observations.length);
   for (let i = 0; i < cmt.observations.length; i++) {
-    assert.equal(cmt.observations[i].effective_date, pj.observations[i].effective_date);
+    const expected = new Date(`${cmt.observations[i].effective_date}T00:00:00Z`);
+    expected.setUTCDate(expected.getUTCDate() + 7);
+    assert.equal(pj.observations[i].effective_date, expected.toISOString().slice(0, 10));
     assert.equal(cmt.observations[i].value_numeric, pj.observations[i].value_numeric);
   }
   // Confidence + provenance labeling differs, as designed.
   assert.equal(cmt.observations[0].confidence, 'high');
   assert.equal(pj.observations[0].confidence, 'medium');
   assert.match(pj.observations[0].method, /derived_28usc1961/);
+  assert.match(pj.observations[0].notes, /preceding source week beginning 2026-06-29/);
   assert.match(pj.observations[0].notes, /not legal advice/i);
 });
 
@@ -72,13 +76,22 @@ test('weekly averages use published half-up rounding for exact half-cent ties', 
   assert.equal(week.avg, 6.08);
 });
 
-test('current-formula federal post-judgment records begin with the 2000-12-11 rate week', () => {
+test('current-formula federal post-judgment records begin with the following applicability week', () => {
   const weeks = [
     { week: '2000-12-04', avg: 5.74, n: 5 },
-    { week: FEDERAL_PJ_FIRST_RATE_WEEK, avg: 5.73, n: 5 },
+    { week: FEDERAL_PJ_FIRST_SOURCE_WEEK, avg: 5.73, n: 5 },
   ];
   const cmt = buildCmtRecords(weeks, src);
   const pj = buildPostJudgmentRecords(weeks, src);
   assert.equal(cmt.observations.length, 2);
   assert.deepEqual(pj.observations.map((row) => row.effective_date), [FEDERAL_PJ_FIRST_RATE_WEEK]);
+});
+
+test('week ending August 21 maps to source week August 17 and PJ applicability week August 24', () => {
+  const weeks = [{ week: '2026-08-17', avg: 4, n: 5, published_date: '2026-08-21' }];
+  const cmt = buildCmtRecords(weeks, src);
+  const pj = buildPostJudgmentRecords(weeks, src);
+  assert.equal(cmt.observations[0].effective_date, '2026-08-17');
+  assert.equal(pj.observations[0].effective_date, '2026-08-24');
+  assert.equal(pj.observations[0].value_numeric, 4);
 });

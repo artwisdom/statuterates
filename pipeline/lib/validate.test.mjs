@@ -79,10 +79,36 @@ test('post-judgment != CMT for a week is a hard error', () => {
   const cmt = upsertEntity(db, { slug: 'treasury-1-year-cmt', name: 'CMT', entity_type: 'rate_series', jurisdiction: 'US' });
   const pj = upsertEntity(db, { slug: 'us-federal-post-judgment', name: 'PJ', entity_type: 'rate_series', jurisdiction: 'US' });
   upsertObservation(db, { ...base, entity_id: cmt, value_numeric: 3.95, value_text: '3.95%', effective_date: '2026-07-06' });
-  upsertObservation(db, { ...base, entity_id: pj, confidence: 'medium', value_numeric: 3.5, value_text: '3.5%', effective_date: '2026-07-06' });
+  upsertObservation(db, { ...base, entity_id: pj, confidence: 'medium', value_numeric: 3.5, value_text: '3.5%', effective_date: '2026-07-13' });
   const r = validate(db, { today });
   assert.equal(r.ok, false);
   assert.ok(r.errors.some((e) => /derivation broken/.test(e)));
+});
+
+test('same-date federal PJ and CMT rows are rejected because the legal row must be seven days later', () => {
+  const db = seed();
+  const cmt = upsertEntity(db, {
+    slug: 'treasury-1-year-cmt', name: 'CMT', entity_type: 'rate_series', jurisdiction: 'US',
+  });
+  const pj = upsertEntity(db, {
+    slug: 'us-federal-post-judgment', name: 'PJ', entity_type: 'rate_series', jurisdiction: 'US',
+  });
+  upsertObservation(db, {
+    ...base, entity_id: cmt, value_numeric: 4, value_text: '4%', effective_date: '2026-08-17',
+  });
+  upsertObservation(db, {
+    ...base, entity_id: pj, confidence: 'medium', value_numeric: 4, value_text: '4%',
+    effective_date: '2026-08-17',
+  });
+  const result = validate(db, { today: '2026-08-25' });
+  assert.equal(result.ok, false);
+  assert.ok(result.errors.some((error) => (
+    /post-judgment@2026-08-17: matching CMT source week 2026-08-10 is missing/.test(error)
+  )));
+  assert.ok(result.errors.some((error) => (
+    /CMT@2026-08-17: matching federal post-judgment row 2026-08-24 is missing/.test(error)
+  )));
+  db.close();
 });
 
 test('IRS §6621 spread mismatch is a hard error', () => {
@@ -286,13 +312,13 @@ test('federal weekly series require complete one-to-one coverage after the formu
   }
   upsertObservation(db, {
     ...base, entity_id: pj, confidence: 'medium', value_numeric: 4.03,
-    value_text: '4.03%', effective_date: '2026-07-06',
+    value_text: '4.03%', effective_date: '2026-07-13',
   });
 
   const result = validate(db, { today });
   assert.equal(result.ok, false);
   assert.ok(result.errors.some((error) => (
-    /CMT@2026-06-29: matching federal post-judgment row is missing/.test(error)
+    /CMT@2026-06-29: matching federal post-judgment row 2026-07-06 is missing/.test(error)
   )));
   db.close();
 });
@@ -310,13 +336,13 @@ test('current-formula federal post-judgment rows cannot predate the 2000 transit
   });
   upsertObservation(db, {
     ...base, entity_id: pj, confidence: 'medium', value_numeric: 5.74,
-    value_text: '5.74%', effective_date: '2000-12-04',
+    value_text: '5.74%', effective_date: '2000-12-11',
   });
 
   const result = validate(db, { today });
   assert.equal(result.ok, false);
   assert.ok(result.errors.some((error) => (
-    /current §1961 weekly-CMT formula cannot predate 2000-12-11/.test(error)
+    /current §1961 weekly-CMT formula cannot predate 2000-12-18/.test(error)
   )));
   db.close();
 });
@@ -333,12 +359,16 @@ test('paired federal rows cannot conceal a missing calendar week', () => {
     ['2026-06-22', 3.99],
     ['2026-07-06', 4.03],
   ]) {
-    for (const [entity_id, confidence] of [[cmt, 'high'], [pj, 'medium']]) {
-      upsertObservation(db, {
-        ...base, entity_id, confidence, value_numeric,
-        value_text: `${value_numeric}%`, effective_date,
-      });
-    }
+    upsertObservation(db, {
+      ...base, entity_id: cmt, confidence: 'high', value_numeric,
+      value_text: `${value_numeric}%`, effective_date,
+    });
+    const pjDate = new Date(`${effective_date}T00:00:00Z`);
+    pjDate.setUTCDate(pjDate.getUTCDate() + 7);
+    upsertObservation(db, {
+      ...base, entity_id: pj, confidence: 'medium', value_numeric,
+      value_text: `${value_numeric}%`, effective_date: pjDate.toISOString().slice(0, 10),
+    });
   }
 
   const result = validate(db, { today });
@@ -347,7 +377,7 @@ test('paired federal rows cannot conceal a missing calendar week', () => {
     /treasury-1-year-cmt: weekly history gap between 2026-06-22 and 2026-07-06/.test(error)
   )));
   assert.ok(result.errors.some((error) => (
-    /us-federal-post-judgment: weekly history gap between 2026-06-22 and 2026-07-06/.test(error)
+    /us-federal-post-judgment: weekly history gap between 2026-06-29 and 2026-07-13/.test(error)
   )));
   db.close();
 });
@@ -368,21 +398,24 @@ test('a recent-only legacy federal subset cannot satisfy the full-history proven
     jurisdiction: 'US',
     metadata: { statute: '28 U.S.C. §1961' },
   });
-  for (const [entity_id, confidence] of [[cmt, 'high'], [pj, 'medium']]) {
+  for (const [entity_id, confidence, effective_date] of [
+    [cmt, 'high', '2026-07-06'],
+    [pj, 'medium', '2026-07-13'],
+  ]) {
     upsertObservation(db, {
       ...base,
       entity_id,
       confidence,
       value_numeric: 4.03,
       value_text: '4.03%',
-      effective_date: '2026-07-06',
+      effective_date,
       method: entity_id === cmt ? 'weekly-avg-of-daily-h15' : 'derived_28usc1961_weekly_avg_h15_1yr_cmt',
     });
   }
   const result = validate(db, { today });
   assert.equal(result.ok, false);
   assert.ok(result.errors.some((error) => /full history must start 2000-01-03/.test(error)));
-  assert.ok(result.errors.some((error) => /modern history must start 2000-12-11/.test(error)));
+  assert.ok(result.errors.some((error) => /modern history must start 2000-12-18/.test(error)));
   assert.ok(result.errors.some((error) => /history is truncated/.test(error)));
   assert.ok(result.errors.some((error) => /published WGS1YR provenance/.test(error)));
   assert.ok(result.errors.some((error) => /metadata contract is missing/.test(error)));

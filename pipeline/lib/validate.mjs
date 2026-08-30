@@ -26,6 +26,7 @@ import { validateFloridaOfficialHistory, FLORIDA_OFFICIAL_HISTORY_COMPLETE_THROU
 import { validateIrsPenaltyRules } from '../fetchers/irs-penalty-rules.mjs';
 import {
   FED_H15_HISTORY_START_WEEK,
+  FEDERAL_PJ_FIRST_SOURCE_WEEK,
   FEDERAL_PJ_FIRST_RATE_WEEK,
 } from './normalize.mjs';
 
@@ -48,6 +49,12 @@ function isIsoDate(s) {
 
 function daysBetween(a, b) {
   return Math.round((new Date(a + 'T00:00:00Z') - new Date(b + 'T00:00:00Z')) / 86400000);
+}
+
+function shiftIsoDays(date, days) {
+  const shifted = new Date(`${date}T00:00:00Z`);
+  shifted.setUTCDate(shifted.getUTCDate() + days);
+  return shifted.toISOString().slice(0, 10);
 }
 
 export function validate(db, { today = new Date().toISOString().slice(0, 10) } = {}) {
@@ -511,15 +518,15 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     errors.push('Virginia/New Mexico: retired source-review-date observations must not reappear');
   }
 
-  // Federal derivation consistency. The current §1961 formula begins with the rate week
-  // 2000-12-11; before that, CMT reference history may exist without a post-judgment counterpart.
-  // From the transition forward the two series must have exactly one row per date and equal values.
-  // Merely checking overlapping rows lets hydration conceal a truncated or partially loaded series.
+  // Federal derivation consistency. CMT rows are keyed to the underlying H.15 source-week Monday;
+  // post-judgment rows are keyed to the following judgment-applicability Monday. Every modern CMT
+  // source week must therefore have exactly one equal-valued PJ row seven days later. Merely checking
+  // overlapping values lets hydration conceal an offset, truncated, or partially loaded series.
   const cmtRows = rows.filter((r) => r.entity_slug === 'treasury-1-year-cmt');
   const pj = rows.filter((r) => r.entity_slug === 'us-federal-post-judgment');
   const cmt = new Map(cmtRows.map((r) => [r.effective_date, r.value_numeric]));
   const pjByDate = new Map(pj.map((r) => [r.effective_date, r.value_numeric]));
-  const eligibleCmtRows = cmtRows.filter((r) => r.effective_date >= FEDERAL_PJ_FIRST_RATE_WEEK);
+  const eligibleCmtRows = cmtRows.filter((r) => r.effective_date >= FEDERAL_PJ_FIRST_SOURCE_WEEK);
   let pjChecked = 0;
   if (cmtRows.length || pj.length) {
     if (!cmtRows.length) errors.push('treasury-1-year-cmt: series is missing while federal post-judgment history exists');
@@ -590,6 +597,9 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
     if (pjMetadata?.input_series_id !== 'DGS1'
         || pjMetadata?.validation_series_id !== 'WGS1YR'
         || pjMetadata?.history_start !== FEDERAL_PJ_FIRST_RATE_WEEK
+        || pjMetadata?.source_history_start !== FEDERAL_PJ_FIRST_SOURCE_WEEK
+        || pjMetadata?.date_semantics !== 'judgment-applicability-week-start'
+        || pjMetadata?.source_week_offset_days !== -7
         || pjMetadata?.formula_effective_date !== '2000-12-21') {
       errors.push('us-federal-post-judgment: modern DGS1/WGS1YR formula metadata contract is missing');
     }
@@ -613,20 +623,27 @@ export function validate(db, { today = new Date().toISOString().slice(0, 10) } =
       );
       continue;
     }
-    if (!cmt.has(r.effective_date)) {
-      errors.push(`post-judgment@${r.effective_date}: matching CMT weekly average is missing`);
+    const sourceWeek = shiftIsoDays(r.effective_date, -7);
+    if (!cmt.has(sourceWeek)) {
+      errors.push(
+        `post-judgment@${r.effective_date}: matching CMT source week ${sourceWeek} is missing`
+      );
       continue;
     }
     pjChecked++;
-    if (Math.abs(cmt.get(r.effective_date) - r.value_numeric) > 1e-9) {
+    if (Math.abs(cmt.get(sourceWeek) - r.value_numeric) > 1e-9) {
       errors.push(
-        `post-judgment@${r.effective_date} (${r.value_numeric}%) != CMT weekly avg (${cmt.get(r.effective_date)}%) — derivation broken`
+        `post-judgment@${r.effective_date} (${r.value_numeric}%) != CMT source week ` +
+        `${sourceWeek} (${cmt.get(sourceWeek)}%) — derivation broken`
       );
     }
   }
   for (const r of eligibleCmtRows) {
-    if (!pjByDate.has(r.effective_date)) {
-      errors.push(`CMT@${r.effective_date}: matching federal post-judgment row is missing`);
+    const applicabilityWeek = shiftIsoDays(r.effective_date, 7);
+    if (!pjByDate.has(applicabilityWeek)) {
+      errors.push(
+        `CMT@${r.effective_date}: matching federal post-judgment row ${applicabilityWeek} is missing`
+      );
     }
   }
 

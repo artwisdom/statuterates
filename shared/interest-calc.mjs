@@ -81,7 +81,8 @@ export function mondayOf(iso) {
 
 /**
  * US federal post-judgment interest (28 U.S.C. §1961).
- * Rate: the weekly series entry for the calendar week PRECEDING the judgment week.
+ * Rate: the legal-series entry for the judgment's applicability week. Each entry already carries
+ * the H.15 value from the preceding source week.
  * Accrual: daily at rate/365 on the current base, compounded annually on the judgment anniversary.
  */
 export function federalPostJudgment({
@@ -97,13 +98,14 @@ export function federalPostJudgment({
   if (judgmentDate < validFrom) {
     throw new Error(`This federal calculator supports judgments entered on or after ${validFrom}`);
   }
-  const priorWeekMonday = isoOf(new Date(parseDate(mondayOf(judgmentDate)) - 7 * DAY_MS));
+  const judgmentWeekMonday = mondayOf(judgmentDate);
   const h = sortHistory(weeklyHistory);
-  const entry = h.find((p) => p.date === priorWeekMonday) || null;
+  const entry = h.find((p) => p.date === judgmentWeekMonday) || null;
   const rateEntry = entry;
   if (!rateEntry) {
     throw new Error(
-      `No exact H.15 weekly rate is available for the week of ${priorWeekMonday} (judgment ${judgmentDate}); an older week will not be substituted`
+      `No exact federal post-judgment rate is available for the judgment week of ${judgmentWeekMonday} ` +
+      `(judgment ${judgmentDate}); an older applicability period will not be substituted`
     );
   }
   const r = rateEntry.value / 100;
@@ -131,7 +133,8 @@ export function federalPostJudgment({
   return {
     method: '28 U.S.C. §1961: daily accrual (actual/365), compounded annually',
     rate_percent: rateEntry.value,
-    rate_week_monday: rateEntry.date,
+    rate_effective_monday: rateEntry.date,
+    rate_week_monday: isoOf(new Date(parseDate(rateEntry.date) - 7 * DAY_MS)),
     days,
     interest: round2(interest),
     total: round2(principal + interest),

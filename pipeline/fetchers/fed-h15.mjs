@@ -23,6 +23,11 @@ const FIRST_DAILY_DATE = '2000-01-03';
 const FIRST_WEEKLY_DATE = '2000-01-07';
 const MIN_DAILY_ROWS = 6_500;
 const MIN_WEEKLY_ROWS = 1_300;
+// WGS1YR normally publishes the completed Friday week on Monday afternoon. Ten days permits a
+// weekend or Monday holiday before the next publication, but rejects a full missing weekly period.
+// The scheduled refresh runs Wednesday, when a current observation should be no more than 5 days
+// old; keeping this date-only guard slightly wider also makes safe manual runs possible.
+const MAX_WEEKLY_AGE_DAYS = 10;
 
 // Stable published anchors spanning the imported period. The full daily/weekly reconciliation is
 // the primary integrity check; these anchors additionally catch a wrong-but-well-formed series.
@@ -344,7 +349,12 @@ export function validateFredH15Integrity(
   if (dailyAge < 0) errors.push(`DGS1 contains future observation ${latestDaily}`);
   else if (dailyAge > 10) errors.push(`DGS1 latest observation ${latestDaily} is ${dailyAge} days old`);
   if (weeklyAge < 0) errors.push(`WGS1YR contains future observation ${latestWeekly}`);
-  else if (weeklyAge > 17) errors.push(`WGS1YR latest observation ${latestWeekly} is ${weeklyAge} days old`);
+  else if (weeklyAge > MAX_WEEKLY_AGE_DAYS) {
+    errors.push(
+      `WGS1YR latest observation ${latestWeekly} is ${weeklyAge} days old ` +
+      `(maximum ${MAX_WEEKLY_AGE_DAYS}); the latest published weekly period may be missing`
+    );
+  }
 
   const weeklyByFriday = new Map(weekly.observations.map((point) => [point.date, point.value]));
   for (const [date, expected] of WGS1YR_ANCHORS) {

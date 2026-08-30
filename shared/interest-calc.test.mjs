@@ -63,12 +63,13 @@ test('mondayOf handles all weekdays incl. Sunday', () => {
 
 test('federal post-judgment uses the week PRECEDING the judgment week', () => {
   const weekly = [
-    { effective_date: '2026-06-29', value: 3.98 },
-    { effective_date: '2026-07-06', value: 3.95 },
+    { effective_date: '2026-07-06', value: 3.98 },
+    { effective_date: '2026-07-13', value: 3.95 },
   ];
-  // Judgment Wed 2026-07-08 (week of Jul 6) -> preceding week Mon Jun 29 -> 3.98%
+  // Judgment Wed 2026-07-08 uses the Jul 6 applicability row, sourced from week Mon Jun 29.
   const r = federalPostJudgment({ principal: 100000, judgmentDate: '2026-07-08', endDate: '2026-10-08', weeklyHistory: weekly });
   assert.equal(r.rate_percent, 3.98);
+  assert.equal(r.rate_effective_monday, '2026-07-06');
   assert.equal(r.rate_week_monday, '2026-06-29');
   assert.equal(r.days, 92);
   // 100000 * 3.98% * 92/365 = 1003.18
@@ -76,23 +77,55 @@ test('federal post-judgment uses the week PRECEDING the judgment week', () => {
   assert.equal(r.total, 101003.18);
 });
 
+test('federal applicability week preserves the underlying WGS1YR source week', () => {
+  const r = federalPostJudgment({
+    principal: 1000,
+    judgmentDate: '2026-08-24',
+    endDate: '2026-08-25',
+    weeklyHistory: [{ effective_date: '2026-08-24', value: 4 }],
+  });
+  assert.equal(r.rate_percent, 4);
+  assert.equal(r.rate_effective_monday, '2026-08-24');
+  assert.equal(r.rate_week_monday, '2026-08-17');
+});
+
 test('federal post-judgment fails closed before the modern rule and when the exact week is absent', () => {
   assert.throws(() => federalPostJudgment({
     principal: 1000,
     judgmentDate: '2000-12-20',
     endDate: '2000-12-21',
-    weeklyHistory: [{ effective_date: '2000-12-11', value: 5.5 }],
+    weeklyHistory: [{ effective_date: '2000-12-18', value: 5.5 }],
   }), /on or after 2000-12-21/);
   assert.throws(() => federalPostJudgment({
     principal: 1000,
     judgmentDate: '2026-07-08',
     endDate: '2026-07-09',
-    weeklyHistory: [{ effective_date: '2026-06-22', value: 4 }],
-  }), /No exact H\.15 weekly rate.*older week will not be substituted/);
+    weeklyHistory: [{ effective_date: '2026-06-29', value: 4 }],
+  }), /No exact federal post-judgment rate.*older applicability period will not be substituted/);
+});
+
+test('federal transition week rejects pre-rule dates but accepts December 21, 2000', () => {
+  const weeklyHistory = [{ effective_date: '2000-12-18', value: 5.73 }];
+  for (const judgmentDate of ['2000-12-18', '2000-12-19', '2000-12-20']) {
+    assert.throws(() => federalPostJudgment({
+      principal: 1000,
+      judgmentDate,
+      endDate: '2000-12-22',
+      weeklyHistory,
+    }), /on or after 2000-12-21/);
+  }
+  const result = federalPostJudgment({
+    principal: 1000,
+    judgmentDate: '2000-12-21',
+    endDate: '2000-12-22',
+    weeklyHistory,
+  });
+  assert.equal(result.rate_percent, 5.73);
+  assert.equal(result.rate_week_monday, '2000-12-11');
 });
 
 test('federal post-judgment rejects unsafe or fractional-cent principal amounts', () => {
-  const weeklyHistory = [{ effective_date: '2026-06-29', value: 3.98 }];
+  const weeklyHistory = [{ effective_date: '2026-07-06', value: 3.98 }];
   for (const principal of [1e308, 100.001]) {
     assert.throws(() => federalPostJudgment({
       principal,
@@ -104,7 +137,7 @@ test('federal post-judgment rejects unsafe or fractional-cent principal amounts'
 });
 
 test('federal post-judgment compounds annually (§1961(b))', () => {
-  const weekly = [{ effective_date: '2024-07-01', value: 5 }];
+  const weekly = [{ effective_date: '2024-07-08', value: 5 }];
   const r = federalPostJudgment({ principal: 100000, judgmentDate: '2024-07-08', endDate: '2026-07-08', weeklyHistory: weekly });
   // Year 1: 100000*5% = 5000 -> base 105000; Year 2: 105000*5% = 5250; total 10250
   assert.equal(r.interest, 10250);
