@@ -1,6 +1,6 @@
 // Original editorial copy per rate series (written here, not copied from any source). Keeps each
 // page substantive for readers and search engines, and states plainly what the number means and how
-// it is sourced/derived. `q` powers the FAQ rich-result and the human "what is it" line.
+// it is sourced/derived. `q` supplies the plain-language question used by page metadata and copy.
 
 import { removeTruncatedFragments } from '../../../shared/text-quality.mjs';
 
@@ -325,7 +325,7 @@ variable rate certified each January by the Secretary of State.`,
       scope: 'For a general judgment entered from July 1 through December 31, 2026, the rate is 8.75%. Tenn. Code §47-14-121(a)(1) uses the Department of Financial Institutions formula rate for June, less two percentage points; the official June 2026 history shows 10.75%. A statute, note, contract, or other writing can supply a different lawful rate under subsection (c).',
       accrual: 'The judgment-entry date selects the applicable six-month rate. Section 47-14-122 runs interest from the verdict. In a nonjury case, Tennessee appellate authority treats the practical equivalent of a verdict as the point when the court’s findings make the award sufficiently certain; that point can precede formal judgment entry. Remands and other procedural postures require separate analysis.',
       compounding: 'The selected rate is fixed for that judgment rather than changing with later six-month rates. Tennessee appellate opinions use the Code’s simple-interest definition in ordinary judgment-interest analysis, while contract cases require express agreement for compounding. The statutes do not state one universal postjudgment compounding method, so a payoff calculator remains withheld until day count, partial-payment allocation, and every exception branch are verified.',
-      history: 'Section 47-14-121(b)(3) requires the Administrative Office of the Courts to publish every six-month rate back to July 1, 2012. The local dataset currently contains only one observation, so it does not claim a complete history. The July 1, 2026 value can be reproduced from the official June formula-rate history: 10.75% less two points equals 8.75%.',
+      history: 'Section 47-14-121(b)(3) requires the Administrative Office of the Courts to publish every six-month rate back to July 1, 2012. The dataset preserves all {{history_points}} official AOC half-year selections from that date through the current period. Those published selections are retained directly rather than recomputed from the DFI weekly table; the July 1, 2026 value is also corroborated by the official June formula rate of 10.75% less two points.',
     },
   },
   "alabama-judgment-rate": {
@@ -617,7 +617,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     postSlug: "alabama-judgment-rate",
     appliesShort: "Prejudgment interest is available ONLY on liquidated / reasonably ascertainable sums.",
     applies: "Prejudgment interest is available ONLY on liquidated / reasonably ascertainable sums. (1) Contract claims (§ 8-8-8): recoverable as of right where the amount is certain or ascertainable at the time of breach; a bona fide dispute over the amount does not defeat it if the sum is computable by known standards.",
-    accrual: "From the day the money should have been paid or the act performed (§ 8-8-8 — \"from the day such money… should have been paid\"), i.e., the date of breach. Noncontract/tort claims (where allowed): from the date of injury/loss, provided the property injured or destroyed has an ascertainable money value.",
+    accrual: "For a qualifying contract claim, Ala. Code § 8-8-8 starts interest when the money or other thing should have been paid, or when the contracted act should have been performed. Other claim types require their own authority and accrual analysis; this page does not infer one universal start date.",
     compound: "Simple.",
   },
   "alaska-prejudgment-rate": {
@@ -672,7 +672,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     postSlug: "california-judgment-rate",
     appliesShort: "Prejudgment interest is NOT automatic on all claims.",
     applies: "Prejudgment interest is NOT automatic on all claims. MANDATORY (as of right) only where damages are \"certain, or capable of being made certain by calculation\" and the right vested on a particular day — i.e., liquidated/readily ascertainable claims (Civ. Code sec. 3287(a)). UNLIQUIDATED tort claims: interest is BARRED as of right; it is DISCRETIONARY with the jury, and only in actions for breach of a non-contract obligation or cases of oppression, fraud, or malice (Civ. Code sec. 3288).",
-    accrual: "For mandatory liquidated claims (sec. 3287(a)): from the day the right to recover vested / damages became certain (e.g., date of loss or breach). For contract default 10% (sec. 3289(b)): from the date of breach. For discretionary unliquidated contract interest (sec. 3287(b)): from a date fixed by the court, but no…",
+    accrual: "For mandatory liquidated claims under Civil Code §3287(a), interest starts on the day the right to recover vested and the damages were certain or calculable. For a qualifying contract with no stipulated legal rate, §3289(b) applies 10% after breach. For an unliquidated contract claim, §3287(b) lets the court choose a date before judgment, but never earlier than the filing date.",
     compound: "Simple. California prejudgment interest is computed as simple interest; compounding is not authorized absent a contract term providing for it.",
     formula: "Fixed statutory/constitutional percentages, not a published index. Contract w/o stipulated rate (post-1/1/1986): 10%/yr simple (Civ. Code 3289(b)). Other liquidated claims / discretionary tort: 7%/yr simple (Cal. Const. art. XV sec. 1).",
   },
@@ -985,7 +985,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     appliesShort: "Prejudgment interest in Nevada is generally limited to LIQUIDATED / readily ASCERTAINABLE sums.",
     applies: "Prejudgment interest in Nevada is generally limited to LIQUIDATED / readily ASCERTAINABLE sums. NRS 99.040 grants interest on: (a) contracts express or implied (other than book accounts); (b) settlement of book or store accounts from the day the balance is ascertained; (c) money received to the use/benefit of another and detained without consent; (d) unpaid wages/salary after demand. For OPEN/STORE accounts, interest may be awarded only by a court in an action on the debt (AG Op. 98-20).",
     accrual: "Under NRS 17.130(2), interest on the money judgment (the prejudgment-to-postjudgment period) runs from the time of SERVICE OF THE SUMMONS AND COMPLAINT until satisfied — except any amount representing FUTURE damages, which draws interest only from entry of judgment.",
-    compound: "Simple interest. The FID's official prime-rate publication (citing NRS 99.040 / AG Op. 98-20) states \"Simple interest may be imposed at the rate established in NRS 99.040.\" Nevada courts compute NRS 17.130 / 99.040 interest as simple, not…",
+    compound: "Simple interest. The Nevada Financial Institutions Division's official prime-rate publication states that simple interest may be imposed at the rate established in NRS 99.040. This page does not apply compounding.",
     formula: "Variable formula, published by the Nevada Commissioner of Financial Institutions (Financial Institutions Division): rate = (prime rate at the largest bank in Nevada on the immediately preceding Jan 1 or Jul 1) + 2 percentage points. FID publishes the ascertained prime rate semiannually.",
   },
   "new-hampshire-prejudgment-rate": {
@@ -1039,7 +1039,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     postSlug: "new-york-judgment-rate",
     appliesShort: "Prejudgment (pre-verdict) interest under CPLR 5001 is available AS OF RIGHT only for (1) breach of contract and (2) an \"act or omission depriving or otherwise interfering with title to, or…",
     applies: "Prejudgment (pre-verdict) interest under CPLR 5001 is available AS OF RIGHT only for (1) breach of contract and (2) an \"act or omission depriving or otherwise interfering with title to, or possession or enjoyment of, property\" (i.e., property-damage/conversion/many economic torts). It is thus effectively limited to liquidated or ascertainable pecuniary damages. In actions \"of an equitable nature,\" interest and its rate/accrual date are DISCRETIONARY with the court (CPLR 5001(a)).",
-    accrual: "Interest is computed \"from the earliest ascertainable date the cause of action existed\" (CPLR 5001(b)); for damages incurred later, from the date incurred; where damages arose at various times, interest may be computed on each item from its date or on all damages from \"a single reasonable intermediate date.\" The…",
+    accrual: "Under CPLR 5001(b), interest is computed from the earliest ascertainable date the cause of action existed. Damages incurred later run from the date incurred. If damages arose at various times, interest may be computed on each item from its date or on all damages from a single reasonable intermediate date.",
     compound: "Simple.",
   },
   "north-carolina-prejudgment-rate": {
@@ -1051,7 +1051,7 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     kindLabel: "Fixed by statute",
     postSlug: "north-carolina-judgment-rate",
     appliesShort: "Prejudgment interest is claim-type-restricted, not universal.",
-    applies: "Prejudgment interest is claim-type-restricted, not universal. CONTRACT actions (G.S. 24-5(a)): the amount awarded on the contract bears prejudgment interest from date of breach; the fact finder must separate principal from interest. Excludes penal bonds (G.S. 24-5(a1)), which bear interest only from entry of judgment. NON-CONTRACT / TORT actions (G.S.",
+    applies: "Prejudgment interest is claim-type-restricted, not universal. In contract actions under G.S. 24-5(a), the contract award bears interest from breach and the factfinder must separate principal from interest. Penal bonds instead bear interest from judgment entry under G.S. 24-5(a1). In other actions, G.S. 24-5(b) limits pre-entry interest to the compensatory-damages portion and starts it when the action is filed.",
     accrual: "From the DATE OF BREACH (G.S. 24-5(a)). Non-contract/tort actions: the compensatory-damages portion accrues from the DATE THE ACTION IS COMMENCED (filing), not the date of injury/loss, until the judgment is satisfied (G.S. 24-5(b)).",
     compound: "Simple (statutory legal rate applied per annum to the principal; no compounding provided by statute).",
   },
@@ -1077,8 +1077,8 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     kindLabel: "Same rate as post-judgment",
     postSlug: "ohio-judgment-rate",
     appliesShort: "Two distinct tracks. (1) CONTRACT / LIQUIDATED claims under ORC 1343.03(A): prejudgment interest is a matter of RIGHT (not discretionary) on money due and payable upon a written contract,…",
-    applies: "Two distinct tracks. (1) CONTRACT / LIQUIDATED claims under ORC 1343.03(A): prejudgment interest is a matter of RIGHT (not discretionary) on money due and payable upon a written contract, book account, settlement, or other instrument of writing — the creditor is entitled to interest at the 1343.03(A) statutory rate (or the contract rate if the written contract provides one). Ohio case law (Royal Elec. Constr.",
-    accrual: "Contract/liquidated (1343.03(A)): interest accrues from the date the money became due and payable (e.g., breach/when payment was owed). Tort (1343.03(C)(1)): if awarded, interest is computed from the date the cause of action accrued (for cases of admitted/deliberate liability) or, otherwise, from the earlier of (a)…",
+    applies: "Two distinct tracks. Under ORC 1343.03(A), a creditor is entitled to interest when money becomes due and payable on a written instrument, book account, settlement, verbal contract, or other covered obligation; a written contract can provide a different rate. Tort actions follow the separate §1343.03(C) conditions, including the court's post-verdict good-faith-settlement findings.",
+    accrual: "For a covered §1343.03(A) obligation, interest starts when the money becomes due and payable. For a qualifying tort award under §1343.03(C)(1), admitted-liability and deliberate-harm cases can run from accrual of the cause of action; other cases use the longer qualifying period measured from written notice or filing through judgment. Division (C)(2) excludes future damages.",
     compound: "Simple interest.",
     formula: "Federal short-term rate (IRC 1274) for July, rounded to nearest whole percent, plus 3% = statutory rate for the following calendar year (ORC 5703.47). Same as post-judgment rate. {{current_year}} rate = {{current_rate}}.",
   },
@@ -1224,8 +1224,8 @@ the Nebraska Judicial Branch's complete published change-point table from Januar
     kindLabel: "Discretionary",
     postSlug: "virginia-judgment-rate",
     appliesShort: "Prejudgment interest in Virginia is DISCRETIONARY as to both whether to award it and the date it commences — § 8.01-382 says the factfinder \"may provide for interest on any principal sum…",
-    applies: "Prejudgment interest in Virginia is DISCRETIONARY as to both whether to award it and the date it commences — § 8.01-382 says the factfinder \"may provide for interest on any principal sum awarded… and fix the period at which the interest shall commence.\" It is not mandatory.",
-    accrual: "Discretionary — the factfinder \"fixes the period at which the interest shall commence\" under § 8.01-382. It may be set as early as the date of loss/breach when interest is awarded, but there is no statutorily mandated accrual date; if no period is fixed, interest runs only from the date of entry of judgment / date the…",
+    applies: "Section 8.01-382 permits the final order, jury verdict, judgment, or decree to award interest on all or part of a principal sum and choose the period when that interest begins. A prejudgment award and its start date are therefore discretionary rather than automatic.",
+    accrual: "The factfinder or court chooses the prejudgment commencement period under § 8.01-382. If the final order, judgment, or decree does not provide for interest, the award or jury verdict instead bears judgment-rate interest from its entry or verdict date.",
     compound: "Simple (statutory judgment rate under § 6.2-302 is applied as simple interest; no statutory provision for compounding).",
   },
   "washington-prejudgment-rate": {
@@ -1364,9 +1364,11 @@ export function copyFor(slug, { observation = null, historyPoints = null } = {})
 // must not churn merely because Astro rebuilt. Add a slug here only when its rendered substance
 // materially changes.
 export const CONTENT_MODIFIED = Object.freeze({
+  'alabama-prejudgment-rate': '2026-09-03',
   'alaska-judgment-rate': '2026-07-26',
   'alaska-prejudgment-rate': '2026-07-26',
   'california-judgment-rate': '2026-08-21',
+  'california-prejudgment-rate': '2026-09-03',
   'florida-judgment-rate': '2026-07-26',
   'florida-prejudgment-rate': '2026-07-26',
   'eu-late-payment-reference': '2026-08-16',
@@ -1381,10 +1383,13 @@ export const CONTENT_MODIFIED = Object.freeze({
   'new-jersey-prejudgment-rate': '2026-08-21',
   'new-mexico-judgment-rate': '2026-08-16',
   'nevada-judgment-rate': '2026-08-22',
+  'nevada-prejudgment-rate': '2026-09-03',
   'new-york-consumer-debt-judgment-rate': '2026-08-21',
   'new-york-judgment-rate': '2026-08-21',
+  'new-york-prejudgment-rate': '2026-09-03',
+  'north-carolina-prejudgment-rate': '2026-09-03',
   'ohio-judgment-rate': '2026-08-16',
-  'ohio-prejudgment-rate': '2026-07-26',
+  'ohio-prejudgment-rate': '2026-09-03',
   'oklahoma-judgment-rate': '2026-08-22',
   'oregon-judgment-rate': '2026-08-20',
   'idaho-judgment-rate': '2026-08-20',
@@ -1396,12 +1401,13 @@ export const CONTENT_MODIFIED = Object.freeze({
   'west-virginia-judgment-rate': '2026-08-20',
   'texas-judgment-rate': '2026-07-26',
   'texas-prejudgment-rate': '2026-07-26',
-  'tennessee-judgment-rate': '2026-08-16',
+  'tennessee-judgment-rate': '2026-09-03',
   'us-federal-post-judgment': '2026-07-26',
   'uk-late-payment-commercial': '2026-08-16',
   'utah-judgment-rate': '2026-07-26',
   'washington-judgment-rate': '2026-07-26',
   'virginia-judgment-rate': '2026-08-16',
+  'virginia-prejudgment-rate': '2026-09-03',
   'wisconsin-judgment-rate': '2026-08-22',
 });
 

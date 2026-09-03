@@ -25,6 +25,7 @@ const EXPECTED_RELEASE_SLUGS = [
     'new-york-consumer-debt-judgment-rate',
     'north-dakota-judgment-rate',
     'oklahoma-judgment-rate',
+    'tennessee-judgment-rate',
     'texas-judgment-rate',
     'utah-judgment-rate',
     'west-virginia-judgment-rate',
@@ -42,6 +43,7 @@ test('branch-sensitive releases state their distinct date meanings and legal-era
   const minnesota = historicalRateReleaseForEntitySlug('minnesota-judgment-rate');
   const nevada = historicalRateReleaseForEntitySlug('nevada-judgment-rate');
   const oklahoma = historicalRateReleaseForEntitySlug('oklahoma-judgment-rate');
+  const tennessee = historicalRateReleaseForEntitySlug('tennessee-judgment-rate');
 
   assert.equal(minnesota.inputMeaning, 'Rate-schedule reference date');
   assert.match(minnesota.selectionRule, /general percentage follows the accrual year/);
@@ -49,6 +51,9 @@ test('branch-sensitive releases state their distinct date meanings and legal-era
   assert.match(nevada.branchScope, /causes of action arising on or after July 1, 1987/);
   assert.match(oklahoma.branchScope, /predecessor §727 regimes and current 12 O\.S\. §727\.1/);
   assert.match(oklahoma.selectionRule, /does not back-apply that method to earlier regimes/);
+  assert.equal(tennessee.inputMeaning, 'Judgment-entry date');
+  assert.match(tennessee.selectionRule, /selected rate remains fixed/);
+  assert.match(tennessee.selectionRule, /does not decide the separate accrual date/);
 });
 
 test('historical selector refuses bounds and an explicit source gap', () => {

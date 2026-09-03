@@ -147,6 +147,57 @@ test('repaired state pages keep complete structured legal explanations', () => {
   assert.equal(copyFor('louisiana-prejudgment-rate').kind, 'claim-dependent');
 });
 
+test('Tennessee copy follows the released official history without enabling payoff claims', () => {
+  const copy = copyFor('tennessee-judgment-rate', {
+    observation: { value: 8.75, value_text: '8.75%', effective_date: '2026-07-01' },
+    historyPoints: 29,
+  });
+
+  assert.match(copy.body, /8\.75%/);
+  assert.match(copy.postDetails.history, /29 official AOC half-year selections/);
+  assert.match(copy.postDetails.history, /July 1, 2012/);
+  assert.match(copy.postDetails.history, /rather than recomputed from the DFI weekly table/);
+  assert.match(copy.postDetails.compounding, /payoff calculator remains withheld/);
+  assert.doesNotMatch(text(copy), /only one observation|\{\{/);
+  assert.equal(contentModifiedFor('tennessee-judgment-rate'), '2026-09-03');
+});
+
+test('prejudgment rule details never expose imported sentence fragments', () => {
+  const cases = [
+    ['alabama-prejudgment-rate', 'accrual', /Other claim types require their own authority/],
+    ['california-prejudgment-rate', 'accrual', /never earlier than the filing date/],
+    ['nevada-prejudgment-rate', 'compound', /does not apply compounding/],
+    ['north-carolina-prejudgment-rate', 'applies', /G\.S\. 24-5\(b\)/],
+    ['ohio-prejudgment-rate', 'applies', /good-faith-settlement findings/],
+    ['virginia-prejudgment-rate', 'applies', /discretionary rather than automatic/],
+    ['new-york-prejudgment-rate', 'accrual', /single reasonable intermediate date/],
+  ];
+  const broken = /…|^and fix\b|should have been paid"\), i\.e\.|\(sec\.$|AG Op\.$|\(G\.S\.$|Elec\. Constr\.$/i;
+
+  for (const [slug, field, expected] of cases) {
+    const copy = copyFor(slug);
+    assert.match(copy[field], expected, slug);
+    assert.doesNotMatch(copy[field], broken, slug);
+  }
+});
+
+test('every prejudgment page has complete required rule fields after cleanup', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const exportPayload = JSON.parse(await readFile(
+    new URL('../../../data/exports/entities.json', import.meta.url),
+    'utf8',
+  ));
+
+  for (const entity of exportPayload.entities || exportPayload) {
+    const copy = copyFor(entity.slug);
+    if (!copy.prejudgment) continue;
+    for (const field of ['applies', 'accrual', 'compound']) {
+      assert.ok(String(copy[field] || '').trim(), `${entity.slug}.${field}`);
+      assert.doesNotMatch(String(copy[field]), /…/, `${entity.slug}.${field}`);
+    }
+  }
+});
+
 test('Michigan and New Jersey copy preserves branch mechanics and removes truncated legal prose', () => {
   const michigan = copyFor('michigan-judgment-rate', {
     observation: { value: 4.959, value_text: '4.959%', effective_date: '2026-07-01' },

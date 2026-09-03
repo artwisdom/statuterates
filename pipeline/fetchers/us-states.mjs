@@ -172,6 +172,15 @@ import {
   WISCONSIN_HISTORY_VERIFIED_AT,
   WISCONSIN_STATUTE_815_05_URL,
 } from './minnesota-wisconsin-interest-history.mjs';
+import {
+  buildTennesseeOfficialHistory,
+  TENNESSEE_AOC_HISTORY_URL,
+  TENNESSEE_DFI_FORMULA_HISTORY_URL,
+  TENNESSEE_HISTORY_VERIFIED_AT,
+  TENNESSEE_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+  TENNESSEE_OFFICIAL_HISTORY_START,
+  TENNESSEE_PUBLIC_CHAPTER_1043_URL,
+} from './tennessee-judgment-history.mjs';
 
 const VERIFIED_ON = '2026-07-08';
 const CALIFORNIA_RULES_VERIFIED_AT = '2026-08-21T00:00:00Z';
@@ -964,14 +973,26 @@ const STATES_2 = [
     notes: 'Post-judgment interest under C.R.S. §5-12-102(4)(b): 8% per annum COMPOUNDED ANNUALLY on general money judgments absent a contract rate. Personal-injury/tort judgments use a separate rate under §13-21-101, and appealed money judgments a variable rate under §5-12-106 (certified each January 1 by the Colorado Secretary of State). Verify the current variable rates at coloradosos.gov; not legal advice.' },
   { code: 'TN', name: 'Tennessee', slug: 'tennessee-judgment-rate', value: 8.75, kind: 'variable', asof: '2026-07-01',
     statute: 'Tenn. Code §47-14-121', srcId: 'tn-courts', srcName: 'Tennessee post-judgment interest (Tenn. Code §47-14-121)',
-    publisher: 'Tennessee Courts / Dept. of Financial Institutions (official)', url: 'https://www.tncourts.gov/tennessee-judgment-interest-rates',
-    verifiedOn: '2026-08-16', metadata: {
-      official_formula_history_url: 'https://www.tn.gov/content/tn/tdfi/tdfi-how-do-i/info/formula-rate/formula-rate-history.html',
-      official_history_url: 'https://www.tncourts.gov/tennessee-judgment-interest-rates',
+    publisher: 'Tennessee Courts / Dept. of Financial Institutions (official)', url: TENNESSEE_AOC_HISTORY_URL,
+    verifiedOn: TENNESSEE_HISTORY_VERIFIED_AT.slice(0, 10),
+    license: 'Official public rate table; normalized date/rate facts transcribed with attribution. Source-site terms may apply.',
+    confidence: 'high', method: 'official_aoc_half_year_history', metadata: {
+      official_formula_history_url: TENNESSEE_DFI_FORMULA_HISTORY_URL,
+      official_history_url: TENNESSEE_AOC_HISTORY_URL,
+      calculation: {
+        status: 'reference_only',
+        source_tier: 'official_primary',
+        reason: 'The official judgment-entry history is complete, but accrual trigger, day count, payments, compounding, contract and statutory exceptions, appeals, and satisfaction mechanics are not modeled end-to-end.',
+        renderer_supported: false,
+        rate_behavior: 'fixed_at_entry',
+        input_meaning: 'judgment_entry_date',
+        history_start: TENNESSEE_OFFICIAL_HISTORY_START,
+        curated_history_complete_through: TENNESSEE_OFFICIAL_HISTORY_COMPLETE_THROUGH,
+      },
       official_authorities: [
-        { label: 'Tennessee AOC judgment-interest rate history', url: 'https://www.tncourts.gov/tennessee-judgment-interest-rates' },
-        { label: 'Tennessee DFI formula-rate history', url: 'https://www.tn.gov/content/tn/tdfi/tdfi-how-do-i/info/formula-rate/formula-rate-history.html' },
-        { label: 'Public Chapter 1043 conference report for §47-14-121', url: 'https://www.capitol.tn.gov/Bills/107/CCRReports/CC0016.pdf' },
+        { label: 'Tennessee AOC judgment-interest rate history', url: TENNESSEE_AOC_HISTORY_URL },
+        { label: 'Tennessee DFI formula-rate history', url: TENNESSEE_DFI_FORMULA_HISTORY_URL },
+        { label: 'Public Chapter 1043 conference report for §47-14-121', url: TENNESSEE_PUBLIC_CHAPTER_1043_URL },
         { label: 'Tennessee Rule of Appellate Procedure 41', url: 'https://www.tncourts.gov/courts/rules-appellate-procedure/rules/rules-appellate-procedure-rules/rule-41-interest-judgments' },
         { label: 'Baker v. Grace (Tennessee Court of Appeals)', url: 'https://www.tncourts.gov/sites/default/files/elizabeth_ann_baker_v._jonathan_garrett_grace_-_m2021-00116-coa-r3-cv.pdf' },
         { label: 'Beaty v. Beaty (Tennessee Court of Appeals)', url: 'https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/961/BEATYJL.pdf' },
@@ -1589,6 +1610,21 @@ export function buildStateFixed({
         notes: point.effective_date === f.effective_date
           ? baseObservation.notes
           : `Oklahoma's official judgment-interest history publishes ${point.value_text} beginning ${point.effective_date}. Use the law in effect for that period: the current first-publication Wall Street Journal prime-plus-two formula should not be back-described as the formula for every historical row. Under current §727.1(C), the balance reprices each January 1 and includes previously accrued post-judgment interest. Not legal advice.`,
+      }));
+    }
+
+    if (f.entity.slug === 'tennessee-judgment-rate') {
+      return buildTennesseeOfficialHistory().map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_url: point.source_url,
+        confidence: 'high',
+        method: 'official_aoc_half_year_history',
+        notes: point.effective_date === f.effective_date
+          ? baseObservation.notes
+          : `Tennessee AOC publishes ${point.value_text} for a general judgment entered in the six-month period beginning ${point.effective_date}. The entry date selects the rate, and that rate remains fixed for the judgment. A statute, note, contract, or other qualifying writing can control instead; accrual and payoff mechanics require separate review. Not legal advice.`,
       }));
     }
 

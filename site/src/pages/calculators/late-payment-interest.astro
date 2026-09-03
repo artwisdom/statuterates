@@ -33,6 +33,20 @@ const euLastSupportedStart = dayBefore(euCoverageEndExclusive);
 const title = `UK Late Payment & EU Benchmark Calculator | ${meta.title}`;
 const description = `Estimate qualifying UK late-payment interest (${ukLatest?.value_text}) or run an illustrative EU Directive minimum benchmark from the recorded ECB reference (${euLatest?.value_text}).`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const faqs = [
+  {
+    q: 'How much interest can I charge on a late invoice in the UK?',
+    a: `Statutory interest on late commercial (B2B) payments is the Bank of England base rate on the relevant reference date plus 8 percentage points — currently ${ukLatest?.value_text}. The rate is fixed when the debt becomes overdue and interest accrues daily as simple interest.`,
+  },
+  {
+    q: 'Is UK statutory late-payment interest simple or compound?',
+    a: 'Simple — the Act implies a term of simple interest, computed daily (annual rate ÷ 365), fixed at the rate applicable when the debt became overdue. You may also claim fixed debt-recovery compensation (£40/£70/£100 by debt size).',
+  },
+  {
+    q: 'Can I use the EU result in every member state?',
+    a: 'No. The EU output is an ECB-plus-eight benchmark illustration, not a member-state statutory rate. Official country rates can use different national reference bases or more creditor-favorable rules, so confirm the country table and governing national law.',
+  },
+];
 
 const jsonLd = [
   {
@@ -50,23 +64,11 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'How much interest can I charge on a late invoice in the UK?',
-        acceptedAnswer: { '@type': 'Answer', text: `Statutory interest on late commercial (B2B) payments is the Bank of England base rate on the relevant reference date plus 8 percentage points — currently ${ukLatest?.value_text}. The rate is fixed when the debt becomes overdue and interest accrues daily as simple interest.` },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is UK statutory late-payment interest simple or compound?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Simple — the Act implies a term of simple interest, computed daily (annual rate ÷ 365), fixed at the rate applicable when the debt became overdue. You may also claim fixed debt-recovery compensation (£40/£70/£100 by debt size).' },
-      },
-      {
-        '@type': 'Question',
-        name: 'Can I use the EU result in every member state?',
-        acceptedAnswer: { '@type': 'Answer', text: 'No. The EU output is an ECB-plus-eight benchmark illustration, not a member-state statutory rate. Official country rates can use different national reference bases or more creditor-favorable rules, so confirm the country table and governing national law.' },
-      },
-    ],
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
   },
   {
     '@context': 'https://schema.org',
@@ -172,23 +174,12 @@ const jsonLd = [
 
   <h2>Frequently asked questions</h2>
   <div class="faq-list">
-    <details>
-      <summary>How much interest can I charge on a late invoice in the UK?</summary>
-      <p>For a qualifying commercial debt, the published statutory formula is the Bank of England
-        base rate for the relevant reference period plus eight percentage points. Verify that the
-        debt qualifies and that no contractual remedy changes the statutory entitlement.</p>
-    </details>
-    <details>
-      <summary>Is UK statutory late-payment interest simple or compound?</summary>
-      <p>The calculator applies simple daily interest and does not add accrued interest back to the
-        invoice principal. It reports fixed recovery compensation separately from interest.</p>
-    </details>
-    <details>
-      <summary>Can I use the EU result in every member state?</summary>
-      <p>No. It is an ECB-plus-eight benchmark illustration only. Country rates can use a different
-        national reference base or more creditor-favorable rule. Use the official country table and
-        the member state's implementing law to determine the relevant rate and remedy.</p>
-    </details>
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
   </div>
 
   <div class="disclaimer">Reference arithmetic only—not legal or financial advice. Verify the parties,

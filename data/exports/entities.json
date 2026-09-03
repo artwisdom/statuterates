@@ -2085,9 +2085,9 @@
           "effective_date": "2026-07-01",
           "source_id": "tn-courts",
           "source_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
-          "retrieved_at": "2026-08-16T00:00:00Z",
-          "confidence": "medium",
-          "method": "statute-variable",
+          "retrieved_at": "2026-09-03T00:00:00Z",
+          "confidence": "high",
+          "method": "official_aoc_half_year_history",
           "notes": "Tenn. Code §47-14-121 sets the general six-month judgment rate at the Department of Financial Institutions formula rate for the preceding June or December, less two percentage points. The official June 2026 formula history reports 10.75%, producing 8.75% for a general judgment entered July 1 through December 31, 2026. Another statute, note, contract, or writing can control. Tennessee appellate opinions use the Code’s simple-interest definition in ordinary judgment-interest analysis, while contract cases require express agreement for compounding; the statutes do not state one universal postjudgment compounding method. Calculator-grade day count, payment allocation, and every exception remain unmodeled. Verify applicability; not legal advice."
         }
       }

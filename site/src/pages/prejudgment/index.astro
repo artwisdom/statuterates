@@ -43,6 +43,16 @@ const counts = Object.fromEntries(KINDS.map((k) => [k.key, rows.filter((r) => r.
 const title = `${rateYear} Prejudgment Interest Rates by State (50-State Table)`;
 const description = `${rateYear} prejudgment interest rates for all 50 states and D.C., with cited statutes, claim restrictions, accrual notes, and links to each full reference.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const faqs = [
+  {
+    q: 'What is prejudgment interest?',
+    a: 'Prejudgment interest compensates a plaintiff for the loss of use of money between the date of loss or breach and the date judgment is entered. It is separate from post-judgment interest (which runs after judgment) and, in most states, is available only on liquidated or readily ascertainable amounts — not on unliquidated damages such as pain and suffering.',
+  },
+  {
+    q: 'Is prejudgment interest the same rate as post-judgment interest?',
+    a: 'Sometimes, but not always. A handful of states apply the same statutory rate to both; many set a different prejudgment rate; and several make prejudgment interest discretionary. Each state page here cites the controlling statute and states the rate and restrictions.',
+  },
+];
 
 const jsonLd = [
   {
@@ -66,18 +76,11 @@ const jsonLd = [
   {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'What is prejudgment interest?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Prejudgment interest compensates a plaintiff for the loss of use of money between the date of loss or breach and the date judgment is entered. It is separate from post-judgment interest (which runs after judgment) and, in most states, is available only on liquidated or readily ascertainable amounts — not on unliquidated damages such as pain and suffering.' },
-      },
-      {
-        '@type': 'Question',
-        name: 'Is prejudgment interest the same rate as post-judgment interest?',
-        acceptedAnswer: { '@type': 'Answer', text: 'Sometimes, but not always. A handful of states apply the same statutory rate to both; many set a different prejudgment rate; and several make prejudgment interest discretionary. Each state page here cites the controlling statute and states the rate and restrictions.' },
-      },
-    ],
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
   },
   {
     '@context': 'https://schema.org',
@@ -155,6 +158,16 @@ const jsonLd = [
     the <a href="/methodology/">methodology</a> for how each rate is sourced. Reference data only —
     not legal advice.</p>
 
+  <h2>Frequently asked questions</h2>
+  <div class="faq">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.q}</summary>
+        <p>{faq.a}</p>
+      </details>
+    ))}
+  </div>
+
   <style>
     .calc-link { margin: 4px 0 18px; font-size: 0.95rem; }
     .calc-link a { color: var(--green); font-weight: 600; text-decoration: none; border-bottom: 1px solid var(--line-strong); }
@@ -181,5 +194,8 @@ const jsonLd = [
     .tag.discretionary-with-default, .tag.discretionary-with-cap {
       background: #fbf1df; color: #865d18; border-color: rgba(134,93,24,0.25); }
     .tag.case-specific { background: #f1eafa; color: #68458f; border-color: rgba(104,69,143,0.25); }
+    .faq details { border-top: 1px solid var(--line); padding: 13px 0; }
+    .faq summary { cursor: pointer; font-weight: 650; }
+    .faq p { margin: 8px 0 0; color: var(--ink-soft); }
   </style>
 </BaseLayout>

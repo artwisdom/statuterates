@@ -28,7 +28,36 @@ test('state pages earn ad eligibility through distinct legal analysis or real hi
     isPrejudgment: true,
     hasDetailedRules: false,
     observationCount: 1,
+    prejudgmentRules: {
+      applies: 'This claim-specific rule applies only in the stated circumstances.',
+      accrual: 'Interest starts on the date selected by the controlling rule.',
+      compound: 'Simple interest.',
+    },
   }), true);
+});
+
+test('prejudgment pages fail closed when a required legal-rule field is missing or truncated', () => {
+  const complete = {
+    applies: 'This claim-specific rule applies only in the stated circumstances.',
+    accrual: 'Interest starts on the date selected by the controlling rule.',
+    compound: 'Simple interest.',
+  };
+  for (const field of Object.keys(complete)) {
+    assert.equal(ratePageMayRunAds({
+      isStateRate: true,
+      isPrejudgment: true,
+      hasDetailedRules: false,
+      observationCount: 5,
+      prejudgmentRules: { ...complete, [field]: '' },
+    }), false, field);
+  }
+  assert.equal(ratePageMayRunAds({
+    isStateRate: true,
+    isPrejudgment: true,
+    hasDetailedRules: false,
+    observationCount: 5,
+    prejudgmentRules: { ...complete, accrual: 'The imported sentence was cut off…' },
+  }), false);
 });
 
 test('original federal, tax, and international datasets remain eligible', () => {

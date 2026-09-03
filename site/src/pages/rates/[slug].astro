@@ -80,6 +80,11 @@ const monetizationReady = ratePageMayRunAds({
   isStateRate,
   isPrejudgment: pj,
   hasDetailedRules: Boolean(copy.postDetails),
+  prejudgmentRules: pj ? {
+    applies: copy.applies,
+    accrual: copy.accrual,
+    compound: copy.compound,
+  } : null,
   observationCount: totalPoints,
   explicitlyWithheld: copy.monetizationReady === false,
 });
@@ -194,6 +199,11 @@ const basisLabel = isCaseSpecific
             : latest?.confidence === 'high'
               ? 'Published value'
               : 'Derived value';
+const normalizeHeroLabel = (value) => String(value || '')
+  .normalize('NFKC')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .toLocaleLowerCase('en-US');
 const pageHeading = isStateRate
   ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest ${isCaseSpecific ? 'rules' : 'rate'}`
   : entity.name;
@@ -234,7 +244,8 @@ if (isStateRate) {
   addRelated('/guides/statutory-interest/', 'Statutory interest in plain English');
 }
 
-// JSON-LD: a Dataset for this series, a FAQPage for the current-value question, and breadcrumbs.
+// JSON-LD: the source-backed Dataset and visible breadcrumb trail. Rate pages do not render a
+// question-and-answer block, so they must not claim FAQPage markup for hidden generated copy.
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -260,24 +271,6 @@ const jsonLd = [
       encodingFormat: 'application/json',
       contentUrl: new URL(`/api/v1/entity/${slug}.json`, Astro.site).href,
     },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: copy.q,
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: isCaseSpecific
-            ? `${entity.name} has no uniform statewide percentage: the governing contract or the judge supplies the rate. ${copy.tagline}`
-            : isEuBenchmark
-            ? `As of ${prettyDate(latest?.effective_date)}, the recorded ECB reference input is ${latest?.value_text}. It supports a non-country-specific Directive minimum-benchmark illustration and is not a member-state statutory rate.`
-            : `${isProvisional ? 'Provisional estimate' : `As of ${prettyDate(latest?.effective_date)}`}: ${entity.name} is ${latest?.value_text} ${unitLabel}. ${copy.tagline}`,
-        },
-      },
-    ],
   },
   {
     '@context': 'https://schema.org',
@@ -343,7 +336,9 @@ const jsonLd = [
       <span class={`badge ${latest?.confidence === 'high' ? 'high' : 'medium'}`}>
         {basisLabel}
       </span>
-      {pj && copy.kindLabel && <span class="kind-chip">{copy.kindLabel}</span>}
+      {pj && copy.kindLabel && normalizeHeroLabel(copy.kindLabel) !== normalizeHeroLabel(basisLabel) && (
+        <span class="kind-chip">{copy.kindLabel}</span>
+      )}
     </span>
     {rateFeedHref && (
       <p class="rate-follow"><a href={rateFeedHref}>Follow recorded updates to this rate (RSS)</a></p>

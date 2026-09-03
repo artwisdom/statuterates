@@ -162,6 +162,15 @@ export const HISTORICAL_RATE_RELEASES = Object.freeze([
     coverageEndKind: 'metadata-end',
   }),
   freezeRelease({
+    entitySlug: 'tennessee-judgment-rate',
+    label: 'Tennessee post-judgment interest',
+    inputMeaning: 'Judgment-entry date',
+    branchScope: 'General Tennessee §47-14-121 judgment series; a statute, note, contract, or other qualifying writing can fix a different rate.',
+    selectionRule: 'The Tennessee AOC six-month rate in effect when judgment is entered. That selected rate remains fixed for the judgment; this lookup does not decide the separate accrual date or calculate a payoff.',
+    coverageNote: 'The complete official AOC history begins July 1, 2012.',
+    coverageEndKind: 'calendar-half',
+  }),
+  freezeRelease({
     entitySlug: 'texas-judgment-rate',
     label: 'Texas post-judgment interest',
     inputMeaning: 'Judgment-entry month',

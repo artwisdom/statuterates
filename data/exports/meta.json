@@ -9,7 +9,7 @@
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
   "generated_at": "2026-09-03T01:16:12.198Z",
   "entity_count": 114,
-  "observation_count": 5518,
+  "observation_count": 5546,
   "metrics": [
     "annual_rate"
   ],
@@ -829,9 +829,9 @@
       "name": "Tennessee post-judgment interest (Tenn. Code §47-14-121)",
       "publisher": "Tennessee Courts / Dept. of Financial Institutions (official)",
       "home_url": "https://www.tncourts.gov/tennessee-judgment-interest-rates",
-      "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-08-16",
-      "retrieved_at": "2026-08-16T00:00:00Z"
+      "license": "Official public rate table; normalized date/rate facts transcribed with attribution. Source-site terms may apply.",
+      "robots_status": "curated variable value; official source checked 2026-09-03",
+      "retrieved_at": "2026-09-03T00:00:00Z"
     },
     {
       "id": "tn-prejud",

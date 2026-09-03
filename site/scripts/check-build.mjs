@@ -68,12 +68,18 @@ const unmonetizableRateRoutes = new Set(getAllEntities()
   .filter((entity) => {
     const isStateRate = String(entity.region || '').startsWith('US States')
       && (entity.slug.endsWith('-judgment-rate') || entity.slug.endsWith('-prejudgment-rate'));
+    const copy = copyFor(entity.slug);
     return !ratePageMayRunAds({
       isStateRate,
       isPrejudgment: isPrejudgment(entity),
-      hasDetailedRules: Boolean(copyFor(entity.slug).postDetails),
+      hasDetailedRules: Boolean(copy.postDetails),
+      prejudgmentRules: isPrejudgment(entity) ? {
+        applies: copy.applies,
+        accrual: copy.accrual,
+        compound: copy.compound,
+      } : null,
       observationCount: (entity.history?.annual_rate || []).length,
-      explicitlyWithheld: copyFor(entity.slug).monetizationReady === false,
+      explicitlyWithheld: copy.monetizationReady === false,
     });
   })
   .map((entity) => `/rates/${entity.slug}/`));
@@ -161,9 +167,28 @@ function visibleMainWordCount(html) {
   return text.split(/\s+/).filter((word) => /[A-Za-z]/.test(word)).length;
 }
 
+function visiblePageText(html) {
+  return decodeHtmlText(html
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(?:nbsp|#160);/gi, ' ')
+    .replace(/\s+/g, ' '))
+    .trim();
+}
+
+function normalizeLabel(value) {
+  return decodeHtmlText(String(value || ''))
+    .normalize('NFKC')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLocaleLowerCase('en-US');
+}
+
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
   const route = routeForFile(file);
+  const pageText = visiblePageText(html);
   const outgoing = new Set();
   linkGraph.set(route, outgoing);
 
@@ -222,6 +247,17 @@ for (const file of htmlFiles) {
   }
   if (hasAdsenseUnit && !hasAdsenseLoader) {
     errors.push(`${file}: rendered ad unit is missing the AdSense loader`);
+  }
+  const adjacentRateLabels = html.match(
+    /<span class="badge[^"]*"[^>]*>\s*([^<]+?)\s*<\/span>\s*<span class="kind-chip"[^>]*>\s*([^<]+?)\s*<\/span>/i,
+  );
+  if (adjacentRateLabels
+      && normalizeLabel(adjacentRateLabels[1]) === normalizeLabel(adjacentRateLabels[2])) {
+    errors.push(`${file}: rate hero repeats the same basis and kind label`);
+  }
+  const appliesSection = html.match(/<section class="applies">([\s\S]*?)<\/section>/i)?.[1] || '';
+  if (/<p\b[^>]*>\s*<\/p>/i.test(appliesSection)) {
+    errors.push(`${file}: rendered legal-rule section contains an empty paragraph`);
   }
   const isEditorialContentRoute = /^\/rates\/[^/]+\/$/.test(route)
     || /^\/guides\/[^/]+\/$/.test(route)
@@ -317,6 +353,18 @@ for (const file of htmlFiles) {
       }
       if (route === '/' && structuredData.dateModified !== expectedDatasetModified) {
         errors.push(`${file}: homepage Dataset dateModified must equal the versioned export timestamp`);
+      }
+    }
+    if (structuredData?.['@type'] === 'FAQPage') {
+      for (const [index, question] of (structuredData.mainEntity || []).entries()) {
+        const questionText = String(question?.name || '').replace(/\s+/g, ' ').trim();
+        const answerText = String(question?.acceptedAnswer?.text || '').replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ').trim();
+        if (!questionText || !answerText) {
+          errors.push(`${file}: FAQPage item ${index + 1} is missing a complete question or answer`);
+        } else if (!pageText.includes(questionText) || !pageText.includes(answerText)) {
+          errors.push(`${file}: FAQPage item ${index + 1} is not fully visible in the rendered page`);
+        }
       }
     }
   }
@@ -427,6 +475,12 @@ for (const file of htmlFiles) {
     'Rate = (U.S.',
     'unified by 2017 amendment eff.',
     'Prejudgment = average U.S.',
+    '>should have been paid&quot;), i.e.,',
+    'For discretionary unliquidated contract interest (sec.</p>',
+    '(citing NRS 99.040 / AG Op.</p>',
+    'NON-CONTRACT / TORT actions (G.S.</p>',
+    'Ohio case law (Royal Elec. Constr.</p>',
+    '>and fix the period at which the interest shall commence.',
   ]) {
     if (html.includes(broken)) errors.push(`${file}: rendered legal copy contains a known truncated fragment`);
   }

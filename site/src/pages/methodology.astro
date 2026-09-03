@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta, getAllEntities, currentOf, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
+const sourceRows = Array.from(new Map((meta.sources || []).map((source) => [
+  [source.name, source.publisher, source.home_url].join('\u0000'),
+  source,
+])).values());
 const entities = getAllEntities().sort((a, b) => a.name.localeCompare(b.name));
 const title = `Methodology & sources — ${meta.title}`;
 const description = `The formulas, cited sources, confidence levels, validation rules, and coverage limits behind every ${meta.title} interest-rate series.`;
@@ -70,7 +74,7 @@ const description = `The formulas, cited sources, confidence levels, validation 
 
   <h2>Data sources</h2>
   <ul class="clean">
-    {meta.sources.map((s) => (
+    {sourceRows.map((s) => (
       <li><strong>{s.publisher}</strong> — {s.name}. <a href={s.home_url} rel="nofollow noopener" target="_blank">{s.home_url}</a>. {s.license}</li>
     ))}
   </ul>

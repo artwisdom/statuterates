@@ -2,6 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
+const sourceRows = Array.from(new Map((meta.sources || []).map((source) => [
+  [source.name, source.publisher, source.home_url].join('\u0000'),
+  source,
+])).values());
 const title = `About StatuteRates: sources, review & automation`;
 const description = `Why StatuteRates exists, who maintains it, and how official sources, editorial review, automation, AI assistance, validation, and corrections are handled.`;
 const jsonLd = {
@@ -50,7 +54,7 @@ const jsonLd = {
     not itself the controlling enactment is labeled official-secondary, and any state rule that has not
     reached calculator-grade certainty remains reference-only:</p>
   <ul class="clean">
-    {meta.sources.map((s) => (
+    {sourceRows.map((s) => (
       <li><strong>{s.name}</strong> — {s.publisher}. <a href={s.home_url} rel="nofollow noopener" target="_blank">{s.home_url}</a></li>
     ))}
   </ul>
