@@ -1,108 +1,178 @@
 # Evidence-gated roadmap toward 100
 
-**Planning baseline:** 74/100 composite readiness from the August 30, 2026 project review.
+**Reviewed:** 2026-09-03
 
-This score is an internal prioritization aid, not a prediction of rankings or income. Engineering,
-data quality, crawlability, safety, and unattended operation are largely controllable. Search-engine
-authority, traffic, AdSense approval, ad rates, and revenue depend on external systems and cannot be
-made 100/100 by code alone.
+**Current production:** commit `ebce83f`
 
-## Scorecard rules
+**Purpose:** make StatuteRates a durable, low-maintenance reference asset without confusing technical
+readiness with search rankings, AdSense approval, or income.
 
-| Area | What a high score requires | Evidence required before calling it complete |
-|---|---|---|
-| Data accuracy and legal safety | Official-source history, explicit date semantics, complete supported branches, fail-closed validation | Source receipts, fixtures, validator coverage, and exact calculator tests |
-| Automation and reliability | Scheduled refresh, idempotency, bounded retries, stale-data alarms, deployment handoff, recovery path | Successful scheduled runs, failure simulation, deduplicated alert, and runbook |
-| Technical SEO and AI discovery | Canonicals, structured data, sitemap, crawl access, fast rendered HTML, linked machine formats | Build checks plus public-edge checks; provider acceptance is recorded separately |
-| Content usefulness | Distinct, source-backed answers on pages with demonstrated demand; no doorway inventory | Search Console evidence, primary-source review, content-depth checks, and internal-link tests |
-| Security and maintainability | Least-privilege automation, dependency monitoring, protected release path, documented disclosure | CI receipts, dependency/security scans, branch-rule evidence, and recovery test |
-| Authority and distribution | Legitimate citations and relevant referring domains earned by a useful citable asset | Search Console/link evidence; submissions alone do not count as links |
-| Monetization | Policy-compliant useful inventory, good tool UX, approval, and measured RPM | AdSense dashboard evidence and revenue reports; eligibility code is not approval |
+No honest website can be permanently 100/100. Legal sources change, search demand moves, security
+controls age, and advertising results are controlled partly by outside platforms. A score of 100
+therefore means that the next relevant evidence gate is satisfied, not that future maintenance or
+commercial risk has disappeared.
 
-## Now — protect correctness and remove operational risk
+Scores use four evidence bands: 90–100 means the relevant behavior is measured and automated with
+only small residual gaps; 75–89 means a strong working system with material unfinished safeguards;
+50–74 means usable but externally unproven or meaningfully incomplete; below 50 means the required
+outcome is largely unproven. Candidate points are conditional and do not count until hosted tests and
+public-edge verification pass.
 
-Target: bring controllable engineering categories into the 90–95 range before expanding inventory.
+## Current scorecard
 
-1. **Ship the federal date-semantics repair.** Keep each Treasury observation on its H.15 source
-   week and each federal post-judgment observation on the following judgment-applicability week.
-   Release only after the full pipeline, shared engine, API, MCP, site build, and public-edge checks
-   pass against the exact commit.
-2. **Harden the weekly refresh.** Run Wednesday at 12:00 UTC so a Monday holiday and Tuesday H.15
-   release do not create an avoidable race. Reject a weekly input that is older than the allowed
-   source window; never estimate or carry a missing federal week. Keep upstream fetch and parsing in
-   a read-only job, and cross only a validated data artifact into a fresh commit job.
-3. **Add read-only pull-request CI and repository security hygiene.** Test every interface, use
-   least-privilege workflow permissions, enable supported dependency/code scanning, document private
-   vulnerability reporting, and add a lightweight public-health monitor. Apply branch rules only
-   after confirming the refresh bot can still perform its narrow validated commit path.
-4. **Make documentation mechanically truthful.** Keep current counts and date semantics tied to
-   generated artifacts; preserve dated milestone reports as historical receipts rather than silently
-   rewriting them.
+The first number is the verified production baseline. The second is the expected score only after
+the September quality-and-security candidate is published and its hosted checks pass.
 
-Exit gate: all local suites and builds pass, generated exports are deterministic except for explained
-source/provenance updates, the production deployment matches the approved commit, three sampled rate
-pages preserve their pre-release values except for the intended federal week-label correction, and a
-manual refresh run passes after deployment.
+| Area | Production | Candidate | What still prevents 100 |
+|---|---:|---:|---|
+| Data and legal correctness | 91 | 94 | Most state-law references still require periodic human re-review |
+| Historical coverage and data moat | 84 | 86 | Most state series still have one recorded observation |
+| Core user utility | 86 | 88 | Only Florida has a fully released state-specific calculator |
+| Content usefulness and editorial trust | 82 | 89 | Named editor credentials require owner-approved truthful identity; weak pages need demand-led research |
+| Technical SEO | 90 | 96 | Search-engine processing and field data remain external |
+| AI and machine discoverability | 96 | 97 | Citation by answer engines cannot be guaranteed by technical access |
+| Internal linking and crawl paths | 95 | 96 | Future routes must preserve the current no-orphan contract |
+| Performance and accessibility | 97 | 97 | No CrUX field sample yet; advertising remains the main third-party cost |
+| Automation and refresh reliability | 92 | 95 | Hosted refresh after the candidate release is still required |
+| Safe sandboxing and fail-closed behavior | 88 | 95 | The hardened source client is local until published and exercised by hosted automation |
+| Tests and release safety | 86 | 92 | Browser-level calculator journeys and independent deployment identity can improve |
+| Security and supply chain | 75 | 84 | GitHub dependency alerts, protected release rules, and private reporting remain provider-side gaps |
+| Monitoring and recovery | 83 | 86 | Monitoring still shares GitHub as a platform dependency; rollback exercise is not recent |
+| Maintainability | 77 | 82 | Several large data/content modules and manual freshness metadata remain costly to review |
+| Organic growth evidence | 72 | 72 | The latest finalized comparison is promising but still early and rankings weakened while reach grew |
+| Authority and earned distribution | 20 | 20 | No current evidence set proves relevant referring domains or independent citations |
+| AdSense and monetization readiness | 70 | 78 | Review is pending; approval, serving, page RPM, and revenue are unverified |
+| Passive-operation readiness | 85 | 91 | Provider alerts, periodic legal review, and external monitoring still require work |
 
-## Next — deepen pages already earning impressions
+Three roll-up scores keep unlike outcomes separate:
 
-Target: raise content usefulness and organic-growth readiness without creating thin URLs.
+- **Controllable product and engineering readiness:** 87/100 production; 92/100 after the candidate
+  passes hosted release checks.
+- **Search-growth readiness:** 78/100 production; 82/100 after the candidate. Rankings, indexing, and
+  backlinks must then be measured rather than inferred.
+- **Income-system readiness:** 54/100 production; 60/100 after the candidate. This is readiness to
+  monetize, not verified income. Progress toward the owner's $20,000/month goal is not scoreable
+  until AdSense reports real monetized pageviews, page RPM, and earnings.
 
-1. Use finalized Search Console page/query pairs to strengthen existing winners. The current research
-   queue is Texas, Tennessee, Washington, and Arizona; ordering must be refreshed from current data.
-2. Add only primary-source-backed substance: Texas branch navigation and historical-tool handoff,
-   Tennessee official six-month history if the complete court table can be verified, Washington rule
-   branches, and Arizona scope/exceptions. Preserve strong pages such as Maine unless new evidence
-   identifies a real weakness.
-3. Link historical pages directly into a preselected lookup experience so visitors can act on the
-   period they searched for. Do not release another calculator until its legal scope, rate schedule,
-   day count, compounding, payment allocation, and exceptions pass the Florida-grade contract.
-4. Publish one citable aggregate data package only after schema and provenance checks pass: a
-   50-state reference CSV, all-observations CSV, machine-readable data-package manifest, checksums,
-   and citation metadata. Keep raw machine resources outside the HTML sitemap.
+## Phase A — publish the focused quality-and-security candidate
 
-Exit gate: every changed claim cites an official source, no new indexable route is created without
-measured demand and unique utility, build/link/schema checks pass, and Search Console is given a full
-28-day comparison window before another broad content change.
+Goal: remove known trust defects and make unattended collection safer without adding thin URLs.
 
-## Later — earn authority, approval, and revenue
+1. Repair the seven source-backed legal-copy defects and fail the build if required prejudgment
+   fields are empty or visibly truncated.
+2. Remove hidden generated FAQ structured data from rate pages. On the two pages that legitimately
+   use FAQ markup, render the exact same questions and answers for visitors.
+3. Suppress duplicated rate-hero labels and add rendered-output regression checks.
+4. Make ad eligibility depend on complete visible legal analysis rather than the prejudgment page
+   type alone.
+5. Retry and then fail closed on inaccessible robots policies; enforce one absolute deadline across
+   response headers and bodies; re-check robots and throttling after every redirect; cap response
+   bodies, redirects, and actual attempts; expire robots decisions.
+6. Update the MCP production dependency lock to zero known advisories.
+7. Add Tennessee's complete, official 2012–2026 judgment-rate history to the existing page and
+   historical lookup only if the exact official rows and legal date semantics pass fixtures. Do not
+   enable a Tennessee payoff calculator or invent future rows.
 
-Target: improve the externally controlled categories with repeatable evidence rather than activity
-counts.
+Exit gate: every local suite, API build, documentation check, static-site build, ad-enabled build,
+and diff check passes; changes are separated into reviewable commits; nothing is live until the owner
+approves publishing.
 
-1. Offer the citable dataset to a short, relevant list of legal-research, court-resource, librarian,
-   and developer directories. No paid-link schemes, mass outreach, or fabricated endorsements.
-2. Measure relevant referring domains, non-brand impressions, qualified calculator use, returning
-   visitors, and API/download use. A submitted URL or accepted ping is not traffic, indexing, or a
-   backlink.
-3. Request AdSense review only after the current useful inventory is deployed, the sitewide quality
-   checkpoint passes, and sufficient recrawl time has elapsed. Keep unfinished, shallow, legal, error,
-   and noindex routes ad-free. Approval does not prove meaningful revenue.
-4. Optimize ads only from measured page-level RPM and user-experience data. Protect calculators and
-   source tables from intrusive placements; never trade trust or search usefulness for short-term ad
-   density.
-5. Consider paid/licensed API features only after repeat usage demonstrates demand. Preserve a useful
-   free reference layer and keep costs capped, observable, and reversible.
+## Phase B — prove the release in production
 
-External outcome goals should be tracked separately: relevant referring domains, indexed-page share,
-28-day clicks/impressions, AdSense status, page RPM, monthly revenue, and operational cost. These can
-move the business score toward 100, but none should be reported as achieved without provider or
-revenue evidence.
+Goal: turn a local candidate into a verifiable unattended release.
 
-## Permanent anti-goals
+1. Publish only the approved commits and record the exact commit-to-deployment identity.
+2. Run the hosted refresh on that exact revision. Treat an official-source outage or late
+   publication as a safe stop, not permission to estimate or carry a stale value.
+3. Verify the release marker, security headers, discovery files, ads.txt, APIs, crawler access, and
+   all canonical sitemap URLs from the public edge.
+4. Spot-check the corrected Alabama, California, Nevada, New York, North Carolina, Ohio, and Virginia
+   pages plus Tennessee history. Confirm the numerical rates did not change except through a
+   separately validated data refresh.
+5. Leave the current AdSense review alone. As of September 3 it remains `Getting ready`, ownership is
+   verified, consent messages are active, and the public ads.txt is correct even though AdSense's
+   cached indicator still says not found.
 
-- No mass-generated state calculator or statute doorway pages.
-- No rate, rule, authority, indexing, backlink, approval, traffic, or revenue claim without evidence.
-- No guessed legal branch, invented historical date, stale-rate carry-forward, or silent source
-  substitution.
-- No deployment from an unverified commit and no broad Cloudflare/GitHub permission expansion.
-- No promise that a technical release will produce rankings or passive income.
+Exit gate: hosted refresh, deployment, CodeQL, and six-hour production health are green for the exact
+commit, and the public pages match the approved local artifact.
 
-## Review cadence
+## Phase C — close the controllable 80-to-95 gaps
 
-- Every Wednesday: automated source refresh and fail-closed validation.
-- After any growth release: exact-commit production verification and a 28-day observation window.
-- Monthly: compare Search Console, analytics, uptime, referring domains, AdSense status, and operating
-  cost; move an item forward only when the evidence gate is met.
-- Semi-annually, or before expiry: re-review every released calculator's legal contract. Florida's
-  current review expires January 26, 2027 unless reverified.
+Goal: make future work safer and more evidence-driven before adding inventory.
+
+1. Add a mechanical source-review registry with cadence, last-reviewed date, due date, owner, and a
+   deduplicated overdue alert for every manually curated state source.
+2. Add browser tests for the highest-risk user journeys: historical lookup, federal calculator,
+   Florida calculator, Form 1040 calculator, copy/download actions, mobile navigation, and an
+   ad-eligible versus ad-ineligible route.
+3. Validate OpenAPI semantics against representative responses, not only endpoint presence.
+4. Add an independent low-cost uptime check outside GitHub and document one rollback drill.
+5. Enable supported GitHub vulnerability alerts/security updates and a protected release path only
+   after confirming the refresh bot retains its narrow validated commit route. These are explicit
+   owner/provider changes, not repository edits.
+6. Split oversized content and fetcher modules by legal jurisdiction/source while preserving exact
+   output snapshots.
+
+Exit gate: source review cannot silently expire, critical browser journeys run in CI, external
+monitoring has a receipt, and repository settings no longer leave known security controls disabled.
+
+## Phase D — compound search authority without doorway pages
+
+Goal: strengthen the URLs Google is already testing and create something genuinely worth citing.
+
+1. Compare finalized, equal 28-day Search Console periods monthly. Promote only existing pages with
+   demonstrated impressions/clicks and a specific primary-source content gap.
+2. Deepen one winning state at a time with authoritative history, claim branches, worked examples,
+   and a preselected historical lookup. Tennessee is first because the latest finalized report showed
+   the largest page gain and its complete official history is available.
+3. Audit source reuse rights, then publish one versioned aggregate data package with manifest,
+   checksums, citation metadata, and clear terms. Keep raw machine files outside the HTML sitemap.
+4. Offer that citable asset to a small relevant list of court-resource, law-library, legal-aid, and
+   developer directories. No bought links, mass outreach, or fabricated endorsements.
+5. Add a new indexable route or state calculator only when it has measured demand, unique utility,
+   complete official sources, exact calculation rules, and a dedicated release contract.
+
+Exit gate: the page-level evidence selected the work, every added claim is source-backed, the release
+adds unique utility, and authority is measured by verified relevant citations/referring domains—not
+submission counts.
+
+## Phase E — optimize income from measured behavior
+
+Goal: convert useful traffic into durable revenue without harming trust or search performance.
+
+1. Wait for the pending AdSense decision. If rejected, repair only the documented issue and submit
+   once after public verification. If approved, first record a clean baseline of monetized pageviews,
+   page RPM, and revenue.
+2. Segment calculators, guides, directories, and rate pages in AdSense reporting. Run one controlled
+   placement/density experiment at a time, protecting calculator inputs, source tables, and Core Web
+   Vitals.
+3. Calculate revenue only as `monetized pageviews / 1,000 * measured page RPM`; never substitute
+   Cloudflare unique visitors or Search Console clicks.
+4. Improve retention through the existing RSS feeds and update workflows before adding an email list
+   with consent, storage, and maintenance obligations.
+5. Consider a higher-tier ad partner or paid API/SLA only after verified traffic or inbound use meets
+   that provider's current requirements. Recheck terms and costs at decision time.
+
+Exit gate: real provider reports demonstrate positive RPM and net revenue, experiments preserve user
+experience, operating cost remains capped, and maintenance time is measured.
+
+## Permanent rules
+
+- Never guess a legal rate, missing date, historical row, claim branch, or source meaning.
+- Never turn a headline percentage into a payoff calculator without the full legal/calculation model.
+- Never publish hidden content, misleading structured data, fake authorship, or mass-generated doorway
+  pages.
+- Never treat build success as indexing, a submitted URL as a backlink, traffic as ad impressions, or
+  monetization wiring as revenue.
+- Never give untrusted source-fetching code write credentials or let a partial feed erase the last
+  validated history.
+- Never deploy from an unverified commit or broaden provider permissions without an explicit gate.
+
+## Cadence
+
+- Wednesday: automated source refresh, validation, deployment handoff, and public health.
+- Every six hours: production contract monitor.
+- Monthly: finalized Search Console comparison, Cloudflare traffic, AdSense status, relevant links,
+  operating cost, and confirmed revenue.
+- Quarterly: state-source review registry, calculator legal contracts, dependencies, provider
+  security settings, and recovery evidence.

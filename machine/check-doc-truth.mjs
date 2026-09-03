@@ -11,9 +11,9 @@ const DIST = join(ROOT, 'site', 'dist');
 const EXPORTS = join(ROOT, 'data', 'exports');
 const failures = [];
 const BASELINE = Object.freeze({
-  date: '2026-08-30',
+  date: '2026-09-03',
   entityCount: 114,
-  observationCount: 5508,
+  observationCount: 5546,
 });
 
 function read(relativePath) {

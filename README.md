@@ -12,7 +12,7 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
 
 ## Current baseline
 
-- Baseline captured 2026-08-30: 114 rate series and 5,508 recorded observations across U.S.
+- Baseline captured 2026-09-03: 114 rate series and 5,546 recorded observations across U.S.
   federal/state, U.K., and E.U. sources. The generated `data/exports/meta.json` is the live count and
   can grow during automatic refreshes without making this dated release receipt inaccurate.
 - 195 static HTML pages (including the real 404 page), a 194-URL indexable sitemap, and 114 JSON plus

@@ -1,10 +1,12 @@
 # GROWTH_PLAN.md — StatuteRates long-term traffic & revenue plan
 
-> Historical research proposal, not an implementation contract. The July 2026 audit found that its
-> nightly/full-history/state-calculator assumptions were unsafe. The site refreshes weekly, most state
-> histories are single-point references, and Florida is the only narrowly audited state calculator;
-> every other state remains gated until its complete rule model and dedicated renderer pass
-> validation. Use this document for ideas only.
+> **Superseded historical research proposal — do not execute this phase plan.** The July 2026 audit
+> found that its nightly/full-history/state-calculator assumptions were unsafe, later evidence
+> invalidated several tactics, and provider requirements can change. The site refreshes weekly, most
+> state histories are single-point references, and Florida is the only narrowly audited state
+> calculator; every other state remains gated until its complete rule model and dedicated renderer
+> pass validation. Use `docs/ROADMAP_TO_100.md` for current decisions and this document only as a
+> dated record of ideas that must be re-researched before use.
 
 **Written 2026-07-16 by the research phase (Fable 5). Implementation owner: Opus 4.8.**
 This document is self-contained: everything needed to execute is in here + the repo. Do not rely on
@@ -75,8 +77,9 @@ The adversarial-verification phase was rate-limited, so treat numbers as reporte
 - [B] Practical rule: `lastmod` only moves on real content change; omit when unknowable.
 
 ### 1.4 Schema in 2026
-- [S] **FAQ rich results were dropped by Google May 7, 2026** (HowTo dead earlier). Existing FAQPage
-  markup is harmless (AI systems still read it) but earns no SERP treatment — stop investing in it.
+- [S] FAQ rich-result visibility was restricted long before this plan. FAQPage markup is not
+  automatically harmless: it must represent the same complete content visible to readers. The
+  current implementation removes it from rate pages and retains it only where exact FAQs render.
 - Still rendering/valuable: Article, Breadcrumb, Organization, WebSite, Dataset. Competitor uses
   SoftwareApplication+WebApplication on calculators — cheap to add, plausible AI-comprehension win.
 
@@ -156,7 +159,8 @@ and actually being monetized tastefully.
    on every value, 10/10-test calc engine) already exists. Surface it.
 10. **State hubs thin** (~450–600 words): no worked example, no statute-history table (data exists in
     DB/exports), no neighboring-state comparison.
-11. IndexNow/Bing absent (see §1.7). FAQPage everywhere (fine to keep; stop adding).
+11. IndexNow/Bing were absent at this historical snapshot. Hidden FAQPage markup is not fine to keep;
+    the current build enforces exact visible-content parity.
 12. Ad slots: 2/page (top+bottom). No mid-content unit on 1,000+-word guides; no multiplex at ends.
 13. Assets already in place (do NOT rebuild): 192 pages, hub↔spoke mesh, Dataset/Article/Breadcrumb/
     Org/WebSite schema, per-entity lastmod for rates, robots+sitemap+GSC, llms.txt + llms-full.txt,
@@ -216,7 +220,8 @@ after deploy. Commit per phase.
     how" linking to editorial policy.
 
 ### Phase 2 — The tool layer (biggest traffic lever, 1–2 sessions)
-2.1 **Per-state calculator pages** `/calculators/[state]-judgment-interest/` (51 pages via
+2.1 **Superseded proposal — do not mass-release:** per-state calculator pages
+    `/calculators/[state]-judgment-interest/` (51 pages via
     `getStaticPaths` over the states dataset — new template file):
     - Fixed-rate states: exact computation (engine `fixedSimpleInterest` / `fixedCompoundInterest`).
     - Variable states: compute at the current published rate with honest framing ("applies the
@@ -299,7 +304,7 @@ after deploy. Commit per phase.
 5.4 Glossary → auto-link first occurrences of glossary terms inside guide bodies (build-time
     transform, capped 3–5 links/guide to avoid spam).
 
-### Ad-revenue ladder (owner actions at milestones — document in DEPLOYMENT_GUIDE §7)
+### Historical ad-revenue hypothesis (superseded — revalidate current provider terms before action)
 - Now: AdSense approval pending → on approval, create ONE "Display / responsive" ad unit, set repo
   var `ADSENSE_SLOT` → intentional in-content units render (already built). In AdSense: turn OFF
   vignette + anchor formats at least for /calculators/* (Auto Ads "Page exclusions") — tool UX is
@@ -322,7 +327,7 @@ after deploy. Commit per phase.
 - No subscriptions/paywall (owner decision 2026-07-16: pure ad-supported).
 - No followed-link embed widgets (Google policy — §1.6). Cite-this + free data instead.
 - No mass thin programmatic pages beyond the per-state set backed by real per-state data.
-- Don't remove existing FAQPage markup; just stop relying on it for SERP features.
+- Keep FAQPage markup only when the exact questions and answers are useful and visible on the page.
 
 ---
 

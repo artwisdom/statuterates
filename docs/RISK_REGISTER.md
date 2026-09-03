@@ -1,44 +1,63 @@
-# RISK_REGISTER.md
+# StatuteRates risk register
 
-Honest risks, base rates, and pre-committed pivot thresholds. The point of writing thresholds **now** is
-to decide with data later instead of emotion.
+**Reviewed:** 2026-09-03
 
-## Base rates (read this first)
-- **Most projects of this class earn ~$0.** The realistic base case for a maintained, useful reference
-  site is **$500–$3,000/month at months 12–18**, and only if it earns organic traffic. Many never do.
-- **Machine-side revenue (API/MCP/pay-per-crawl) is unproven for solo builders today.** Treat it as free
-  optionality, not the plan. Do not model revenue from it.
-- **Licensing** (bulk-selling the dataset to an AI company) is a lottery ticket — documented, not built.
+This register separates controllable product quality from externally controlled outcomes. A passing
+build does not prove indexing, rankings, backlinks, AdSense approval, RPM, or revenue. Likewise, an
+accepted crawl or IndexNow request is not a search visit. Unknown provider evidence is recorded as
+unknown rather than zero.
+
+## Current business baseline
+
+- StatuteRates has demonstrated early organic demand, but the latest finalized private comparison is
+  still small in absolute terms: 122 clicks and 9,344 impressions in the July 25-August 21 window.
+- AdSense currently shows `Getting ready`; a review was requested August 23. Approval, ad serving,
+  page RPM, and StatuteRates revenue are not yet verified.
+- There is no defensible fixed income forecast. If ads are approved, the calculation is
+  `monetized pageviews / 1,000 * measured page RPM`; Cloudflare unique visitors are not monetized
+  pageviews.
+- API, MCP, RSS, and licensing are useful distribution options, but no paid demand is assumed.
 
 ## Risk table
 
-| # | Risk | Likelihood | Impact | Mitigation | Leading indicator |
+| # | Risk | Likelihood | Impact | Current mitigation | Leading indicator / next gate |
 |---|---|---|---|---|---|
-| R1 | **No organic traffic** (the default outcome) | High | Fatal to revenue | Ship focused per-series pages, JSON-LD/FAQ rich results, honest E-E-A-T, exact-match intent ("post judgment interest rate [state]"); expand coverage to widen the keyword surface | Sessions by month 3/6 (see pivot) |
-| R2 | **Source layout change breaks a fetcher** | Medium (per year, per source) | Data goes stale | Fail-loud validation blocks bad publishes; per-source runbook playbooks; only 2 fetchers today (small surface) | `refresh-data` run turns red |
-| R3 | **Source blocks our bot** (403/WAF) | Low for chosen sources; higher for expansion (state/court hosts) | Lose that source | We only use clean official feeds (IRS, Fed H.15) and never spoof UAs; expansion prefers CMT-derived formulas over bot-hostile hosts | Fetch 403 in run log |
-| R4 | **Derived value is subtly wrong** (post-judgment convention) | Low | Trust/legal-adjacent harm | Anchor site on published values; derived rate carries formula + "verify against your court; not advice" + medium confidence; unit-tested invariant | User correction / court-table mismatch |
-| R5 | **A well-funded incumbent ships a free, structured, historized, API'd version** | Low–Medium | Erodes the moat | Our moat is coverage + freshness + as-of-date history + API/MCP; keep expanding jurisdictions faster than a generalist will bother to | A competitor appears in SERP with an API |
-| R6 | **Niche too B2B/thin for ad volume** (known weakness) | Medium | Caps ad ceiling | High commercial intent offsets low volume; if traffic is thin but present, machine/licensing upside remains; pivot option below | Sessions high-value but low-count |
-| R7 | **Platform dependency** (GitHub Pages / Actions / Cloudflare) | Low | Downtime / policy change | All free-tier; site is static and portable (any CDN serves `dist/`); Actions usage ~22 min/month vs 2,000 free; deploy is one `dist/` upload | Platform email / quota warning |
-| R8 | **Ad-network rejection** (thin content / traffic minimums) | Medium early | Delays monetization | Start with Ezoic/AdSense (low bar); add substantive methodology/about content (done); reapply at scale to Mediavine/Raptive | Application rejected |
-| R9 | **Legal/advice perception** (interest rates near legal money) | Low | Complaint risk | Pure factual reference values; disclaimers on every page + derived note; no advice, no personal data | Complaint / takedown |
+| R1 | Organic visibility grows but rankings and clicks do not compound | Medium | High | Fast rendered pages, exact intent coverage, source citations, strong internal linking, and private finalized-window reporting | Two comparable 28-day Search Console periods; non-brand clicks, CTR, and landing-page gains |
+| R2 | Thin or damaged templated content undermines trust or AdSense review | Medium | High | Visible-content/schema parity, minimum rendered-depth checks, selective ad eligibility, correction channel, and fail-closed legal-copy checks | AdSense decision; build alarms; sampled rendered-page review |
+| R3 | An official source changes layout, blocks automation, or publishes late | Medium | High | Robots-aware throttled fetches, bounded retries, immutable last-good exports, strict parsers, and deduplicated failure issues | Refresh failure, stale-source age, or changed source checksum |
+| R4 | A legal rate or date is numerically plausible but uses the wrong legal branch | Low-Medium | Very high | Official-source provenance, explicit effective-date semantics, reference-only defaults, calculator release registry, and fixture tests | Source/court mismatch, correction report, or invariant failure |
+| R5 | Old manually reviewed state references become stale without a value change | Medium | High | Source dates remain visible and no unsupported calculator ships | Mechanical review-due registry and overdue issue are still required |
+| R6 | External authority remains weak even though the product is technically good | High | High | Citable histories, CSV/JSON, OpenAPI, RSS, citation tools, and transparent methodology | Verified relevant referring domains and independent citations |
+| R7 | AdSense remains pending or rejects the site again | Medium | High | Ads are limited to 113 eligible pages in the current build; legal/error/noindex/shallow pages are excluded; CMP messages are active | AdSense approval status, ads.txt recrawl, policy detail, measured serving |
+| R8 | Ad density damages calculators, trust, or Core Web Vitals | Low-Medium after approval | Medium-High | Browser-local tools render before ads, slots reserve space, and performance is monitored | Field CWV, engagement, RPM, and page-level exclusion experiments |
+| R9 | Supply-chain or provider configuration leaves a preventable security gap | Medium | Medium-High | Locked dependencies, CodeQL, secret scanning and push protection, least-privilege Actions | Zero npm advisories; enable GitHub dependency alerts/security updates/private reporting and protected release checks |
+| R10 | Robots/redirect/network behavior permits an unsafe source fetch | Medium until hardening ships | High | Central shared fetch layer and per-source caps | Mocked 5xx/network/redirect/oversize tests and successful hosted refresh |
+| R11 | A platform or GitHub-account outage hides both site and monitor failure | Low | High | Static portable build and six-hour GitHub-hosted health checks | Independent external uptime receipt and documented rollback exercise |
+| R12 | Broad page expansion creates doorway inventory without demand | Medium | High | Search Console-led queue, 194-URL sitemap freeze, and no generic state-calculator rollout | New URL requires measured intent, unique utility, primary sources, and an explicit release gate |
 
-## Pivot thresholds (decide with data, not features)
-- **< 2,000 monthly sessions by month 3** → the pages aren't getting indexed/ranked. First expand
-  coverage (more series/jurisdictions = more keyword entries) and shore up internal linking. Do **not**
-  add features to a site nobody visits.
-- **< 10,000 monthly sessions by month 6** → the *niche* is the problem, not the build. **Change niche,
-  not features.** The runner-up **Passport & Travel-Document Fees** (research/NICHE_DECISION.md) is the
-  pre-selected pivot: same engine, cleaner incumbent gap, consumer-mass tier-1 ad demand; the pipeline,
-  schema, site, API, and MCP server are all reusable — only the fetchers change.
-- **Any paying API/agent caller, or repeated agent traffic in logs** → invest in the machine skin:
-  add per-call metering (Stripe usage-based or x402) and enable Cloudflare pay-per-crawl. Let real
-  demand, not hope, trigger this.
-- **Dataset becomes cited/canonical** (linked by other sites, pulled by models) → explore licensing
-  conversations. Document inbound interest; don't chase it cold.
+## Pre-committed decisions
 
-## What would make me kill the project
-Sustained near-zero traffic across **two** different niches (winner + the passport pivot) by month ~9,
-despite good coverage and clean SEO, means the "fast static reference + ads" thesis isn't working for
-this operator's execution — stop, and reallocate the (reusable) engine to a different data class.
+1. **Do not broaden inventory because one short period slows down.** First confirm a technical issue,
+   then compare two finalized 28-day periods, then improve an existing page whose query/page evidence
+   identifies a real gap.
+2. **Do not release a state payoff calculator from a headline rate.** It needs complete rate history,
+   legal branches, accrual, date convention, compounding, payments, exceptions, a dedicated renderer,
+   and exact fixtures.
+3. **Do not repeatedly resubmit AdSense.** Wait for the pending review. If rejected, use the supplied
+   reason, repair the relevant inventory, verify production, and submit once.
+4. **Do not promise revenue from traffic counts.** Record approval, monetized pageviews, RPM, and net
+   revenue separately from visits and impressions.
+5. **Do not mass-outreach or buy links.** Publish a source-worthy asset only after reuse rights are
+   explicit, then pursue a small relevant list of court, law-library, legal-aid, and developer
+   resources.
+
+## Reassessment triggers
+
+- Weekly: source refresh, validation, deployment handoff, and public health.
+- Monthly: finalized Search Console windows, Cloudflare analytics, relevant referring domains,
+  AdSense status, page-level engagement, operating cost, and confirmed revenue.
+- Quarterly: manually reviewed state sources, calculator legal contracts, dependency/provider
+  security settings, and recovery documentation.
+- Strategy pivot: only after at least two clean finalized periods show sustained decline or flat
+  qualified demand with no technical/indexing cause and focused winner-page improvements also fail.
+  The dataset and engine remain reusable; a short-term traffic dip is not a kill signal.

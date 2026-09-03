@@ -3,14 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-08-30
+**Updated:** 2026-09-03
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
 
 ## Current product
 
-- Baseline captured 2026-08-30: 114 rate-series entities and 5,508 recorded historical observations.
+- Baseline captured 2026-09-03: 114 rate-series entities and 5,546 recorded historical observations.
   The generated `data/exports/meta.json` is the live count between release-document updates.
 - 195 static HTML pages, including the real 404 page; the indexable sitemap contains 194 URLs.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
@@ -326,13 +326,13 @@ verified in production.
 
 ## Verified checks
 
-- Pipeline: 146 tests.
+- Pipeline: 162 tests.
 - Shared interest engine and release contracts: 47 tests.
-- Site data, copy, RSS, and monetization contracts: 32 tests.
+- Site data, copy, RSS, and monetization contracts: 36 tests.
 - MCP: 7 tests, including traversal protection, future-date refusal, compatibility fields, and the
   full six-tool smoke test.
 - Production health monitor: 8 fail-closed contract tests plus the live read-only check.
-- 2026-08-30 generated API baseline: 114 entity endpoints and 5,508 observations; the generated
+- 2026-09-03 generated API baseline: 114 entity endpoints and 5,546 observations; the generated
   metadata is authoritative for the live count after automatic refreshes.
 - Current local static build: 195 pages on Astro 7.
 - Current local indexable sitemap: 194 URLs.

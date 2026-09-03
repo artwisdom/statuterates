@@ -24,7 +24,7 @@ retrieval time. Source timestamps cannot move backward.
 
 ## 3. Coverage
 
-The 2026-08-30 release baseline contains 114 series and 5,508 observations. The generated
+The 2026-09-03 release baseline contains 114 series and 5,546 observations. The generated
 `data/exports/meta.json` is authoritative for the live count after automatic refreshes:
 
 - IRS §6621/§6603 categories and related federal tax rates.
