@@ -26,11 +26,13 @@ export const USER_AGENT = `${USER_AGENT_TOKEN}/0.1 (+https://statuterates.com/ab
 const MIN_HOST_INTERVAL_MS = 3000; // >= 3s between requests to the same host
 const MAX_FETCHES_PER_SOURCE = 150; // hard ceiling per source per run
 const REQUEST_TIMEOUT_MS = 30000;
-
-// --- In-process state --------------------------------------------------------
-const lastHostFetchAt = new Map(); // host -> epoch ms
-const perSourceCount = new Map(); // sourceId -> count
-const robotsCache = new Map(); // host -> parsed robots rules
+const MAX_RESPONSE_BYTES = 10 * 1024 * 1024; // 10 MiB after decompression
+const MAX_ROBOTS_BYTES = 512 * 1024; // RFC 9309 permits a >=500 KiB parsing limit
+const ROBOTS_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+const MAX_REDIRECTS = 5;
+const MAX_ATTEMPTS = 3;
+const BACKOFF_MS = [2000, 5000];
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
@@ -135,163 +137,457 @@ function matchesRobotPath(pattern, pathname) {
   }
 }
 
-async function getRobots(host, origin) {
-  if (robotsCache.has(host)) return robotsCache.get(host);
-  const robotsUrl = `${origin}/robots.txt`;
-  const cached = readCache(robotsUrl);
-  let txt = null;
-  let status = null;
-  if (cached) {
-    txt = cached.body;
-    status = cached.status;
-  } else {
-    await throttleHost(host);
-    try {
-      const res = await fetchWithTimeout(robotsUrl);
-      status = res.status;
-      txt = res.status === 200 ? await res.text() : '';
-    } catch {
-      txt = '';
-      status = 0;
-    }
-    writeCache(robotsUrl, {
-      url: robotsUrl,
-      status,
-      retrieved_at: nowIso(),
-      body: txt,
-      note: 'robots.txt snapshot',
-    });
-  }
-  // On 4xx/absent robots, crawling is permitted by convention. On 5xx we stay conservative.
-  const groups = txt ? parseRobots(txt) : [];
-  const parsed = { groups, status, absent: !txt };
-  robotsCache.set(host, parsed);
-  return parsed;
-}
-
-async function throttleHost(host) {
-  const last = lastHostFetchAt.get(host) || 0;
-  const wait = MIN_HOST_INTERVAL_MS - (Date.now() - last);
-  if (wait > 0) await sleep(wait);
-  lastHostFetchAt.set(host, Date.now());
-}
-
-function fetchWithTimeout(url, init = {}) {
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
-  return fetch(url, {
-    ...init,
-    signal: ctrl.signal,
-    redirect: 'follow',
-    headers: { 'User-Agent': USER_AGENT, Accept: '*/*', ...(init.headers || {}) },
-  }).finally(() => clearTimeout(t));
-}
-
 export function nowIso() {
   return new Date().toISOString();
 }
 
+function isRobotsAbsentStatus(status) {
+  // RFC 9309 section 2.3.1.1 treats 4xx (other than rate limiting) as "unavailable", which permits
+  // crawling. A 429 is operationally transient and must never be mistaken for an absent policy.
+  return status >= 400 && status < 500 && status !== 429;
+}
+
+function isTransientStatus(status) {
+  return status === 429 || status >= 500;
+}
+
+function assertHttpUrl(url, context) {
+  const parsed = url instanceof URL ? url : new URL(url);
+  if (!['http:', 'https:'].includes(parsed.protocol)) {
+    throw new Error(`${context}: unsupported URL scheme ${parsed.protocol}`);
+  }
+  return parsed;
+}
+
+function discardBody(response) {
+  try {
+    // Cancellation is cleanup, not part of the result. Do not await a hostile custom stream whose
+    // cancel hook never settles; attach a rejection handler so abandoning the body cannot create an
+    // unhandled rejection either.
+    Promise.resolve(response.body?.cancel()).catch(() => {});
+  } catch {
+    // Best effort only: the caller is already abandoning this response.
+  }
+}
+
+function cancelReader(reader, reason) {
+  try {
+    // As above, a source-controlled stream must not be able to defeat a response deadline merely by
+    // returning a promise from cancel() that never settles.
+    Promise.resolve(reader.cancel(reason)).catch(() => {});
+  } catch {
+    // Best effort only; the original timeout/size error remains authoritative.
+  }
+}
+
+async function readBoundedBody(response, { responseType, maxBytes, url, deadline }) {
+  const rawLength = response.headers.get('content-length');
+  if (/^\d+$/.test(rawLength || '') && Number(rawLength) > maxBytes) {
+    discardBody(response);
+    throw new Error(`RESPONSE_TOO_LARGE: ${url} declares ${rawLength} bytes (limit ${maxBytes})`);
+  }
+
+  if (!response.body) return responseType === 'buffer' ? Buffer.alloc(0) : '';
+
+  const reader = response.body.getReader();
+  const chunks = [];
+  let bytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await Promise.race([reader.read(), deadline.promise]);
+      if (done) break;
+      const chunk = Buffer.from(value);
+      bytes += chunk.length;
+      if (bytes > maxBytes) {
+        cancelReader(reader, `response exceeds ${maxBytes} bytes`);
+        throw new Error(`RESPONSE_TOO_LARGE: ${url} exceeded ${maxBytes} bytes while streaming`);
+      }
+      chunks.push(chunk);
+    }
+  } catch (error) {
+    if (deadline.expired()) {
+      // Abort normally rejects a fetch-backed stream. The explicit cancel also releases a mocked or
+      // otherwise detached ReadableStream whose pending read does not observe AbortSignal directly.
+      cancelReader(reader, deadline.error());
+      throw deadline.error();
+    }
+    throw error;
+  } finally {
+    try {
+      reader.releaseLock();
+    } catch {
+      // A hostile custom stream can retain a pending read even after cancellation. The request has
+      // already failed closed, so do not replace the useful timeout/size error with a lock error.
+    }
+  }
+  const body = Buffer.concat(chunks, bytes);
+  return responseType === 'buffer' ? body : body.toString('utf8');
+}
+
+/**
+ * Construct an isolated polite HTTP client. Production uses the defaults below; tests inject a mock
+ * fetch, in-memory cache, fake clock, and no-op sleep so every failure path is deterministic and
+ * network-free.
+ */
+export function createHttpClient({
+  fetchImpl = globalThis.fetch,
+  readCacheImpl = readCache,
+  writeCacheImpl = writeCache,
+  sleepImpl = sleep,
+  nowMsImpl = () => Date.now(),
+  nowIsoImpl = nowIso,
+  setTimeoutImpl = setTimeout,
+  clearTimeoutImpl = clearTimeout,
+  minHostIntervalMs = MIN_HOST_INTERVAL_MS,
+  maxFetchesPerSource = MAX_FETCHES_PER_SOURCE,
+  requestTimeoutMs = REQUEST_TIMEOUT_MS,
+  maxResponseBytes = MAX_RESPONSE_BYTES,
+  maxRobotsBytes = MAX_ROBOTS_BYTES,
+  robotsMaxAgeMs = ROBOTS_MAX_AGE_MS,
+  maxRedirects = MAX_REDIRECTS,
+  maxAttempts = MAX_ATTEMPTS,
+  backoffMs = BACKOFF_MS,
+} = {}) {
+  if (typeof fetchImpl !== 'function') throw new TypeError('createHttpClient requires fetchImpl');
+  for (const [name, value, min] of [
+    ['maxResponseBytes', maxResponseBytes, 1],
+    ['maxRobotsBytes', maxRobotsBytes, 1],
+    ['maxRedirects', maxRedirects, 0],
+    ['maxAttempts', maxAttempts, 1],
+  ]) {
+    if (!Number.isInteger(value) || value < min) throw new TypeError(`${name} must be an integer >= ${min}`);
+  }
+
+  // --- In-process state ------------------------------------------------------
+  const lastHostFetchAt = new Map(); // host -> epoch ms
+  const perSourceCount = new Map(); // sourceId -> actual request attempts
+  const robotsCache = new Map(); // origin -> parsed robots rules
+
+  async function throttleHost(host) {
+    const last = lastHostFetchAt.get(host);
+    if (last !== undefined) {
+      const wait = minHostIntervalMs - (nowMsImpl() - last);
+      if (wait > 0) await sleepImpl(wait);
+    }
+    lastHostFetchAt.set(host, nowMsImpl());
+  }
+
+  function consumeFetchBudget(sourceId) {
+    const count = perSourceCount.get(sourceId) || 0;
+    if (count >= maxFetchesPerSource) {
+      throw new Error(
+        `FETCH_CAP: source "${sourceId}" hit the ${maxFetchesPerSource}-fetch ceiling this run`
+      );
+    }
+    perSourceCount.set(sourceId, count + 1);
+  }
+
+  function createDeadline(url) {
+    const ctrl = new AbortController();
+    let expired = false;
+    const timeoutError = new Error(
+      `REQUEST_TIMEOUT: ${url} exceeded the ${requestTimeoutMs}ms response deadline`
+    );
+    let rejectDeadline;
+    const promise = new Promise((_, reject) => {
+      rejectDeadline = reject;
+    });
+    const timeout = setTimeoutImpl(() => {
+      expired = true;
+      ctrl.abort(timeoutError);
+      rejectDeadline(timeoutError);
+    }, requestTimeoutMs);
+    return {
+      signal: ctrl.signal,
+      promise,
+      expired: () => expired,
+      error: () => timeoutError,
+      clear: () => clearTimeoutImpl(timeout),
+    };
+  }
+
+  async function fetchWithDeadline(url, init = {}) {
+    const deadline = createDeadline(url);
+    try {
+      const request = fetchImpl(url, {
+          ...init,
+          signal: deadline.signal,
+          // Redirects are policy boundaries. Each destination is fetched only after its own robots
+          // policy and host throttle have been applied by fetchFollowingRedirects().
+          redirect: 'manual',
+          headers: { 'User-Agent': USER_AGENT, Accept: '*/*', ...(init.headers || {}) },
+        });
+      const response = await Promise.race([request, deadline.promise]);
+      // The deadline intentionally remains armed until the response body is fully read or discarded.
+      return { response, deadline };
+    } catch (error) {
+      deadline.clear();
+      throw error;
+    }
+  }
+
+  async function fetchWithRetries(url, { sourceId = null, purpose = 'data' } = {}) {
+    const target = assertHttpUrl(url, purpose === 'robots' ? 'ROBOTS_UNREACHABLE' : 'NETWORK');
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      await throttleHost(target.host);
+      if (sourceId !== null) consumeFetchBudget(sourceId);
+
+      let response;
+      let deadline;
+      try {
+        ({ response, deadline } = await fetchWithDeadline(target.href));
+      } catch (error) {
+        if (attempt < maxAttempts) {
+          await sleepImpl(backoffMs[attempt - 1] ?? 0);
+          continue;
+        }
+        const prefix = purpose === 'robots' ? 'ROBOTS_UNREACHABLE' : 'NETWORK';
+        throw new Error(`${prefix}: ${target.href} failed after ${maxAttempts} attempts (${error.message})`, {
+          cause: error,
+        });
+      }
+
+      if (isTransientStatus(response.status)) {
+        if (attempt < maxAttempts) {
+          await discardBody(response);
+          deadline.clear();
+          await sleepImpl(backoffMs[attempt - 1] ?? 0);
+          continue;
+        }
+        if (purpose === 'robots') {
+          await discardBody(response);
+          deadline.clear();
+          throw new Error(
+            `ROBOTS_UNREACHABLE: ${target.href} returned HTTP_${response.status} after ${maxAttempts} attempts`
+          );
+        }
+      }
+      return { response, deadline };
+    }
+    throw new Error(`NETWORK: ${target.href} exhausted its retry budget`);
+  }
+
+  function freshCachedRobots(cached) {
+    if (!cached) return null;
+    const status = Number(cached.status);
+    const age = nowMsImpl() - Date.parse(cached.retrieved_at || '');
+    if (!Number.isFinite(age) || age < 0 || age >= robotsMaxAgeMs) return null;
+    if (status >= 200 && status < 300 && typeof cached.body === 'string') {
+      return { groups: cached.body ? parseRobots(cached.body) : [], status, absent: false };
+    }
+    if (isRobotsAbsentStatus(status)) return { groups: [], status, absent: true };
+    // Old versions could cache a network error/429/5xx with an empty body. Never reinterpret it as
+    // absent/allow; force a live retry, which still fails closed if the policy remains unreachable.
+    return null;
+  }
+
+  async function fetchRobotsDocument(robotsUrl) {
+    let current = assertHttpUrl(robotsUrl, 'ROBOTS_UNREACHABLE');
+    for (let redirects = 0; ; redirects++) {
+      const { response, deadline } = await fetchWithRetries(current.href, { purpose: 'robots' });
+      try {
+        if (REDIRECT_STATUSES.has(response.status)) {
+          const location = response.headers.get('location');
+          await discardBody(response);
+          if (!location) {
+            throw new Error(`ROBOTS_UNREACHABLE: ${current.href} redirected without a Location header`);
+          }
+          if (redirects >= maxRedirects) {
+            throw new Error(`ROBOTS_UNREACHABLE: ${robotsUrl} exceeded ${maxRedirects} redirects`);
+          }
+          try {
+            current = assertHttpUrl(new URL(location, current), 'ROBOTS_UNREACHABLE');
+          } catch (error) {
+            if (String(error.message).startsWith('ROBOTS_UNREACHABLE:')) throw error;
+            throw new Error(`ROBOTS_UNREACHABLE: invalid redirect from ${current.href} (${error.message})`, {
+              cause: error,
+            });
+          }
+          continue;
+        }
+
+        if (isRobotsAbsentStatus(response.status)) {
+          await discardBody(response);
+          return { body: '', status: response.status, finalUrl: current.href, absent: true };
+        }
+        if (response.status < 200 || response.status >= 300) {
+          await discardBody(response);
+          throw new Error(`ROBOTS_UNREACHABLE: ${current.href} returned HTTP_${response.status}`);
+        }
+
+        const body = await readBoundedBody(response, {
+          responseType: 'text',
+          maxBytes: maxRobotsBytes,
+          url: current.href,
+          deadline,
+        });
+        return { body, status: response.status, finalUrl: current.href, absent: false };
+      } catch (error) {
+        if (String(error.message).startsWith('ROBOTS_UNREACHABLE:')) throw error;
+        throw new Error(`ROBOTS_UNREACHABLE: ${current.href} could not be read safely (${error.message})`, {
+          cause: error,
+        });
+      } finally {
+        deadline.clear();
+      }
+    }
+  }
+
+  async function getRobots(origin) {
+    if (robotsCache.has(origin)) return robotsCache.get(origin);
+    const robotsUrl = new URL('/robots.txt', origin).href;
+    const fromDisk = freshCachedRobots(readCacheImpl(robotsUrl));
+    if (fromDisk) {
+      robotsCache.set(origin, fromDisk);
+      return fromDisk;
+    }
+
+    // Only successful 2xx documents and RFC-compatible absent 4xx results are cached. A network
+    // error, 429, 5xx, unsafe redirect, or oversized document throws and leaves no allow decision.
+    const fetched = await fetchRobotsDocument(robotsUrl);
+    writeCacheImpl(robotsUrl, {
+      url: robotsUrl,
+      final_url: fetched.finalUrl,
+      status: fetched.status,
+      retrieved_at: nowIsoImpl(),
+      body: fetched.body,
+      note: 'robots.txt snapshot',
+    });
+    const parsed = {
+      groups: fetched.body ? parseRobots(fetched.body) : [],
+      status: fetched.status,
+      absent: fetched.absent,
+    };
+    robotsCache.set(origin, parsed);
+    return parsed;
+  }
+
+  async function assertRobotsAllowed(url) {
+    const target = assertHttpUrl(url, 'ROBOTS_UNREACHABLE');
+    const robots = await getRobots(target.origin);
+    if (!robots.absent) {
+      const allowed = pathAllowed(
+        robots.groups,
+        USER_AGENT_TOKEN,
+        target.pathname + (target.search || '')
+      );
+      if (!allowed) {
+        throw new Error(
+          `ROBOTS_DISALLOW: ${target.href} is disallowed by ${target.origin}/robots.txt for our UA`
+        );
+      }
+    }
+  }
+
+  async function fetchFollowingRedirects(url, { sourceId, responseType }) {
+    let current = assertHttpUrl(url, 'NETWORK');
+    for (let redirects = 0; ; redirects++) {
+      // Re-evaluate on every hop. This covers same-origin path changes and, critically, applies the
+      // destination host's robots policy and throttle before a cross-origin redirect is followed.
+      await assertRobotsAllowed(current);
+      const { response, deadline } = await fetchWithRetries(current.href, {
+        sourceId,
+        purpose: 'data',
+      });
+      try {
+        if (REDIRECT_STATUSES.has(response.status)) {
+          const location = response.headers.get('location');
+          await discardBody(response);
+          if (!location) throw new Error(`REDIRECT_INVALID: ${current.href} has no Location header`);
+          if (redirects >= maxRedirects) {
+            throw new Error(`REDIRECT_LIMIT: ${url} exceeded ${maxRedirects} redirects`);
+          }
+          try {
+            current = assertHttpUrl(new URL(location, current), 'REDIRECT_INVALID');
+          } catch (error) {
+            if (String(error.message).startsWith('REDIRECT_INVALID:')) throw error;
+            throw new Error(`REDIRECT_INVALID: ${current.href} returned ${location} (${error.message})`, {
+              cause: error,
+            });
+          }
+          continue;
+        }
+
+        const body = await readBoundedBody(response, {
+          responseType,
+          maxBytes: maxResponseBytes,
+          url: current.href,
+          deadline,
+        });
+        return { response, body, finalUrl: current.href };
+      } finally {
+        deadline.clear();
+      }
+    }
+  }
+
+  const DEFAULT_MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000; // 2 days
+  async function politeGetInternal(
+    url,
+    { sourceId = 'default', force = false, maxAgeMs = DEFAULT_MAX_AGE_MS } = {},
+    responseType = 'text'
+  ) {
+    const initial = assertHttpUrl(url, 'NETWORK');
+
+    // Cache first — but treat a cache entry older than maxAgeMs as stale so the data never lags the
+    // source. The CI runner starts cacheless; this protects local regenerations too.
+    if (!force) {
+      const cached = readCacheImpl(initial.href);
+      if (cached && cached.status === 200) {
+        const age = nowMsImpl() - Date.parse(cached.retrieved_at || 0);
+        const fresh = !(age >= 0) || age < maxAgeMs;
+        if (fresh && responseType === 'text' && typeof cached.body === 'string') {
+          return { ...cached, fromCache: true };
+        }
+        if (fresh && responseType === 'buffer' && cached.body_encoding === 'base64'
+            && typeof cached.body_base64 === 'string') {
+          return {
+            ...cached,
+            body: Buffer.from(cached.body_base64, 'base64'),
+            fromCache: true,
+          };
+        }
+      }
+    }
+
+    const { response, body, finalUrl } = await fetchFollowingRedirects(initial.href, {
+      sourceId,
+      responseType,
+    });
+    const entry = {
+      url: initial.href,
+      final_url: finalUrl,
+      status: response.status,
+      retrieved_at: nowIsoImpl(),
+      contentType: response.headers.get('content-type') || '',
+      ...(responseType === 'buffer'
+        ? { body_encoding: 'base64', body_base64: body.toString('base64') }
+        : { body }),
+    };
+    writeCacheImpl(initial.href, entry); // cache final non-redirect responses, including non-200
+    if (response.status !== 200) throw new Error(`HTTP_${response.status}: ${finalUrl}`);
+    return { ...entry, body, fromCache: false };
+  }
+
+  return {
+    politeGet: (url, options = {}) => politeGetInternal(url, options, 'text'),
+    politeGetBuffer: (url, options = {}) => politeGetInternal(url, options, 'buffer'),
+    fetchStats: () => Object.fromEntries(perSourceCount),
+  };
+}
+
+const defaultClient = createHttpClient();
+
 /**
  * Cache-first, robots-respecting, rate-limited GET.
  * @param {string} url
- * @param {object} opts
- * @param {string} opts.sourceId  logical source id (for the per-source fetch cap)
- * @param {boolean} [opts.force]  bypass cache (still throttles + writes cache)
- * @param {number} [opts.maxAgeMs]  cache freshness window; a cached entry older than this is
- *   treated as a miss and re-fetched. Default 2 days — keeps market series (IRS/H.15) current on
- *   any run while staying polite (at most one hit per URL per window). Set 0/Infinity to disable.
- * @returns {Promise<{url,status,retrieved_at,body:string,fromCache,contentType}>}
+ * @param {object} options
+ * @param {string} options.sourceId logical source id (for the per-source fetch cap)
+ * @param {boolean} [options.force] bypass cache (still checks robots, throttles, and writes cache)
+ * @param {number} [options.maxAgeMs] cached-response freshness window; default two days
  */
-const DEFAULT_MAX_AGE_MS = 2 * 24 * 60 * 60 * 1000; // 2 days
-async function politeGetInternal(
-  url,
-  { sourceId = 'default', force = false, maxAgeMs = DEFAULT_MAX_AGE_MS } = {},
-  responseType = 'text'
-) {
-  const u = new URL(url);
-  const host = u.host;
-  const origin = u.origin;
-
-  // 1) Cache first — but treat a cache entry older than maxAgeMs as stale so the data never lags the
-  //    source. (The CI runner starts cacheless and always fetches fresh; this keeps LOCAL regenerations
-  //    from silently republishing stale market rates, which is how a freshness lag slips in.)
-  if (!force) {
-    const cached = readCache(url);
-    if (cached && cached.status === 200) {
-      const age = Date.now() - Date.parse(cached.retrieved_at || 0);
-      const fresh = !(age >= 0) || age < maxAgeMs;
-      if (fresh && responseType === 'text' && typeof cached.body === 'string') {
-        return { ...cached, fromCache: true };
-      }
-      if (fresh && responseType === 'buffer' && cached.body_encoding === 'base64'
-          && typeof cached.body_base64 === 'string') {
-        return {
-          ...cached,
-          body: Buffer.from(cached.body_base64, 'base64'),
-          fromCache: true,
-        };
-      }
-    }
-  }
-
-  // 2) robots.txt gate.
-  const robots = await getRobots(host, origin);
-  if (!robots.absent) {
-    const allowed = pathAllowed(robots.groups, USER_AGENT_TOKEN, u.pathname + (u.search || ''));
-    if (!allowed) {
-      throw new Error(`ROBOTS_DISALLOW: ${url} is disallowed by ${origin}/robots.txt for our UA`);
-    }
-  }
-
-  // 3) Per-source ceiling.
-  const count = perSourceCount.get(sourceId) || 0;
-  if (count >= MAX_FETCHES_PER_SOURCE) {
-    throw new Error(
-      `FETCH_CAP: source "${sourceId}" hit the ${MAX_FETCHES_PER_SOURCE}-fetch ceiling this run`
-    );
-  }
-  perSourceCount.set(sourceId, count + 1);
-
-  // 4) Throttle + fetch, with retry-with-backoff on transient failures (network error, 429, 5xx).
-  //    Permanent 4xx (except 429) fail fast. This keeps the automated weekly refresh resilient to
-  //    blips without hammering a source.
-  const MAX_ATTEMPTS = 3;
-  const BACKOFF_MS = [2000, 5000];
-  let res, body;
-  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-    await throttleHost(host);
-    try {
-      res = await fetchWithTimeout(url);
-      body = responseType === 'buffer'
-        ? Buffer.from(await res.arrayBuffer())
-        : await res.text();
-    } catch (e) {
-      // Network/timeout error -> retry.
-      if (attempt < MAX_ATTEMPTS) { await sleep(BACKOFF_MS[attempt - 1]); continue; }
-      throw new Error(`NETWORK: ${url} failed after ${MAX_ATTEMPTS} attempts (${e.message})`);
-    }
-    const transient = res.status === 429 || res.status >= 500;
-    if (transient && attempt < MAX_ATTEMPTS) { await sleep(BACKOFF_MS[attempt - 1]); continue; }
-    break;
-  }
-  const entry = {
-    url,
-    status: res.status,
-    retrieved_at: nowIso(),
-    contentType: res.headers.get('content-type') || '',
-    ...(responseType === 'buffer'
-      ? { body_encoding: 'base64', body_base64: body.toString('base64') }
-      : { body }),
-  };
-  writeCache(url, entry); // cache all responses, including non-200, to avoid re-fetching
-  if (res.status !== 200) {
-    throw new Error(`HTTP_${res.status}: ${url}`);
-  }
-  return { ...entry, body, fromCache: false };
-}
-
 export function politeGet(url, options = {}) {
-  return politeGetInternal(url, options, 'text');
+  return defaultClient.politeGet(url, options);
 }
 
 /**
@@ -301,9 +597,9 @@ export function politeGet(url, options = {}) {
  * @returns {Promise<{url,status,retrieved_at,body:Buffer,fromCache,contentType}>}
  */
 export function politeGetBuffer(url, options = {}) {
-  return politeGetInternal(url, options, 'buffer');
+  return defaultClient.politeGetBuffer(url, options);
 }
 
 export function fetchStats() {
-  return Object.fromEntries(perSourceCount);
+  return defaultClient.fetchStats();
 }
