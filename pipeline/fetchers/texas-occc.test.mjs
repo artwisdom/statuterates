@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { assertCurrentTexasMonth, parseTexasCurrentRate } from './texas-occc.mjs';
+import { assertCurrentTexasMonth, getTexasCivilDate, parseTexasCurrentRate } from './texas-occc.mjs';
 import { buildTexasOfficialMonthlyHistory, validateTexasMonthlyHistory } from './texas-occc-history.mjs';
 
 test('official Texas history is a contiguous 515-month schedule through July 2026', () => {
@@ -48,4 +48,12 @@ test('Texas current-page parser and period gate fail closed', () => {
     () => assertCurrentTexasMonth({ effective_date: '2026-06-01' }, { today: '2026-07-19' }),
     /does not match 2026-07-01/
   );
+});
+
+test('Texas current-period gate follows the agency civil date at a UTC month boundary', () => {
+  const texasToday = getTexasCivilDate(new Date('2026-09-01T02:16:00Z'));
+  assert.equal(texasToday, '2026-08-31');
+  assert.doesNotThrow(() => {
+    assertCurrentTexasMonth({ effective_date: '2026-08-01' }, { today: texasToday });
+  });
 });

@@ -19,6 +19,25 @@ const MONTHS = new Map([
   ['september', '09'], ['october', '10'], ['november', '11'], ['december', '12'],
 ]);
 
+export function getTexasCivilDate(instant = new Date()) {
+  const date = instant instanceof Date ? instant : new Date(instant);
+  if (Number.isNaN(date.getTime())) throw new Error('Texas OCCC: invalid clock instant');
+  // GitHub runners use UTC, but the agency's published month follows its Texas civil date. Without
+  // this conversion, an evening refresh on the final Texas day of a month expects the next month.
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Chicago',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+      .formatToParts(date)
+      .filter(({ type }) => type !== 'literal')
+      .map(({ type, value }) => [type, value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+
 function htmlToText(html) {
   return html
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
@@ -52,7 +71,7 @@ export function parseTexasCurrentRate(html) {
   return { value, effective_date: `${year}-${month}-01` };
 }
 
-export function assertCurrentTexasMonth(point, { today = new Date().toISOString().slice(0, 10) } = {}) {
+export function assertCurrentTexasMonth(point, { today = getTexasCivilDate() } = {}) {
   const expected = `${today.slice(0, 7)}-01`;
   if (point.effective_date !== expected) {
     throw new Error(`Texas OCCC: published current period ${point.effective_date} does not match ${expected}`);

@@ -22,7 +22,7 @@ import { fetchEcb, ECB_ENTITY } from './fetchers/ecb.mjs';
 import { buildCmtRecords, buildPostJudgmentRecords } from './lib/normalize.mjs';
 import { buildPublishedSeries, buildUkLatePayment, buildEuReference } from './lib/rates-intl.mjs';
 import { STATE_SOURCES, buildStateFixed, buildIowa } from './fetchers/us-states.mjs';
-import { fetchTexasCurrentRate } from './fetchers/texas-occc.mjs';
+import { fetchTexasCurrentRate, getTexasCivilDate } from './fetchers/texas-occc.mjs';
 import { fetchAlaskaCourtRates } from './fetchers/alaska-judicial.mjs';
 import { fetchNebraskaCurrentRate } from './fetchers/nebraska-judicial.mjs';
 import { fetchIowaCourtTable } from './fetchers/iowa-judicial.mjs';
@@ -124,7 +124,9 @@ async function runAll() {
   }
   const runId = startRun(db);
   try {
-    const today = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const today = now.toISOString().slice(0, 10);
+    const texasToday = getTexasCivilDate(now);
 
     // 1) FETCH — US (IRS + Fed H.15 through cross-checked FRED feeds), UK (BoE), EU (ECB)
     const [irs, federalReserve, boe, ecb, texas, alaskaCourt, nebraska, floridaCfo, iowaCourt, utahCourt] = await Promise.all([
@@ -138,7 +140,7 @@ async function runAll() {
       })(),
       fetchBoe({ log: console.log }),
       fetchEcb({ log: console.log }),
-      fetchTexasCurrentRate({ log: console.log, today }),
+      fetchTexasCurrentRate({ log: console.log, today: texasToday }),
       fetchAlaskaCourtRates({ log: console.log, today }),
       fetchNebraskaCurrentRate({ log: console.log, today }),
       fetchFloridaCfoRates({ log: console.log, today }),
