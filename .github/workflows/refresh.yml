@@ -204,7 +204,7 @@ jobs:
           fi
 
   legal-review-check:
-    name: Check calculator legal-review windows read-only
+    name: Check legal-review windows read-only
     needs: commit
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -214,6 +214,10 @@ jobs:
       due: ${{ steps.legal-review.outputs.due }}
       title: ${{ steps.legal-review.outputs.title }}
       body: ${{ steps.legal-review.outputs.body }}
+      source_review_due: ${{ steps.source-review.outputs.due }}
+      source_review_overdue: ${{ steps.source-review.outputs.overdue }}
+      source_review_title: ${{ steps.source-review.outputs.title }}
+      source_review_body: ${{ steps.source-review.outputs.body }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -228,6 +232,10 @@ jobs:
       - name: Check calculator legal-review windows
         id: legal-review
         run: node machine/legal-review-reminder.mjs
+
+      - name: Check the manual state-source review registry
+        id: source-review
+        run: node machine/source-review-registry.mjs
 
   legal-review-notify:
     name: Open calculator legal-review reminder when due
@@ -278,14 +286,82 @@ jobs:
       REFRESH_RESULT: ${{ needs.refresh.result }}
       COMMIT_RESULT: ${{ needs.commit.result }}
       REVIEW_RESULT: ${{ needs.legal-review-check.result }}
+      SOURCE_REVIEW_DUE: ${{ needs.legal-review-check.outputs.source_review_due }}
+      SOURCE_REVIEW_OVERDUE: ${{ needs.legal-review-check.outputs.source_review_overdue }}
+      SOURCE_REVIEW_TITLE: ${{ needs.legal-review-check.outputs.source_review_title }}
+      SOURCE_REVIEW_BODY: ${{ needs.legal-review-check.outputs.source_review_body }}
+      SOURCE_REVIEW_LABEL: "automation:manual-source-review"
     steps:
+      - name: Maintain one manual-source review alert
+        if: ${{ needs.legal-review-check.result == 'success' }}
+        run: |
+          gh label create "$SOURCE_REVIEW_LABEL" \
+            --color "FBCA04" \
+            --description "A manually maintained StatuteRates legal source needs review" \
+            --force
+
+          ISSUE_NUMBER=$(gh issue list \
+            --state all \
+            --label "$SOURCE_REVIEW_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq 'map(.number) | max // empty')
+
+          if [ "$SOURCE_REVIEW_DUE" = "true" ]; then
+            if [ -n "$ISSUE_NUMBER" ]; then
+              ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state')
+              if [ "$ISSUE_STATE" = "CLOSED" ]; then
+                gh issue reopen "$ISSUE_NUMBER"
+              fi
+              gh issue edit "$ISSUE_NUMBER" \
+                --title "$SOURCE_REVIEW_TITLE" \
+                --body "$SOURCE_REVIEW_BODY" \
+                --add-label "$SOURCE_REVIEW_LABEL" \
+                --add-assignee "$ALERT_ASSIGNEE"
+            else
+              gh issue create \
+                --title "$SOURCE_REVIEW_TITLE" \
+                --body "$SOURCE_REVIEW_BODY" \
+                --label "$SOURCE_REVIEW_LABEL" \
+                --assignee "$ALERT_ASSIGNEE"
+            fi
+
+            OPEN_ISSUES=$(gh issue list \
+              --state open \
+              --label "$SOURCE_REVIEW_LABEL" \
+              --limit 100 \
+              --json number \
+              --jq 'map(.number) | sort | reverse | .[]')
+            PRIMARY_ISSUE=$(printf '%s\n' "$OPEN_ISSUES" | head -n 1)
+            for DUPLICATE in $OPEN_ISSUES; do
+              if [ "$DUPLICATE" != "$PRIMARY_ISSUE" ]; then
+                gh issue close "$DUPLICATE" --comment "Closed as a duplicate of #$PRIMARY_ISSUE."
+              fi
+            done
+          else
+            OPEN_ISSUES=$(gh issue list \
+              --state open \
+              --label "$SOURCE_REVIEW_LABEL" \
+              --limit 100 \
+              --json number \
+              --jq '.[].number')
+            if [ -z "$OPEN_ISSUES" ]; then
+              echo "All registered manual sources are inside their review windows."
+            else
+              for ISSUE_NUMBER in $OPEN_ISSUES; do
+                gh issue close "$ISSUE_NUMBER" \
+                  --comment "The manual source-review registry is current again."
+              done
+            fi
+          fi
+
       - name: Write failure diagnostics
         if: ${{ needs.refresh.result != 'success' || needs.commit.result != 'success' || needs.legal-review-check.result != 'success' }}
         run: |
           {
             echo "## Data refresh failed closed"
             echo ""
-            echo "Fetch/validate: $REFRESH_RESULT; artifact commit: $COMMIT_RESULT; legal review check: $REVIEW_RESULT."
+            echo "Fetch/validate: $REFRESH_RESULT; artifact commit: $COMMIT_RESULT; legal/source review checks: $REVIEW_RESULT."
             echo "Unvalidated exports cannot be committed or deployed. See docs/MAINTENANCE_RUNBOOK.md."
           } >> "$GITHUB_STEP_SUMMARY"
 

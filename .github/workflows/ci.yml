@@ -50,8 +50,10 @@ jobs:
         working-directory: shared
         run: node --test
 
-      - name: Test the production health checker
-        run: node --test machine/check-site-health.test.mjs
+      - name: Test machine safety controls and the source-review registry
+        run: |
+          node --test machine/*.test.mjs
+          node machine/source-review-registry.mjs >/dev/null
 
       - name: Install and test the read-only MCP interface
         working-directory: machine/mcp-server
@@ -62,12 +64,14 @@ jobs:
       - name: Generate the static API from committed exports
         run: node machine/build-api.mjs
 
-      - name: Build the static site without ads or deployment
+      - name: Build the static site with the synthetic ad boundary and without deployment
         working-directory: site
         env:
           SITE_URL: https://statuterates.com
-          ADSENSE_CLIENT: ""
-          ADSENSE_SLOT: ""
+          # Fake public identifiers exercise the exact ad-eligible/ad-free rendering boundary without
+          # contacting Google. Browser tests abort every cross-origin request.
+          ADSENSE_CLIENT: ca-pub-0000000000000000
+          ADSENSE_SLOT: "0000000000"
           DEPLOY_MARKER: ${{ format('ci-{0}-{1}', github.run_id, github.run_attempt) }}
         run: npm run build
 
@@ -76,6 +80,26 @@ jobs:
         env:
           SITE_URL: https://statuterates.com
         run: npm run verify-build
+
+      - name: Install the pinned Chromium release-test browser
+        working-directory: site
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser release journeys against the built artifact
+        working-directory: site
+        env:
+          EXPECT_ADSENSE_CLIENT: ca-pub-0000000000000000
+          EXPECT_ADSENSE_SLOT: "0000000000"
+        run: npm run test:browser
+
+      - name: Retain browser failure evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-release-failure-${{ github.run_id }}
+          path: tmp/playwright-results
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Verify generated API conformance
         run: node machine/check-api-conformance.mjs

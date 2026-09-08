@@ -4,6 +4,7 @@ import { readFile, readdir } from 'node:fs/promises';
 
 const deployPath = new URL('../../.github/workflows/deploy.yml', import.meta.url);
 const refreshPath = new URL('../../.github/workflows/refresh.yml', import.meta.url);
+const ciPath = new URL('../../.github/workflows/ci.yml', import.meta.url);
 const workflowsPath = new URL('../../.github/workflows/', import.meta.url);
 const edgeCheckPath = new URL('../../machine/check-public-edge.mjs', import.meta.url);
 
@@ -128,6 +129,63 @@ test('weekly automation opens one deduplicated calculator legal-review reminder'
   assert.doesNotMatch(checkJob, /issues:\s*write|GH_TOKEN:/);
   assert.match(notifyJob, /issues:\s*write/);
   assert.doesNotMatch(notifyJob, /actions\/checkout@|node machine\/legal-review-reminder/);
+});
+
+test('weekly automation validates all manual state sources and maintains one durable due issue', async () => {
+  const refresh = await readFile(refreshPath, 'utf8');
+  const checkJob = refresh.slice(
+    refresh.indexOf('\n  legal-review-check:'),
+    refresh.indexOf('\n  legal-review-notify:'),
+  );
+  const alertJob = refresh.slice(refresh.indexOf('\n  refresh-alert:'));
+  const sourceAlert = alertJob.slice(
+    alertJob.indexOf('name: Maintain one manual-source review alert'),
+    alertJob.indexOf('name: Write failure diagnostics'),
+  );
+
+  assert.match(checkJob, /node machine\/source-review-registry\.mjs/);
+  assert.match(checkJob, /source_review_due:\s*\$\{\{ steps\.source-review\.outputs\.due \}\}/);
+  assert.match(checkJob, /source_review_overdue:\s*\$\{\{ steps\.source-review\.outputs\.overdue \}\}/);
+  assert.match(checkJob, /contents:\s*read/);
+  assert.doesNotMatch(checkJob, /issues:\s*write|GH_TOKEN:/);
+
+  assert.match(alertJob, /permissions:\s*\n\s+issues:\s*write/);
+  assert.match(alertJob, /SOURCE_REVIEW_LABEL:\s*"automation:manual-source-review"/);
+  assert.match(sourceAlert, /gh issue list[\s\S]*--state all/);
+  assert.match(sourceAlert, /gh issue reopen/);
+  assert.match(sourceAlert, /gh issue edit/);
+  assert.match(sourceAlert, /gh issue create/);
+  assert.match(sourceAlert, /gh issue close/);
+  assert.doesNotMatch(sourceAlert, /continue-on-error:\s*true/);
+  assert.doesNotMatch(sourceAlert, /actions\/checkout@|npm ci|node machine\/source-review-registry/);
+});
+
+test('real-browser journeys gate pull requests and Pages publication without touching production', async () => {
+  const [deploy, ci, refresh] = await Promise.all([
+    readFile(deployPath, 'utf8'),
+    readFile(ciPath, 'utf8'),
+    readFile(refreshPath, 'utf8'),
+  ]);
+
+  for (const [label, workflow] of [['deploy', deploy], ['CI', ci]]) {
+    assert.match(workflow, /npx playwright install --with-deps chromium/, `${label} installs Chromium`);
+    assert.match(workflow, /run:\s*npm run test:browser/, `${label} runs browser release journeys`);
+    const browserIndex = workflow.indexOf('name: Run browser release journeys against the built artifact');
+    const evidenceIndex = workflow.indexOf('name: Retain browser failure evidence');
+    assert.notEqual(browserIndex, -1, `${label} browser gate is present`);
+    assert.ok(browserIndex < evidenceIndex, `${label} retains failure evidence after the gate`);
+    const browserStep = workflow.slice(browserIndex, evidenceIndex);
+    assert.doesNotMatch(browserStep, /continue-on-error:\s*true/);
+  }
+
+  const buildIndex = deploy.indexOf('name: Build the site');
+  const browserIndex = deploy.indexOf('name: Run browser release journeys against the built artifact');
+  const pagesArtifactIndex = deploy.indexOf('uses: actions/upload-pages-artifact@');
+  assert.ok(buildIndex < browserIndex && browserIndex < pagesArtifactIndex);
+  assert.match(deploy, /node machine\/source-review-registry\.mjs/);
+  assert.doesNotMatch(refresh, /playwright install|npm run test:browser/);
+  assert.match(ci, /ADSENSE_CLIENT:\s*ca-pub-0000000000000000/);
+  assert.match(ci, /EXPECT_ADSENSE_CLIENT:\s*ca-pub-0000000000000000/);
 });
 
 test('refresh failures maintain one durable alert and a later success closes it', async () => {

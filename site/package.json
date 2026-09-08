@@ -9,6 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "test": "node --test src/lib/*.test.mjs",
+    "test:browser": "playwright test",
+    "test:browser:release": "node ../machine/build-api.mjs && ADSENSE_CLIENT=ca-pub-0000000000000000 ADSENSE_SLOT=0000000000 SITE_URL=https://statuterates.com npm run build && EXPECT_ADSENSE_CLIENT=ca-pub-0000000000000000 EXPECT_ADSENSE_SLOT=0000000000 npm run test:browser",
     "verify-build": "node scripts/check-build.mjs"
   },
   "engines": {
@@ -16,5 +18,8 @@
   },
   "dependencies": {
     "astro": "7.1.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
   }
 }

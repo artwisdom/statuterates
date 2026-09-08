@@ -55,6 +55,11 @@ jobs:
           npm test
           node run.mjs build
 
+      - name: Test and validate the manual state-source review registry
+        run: |
+          node --test machine/source-review-registry.test.mjs
+          node machine/source-review-registry.mjs >/dev/null
+
       - name: Install site dependencies
         working-directory: site
         run: npm ci
@@ -95,6 +100,26 @@ jobs:
       - name: Verify built links and indexing guardrails
         working-directory: site
         run: npm run verify-build
+
+      - name: Install the pinned Chromium release-test browser
+        working-directory: site
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser release journeys against the built artifact
+        working-directory: site
+        env:
+          EXPECT_ADSENSE_CLIENT: ${{ vars.ADSENSE_CLIENT || '' }}
+          EXPECT_ADSENSE_SLOT: ${{ vars.ADSENSE_SLOT || '' }}
+        run: npm run test:browser
+
+      - name: Retain browser failure evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-release-failure-${{ github.run_id }}
+          path: tmp/playwright-results
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Apply base path for GitHub Pages project subpath
         working-directory: site
