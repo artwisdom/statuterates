@@ -72,6 +72,12 @@ State-specific calculator routes have four independent protections:
 3. The entity renderer ID must exactly match the registry entry.
 4. Build and shared-contract checks reject an unapproved state calculator route.
 
+Manual state-source freshness has a separate code-controlled contract. The registry in
+`machine/source-review-registry.json` covers exactly the 102 active `STATE_SOURCES`, records owner,
+risk, last review, cadence, and next due date, and fingerprints the sorted source ID/URL set. Its
+checker rejects missing or stale rows, URL drift, malformed schedules, insecure URLs, and unexpected
+export-only sources. Automated retrieval timestamps do not advance this human review ledger.
+
 ## 5. Pipeline
 
 ```text
@@ -107,7 +113,10 @@ Important modules:
 - Search discovery: sitemap, robots, RSS changes feed, `llms.txt`, and `llms-full.txt`.
 
 `site/scripts/check-build.mjs` fails deployment on broken internal targets, unsafe calculator output,
-missing `noindex` gates, or prose whitespace damage after framework upgrades.
+missing `noindex` gates, or prose whitespace damage after framework upgrades. A second release layer
+uses Playwright to exercise seven high-risk calculator, historical lookup, copy/download/print,
+mobile-layout, and monetization journeys against the completed static artifact. The browser is not
+allowed to make cross-origin requests.
 
 ## 7. Runtime and automation
 
@@ -117,5 +126,7 @@ newly generated snapshot again in a read-only job. An immutable, data-only artif
 a fresh commit job that installs no dependencies, executes no fetched content, validates artifact
 shape/scope, and has narrowly job-scoped repository-write permission. Its pinned, non-persisting
 checkout uses that permission internally, while `GH_TOKEN` is exposed to a shell only in the final
-commit/push step. Issue access is isolated in separate notification jobs. The deploy workflow runs
-site data-contract tests plus static-output verification before publishing.
+commit/push step. Issue access is isolated in separate notification jobs. The weekly read-only job
+also validates the 102-source review registry; a separate issue-only job maintains one reminder from
+14 days before the first due date through recovery. The deploy workflow runs site data-contract,
+static-output, and real-browser release tests before a Pages artifact can be uploaded.

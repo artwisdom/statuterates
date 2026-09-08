@@ -12,9 +12,10 @@ Use Node 24 or newer. The repository includes `.node-version` files.
 ./setup.sh
 ```
 
-`setup.sh` installs exact lockfile dependencies, runs all tests, refreshes remote sources, builds the
-static API and website, checks API conformance, verifies links/indexing gates, and exercises the MCP
-server. A network-free code/build sequence is listed in the root `README.md`.
+`setup.sh` installs exact lockfile dependencies and Chromium, runs unit and real-browser release
+tests, refreshes remote sources, builds the static API and website, checks API conformance, verifies
+links/indexing gates, and exercises the MCP server. A local no-source-refresh sequence is listed in
+the root `README.md`.
 
 ## 2. GitHub Actions configuration
 
@@ -35,10 +36,13 @@ history, fetches permitted sources, and validates without write authority. Only 
 revalidates the artifact boundary, and commits exports only when they changed. A stale `main` base or
 any non-data path fails closed and requires a safe rerun.
 
-The deploy workflow installs and tests the pipeline, validates a fresh database hydrated from the
+The deploy workflow installs and tests the pipeline, validates the 102-source manual-review registry,
+validates a fresh database hydrated from the
 committed exports, tests the site data contract and shared engine, rebuilds the static API, builds
-Astro, checks all internal targets and calculator indexing gates, validates the API contract, and
-then publishes to GitHub Pages. After publication it waits for the custom domain, verifies the key
+Astro, checks all internal targets and calculator indexing gates, then runs seven deterministic
+Chromium journeys against that completed artifact. Every cross-origin request is blocked and a
+browser failure stops the release before Pages upload. It then validates the API contract and
+publishes to GitHub Pages. After publication it waits for the custom domain, verifies the key
 release markers and public support files, and checks every sitemap URL before notifying search engines.
 It runs for reviewed `main` changes and after every successful refresh through
 `workflow_run`. The latter is required because GitHub intentionally prevents a push made with the
@@ -52,9 +56,10 @@ Actions tab. Before pushing, run:
 
 ```bash
 cd pipeline && npm test
-cd ../site && npm test
+cd .. && node --test machine/*.test.mjs && node machine/source-review-registry.mjs
+cd site && npm test && npx playwright install chromium
 cd .. && node machine/build-api.mjs
-cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build
+cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build && npm run test:browser
 cd .. && node machine/check-api-conformance.mjs
 cd machine/mcp-server && npm test
 ```

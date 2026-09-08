@@ -3,10 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-09-03
+**Updated:** 2026-09-07
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
+
+The current public artifact is commit `2243359`. The Phase C1 controls below are a verified local
+candidate and do not count as production until the owner approves publication and the hosted release
+checks succeed.
 
 ## Current product
 
@@ -22,6 +26,8 @@
 - Refresh sandbox: network fetchers, parsers, dependencies, and validation run without write
   authority. Only an immutable validated `data/exports` artifact reaches a fresh commit job, which
   rejects stale bases, special files, invalid JSON, count mismatches, and out-of-scope paths.
+- The repository now includes a 102-source manual-review registry with a 90-day cadence, a 14-day
+  warning window, exact active-source URL fingerprint, and one deduplicated GitHub issue reminder.
 - 102 state-law entities across post- and prejudgment interest.
 - Calculator set in the current repository: general fixed-rate judgment/per-diem arithmetic,
   full-modern-history federal post-judgment, separate IRS underpayment/refund interest, U.K./E.U.
@@ -29,6 +35,26 @@
 - State calculators: Florida is the only dedicated released state calculator. The two unfinished
   generic state/prejudgment calculator placeholders are absent from the build and sitemap and return
   a real 404; every other dedicated state calculator is also absent until its fail-closed gate passes.
+
+## Phase C1 source-review and browser-safety candidate
+
+- All 102 active `STATE_SOURCES` entries have an explicit owner, risk, last-reviewed date, and next
+  review deadline. Six export-only sources are explicitly classified rather than silently ignored.
+- The registry rejects missing/stale entries, unexpected exports, insecure or drifted source URLs,
+  malformed schedules, and unsupported review dates. As of September 7, all 102 sources are current;
+  the earliest deadline is October 6 and the first 14-day warning begins September 22.
+- The weekly read-only check feeds one narrowly authorized GitHub issue reminder. It updates or
+  reopens the existing issue, closes duplicates, and closes the reminder after recovery.
+- Seven deterministic Chromium journeys now gate pull requests and deployment: Tennessee historical
+  lookup/copy/CSV/range safety; Florida, federal, IRS-interest, and Form 1040 calculations; phone
+  navigation/overflow; and the ad-eligible/ad-free boundary.
+- Browser tests run against the built static artifact with all cross-origin requests blocked, fake ad
+  identifiers in CI, one hosted worker, zero retries, and failure-only traces/screenshots. Pages
+  upload occurs only after they pass.
+- The phone test exposed a real About-page overflow caused by long official-source URLs. Those links
+  now wrap without widening the page.
+- Local verification is not a hosted or production receipt. GitHub issue behavior, hosted browser
+  installation, workflow duration, deployment, and the public edge remain pending publication.
 
 ## July 2026 safety baseline
 

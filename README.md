@@ -30,7 +30,9 @@ Repository: [github.com/artwisdom/statuterates](https://github.com/artwisdom/sta
   integrity monitor protects the Form 1040 penalty rules used by the calculator.
   The fetch/test job is read-only; only its immutable validated `data/exports` artifact crosses to a
   fresh commit job with narrowly scoped repository-write authority.
-- Curated state references carry explicit source tiers and source-check dates.
+- Curated state references carry explicit source tiers and source-check dates. A mechanical
+  102-source review registry checks their owner, risk, quarterly due date, exact URL contract, and
+  coverage each week; one deduplicated GitHub issue warns before a review expires.
 - The repository includes general fixed-rate judgment/per-diem, full-modern-history federal §1961,
   fail-closed U.K. late-payment plus a clearly labeled E.U. Directive benchmark, IRS
   interest/refund, individual Form 1040 penalty-and-interest, and a narrowly audited Florida §55.03
@@ -63,15 +65,17 @@ Node 24 or newer is required. Version files are included for common Node version
 ./setup.sh
 ```
 
-That command installs locked dependencies, runs tests, refreshes the remote data sources, builds the
-API and site, and verifies the final static output. For an offline/code-only verification, run:
+That command installs locked dependencies and Chromium, runs unit and real-browser release tests,
+refreshes the remote data sources, builds the API and site, and verifies the final static output. For
+a local verification without refreshing remote sources, run:
 
 ```bash
 cd pipeline && npm ci && npm test
-cd ../site && npm ci && npm test
-cd .. && node --test shared/*.test.mjs
+cd ../site && npm ci && npm test && npx playwright install chromium
+cd .. && node --test shared/*.test.mjs machine/*.test.mjs
+node machine/source-review-registry.mjs
 node machine/build-api.mjs
-cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build
+cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build && npm run test:browser
 cd ../machine/mcp-server && npm ci && npm test
 ```
 
@@ -83,7 +87,7 @@ cd ../machine/mcp-server && npm ci && npm test
 | `data/exports/` | Versioned, deployable JSON snapshots and automation history bootstrap |
 | `site/` | Astro static site, SEO pages, safe calculators, and build verification |
 | `shared/` | Dependency-free interest calculation engine and tests |
-| `machine/` | Static API generator, OpenAPI contract, and MCP server |
+| `machine/` | Static API generator, OpenAPI contract, source-review registry, and MCP server |
 | `docs/` | Architecture, deployment, maintenance, risk, and historical planning records |
 | `scratchpad/` | Retained, non-production research snapshots and one-time audit helpers; see its README |
 | `.github/workflows/` | Weekly data refresh and GitHub Pages deployment automation |
@@ -101,6 +105,8 @@ IRS rule-monitor milestone,
 audited state calculator, and
 [docs/PHASE_7_AI_DISCOVERY.md](docs/PHASE_7_AI_DISCOVERY.md) for the AI-search, public OpenAPI, and
 machine-interface safety release, and
+[docs/PHASE_C1_CONTROLS.md](docs/PHASE_C1_CONTROLS.md) for the automated state-source review and
+real-browser release gates, and
 [docs/ADSENSE_VALUE_REPAIR.md](docs/ADSENSE_VALUE_REPAIR.md) for the low-value-content diagnosis,
 inventory policy, and re-review gate, and
 [docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.

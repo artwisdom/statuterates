@@ -106,6 +106,14 @@ for (const label of ['README', 'STATE', 'ARCHITECTURE', 'DEPLOYMENT_GUIDE']) {
   requireText(label, documents[label], 'fresh commit job');
 }
 
+for (const label of ['README', 'STATE', 'ARCHITECTURE', 'DEPLOYMENT_GUIDE', 'MAINTENANCE_RUNBOOK']) {
+  requireText(label, documents[label], '102-source');
+}
+for (const label of ['README', 'STATE', 'ARCHITECTURE', 'DEPLOYMENT_GUIDE']) {
+  requireText(label, documents[label], 'browser');
+}
+requireText('MAINTENANCE_RUNBOOK', documents.MAINTENANCE_RUNBOOK, 'source-review-registry.mjs');
+
 const federal = JSON.parse(read('data/exports/entity/us-federal-post-judgment.json'));
 if (federal.metadata?.date_semantics !== 'judgment-applicability-week-start'
     || federal.metadata?.source_week_offset_days !== -7) {

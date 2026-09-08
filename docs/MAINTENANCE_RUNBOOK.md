@@ -239,6 +239,21 @@ Florida (78 official periods), Utah (34 annual rows), Maine, Kentucky, and Georg
 verified histories. A source review must not invent historical dates or change `retrieved_at` to the
 build time.
 
+The authoritative 102-source schedule is `machine/source-review-registry.json`. It covers exactly
+all active `STATE_SOURCES`; `machine/source-review-registry.mjs` checks the registry each Wednesday and
+opens or updates one GitHub issue when any review enters its 14-day warning window. Run the same
+read-only report locally at any time:
+
+```bash
+node machine/source-review-registry.mjs
+```
+
+For a date-bound rehearsal without changing the registry, set an explicit Eastern calendar date:
+
+```bash
+SOURCE_REVIEW_TODAY=2026-10-07 node machine/source-review-registry.mjs
+```
+
 For each state reviewed:
 
 1. Open the cited URL and classify it with `pipeline/lib/state-rules.mjs`.
@@ -247,8 +262,17 @@ For each state reviewed:
 3. Confirm the rate, effective period, claim-type branches, accrual rule, compounding, day count,
    reset/lock behavior, and exceptions.
 4. Add a new effective-date observation when the law/rate changed; never overwrite the earlier point.
-5. Update the source-check timestamp only when the source was actually reviewed.
-6. Run all tests, isolated build/validation, export, site build, and API conformance.
+5. Update the source-check timestamp and registry `last_reviewed` only when the source was actually
+   reviewed. An automated `retrieved_at`, successful build, or unchanged rate is not a new legal
+   review. Set `next_due` to exactly `last_reviewed + cadence_days`.
+6. If the official source URL intentionally changed, update the source code and generated exports,
+   inspect every affected citation, then update `active_source_urls_sha256` using the fingerprint
+   reported by the failing checker. Never update the hash merely to silence unexplained drift.
+7. Run `node --test machine/*.test.mjs` and `node machine/source-review-registry.mjs`, followed by all
+   pipeline tests, isolated build/validation, export, site build, browser release journeys, and API
+   conformance.
+8. After the reviewed registry is published, the next successful weekly run updates or closes the
+   existing reminder. Do not close it only because the rate itself stayed unchanged.
 
 Georgia and Mississippi now use the state legislatures' authorized LexisNexis code portals, which
 are classified as `official_secondary` rather than controlling enactments. Georgia's changing prime

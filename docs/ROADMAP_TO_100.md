@@ -1,8 +1,8 @@
 # Evidence-gated roadmap toward 100
 
-**Reviewed:** 2026-09-03
+**Reviewed:** 2026-09-07
 
-**Current production:** commit `ebce83f`
+**Current production before the Phase C1 candidate:** commit `2243359`
 
 **Purpose:** make StatuteRates a durable, low-maintenance reference asset without confusing technical
 readiness with search rankings, AdSense approval, or income.
@@ -20,37 +20,38 @@ public-edge verification pass.
 
 ## Current scorecard
 
-The first number is the verified production baseline. The second is the expected score only after
-the September quality-and-security candidate is published and its hosted checks pass.
+The first number is the verified production baseline after the September quality-and-security
+release. The second is the expected score only after the Phase C1 source-review and browser-safety
+candidate is published and its hosted checks pass.
 
 | Area | Production | Candidate | What still prevents 100 |
 |---|---:|---:|---|
-| Data and legal correctness | 91 | 94 | Most state-law references still require periodic human re-review |
-| Historical coverage and data moat | 84 | 86 | Most state series still have one recorded observation |
-| Core user utility | 86 | 88 | Only Florida has a fully released state-specific calculator |
-| Content usefulness and editorial trust | 82 | 89 | Named editor credentials require owner-approved truthful identity; weak pages need demand-led research |
-| Technical SEO | 90 | 96 | Search-engine processing and field data remain external |
-| AI and machine discoverability | 96 | 97 | Citation by answer engines cannot be guaranteed by technical access |
-| Internal linking and crawl paths | 95 | 96 | Future routes must preserve the current no-orphan contract |
+| Data and legal correctness | 94 | 95 | Human legal review still cannot be fully automated |
+| Historical coverage and data moat | 86 | 86 | Most state series still have one recorded observation |
+| Core user utility | 88 | 89 | Only Florida has a fully released state-specific calculator |
+| Content usefulness and editorial trust | 89 | 89 | Named editor credentials require owner-approved truthful identity; weak pages need demand-led research |
+| Technical SEO | 96 | 96 | Search-engine processing and field data remain external |
+| AI and machine discoverability | 97 | 97 | Citation by answer engines cannot be guaranteed by technical access |
+| Internal linking and crawl paths | 96 | 96 | Future routes must preserve the current no-orphan contract |
 | Performance and accessibility | 97 | 97 | No CrUX field sample yet; advertising remains the main third-party cost |
-| Automation and refresh reliability | 92 | 95 | Hosted refresh after the candidate release is still required |
-| Safe sandboxing and fail-closed behavior | 88 | 95 | The hardened source client is local until published and exercised by hosted automation |
-| Tests and release safety | 86 | 92 | Browser-level calculator journeys and independent deployment identity can improve |
-| Security and supply chain | 75 | 84 | GitHub dependency alerts, protected release rules, and private reporting remain provider-side gaps |
-| Monitoring and recovery | 83 | 86 | Monitoring still shares GitHub as a platform dependency; rollback exercise is not recent |
-| Maintainability | 77 | 82 | Several large data/content modules and manual freshness metadata remain costly to review |
+| Automation and refresh reliability | 95 | 96 | Hosted issue and browser jobs are unverified until publication |
+| Safe sandboxing and fail-closed behavior | 95 | 96 | Human-source review remains an alert rather than a publication block |
+| Tests and release safety | 92 | 96 | Chromium coverage is local until hosted; no independent browser engine yet |
+| Security and supply chain | 84 | 85 | GitHub dependency alerts, protected release rules, and private reporting remain provider-side gaps |
+| Monitoring and recovery | 86 | 88 | Monitoring still shares GitHub as a platform dependency; rollback exercise is not recent |
+| Maintainability | 82 | 87 | Several large data/content modules remain costly to review |
 | Organic growth evidence | 72 | 72 | The latest finalized comparison is promising but still early and rankings weakened while reach grew |
 | Authority and earned distribution | 20 | 20 | No current evidence set proves relevant referring domains or independent citations |
-| AdSense and monetization readiness | 70 | 78 | Review is pending; approval, serving, page RPM, and revenue are unverified |
-| Passive-operation readiness | 85 | 91 | Provider alerts, periodic legal review, and external monitoring still require work |
+| AdSense and monetization readiness | 78 | 79 | Review outcome, serving, page RPM, and revenue are unverified |
+| Passive-operation readiness | 91 | 94 | Human legal review, provider alerts, and external monitoring still require work |
 
 Three roll-up scores keep unlike outcomes separate:
 
-- **Controllable product and engineering readiness:** 87/100 production; 92/100 after the candidate
+- **Controllable product and engineering readiness:** 92/100 production; 95/100 after the candidate
   passes hosted release checks.
-- **Search-growth readiness:** 78/100 production; 82/100 after the candidate. Rankings, indexing, and
+- **Search-growth readiness:** 82/100 production; 83/100 after the candidate. Rankings, indexing, and
   backlinks must then be measured rather than inferred.
-- **Income-system readiness:** 54/100 production; 60/100 after the candidate. This is readiness to
+- **Income-system readiness:** 60/100 production; 62/100 after the candidate. This is readiness to
   monetize, not verified income. Progress toward the owner's $20,000/month goal is not scoreable
   until AdSense reports real monetized pageviews, page RPM, and earnings.
 
@@ -115,6 +116,13 @@ Goal: make future work safer and more evidence-driven before adding inventory.
 
 Exit gate: source review cannot silently expire, critical browser journeys run in CI, external
 monitoring has a receipt, and repository settings no longer leave known security controls disabled.
+
+### Phase C1 candidate prepared September 7
+
+Items 1 and 2 are complete in the local candidate: all 102 active state sources are registered with
+a 14-day warning and one deduplicated issue, and seven Chromium journeys gate the built artifact
+before Pages upload. Local success does not count as hosted or production evidence. Items 3–6 remain
+future, separately scoped work.
 
 ## Phase D — compound search authority without doorway pages
 

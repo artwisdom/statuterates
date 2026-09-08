@@ -1,6 +1,6 @@
 # StatuteRates risk register
 
-**Reviewed:** 2026-09-03
+**Reviewed:** 2026-09-07
 
 This register separates controllable product quality from externally controlled outcomes. A passing
 build does not prove indexing, rankings, backlinks, AdSense approval, RPM, or revenue. Likewise, an
@@ -26,10 +26,10 @@ unknown rather than zero.
 | R2 | Thin or damaged templated content undermines trust or AdSense review | Medium | High | Visible-content/schema parity, minimum rendered-depth checks, selective ad eligibility, correction channel, and fail-closed legal-copy checks | AdSense decision; build alarms; sampled rendered-page review |
 | R3 | An official source changes layout, blocks automation, or publishes late | Medium | High | Robots-aware throttled fetches, bounded retries, immutable last-good exports, strict parsers, and deduplicated failure issues | Refresh failure, stale-source age, or changed source checksum |
 | R4 | A legal rate or date is numerically plausible but uses the wrong legal branch | Low-Medium | Very high | Official-source provenance, explicit effective-date semantics, reference-only defaults, calculator release registry, and fixture tests | Source/court mismatch, correction report, or invariant failure |
-| R5 | Old manually reviewed state references become stale without a value change | Medium | High | Source dates remain visible and no unsupported calculator ships | Mechanical review-due registry and overdue issue are still required |
+| R5 | Old manually reviewed state references become stale without a value change | Medium | High | The Phase C1 candidate registers all 102 active sources, warns 14 days before due, and maintains one reminder issue | Publish it, then verify the first hosted check and the September 23 warning behavior |
 | R6 | External authority remains weak even though the product is technically good | High | High | Citable histories, CSV/JSON, OpenAPI, RSS, citation tools, and transparent methodology | Verified relevant referring domains and independent citations |
 | R7 | AdSense remains pending or rejects the site again | Medium | High | Ads are limited to 113 eligible pages in the current build; legal/error/noindex/shallow pages are excluded; CMP messages are active | AdSense approval status, ads.txt recrawl, policy detail, measured serving |
-| R8 | Ad density damages calculators, trust, or Core Web Vitals | Low-Medium after approval | Medium-High | Browser-local tools render before ads, slots reserve space, and performance is monitored | Field CWV, engagement, RPM, and page-level exclusion experiments |
+| R8 | Ad density damages calculators, trust, or Core Web Vitals | Low-Medium after approval | Medium-High | Browser-local tools render before ads, slots reserve space, and the Phase C1 candidate tests eligible/ineligible routes with blocked external requests | Hosted browser pass, then field CWV, engagement, RPM, and page-level exclusion experiments |
 | R9 | Supply-chain or provider configuration leaves a preventable security gap | Medium | Medium-High | Locked dependencies, CodeQL, secret scanning and push protection, least-privilege Actions | Zero npm advisories; enable GitHub dependency alerts/security updates/private reporting and protected release checks |
 | R10 | Robots/redirect/network behavior permits an unsafe source fetch | Medium until hardening ships | High | Central shared fetch layer and per-source caps | Mocked 5xx/network/redirect/oversize tests and successful hosted refresh |
 | R11 | A platform or GitHub-account outage hides both site and monitor failure | Low | High | Static portable build and six-hour GitHub-hosted health checks | Independent external uptime receipt and documented rollback exercise |
