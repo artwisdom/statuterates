@@ -28,7 +28,9 @@ export default defineConfig({
     video: 'off',
   },
   webServer: {
-    command: `npm run preview -- --host ${host} --port ${port}`,
+    // Astro 7.2+ auto-detaches preview when it detects an AI coding agent. Playwright must own the
+    // foreground process so it can verify startup and always tear the exact server down.
+    command: `ASTRO_PREVIEW_BACKGROUND=0 npm run preview -- --host ${host} --port ${port}`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 120_000,

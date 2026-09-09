@@ -35,7 +35,8 @@ jobs:
 
       - name: Check the production contract
         env:
-          SITE_URL: ${{ vars.SITE_URL || 'https://statuterates.com' }}
+          # Monitoring must never follow a mutable repository variable away from production.
+          SITE_URL: https://statuterates.com
           # Ten days covers a weekly refresh plus weekends, U.S. Monday holidays, and normal
           # scheduled-run delay while still detecting a missed weekly data release promptly.
           MAX_DATA_AGE_HOURS: "240"
@@ -51,7 +52,7 @@ jobs:
           ALERT_LABEL: "automation:production-health"
           ALERT_ASSIGNEE: ${{ github.repository_owner }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          CHECKED_SITE: ${{ vars.SITE_URL || 'https://statuterates.com' }}
+          CHECKED_SITE: https://statuterates.com
         run: |
           gh label create "$ALERT_LABEL" \
             --color "B60205" \
@@ -120,3 +121,30 @@ jobs:
                 --comment "The read-only production health check recovered successfully: $RUN_URL"
             done
           fi
+
+  health-heartbeat:
+    name: Confirm successful health check to the independent monitor
+    needs: check
+    if: ${{ always() && needs.check.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      # This secret-bearing job deliberately checks out and executes no repository code.
+      - name: Ping configured heartbeat without blocking a healthy site check
+        continue-on-error: true
+        env:
+          HEARTBEAT_URL: ${{ secrets.UPTIMEROBOT_PRODUCTION_HEALTH_HEARTBEAT_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$HEARTBEAT_URL" ]; then
+            echo "Independent health heartbeat is not configured; continuing without it."
+            exit 0
+          fi
+          case "$HEARTBEAT_URL" in
+            https://*) ;;
+            *) echo "Refusing a non-HTTPS heartbeat URL." >&2; exit 1 ;;
+          esac
+          curl --fail --silent --show-error \
+            --max-time 15 --retry 2 --retry-delay 2 \
+            "$HEARTBEAT_URL" >/dev/null

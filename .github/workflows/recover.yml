@@ -1,0 +1,306 @@
+# Manual recovery for a previously verified, retained GitHub Pages artifact.
+#
+# The default mode only validates the selected release. Production restoration is never automatic:
+# it requires an exact confirmation string, a successful deploy-site receipt, a retained artifact,
+# a full main-ancestor SHA, and a safe immutable marker inside the archive.
+name: recover-production
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: "Full 40-character source SHA recorded in the retained artifact"
+        required: true
+        type: string
+      deploy_run_id:
+        description: "Successful deploy-site run that produced the retained artifact"
+        required: true
+        type: string
+      mode:
+        description: "Validate only unless an owner explicitly approves production restoration"
+        required: true
+        default: validate-only
+        type: choice
+        options:
+          - validate-only
+          - restore-production
+      confirmation:
+        description: "For restore-production only, enter RESTORE STATUTERATES PRODUCTION"
+        required: false
+        type: string
+
+permissions: {}
+
+concurrency:
+  # Share the production lock with deploy-site so release and recovery publications never overlap.
+  group: deploy-site
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate the retained known-good artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      deploy_marker: ${{ steps.artifact.outputs.deploy_marker }}
+      source_sha: ${{ steps.selection.outputs.source_sha }}
+      source_run_attempt: ${{ steps.selection.outputs.source_run_attempt }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          ref: main
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Verify the owner selection and successful deployment receipt
+        id: selection
+        env:
+          SOURCE_SHA: ${{ inputs.source_sha }}
+          DEPLOY_RUN_ID: ${{ inputs.deploy_run_id }}
+          RECOVERY_MODE: ${{ inputs.mode }}
+          RECOVERY_CONFIRMATION: ${{ inputs.confirmation }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          REQUESTING_ACTOR: ${{ github.actor }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          WORKFLOW_REF: ${{ github.ref }}
+          CONFIGURED_SITE_URL: ${{ vars.SITE_URL }}
+          CONFIGURED_BASE_PATH: ${{ vars.BASE_PATH }}
+        run: |
+          set -euo pipefail
+          if [ "$REQUESTING_ACTOR" != "$REPOSITORY_OWNER" ]; then
+            echo "Only the repository owner may validate or restore a retained production release." >&2
+            exit 1
+          fi
+          if [ "$WORKFLOW_REF" != "refs/heads/main" ]; then
+            echo "Recovery must be dispatched from the main workflow definition." >&2
+            exit 1
+          fi
+          if [ -n "$CONFIGURED_SITE_URL" ] && [ "$CONFIGURED_SITE_URL" != "https://statuterates.com" ]; then
+            echo "Recovery refuses unexpected SITE_URL repository variable: $CONFIGURED_SITE_URL" >&2
+            exit 1
+          fi
+          if [ -n "$CONFIGURED_BASE_PATH" ] && [ "$CONFIGURED_BASE_PATH" != "/" ]; then
+            echo "Recovery refuses unexpected BASE_PATH repository variable: $CONFIGURED_BASE_PATH" >&2
+            exit 1
+          fi
+          if [[ ! "$SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "source_sha must be a full lowercase 40-character commit SHA." >&2
+            exit 1
+          fi
+          if [[ ! "$DEPLOY_RUN_ID" =~ ^[1-9][0-9]*$ ]]; then
+            echo "deploy_run_id must be a positive GitHub Actions run ID." >&2
+            exit 1
+          fi
+          if [ "$RECOVERY_MODE" = "restore-production" ] \
+             && [ "$RECOVERY_CONFIRMATION" != "RESTORE STATUTERATES PRODUCTION" ]; then
+            echo "Production restoration requires the exact confirmation text." >&2
+            exit 1
+          fi
+
+          git cat-file -e "${SOURCE_SHA}^{commit}"
+          if ! git merge-base --is-ancestor "$SOURCE_SHA" origin/main; then
+            echo "Refusing a source SHA that is not in main history." >&2
+            exit 1
+          fi
+
+          RUN_JSON=$(gh api "repos/$GH_REPO/actions/runs/$DEPLOY_RUN_ID")
+          RUN_NAME=$(jq -r '.name' <<<"$RUN_JSON")
+          RUN_PATH=$(jq -r '.path' <<<"$RUN_JSON")
+          RUN_STATUS=$(jq -r '.status' <<<"$RUN_JSON")
+          RUN_CONCLUSION=$(jq -r '.conclusion' <<<"$RUN_JSON")
+          RUN_BRANCH=$(jq -r '.head_branch' <<<"$RUN_JSON")
+          RUN_ATTEMPT=$(jq -r '.run_attempt' <<<"$RUN_JSON")
+          if [ "$RUN_NAME" != "deploy-site" ] \
+             || [ "$RUN_PATH" != ".github/workflows/deploy.yml" ] \
+             || [ "$RUN_STATUS" != "completed" ] \
+             || [ "$RUN_CONCLUSION" != "success" ] \
+             || [ "$RUN_BRANCH" != "main" ] \
+             || [[ ! "$RUN_ATTEMPT" =~ ^[1-9][0-9]*$ ]]; then
+            echo "The selected run is not a completed successful main deploy-site release." >&2
+            exit 1
+          fi
+
+          echo "source_sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
+          echo "source_run_attempt=$RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
+          echo "Selected successful deploy-site run $DEPLOY_RUN_ID attempt $RUN_ATTEMPT."
+
+      - name: Download only the selected run's retained Pages artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: github-pages
+          path: ${{ runner.temp }}/recovery-source
+          repository: ${{ github.repository }}
+          run-id: ${{ inputs.deploy_run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Validate archive structure and immutable release identity without extracting it
+        id: artifact
+        env:
+          EXPECTED_SOURCE_SHA: ${{ steps.selection.outputs.source_sha }}
+          EXPECTED_RUN_ID: ${{ inputs.deploy_run_id }}
+          EXPECTED_RUN_ATTEMPT: ${{ steps.selection.outputs.source_run_attempt }}
+        run: |
+          set -euo pipefail
+          MARKER=$(node machine/validate-recovery-artifact.mjs "$RUNNER_TEMP/recovery-source/artifact.tar")
+          echo "deploy_marker=$MARKER" >> "$GITHUB_OUTPUT"
+
+      - name: Re-upload the validated tar for this recovery run
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: github-pages-recovery-${{ github.run_id }}
+          path: ${{ runner.temp }}/recovery-source/artifact.tar
+          if-no-files-found: error
+          retention-days: 2
+          compression-level: 0
+
+      - name: Record the safe default outcome
+        if: ${{ inputs.mode == 'validate-only' }}
+        run: |
+          echo "## Recovery validation passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "The retained release is safe and available. Production was not changed." >> "$GITHUB_STEP_SUMMARY"
+
+  restore:
+    name: Restore the explicitly confirmed artifact to production
+    needs: validate
+    if: ${{ inputs.mode == 'restore-production' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the already validated retained artifact
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+        with:
+          artifact_name: github-pages-recovery-${{ github.run_id }}
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          ref: main
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Verify the restored release across the public edge
+        env:
+          SITE_URL: https://statuterates.com
+          DEPLOY_MARKER: ${{ needs.validate.outputs.deploy_marker }}
+        run: node machine/check-public-edge.mjs
+
+  recovery-alert:
+    name: Maintain the recovery failure alert
+    needs: [validate, restore]
+    if: ${{ always() && inputs.mode == 'restore-production' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ALERT_TITLE: "[automation] StatuteRates deployment needs attention"
+      ALERT_LABEL: "automation:deploy-failure"
+      ALERT_ASSIGNEE: ${{ github.repository_owner }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      SOURCE_RUN_ID: ${{ inputs.deploy_run_id }}
+      VALIDATE_RESULT: ${{ needs.validate.result }}
+      RESTORE_RESULT: ${{ needs.restore.result }}
+    steps:
+      - name: Open or update one recovery failure alert
+        if: ${{ needs.validate.result != 'success' || needs.restore.result != 'success' }}
+        continue-on-error: true
+        run: |
+          gh label create "$ALERT_LABEL" \
+            --color "B60205" \
+            --description "A validated StatuteRates production deployment failed" \
+            --force
+
+          BODY=$(printf '%s\n' \
+            "The explicitly requested StatuteRates recovery did not complete successfully." \
+            "" \
+            "- Recovery run: [Open the GitHub Actions run]($RUN_URL)" \
+            "- Artifact validation result: \`$VALIDATE_RESULT\`" \
+            "- Restore/public verification result: \`$RESTORE_RESULT\`" \
+            "- Requested source: \`$SOURCE_SHA\`" \
+            "- Source deployment run: \`$SOURCE_RUN_ID\`" \
+            "" \
+            "Do not bypass the recovery checks. Production state may be unchanged or may require another verified restore after reviewing this run.")
+
+          ISSUE_NUMBER=$(gh issue list \
+            --state all \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq 'map(.number) | max // empty')
+          if [ -n "$ISSUE_NUMBER" ]; then
+            ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state')
+            if [ "$ISSUE_STATE" = "CLOSED" ]; then
+              gh issue reopen "$ISSUE_NUMBER"
+            fi
+            gh issue edit "$ISSUE_NUMBER" \
+              --title "$ALERT_TITLE" \
+              --body "$BODY" \
+              --add-label "$ALERT_LABEL" \
+              --add-assignee "$ALERT_ASSIGNEE"
+            gh issue comment "$ISSUE_NUMBER" --body "The recovery failed: $RUN_URL"
+          else
+            gh issue create \
+              --title "$ALERT_TITLE" \
+              --body "$BODY" \
+              --label "$ALERT_LABEL" \
+              --assignee "$ALERT_ASSIGNEE"
+          fi
+
+          OPEN_ISSUES=$(gh issue list \
+            --state open \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq 'map(.number) | sort | reverse | .[]')
+          PRIMARY_ISSUE=$(printf '%s\n' "$OPEN_ISSUES" | head -n 1)
+          for DUPLICATE in $OPEN_ISSUES; do
+            if [ "$DUPLICATE" != "$PRIMARY_ISSUE" ]; then
+              gh issue close "$DUPLICATE" --comment "Closed as a duplicate of #$PRIMARY_ISSUE."
+            fi
+          done
+
+      - name: Close deployment failure alerts after verified recovery
+        if: ${{ needs.validate.result == 'success' && needs.restore.result == 'success' }}
+        continue-on-error: true
+        run: |
+          gh label create "$ALERT_LABEL" \
+            --color "B60205" \
+            --description "A validated StatuteRates production deployment failed" \
+            --force
+          ISSUE_NUMBERS=$(gh issue list \
+            --state open \
+            --label "$ALERT_LABEL" \
+            --limit 100 \
+            --json number \
+            --jq '.[].number')
+          if [ -z "$ISSUE_NUMBERS" ]; then
+            echo "No open deployment-failure alert needs to be closed."
+          else
+            for ISSUE_NUMBER in $ISSUE_NUMBERS; do
+              gh issue close "$ISSUE_NUMBER" \
+                --comment "The retained release was restored and verified at the public edge: $RUN_URL"
+            done
+          fi

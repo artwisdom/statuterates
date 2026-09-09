@@ -437,3 +437,34 @@ jobs:
                 --comment "The validated data refresh recovered successfully: $RUN_URL"
             done
           fi
+
+  refresh-heartbeat:
+    name: Confirm successful refresh to the independent monitor
+    needs: [refresh, commit, legal-review-check, refresh-alert]
+    if: >-
+      ${{ always() &&
+          needs.refresh.result == 'success' &&
+          needs.commit.result == 'success' &&
+          needs.legal-review-check.result == 'success' &&
+          needs.refresh-alert.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - name: Ping configured heartbeat without blocking a valid refresh
+        continue-on-error: true
+        env:
+          HEARTBEAT_URL: ${{ secrets.UPTIMEROBOT_REFRESH_HEARTBEAT_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$HEARTBEAT_URL" ]; then
+            echo "Independent refresh heartbeat is not configured; continuing without it."
+            exit 0
+          fi
+          case "$HEARTBEAT_URL" in
+            https://*) ;;
+            *) echo "Refusing a non-HTTPS heartbeat URL." >&2; exit 1 ;;
+          esac
+          curl --fail --silent --show-error \
+            --max-time 15 --retry 2 --retry-delay 2 \
+            "$HEARTBEAT_URL" >/dev/null

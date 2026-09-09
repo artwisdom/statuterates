@@ -3,6 +3,7 @@
 // then checks every canonical sitemap URL so a broken public deployment cannot pass silently.
 
 import { APPROVED_HISTORICAL_RATE_SLUGS } from '../shared/historical-rate-releases.mjs';
+import { requireMachineResponseHeaders } from './http-contract.mjs';
 
 const configuredUrl = process.env.SITE_URL;
 if (!configuredUrl) throw new Error('SITE_URL is required');
@@ -208,6 +209,17 @@ for (const [label, result] of Object.entries({
 })) {
   requireGooglebotNoindexHeader(label, result.response);
 }
+for (const [label, result] of Object.entries({
+  'API service index': apiIndex,
+  'API metadata': apiMeta,
+  'API current values': apiLatest,
+  'API upcoming values': apiUpcoming,
+  'API historical lookup coverage': apiHistoryCoverage,
+  'Texas entity JSON': apiTexas,
+})) {
+  requireMachineResponseHeaders(label, result.response, 'application/json');
+}
+requireMachineResponseHeaders('Texas entity CSV', apiTexasCsv.response, 'text/csv');
 for (const [label, result] of Object.entries({
   homepage: home,
   'Texas rate page': texasRate,

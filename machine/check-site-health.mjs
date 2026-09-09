@@ -2,6 +2,8 @@
 
 import { pathToFileURL } from 'node:url';
 
+import { requireMachineResponseHeaders } from './http-contract.mjs';
+
 export const DEFAULT_SITE_URL = 'https://statuterates.com';
 export const DEFAULT_MAX_DATA_AGE_HOURS = 240;
 export const PRIORITY_RATE_PATH = '/rates/texas-judgment-rate/';
@@ -124,12 +126,22 @@ function requireFreshGeneratedAt(generatedAt, now, maxDataAgeHours) {
   }
 }
 
-function requireReleaseMarker(text) {
+export function parseReleaseMarker(text) {
   const marker = text.trim();
   if (!marker) throw new Error('deploy-marker.txt is empty');
   if (marker.toLowerCase() === 'local') throw new Error('deploy-marker.txt exposes the local-build fallback');
-  if (marker.length > 200 || /[\r\n\0]/.test(marker)) throw new Error('deploy-marker.txt is malformed');
-  return marker;
+  const match = /^statuterates:([0-9a-f]{40}):([1-9][0-9]*)-([1-9][0-9]*)$/.exec(marker);
+  if (!match) {
+    throw new Error(
+      'deploy-marker.txt is malformed; expected statuterates:<40-character-sha>:<run-id>-<attempt>',
+    );
+  }
+  return {
+    marker,
+    sourceSha: match[1],
+    runId: match[2],
+    runAttempt: Number(match[3]),
+  };
 }
 
 async function fetchWithRetry(fetchImpl, url, {
@@ -218,14 +230,18 @@ export async function checkSiteHealth({
   requireAds(results.ads.text);
   requireText('llms.txt', results.llms.text, `${origin}/api/v1/meta.json`);
   requireText('llms.txt', results.llms.text, `${origin}${PRIORITY_RATE_PATH}`);
-  const marker = requireReleaseMarker(results.marker.text);
+  requireMachineResponseHeaders('API metadata', results.metadata.response, 'application/json');
+  const release = parseReleaseMarker(results.marker.text);
   const metadata = parseMetadata(results.metadata.text);
   requireFreshGeneratedAt(metadata.generated_at, now, maxDataAgeHours);
 
   return {
     origin,
     generatedAt: metadata.generated_at,
-    marker,
+    marker: release.marker,
+    sourceSha: release.sourceSha,
+    runId: release.runId,
+    runAttempt: release.runAttempt,
     sitemapUrlCount: urls.length,
     entityCount: metadata.data.entity_count,
     observationCount: metadata.data.observation_count,
@@ -240,7 +256,8 @@ async function main() {
     maxDataAgeHours,
   });
   console.log(
-    `Production health OK: ${result.origin}, marker ${result.marker}, API generated ${result.generatedAt}, `
+    `Production health OK: ${result.origin}, source ${result.sourceSha}, marker ${result.marker}, `
+    + `API generated ${result.generatedAt}, `
     + `${result.entityCount} entities, ${result.observationCount} observations, ${result.sitemapUrlCount} sitemap URLs.`,
   );
 }

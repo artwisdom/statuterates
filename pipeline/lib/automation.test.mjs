@@ -3,8 +3,11 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 
 const deployPath = new URL('../../.github/workflows/deploy.yml', import.meta.url);
+const recoveryPath = new URL('../../.github/workflows/recover.yml', import.meta.url);
 const refreshPath = new URL('../../.github/workflows/refresh.yml', import.meta.url);
 const ciPath = new URL('../../.github/workflows/ci.yml', import.meta.url);
+const siteHealthPath = new URL('../../.github/workflows/site-health.yml', import.meta.url);
+const playwrightConfigPath = new URL('../../site/playwright.config.mjs', import.meta.url);
 const workflowsPath = new URL('../../.github/workflows/', import.meta.url);
 const edgeCheckPath = new URL('../../machine/check-public-edge.mjs', import.meta.url);
 
@@ -105,7 +108,12 @@ test('the deployed custom domain is verified before search engines are notified'
   assert.ok(deploymentIndex < edgeCheckIndex && edgeCheckIndex < indexNowIndex);
   assert.match(deploy, /run:\s*node machine\/check-public-edge\.mjs/);
   assert.match(deploy, /^\s*-\s*"machine\/(?:check-public-edge\.mjs|\*\*)"\s*$/m);
-  assert.match(deploy, /DEPLOY_MARKER:\s*\$\{\{ format\('\{0\}-\{1\}', github\.run_id, github\.run_attempt\) \}\}/);
+  assert.match(
+    deploy,
+    /DEPLOY_MARKER="statuterates:\$\{SOURCE_SHA\}:\$\{GITHUB_RUN_ID\}-\$\{GITHUB_RUN_ATTEMPT\}"/,
+  );
+  assert.match(deploy, /DEPLOY_MARKER:\s*\$\{\{ needs\.build\.outputs\.deploy_marker \}\}/);
+  assert.match(deploy, /ref:\s*\$\{\{ needs\.build\.outputs\.source_sha \}\}/);
   assert.match(edgeCheck, /const releaseId = expectedMarker;/);
   assert.match(edgeCheck, /url\.searchParams\.set\('deploy', releaseId\)/);
 });
@@ -161,10 +169,11 @@ test('weekly automation validates all manual state sources and maintains one dur
 });
 
 test('real-browser journeys gate pull requests and Pages publication without touching production', async () => {
-  const [deploy, ci, refresh] = await Promise.all([
+  const [deploy, ci, refresh, playwrightConfig] = await Promise.all([
     readFile(deployPath, 'utf8'),
     readFile(ciPath, 'utf8'),
     readFile(refreshPath, 'utf8'),
+    readFile(playwrightConfigPath, 'utf8'),
   ]);
 
   for (const [label, workflow] of [['deploy', deploy], ['CI', ci]]) {
@@ -182,10 +191,82 @@ test('real-browser journeys gate pull requests and Pages publication without tou
   const browserIndex = deploy.indexOf('name: Run browser release journeys against the built artifact');
   const pagesArtifactIndex = deploy.indexOf('uses: actions/upload-pages-artifact@');
   assert.ok(buildIndex < browserIndex && browserIndex < pagesArtifactIndex);
-  assert.match(deploy, /node machine\/source-review-registry\.mjs/);
+  assert.match(deploy, /node (?:machine\/)?source-review-registry\.mjs/);
   assert.doesNotMatch(refresh, /playwright install|npm run test:browser/);
   assert.match(ci, /ADSENSE_CLIENT:\s*ca-pub-0000000000000000/);
   assert.match(ci, /EXPECT_ADSENSE_CLIENT:\s*ca-pub-0000000000000000/);
+  assert.match(playwrightConfig, /ASTRO_PREVIEW_BACKGROUND=0 npm run preview/);
+});
+
+test('manual production recovery is validate-first, identity-bound, and serialized with deploys', async () => {
+  const [deploy, recovery] = await Promise.all([
+    readFile(deployPath, 'utf8'),
+    readFile(recoveryPath, 'utf8'),
+  ]);
+  const triggers = recovery.slice(recovery.indexOf('\non:'), recovery.indexOf('\npermissions:'));
+  const validateJob = recovery.slice(recovery.indexOf('\n  validate:'), recovery.indexOf('\n  restore:'));
+  const restoreJob = recovery.slice(recovery.indexOf('\n  restore:'), recovery.indexOf('\n  recovery-alert:'));
+  const deployJob = deploy.slice(deploy.indexOf('\n  deploy:'), deploy.indexOf('\n  deploy-alert:'));
+
+  assert.match(triggers, /workflow_dispatch:/);
+  assert.doesNotMatch(triggers, /schedule:|push:|workflow_run:/);
+  assert.match(recovery, /default:\s*validate-only/);
+  assert.match(recovery, /RESTORE STATUTERATES PRODUCTION/);
+  assert.match(recovery, /group:\s*deploy-site/);
+  assert.match(deploy, /group:\s*deploy-site/);
+  assert.match(recovery, /cancel-in-progress:\s*false/);
+  assert.match(deploy, /cancel-in-progress:\s*false/);
+
+  assert.match(deployJob, /actions:\s*read/);
+  const retainedArtifactIndex = deployJob.indexOf('name: Download this run\'s retained Pages artifact');
+  const retainedValidationIndex = deployJob.indexOf('name: Prove the retained artifact is recovery-eligible');
+  const productionDeployIndex = deployJob.indexOf('uses: actions/deploy-pages@');
+  assert.ok(
+    retainedArtifactIndex !== -1
+      && retainedArtifactIndex < retainedValidationIndex
+      && retainedValidationIndex < productionDeployIndex,
+  );
+  assert.match(deployJob, /node machine\/validate-recovery-artifact\.mjs/);
+
+  assert.match(validateJob, /actions:\s*read/);
+  assert.match(validateJob, /contents:\s*read/);
+  assert.doesNotMatch(validateJob, /pages:\s*write|id-token:\s*write/);
+  assert.match(validateJob, /actions\/download-artifact@[a-f0-9]{40}/);
+  assert.match(validateJob, /run-id:\s*\$\{\{ inputs\.deploy_run_id \}\}/);
+  assert.match(validateJob, /node machine\/validate-recovery-artifact\.mjs/);
+  assert.match(validateJob, /actions\/upload-artifact@[a-f0-9]{40}/);
+
+  assert.match(restoreJob, /inputs\.mode == 'restore-production'/);
+  assert.match(restoreJob, /pages:\s*write/);
+  assert.match(restoreJob, /id-token:\s*write/);
+  assert.match(restoreJob, /actions\/deploy-pages@[a-f0-9]{40}/);
+  assert.match(restoreJob, /node machine\/check-public-edge\.mjs/);
+  assert.doesNotMatch(recovery, /name:\s*Ping IndexNow/);
+});
+
+test('independent heartbeats are optional, HTTPS-only, non-blocking, and isolated from fetched code', async () => {
+  const [health, refresh] = await Promise.all([
+    readFile(siteHealthPath, 'utf8'),
+    readFile(refreshPath, 'utf8'),
+  ]);
+  const healthHeartbeat = health.slice(health.indexOf('\n  health-heartbeat:'));
+  const refreshHeartbeat = refresh.slice(refresh.indexOf('\n  refresh-heartbeat:'));
+
+  assert.match(health, /SITE_URL:\s*https:\/\/statuterates\.com/);
+  assert.match(health, /CHECKED_SITE:\s*https:\/\/statuterates\.com/);
+  assert.doesNotMatch(health, /vars\.SITE_URL/);
+  assert.match(healthHeartbeat, /UPTIMEROBOT_PRODUCTION_HEALTH_HEARTBEAT_URL/);
+  assert.match(healthHeartbeat, /continue-on-error:\s*true/);
+  assert.match(healthHeartbeat, /https:\/\/\*/);
+  assert.match(healthHeartbeat, /needs:\s*check/);
+  assert.match(healthHeartbeat, /needs\.check\.result == 'success'/);
+  assert.match(healthHeartbeat, /permissions:\s*\{\}/);
+  assert.doesNotMatch(healthHeartbeat, /actions\/checkout@|npm ci|node machine\/check-site-health|GH_TOKEN/);
+  assert.match(refreshHeartbeat, /UPTIMEROBOT_REFRESH_HEARTBEAT_URL/);
+  assert.match(refreshHeartbeat, /continue-on-error:\s*true/);
+  assert.match(refreshHeartbeat, /permissions:\s*\{\}/);
+  assert.match(refreshHeartbeat, /needs\.refresh\.result == 'success'/);
+  assert.doesNotMatch(refreshHeartbeat, /actions\/checkout@|npm ci|node run\.mjs|GH_TOKEN/);
 });
 
 test('refresh failures maintain one durable alert and a later success closes it', async () => {
@@ -251,7 +332,7 @@ test('automation uses current Node 24 GitHub Actions runtimes', async () => {
   assert.doesNotMatch(workflowPermissions, /(?:pages|id-token):\s*write/);
 
   const deployJob = deploy.slice(deploy.indexOf('\n  deploy:'));
-  assert.match(deployJob, /permissions:\s*\n\s+contents:\s*read\s*\n\s+pages:\s*write\s*\n\s+id-token:\s*write/);
+  assert.match(deployJob, /permissions:\s*\n\s+actions:\s*read\s*\n\s+contents:\s*read\s*\n\s+pages:\s*write\s*\n\s+id-token:\s*write/);
 });
 
 test('every active GitHub Action is pinned to an immutable commit', async () => {
