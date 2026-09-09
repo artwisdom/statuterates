@@ -2,8 +2,11 @@
 
 **Prepared:** 2026-09-07
 
-**Release state:** implemented and verified locally. Production remains on the Phase A commit
-`2243359` until the owner approves publication and the hosted workflows pass.
+**Published and reverified:** 2026-09-08
+
+**Release state:** production at commit `8566f5e`. The hosted deployment, CodeQL scan, and an
+independent six-hour health run passed. The deployment verified the exact public artifact and all
+194 canonical sitemap URLs before discovery notification.
 
 ## Why this phase exists
 
@@ -64,13 +67,21 @@ small screens, and the browser test protects that repair.
 
 ## Evidence boundary and remaining limits
 
-- Local tests prove the repository behavior, not the hosted runner or public site.
+- The hosted Chromium gate and public-edge release check passed for the published commit. This is
+  production evidence for that artifact, not a guarantee that a future run will pass.
 - This release uses Chromium only; it is a high-value release gate, not a complete browser matrix.
-- The local server exercises the immutable static artifact. The existing post-deploy public-edge
+- The local browser still exercises the immutable static artifact. The post-deploy public-edge
   checker remains responsible for exact production identity, canonical URLs, headers, and crawler
-  surfaces.
-- GitHub issue creation, hosted CI duration, and deployment behavior remain unverified until the
-  commit is published. No recurring-cost claim should be made before hosted usage is observed.
+  surfaces; it passed for this release.
+- The weekly source-review issue lifecycle cannot be considered exercised end to end until a real
+  source reaches its warning window. The first scheduled opportunity is September 23, 2026.
+- Passing controls do not prove indexing, search demand, AdSense approval, citations, or revenue.
+
+## Hosted receipts
+
+- Deployment and public edge: [run 34296673087](https://github.com/artwisdom/statuterates/actions/runs/34296673087)
+- CodeQL: [run 34296673075](https://github.com/artwisdom/statuterates/actions/runs/34296673075)
+- Independent production health: [run 34296834443](https://github.com/artwisdom/statuterates/actions/runs/34296834443)
 
 ## Commands
 

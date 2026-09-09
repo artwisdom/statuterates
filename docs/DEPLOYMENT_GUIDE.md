@@ -28,6 +28,16 @@ Repository variables used by `.github/workflows/deploy.yml`:
 | `ADSENSE_CLIENT` | Only after approval | `ca-pub-...` client identifier |
 | `ADSENSE_SLOT` | Optional after approval | Responsive display-unit slot |
 
+Optional independent-monitor secrets used only after owner-approved activation:
+
+| Secret | Purpose |
+|---|---|
+| `UPTIMEROBOT_PRODUCTION_HEALTH_HEARTBEAT_URL` | Confirms a successful six-hour public contract check |
+| `UPTIMEROBOT_REFRESH_HEARTBEAT_URL` | Confirms a successful end-to-end Wednesday refresh |
+
+The heartbeat steps are HTTPS-only, non-blocking, and no-op while the secrets are absent. Never put a
+private heartbeat URL in a repository variable, source file, issue, or workflow log.
+
 The refresh workflow runs weekly on Wednesday at 12:00 UTC (Wednesday morning in U.S. Eastern time).
 That buffer covers the normal Monday Federal Reserve publication plus Tuesday releases delayed by a
 Monday federal holiday. It tests the pipeline, hydrates a fresh SQLite database from committed JSON
@@ -36,18 +46,24 @@ history, fetches permitted sources, and validates without write authority. Only 
 revalidates the artifact boundary, and commits exports only when they changed. A stale `main` base or
 any non-data path fails closed and requires a safe rerun.
 
-The deploy workflow installs and tests the pipeline, validates the 102-source manual-review registry,
+The deploy workflow installs and tests the pipeline, executable API/OpenAPI contract, and 102-source
+manual-review registry,
 validates a fresh database hydrated from the
 committed exports, tests the site data contract and shared engine, rebuilds the static API, builds
 Astro, checks all internal targets and calculator indexing gates, then runs seven deterministic
 Chromium journeys against that completed artifact. Every cross-origin request is blocked and a
 browser failure stops the release before Pages upload. It then validates the API contract and
-publishes to GitHub Pages. After publication it waits for the custom domain, verifies the key
+uploads the Pages artifact, validates that exact retained tar as safely recoverable, and only then
+publishes to GitHub Pages. Its marker binds the full checked-out source SHA to the workflow run and
+attempt. After publication it waits for the custom domain, verifies the key
 release markers and public support files, and checks every sitemap URL before notifying search engines.
 It runs for reviewed `main` changes and after every successful refresh through
 `workflow_run`. The latter is required because GitHub intentionally prevents a push made with the
 workflow's `GITHUB_TOKEN` from triggering another push workflow. A successful no-change refresh still
 runs the inexpensive deployment verification so production cannot silently drift from `main`.
+Deployments are serialized, bounded by explicit timeouts, retain their Pages artifact for 30 days,
+require correct JSON/CSV delivery headers, and maintain one deduplicated issue on build, publication,
+or public-edge failure.
 
 ## 3. Manual production deploy
 
@@ -56,7 +72,8 @@ Actions tab. Before pushing, run:
 
 ```bash
 cd pipeline && npm test
-cd .. && node --test machine/*.test.mjs && node machine/source-review-registry.mjs
+cd ../machine && npm ci && npm test
+cd .. && node machine/source-review-registry.mjs
 cd site && npm test && npx playwright install chromium
 cd .. && node machine/build-api.mjs
 cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build && npm run test:browser
@@ -139,5 +156,9 @@ architecture is sufficient until traffic demonstrates a real bottleneck.
 
 ## 7. Failure recovery
 
-Use `docs/MAINTENANCE_RUNBOOK.md`. A failed validation or build must leave the last good production
-artifact intact. Never bypass validation to force a refresh through.
+Use `docs/MAINTENANCE_RUNBOOK.md` for source and build failures and
+`docs/RECOVERY_RUNBOOK.md` for a public incident. A failed validation or pre-publication build leaves
+the last good production artifact intact. The hosted recovery workflow defaults to validating a
+retained artifact without changing production; a real restoration requires exact owner confirmation
+and another complete public-edge check. Never bypass validation or enable automatic rollback to
+force a refresh through.

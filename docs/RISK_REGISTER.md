@@ -1,6 +1,6 @@
 # StatuteRates risk register
 
-**Reviewed:** 2026-09-07
+**Reviewed:** 2026-09-08
 
 This register separates controllable product quality from externally controlled outcomes. A passing
 build does not prove indexing, rankings, backlinks, AdSense approval, RPM, or revenue. Likewise, an
@@ -26,14 +26,15 @@ unknown rather than zero.
 | R2 | Thin or damaged templated content undermines trust or AdSense review | Medium | High | Visible-content/schema parity, minimum rendered-depth checks, selective ad eligibility, correction channel, and fail-closed legal-copy checks | AdSense decision; build alarms; sampled rendered-page review |
 | R3 | An official source changes layout, blocks automation, or publishes late | Medium | High | Robots-aware throttled fetches, bounded retries, immutable last-good exports, strict parsers, and deduplicated failure issues | Refresh failure, stale-source age, or changed source checksum |
 | R4 | A legal rate or date is numerically plausible but uses the wrong legal branch | Low-Medium | Very high | Official-source provenance, explicit effective-date semantics, reference-only defaults, calculator release registry, and fixture tests | Source/court mismatch, correction report, or invariant failure |
-| R5 | Old manually reviewed state references become stale without a value change | Medium | High | The Phase C1 candidate registers all 102 active sources, warns 14 days before due, and maintains one reminder issue | Publish it, then verify the first hosted check and the September 23 warning behavior |
+| R5 | Old manually reviewed state references become stale without a value change | Medium | High | Phase C1 registers all 102 active sources, warns 14 days before due, and maintains one reminder issue | Verify the first natural warning-window lifecycle on the September 23 run |
 | R6 | External authority remains weak even though the product is technically good | High | High | Citable histories, CSV/JSON, OpenAPI, RSS, citation tools, and transparent methodology | Verified relevant referring domains and independent citations |
 | R7 | AdSense remains pending or rejects the site again | Medium | High | Ads are limited to 113 eligible pages in the current build; legal/error/noindex/shallow pages are excluded; CMP messages are active | AdSense approval status, ads.txt recrawl, policy detail, measured serving |
-| R8 | Ad density damages calculators, trust, or Core Web Vitals | Low-Medium after approval | Medium-High | Browser-local tools render before ads, slots reserve space, and the Phase C1 candidate tests eligible/ineligible routes with blocked external requests | Hosted browser pass, then field CWV, engagement, RPM, and page-level exclusion experiments |
-| R9 | Supply-chain or provider configuration leaves a preventable security gap | Medium | Medium-High | Locked dependencies, CodeQL, secret scanning and push protection, least-privilege Actions | Zero npm advisories; enable GitHub dependency alerts/security updates/private reporting and protected release checks |
+| R8 | Ad density damages calculators, trust, or Core Web Vitals | Low-Medium after approval | Medium-High | Browser-local tools render before ads, slots reserve space, and Phase C1 tests eligible/ineligible routes with blocked external requests | Field CWV, engagement, RPM, and page-level exclusion experiments after approval |
+| R9 | Supply-chain or provider configuration leaves a preventable security gap | Medium | Medium-High | Locked dependencies, CodeQL, secret scanning and push protection, least-privilege Actions; Phase C2 adds a separate pinned machine-contract lock and clears the September 8 Astro/Hono advisory set | Keep all four npm trees at zero known advisories; enable GitHub dependency graph/security updates without auto-merging upgrades; design protected release checks around the refresh bot |
 | R10 | Robots/redirect/network behavior permits an unsafe source fetch | Medium until hardening ships | High | Central shared fetch layer and per-source caps | Mocked 5xx/network/redirect/oversize tests and successful hosted refresh |
-| R11 | A platform or GitHub-account outage hides both site and monitor failure | Low | High | Static portable build and six-hour GitHub-hosted health checks | Independent external uptime receipt and documented rollback exercise |
+| R11 | A platform or GitHub-account outage hides both site and monitor failure | Low | High | Static portable build, six-hour GitHub health, Phase C2 independent-heartbeat hooks, retained artifacts, and validate-first manual recovery | Activate the outside monitor, obtain heartbeat receipts, and pass a hosted validate-only recovery rehearsal |
 | R12 | Broad page expansion creates doorway inventory without demand | Medium | High | Search Console-led queue, 194-URL sitemap freeze, and no generic state-calculator rollout | New URL requires measured intent, unique utility, primary sources, and an explicit release gate |
+| R13 | An automatic or mistaken rollback restores stale legal data | Low after Phase C2 | Very high | No automatic rollback; exact source/run marker, safe archive validation, full owner confirmation, shared publication lock, and post-restore public check | Publish Phase C2 and pass a validate-only rehearsal; reserve real restore for a confirmed incident |
 
 ## Pre-committed decisions
 

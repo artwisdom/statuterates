@@ -109,6 +109,9 @@ Important modules:
 - Human site: Astro 7 static build in `site/dist/` (195 HTML pages, including the real 404 page, and
   194 indexable sitemap URLs in the current local baseline).
 - Static API: `machine/build-api.mjs` writes `site/public/api/v1/` from committed exports.
+- API release contract: pinned YAML/JSON Schema tooling compiles the OpenAPI 3.1 response schemas,
+  validates every aggregate and per-entity JSON response, and requires every CSV row to match its
+  JSON history projection exactly.
 - MCP: six read/calculation tools over the same snapshots, with slug validation before file access.
 - Search discovery: sitemap, robots, RSS changes feed, `llms.txt`, and `llms-full.txt`.
 
@@ -120,7 +123,7 @@ allowed to make cross-origin requests.
 
 ## 7. Runtime and automation
 
-The repository is standardized on Node 24+. Both GitHub workflows install from lockfiles with
+The repository is standardized on Node 24+. GitHub workflows install from lockfiles with
 `npm ci`. The refresh workflow runs each Wednesday at 12:00 UTC, tests before fetching, and tests the
 newly generated snapshot again in a read-only job. An immutable, data-only artifact then crosses to
 a fresh commit job that installs no dependencies, executes no fetched content, validates artifact
@@ -129,4 +132,14 @@ checkout uses that permission internally, while `GH_TOKEN` is exposed to a shell
 commit/push step. Issue access is isolated in separate notification jobs. The weekly read-only job
 also validates the 102-source review registry; a separate issue-only job maintains one reminder from
 14 days before the first due date through recovery. The deploy workflow runs site data-contract,
-static-output, and real-browser release tests before a Pages artifact can be uploaded.
+static-output, executable API-contract, and real-browser release tests before a Pages artifact can
+be uploaded.
+
+Every published artifact carries the full source commit plus its deploy run and attempt. Normal and
+recovery publications share one serialized lock. Known-good Pages artifacts are retained for a
+bounded 30-day window, and the actual uploaded tar must pass the recovery validator before normal
+publication. The manual recovery path validates archive structure and exact identity without
+extraction or execution, defaults to no publication, and requires an exact confirmation before
+restoration. API checks require the expected JSON/CSV media type and public cross-origin header.
+Automatic rollback is prohibited because a transient platform failure must not silently reintroduce
+stale legal data.

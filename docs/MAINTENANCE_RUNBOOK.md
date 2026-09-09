@@ -188,6 +188,8 @@ DATA_MOAT_DB=/tmp/statuterates-repair.sqlite node pipeline/run.mjs validate
 ```bash
 cd site && npm test
 cd .. && node --test shared/*.test.mjs
+cd machine && npm ci && npm test
+cd ..
 node machine/build-api.mjs
 cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build
 cd .. && node machine/check-api-conformance.mjs
@@ -196,6 +198,22 @@ cd .. && node machine/check-api-conformance.mjs
 The build verifier checks internal targets, homepage reachability for every sitemap URL, minimum
 content-depth alarms, Astro whitespace regressions, state-calculator output, `noindex` gates, and
 sitemap exclusions.
+
+## Deployment or public-edge failure
+
+The deploy workflow maintains one `automation:deploy-failure` issue. First identify whether the
+failure happened before or after Pages publication:
+
+1. A build, test, or artifact-upload failure leaves the prior public site in place. Prepare a tested
+   forward fix; do not restore anything.
+2. A Pages or public-edge failure is ambiguous until the public structured release marker is read.
+   Re-run the health check after ruling out a temporary GitHub, Cloudflare, or DNS interruption.
+3. If the new release is genuinely broken and a forward fix is unsafe or slow, follow
+   `docs/RECOVERY_RUNBOOK.md`. Run `validate-only` first. Production restoration remains an explicit
+   owner action and can use only an eligible retained known-good artifact.
+
+Never automate rollback from a single timeout. Returning to an older snapshot can reintroduce stale
+legal data even when the monitor, not the site, is the failing component.
 
 ## Search Console machine-resource exclusions
 

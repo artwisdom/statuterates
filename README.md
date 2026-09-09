@@ -71,8 +71,9 @@ a local verification without refreshing remote sources, run:
 
 ```bash
 cd pipeline && npm ci && npm test
+cd ../machine && npm ci && npm test
 cd ../site && npm ci && npm test && npx playwright install chromium
-cd .. && node --test shared/*.test.mjs machine/*.test.mjs
+cd .. && node --test shared/*.test.mjs
 node machine/source-review-registry.mjs
 node machine/build-api.mjs
 cd site && SITE_URL=https://statuterates.com npm run build && npm run verify-build && npm run test:browser
@@ -87,7 +88,7 @@ cd ../machine/mcp-server && npm ci && npm test
 | `data/exports/` | Versioned, deployable JSON snapshots and automation history bootstrap |
 | `site/` | Astro static site, SEO pages, safe calculators, and build verification |
 | `shared/` | Dependency-free interest calculation engine and tests |
-| `machine/` | Static API generator, OpenAPI contract, source-review registry, and MCP server |
+| `machine/` | Static API generator, executable OpenAPI contracts, source-review registry, and MCP server |
 | `docs/` | Architecture, deployment, maintenance, risk, and historical planning records |
 | `scratchpad/` | Retained, non-production research snapshots and one-time audit helpers; see its README |
 | `.github/workflows/` | Weekly data refresh and GitHub Pages deployment automation |
@@ -107,6 +108,8 @@ audited state calculator, and
 machine-interface safety release, and
 [docs/PHASE_C1_CONTROLS.md](docs/PHASE_C1_CONTROLS.md) for the automated state-source review and
 real-browser release gates, and
+[docs/PHASE_C2_CONTROLS.md](docs/PHASE_C2_CONTROLS.md) for semantic API validation, exact release
+identity, deployment alerting, and manual recovery safeguards, and
 [docs/ADSENSE_VALUE_REPAIR.md](docs/ADSENSE_VALUE_REPAIR.md) for the low-value-content diagnosis,
 inventory policy, and re-review gate, and
 [docs/MAINTENANCE_RUNBOOK.md](docs/MAINTENANCE_RUNBOOK.md) for operational recovery.

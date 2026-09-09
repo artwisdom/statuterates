@@ -3,14 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-09-07
+**Updated:** 2026-09-08
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
 
-The current public artifact is commit `2243359`. The Phase C1 controls below are a verified local
-candidate and do not count as production until the owner approves publication and the hosted release
-checks succeed.
+The current public artifact is commit `8566f5e`. Phase C1 is published and verified. Phase C2 is a
+local reliability candidate only; it does not count as production until the owner approves
+publication and the hosted release checks succeed.
 
 ## Current product
 
@@ -36,7 +36,7 @@ checks succeed.
   generic state/prejudgment calculator placeholders are absent from the build and sitemap and return
   a real 404; every other dedicated state calculator is also absent until its fail-closed gate passes.
 
-## Phase C1 source-review and browser-safety candidate
+## Phase C1 source-review and browser-safety production release
 
 - All 102 active `STATE_SOURCES` entries have an explicit owner, risk, last-reviewed date, and next
   review deadline. Six export-only sources are explicitly classified rather than silently ignored.
@@ -53,8 +53,36 @@ checks succeed.
   upload occurs only after they pass.
 - The phone test exposed a real About-page overflow caused by long official-source URLs. Those links
   now wrap without widening the page.
-- Local verification is not a hosted or production receipt. GitHub issue behavior, hosted browser
-  installation, workflow duration, deployment, and the public edge remain pending publication.
+- The hosted Chromium gate, deployment, CodeQL scan, exact-artifact public-edge check, and an
+  independent production-health run passed on September 8. The source-review issue lifecycle still
+  needs its first real warning-window exercise, expected on the September 23 scheduled refresh.
+
+## Phase C2 API-contract and recovery candidate
+
+- Pinned OpenAPI tooling now compiles endpoint-specific response schemas and validates all aggregate
+  endpoints plus every per-entity JSON/CSV pair. Cross-file checks cover exact counts, release dates,
+  slugs, metric and source relationships, current/future selection, historical-lookup boundaries,
+  CSV parity, and federal source-week/application-week semantics. Public checks also require the
+  machine endpoints' JSON/CSV media types and cross-origin access header.
+- Destructive fixture tests prove the gate rejects malformed response types, endpoint shape drift,
+  broken provenance, incorrect current/latest selection, missing future observations, CSV drift, and
+  filename/slug disagreement.
+- Deployment records the exact checked-out full commit SHA in a structured public marker, always
+  verifies the production domain, serializes publications, uses explicit timeouts, retains the Pages
+  artifact for 30 days, proves the actual retained tar is recovery-eligible before publication, and
+  maintains one deployment-failure issue.
+- A new manual recovery workflow defaults to validation only. It accepts only a retained artifact
+  from a successful `main` deployment, checks exact source/run identity and safe tar structure without
+  extraction or execution, and requires an exact confirmation phrase before a real restoration.
+- Optional independent-monitor heartbeats are dormant unless their private HTTPS URLs are stored as
+  GitHub secrets. Secret-bearing heartbeat jobs execute no checked-out repository code, and a
+  monitoring outage cannot invalidate a healthy site or refresh.
+- A release-time advisory refresh upgraded Astro to 7.3.2, pinned its corrected YAML/SVG toolchain,
+  and forced the MCP SDK onto Hono 4.13.7. All four npm dependency trees report zero known
+  vulnerabilities. Playwright explicitly keeps Astro preview in the foreground so the browser gate
+  owns and reliably stops its test server.
+- This candidate changes no rate, calculation, indexable page, sitemap URL, AdSense boundary, or
+  crawler rule. It is local only until publication is explicitly approved and hosted receipts pass.
 
 ## July 2026 safety baseline
 
