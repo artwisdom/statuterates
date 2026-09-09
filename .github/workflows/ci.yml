@@ -50,9 +50,13 @@ jobs:
         working-directory: shared
         run: node --test
 
+      - name: Install machine-contract dependencies
+        working-directory: machine
+        run: npm ci
+
       - name: Test machine safety controls and the source-review registry
         run: |
-          node --test machine/*.test.mjs
+          npm test --prefix machine
           node machine/source-review-registry.mjs >/dev/null
 
       - name: Install and test the read-only MCP interface
@@ -72,7 +76,7 @@ jobs:
           # contacting Google. Browser tests abort every cross-origin request.
           ADSENSE_CLIENT: ca-pub-0000000000000000
           ADSENSE_SLOT: "0000000000"
-          DEPLOY_MARKER: ${{ format('ci-{0}-{1}', github.run_id, github.run_attempt) }}
+          DEPLOY_MARKER: ${{ format('statuterates:{0}:{1}-{2}', github.sha, github.run_id, github.run_attempt) }}
         run: npm run build
 
       - name: Verify built links and indexing guardrails

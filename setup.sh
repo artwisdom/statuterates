@@ -12,6 +12,7 @@ node -e 'const [major] = process.versions.node.split(".").map(Number); if (major
 
 echo "==> 1/7  Installing locked dependencies and the pinned browser (local only)"
 ( cd pipeline && npm ci --no-audit --no-fund )
+( cd machine && npm ci --no-audit --no-fund )
 ( cd machine/mcp-server && npm ci --no-audit --no-fund )
 ( cd site && npm ci --no-audit --no-fund && npx playwright install chromium )
 
@@ -19,7 +20,7 @@ echo "==> 2/7  Running unit, data-contract, and source-review tests"
 ( cd pipeline && npm test )
 ( cd shared && node --test )
 ( cd site && npm test )
-node --test machine/*.test.mjs
+( cd machine && npm test )
 node machine/source-review-registry.mjs >/dev/null
 
 echo "==> 3/7  Running the data pipeline (fetch -> validate -> export)"

@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: StatuteRates Static JSON and CSV API
-  version: "1.1.0"
+  version: "1.2.0"
   description: >
     Free, read-only access to StatuteRates' provenance-tracked statutory, judgment, tax, and
     late-payment interest-rate dataset. Every endpoint is a prebuilt file served from a CDN and
@@ -32,13 +32,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  api_version: { type: string }
-                  dataset: { type: string }
-                  generated_at: { type: string, format: date-time }
-                  endpoints: { type: object }
-                  counts: { type: object }
+                $ref: "#/components/schemas/ServiceIndex"
   /api/v1/meta.json:
     get:
       operationId: getMeta
@@ -49,7 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Envelope"
+                $ref: "#/components/schemas/MetaEnvelope"
   /api/v1/metrics.json:
     get:
       operationId: getMetrics
@@ -60,7 +54,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Envelope"
+                $ref: "#/components/schemas/MetricsEnvelope"
   /api/v1/entities.json:
     get:
       operationId: getEntities
@@ -71,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Envelope"
+                $ref: "#/components/schemas/EntitiesEnvelope"
   /api/v1/latest.json:
     get:
       operationId: getLatest
@@ -83,7 +77,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Envelope"
+                $ref: "#/components/schemas/CurrentValuesEnvelope"
   /api/v1/upcoming.json:
     get:
       operationId: getUpcoming
@@ -95,7 +89,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Envelope"
+                $ref: "#/components/schemas/UpcomingValuesEnvelope"
   /api/v1/history-coverage.json:
     get:
       operationId: getHistoricalCoverage
@@ -111,12 +105,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: "#/components/schemas/Envelope"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/HistoricalCoverageCollection"
+                $ref: "#/components/schemas/HistoryCoverageEnvelope"
   /api/v1/entity/{slug}.json:
     get:
       operationId: getEntity
@@ -125,7 +114,7 @@ paths:
         - name: slug
           in: path
           required: true
-          schema: { type: string }
+          schema: { type: string, pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
           description: URL-safe entity slug (see entities.json for the list).
       responses:
         "200":
@@ -133,7 +122,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Envelope"
+                $ref: "#/components/schemas/EntityEnvelope"
         "404":
           description: No such entity (the file does not exist on the CDN)
   /api/v1/entity/{slug}.csv:
@@ -144,77 +133,257 @@ paths:
         - name: slug
           in: path
           required: true
-          schema: { type: string }
+          schema: { type: string, pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
       responses:
         "200":
           description: OK
           content:
             text/csv:
-              schema: { type: string }
+              schema: { type: string, minLength: 1 }
         "404":
           description: No such entity
 components:
   schemas:
-    Observation:
+    ServiceIndex:
       type: object
-      description: A single value with full provenance.
-      required: [metric, unit, effective_date, source_url, retrieved_at, confidence]
+      additionalProperties: false
+      required: [api_version, dataset, description, generated_at, endpoints, current_as_of, counts]
       properties:
-        metric: { type: string, description: "e.g. the primary metric name" }
+        api_version: { type: string, const: v1 }
+        dataset: { type: string, minLength: 1 }
+        description: { type: [string, "null"] }
+        generated_at: { type: string, format: date-time }
+        current_as_of: { type: string, format: date }
+        endpoints:
+          type: object
+          additionalProperties: false
+          required: [meta, entities, latest, upcoming, metrics, history_coverage, entity, entity_csv, documentation, openapi, llms, llms_full]
+          properties:
+            meta: { type: string, const: "/api/v1/meta.json" }
+            entities: { type: string, const: "/api/v1/entities.json" }
+            latest: { type: string, const: "/api/v1/latest.json" }
+            upcoming: { type: string, const: "/api/v1/upcoming.json" }
+            metrics: { type: string, const: "/api/v1/metrics.json" }
+            history_coverage: { type: string, const: "/api/v1/history-coverage.json" }
+            entity: { type: string, const: "/api/v1/entity/{slug}.json" }
+            entity_csv: { type: string, const: "/api/v1/entity/{slug}.csv" }
+            documentation: { type: string, const: "/api/" }
+            openapi: { type: string, const: "/openapi.yaml" }
+            llms: { type: string, const: "/llms.txt" }
+            llms_full: { type: string, const: "/llms-full.txt" }
+        counts:
+          type: object
+          additionalProperties: false
+          required: [entities, observations, historical_lookup_series]
+          properties:
+            entities: { type: integer, minimum: 1 }
+            observations: { type: integer, minimum: 1 }
+            historical_lookup_series: { type: integer, minimum: 0 }
+
+    SourceRecord:
+      type: object
+      additionalProperties: false
+      required: [id, name, publisher, home_url, license, robots_status, retrieved_at]
+      properties:
+        id: { type: string, minLength: 1 }
+        name: { type: string, minLength: 1 }
+        publisher: { type: string, minLength: 1 }
+        home_url: { type: string, format: uri, pattern: "^https://" }
+        license: { type: string, minLength: 1 }
+        robots_status: { type: string, minLength: 1 }
+        retrieved_at: { type: string, format: date-time }
+
+    DatasetMeta:
+      type: object
+      additionalProperties: false
+      required: [title, description, version, update_cadence, attribution, license, sample_query, disclaimer, generated_at, entity_count, observation_count, metrics, sources]
+      properties:
+        title: { type: string, minLength: 1 }
+        description: { type: string, minLength: 1 }
+        version: { type: string, minLength: 1 }
+        update_cadence: { type: string, minLength: 1 }
+        attribution: { type: string, minLength: 1 }
+        license: { type: string, minLength: 1 }
+        sample_query: { type: string, minLength: 1 }
+        disclaimer: { type: string, minLength: 1 }
+        generated_at: { type: string, format: date-time }
+        entity_count: { type: integer, minimum: 1 }
+        observation_count: { type: integer, minimum: 1 }
+        metrics:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { type: string, minLength: 1 }
+        sources:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/SourceRecord" }
+
+    ObservationFields:
+      type: object
+      description: Shared fields for a single value with full provenance.
+      required: [metric, value, value_text, unit, effective_date, source_id, source_url, retrieved_at, confidence, method, notes]
+      properties:
+        metric: { type: string, minLength: 1, description: "e.g. the primary metric name" }
         value: { type: [number, "null"], description: "machine-usable numeric value" }
         value_text: { type: [string, "null"], description: "human display / ranges" }
-        unit: { type: string }
+        unit: { type: string, const: percent_per_annum }
         effective_date: { type: string, format: date, description: "date the value took effect" }
-        source_id: { type: string }
-        source_url: { type: string, format: uri, description: "exact page the value came from" }
+        source_id: { type: string, minLength: 1 }
+        source_url: { type: string, format: uri, pattern: "^https://", description: "exact page the value came from" }
         retrieved_at: { type: string, format: date-time }
         confidence: { type: string, enum: [high, medium, low] }
         method: { type: [string, "null"] }
         notes: { type: [string, "null"] }
+      anyOf:
+        - properties:
+            value: { type: number }
+        - properties:
+            value_text: { type: string, minLength: 1 }
+
+    Observation:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ObservationFields"
+      unevaluatedProperties: false
+
+    FlatObservation:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/ObservationFields"
+        - type: object
+          required: [entity, entity_name]
+          properties:
+            entity: { type: string, pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+            entity_name: { type: string, minLength: 1 }
+      unevaluatedProperties: false
+
+    ObservationMap:
+      type: object
+      minProperties: 1
+      additionalProperties: { $ref: "#/components/schemas/Observation" }
+
+    HistoryMap:
+      type: object
+      minProperties: 1
+      additionalProperties:
+        type: array
+        minItems: 1
+        items: { $ref: "#/components/schemas/Observation" }
+
     Entity:
       type: object
-      required: [slug, name, entity_type]
+      additionalProperties: false
+      required: [slug, name, entity_type, jurisdiction, region, locale, metrics, generated_at, latest, current, latest_published, current_as_of, metadata, history]
       properties:
-        slug: { type: string }
-        name: { type: string }
-        entity_type: { type: string }
-        jurisdiction: { type: [string, "null"] }
-        region: { type: [string, "null"] }
+        slug: { type: string, pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        name: { type: string, minLength: 1 }
+        entity_type: { type: string, minLength: 1 }
+        jurisdiction: { type: string, minLength: 1 }
+        region: { type: string, minLength: 1 }
         locale: { type: [string, "null"] }
-        metrics: { type: array, items: { type: string } }
+        metrics:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { type: string, minLength: 1 }
+        generated_at: { type: string, format: date-time }
         latest:
-          type: object
           description: Backwards-compatible alias for current; never contains a future-effective observation.
-          additionalProperties: { $ref: "#/components/schemas/Observation" }
+          $ref: "#/components/schemas/ObservationMap"
         current:
-          type: object
           description: Values in force on current_as_of.
-          additionalProperties: { $ref: "#/components/schemas/Observation" }
+          $ref: "#/components/schemas/ObservationMap"
         latest_published:
-          type: object
           description: Newest published values, which can include an officially announced future period.
-          additionalProperties: { $ref: "#/components/schemas/Observation" }
+          $ref: "#/components/schemas/ObservationMap"
         current_as_of: { type: string, format: date }
-        history:
+        metadata:
           type: object
-          additionalProperties:
-            type: array
-            items: { $ref: "#/components/schemas/Observation" }
+          description: Series-specific legal and calculation metadata; keys vary by jurisdiction.
+        history: { $ref: "#/components/schemas/HistoryMap" }
+
+    EntitySummary:
+      type: object
+      additionalProperties: false
+      required: [slug, name, entity_type, jurisdiction, region, latest, current, latest_published, current_as_of]
+      properties:
+        slug: { type: string, pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        name: { type: string, minLength: 1 }
+        entity_type: { type: string, minLength: 1 }
+        jurisdiction: { type: string, minLength: 1 }
+        region: { type: string, minLength: 1 }
+        latest: { $ref: "#/components/schemas/ObservationMap" }
+        current: { $ref: "#/components/schemas/ObservationMap" }
+        latest_published: { $ref: "#/components/schemas/ObservationMap" }
+        current_as_of: { type: string, format: date }
+
+    MetricsCollection:
+      type: object
+      additionalProperties: false
+      required: [metrics]
+      properties:
+        metrics:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items: { type: string, minLength: 1 }
+
+    EntityCollection:
+      type: object
+      additionalProperties: false
+      required: [count, current_as_of, entities]
+      properties:
+        count: { type: integer, minimum: 1 }
+        current_as_of: { type: string, format: date }
+        entities:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/EntitySummary" }
+
+    CurrentValuesCollection:
+      type: object
+      additionalProperties: false
+      required: [count, current_as_of, observations]
+      properties:
+        count: { type: integer, minimum: 1 }
+        current_as_of: { type: string, format: date }
+        observations:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/FlatObservation" }
+
+    UpcomingValuesCollection:
+      type: object
+      additionalProperties: false
+      required: [count, current_as_of, observations]
+      properties:
+        count: { type: integer, minimum: 0 }
+        current_as_of: { type: string, format: date }
+        observations:
+          type: array
+          items: { $ref: "#/components/schemas/FlatObservation" }
+
     OfficialAuthority:
       type: object
+      additionalProperties: false
       required: [label, url]
       properties:
-        label: { type: string }
-        url: { type: string, format: uri }
+        label: { type: string, minLength: 1 }
+        url: { type: string, format: uri, pattern: "^https://" }
+
     CoverageGap:
       type: object
+      additionalProperties: false
       required: [start, end, reason]
       properties:
         start: { type: string, format: date }
         end: { type: string, format: date }
-        reason: { type: string }
+        reason: { type: string, minLength: 1 }
+
     HistoricalCoverageSeries:
       type: object
+      additionalProperties: false
       required:
         - entity_slug
         - label
@@ -233,35 +402,39 @@ components:
         - official_authorities
         - links
       properties:
-        entity_slug: { type: string }
-        label: { type: string }
+        entity_slug: { type: string, pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+        label: { type: string, minLength: 1 }
         metric: { type: string, const: annual_rate }
         usage: { type: string, const: reference_only }
         calculation_supported: { type: boolean, const: false }
-        input_meaning: { type: string, description: "Legal/date meaning of the requested lookup date." }
-        branch_scope: { type: string, description: "Branch represented and material exclusions." }
-        selection_rule: { type: string }
-        coverage_note: { type: string }
+        input_meaning: { type: string, minLength: 1, description: "Legal/date meaning of the requested lookup date." }
+        branch_scope: { type: string, minLength: 1, description: "Branch represented and material exclusions." }
+        selection_rule: { type: string, minLength: 1 }
+        coverage_note: { type: string, minLength: 1 }
         coverage_start: { type: string, format: date }
         coverage_end: { type: string, format: date, description: "Last date released for lookup; never after current_as_of." }
         history_count: { type: integer, minimum: 2 }
         gaps:
           type: array
           items: { $ref: "#/components/schemas/CoverageGap" }
-        source_url: { type: string, format: uri }
+        source_url: { type: string, format: uri, pattern: "^https://" }
         official_authorities:
           type: array
+          minItems: 1
           items: { $ref: "#/components/schemas/OfficialAuthority" }
         links:
           type: object
+          additionalProperties: false
           required: [page, entity_json, entity_csv, historical_lookup]
           properties:
-            page: { type: string }
-            entity_json: { type: string }
-            entity_csv: { type: string }
-            historical_lookup: { type: string }
+            page: { type: string, format: uri-reference, pattern: "^/rates/[a-z0-9-]+/$" }
+            entity_json: { type: string, format: uri-reference, pattern: "^/api/v1/entity/[a-z0-9-]+\\.json$" }
+            entity_csv: { type: string, format: uri-reference, pattern: "^/api/v1/entity/[a-z0-9-]+\\.csv$" }
+            historical_lookup: { type: string, format: uri-reference, pattern: "^/calculators/historical-rate-lookup/\\?series=[a-z0-9-]+$" }
+
     HistoricalCoverageCollection:
       type: object
+      additionalProperties: false
       required: [count, current_as_of, series]
       properties:
         count: { type: integer, minimum: 1 }
@@ -269,12 +442,76 @@ components:
         series:
           type: array
           items: { $ref: "#/components/schemas/HistoricalCoverageSeries" }
+
     Envelope:
       type: object
-      required: [api_version, generated_at, data]
+      required: [api_version, generated_at, attribution, license, data]
       properties:
-        api_version: { type: string }
+        api_version: { type: string, const: v1 }
         generated_at: { type: string, format: date-time }
         attribution: { type: [string, "null"] }
         license: { type: [string, "null"] }
         data: {}
+
+    MetaEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/DatasetMeta" }
+      unevaluatedProperties: false
+
+    MetricsEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/MetricsCollection" }
+      unevaluatedProperties: false
+
+    EntitiesEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/EntityCollection" }
+      unevaluatedProperties: false
+
+    CurrentValuesEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/CurrentValuesCollection" }
+      unevaluatedProperties: false
+
+    UpcomingValuesEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/UpcomingValuesCollection" }
+      unevaluatedProperties: false
+
+    HistoryCoverageEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/HistoricalCoverageCollection" }
+      unevaluatedProperties: false
+
+    EntityEnvelope:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Envelope"
+        - type: object
+          properties:
+            data: { $ref: "#/components/schemas/Entity" }
+      unevaluatedProperties: false

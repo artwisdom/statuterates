@@ -1,0 +1,19 @@
+{
+  "name": "statuterates-machine-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Release-time validation for the StatuteRates static API and machine interfaces.",
+  "scripts": {
+    "test": "node --test *.test.mjs",
+    "check-api": "node check-api-conformance.mjs"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "yaml": "2.9.0"
+  }
+}
