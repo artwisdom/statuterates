@@ -1,10 +1,13 @@
 # Phase C2 API-contract and release-recovery controls
 
-**Prepared:** 2026-09-08
+**Prepared:** 2026-09-08; **published and verified:** 2026-09-13
 
-**Release state:** implemented as a local candidate. Nothing in this document counts as hosted or
-production evidence until the owner approves publication and the exact commit passes hosted tests,
-deployment, and public-edge verification.
+**Release state:** production commit `2aff7c761ac8a30b2bec8d63eff2b5a573d8f223`. Hosted
+[CI run 34800485190](https://github.com/artwisdom/statuterates/actions/runs/34800485190),
+[deployment run 34800467151](https://github.com/artwisdom/statuterates/actions/runs/34800467151),
+and the independent public-edge check passed. The hosted
+[validate-only recovery run 34800640692](https://github.com/artwisdom/statuterates/actions/runs/34800640692)
+validated the retained release without restoring production.
 
 ## Why this phase is the next move
 
@@ -76,8 +79,8 @@ The validator does not extract or execute the old artifact. A real restoration r
 and recovery share one concurrency lock, and a restored artifact must pass the full public-edge check.
 
 Artifacts published before Phase C2 use the older run-only marker and intentionally fail this stricter
-identity check. The first recoverable known-good point begins only after Phase C2 itself is published
-and verified; this boundary is safer than pretending a legacy artifact has commit-level identity.
+identity check. The first recoverable known-good point is deployment run `34800467151` on `2aff7c7`;
+this boundary is safer than pretending a legacy artifact has commit-level identity.
 
 Automatic rollback is intentionally excluded. A temporary CDN, DNS, Cloudflare, or checker failure
 must not silently replace newer legal data with an older snapshot.
@@ -99,7 +102,7 @@ remains a separate owner/provider gate.
 ## Dependency security checkpoint
 
 A fresh release-time advisory query found newly disclosed issues in the prior Astro build tree and a
-transitive Hono version used by the read-only MCP package. The candidate upgrades Astro to 7.3.2,
+transitive Hono version used by the read-only MCP package. The release upgrades Astro to 7.3.2,
 pins SVGO 4.1.0 and the resolved js-yaml 4.3.2, and overrides Hono to 4.13.7 without moving the MCP
 SDK. Clean installs, all tests, the static build, and the browser journeys pass, and all four npm
 trees currently report zero known vulnerabilities.
@@ -115,7 +118,8 @@ server, detects an early exit, and tears it down after the run.
 - A validate-only recovery rehearsal can prove the selected hosted artifact is recoverable without
   changing production. A real restore should be reserved for an actual incident or an explicitly
   approved drill.
-- GitHub's dependency graph and Dependabot security updates are provider settings. The current open
+- GitHub's dependency graph, Dependabot alerts, and security-update pull requests were enabled on
+  September 13. Grouped security updates and automatic merging remain off. The current open
   dependency pull requests remain unmerged until reviewed separately.
 - Search rankings, AI citations, AdSense approval, monetized pageviews, RPM, and revenue remain
   external outcomes and are not implied by this release.

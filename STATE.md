@@ -3,14 +3,14 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-09-08
+**Updated:** 2026-09-13
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
 
-The current public artifact is commit `8566f5e`. Phase C1 is published and verified. Phase C2 is a
-local reliability candidate only; it does not count as production until the owner approves
-publication and the hosted release checks succeed.
+The current public artifact is commit `2aff7c7` (deployment run `34800467151`). Phase C2 is
+published and verified. The September 9 automated data refresh was preserved in this release;
+the current export contains 5,552 observations. Independent external heartbeats are not yet active.
 
 ## Current product
 
@@ -57,7 +57,7 @@ publication and the hosted release checks succeed.
   independent production-health run passed on September 8. The source-review issue lifecycle still
   needs its first real warning-window exercise, expected on the September 23 scheduled refresh.
 
-## Phase C2 API-contract and recovery candidate
+## Phase C2 API-contract and recovery production release
 
 - Pinned OpenAPI tooling now compiles endpoint-specific response schemas and validates all aggregate
   endpoints plus every per-entity JSON/CSV pair. Cross-file checks cover exact counts, release dates,
@@ -81,8 +81,14 @@ publication and the hosted release checks succeed.
   and forced the MCP SDK onto Hono 4.13.7. All four npm dependency trees report zero known
   vulnerabilities. Playwright explicitly keeps Astro preview in the foreground so the browser gate
   owns and reliably stops its test server.
-- This candidate changes no rate, calculation, indexable page, sitemap URL, AdSense boundary, or
-  crawler rule. It is local only until publication is explicitly approved and hosted receipts pass.
+- The C2 code changes no rate, calculation, indexable page, sitemap URL, AdSense boundary, or
+  crawler rule. A separate September 9 automated refresh added six observations before publication.
+- The September 13 hosted CI run `34800485190`, deployment run `34800467151`, and independent
+  public-edge check all passed on commit `2aff7c7`. A ten-line site lockfile repair cleared an
+  initial Linux install failure before the successful release. Validate-only recovery run
+  `34800640692` passed against the retained artifact; the restore job was skipped and the live
+  marker remained unchanged. GitHub's dependency graph, Dependabot alerts, and security-update PRs
+  are enabled without automatic merging. External monitor signup and secret URLs remain outstanding.
 
 ## July 2026 safety baseline
 

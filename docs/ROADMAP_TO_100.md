@@ -1,8 +1,8 @@
 # Evidence-gated roadmap toward 100
 
-**Reviewed:** 2026-09-08
+**Reviewed:** 2026-09-13
 
-**Current production:** commit `8566f5e`
+**Current production:** commit `2aff7c7`
 
 **Purpose:** make StatuteRates a durable, low-maintenance reference asset without confusing technical
 readiness with search rankings, AdSense approval, or income.
@@ -15,16 +15,16 @@ commercial risk has disappeared.
 Scores use four evidence bands: 90–100 means the relevant behavior is measured and automated with
 only small residual gaps; 75–89 means a strong working system with material unfinished safeguards;
 50–74 means usable but externally unproven or meaningfully incomplete; below 50 means the required
-outcome is largely unproven. Candidate points are conditional and do not count until hosted tests and
-public-edge verification pass.
+outcome is largely unproven. Phase C2 passed hosted tests, deployment, public-edge verification, and
+a validate-only recovery rehearsal on September 13. Its external heartbeat remains inactive.
 
 ## Current scorecard
 
-The first number is the verified production baseline after Phase C1. The second is the expected
-score only after the Phase C2 API-contract and recovery candidate is published and its hosted checks
-pass. Provider settings and external monitoring do not count merely because repository hooks exist.
+The first number is the verified production baseline after Phase C1. The second is the current
+conservative Phase C2 production assessment. The enabled GitHub dependency controls and hosted
+recovery rehearsal count; external monitoring does not count merely because repository hooks exist.
 
-| Area | Production | C2 candidate | What still prevents 100 |
+| Area | C1 baseline | Current C2 | What still prevents 100 |
 |---|---:|---:|---|
 | Data and legal correctness | 95 | 96 | Human legal review still cannot be fully automated |
 | Historical coverage and data moat | 86 | 86 | Most state series still have one recorded observation |
@@ -34,24 +34,23 @@ pass. Provider settings and external monitoring do not count merely because repo
 | AI and machine discoverability | 97 | 97 | Citation by answer engines cannot be guaranteed by technical access |
 | Internal linking and crawl paths | 96 | 96 | Future routes must preserve the current no-orphan contract |
 | Performance and accessibility | 97 | 97 | No CrUX field sample yet; advertising remains the main third-party cost |
-| Automation and refresh reliability | 96 | 97 | External monitor activation and a hosted recovery rehearsal remain pending |
+| Automation and refresh reliability | 96 | 97 | External monitor activation remains pending |
 | Safe sandboxing and fail-closed behavior | 96 | 97 | Human-source review remains an alert rather than a publication block |
-| Tests and release safety | 96 | 98 | Chromium is still the sole browser engine; hosted C2 evidence is pending |
-| Security and supply chain | 85 | 87 | GitHub dependency graph/security updates and protected release rules remain provider-side gaps |
-| Monitoring and recovery | 88 | 92 | External monitors and a hosted validate-only recovery receipt remain pending |
+| Tests and release safety | 96 | 98 | Chromium is still the sole browser engine |
+| Security and supply chain | 85 | 89 | Protected release rules remain a provider-side gap; no dependency PR is auto-merged |
+| Monitoring and recovery | 88 | 94 | External monitors and heartbeat receipts remain pending |
 | Maintainability | 87 | 89 | Several large data/content modules remain costly to review |
 | Organic growth evidence | 72 | 72 | The latest finalized comparison is promising but still early and rankings weakened while reach grew |
 | Authority and earned distribution | 20 | 20 | No current evidence set proves relevant referring domains or independent citations |
 | AdSense and monetization readiness | 79 | 79 | Review outcome, serving, page RPM, and revenue are unverified |
-| Passive-operation readiness | 94 | 96 | Human legal review, provider settings, and external monitoring still require work |
+| Passive-operation readiness | 94 | 96 | Human legal review, protected release rules, and external monitoring still require work |
 
 Three roll-up scores keep unlike outcomes separate:
 
-- **Controllable product and engineering readiness:** 95/100 production; 97/100 after the candidate
-  passes hosted release checks.
-- **Search-growth readiness:** 83/100 production; 83/100 after the candidate. Rankings, indexing, and
-  backlinks must then be measured rather than inferred.
-- **Income-system readiness:** 62/100 production; 63/100 after the candidate. This is readiness to
+- **Controllable product and engineering readiness:** 97/100 current production.
+- **Search-growth readiness:** 83/100 current production. Rankings, indexing, and backlinks must
+  be measured rather than inferred.
+- **Income-system readiness:** 63/100 current production. This is readiness to
   monetize, not verified income. Progress toward the owner's $20,000/month goal is not scoreable
   until AdSense reports real monetized pageviews, page RPM, and earnings.
 
@@ -124,15 +123,15 @@ warning and one deduplicated issue, and seven Chromium journeys gate the built a
 upload. Hosted deployment, CodeQL, browser, public-edge, and six-hour health receipts passed for the
 exact release. The issue lifecycle still awaits its first natural warning window.
 
-### Phase C2 candidate prepared September 8
+### Phase C2 published and verified September 13
 
-Item 3 is implemented locally with compiled OpenAPI 3.1 response schemas, complete JSON/CSV
-validation, cross-file meaning checks, and destructive mutation tests. Item 4 is partially
-implemented: deployment failures get one issue, releases retain a bounded set of known-good
-artifacts, and a manual validate-first recovery workflow rejects mismatched or unsafe archives.
-Independent-monitor heartbeats are present but dormant until the owner activates a provider and
-stores its private URLs. Item 5 remains a provider-setting decision; no Dependabot pull request is
-approved or merged by this candidate. Item 6 remains future work.
+Item 3 is live with compiled OpenAPI 3.1 response schemas, complete JSON/CSV validation, cross-file
+meaning checks, and destructive mutation tests. Item 4 has a verified retained-artifact and
+validate-only recovery receipt; production restoration was not exercised. Independent-monitor
+heartbeats are present but dormant until the owner signs in to a free provider and stores its private
+URLs. For item 5, the dependency graph, alerts, and security-update pull requests are enabled, but
+protected release rules still need a separate compatibility review. No dependency pull request was
+approved or merged by this release. Item 6 remains future work.
 
 ## Phase D — compound search authority without doorway pages
 
