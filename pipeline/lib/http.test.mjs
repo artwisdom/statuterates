@@ -238,6 +238,60 @@ test('a legacy cached robots transient error is retried instead of becoming allo
   );
 });
 
+test('direct fetches reject credentials and literal local or private network targets before I/O', async () => {
+  const unsafeUrls = [
+    'http://localhost/data',
+    'https://source.localhost/data',
+    'http://127.0.0.1/data',
+    'http://127.1/data',
+    'http://10.0.0.1/data',
+    'http://100.64.0.1/data',
+    'http://169.254.169.254/latest/meta-data/',
+    'http://172.16.0.1/data',
+    'http://192.168.1.1/data',
+    'http://[::1]/data',
+    'http://[::ffff:127.0.0.1]/data',
+    'http://[64:ff9b::7f00:1]/data',
+    'http://[fc00::1]/data',
+    'http://[fe80::1]/data',
+    'http://service.local/data',
+    'http://localhost.localdomain/data',
+    'https://user:password@example.test/data',
+  ];
+
+  for (const url of unsafeUrls) {
+    const mock = queuedFetch([]);
+    const { client, writes } = isolatedClient(mock.fetchImpl);
+    await assert.rejects(
+      () => client.politeGet(url, { force: true }),
+      /NETWORK: (?:unsafe network target|URL credentials are not allowed)/
+    );
+    assert.equal(mock.calls.length, 0, `${url} must be rejected before fetch`);
+    assert.deepEqual(writes, []);
+  }
+});
+
+test('a public source redirect cannot cross into a private network target', async () => {
+  const mock = queuedFetch([
+    new Response(null, { status: 404 }),
+    new Response(null, {
+      status: 302,
+      headers: { location: 'http://169.254.169.254/latest/meta-data/' },
+    }),
+  ]);
+  const { client, writes } = isolatedClient(mock.fetchImpl);
+
+  await assert.rejects(
+    () => client.politeGet('https://public-source.test/start', { force: true }),
+    /REDIRECT_INVALID: unsafe network target 169\.254\.169\.254/
+  );
+  assert.deepEqual(
+    mock.calls.map((call) => call.url),
+    ['https://public-source.test/robots.txt', 'https://public-source.test/start']
+  );
+  assert.deepEqual(writes.map((write) => write.url), ['https://public-source.test/robots.txt']);
+});
+
 test('cross-origin redirects check and throttle the destination before following', async () => {
   const mock = queuedFetch([
     new Response(null, { status: 404 }),
