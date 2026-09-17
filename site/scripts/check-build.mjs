@@ -5,7 +5,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getAllEntities, getMeta, isPrejudgment } from '../src/lib/data.mjs';
+import { currentOf, getAllEntities, getMeta, isPrejudgment } from '../src/lib/data.mjs';
 import { copyFor } from '../src/lib/content.mjs';
 import { ratePageMayRunAds } from '../src/lib/monetization.mjs';
 import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
@@ -543,6 +543,56 @@ if (machineFiles.every((relativePath) => existsSync(join(DIST, relativePath)))) 
   const currentAsOf = String(apiLatest.data?.current_as_of || '').slice(0, 10);
   if (!llmsFull.includes(`Current as of: ${currentAsOf}`)) {
     errors.push('llms-full.txt: snapshot date disagrees with the current-values endpoint');
+  }
+  for (const entity of getAllEntities().filter(isPrejudgment)) {
+    const sectionHeading = `## ${entity.name}\n`;
+    const sectionStart = llmsFull.indexOf(sectionHeading);
+    if (sectionStart < 0) {
+      errors.push(`llms-full.txt: missing prejudgment section for ${entity.slug}`);
+      continue;
+    }
+    const nextSection = llmsFull.indexOf('\n\n## ', sectionStart + sectionHeading.length);
+    const section = llmsFull.slice(sectionStart, nextSection < 0 ? undefined : nextSection);
+    const machineLines = new Set(section.split('\n'));
+    const historyPoints = (entity.history?.annual_rate || []).length;
+    const pageCopy = copyFor(entity.slug, {
+      observation: currentOf(entity),
+      historyPoints,
+    });
+    const machineCopy = copyFor(entity.slug, {
+      observation: currentOf(entity, currentAsOf),
+      historyPoints,
+    });
+    const rateRoute = `/rates/${entity.slug}/`;
+    const ratePagePath = routeToFile.get(rateRoute);
+    const ratePageText = ratePagePath
+      ? visiblePageText(readFileSync(ratePagePath, 'utf8'))
+      : '';
+
+    for (const [label, field, optional] of [
+      ['Applicability', 'applies', false],
+      ['Accrual', 'accrual', false],
+      ['Compounding', 'compound', false],
+      ['Rate-setting formula', 'formula', true],
+    ]) {
+      const visibleValue = String(pageCopy[field] || '').replace(/\s+/g, ' ').trim();
+      const machineValue = String(machineCopy[field] || '').replace(/\s+/g, ' ').trim();
+      if (optional && !visibleValue && !machineValue) continue;
+      if (!visibleValue || !machineValue) {
+        errors.push(`AI content parity: ${entity.slug}.${field} is missing from the shared visible-page source`);
+        continue;
+      }
+      if (visibleValue !== machineValue) {
+        errors.push(`AI content parity: ${entity.slug}.${field} differs between visible-page and llms-full snapshots`);
+        continue;
+      }
+      if (!ratePageText.includes(visibleValue)) {
+        errors.push(`${rateRoute}: visible page is missing its shared ${field} content`);
+      }
+      if (!machineLines.has(`${label}: ${machineValue}`)) {
+        errors.push(`llms-full.txt: ${entity.slug} is missing exact ${field} content from the visible page`);
+      }
+    }
   }
   if (!openapi.includes('title: StatuteRates Static JSON and CSV API')
       || !openapi.includes('https://statuterates.com/terms/#data-api-license')

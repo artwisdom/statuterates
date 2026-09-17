@@ -517,6 +517,7 @@ const jsonLd = [
     <h2 id="related-resources-heading">Related resources</h2>
     <ul class="clean">
       {relatedResources.map((resource) => <li><a href={resource.href}>{resource.label}</a></li>)}
+      <li><a href="/changes/">Browse all recorded changes</a></li>
       {rateFeedHref && <li><a href={rateFeedHref}>Follow this rate's recorded updates (RSS)</a></li>}
     </ul>
   </section>
