@@ -1,8 +1,11 @@
 # Evidence-gated roadmap toward 100
 
-**Reviewed:** 2026-09-13
+**Reviewed:** 2026-09-16
 
-**Current production:** commit `2aff7c7`
+**Verified Phase C2 release receipt:** commit `2aff7c7`, deployed and checked September 13, 2026.
+Weekly refreshes may advance production without revising this dated scorecard. Read the public
+[`deploy-marker.txt`](https://statuterates.com/deploy-marker.txt) for the exact live artifact and
+generated `data/exports/meta.json` for the checked-out dataset count.
 
 **Purpose:** make StatuteRates a durable, low-maintenance reference asset without confusing technical
 readiness with search rankings, AdSense approval, or income.
@@ -18,13 +21,14 @@ only small residual gaps; 75–89 means a strong working system with material un
 outcome is largely unproven. Phase C2 passed hosted tests, deployment, public-edge verification, and
 a validate-only recovery rehearsal on September 13. Its external heartbeat remains inactive.
 
-## Current scorecard
+## Dated scorecard
 
-The first number is the verified production baseline after Phase C1. The second is the current
-conservative Phase C2 production assessment. The enabled GitHub dependency controls and hosted
-recovery rehearsal count; external monitoring does not count merely because repository hooks exist.
+The first number is the verified production baseline after Phase C1. The second is the conservative
+assessment of the verified September 13 Phase C2 release. The enabled GitHub dependency
+controls and hosted recovery rehearsal count; external monitoring does not count merely because
+repository hooks exist.
 
-| Area | C1 baseline | Current C2 | What still prevents 100 |
+| Area | C1 baseline | Sep. 13 C2 | What still prevents 100 |
 |---|---:|---:|---|
 | Data and legal correctness | 95 | 96 | Human legal review still cannot be fully automated |
 | Historical coverage and data moat | 86 | 86 | Most state series still have one recorded observation |
@@ -47,10 +51,10 @@ recovery rehearsal count; external monitoring does not count merely because repo
 
 Three roll-up scores keep unlike outcomes separate:
 
-- **Controllable product and engineering readiness:** 97/100 current production.
-- **Search-growth readiness:** 83/100 current production. Rankings, indexing, and backlinks must
+- **Controllable product and engineering readiness:** 97/100 for the September 13 Phase C2 release.
+- **Search-growth readiness:** 83/100 for the September 13 Phase C2 release. Rankings, indexing, and backlinks must
   be measured rather than inferred.
-- **Income-system readiness:** 63/100 current production. This is readiness to
+- **Income-system readiness:** 63/100 for the September 13 Phase C2 release. This is readiness to
   monetize, not verified income. Progress toward the owner's $20,000/month goal is not scoreable
   until AdSense reports real monetized pageviews, page RPM, and earnings.
 

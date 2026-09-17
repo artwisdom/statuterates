@@ -46,11 +46,28 @@ updates:
       prefix: deps(site)
 
   - package-ecosystem: npm
-    directory: /machine/mcp-server
+    directory: /machine
     schedule:
       interval: weekly
       day: monday
       time: "09:45"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    groups:
+      machine-nonmajor:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: deps(machine)
+
+  - package-ecosystem: npm
+    directory: /machine/mcp-server
+    schedule:
+      interval: weekly
+      day: monday
+      time: "10:00"
       timezone: America/New_York
     open-pull-requests-limit: 5
     versioning-strategy: increase-if-necessary

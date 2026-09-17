@@ -3,19 +3,23 @@
 > Resume here. This file describes the current implementation; older execution and growth reports are
 > historical snapshots and may contain superseded counts or assumptions.
 
-**Updated:** 2026-09-13
+**Updated:** 2026-09-16
 **Production:** https://statuterates.com
 **Repository:** https://github.com/artwisdom/statuterates
 **Runtime:** Node 24+
 
-The current public artifact is commit `2aff7c7` (deployment run `34800467151`). Phase C2 is
-published and verified. The September 9 automated data refresh was preserved in this release;
-the current export contains 5,552 observations. Independent external heartbeats are not yet active.
+The verified Phase C2 release receipt is commit `2aff7c7` (deployment run `34800467151`), checked on
+September 13, 2026. That release preserved the September 9 automated refresh and contained 5,552
+observations. Later weekly refreshes can advance production without a prose-document edit: the public
+[`deploy-marker.txt`](https://statuterates.com/deploy-marker.txt) is authoritative for the exact live
+artifact, while generated `data/exports/meta.json` is authoritative for the checked-out dataset count.
+Independent external heartbeats were not active at the time of the Phase C2 receipt.
 
 ## Current product
 
 - Baseline captured 2026-09-03: 114 rate-series entities and 5,546 recorded historical observations.
-  The generated `data/exports/meta.json` is the live count between release-document updates.
+  Generated `data/exports/meta.json` is authoritative for the checked-out dataset count between
+  release-document updates.
 - 195 static HTML pages, including the real 404 page; the indexable sitemap contains 194 URLs.
 - 114 per-entity JSON endpoints, 114 CSV endpoints, and aggregate API endpoints.
 - Weekly automated refresh each Wednesday at 12:00 UTC for IRS, Federal Reserve, Bank of England,
@@ -57,7 +61,7 @@ the current export contains 5,552 observations. Independent external heartbeats 
   independent production-health run passed on September 8. The source-review issue lifecycle still
   needs its first real warning-window exercise, expected on the September 23 scheduled refresh.
 
-## Phase C2 API-contract and recovery production release
+## Phase C2 API-contract and recovery verified release receipt
 
 - Pinned OpenAPI tooling now compiles endpoint-specific response schemas and validates all aggregate
   endpoints plus every per-entity JSON/CSV pair. Cross-file checks cover exact counts, release dates,
@@ -89,6 +93,16 @@ the current export contains 5,552 observations. Independent external heartbeats 
   `34800640692` passed against the retained artifact; the restore job was skipped and the live
   marker remained unchanged. GitHub's dependency graph, Dependabot alerts, and security-update PRs
   are enabled without automatic merging. External monitor signup and secret URLs remain outstanding.
+
+## Phase C3 local candidate (not production)
+
+The September 16 Phase C3 candidate strengthens AI/human content parity, literal-target fetch
+sandboxing, grouped legal-source review packets, dependency coverage, and documentation truth
+checks. It also creates a private, rights-gated data-package candidate that is excluded from Git and
+cannot be published by this release. No rate, calculation rule, indexable URL, crawler policy, or ad
+boundary changes. See [`docs/PHASE_C3_CONTROLS.md`](docs/PHASE_C3_CONTROLS.md) for the bounded scope
+and local verification receipt. This section is not a push, hosted-CI, deployment, or public-edge
+claim; production identity remains the public deploy marker until a separate release is approved.
 
 ## July 2026 safety baseline
 

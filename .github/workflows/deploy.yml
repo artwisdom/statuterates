@@ -169,6 +169,9 @@ jobs:
       - name: Verify API conformance (fail the deploy if the API drifted)
         run: node machine/check-api-conformance.mjs
 
+      - name: Verify current documentation against generated artifacts
+        run: node machine/check-doc-truth.mjs
+
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: site/dist

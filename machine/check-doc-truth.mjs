@@ -59,6 +59,7 @@ const documents = {
   ARCHITECTURE: read('docs/ARCHITECTURE.md'),
   DEPLOYMENT_GUIDE: read('docs/DEPLOYMENT_GUIDE.md'),
   MAINTENANCE_RUNBOOK: read('docs/MAINTENANCE_RUNBOOK.md'),
+  ROADMAP: read('docs/ROADMAP_TO_100.md'),
 };
 
 if (Number(meta.entity_count) < BASELINE.entityCount) {
@@ -84,9 +85,22 @@ requireText(
   documents.STATE,
   `Baseline captured ${BASELINE.date}: ${BASELINE.entityCount} rate-series entities and ${formattedBaselineObservations} recorded historical observations`,
 );
-requireText('STATE', documents.STATE, '`data/exports/meta.json` is the live count');
 requireText('STATE', documents.STATE, `${builtHtml} static HTML pages`);
 requireText('STATE', documents.STATE, `sitemap contains ${sitemapUrls} URLs`);
+requireText('STATE', documents.STATE, 'https://statuterates.com/deploy-marker.txt');
+requireText('STATE', documents.STATE, '`data/exports/meta.json` is authoritative for the checked-out dataset count');
+requireText('ROADMAP', documents.ROADMAP, 'https://statuterates.com/deploy-marker.txt');
+requireText('ROADMAP', documents.ROADMAP, 'generated `data/exports/meta.json`');
+
+const staleCurrentClaims = [
+  ['STATE', documents.STATE, /current public artifact is commit/iu],
+  ['ROADMAP', documents.ROADMAP, /\*\*Current production:\*\*/iu],
+  ['ROADMAP', documents.ROADMAP, /\/100 current production/iu],
+  ['ROADMAP', documents.ROADMAP, /current conservative Phase C2 production assessment/iu],
+];
+for (const [label, text, pattern] of staleCurrentClaims) {
+  if (pattern.test(text)) failures.push(`${label} contains a stale undated production claim: ${pattern}`);
+}
 requireText(
   'ARCHITECTURE',
   documents.ARCHITECTURE,
@@ -99,8 +113,8 @@ requireText('ARCHITECTURE', documents.ARCHITECTURE, 'Florida post-judgment is th
 
 const refresh = read('.github/workflows/refresh.yml');
 requireText('refresh workflow', refresh, 'cron: "0 12 * * 3"');
-for (const [label, text] of Object.entries(documents)) {
-  if (label !== 'MAINTENANCE_RUNBOOK') requireText(label, text, 'Wednesday at 12:00 UTC');
+for (const label of ['README', 'STATE', 'ARCHITECTURE', 'DEPLOYMENT_GUIDE']) {
+  requireText(label, documents[label], 'Wednesday at 12:00 UTC');
 }
 for (const label of ['README', 'STATE', 'ARCHITECTURE', 'DEPLOYMENT_GUIDE']) {
   requireText(label, documents[label], 'fresh commit job');
