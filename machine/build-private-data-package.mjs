@@ -105,6 +105,8 @@ const DATA_DICTIONARY = Object.freeze({
   source_home_url: 'Canonical source URL recorded in the committed metadata.',
   source_recorded_license: 'Verbatim rights statement recorded for the source.',
   rights_category: 'Conservative internal category derived by exact whitelist match; not legal clearance.',
+  lineage_category: 'Whether the observation citation stays on the recorded source origin.',
+  candidate_disposition: 'Combined source-rights and observation-lineage decision for this private candidate.',
 });
 
 const OBSERVATION_FIELDS = Object.freeze(Object.keys(DATA_DICTIONARY));
@@ -135,11 +137,14 @@ function stableJson(value) {
 }
 
 function csvCell(value) {
-  const normalized = value === null || value === undefined
+  let normalized = value === null || value === undefined
     ? ''
     : typeof value === 'object'
       ? JSON.stringify(value)
       : String(value);
+  // Keep the CSV safe to inspect in spreadsheet software. JSONL remains the exact machine-value
+  // representation; only string cells with a formula-capable prefix receive a leading apostrophe.
+  if (typeof value === 'string' && /^[=+\-@]/u.test(normalized)) normalized = `'${normalized}`;
   return `"${normalized.replaceAll('"', '""')}"`;
 }
 
@@ -167,6 +172,35 @@ function sourceRights(source) {
   return classification;
 }
 
+function httpsOrigin(value, label) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`${label} must be a valid URL: ${JSON.stringify(value)}`);
+  }
+  if (url.protocol !== 'https:') throw new Error(`${label} must use HTTPS: ${value}`);
+  return url.origin;
+}
+
+function observationLineage(source, observation) {
+  const recordedOrigin = httpsOrigin(source.home_url, `source ${source.id} home_url`);
+  const observedOrigin = httpsOrigin(
+    observation.source_url,
+    `${observation.source_id} observation source_url`,
+  );
+  if (recordedOrigin === observedOrigin) {
+    return {
+      category: 'same_origin_as_recorded_source',
+      disposition: 'include_in_private_candidate',
+    };
+  }
+  return {
+    category: 'cross_origin_observation_review_required',
+    disposition: 'exclude_pending_lineage_review',
+  };
+}
+
 function flattenObservations(entity, sourceById) {
   const observations = [];
   for (const [metric, history] of Object.entries(entity.history || {}).sort(([a], [b]) => compareText(a, b))) {
@@ -176,6 +210,10 @@ function flattenObservations(entity, sourceById) {
         throw new Error(`${entity.slug}/${metric}/${observation.effective_date} references unknown source ${observation.source_id}`);
       }
       const rights = sourceRights(source);
+      const lineage = observationLineage(source, observation);
+      const candidateDisposition = rights.disposition === 'include_in_private_candidate'
+        ? lineage.disposition
+        : rights.disposition;
       observations.push({
         entity_slug: entity.slug,
         entity_name: entity.name,
@@ -199,6 +237,8 @@ function flattenObservations(entity, sourceById) {
         source_home_url: source.home_url,
         source_recorded_license: source.license,
         rights_category: rights.category,
+        lineage_category: lineage.category,
+        candidate_disposition: candidateDisposition,
       });
     }
   }
@@ -244,10 +284,10 @@ export function buildPrivateCandidateModel({ meta, entities, inputFiles }) {
   }
 
   const excludedObservations = allObservations.filter((observation) => (
-    sourceRights(sourceById.get(observation.source_id)).disposition !== 'include_in_private_candidate'
+    observation.candidate_disposition !== 'include_in_private_candidate'
   ));
   const includedObservations = allObservations.filter((observation) => (
-    sourceRights(sourceById.get(observation.source_id)).disposition === 'include_in_private_candidate'
+    observation.candidate_disposition === 'include_in_private_candidate'
   ));
   const includedEntitySlugs = new Set(includedObservations.map((observation) => observation.entity_slug));
   const excludedEntitySlugs = new Set(excludedObservations.map((observation) => observation.entity_slug));
@@ -263,6 +303,22 @@ export function buildPrivateCandidateModel({ meta, entities, inputFiles }) {
 
   const sourceMatrix = sources.map((source) => {
     const rights = sourceRights(source);
+    const sourceExcludedObservations = excludedObservations.filter((observation) => (
+      observation.source_id === source.id
+    ));
+    const hasLineageExclusions = sourceExcludedObservations.some((observation) => (
+      observation.lineage_category === 'cross_origin_observation_review_required'
+    ));
+    const candidateDisposition = rights.disposition !== 'include_in_private_candidate'
+      ? rights.disposition
+      : hasLineageExclusions
+        ? 'partial_exclusion_pending_lineage_review'
+        : 'include_in_private_candidate';
+    const exclusionReason = rights.disposition !== 'include_in_private_candidate'
+      ? 'Source-site terms require owner/legal review before any data-package publication or redistribution.'
+      : hasLineageExclusions
+        ? 'One or more observation citations use a different origin than the recorded source; review that lineage and its terms before inclusion.'
+        : '';
     return {
       source_id: source.id,
       source_name: source.name,
@@ -272,14 +328,12 @@ export function buildPrivateCandidateModel({ meta, entities, inputFiles }) {
       recorded_source_status: source.robots_status,
       recorded_license: source.license,
       rights_category: rights.category,
-      candidate_disposition: rights.disposition,
+      candidate_disposition: candidateDisposition,
       attribution: rights.attribution,
       legal_clearance: 'not_assessed',
       observation_count: observationCounts.get(source.id) || 0,
       excluded_observation_count: excludedCounts.get(source.id) || 0,
-      exclusion_reason: rights.disposition === 'include_in_private_candidate'
-        ? ''
-        : 'Source-site terms require owner/legal review before any data-package publication or redistribution.',
+      exclusion_reason: exclusionReason,
     };
   });
 
@@ -290,6 +344,16 @@ export function buildPrivateCandidateModel({ meta, entities, inputFiles }) {
       recorded_license: source.recorded_license,
       rights_category: source.rights_category,
       excluded_observation_count: source.excluded_observation_count,
+      excluded_observation_origins: [...new Set(
+        excludedObservations
+          .filter((observation) => observation.source_id === source.source_id)
+          .map((observation) => new URL(observation.source_url).origin),
+      )].sort(compareText),
+      lineage_categories: [...new Set(
+        excludedObservations
+          .filter((observation) => observation.source_id === source.source_id)
+          .map((observation) => observation.lineage_category),
+      )].sort(compareText),
       affected_entities: [...new Set(
         excludedObservations
           .filter((observation) => observation.source_id === source.source_id)
@@ -402,6 +466,7 @@ export function renderPrivateCandidateFiles(model) {
       observation_fields: DATA_DICTIONARY,
       source_attribution_rights_fields: SOURCE_MATRIX_DICTIONARY,
       missing_values: 'Null or empty values mean the committed source snapshot did not record a value.',
+      spreadsheet_safety: 'CSV string cells beginning with =, +, -, or @ receive a leading apostrophe. JSONL preserves the exact value.',
       rights_category_warning: 'Categories mirror recorded source statements and are not independent legal-clearance findings.',
     })],
     ['exclusions.json', stableJson({
@@ -447,14 +512,24 @@ async function readInputs(exportRoot = EXPORT_ROOT) {
 }
 
 async function assertCommittedInputs() {
+  const inputPathspecs = ['data/exports/meta.json', 'data/exports/entity'];
   try {
     const { stdout } = await execFileAsync(
       'git',
-      ['status', '--porcelain=v1', '--untracked-files=all', '--', 'data/exports/meta.json', 'data/exports/entity'],
+      ['status', '--porcelain=v1', '--untracked-files=all', '--', ...inputPathspecs],
       { cwd: REPO_ROOT, encoding: 'utf8' },
     );
     if (stdout.trim()) {
       throw new Error(`data-package inputs are not clean committed snapshots:\n${stdout.trim()}`);
+    }
+    try {
+      await execFileAsync(
+        'git',
+        ['diff', '--quiet', '--no-ext-diff', 'HEAD', '--', ...inputPathspecs],
+        { cwd: REPO_ROOT },
+      );
+    } catch {
+      throw new Error('data-package inputs do not byte-match the checked-out HEAD snapshot');
     }
   } catch (error) {
     if (error.message.startsWith('data-package inputs are not clean')) throw error;

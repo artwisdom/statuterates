@@ -64,33 +64,58 @@ test('snapshot count drift stops the candidate build', async () => {
   );
 });
 
-test('review-required Tennessee observations are excluded and itemized', async () => {
+test('source-rights and cross-origin lineage review observations are excluded and itemized', async () => {
   const inputs = await committedInputs();
-  const expectedTennesseeCount = inputs.entities
-    .flatMap((entity) => Object.values(entity.history || {}).flat())
-    .filter((observation) => observation.source_id === 'tn-courts').length;
-  const expectedIncludedEntities = inputs.entities.filter((entity) => (
-    Object.values(entity.history || {}).flat().some((observation) => observation.source_id !== 'tn-courts')
-  )).length;
+  const sourceById = new Map(inputs.meta.sources.map((source) => [source.id, source]));
+  const allObservations = inputs.entities.flatMap((entity) => (
+    Object.values(entity.history || {}).flat().map((observation) => ({ entity: entity.slug, observation }))
+  ));
+  const expectedExcluded = allObservations.filter(({ observation }) => {
+    const source = sourceById.get(observation.source_id);
+    const rightsBlocked = RIGHTS_BY_RECORDED_LICENSE[source.license].disposition !== 'include_in_private_candidate';
+    return rightsBlocked || new URL(source.home_url).origin !== new URL(observation.source_url).origin;
+  });
+  const expectedTennesseeCount = expectedExcluded
+    .filter(({ observation }) => observation.source_id === 'tn-courts').length;
+  const expectedIncludedEntities = new Set(
+    allObservations
+      .filter((item) => !expectedExcluded.includes(item))
+      .map((item) => item.entity),
+  ).size;
+  const expectedExcludedEntities = new Set(expectedExcluded.map((item) => item.entity)).size;
   assert.ok(expectedTennesseeCount > 0);
   const model = buildPrivateCandidateModel(inputs);
   assert.equal(model.counts.source_records_classified, inputs.meta.sources.length);
   assert.equal(model.counts.entities_in_source_snapshot, inputs.entities.length);
   assert.equal(model.counts.observations_in_source_snapshot, inputs.meta.observation_count);
-  assert.equal(model.counts.observations_included, inputs.meta.observation_count - expectedTennesseeCount);
-  assert.equal(model.counts.observations_excluded, expectedTennesseeCount);
+  assert.equal(model.counts.observations_included, inputs.meta.observation_count - expectedExcluded.length);
+  assert.equal(model.counts.observations_excluded, expectedExcluded.length);
   assert.equal(model.counts.entities_with_included_observations, expectedIncludedEntities);
-  assert.equal(model.counts.entities_with_excluded_observations, 1);
-  assert.equal(model.exclusions.length, 1);
-  assert.deepEqual(model.exclusions[0], {
-    source_id: 'tn-courts',
-    recorded_license: 'Official public rate table; normalized date/rate facts transcribed with attribution. Source-site terms may apply.',
-    rights_category: 'source_site_terms_review_required',
-    excluded_observation_count: expectedTennesseeCount,
-    affected_entities: ['tennessee-judgment-rate'],
-    reason: 'Source-site terms require owner/legal review before any data-package publication or redistribution.',
-  });
+  assert.equal(model.counts.entities_with_excluded_observations, expectedExcludedEntities);
+  const tennessee = model.exclusions.find((item) => item.source_id === 'tn-courts');
+  assert.equal(tennessee.recorded_license, 'Official public rate table; normalized date/rate facts transcribed with attribution. Source-site terms may apply.');
+  assert.equal(tennessee.rights_category, 'source_site_terms_review_required');
+  assert.equal(tennessee.excluded_observation_count, expectedTennesseeCount);
+  assert.deepEqual(tennessee.affected_entities, ['tennessee-judgment-rate']);
+  assert.match(tennessee.reason, /Source-site terms require owner\/legal review/);
   assert.equal(model.includedObservations.some((row) => row.source_id === 'tn-courts'), false);
+
+  const georgiaPrejudgment = model.exclusions.find((item) => item.source_id === 'ga-prejud');
+  assert.ok(georgiaPrejudgment.excluded_observation_count > 0);
+  assert.deepEqual(georgiaPrejudgment.excluded_observation_origins, ['https://fred.stlouisfed.org']);
+  assert.deepEqual(georgiaPrejudgment.lineage_categories, ['cross_origin_observation_review_required']);
+  assert.match(georgiaPrejudgment.reason, /different origin than the recorded source/);
+  assert.equal(model.includedObservations.some((row) => row.source_id === 'ga-prejud'), false);
+});
+
+test('invalid or insecure observation lineage URLs stop the candidate build', async () => {
+  const inputs = await committedInputs();
+  const target = Object.values(inputs.entities[0].history).flat()[0];
+  target.source_url = 'http://example.gov/not-https';
+  assert.throws(
+    () => buildPrivateCandidateModel(inputs),
+    /observation source_url must use HTTPS/,
+  );
 });
 
 test('rendering is byte deterministic and checksums cover every payload file', async () => {
@@ -114,4 +139,17 @@ test('rendering is byte deterministic and checksums cover every payload file', a
   assert.equal(manifest.publication_authorized, false);
   assert.equal(manifest.redistribution_authorized, false);
   assert.equal(manifest.legal_clearance, 'not_assessed');
+});
+
+test('CSV neutralizes spreadsheet formula prefixes while JSONL preserves the exact string', async () => {
+  const inputs = await committedInputs();
+  const model = buildPrivateCandidateModel(inputs);
+  model.includedObservations[0] = {
+    ...model.includedObservations[0],
+    notes: '=HYPERLINK("https://example.invalid","open")',
+  };
+  const files = renderPrivateCandidateFiles(model);
+
+  assert.match(files.get('observations.csv'), /"'=HYPERLINK\(""https:\/\/example\.invalid"",""open""\)"/u);
+  assert.match(files.get('observations.jsonl'), /"notes":"=HYPERLINK\(\\"https:\/\/example\.invalid\\",\\"open\\"\)"/u);
 });

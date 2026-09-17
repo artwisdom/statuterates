@@ -28,7 +28,7 @@ and crawlers to reach without creating thin per-change pages.
 The shared refresh client rejects URL credentials and explicit loopback, link-local, private, carrier-grade NAT,
 reserved, documentation, multicast, and IPv4-mapped/translated address literals. It applies the same check to
 redirect destinations before the target request. Focused tests prove unsafe direct targets cause no network I/O
-and a public source cannot redirect the runner to cloud-instance metadata.
+and a public source cannot redirect the runner to a literal cloud-instance metadata address.
 
 This is a bounded literal-target control. It does not claim to solve every DNS-rebinding or upstream-network risk;
 source hostnames remain code-reviewed and the existing robots, redirect, byte, retry, and deadline controls remain
@@ -53,8 +53,11 @@ input and payload checksums, data dictionary, source-attribution/rights matrix, 
 and observation JSONL/CSV.
 
 The rights classifier exactly matches all recorded source-license statements and fails closed on unknown text.
-The current candidate evaluates 5,555 observations, includes 5,526, and excludes all 29 `tn-courts` observations
-because the recorded source note says site terms may apply. The output repeatedly builds byte-identically.
+An observation is also withheld whenever its citation moves to a different origin than the source record, so
+source-level terms cannot silently stand in for an unreviewed secondary lineage. The current candidate evaluates
+5,555 observations, includes 5,322, and excludes 233: Tennessee's site-terms records plus every cross-origin
+lineage pending review. The output repeatedly builds byte-identically, compares its data inputs directly with
+`HEAD`, and neutralizes formula-capable string prefixes in CSV while preserving exact values in JSONL.
 
 This package is deliberately marked private, not legally cleared, not approved, and not publishable. The recorded
 rights statements are provenance metadata rather than legal opinions. Public or commercial distribution remains
