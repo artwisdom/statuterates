@@ -144,8 +144,8 @@ Goal: strengthen the URLs Google is already testing and create something genuine
 1. Compare finalized, equal 28-day Search Console periods monthly. Promote only existing pages with
    demonstrated impressions/clicks and a specific primary-source content gap.
 2. Deepen one winning state at a time with authoritative history, claim branches, worked examples,
-   and a preselected historical lookup. Tennessee is first because the latest finalized report showed
-   the largest page gain and its complete official history is available.
+   and a preselected historical lookup. Tennessee's official history is already released; select the
+   next state only from a newer finalized report and a verified primary-source gap.
 3. Audit source reuse rights, then publish one versioned aggregate data package with manifest,
    checksums, citation metadata, and clear terms. Keep raw machine files outside the HTML sitemap.
 4. Offer that citable asset to a small relevant list of court-resource, law-library, legal-aid, and
