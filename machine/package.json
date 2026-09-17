@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Release-time validation for the StatuteRates static API and machine interfaces.",
   "scripts": {
+    "build:private-candidate": "node build-private-data-package.mjs --build-private-candidate",
     "test": "node --test *.test.mjs",
     "check-api": "node check-api-conformance.mjs"
   },
