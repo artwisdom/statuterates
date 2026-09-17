@@ -6,8 +6,10 @@ import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
+  buildSourceReviewPacket,
   buildSourceReviewAlert,
   buildSourceReviewRegistry,
+  canonicalSourceUrl,
   currentEasternDate,
   loadSourceReviewReport,
   sourceUrlFingerprint,
@@ -38,6 +40,24 @@ function policy(activeSources, reviews = undefined, exportSourceExemptions = [])
       owner: 'repository-owner',
       risk: 'high',
     })),
+  };
+}
+
+function entity(slug, observations) {
+  return {
+    slug,
+    latest: { annual_rate: observations.at(-1) },
+    history: { annual_rate: observations },
+  };
+}
+
+function observation(sourceId, valueText, effectiveDate) {
+  return {
+    metric: 'annual_rate',
+    value_text: valueText,
+    effective_date: effectiveDate,
+    source_id: sourceId,
+    source_url: `https://example.gov/${sourceId}`,
   };
 }
 
@@ -96,31 +116,220 @@ test('due-date boundaries distinguish warning, due-today, and overdue states', (
   assert.match(alert.body, /repository-owner/);
 });
 
+test('the review packet groups canonical shared URLs and maps current exported entity impact', () => {
+  const activeSources = [
+    source('aa-jud', { home_url: 'https://EXAMPLE.gov/rates?a=1&b=2#table' }),
+    source('aa-prejud', { home_url: 'https://example.gov/rates?a=1&b=2' }),
+  ];
+  const report = buildSourceReviewRegistry({
+    policy: policy(activeSources),
+    activeSources,
+    exportedSources: activeSources,
+    today: '2026-03-18',
+    leadDays: 14,
+  });
+  const exportedEntities = [
+    entity('alpha-judgment-rate', [
+      observation('aa-jud', '5%', '2026-01-01'),
+      observation('aa-jud', '6%', '2026-05-01'),
+    ]),
+    entity('alpha-prejudgment-rate', [observation('aa-prejud', '7%', '2026-01-01')]),
+  ];
+  const reportBefore = JSON.stringify(report);
+  const entitiesBefore = JSON.stringify(exportedEntities);
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = () => { throw new Error('source-review packet must not fetch'); };
+  let packet;
+  try {
+    packet = buildSourceReviewPacket({ report, exportedEntities, asOf: '2026-03-18' });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+
+  assert.equal(canonicalSourceUrl(activeSources[0].home_url), 'https://example.gov/rates?a=1&b=2');
+  assert.equal(packet.actionable_source_count, 2);
+  assert.equal(packet.url_group_count, 1);
+  assert.equal(packet.included_group_count, 1);
+  assert.deepEqual(packet.groups[0].source_ids, ['aa-jud', 'aa-prejud']);
+  assert.equal(packet.groups[0].host, 'example.gov');
+  assert.deepEqual(
+    packet.groups[0].affected_entities.map((item) => ({
+      slug: item.slug,
+      value: item.current.value_text,
+      date: item.current.effective_date,
+      history: item.history_count,
+    })),
+    [
+      { slug: 'alpha-judgment-rate', value: '5%', date: '2026-01-01', history: 2 },
+      { slug: 'alpha-prejudgment-rate', value: '7%', date: '2026-01-01', history: 1 },
+    ],
+  );
+  assert.match(packet.body, /Review each official URL once, then record evidence separately for every listed source ID/);
+  assert.match(packet.body, /Do not update `last_reviewed` or `next_due` until a human has checked/);
+  assert.equal(JSON.stringify(report), reportBefore);
+  assert.equal(JSON.stringify(exportedEntities), entitiesBefore);
+});
+
+test('each URL group reports only observations contributed by that group source', () => {
+  const activeSources = [source('old-source'), source('new-source')];
+  const report = buildSourceReviewRegistry({
+    policy: policy(activeSources),
+    activeSources,
+    exportedSources: activeSources,
+    today: '2026-03-18',
+  });
+  const packet = buildSourceReviewPacket({
+    report,
+    exportedEntities: [entity('multi-source-rate', [
+      observation('old-source', '4%', '2025-01-01'),
+      observation('old-source', '5%', '2025-07-01'),
+      observation('new-source', '6%', '2026-01-01'),
+    ])],
+    asOf: '2026-03-18',
+  });
+  const oldGroup = packet.groups.find((group) => group.source_ids.includes('old-source'));
+  const newGroup = packet.groups.find((group) => group.source_ids.includes('new-source'));
+
+  assert.deepEqual(oldGroup.affected_entities[0], {
+    slug: 'multi-source-rate',
+    source_ids: ['old-source'],
+    current: { value_text: '6%', effective_date: '2026-01-01' },
+    latest_matching: { value_text: '5%', effective_date: '2025-07-01' },
+    history_count: 2,
+  });
+  assert.deepEqual(newGroup.affected_entities[0], {
+    slug: 'multi-source-rate',
+    source_ids: ['new-source'],
+    current: { value_text: '6%', effective_date: '2026-01-01' },
+    latest_matching: { value_text: '6%', effective_date: '2026-01-01' },
+    history_count: 1,
+  });
+  assert.match(oldGroup.url, /old-source/);
+  assert.match(packet.body, /series current \*\*6%\*\* @ `2026-01-01`/);
+  assert.match(packet.body, /latest listed-source observation \*\*5%\*\* @ `2025-07-01`/);
+});
+
+test('canonical URL grouping preserves query order and path slash semantics', () => {
+  assert.notEqual(
+    canonicalSourceUrl('https://example.gov/rates?a=1&b=2'),
+    canonicalSourceUrl('https://example.gov/rates?b=2&a=1'),
+  );
+  assert.notEqual(
+    canonicalSourceUrl('https://example.gov/rates'),
+    canonicalSourceUrl('https://example.gov/rates/'),
+  );
+});
+
+test('the review packet remains bounded and reports omitted URL and entity groups', () => {
+  const activeSources = [source('aa-jud'), source('bb-jud')];
+  const report = buildSourceReviewRegistry({
+    policy: policy(activeSources),
+    activeSources,
+    exportedSources: activeSources,
+    today: '2026-03-18',
+  });
+  const packet = buildSourceReviewPacket({
+    report,
+    exportedEntities: [
+      entity('alpha-one', [observation('aa-jud', '1%', '2026-01-01')]),
+      entity('alpha-two', [observation('aa-jud', '2%', '2026-01-01')]),
+      entity('beta-one', [observation('bb-jud', '3%', '2026-01-01')]),
+    ],
+    asOf: '2026-03-18',
+    maxGroups: 1,
+    maxEntitiesPerGroup: 1,
+    maxBytes: 2_000,
+  });
+
+  assert.equal(packet.url_group_count, 2);
+  assert.equal(packet.included_group_count, 1);
+  assert.equal(packet.omitted_group_count, 1);
+  assert.ok(packet.byte_count <= 2_000);
+  assert.match(packet.body, /1 additional official URL group was omitted/);
+  assert.match(packet.body, /Source IDs: `bb-jud`/);
+  assert.match(packet.body, /1 additional affected export\(s\) omitted/);
+});
+
+test('the default packet has no independent 60-group truncation', () => {
+  const activeSources = Array.from({ length: 61 }, (_, index) => source(`source-${String(index).padStart(2, '0')}`));
+  const report = buildSourceReviewRegistry({
+    policy: policy(activeSources),
+    activeSources,
+    exportedSources: activeSources,
+    today: '2026-03-18',
+  });
+  const exportedEntities = activeSources.map((item, index) => entity(
+    `entity-${String(index).padStart(2, '0')}`,
+    [observation(item.id, `${index + 1}%`, '2026-01-01')],
+  ));
+  const packet = buildSourceReviewPacket({ report, exportedEntities, asOf: '2026-03-18' });
+
+  assert.equal(packet.url_group_count, 61);
+  assert.equal(packet.included_group_count, 61);
+  assert.equal(packet.omitted_group_count, 0);
+  assert.ok(packet.byte_count <= packet.max_bytes);
+});
+
+test('impossible exported observation dates fail closed before entering a review packet', () => {
+  const activeSources = [source('aa-jud')];
+  const report = buildSourceReviewRegistry({
+    policy: policy(activeSources),
+    activeSources,
+    exportedSources: activeSources,
+    today: '2026-03-18',
+  });
+  assert.throws(
+    () => buildSourceReviewPacket({
+      report,
+      exportedEntities: [entity('invalid-date-rate', [observation('aa-jud', '99%', '2026-02-30')])],
+      asOf: '2026-03-18',
+    }),
+    /observation effective_date is not a real calendar date: 2026-02-30/,
+  );
+});
+
 test('the default calendar boundary is U.S. Eastern rather than UTC', () => {
   assert.equal(currentEasternDate(new Date('2026-09-08T00:30:00Z')), '2026-09-07');
   assert.equal(currentEasternDate(new Date('2026-09-08T12:00:00Z')), '2026-09-08');
 });
 
-test('the executable emits safe multiline GitHub outputs during the warning window', () => {
+test('the executable emits a bounded grouped GitHub packet at the next committed warning window', () => {
   const directory = mkdtempSync(join(tmpdir(), 'statuterates-source-review-'));
   const outputPath = join(directory, 'github-output.txt');
+  const savedPolicy = JSON.parse(readFileSync(
+    new URL('./source-review-registry.json', import.meta.url),
+    'utf8',
+  ));
+  const latestReview = savedPolicy.reviews.map((review) => review.last_reviewed).sort().at(-1);
+  const firstLeadWindow = savedPolicy.reviews
+    .map((review) => {
+      const date = new Date(`${review.next_due}T00:00:00Z`);
+      date.setUTCDate(date.getUTCDate() - 14);
+      return date.toISOString().slice(0, 10);
+    })
+    .sort()
+    .at(0);
+  const rehearsalDate = [latestReview, firstLeadWindow].sort().at(-1);
   try {
     const result = spawnSync(process.execPath, [fileURLToPath(new URL('./source-review-registry.mjs', import.meta.url))], {
       encoding: 'utf8',
       env: {
         ...process.env,
         GITHUB_OUTPUT: outputPath,
-        SOURCE_REVIEW_TODAY: '2026-09-23',
+        SOURCE_REVIEW_TODAY: rehearsalDate,
       },
     });
     assert.equal(result.status, 0, result.stderr);
     const output = readFileSync(outputPath, 'utf8');
     assert.match(output, /^due=true$/m);
-    assert.match(output, /^overdue=false$/m);
+    assert.match(output, /^overdue=(?:true|false)$/m);
     assert.match(output, /^title=\[StatuteRates\] Manual legal-source review due$/m);
     assert.match(output, /^body<<STATUTERATES_SOURCE_REVIEW_\d+$/m);
-    assert.match(output, /Massachusetts G\.L\. c\.231/);
-    assert.match(output, /\(due soon\)/);
+    assert.match(output, /source IDs? grouped into \d+ official URLs?/);
+    assert.match(output, /Affected exports:/);
+    assert.match(output, /\((?:due soon|due today|overdue)\)/);
+    assert.match(output, /Do not update `last_reviewed` or `next_due` until a human has checked/);
+    assert.ok(Buffer.byteLength(output, 'utf8') < 55_000);
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

@@ -272,6 +272,13 @@ For a date-bound rehearsal without changing the registry, set an explicit Easter
 SOURCE_REVIEW_TODAY=2026-10-07 node machine/source-review-registry.mjs
 ```
 
+The reminder packet groups entries by canonical official URL, so a page shared by post- and
+prejudgment records is opened once. Each group still lists every registry source ID separately with
+its owner, risk, last-reviewed date, and deadline, plus the affected entity slugs, current exported
+value/effective date, and recorded-history count. The packet reads only the generated exports in the
+current checkout (committed exports in scheduled CI), performs no network request, is capped below
+GitHub's issue-body limit, and never changes a review date.
+
 For each state reviewed:
 
 1. Open the cited URL and classify it with `pipeline/lib/state-rules.mjs`.

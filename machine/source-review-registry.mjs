@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { appendFileSync, readFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, readdirSync } from 'node:fs';
+import { Buffer } from 'node:buffer';
 import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -12,6 +13,24 @@ const ALLOWED_RISKS = new Set(['critical', 'high', 'medium', 'low']);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const defaultPolicyPath = join(__dirname, 'source-review-registry.json');
 const defaultMetaPath = join(__dirname, '..', 'data', 'exports', 'meta.json');
+const defaultEntityDirectory = join(__dirname, '..', 'data', 'exports', 'entity');
+const DEFAULT_PACKET_GROUP_LIMIT = Number.MAX_SAFE_INTEGER;
+const DEFAULT_PACKET_ENTITY_LIMIT = 8;
+const DEFAULT_PACKET_BYTE_LIMIT = 50_000;
+
+const STATUS_PRIORITY = new Map([
+  ['current', 0],
+  ['due_soon', 1],
+  ['due_today', 2],
+  ['overdue', 3],
+]);
+
+const RISK_PRIORITY = new Map([
+  ['low', 0],
+  ['medium', 1],
+  ['high', 2],
+  ['critical', 3],
+]);
 
 function parseIsoDate(value, label) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) {
@@ -269,14 +288,270 @@ export function buildSourceReviewRegistry({
   };
 }
 
-export function buildSourceReviewAlert(report) {
+export function canonicalSourceUrl(value) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`Cannot canonicalize invalid source URL: ${value}`);
+  }
+  if (url.protocol !== 'https:') throw new Error(`Canonical source URL must use HTTPS: ${value}`);
+  url.hash = '';
+  url.hostname = url.hostname.toLowerCase();
+  if (url.port === '443') url.port = '';
+  return url.href;
+}
+
+function observationsForEntity(entity) {
+  const observations = [];
+  const seen = new Set();
+  const add = (observation) => {
+    if (!observation || typeof observation !== 'object' || Array.isArray(observation)) {
+      throw new Error(`Entity observation for ${entity.slug} must be an object`);
+    }
+    assertSafeText(observation.metric, `entity ${entity.slug} observation metric`);
+    parseIsoDate(observation.effective_date, `entity ${entity.slug} observation effective_date`);
+    assertSafeText(observation.source_id, `entity ${entity.slug} observation source_id`);
+    assertSafeText(observation.value_text, `entity ${entity.slug} observation value_text`, 300);
+    const key = [
+      observation.metric,
+      observation.effective_date,
+      observation.source_id,
+      observation.value_text,
+      observation.source_url,
+    ].join('\t');
+    if (seen.has(key)) return;
+    seen.add(key);
+    observations.push(observation);
+  };
+
+  for (const metric of Object.keys(entity.history || {}).sort()) {
+    const history = entity.history[metric];
+    if (!Array.isArray(history)) throw new Error(`Entity ${entity.slug} history.${metric} must be an array`);
+    for (const observation of history) add(observation);
+  }
+  for (const metric of Object.keys(entity.latest || {}).sort()) add(entity.latest[metric]);
+  return observations;
+}
+
+function latestEffectiveObservation(observations, asOf) {
+  return observations
+    .filter((item) => item.effective_date <= asOf)
+    .sort((a, b) => (
+      a.effective_date.localeCompare(b.effective_date) || String(a.metric).localeCompare(String(b.metric))
+    ))
+    .at(-1) || null;
+}
+
+function observationValue(observation) {
+  return observation
+    ? {
+        value_text: String(observation.value_text),
+        effective_date: observation.effective_date,
+      }
+    : null;
+}
+
+function summarizeEntity(entity, asOf) {
+  if (!entity || typeof entity !== 'object' || Array.isArray(entity)) {
+    throw new Error('Every exported entity must be an object');
+  }
+  assertSafeText(entity.slug, 'exported entity slug');
+  const observations = observationsForEntity(entity);
+  return {
+    slug: entity.slug,
+    observations,
+    current: observationValue(latestEffectiveObservation(observations, asOf)),
+  };
+}
+
+function summarizeEntityForSources(entity, sourceIdSet, asOf) {
+  const observations = entity.observations.filter((item) => sourceIdSet.has(item.source_id));
+  const latestMatching = latestEffectiveObservation(observations, asOf);
+  return {
+    slug: entity.slug,
+    source_ids: [...new Set(observations.map((item) => item.source_id))].sort(),
+    current: entity.current,
+    latest_matching: observationValue(latestMatching),
+    history_count: observations.length,
+  };
+}
+
+function compareByPriority(priority, a, b) {
+  return (priority.get(b) ?? -1) - (priority.get(a) ?? -1) || a.localeCompare(b);
+}
+
+function renderSourceReviewGroup(group, entityLimit) {
+  const sourceLines = group.sources.map((entry) => (
+    `  - \`${entry.source.id}\` — ${entry.source.name}; last \`${entry.last_reviewed}\`; ` +
+    `due \`${entry.next_due}\` (${entry.status.replace('_', ' ')}); **${entry.risk}**; \`${entry.owner}\``
+  ));
+  const displayedEntities = group.affected_entities.slice(0, entityLimit);
+  const entityLines = displayedEntities.length
+    ? displayedEntities.map((entity) => {
+        const current = entity.current
+          ? `series current **${entity.current.value_text}** @ \`${entity.current.effective_date}\``
+          : 'no series observation effective by the export date';
+        const matching = entity.latest_matching
+          ? `latest listed-source observation **${entity.latest_matching.value_text}** @ \`${entity.latest_matching.effective_date}\``
+          : 'no observation effective by the export date';
+        return (
+          `  - \`${entity.slug}\` (source IDs ${entity.source_ids.map((id) => `\`${id}\``).join(', ')}): ` +
+          `${current}; ${matching}; ${entity.history_count} linked history point${entity.history_count === 1 ? '' : 's'}`
+        );
+      })
+    : ['  - _No matching entity observation was found; verify the registry-to-export mapping._'];
+  const omittedEntities = Math.max(0, group.affected_entities.length - displayedEntities.length);
+  if (omittedEntities) entityLines.push(`  - _${omittedEntities} additional affected export(s) omitted from this compact packet._`);
+
+  return [
+    `### [${group.host}](${group.url})`,
+    '- Registered sources:',
+    ...sourceLines,
+    '- Affected exports:',
+    ...entityLines,
+  ].join('\n');
+}
+
+export function buildSourceReviewPacket({
+  report,
+  exportedEntities,
+  asOf = report?.checked_on,
+  maxGroups = DEFAULT_PACKET_GROUP_LIMIT,
+  maxEntitiesPerGroup = DEFAULT_PACKET_ENTITY_LIMIT,
+  maxBytes = DEFAULT_PACKET_BYTE_LIMIT,
+} = {}) {
+  if (!report || !Array.isArray(report.entries)) throw new Error('Source-review report entries are required');
+  if (!Array.isArray(exportedEntities) || exportedEntities.length === 0) {
+    throw new Error('exportedEntities must be a non-empty array');
+  }
+  if (!Number.isSafeInteger(maxGroups) || maxGroups < 1) {
+    throw new Error('maxGroups must be a positive safe integer');
+  }
+  if (!Number.isInteger(maxEntitiesPerGroup) || maxEntitiesPerGroup < 1 || maxEntitiesPerGroup > 25) {
+    throw new Error('maxEntitiesPerGroup must be an integer from 1 to 25');
+  }
+  if (!Number.isInteger(maxBytes) || maxBytes < 2_000 || maxBytes > 55_000) {
+    throw new Error('maxBytes must be an integer from 2000 to 55000');
+  }
+  const asOfDate = String(asOf || '').slice(0, 10);
+  parseIsoDate(asOfDate, 'packet asOf');
+
+  const seenEntitySlugs = new Set();
+  const entities = exportedEntities.map((entity) => {
+    const summary = summarizeEntity(entity, asOfDate);
+    if (seenEntitySlugs.has(summary.slug)) throw new Error(`Duplicate exported entity slug: ${summary.slug}`);
+    seenEntitySlugs.add(summary.slug);
+    return summary;
+  });
+  const actionable = report.entries.filter((entry) => entry.status !== 'current');
+  const groupMap = new Map();
+
+  for (const entry of actionable) {
+    const url = canonicalSourceUrl(entry.source.url);
+    const group = groupMap.get(url) || {
+      url,
+      host: new URL(url).hostname,
+      sources: [],
+      affected_entities: [],
+    };
+    group.sources.push(entry);
+    groupMap.set(url, group);
+  }
+
+  const groups = [...groupMap.values()].map((group) => {
+    group.sources.sort((a, b) => a.source.id.localeCompare(b.source.id));
+    const sourceIds = group.sources.map((entry) => entry.source.id);
+    const sourceIdSet = new Set(sourceIds);
+    const affectedEntities = entities
+      .map((entity) => summarizeEntityForSources(entity, sourceIdSet, asOfDate))
+      .filter((entity) => entity.source_ids.length > 0)
+      .sort((a, b) => a.slug.localeCompare(b.slug));
+    const statuses = [...new Set(group.sources.map((entry) => entry.status))]
+      .sort((a, b) => compareByPriority(STATUS_PRIORITY, a, b));
+    const risks = [...new Set(group.sources.map((entry) => entry.risk))]
+      .sort((a, b) => compareByPriority(RISK_PRIORITY, a, b));
+    return {
+      ...group,
+      source_ids: sourceIds,
+      affected_entities: affectedEntities,
+      statuses,
+      risks,
+      owners: [...new Set(group.sources.map((entry) => entry.owner))].sort(),
+      last_reviewed_dates: [...new Set(group.sources.map((entry) => entry.last_reviewed))].sort(),
+      due_dates: [...new Set(group.sources.map((entry) => entry.next_due))].sort(),
+    };
+  }).sort((a, b) => (
+    a.due_dates[0].localeCompare(b.due_dates[0]) || a.url.localeCompare(b.url)
+  ));
+
+  const header = [
+    'The quarterly review window is approaching, due, or overdue for the manually maintained legal sources below.',
+    '',
+    `**Review packet:** ${actionable.length} source ID${actionable.length === 1 ? '' : 's'} grouped into ` +
+      `${groups.length} official URL${groups.length === 1 ? '' : 's'}; exported values evaluated as of \`${asOfDate}\`.`,
+    'Review each official URL once, then record evidence separately for every listed source ID.',
+    'For every group, verify the current rate, formula or scope, and any effective-date change.',
+    '',
+  ].join('\n') + '\n';
+  const footer = [
+    '',
+    'Follow `docs/MAINTENANCE_RUNBOOK.md` → “State-law source review”.',
+    '**Do not update `last_reviewed` or `next_due` until a human has checked the cited authority.** ' +
+      'Never infer a rate, carry it forward, or treat a successful fetch as a legal review.',
+  ].join('\n');
+  const includedGroups = [];
+  const groupCandidates = groups.slice(0, maxGroups);
+  const assembleBody = (blocks, omittedGroups) => {
+    const omittedSourceIds = omittedGroups.flatMap((group) => group.source_ids);
+    const displayedOmittedSourceIds = omittedSourceIds.slice(0, 20);
+    const remainingOmittedSourceIds = omittedSourceIds.length - displayedOmittedSourceIds.length;
+    const omittedIds = displayedOmittedSourceIds.length
+      ? ` Source IDs: ${displayedOmittedSourceIds.map((id) => `\`${id}\``).join(', ')}` +
+        `${remainingOmittedSourceIds ? `, plus ${remainingOmittedSourceIds} more` : ''}.`
+      : '';
+    const omission = omittedGroups.length
+      ? `\n\n_${omittedGroups.length} additional official URL group${omittedGroups.length === 1 ? ' was' : 's were'} ` +
+        `omitted to keep the GitHub issue bounded.${omittedIds}_`
+      : '';
+    return `${header}${blocks.join('\n\n')}${omission}${footer}`;
+  };
+  for (const [index, group] of groupCandidates.entries()) {
+    const block = renderSourceReviewGroup(group, maxEntitiesPerGroup);
+    const proposedBlocks = [...includedGroups, block];
+    const proposedOmittedGroups = groups.slice(index + 1);
+    if (Buffer.byteLength(assembleBody(proposedBlocks, proposedOmittedGroups), 'utf8') > maxBytes) break;
+    includedGroups.push(block);
+  }
+  const omittedGroupCount = groups.length - includedGroups.length;
+  const body = assembleBody(includedGroups, groups.slice(includedGroups.length));
+  const byteCount = Buffer.byteLength(body, 'utf8');
+  if (byteCount > maxBytes) throw new Error('Source-review packet could not fit within maxBytes');
+
+  return {
+    checked_on: report.checked_on,
+    export_as_of: asOfDate,
+    actionable_source_count: actionable.length,
+    url_group_count: groups.length,
+    included_group_count: includedGroups.length,
+    omitted_group_count: omittedGroupCount,
+    max_bytes: maxBytes,
+    byte_count: byteCount,
+    groups,
+    body,
+  };
+}
+
+export function buildSourceReviewAlert(report, packet = null) {
   // Open the durable reminder during the lead window, while there is still time to perform a real
   // source review. Waiting until the next weekly run after the deadline would make the alert late by
   // design. The report still distinguishes due-soon, due-today, and overdue entries.
   const actionable = report.entries.filter((entry) => entry.status !== 'current');
   const overdue = actionable.filter((entry) => entry.status === 'overdue');
   const title = '[StatuteRates] Manual legal-source review due';
-  const body = actionable.length
+  const body = actionable.length && packet
+    ? packet.body
+    : actionable.length
     ? [
         'The quarterly review window is approaching, due, or overdue for these manually maintained legal sources:',
         '',
@@ -298,7 +573,15 @@ export function buildSourceReviewAlert(report) {
     body,
     due_count: actionable.length,
     overdue_count: overdue.length,
+    url_group_count: packet?.url_group_count ?? actionable.length,
   };
+}
+
+export function loadExportedEntities(entityDirectory = defaultEntityDirectory) {
+  return readdirSync(entityDirectory)
+    .filter((name) => name.endsWith('.json'))
+    .sort()
+    .map((name) => JSON.parse(readFileSync(join(entityDirectory, name), 'utf8')));
 }
 
 export function loadSourceReviewReport({
@@ -309,13 +592,17 @@ export function loadSourceReviewReport({
 } = {}) {
   const policy = JSON.parse(readFileSync(policyPath, 'utf8'));
   const metadata = JSON.parse(readFileSync(metaPath, 'utf8'));
-  return buildSourceReviewRegistry({
+  const report = buildSourceReviewRegistry({
     policy,
     activeSources: STATE_SOURCES,
     exportedSources: metadata.sources,
     today,
     leadDays,
   });
+  if (typeof metadata.generated_at !== 'string' || Number.isNaN(Date.parse(metadata.generated_at))) {
+    throw new Error('Export metadata generated_at must be a valid timestamp');
+  }
+  return { ...report, export_generated_at: metadata.generated_at };
 }
 
 function writeGithubOutputs(alert) {
@@ -328,11 +615,16 @@ function writeGithubOutputs(alert) {
 
 function main() {
   const report = loadSourceReviewReport();
-  const alert = buildSourceReviewAlert(report);
+  const packet = buildSourceReviewPacket({
+    report,
+    exportedEntities: loadExportedEntities(),
+    asOf: report.export_generated_at,
+  });
+  const alert = buildSourceReviewAlert(report, packet);
   if (process.env.GITHUB_OUTPUT) {
     writeGithubOutputs(alert);
   } else {
-    console.log(JSON.stringify({ ...report, alert }, null, 2));
+    console.log(JSON.stringify({ ...report, packet, alert }, null, 2));
   }
 }
 
