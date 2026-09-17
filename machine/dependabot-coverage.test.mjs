@@ -38,7 +38,10 @@ test('every committed npm lockfile has one weekly Dependabot maintenance entry',
       'increase-if-necessary',
       `${directory} must preserve compatible lockfile updates`,
     );
-    assert.ok(update['open-pull-requests-limit'] > 0, `${directory} must cap open dependency pull requests`);
+    assert.ok(
+      update['open-pull-requests-limit'] > 0 && update['open-pull-requests-limit'] <= 5,
+      `${directory} must cap open dependency pull requests at five or fewer`,
+    );
     assert.match(update['commit-message']?.prefix || '', /^deps\(.+\)$/u, `${directory} needs a dependency commit prefix`);
 
     const groupedTypes = Object.values(update.groups || {})
