@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
 import EditorialCredit from '../../components/EditorialCredit.astro';
-import { getAllEntities, getEntity, getMeta, currentOf, latestOf, prettyDate, prettyDateTime, isPrejudgment, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
+import { getAllEntities, getEntity, getMeta, latestOf, machineCurrentGuard, prettyDate, prettyDateTime, isPrejudgment, recordedCurrentOf, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 import { recordedChangesFor } from '../../lib/changes.mjs';
 import {
@@ -21,7 +21,22 @@ const entity = getEntity(slug);
 const meta = getMeta();
 const JUR = { US: 'United States', GB: 'United Kingdom', EU: 'European Union' };
 const latestPublished = latestOf(entity);
-const latest = currentOf(entity);
+const latest = recordedCurrentOf(entity);
+const currentGuard = machineCurrentGuard(entity);
+const isUnverifiedLastRecorded = currentGuard?.status === 'unverified_last_recorded';
+const isBranchPartial = currentGuard?.status === 'branch_partial_reference_only';
+const isCurrentWithheld = Boolean(currentGuard);
+const unverifiedLastRecordedLabel = 'LAST RECORDED — current official rate unverified';
+const recordedValueText = String(latest?.value_text ?? latest?.value ?? '')
+  .replace(/^LAST RECORDED:\s*/i, '')
+  .replace(/\s*—\s*current official rate unverified\s*$/i, '')
+  .replace(/\s*\(last recorded;\s*(?:not current-verified|current official rate unverified)\)\s*$/i, '')
+  .trim();
+const rateValueText = isUnverifiedLastRecorded
+  ? `LAST RECORDED: ${recordedValueText} — current official rate unverified`
+  : isBranchPartial
+  ? 'CURRENT VALUE WITHHELD — legal branch selection required'
+  : latest?.value_text;
 const history = (entity.history?.annual_rate || []).slice(0, 40); // recent history for the table
 const totalPoints = (entity.history?.annual_rate || []).length;
 const recordedChanges = recordedChangesFor(entity);
@@ -54,7 +69,7 @@ const CALC_FOR = {
 };
 const candidateCalcHref = CALC_FOR[slug] || null;
 const dedicatedStateCalcHref = stateCalculatorReleaseForEntity(entity)?.path || null;
-const manualStateCalcHref = !isPrejudgment(entity) && slug.endsWith('-judgment-rate')
+const manualStateCalcHref = !isCurrentWithheld && !isPrejudgment(entity) && slug.endsWith('-judgment-rate')
   ? '/calculators/judgment-interest/'
   : null;
 const calcHref = dedicatedStateCalcHref || candidateCalcHref || manualStateCalcHref;
@@ -126,7 +141,11 @@ const statuteTitle = {
   'washington-judgment-rate': `RCW 4.56.110: Washington Judgment Interest Rates ${rateYear}`,
 }[slug];
 const stateRateKind = pj ? (isCaseSpecific ? 'Prejudgment Interest Rules' : 'Prejudgment Interest Rate') : 'Post-Judgment Interest Rate';
-const stateTitleWithValue = `${stateName} ${stateRateKind} ${rateYear}${isCaseSpecific ? '' : `: ${latest?.value_text}`}`;
+const stateTitleWithValue = isUnverifiedLastRecorded
+  ? `${stateName} ${pj ? 'Prejudgment' : 'Judgment'} Rate: Last Recorded, Current Unverified`
+  : isBranchPartial
+  ? `${stateName} ${pj ? 'Prejudgment' : 'Judgment'} Rate: Current Value Withheld`
+  : `${stateName} ${stateRateKind} ${rateYear}${isCaseSpecific ? '' : `: ${latest?.value_text}`}`;
 const stateTitleWithoutValue = `${stateName} ${stateRateKind} ${rateYear}`;
 const targetedTitle = statuteTitle
   || (isStateRate ? stateTitleWithValue : null)
@@ -139,10 +158,14 @@ const title = targetedTitle.length <= 65
     : entity.name;
 const statePreDescriptionDetailed = `${rateYear} ${stateName} prejudgment interest ${isCaseSpecific ? 'rule' : `rate: ${latest?.value_text}`}. See when it applies, accrual, compounding, ${seoStatuteLabel}, exceptions, and the official source.`;
 const statePreDescriptionCompact = `${rateYear} ${stateName} prejudgment interest ${isCaseSpecific ? 'rule' : `rate: ${latest?.value_text}`}. See applicability, accrual, compounding, exceptions, and the cited official source.`;
-const description = isStateRate
-  ? pj
-    ? (copy.seoDescription || (statePreDescriptionDetailed.length <= 160 ? statePreDescriptionDetailed : statePreDescriptionCompact))
-    : `${rateYear} ${stateName} post-judgment interest rate: ${latest?.value_text} per year. See ${seoStatuteLabel}, ${effectiveDateIsReference ? 'reference date' : 'effective date'}, exceptions, history, and official source.`
+const description = isUnverifiedLastRecorded
+  ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest: last recorded ${recordedValueText}; current official rate unverified. See the formula, history, and source warning.`
+  : isBranchPartial
+  ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest: current percentage withheld pending legal branch selection. See the recorded branch reference, scope, and official sources.`
+  : isStateRate
+  ? (copy.seoDescription || (pj
+    ? (statePreDescriptionDetailed.length <= 160 ? statePreDescriptionDetailed : statePreDescriptionCompact)
+    : `${rateYear} ${stateName} post-judgment interest rate: ${latest?.value_text} per year. See ${seoStatuteLabel}, ${effectiveDateIsReference ? 'reference date' : 'effective date'}, exceptions, history, and official source.`))
   : slug === 'uk-late-payment-commercial'
   ? `${rateYear} UK statutory interest on late commercial payments: ${latest?.value_text} per year. See the current rate, effective dates, calculation rules, and cited source.`
   : isEuBenchmark
@@ -159,7 +182,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Legacy variable-series copy is also stale-proofed here. New volatile copy uses explicit
 // observation-backed tokens in content.mjs; this global replacement protects older single-value
 // paragraphs until each is migrated.
-const bodyText = (latest?.value_text && !latest.value_text.includes('/'))
+const bodyText = !isCurrentWithheld && (latest?.value_text && !latest.value_text.includes('/'))
   ? copy.body.replace(/currently \d+(?:\.\d+)?%/gi, `currently ${latest.value_text}`)
   : copy.body;
 const pageModified = [
@@ -169,7 +192,11 @@ const pageModified = [
 
 // Provenance line for the "Cite this page" block.
 const citeStatute = entity.metadata?.statute;
-const citeNote = isProvisional
+const citeNote = isUnverifiedLastRecorded
+  ? `${unverifiedLastRecordedLabel}. The ${recordedValueText} observation is retained only as historical provenance; confirm the current official schedule before use.`
+  : isBranchPartial
+  ? `${currentGuard.label}. The ${recordedValueText} observation is a branch-limited reference, not a generic machine-usable current rate.`
+  : isProvisional
   ? `Provisional H.15-based calculation dated ${prettyDate(latest?.effective_date)}; pending ${provisionalConfirmation} confirmation.`
   : isCaseSpecific
   ? `Case-specific rule recorded under ${citeStatute}; no uniform numeric percentage is published.`
@@ -182,7 +209,11 @@ const sourceRecord = (meta.sources || []).find((source) => source.id === latest?
 const officialAuthorities = Array.isArray(entity.metadata?.official_authorities)
   ? entity.metadata.official_authorities.filter((item) => item?.label && /^https:\/\//.test(item?.url || ''))
   : [];
-const basisLabel = isCaseSpecific
+const basisLabel = isUnverifiedLastRecorded
+  ? 'Current official rate unverified'
+  : isBranchPartial
+  ? 'Current value withheld — legal branch selection required'
+  : isCaseSpecific
   ? 'Case-specific rule'
   : isProvisional
     ? 'Provisional estimate'
@@ -208,7 +239,11 @@ const pageHeading = isStateRate
   ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest ${isCaseSpecific ? 'rules' : 'rate'}`
   : entity.name;
 const factsHeading = isStateRate
-  ? `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest at a glance`
+  ? isUnverifiedLastRecorded
+    ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest — last recorded status`
+    : isBranchPartial
+    ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest — branch selection required`
+    : `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest at a glance`
   : isEuBenchmark
   ? `${entity.name} input at a glance`
   : `${entity.name} at a glance`;
@@ -264,7 +299,12 @@ const jsonLd = [
       '@type': 'PropertyValue',
       name: entity.name,
       unitText: isCaseSpecific ? 'case-specific legal rule' : 'percent per annum',
-      value: isCaseSpecific ? latest?.value_text : latest?.value,
+      value: isCurrentWithheld ? rateValueText : isCaseSpecific ? latest?.value_text : latest?.value,
+      ...(isCurrentWithheld ? {
+        description: isUnverifiedLastRecorded
+          ? `${unverifiedLastRecordedLabel}; historical observation only.`
+          : `${currentGuard.label}; recorded branch reference only.`,
+      } : {}),
     },
     distribution: {
       '@type': 'DataDownload',
@@ -297,12 +337,28 @@ const jsonLd = [
   <h1>{pageHeading}</h1>
   <EditorialCredit kind="rate" reviewedOn={latest?.retrieved_at || pageModified} />
   <p class="lead"><span class="chip">{JUR[entity.jurisdiction] || entity.jurisdiction}</span> &nbsp;{copy.tagline}</p>
+  {isUnverifiedLastRecorded && (
+    <div class="disclaimer" data-current-rate-status="unverified_last_recorded">
+      <strong>LAST RECORDED — current official rate unverified.</strong>
+      {' '}The {recordedValueText} observation is retained for historical provenance only. Do not use it as the current rate without confirming the controlling official schedule.
+    </div>
+  )}
+  {isBranchPartial && (
+    <div class="disclaimer" data-current-rate-status="branch_partial_reference_only">
+      <strong>CURRENT VALUE WITHHELD — legal branch selection required.</strong>
+      {' '}The recorded {recordedValueText} observation covers a limited legal branch. It is preserved as reference provenance, not presented as a generic current percentage.
+    </div>
+  )}
   {hubHref && (
     <p class="hublink"><a href={hubHref}>→ All {stateName} judgment &amp; prejudgment interest rates</a></p>
   )}
 
   <div class="rate-hero">
-    <div class="eyebrow">{isCaseSpecific
+    <div class="eyebrow">{isUnverifiedLastRecorded
+      ? 'LAST RECORDED'
+      : isBranchPartial
+      ? 'CURRENT VALUE WITHHELD'
+      : isCaseSpecific
       ? 'Current rule'
       : isProvisional
       ? 'Provisional current estimate'
@@ -311,9 +367,13 @@ const jsonLd = [
       : isStatuteBranching
       ? 'Headline statutory branch'
       : 'Current rate'}</div>
-    <span class="value">{latest?.value_text}</span>
+    <span class="value">{isBranchPartial ? 'Branch selection required' : isUnverifiedLastRecorded ? recordedValueText : latest?.value_text}</span>
     <span class="asof">
-      {isCaseSpecific
+      {isUnverifiedLastRecorded
+        ? <>historical observation — current official rate unverified</>
+        : isBranchPartial
+        ? <>recorded branch reference: {recordedValueText}; not a generic current rate</>
+        : isCaseSpecific
         ? <>— no uniform statewide percentage</>
         : isProvisional
         ? <>per year — official H.15 input, pending {provisionalConfirmation} confirmation</>
@@ -349,11 +409,15 @@ const jsonLd = [
     <h2 id="rate-facts-heading">{factsHeading}</h2>
     <dl>
       <div>
-        <dt>{isCaseSpecific ? 'Current rule' : isEuBenchmark ? 'Current benchmark input' : isStatuteBranching ? 'Headline branch' : 'Current rate'}</dt>
-        <dd>{latest?.value_text}{isCaseSpecific ? '' : isEuBenchmark ? ' ECB reference input' : isStatuteBranching ? ' per year (branch shown)' : ' per year'}</dd>
+        <dt>{isUnverifiedLastRecorded ? 'Last recorded rate' : isBranchPartial ? 'Current rate' : isCaseSpecific ? 'Current rule' : isEuBenchmark ? 'Current benchmark input' : isStatuteBranching ? 'Headline branch' : 'Current rate'}</dt>
+        <dd>{isUnverifiedLastRecorded
+          ? <>{recordedValueText} per year — current official rate unverified</>
+          : isBranchPartial
+          ? <>Unavailable — legal branch selection required; recorded branch reference {recordedValueText}</>
+          : <>{latest?.value_text}{isCaseSpecific ? '' : isEuBenchmark ? ' ECB reference input' : isStatuteBranching ? ' per year (branch shown)' : ' per year'}</>}</dd>
       </div>
       <div>
-        <dt>{effectiveDateLabel}</dt>
+        <dt>{isCurrentWithheld ? 'Recorded-reference date' : effectiveDateLabel}</dt>
         <dd>{prettyDate(latest?.effective_date)}</dd>
       </div>
       <div>
@@ -409,7 +473,7 @@ const jsonLd = [
           ? '→ Explore the clearly labeled EU benchmark illustration'
         : dedicatedStateCalcHref
           ? `→ Calculate ${stateName} judgment interest with the audited statutory tool`
-        : '→ Calculate interest at this rate'}
+        : '→ Open the manual arithmetic-only tool — independently verify every legal input first'}
     </strong></a></p>
   )}
   {slug === 'irs-underpayment' && (
@@ -464,11 +528,15 @@ const jsonLd = [
 
   <AdSlot id="rate-top" enabled={monetizationReady} />
 
-  <h2>{totalPoints === 1 ? 'Current recorded observation' : 'Effective-date history'}</h2>
+  <h2>{isCurrentWithheld ? 'Recorded observation and preserved history' : totalPoints === 1 ? 'Current recorded observation' : 'Effective-date history'}</h2>
   <div class="scroll-x">
     <table>
       <caption>
-        {totalPoints === 1
+        {isUnverifiedLastRecorded
+          ? `The last recorded ${recordedValueText} observation is preserved for historical provenance; the current official rate is unverified.`
+          : isBranchPartial
+          ? `The recorded ${recordedValueText} observation is preserved as a branch-limited reference; no generic current percentage is published.`
+          : totalPoints === 1
           ? 'One current observation is on record; this page does not claim complete historical coverage.'
           : `${totalPoints} data points on record${totalPoints > history.length ? ` (showing the most recent ${history.length})` : ''}.`}
         All recorded observations are in the <a href={`/api/v1/entity/${slug}.json`}>JSON API</a>.

@@ -21,10 +21,89 @@ import {
   HISTORICAL_RATE_RELEASES,
   historicalRateSeriesForEntity,
 } from '../shared/historical-rate-releases.mjs';
+import {
+  BRANCH_PARTIAL_STATUS,
+  csvObservationUsage,
+  UNVERIFIED_LAST_RECORDED_LABEL,
+  UNVERIFIED_LAST_RECORDED_STATUS,
+  withMachineCurrentGuard,
+} from '../shared/machine-current-safety.mjs';
+
+export {
+  BRANCH_PARTIAL_STATUS,
+  UNVERIFIED_LAST_RECORDED_LABEL,
+  UNVERIFIED_LAST_RECORDED_STATUS,
+} from '../shared/machine-current-safety.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EXPORTS = resolve(__dirname, '..', 'data', 'exports');
 const API_DIR = resolve(__dirname, '..', 'site', 'public', 'api', 'v1');
+
+function lastRecordedValueText(observation) {
+  const raw = String(observation?.value_text ?? observation?.value ?? '').trim();
+  const value = raw
+    .replace(/^LAST RECORDED:\s*/i, '')
+    .replace(/\s*—\s*current official rate unverified\s*$/i, '')
+    .replace(/\s*\(last recorded;\s*(?:not current-verified|current official rate unverified)\)\s*$/i, '')
+    .trim();
+  return `LAST RECORDED: ${value} — current official rate unverified`;
+}
+
+function labelLastRecordedObservation(observation) {
+  if (!observation) return observation;
+  const notes = String(observation.notes || '').trim();
+  const labeledNotes = /current official rate unverified/i.test(notes)
+    ? notes
+    : `${UNVERIFIED_LAST_RECORDED_LABEL}.${notes ? ` ${notes}` : ''}`;
+  return {
+    ...observation,
+    value_text: lastRecordedValueText(observation),
+    notes: labeledNotes,
+  };
+}
+
+// These records retain a real historical observation, but their current official percentage could
+// not be independently verified. Keep the numeric history intact while making every API projection
+// of the last recorded row impossible to mistake for a verified current rate.
+export function withRateVerificationStatus(record) {
+  if (record?.metadata?.current_rate_status !== UNVERIFIED_LAST_RECORDED_STATUS) {
+    return withMachineCurrentGuard(record);
+  }
+  const lastRecordedDate = String(
+    record.metadata?.last_recorded_rate?.effective_date
+      || Object.values(record.current || {})[0]?.effective_date
+      || '',
+  );
+  const labelMap = (values) => Object.fromEntries(Object.entries(values || {}).map(([metric, observation]) => [
+    metric,
+    !lastRecordedDate || observation?.effective_date === lastRecordedDate
+      ? labelLastRecordedObservation(observation)
+      : observation,
+  ]));
+  const history = Object.fromEntries(Object.entries(record.history || {}).map(([metric, observations]) => [
+    metric,
+    observations.map((observation) => (
+      !lastRecordedDate || observation?.effective_date === lastRecordedDate
+        ? labelLastRecordedObservation(observation)
+        : observation
+    )),
+  ]));
+  const labeled = {
+    ...record,
+    latest: labelMap(record.latest),
+    current: labelMap(record.current),
+    latest_published: labelMap(record.latest_published),
+    metadata: {
+      ...record.metadata,
+      current_rate_status: UNVERIFIED_LAST_RECORDED_STATUS,
+      current_rate_numeric: null,
+      current_official_rate_verified: false,
+      current_rate_label: UNVERIFIED_LAST_RECORDED_LABEL,
+    },
+    history,
+  };
+  return withMachineCurrentGuard(labeled);
+}
 
 function readJson(p) {
   return JSON.parse(readFileSync(p, 'utf8'));
@@ -40,13 +119,44 @@ function csvEscape(v) {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-// Spreadsheet-ready history for one entity: one row per observation, provenance included.
+// Spreadsheet-ready history for one entity: one row per observation, provenance included. CSV
+// retains numeric history, but explicit usage columns prevent a last row from being mistaken for a
+// machine-usable current value.
 function writeCsv(path, rec) {
-  const header = ['series', 'metric', 'effective_date', 'value_percent', 'unit', 'confidence', 'method', 'source_url', 'retrieved_at'];
+  const header = [
+    'series',
+    'metric',
+    'effective_date',
+    'value_percent',
+    'value_text',
+    'unit',
+    'confidence',
+    'method',
+    'source_url',
+    'retrieved_at',
+    'record_usage',
+    'current_use_allowed',
+    'current_rate_status',
+  ];
   const rows = [header.join(',')];
   for (const [metric, arr] of Object.entries(rec.history || {})) {
     for (const o of arr) {
-      rows.push([rec.slug, metric, o.effective_date, o.value, o.unit, o.confidence, o.method, o.source_url, o.retrieved_at].map(csvEscape).join(','));
+      const usage = csvObservationUsage(rec, metric, o);
+      rows.push([
+        rec.slug,
+        metric,
+        o.effective_date,
+        o.value,
+        o.value_text,
+        o.unit,
+        o.confidence,
+        o.method,
+        o.source_url,
+        o.retrieved_at,
+        usage.record_usage,
+        usage.current_use_allowed,
+        usage.current_rate_status,
+      ].map(csvEscape).join(','));
     }
   }
   mkdirSync(dirname(path), { recursive: true });
@@ -72,7 +182,9 @@ function main() {
       .sort()
       .map((file) => readJson(join(entityDir, file)))
     : [];
-  const safeRecords = entityRecords.map((record) => withCurrentValues(record, asOfDate));
+  const safeRecords = entityRecords.map((record) => (
+    withRateVerificationStatus(withCurrentValues(record, asOfDate))
+  ));
   const safeBySlug = new Map(safeRecords.map((record) => [record.slug, record]));
   const historicalCoverage = HISTORICAL_RATE_RELEASES.map((release) => {
     const record = safeBySlug.get(release.entitySlug);
@@ -150,6 +262,12 @@ function main() {
       current: safe.current,
       latest_published: safe.latest_published,
       current_as_of: asOfDate,
+      ...(safe.machine_current_usable === false ? {
+        current_rate_status: safe.current_rate_status,
+        current_rate_label: safe.current_rate_label,
+        machine_current_usable: false,
+        current_value_unavailable_reason: safe.current_value_unavailable_reason,
+      } : {}),
     } : summary;
   });
   write('entities.json', envelope({
@@ -158,7 +276,8 @@ function main() {
     entities: safeEntitySummaries,
   }));
 
-  // Flat "every current value in one call" endpoint — the cheapest possible agent integration.
+  // Flat "every machine-usable current value in one call" endpoint. Explicitly unverified and
+  // branch-partial records have empty current maps and are therefore omitted.
   // It is deliberately rebuilt from history rather than exports/latest.json because an agency can
   // publish a future quarter before that quarter is actually in force.
   const currentObservations = safeRecords.flatMap((record) => Object.values(record.current || {})
@@ -211,4 +330,4 @@ function main() {
   return n;
 }
 
-main();
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

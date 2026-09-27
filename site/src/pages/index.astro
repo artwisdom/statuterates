@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import AdSlot from '../components/AdSlot.astro';
-import { getMeta, getEntity, groupedEntities, currentOf, prettyDate } from '../lib/data.mjs';
+import { currentValueText, getMeta, getEntity, groupedEntities, currentOf, machineCurrentGuard, prettyDate } from '../lib/data.mjs';
 import { copyFor } from '../lib/content.mjs';
 
 const meta = getMeta();
@@ -94,14 +94,16 @@ const jsonLd = {
       <div class="grid">
         {g.entities.map((e) => {
           const l = currentOf(e);
+          const guard = machineCurrentGuard(e);
           return (
             <a class="card" href={`/rates/${e.slug}/`} style="display:block;color:inherit">
               <span class="chip">{JUR[e.jurisdiction] || e.jurisdiction}</span>
               <h3 style="margin-top:6px">{e.name}</h3>
-              <div class="cval">{l?.value_text}</div>
+              <div class="cval">{currentValueText(e)}</div>
               <div class="cmeta">
-                effective {prettyDate(l?.effective_date)} ·
-                {(l?.method || '').startsWith('statute') ? ' curated reference' : l?.confidence === 'high' ? ' published' : ' derived'}
+                {guard
+                  ? 'No generic current value · recorded history remains available'
+                  : <>effective {prettyDate(l?.effective_date)} · {(l?.method || '').startsWith('statute') ? ' curated reference' : l?.confidence === 'high' ? ' published' : ' derived'}</>}
               </div>
             </a>
           );

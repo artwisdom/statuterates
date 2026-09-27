@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: StatuteRates Static JSON and CSV API
-  version: "1.2.0"
+  version: "1.3.0"
   description: >
     Free, read-only access to StatuteRates' provenance-tracked statutory, judgment, tax, and
     late-payment interest-rate dataset. Every endpoint is a prebuilt file served from a CDN and
@@ -11,7 +11,9 @@ info:
     latest_published, in history, and through /api/v1/upcoming.json. The narrower
     /api/v1/history-coverage.json endpoint lists only historical lookups whose date meaning, legal
     branch, source provenance, coverage boundary, and known gaps have passed a separate release
-    review.
+    review. Unverified-current and branch-partial records fail closed: current/latest are empty,
+    /latest.json omits them, and their numeric observations remain available only as explicitly
+    labeled historical or branch-limited provenance.
   license:
     name: StatuteRates data and API terms
     url: https://statuterates.com/terms/#data-api-license
@@ -58,7 +60,7 @@ paths:
   /api/v1/entities.json:
     get:
       operationId: getEntities
-      summary: Collection index — all entities with current and latest-published values
+      summary: Collection index — all entities with safe current projections and latest-published values
       responses:
         "200":
           description: OK
@@ -69,8 +71,8 @@ paths:
   /api/v1/latest.json:
     get:
       operationId: getLatest
-      summary: Flat list of every value currently in force — the one-call integration
-      description: No observation whose effective date is after current_as_of appears here.
+      summary: Flat list of every machine-usable value currently in force — the one-call integration
+      description: No future, unverified-current, or branch-partial observation appears here.
       responses:
         "200":
           description: OK
@@ -128,7 +130,7 @@ paths:
   /api/v1/entity/{slug}.csv:
     get:
       operationId: getEntityCsv
-      summary: One entity's recorded observations as CSV (spreadsheet-ready, provenance columns included)
+      summary: One entity's recorded observations as CSV (provenance and current-use safety columns included)
       parameters:
         - name: slug
           in: path
@@ -263,6 +265,11 @@ components:
       minProperties: 1
       additionalProperties: { $ref: "#/components/schemas/Observation" }
 
+    CurrentObservationMap:
+      type: object
+      description: Empty when the record is unverified-current or branch-partial and therefore unsafe for machine current use.
+      additionalProperties: { $ref: "#/components/schemas/Observation" }
+
     HistoryMap:
       type: object
       minProperties: 1
@@ -289,15 +296,19 @@ components:
           items: { type: string, minLength: 1 }
         generated_at: { type: string, format: date-time }
         latest:
-          description: Backwards-compatible alias for current; never contains a future-effective observation.
-          $ref: "#/components/schemas/ObservationMap"
+          description: Backwards-compatible alias for current; empty for a fail-closed record.
+          $ref: "#/components/schemas/CurrentObservationMap"
         current:
-          description: Values in force on current_as_of.
-          $ref: "#/components/schemas/ObservationMap"
+          description: Machine-usable values in force on current_as_of; empty for a fail-closed record.
+          $ref: "#/components/schemas/CurrentObservationMap"
         latest_published:
           description: Newest published values, which can include an officially announced future period.
           $ref: "#/components/schemas/ObservationMap"
         current_as_of: { type: string, format: date }
+        current_rate_status: { type: string, enum: [unverified_last_recorded, branch_partial_reference_only] }
+        current_rate_label: { type: string, minLength: 1 }
+        machine_current_usable: { type: boolean, const: false }
+        current_value_unavailable_reason: { type: string, minLength: 1 }
         metadata:
           type: object
           description: Series-specific legal and calculation metadata; keys vary by jurisdiction.
@@ -313,10 +324,14 @@ components:
         entity_type: { type: string, minLength: 1 }
         jurisdiction: { type: string, minLength: 1 }
         region: { type: string, minLength: 1 }
-        latest: { $ref: "#/components/schemas/ObservationMap" }
-        current: { $ref: "#/components/schemas/ObservationMap" }
+        latest: { $ref: "#/components/schemas/CurrentObservationMap" }
+        current: { $ref: "#/components/schemas/CurrentObservationMap" }
         latest_published: { $ref: "#/components/schemas/ObservationMap" }
         current_as_of: { type: string, format: date }
+        current_rate_status: { type: string, enum: [unverified_last_recorded, branch_partial_reference_only] }
+        current_rate_label: { type: string, minLength: 1 }
+        machine_current_usable: { type: boolean, const: false }
+        current_value_unavailable_reason: { type: string, minLength: 1 }
 
     MetricsCollection:
       type: object

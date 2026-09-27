@@ -111,7 +111,9 @@ Important modules:
 - Static API: `machine/build-api.mjs` writes `site/public/api/v1/` from committed exports.
 - API release contract: pinned YAML/JSON Schema tooling compiles the OpenAPI 3.1 response schemas,
   validates every aggregate and per-entity JSON response, and requires every CSV row to match its
-  JSON history projection exactly.
+  JSON history projection exactly. Explicitly unverified-current and branch-partial records keep
+  their history but publish empty `current`/`latest` maps, stay out of the current-values aggregate,
+  and mark every CSV row as unavailable for current use.
 - MCP: six read/calculation tools over the same snapshots, with slug validation before file access.
 - Search discovery: sitemap, robots, RSS changes feed, `llms.txt`, and `llms-full.txt`.
 

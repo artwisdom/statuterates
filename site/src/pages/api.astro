@@ -41,12 +41,12 @@ const jsonLd = {
       <tbody>
         <tr><td><a href="/api/v1/index.json"><code>/api/v1/index.json</code></a></td><td>Service index — links + counts</td></tr>
         <tr><td><a href="/api/v1/meta.json"><code>/api/v1/meta.json</code></a></td><td>Dataset metadata, freshness, sources</td></tr>
-        <tr><td><a href="/api/v1/entities.json"><code>/api/v1/entities.json</code></a></td><td>All series with current and latest-published values</td></tr>
-        <tr><td><a href="/api/v1/latest.json"><code>/api/v1/latest.json</code></a></td><td>Flat list of every current value (one call)</td></tr>
+        <tr><td><a href="/api/v1/entities.json"><code>/api/v1/entities.json</code></a></td><td>All series with safe current projections, fail-closed status, and latest-published values</td></tr>
+        <tr><td><a href="/api/v1/latest.json"><code>/api/v1/latest.json</code></a></td><td>Flat list of every machine-usable current value (one call)</td></tr>
         <tr><td><a href="/api/v1/upcoming.json"><code>/api/v1/upcoming.json</code></a></td><td>Officially announced future periods, kept separate from current values</td></tr>
         <tr><td><a href="/api/v1/history-coverage.json"><code>/api/v1/history-coverage.json</code></a></td><td>Code-reviewed historical lookup series, date meanings, verified boundaries, and known gaps</td></tr>
         <tr><td><code>/api/v1/entity/&#123;slug&#125;.json</code></td><td>One series — current, latest published, and full history with provenance</td></tr>
-        <tr><td><code>/api/v1/entity/&#123;slug&#125;.csv</code></td><td>Recorded observations as CSV (spreadsheet-ready)</td></tr>
+        <tr><td><code>/api/v1/entity/&#123;slug&#125;.csv</code></td><td>Recorded observations as CSV with explicit usage and current-use safety columns</td></tr>
       </tbody>
     </table>
   </div>
@@ -54,14 +54,17 @@ const jsonLd = {
     <code>effective_date</code>, <code>source_url</code>, <code>retrieved_at</code>,
     <code>confidence</code>, method, and notes. Confidence describes the observation process; it does
     not make a state rule calculator-ready. A preannounced future period remains in
-    <code>latest_published</code> and history, while <code>current</code> always means effective on the
-    snapshot date.</p>
+    <code>latest_published</code> and history. For an unverified-current or branch-partial record,
+    <code>current</code> and <code>latest</code> are empty, <code>machine_current_usable</code> is false,
+    and the numeric observation remains available only as labeled historical provenance. CSV rows
+    carry <code>record_usage</code>, <code>current_use_allowed</code>, and
+    <code>current_rate_status</code> so a last row cannot be silently mistaken for the current rate.</p>
 
   <h2>Machine discovery</h2>
   <ul class="clean">
     <li><a href="/openapi.yaml">OpenAPI 3.1 specification</a> — machine-readable endpoint contract.</li>
     <li><a href="/llms.txt">Concise machine-readable guide</a> and
-      <a href="/llms-full.txt">all current values with citations</a>.</li>
+      <a href="/llms-full.txt">safe current values and explicit refusal states with citations</a>.</li>
     <li><a href="https://github.com/artwisdom/statuterates/tree/main/machine/mcp-server">Read-only MCP server</a>
       — search, fail-closed historical lookup, comparison, and audited calculations for compatible AI tools.</li>
   </ul>

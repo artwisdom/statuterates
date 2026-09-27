@@ -1,7 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
-import { getAllEntities, getMeta, currentOf, prettyDate } from '../../lib/data.mjs';
+import {
+  getAllEntities,
+  getMeta,
+  currentOf,
+  isMachineCurrentUsable,
+  prettyDate,
+} from '../../lib/data.mjs';
 
 const meta = getMeta();
 const yr = new Date(meta.generated_at).getUTCFullYear();
@@ -9,7 +15,12 @@ const yr = new Date(meta.generated_at).getUTCFullYear();
 // Rank states by their primary numeric rate (the first figure of a dual "X% / Y%" value_text).
 const clean = (name) => name.replace(/ (Pre)?[Jj]udgment Interest Rate$/, '').replace('Post-', '');
 const build = (region) => getAllEntities()
-  .filter((e) => e.region === region && e.metadata?.state !== undefined && !e.slug.includes('consumer-debt'))
+  .filter((e) => (
+    e.region === region
+    && e.metadata?.state !== undefined
+    && !e.slug.includes('consumer-debt')
+    && isMachineCurrentUsable(e)
+  ))
   .map((e) => ({ name: clean(e.name), slug: e.slug, base: e.slug.replace(/-(pre)?judgment-rate$/, ''), v: currentOf(e)?.value, vt: currentOf(e)?.value_text }))
   // A dual/conditional headline is not one comparable statewide rate, so omit it from numeric ranks.
   .filter((r) => Number.isFinite(r.v) && !r.vt?.includes('/'))
@@ -46,8 +57,9 @@ const jsonLd = [
   <h1>Highest &amp; lowest judgment interest rates by state ({yr})</h1>
   <p class="lead">Interest on a money judgment ranges from low single digits to 12% a year depending on
     the state. Here are the extremes for {yr} — both <em>after</em> judgment and <em>before</em> it —
-    based on the current recorded observations. States with multiple rates by claim type, judgment size,
-    or debtor type are excluded because ranking only their first number would be misleading.</p>
+    based on machine-usable current observations. States with unverified values or multiple rates by
+    claim type, judgment size, or debtor type are excluded because ranking a historical or partial
+    branch number would be misleading.</p>
 
   <AdSlot id="rank-top" enabled={false} />
 

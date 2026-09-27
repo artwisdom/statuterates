@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "description": "Quarterly review controls for every active state-law source in pipeline/fetchers/us-states.mjs STATE_SOURCES.",
-  "active_source_urls_sha256": "c190b78efa54f9b04a855bf20e125cf72b2eb1f64e4c9b792ef0996f17b8bcf1",
+  "active_source_urls_sha256": "17f4e994922f2f9ce0d9a01399ed730cdcf91a5a4b10528d79b3ba413b79afba",
   "export_source_exemptions": [
     { "source_id": "boe-bank-rate", "reason": "Automated non-state Bank of England series." },
     { "source_id": "ecb-mro", "reason": "Automated non-state European Central Bank series." },

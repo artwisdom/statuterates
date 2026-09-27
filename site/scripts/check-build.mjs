@@ -5,7 +5,14 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, extname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { currentOf, getAllEntities, getMeta, isPrejudgment } from '../src/lib/data.mjs';
+import {
+  currentOf,
+  currentValueText,
+  getAllEntities,
+  getMeta,
+  isPrejudgment,
+  machineCurrentGuard,
+} from '../src/lib/data.mjs';
 import { copyFor } from '../src/lib/content.mjs';
 import { ratePageMayRunAds } from '../src/lib/monetization.mjs';
 import { APPROVED_STATE_CALCULATOR_PATHS } from '../src/lib/state-calculators.mjs';
@@ -518,7 +525,7 @@ const sitemap = readFileSync(sitemapPath, 'utf8');
 
 // Machine/AI discovery is part of the release contract. These files are compatibility and
 // integration surfaces—not special ranking shortcuts—and must stay accurate and mutually linked.
-const machineFiles = ['robots.txt', 'llms.txt', 'llms-full.txt', 'openapi.yaml', 'api/v1/index.json', 'api/v1/latest.json', 'api/v1/upcoming.json'];
+const machineFiles = ['robots.txt', 'llms.txt', 'llms-full.txt', 'openapi.yaml', 'api/v1/index.json', 'api/v1/entities.json', 'api/v1/latest.json', 'api/v1/upcoming.json'];
 for (const relativePath of machineFiles) {
   if (!existsSync(join(DIST, relativePath))) errors.push(`${relativePath}: missing machine-discovery artifact`);
 }
@@ -529,6 +536,7 @@ if (machineFiles.every((relativePath) => existsSync(join(DIST, relativePath)))) 
   const openapi = readFileSync(join(DIST, 'openapi.yaml'), 'utf8');
   const apiIndex = JSON.parse(readFileSync(join(DIST, 'api/v1/index.json'), 'utf8'));
   const apiLatest = JSON.parse(readFileSync(join(DIST, 'api/v1/latest.json'), 'utf8'));
+  const apiEntities = JSON.parse(readFileSync(join(DIST, 'api/v1/entities.json'), 'utf8'));
   const apiUpcoming = JSON.parse(readFileSync(join(DIST, 'api/v1/upcoming.json'), 'utf8'));
   if (!/^User-agent: \*\nAllow: \/$/m.test(robots) || /^[\t ]*Disallow:[\t ]*\S/im.test(robots)) {
     errors.push('robots.txt: unrestricted crawler access is no longer explicitly allowed');
@@ -605,6 +613,62 @@ if (machineFiles.every((relativePath) => existsSync(join(DIST, relativePath)))) 
   for (const observation of apiLatest.data?.observations || []) {
     if (observation.effective_date > currentAsOf) {
       errors.push(`api/v1/latest.json: ${observation.entity} incorrectly promotes ${observation.effective_date} after ${currentAsOf}`);
+    }
+  }
+  const latestSlugs = new Set((apiLatest.data?.observations || []).map((observation) => observation.entity));
+  const apiSummaries = new Map(
+    (apiEntities.data?.entities || []).map((entity) => [entity.slug, entity]),
+  );
+  const rankHtml = readFileSync(join(DIST, 'states', 'highest-lowest', 'index.html'), 'utf8');
+  const homeHtml = readFileSync(join(DIST, 'index.html'), 'utf8');
+  const statesHtml = readFileSync(join(DIST, 'states', 'index.html'), 'utf8');
+  const prejudgmentHtml = readFileSync(join(DIST, 'prejudgment', 'index.html'), 'utf8');
+  const methodologyHtml = readFileSync(join(DIST, 'methodology', 'index.html'), 'utf8');
+  for (const entity of getAllEntities()) {
+    const guard = machineCurrentGuard(entity);
+    if (!guard) continue;
+    if (latestSlugs.has(entity.slug)) {
+      errors.push(`api/v1/latest.json: fail-closed ${entity.slug} leaked into current values`);
+    }
+    const summary = apiSummaries.get(entity.slug);
+    if (!summary || Object.keys(summary.current || {}).length || Object.keys(summary.latest || {}).length) {
+      errors.push(`api/v1/entities.json: fail-closed ${entity.slug} does not have empty current/latest maps`);
+    }
+    const sectionHeading = `## ${entity.name}\n`;
+    const sectionStart = llmsFull.indexOf(sectionHeading);
+    const nextSection = llmsFull.indexOf('\n\n## ', sectionStart + sectionHeading.length);
+    const section = sectionStart >= 0
+      ? llmsFull.slice(sectionStart, nextSection < 0 ? undefined : nextSection)
+      : '';
+    if (!section.includes('Machine-usable current value: unavailable')
+        || !section.includes(`Current-use status: ${guard.status}`)) {
+      errors.push(`llms-full.txt: fail-closed ${entity.slug} is missing its current-use refusal`);
+    }
+    const rateHtml = readFileSync(join(DIST, 'rates', entity.slug, 'index.html'), 'utf8');
+    if (!rateHtml.includes(`data-current-rate-status="${guard.status}"`)
+        || !rateHtml.includes(guard.label)) {
+      errors.push(`/rates/${entity.slug}/: human-facing current-value refusal is missing`);
+    }
+    const base = entity.slug.replace(/-(?:pre)?judgment-rate$/, '');
+    const hubHtml = readFileSync(join(DIST, 'states', base, 'index.html'), 'utf8');
+    if (!hubHtml.includes('value is') || !/>withheld<\/strong>/.test(hubHtml)) {
+      errors.push(`/states/${base}/: guarded value is not explicitly withheld in the current snapshot`);
+    }
+    const safeText = currentValueText(entity);
+    const tableHtml = isPrejudgment(entity) ? prejudgmentHtml : statesHtml;
+    if (!safeText || !tableHtml.includes(safeText)) {
+      errors.push(`${isPrejudgment(entity) ? '/prejudgment/' : '/states/'}: safe label missing for ${entity.slug}`);
+    }
+    if (!methodologyHtml.includes(safeText)) {
+      errors.push(`/methodology/: safe label missing for ${entity.slug}`);
+    }
+    if (!isPrejudgment(entity) && !homeHtml.includes(safeText)) {
+      errors.push(`/: safe label missing for ${entity.slug}`);
+    }
+  }
+  for (const base of ['missouri', 'new-hampshire']) {
+    if (rankHtml.includes(`/states/${base}/`)) {
+      errors.push(`/states/highest-lowest/: fail-closed ${base} leaked into a numeric ranking`);
     }
   }
   for (const observation of apiUpcoming.data?.observations || []) {

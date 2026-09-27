@@ -18,11 +18,25 @@ function readJson(path) {
 
 function observationRetrievedAt(record, observation, source) {
   // Older builds stamped every curated state observation with the build time even though no source
-  // was fetched. Correct those snapshots to the source's actual verification time while hydrating.
-  const curatedState = String(record.region || '').startsWith('US States')
-    && ['statute-fixed', 'statute-variable'].includes(observation.method);
-  if (curatedState && source?.retrieved_at) return source.retrieved_at;
+  // was fetched. Clamp missing or future receipts to the source's actual verification time while
+  // preserving an older valid per-observation receipt for append-only histories.
+  const curatedState = String(record.region || '').startsWith('US States');
+  const sourceTime = Date.parse(source?.retrieved_at || '');
+  if (curatedState && Number.isFinite(sourceTime)) {
+    const observationTime = Date.parse(observation.retrieved_at || '');
+    if (!Number.isFinite(observationTime) || observationTime > sourceTime) return source.retrieved_at;
+  }
   return observation.retrieved_at;
+}
+
+function observationEffectiveDate(record, observation) {
+  // Alabama's former export used the source-review day as the legal effective date. Rewrite that
+  // durable key while hydrating so the committed snapshot keeps its row count until exports are
+  // regenerated, without allowing the invalid 2026 date back into SQLite.
+  if (record.slug === 'alabama-judgment-rate' && observation.effective_date === '2026-07-09') {
+    return '2011-09-01';
+  }
+  return observation.effective_date;
 }
 
 function isSupersededCuratedObservation(record, observation) {
@@ -56,6 +70,11 @@ function purgeSupersededCuratedObservations(db) {
     DELETE FROM observations
     WHERE effective_date = '2026-07-09'
       AND entity_id IN (SELECT id FROM entities WHERE slug = 'texas-prejudgment-rate')
+  `).run();
+  db.prepare(`
+    DELETE FROM observations
+    WHERE effective_date = '2026-07-09'
+      AND entity_id IN (SELECT id FROM entities WHERE slug = 'alabama-judgment-rate')
   `).run();
   db.prepare(`
     DELETE FROM observations
@@ -153,7 +172,7 @@ export function seedFromExports(db, { exportsDir = DEFAULT_EXPORTS_DIR } = {}) {
             value_numeric: observation.value,
             value_text: observation.value_text,
             unit: observation.unit,
-            effective_date: observation.effective_date,
+            effective_date: observationEffectiveDate(record, observation),
             source_id: observation.source_id,
             source_url: observation.source_url,
             retrieved_at: observationRetrievedAt(record, observation, source),

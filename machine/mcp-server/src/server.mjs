@@ -11,7 +11,7 @@
 //   get_entity         — full record for one entity (latest values + history)
 //   get_latest_value   — the current value of a metric for an entity, with provenance
 //   get_historical_value — a released value for one reviewed historical date/branch
-//   compare_values     — compare one metric across several entities
+//   compare_values     — compare machine-usable current values; guarded records are excluded
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -81,7 +81,7 @@ server.registerTool(
   'search_entities',
   {
     title: 'Search entities',
-    description: `Fuzzy-search the ${DATASET_TITLE} for entities by name, slug, jurisdiction (ISO code), or region. Returns matches with values currently in force as of the dataset snapshot, plus any later published value separately. Use this to resolve a user's phrasing (e.g. "the US", "USA") to a canonical entity slug before calling get_entity or get_latest_value.`,
+    description: `Fuzzy-search the ${DATASET_TITLE} for entities by name, slug, jurisdiction (ISO code), or region. Returns machine-usable current values when safe; unverified or branch-partial records return empty current fields plus a fail-closed status. Use this to resolve a user's phrasing (e.g. "the US", "USA") to a canonical entity slug before calling get_entity or get_latest_value.`,
     inputSchema: {
       query: z.string().describe('Free-text query, e.g. a country name, ISO code, or region.'),
       limit: z.number().int().min(1).max(100).optional().describe('Max results (default 25).'),
@@ -101,6 +101,12 @@ server.registerTool(
         current: e.current || null,
         current_as_of: e.current_as_of || null,
         latest_published: e.latest_published || null,
+        ...(e.machine_current_usable === false ? {
+          current_rate_status: e.current_rate_status,
+          current_rate_label: e.current_rate_label,
+          machine_current_usable: false,
+          current_value_unavailable_reason: e.current_value_unavailable_reason,
+        } : {}),
       })),
     });
   }
@@ -126,7 +132,7 @@ server.registerTool(
   'get_latest_value',
   {
     title: 'Get latest value',
-    description: `Return the value CURRENTLY IN FORCE as of the dataset snapshot for one entity and metric, with full provenance (effective_date, source_url, retrieved_at, confidence). A later preannounced period is never promoted early. Omit "metric" to get every metric's current value.`,
+    description: `Return the machine-usable value CURRENTLY IN FORCE as of the dataset snapshot for one entity and metric, with full provenance. A later preannounced period is never promoted early. Unverified and branch-partial records fail closed and direct the caller to get_entity for historical provenance.`,
     inputSchema: {
       slug: z.string().describe('Entity slug (resolve via search_entities if unsure).'),
       metric: z
@@ -136,6 +142,13 @@ server.registerTool(
     },
   },
   async ({ slug, metric }) => {
+    const rec = getEntity(slug);
+    if (rec?.machine_current_usable === false) {
+      return notFound(
+        `Current value withheld for "${slug}" (${rec.current_rate_status}): `
+        + `${rec.current_value_unavailable_reason} Use get_entity only for labeled historical provenance.`,
+      );
+    }
     const v = latestValue(slug, metric);
     if (!v || (Array.isArray(v) && v.length === 0)) {
       return notFound(`No value for slug "${slug}"${metric ? ` metric "${metric}"` : ''}.`);
@@ -170,7 +183,7 @@ server.registerTool(
   'compare_values',
   {
     title: 'Compare values',
-    description: `Compare one metric currently in force across several entities, sorted high-to-low. Useful for "which jurisdiction has the highest X" questions. Returns each current value with provenance.`,
+    description: `Compare machine-usable current values across several entities, sorted high-to-low. Unverified and branch-partial records are never ranked; they are returned separately in excluded with the fail-closed reason.`,
     inputSchema: {
       slugs: z.array(z.string()).min(2).describe('Two or more entity slugs to compare.'),
       metric: z
@@ -182,14 +195,33 @@ server.registerTool(
   async ({ slugs, metric }) => {
     const m = metric || defaultMetric();
     const rows = [];
+    const excluded = [];
     for (const slug of slugs) {
+      const record = getEntity(slug);
+      if (record?.machine_current_usable === false) {
+        excluded.push({
+          slug,
+          name: record.name,
+          current_rate_status: record.current_rate_status,
+          machine_current_usable: false,
+          reason: record.current_value_unavailable_reason,
+        });
+        continue;
+      }
       const v = latestValue(slug, m);
       const one = Array.isArray(v) ? v.find((x) => x.metric === m) : v;
       if (one) rows.push({ slug, name: one.name, value: one.value, value_text: one.value_text, unit: one.unit, effective_date: one.effective_date, source_url: one.source_url });
-      else rows.push({ slug, error: 'not found' });
+      else excluded.push({ slug, reason: 'No machine-usable current value was found.' });
     }
     rows.sort((a, b) => (b.value ?? -Infinity) - (a.value ?? -Infinity));
-    return json({ metric: m, count: rows.length, comparison: rows });
+    return json({
+      metric: m,
+      requested_count: slugs.length,
+      ranked_count: rows.length,
+      excluded_count: excluded.length,
+      comparison: rows,
+      excluded,
+    });
   }
 );
 

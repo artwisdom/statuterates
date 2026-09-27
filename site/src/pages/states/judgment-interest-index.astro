@@ -4,6 +4,7 @@ import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
 import {
   currentOf,
+  currentValueText,
   getMeta,
   prettyDate,
   stateCalculatorReleaseForEntity,
@@ -67,7 +68,7 @@ const rows = hubs.map((hub) => {
     base: hub.base,
     name: hub.name,
     slug: entity.slug,
-    value: current?.value_text || 'See state analysis',
+    value: currentValueText(entity, dataDate) || 'See state analysis',
     basis: basisFor(entity, current),
     sourceUrl,
     sourceLabel: sourceTier.startsWith('official_') ? 'Official source' : 'Recorded source',

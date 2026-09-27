@@ -24,6 +24,10 @@ const checksum = (value) => createHash('sha256')
   .digest('hex');
 
 test('Nevada exact official tuples, projection, formula, and unavailable first row are locked', () => {
+  assert.equal(
+    NEVADA_FID_2026_JULY_NOTICE_URL,
+    'https://www.fid.nv.gov/siteassets/resources/Prime_Interest_Rate_July_1__2026.pdf',
+  );
   const history = buildNevadaOfficialHistory();
 
   assert.equal(NEVADA_TUPLES.length, 79);

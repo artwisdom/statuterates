@@ -162,11 +162,153 @@ test('Tennessee copy follows the released official history without enabling payo
   assert.equal(contentModifiedFor('tennessee-judgment-rate'), '2026-09-03');
 });
 
+test('confirmed Arkansas Arizona and Delaware transitions materialize from observations', () => {
+  const cases = [
+    ['arkansas-judgment-rate', '6%', '2026-09-17', /Federal Reserve primary-credit rate/, /5\.75%/],
+    ['arkansas-prejudgment-rate', '6%', '2026-09-17', /when appropriate on the facts/, /5\.75%/],
+    ['arizona-judgment-rate', '8%', '2026-09-21', /§44-1201\(B\)/, /7\.75%/],
+    ['delaware-judgment-rate', '9%', '2026-09-17', /§2301\(a\)/, /8\.75%/],
+    ['delaware-prejudgment-rate', '9%', '2026-09-17', /§2301\(d\)/, /8\.75%/],
+  ];
+
+  for (const [slug, valueText, effectiveDate, authority, staleValue] of cases) {
+    const copy = copyFor(slug, {
+      observation: {
+        value: Number.parseFloat(valueText),
+        value_text: valueText,
+        effective_date: effectiveDate,
+      },
+    });
+    const rendered = text(copy);
+    assert.match(rendered, new RegExp(valueText.replace('.', '\\.')) , slug);
+    assert.match(rendered, authority, slug);
+    assert.doesNotMatch(rendered, staleValue, slug);
+    assert.doesNotMatch(rendered, /\{\{/, slug);
+  }
+
+  const arizonaPrejudgment = copyFor('arizona-prejudgment-rate');
+  assert.match(arizonaPrejudgment.body, /§44-1201\(A\).*subsection \(B\).*subsection \(C\).*subsection \(D\).*subsection \(F\)/s);
+  assert.match(arizonaPrejudgment.applies, /§44-1201\(D\)/);
+  assert.match(arizonaPrejudgment.formula, /Subsection \(F\).*subsection \(A\) or \(B\)/);
+  assert.doesNotMatch(text(arizonaPrejudgment), /7\.75%/);
+});
+
+test('ambiguous Missouri Nevada prejudgment and New Hampshire values remain fail closed', () => {
+  const missouriPost = copyFor('missouri-judgment-rate');
+  const missouriPre = copyFor('missouri-prejudgment-rate');
+  const nevadaPre = copyFor('nevada-prejudgment-rate', {
+    observation: { value: 8.75, value_text: '8.75%', effective_date: '2026-07-01' },
+  });
+  const newHampshirePost = copyFor('new-hampshire-judgment-rate', {
+    observation: { value: 5.7, value_text: '5.7%', effective_date: '2026-01-01' },
+  });
+  const newHampshirePre = copyFor('new-hampshire-prejudgment-rate', {
+    observation: { value: 5.7, value_text: '5.7%', effective_date: '2026-01-01' },
+  });
+
+  assert.match(missouriPost.body, /non-tort.*9%/s);
+  assert.match(missouriPost.body, /not publishing a current numeric rate.*tort branch/s);
+  assert.match(missouriPre.formula, /numeric tort result remains unavailable/);
+  assert.doesNotMatch(text({ missouriPost, missouriPre }), /8\.75%|8\.88%/);
+
+  assert.match(nevadaPre.body, /not publishing a current numeric prejudgment value/);
+  assert.match(nevadaPre.formula, /Do not substitute.*NRS 17\.130/s);
+  assert.doesNotMatch(text(nevadaPre), /8\.75%/);
+
+  assert.match(newHampshirePost.body, /withholding the current numeric value/);
+  assert.match(newHampshirePre.body, /withholding the current numeric value/);
+  assert.doesNotMatch(text({ newHampshirePost, newHampshirePre }), /5\.7%/);
+});
+
+test('September legal review copy preserves every confirmed branch correction', () => {
+  const cases = [
+    ['washington-prejudgment-rate', /medical debt is capped at 9%/],
+    ['colorado-prejudgment-rate', /medical-debt claim can instead be capped at 3%/],
+    ['illinois-prejudgment-rate', /separate authorities.*6%.*5%/s],
+    ['indiana-prejudgment-rate', /court-selected simple rate from 6% to 10%/],
+    ['pennsylvania-prejudgment-rate', /official 2026 Rule 238 rate is 7\.75%/],
+    ['new-york-prejudgment-rate', /consumer-debt action against a natural person.*2%/s],
+    ['north-carolina-prejudgment-rate', /consumer contract uses the lower of the contract and legal rates/],
+    ['rhode-island-judgment-rate', /pecuniary damages plus the prejudgment interest/],
+    ['rhode-island-prejudgment-rate', /medical or dental malpractice/],
+    ['south-dakota-prejudgment-rate', /not a periodically resetting formula/],
+    ['south-dakota-prejudgment-rate', /inverse condemnation.*4\.5%/],
+    ['west-virginia-prejudgment-rate', /resets annually, not twice a year/],
+    ['new-mexico-prejudgment-rate', /no more than 15%.*does not make 15% an unconditional default/s],
+    ['tennessee-prejudgment-rate', /Ten percent is a ceiling, not an automatic default/],
+    ['wyoming-judgment-rate', /child-support or maintenance judgments can carry no interest/],
+    ['wyoming-prejudgment-rate', /not a universal prejudgment award/],
+  ];
+
+  for (const [slug, expected] of cases) {
+    assert.match(text(copyFor(slug)), expected, slug);
+  }
+});
+
+test('softened legal-rate pages do not claim a universal simple-interest rule', () => {
+  const slugs = [
+    'alabama-prejudgment-rate',
+    'california-prejudgment-rate',
+    'idaho-prejudgment-rate',
+    'vermont-prejudgment-rate',
+    'maryland-prejudgment-rate',
+    'north-dakota-prejudgment-rate',
+    'virginia-prejudgment-rate',
+    'wyoming-prejudgment-rate',
+  ];
+
+  for (const slug of slugs) {
+    assert.doesNotMatch(text(copyFor(slug)), /as simple interest|simple interest only|compound: "Simple"/i, slug);
+  }
+});
+
+test('every page changed by the September legal copy repair advances lastmod once', () => {
+  const slugs = [
+    'alabama-prejudgment-rate',
+    'arizona-judgment-rate',
+    'arizona-prejudgment-rate',
+    'arkansas-judgment-rate',
+    'arkansas-prejudgment-rate',
+    'california-prejudgment-rate',
+    'colorado-prejudgment-rate',
+    'delaware-judgment-rate',
+    'delaware-prejudgment-rate',
+    'idaho-prejudgment-rate',
+    'illinois-prejudgment-rate',
+    'indiana-prejudgment-rate',
+    'maryland-prejudgment-rate',
+    'missouri-judgment-rate',
+    'missouri-prejudgment-rate',
+    'nevada-prejudgment-rate',
+    'new-hampshire-judgment-rate',
+    'new-hampshire-prejudgment-rate',
+    'new-mexico-prejudgment-rate',
+    'new-york-prejudgment-rate',
+    'north-carolina-judgment-rate',
+    'north-carolina-prejudgment-rate',
+    'north-dakota-prejudgment-rate',
+    'pennsylvania-prejudgment-rate',
+    'rhode-island-judgment-rate',
+    'rhode-island-prejudgment-rate',
+    'south-dakota-judgment-rate',
+    'south-dakota-prejudgment-rate',
+    'tennessee-prejudgment-rate',
+    'vermont-prejudgment-rate',
+    'virginia-prejudgment-rate',
+    'washington-prejudgment-rate',
+    'west-virginia-prejudgment-rate',
+    'wyoming-judgment-rate',
+    'wyoming-prejudgment-rate',
+  ];
+
+  for (const slug of slugs) assert.equal(contentModifiedFor(slug), '2026-09-27', slug);
+});
+
 test('prejudgment rule details never expose imported sentence fragments', () => {
   const cases = [
     ['alabama-prejudgment-rate', 'accrual', /Other claim types require their own authority/],
     ['california-prejudgment-rate', 'accrual', /never earlier than the filing date/],
-    ['nevada-prejudgment-rate', 'compound', /does not apply compounding/],
+    ['nevada-prejudgment-rate', 'compound', /source contract remains unresolved/],
     ['north-carolina-prejudgment-rate', 'applies', /G\.S\. 24-5\(b\)/],
     ['ohio-prejudgment-rate', 'applies', /good-faith-settlement findings/],
     ['virginia-prejudgment-rate', 'applies', /discretionary rather than automatic/],

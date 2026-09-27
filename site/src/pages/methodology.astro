@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getMeta, getAllEntities, currentOf, prettyDate } from '../lib/data.mjs';
+import { currentValueText, getMeta, getAllEntities, currentOf, machineCurrentGuard, prettyDate } from '../lib/data.mjs';
 const meta = getMeta();
 const sourceRows = Array.from(new Map((meta.sources || []).map((source) => [
   [source.name, source.publisher, source.home_url].join('\u0000'),
@@ -23,12 +23,13 @@ const description = `The formulas, cited sources, confidence levels, validation 
       <tbody>
         {entities.map((e) => {
           const l = currentOf(e);
+          const guard = machineCurrentGuard(e);
           return (
             <tr>
               <td><a href={`/rates/${e.slug}/`}>{e.name}</a></td>
-              <td class="num">{l?.value_text}</td>
-              <td>{prettyDate(l?.effective_date)}</td>
-              <td class="source-note">{(l?.method || '').startsWith('statute') ? 'Curated reference' : l?.confidence === 'high' ? 'Published' : 'Derived'}</td>
+              <td class="num">{currentValueText(e)}</td>
+              <td>{guard ? 'Historical/reference only' : prettyDate(l?.effective_date)}</td>
+              <td class="source-note">{guard?.label || ((l?.method || '').startsWith('statute') ? 'Curated reference' : l?.confidence === 'high' ? 'Published' : 'Derived')}</td>
             </tr>
           );
         })}

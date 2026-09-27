@@ -331,6 +331,360 @@ const FIXED = [
 // Fixed-by-statute = high confidence; variable/agency-set current values = medium confidence +
 // method 'statute-variable' (re-checked on the runbook schedule). Source tiers are explicit below.
 const EXP_VERIFIED_ON = '2026-07-09';
+const SEPTEMBER_LEGAL_SOURCE_CHECK_AT = '2026-09-27T16:07:10Z';
+const ALABAMA_JUDGMENT_STATUTE_URL = 'https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10';
+const ALABAMA_2011_ACTS_SUMMARY_URL = 'https://alison.legislature.state.al.us/summaries-2011-general-acts';
+const ALABAMA_SB207_URL = 'https://alison.legislature.state.al.us/files/pdf/SearchableInstruments/2011RS/PrintFiles/SB207-Eng.pdf';
+const ARKANSAS_ACT_995_URL = 'https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf';
+const ARKANSAS_CODE_PORTAL_URL = 'https://www.arkleg.state.ar.us/ArkansasLaw';
+const ARIZONA_SECTION_44_1201_URL = 'https://www.azleg.gov/ars/44/01201.htm';
+const DELAWARE_SECTION_2301_URL = 'https://delcode.delaware.gov/title6/c023/';
+const DELAWARE_COURTS_INTEREST_GUIDANCE_URL = 'https://courts.delaware.gov/forms/download.aspx?id=27048';
+const FEDERAL_RESERVE_H15_PRIME_SERIES_URL = 'https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSPBLP_N.D&rel=H15';
+const FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL = 'https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSRP_F02_N.D&rel=H15';
+const FEDERAL_RESERVE_H15_RELEASE_FEED_URL = 'https://www.federalreserve.gov/feeds/h15.html';
+const MISSOURI_SECTION_408_040_URL = 'https://revisor.mo.gov/main/OneSection.aspx?section=408.040';
+const NEVADA_NRS_99_URL = 'https://www.leg.state.nv.us/NRS/NRS-099.html';
+const NEW_HAMPSHIRE_RATE_FORMULA_URL = 'https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm';
+const NEW_HAMPSHIRE_RATE_LOCK_URL = 'https://www.gc.nh.gov/rsa/html/XXXI/336/336-2.htm';
+const NEW_HAMPSHIRE_EXECUTION_INTEREST_URL = 'https://www.gc.nh.gov/rsa/html/LIV/527/527-10.htm';
+const NEW_HAMPSHIRE_COURT_SCHEDULE_URL = 'https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates';
+
+const ALABAMA_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The September 1, 2011 general-rate transition is verified, but the contract-action branch, accrual, compounding, day count, payments, and special judgments are not calculator-complete.',
+  rate_behavior: 'branch_specific_fixed_at_entry',
+  current_value_status: 'verified_general_branch',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    general: 'Ala. Code §8-8-10(a): 7.5% for covered judgments entered on or after September 1, 2011',
+    contract_action: 'A judgment based on a contract action uses the rate stated in the contract',
+  },
+};
+
+const ARKANSAS_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The Act 995 formula and verified H.15 benchmark changes are preserved, but entry-date selection, the contract-rate comparison, constitutional cap, excluded county warrants, accrual, day count, and payments are not calculator-complete.',
+  rate_behavior: 'fixed_at_entry_from_daily_benchmark',
+  rate_schedule: 'federal_reserve_primary_credit_rate_on_judgment_date_plus_2',
+  current_value_status: 'verified_general_formula',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    noncontract: 'Ark. Code §16-65-114(a): primary credit rate in effect on judgment entry plus two points',
+    contract: 'Greater of the contract rate and the statutory primary-credit-plus-two formula',
+    constitutional_cap: 'The Arkansas Constitution maximum remains controlling',
+    excluded: 'Interest is not allowed on county warrants or other evidence of county indebtedness',
+  },
+};
+
+const ARKANSAS_PREJUDGMENT_CALCULATION = {
+  ...ARKANSAS_POSTJUDGMENT_CALCULATION,
+  reason: 'The Act 995 benchmark formula is verified, but prejudgment entitlement is fact-specific and the accrual trigger, claim classification, constitutional cap, day count, and payments are not calculator-complete.',
+  rate_behavior: 'entitlement_and_entry_date_specific',
+  branches: {
+    rate_reference: 'When prejudgment interest is legally available, Act 995 supplies the primary-credit-plus-two statutory reference rate',
+    entitlement: 'Availability and the legally relevant accrual date depend on the claim and controlling Arkansas law',
+    constitutional_cap: 'The Arkansas Constitution maximum remains controlling',
+  },
+};
+
+const ARIZONA_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The general formula and September 21, 2026 publication boundary are verified, but written-agreement, qualifying medical-debt, condemnation, payment, day-count, and special-judgment branches are not calculator-complete.',
+  rate_behavior: 'fixed_at_entry',
+  rate_schedule: 'lesser_of_10_or_h15_prime_plus_1_effective_first_business_day_after_publication',
+  current_value_status: 'verified_general_branch',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    general: 'A.R.S. §44-1201(B): lesser of 10% or Federal Reserve H.15 prime plus one point, fixed at entry',
+    obligation_written_agreement_and_medical_debt: 'A.R.S. §44-1201(A) governs qualifying obligations and written agreements and supplies the medical-debt cap',
+    condemnation: 'A.R.S. §44-1201(C) provides the condemnation branch',
+    barred_prejudgment_categories: 'A.R.S. §44-1201(D) bars prejudgment interest for listed unliquidated, future, punitive, and exemplary damages',
+    awarded_prejudgment: 'A.R.S. §44-1201(F) directs an awarded prejudgment rate to subsection A or B',
+  },
+};
+
+const ARIZONA_PREJUDGMENT_CALCULATION = {
+  ...ARIZONA_POSTJUDGMENT_CALCULATION,
+  reason: 'The September 21, 2026 benchmark boundary is verified, but prejudgment entitlement, liquidated-claim and written-agreement classification, exclusions, accrual, day count, and payments remain fact-specific.',
+  rate_behavior: 'entitlement_and_claim_branch_specific',
+  branches: {
+    ...ARIZONA_POSTJUDGMENT_CALCULATION.branches,
+    entitlement: 'Prejudgment interest entitlement and its accrual date remain claim-specific',
+  },
+};
+
+const DELAWARE_POSTJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The legal-rate formula and September 17, 2026 benchmark change are verified, but the lesser-of contract branch, tort settlement-demand branch, accrual, day count, payments, and special judgments are not calculator-complete.',
+  rate_behavior: 'benchmark_variable_with_branch_specific_locking',
+  rate_schedule: 'federal_reserve_primary_credit_rate_plus_5',
+  current_value_status: 'verified_general_legal_rate',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    general_legal_rate: '6 Del. C. §2301(a): Federal Reserve discount or primary-credit rate plus five points',
+    contract_postjudgment: 'A contract judgment uses the lesser of the contract rate and the legal rate',
+    tort_settlement_demand: 'Section 2301(d) supplies a separate prejudgment-interest path for qualifying tort settlement demands',
+  },
+};
+
+const DELAWARE_PREJUDGMENT_CALCULATION = {
+  ...DELAWARE_POSTJUDGMENT_CALCULATION,
+  reason: 'The legal-rate formula is verified, but entitlement, the §2301(d) tort settlement-demand conditions, accrual dates, contract interactions, day count, and payments remain fact-specific.',
+  rate_behavior: 'entitlement_and_claim_branch_specific',
+};
+
+const MISSOURI_JUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The 9% non-tort branch is verified. The tort branch uses the statute\'s “intended Federal Funds Rate,” which cannot safely be flattened to the target range or effective rate without authoritative clarification.',
+  rate_behavior: 'claim_branch_specific',
+  current_value_status: 'non_tort_verified_tort_benchmark_unresolved',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    non_tort: '9%, or a higher lawful contract rate where the statute applies',
+    tort: 'Federal Funds benchmark plus five points; numeric value withheld because the statutory benchmark identity is ambiguous',
+  },
+};
+
+const MISSOURI_PREJUDGMENT_CALCULATION = {
+  ...MISSOURI_JUDGMENT_CALCULATION,
+  reason: 'The 9% liquidated or contract reference branch is verified, but tort entitlement, settlement-demand conditions, and the statute\'s ambiguous “intended Federal Funds Rate” benchmark prevent a safe numeric tort value.',
+  branches: {
+    liquidated_or_contract: 'Section 408.020 can supply 9% for qualifying liquidated or contract claims',
+    tort_prejudgment: 'Section 408.040 conditions entitlement and references the unresolved intended Federal Funds benchmark; numeric value withheld',
+    tort_post_entry: 'A separate Federal Funds plus three points path can govern the prejudgment-interest component after entry',
+  },
+};
+
+const NEVADA_PREJUDGMENT_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The official July 1, 2026 benchmark and the 8.75% NRS 99.040 statutory reference are verified. A generic current prejudgment number is still withheld because entitlement, the covered transaction category and date, the written-contract branch, book/store-account timing, and statutory exclusions cannot safely be flattened into one value.',
+  rate_behavior: 'transaction_and_claim_branch_specific_fail_closed',
+  current_value_status: 'unavailable_fail_closed',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    prejudgment: 'NRS 99.040 uses the prime rate for the January 1 or July 1 immediately preceding the transaction plus two points, but only for covered claims and subject to contract and statutory exceptions',
+    postjudgment_separate: 'The verified 8.75% NRS 17.130 postjudgment history is separate and remains unchanged',
+  },
+};
+
+const NEW_HAMPSHIRE_INTEREST_CALCULATION = {
+  status: 'reference_only',
+  source_tier: 'official_primary',
+  reason: 'The statutory annual formula and rate-lock rule are accessible, but the official 2026 Judicial Branch schedule is inaccessible and the prior 5.7% value could not be independently corroborated. The numeric value is withheld.',
+  rate_behavior: 'annual_formula_fixed_at_verdict_or_finding',
+  rate_schedule: 'final_26_week_treasury_bill_auction_before_september_30_plus_2_rounded_to_tenth',
+  current_value_status: 'unavailable_fail_closed',
+  branches_complete: false,
+  renderer_supported: false,
+  rule_verified_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT,
+  branches: {
+    annual_formula: 'RSA 336:1, II supplies the annual simple-rate formula',
+    rate_lock: 'RSA 336:2 fixes the rate at verdict or the finding for pecuniary damages',
+    execution_interest: 'RSA 527:10 governs interest on executions',
+    official_schedule: 'Judicial Branch annual schedule was inaccessible during review; no numeric value is inferred',
+  },
+};
+
+const ARKANSAS_AUTHORITIES = [
+  { label: 'Arkansas Act 995 of 2019 — amended §16-65-114', url: ARKANSAS_ACT_995_URL },
+  { label: 'Arkansas Code official portal', url: ARKANSAS_CODE_PORTAL_URL },
+  { label: 'Federal Reserve H.15 release', url: FEDERAL_RESERVE_H15_URL },
+  { label: 'Federal Reserve H.15 primary-credit series', url: FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL },
+];
+const ARIZONA_AUTHORITIES = [
+  { label: 'A.R.S. §44-1201', url: ARIZONA_SECTION_44_1201_URL },
+  { label: 'Federal Reserve H.15 release', url: FEDERAL_RESERVE_H15_URL },
+  { label: 'Federal Reserve H.15 bank-prime series', url: FEDERAL_RESERVE_H15_PRIME_SERIES_URL },
+  { label: 'Federal Reserve H.15 publication feed', url: FEDERAL_RESERVE_H15_RELEASE_FEED_URL },
+];
+const DELAWARE_AUTHORITIES = [
+  { label: '6 Del. C. §2301', url: DELAWARE_SECTION_2301_URL },
+  { label: 'Delaware Courts interest-rate guidance', url: DELAWARE_COURTS_INTEREST_GUIDANCE_URL },
+  { label: 'Federal Reserve H.15 release', url: FEDERAL_RESERVE_H15_URL },
+  { label: 'Federal Reserve H.15 primary-credit series', url: FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL },
+];
+const NEW_HAMPSHIRE_AUTHORITIES = [
+  { label: 'RSA 336:1 — annual simple-rate formula', url: NEW_HAMPSHIRE_RATE_FORMULA_URL },
+  { label: 'RSA 336:2 — rate fixed at verdict or finding', url: NEW_HAMPSHIRE_RATE_LOCK_URL },
+  { label: 'RSA 527:10 — execution interest', url: NEW_HAMPSHIRE_EXECUTION_INTEREST_URL },
+  { label: 'New Hampshire Judicial Branch civil-interest schedule (inaccessible during review)', url: NEW_HAMPSHIRE_COURT_SCHEDULE_URL },
+  { label: 'U.S. Treasury 182-day bill auction, September 29, 2025 (formula-input candidate; not independent rate corroboration)', url: 'https://www.treasurydirect.gov/instit/annceresult/press/preanre/2025/R_20250929_1.pdf' },
+  { label: '2001 N.H. Laws ch. 160 (HB 140)', url: 'https://www.gc.nh.gov/legislation/2001/HB0140.html' },
+];
+
+const CURATED_APPEND_ONLY_HISTORIES = new Map([
+  ['arkansas-judgment-rate', [
+    {
+      value: 5.75,
+      value_text: '5.75%',
+      effective_date: '2026-07-08',
+      source_id: 'ar-jud',
+      source_url: 'https://www.federalreserve.gov/releases/h15/',
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. Simple interest. Verify the current value at federalreserve.gov; not legal advice.',
+    },
+    { value: 6, value_text: '6.00%', effective_date: '2026-09-17', retrieved_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT },
+  ]],
+  ['arkansas-prejudgment-rate', [
+    {
+      value: 5.75,
+      value_text: '5.75%',
+      effective_date: '2026-07-09',
+      source_id: 'ar-prejud',
+      source_url: ARKANSAS_ACT_995_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice.',
+    },
+    { value: 6, value_text: '6.00%', effective_date: '2026-09-17', retrieved_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT },
+  ]],
+  ['arizona-judgment-rate', [
+    {
+      value: 7.75,
+      value_text: '7.75%',
+      effective_date: '2026-07-08',
+      source_id: 'az-ars',
+      source_url: ARIZONA_SECTION_44_1201_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Post-judgment interest under A.R.S. §44-1201(B): the lesser of 10% per annum or the Federal Reserve prime rate (Fed H.15) + 1 percentage point — currently 7.75% (prime ~6.75% + 1). Simple interest. A written agreement may set a different rate. Verify against the current prime rate; not legal advice.',
+    },
+    { value: 8, value_text: '8.00%', effective_date: '2026-09-21', retrieved_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT },
+  ]],
+  ['arizona-prejudgment-rate', [
+    {
+      value: 7.75,
+      value_text: '7.75%',
+      effective_date: '2026-07-08',
+      source_id: 'az-prejud',
+      source_url: ARIZONA_SECTION_44_1201_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Prejudgment interest under A.R.S. § 44-1201(A), & — 7.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arizona’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-08; verify at azleg.gov. Not legal advice.',
+    },
+    { value: 8, value_text: '8.00%', effective_date: '2026-09-21', retrieved_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT },
+  ]],
+  ['delaware-judgment-rate', [
+    {
+      value: 8.75,
+      value_text: '8.75%',
+      effective_date: '2026-07-08',
+      source_id: 'de-jud',
+      source_url: DELAWARE_SECTION_2301_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Verify the current value at delcode.delaware.gov; not legal advice.',
+    },
+    { value: 9, value_text: '9.00%', effective_date: '2026-09-17', retrieved_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT },
+  ]],
+  ['delaware-prejudgment-rate', [
+    {
+      value: 8.75,
+      value_text: '8.75%',
+      effective_date: '2026-07-09',
+      source_id: 'de-prejud',
+      source_url: DELAWARE_SECTION_2301_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Prejudgment interest under 6 Del. C. § 2301(a) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Delaware’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at delcode.delaware.gov. Not legal advice.',
+    },
+    { value: 9, value_text: '9.00%', effective_date: '2026-09-17', retrieved_at: SEPTEMBER_LEGAL_SOURCE_CHECK_AT },
+  ]],
+  ['missouri-judgment-rate', [
+    {
+      value: 9,
+      value_text: '9% / 8.75%',
+      effective_date: '2026-07-09',
+      source_id: 'mo-jud',
+      source_url: MISSOURI_SECTION_408_040_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Post-judgment interest under Mo. Rev. Stat. §408.040: NON-TORT/contract judgments bear 9% fixed (or the contract rate if higher); TORT judgments bear the intended Federal Funds rate + 5% — currently about 8.75% (variable). Simple interest. Verify at revisor.mo.gov; not legal advice.',
+    },
+  ]],
+  ['missouri-prejudgment-rate', [
+    {
+      value: 9,
+      value_text: '9% non-tort; tort rule varies',
+      effective_date: '2026-07-09',
+      source_id: 'mo-prejud',
+      source_url: MISSOURI_SECTION_408_040_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Liquidated or contract claims may bear 9% under § 408.020. For qualifying tort claims, § 408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points. Section 408.040.4 separately says the judgment for prejudgment interest bears Federal Funds plus 3 points after entry. Because those are distinct stages, this reference record does not flatten the tort rule into one headline percentage. Not legal advice.',
+    },
+  ]],
+  // Reclassifying these existing observations as unverified does not make the underlying number a
+  // newly captured value. Preserve its original receipt while the source row records the September
+  // review attempt and the current-value surfaces fail closed.
+  ['nevada-prejudgment-rate', [
+    {
+      value: 8.75,
+      value_text: '8.75%',
+      effective_date: '2026-07-09',
+      source_id: 'nv-prejud',
+      source_url: NEVADA_NRS_99_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Prejudgment interest under NRS 99.040 — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Nevada’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at leg.state.nv.us. Not legal advice.',
+    },
+  ]],
+  ['new-hampshire-judgment-rate', [
+    {
+      value: 5.7,
+      value_text: '5.7%',
+      effective_date: '2026-01-01',
+      source_id: 'nh-jud',
+      source_url: NEW_HAMPSHIRE_COURT_SCHEDULE_URL,
+      retrieved_at: '2026-08-20T00:00:00Z',
+      confidence: 'high',
+      method: 'statute-variable-official-table',
+      notes: 'New Hampshire publishes 5.7% for 2026. RSA 336:1, II uses the final 26-week Treasury-bill auction before September 30 of the preceding year plus two points, rounded to one decimal place, and expressly calls the result an annual simple rate. RSA 336:2 fixes a particular judgment’s rate at verdict or the finding for pecuniary damages; an existing judgment does not reset each January. Day count and payment allocation remain unmodeled. Not legal advice.',
+    },
+  ]],
+  ['new-hampshire-prejudgment-rate', [
+    {
+      value: 5.7,
+      value_text: '5.7%',
+      effective_date: '2026-01-01',
+      source_id: 'nh-prejud',
+      source_url: NEW_HAMPSHIRE_COURT_SCHEDULE_URL,
+      retrieved_at: '2026-07-09T00:00:00Z',
+      confidence: 'medium',
+      method: 'statute-variable',
+      notes: 'Prejudgment interest under RSA 336:1, II — 5.7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Hampshire’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at courts.nh.gov. Not legal advice.',
+    },
+  ]],
+]);
 const TEXAS_POSTJUDGMENT_CALCULATION = {
   status: 'reference_only',
   source_tier: 'official_primary',
@@ -963,10 +1317,11 @@ const STATES_2 = [
     statute: 'RCW 4.56.110', srcId: 'wa-rcw', srcName: 'Washington post-judgment interest (RCW 4.56.110)',
     publisher: 'Washington State Legislature (official)', url: 'https://app.leg.wa.gov/rcw/default.aspx?cite=4.56.110',
     notes: 'Post-judgment interest under RCW 4.56.110 sets DISTINCT rates by claim type: general "all other" money judgments carry the statutory maximum under RCW 19.52.020 (currently 12%); consumer-debt judgments 9% (fixed); tort judgments against individuals/entities carry the federal prime rate + 2% (currently 8.75%); child-support judgments 12%; judgments on a written contract carry the contract’s rate. Simple interest. Verify at app.leg.wa.gov; not legal advice.' },
-  { code: 'AZ', name: 'Arizona', slug: 'arizona-judgment-rate', value: 7.75, kind: 'variable', asof: '2026-07-08',
-    statute: 'A.R.S. §44-1201(B)', srcId: 'az-ars', srcName: 'Arizona judgment interest (A.R.S. §44-1201)',
-    publisher: 'Arizona State Legislature (official)', url: 'https://www.azleg.gov/ars/44/01201.htm',
-    notes: 'Post-judgment interest under A.R.S. §44-1201(B): the lesser of 10% per annum or the Federal Reserve prime rate (Fed H.15) + 1 percentage point — currently 7.75% (prime ~6.75% + 1). Simple interest. A written agreement may set a different rate. Verify against the current prime rate; not legal advice.' },
+  { code: 'AZ', name: 'Arizona', slug: 'arizona-judgment-rate', value: 8, value_text: '8.00%', kind: 'variable', asof: '2026-09-21', verifiedOn: '2026-09-27', retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: '2026-07-09',
+    statute: 'A.R.S. §44-1201(B)–(D)', srcId: 'az-ars', srcName: 'Arizona judgment-interest statute and Federal Reserve H.15 benchmark',
+    publisher: 'Arizona State Legislature and Federal Reserve Board (official)', url: ARIZONA_SECTION_44_1201_URL, confidence: 'high', method: 'statute-variable-official-benchmark', calculation: ARIZONA_POSTJUDGMENT_CALCULATION,
+    metadata: { basis: 'statute-variable-official-benchmark', official_statute_url: ARIZONA_SECTION_44_1201_URL, official_benchmark_url: FEDERAL_RESERVE_H15_PRIME_SERIES_URL, official_authorities: ARIZONA_AUTHORITIES },
+    notes: 'Arizona’s general A.R.S. §44-1201(B) judgment-rate reference became 8.00% on September 21, 2026: the lesser of 10% or the 7.00% H.15 bank-prime observation plus one point. The September 17 prime observation was published September 18, and the statute makes a change operative on the first business day after publication. Written agreements, qualifying medical debt, condemnation, and other special paths can differ. Reference only; not legal advice.' },
   { code: 'CO', name: 'Colorado', slug: 'colorado-judgment-rate', value: 8, kind: 'fixed', asof: '2026-01-01',
     statute: 'C.R.S. §5-12-102(4)(b)', srcId: 'co-sos', srcName: 'Colorado judgment interest (C.R.S. §5-12-102 / §13-21-101)',
     publisher: 'Colorado Secretary of State (official rate certification)', url: 'https://www.coloradosos.gov/pubs/info_center/files/interest_rates.pdf',
@@ -1005,11 +1360,12 @@ const STATES_2 = [
 for (const st of STATES_2) {
   const sourceTier = classifyStateSource({ publisher: st.publisher, home_url: st.url });
   const verifiedOn = st.verifiedOn || EXP_VERIFIED_ON;
+  const registryEvidence = st.registryReviewOn ? `; registry last_reviewed ${st.registryReviewOn} preserved` : '';
   STATE_SOURCES.push({
     id: st.srcId, name: st.srcName, publisher: st.publisher, home_url: st.url,
     license: st.license || (sourceTier === 'third_party_secondary' ? 'Statutory text is a government edict; third-party page terms may apply.' : 'Government edict — not subject to copyright.'),
-    robots_status: `curated ${st.kind} value; ${sourceTier === 'official_primary' ? 'official' : 'secondary'} source checked ${verifiedOn}`,
-    retrieved_at: `${verifiedOn}T00:00:00Z`,
+    robots_status: `curated ${st.kind} value; ${sourceTier === 'official_primary' ? 'official' : 'secondary'} source checked ${verifiedOn}${registryEvidence}`,
+    retrieved_at: st.retrievedAt || `${verifiedOn}T00:00:00Z`,
   });
   FIXED.push({
     entity: { slug: st.slug, name: `${st.name} Judgment Interest Rate`, entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: { state: st.code, statute: st.statute, basis: st.kind === 'fixed' ? 'statute-fixed' : 'statute-variable', ...(st.metadata || {}), ...(st.calculation ? { calculation: st.calculation } : {}) } },
@@ -1028,21 +1384,32 @@ for (const st of STATES_2) {
 // ---- Expansion batch 3: remaining states + DC, each verified 2026-07-09 against its official
 // statute/agency source (multi-agent pass). Fixed = high confidence; variable/agency-set = medium.
 const STATES_3 = [
-  { code: "AL", name: "Alabama", slug: "alabama-judgment-rate", value: 7.5, value_text: "7.5%", kind: "fixed", asof: "2026-07-09", statute: "Ala. Code § 8-8-10(a)", srcId: "al-jud", srcName: "Alabama judgment interest (Ala. Code § 8-8-10(a))", publisher: "Alabama — alison.legislature.state.al.us", url: "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
-    notes: "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). For a judgment \"based upon a contract action,\" interest runs \"at the same rate of interest as stated in the contract\" (the contract rate governs, not… Verify against the statute; not legal advice." },
+  { code: "AL", name: "Alabama", slug: "alabama-judgment-rate", value: 7.5, value_text: "7.5%", kind: "fixed", asof: "2011-09-01", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "Ala. Code § 8-8-10(a)", srcId: "al-jud", srcName: "Alabama judgment interest and 2011 rate transition", publisher: "Alabama Legislature (official)", url: ALABAMA_2011_ACTS_SUMMARY_URL, confidence: "high", method: "statute-branching-official-history", calculation: ALABAMA_POSTJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-branching-official-history", official_authorities: [
+      { label: "Ala. Code §8-8-10", url: ALABAMA_JUDGMENT_STATUTE_URL },
+      { label: "2011 Alabama Acts summary — Act 2011-521", url: ALABAMA_2011_ACTS_SUMMARY_URL },
+      { label: "SB207 engrossed text", url: ALABAMA_SB207_URL },
+    ] },
+    notes: "Act 2011-521 changed Alabama’s general non-contract judgment rate to 7.5% for judgments entered on or after September 1, 2011. A judgment based on a contract action uses the rate stated in the contract. Accrual, compounding, day count, payments, and special-judgment branches remain calculator-withheld. Reference only; not legal advice." },
   { code: "AK", name: "Alaska", slug: "alaska-judgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "Alaska Stat. 09.30.070(a)", srcId: "ak-jud", srcName: "Alaska pre- and post-judgment interest rate table (ADM-505)", publisher: "Alaska Court System (official)", url: ALASKA_ADM_505_URL, confidence: "high", method: "statute-variable-official-table", calculation: ALASKA_POSTJUDGMENT_CALCULATION,
     metadata: { official_history_url: ALASKA_ADM_505_URL, official_statute_url: ALASKA_STATUTE_URL },
     notes: "Alaska Court System form ADM-505 publishes 6.75% for judgments entered in 2026 under AS 09.30.070(a): three percentage points above the 12th Federal Reserve District discount rate in effect on January 2 of the judgment year. A controlling contract or another statute can set a different rate. The selected annual rate stays fixed until the judgment is paid, and post-judgment interest begins when the judge signs the judgment. Verify the correct branch; not legal advice." },
-  { code: "AR", name: "Arkansas", slug: "arkansas-judgment-rate", value: 5.75, value_text: "5.75%", kind: "variable", asof: "2026-07-08", statute: "Ark. Code Ann. § 16-65-114(a)", srcId: "ar-jud", srcName: "Arkansas judgment interest (Ark. Code Ann. § 16-65-114(a))", publisher: "Arkansas — federalreserve.gov", url: "https://www.federalreserve.gov/releases/h15/",
-    notes: "Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. The primary credit rate… Simple interest. The old fixed 10% (or contract rate, whichever greater) was replaced by Act 995 of 2019 (effective 7/24/2019) with the current… Verify the current value at federalreserve.gov; not legal advice." },
+  { code: "AR", name: "Arkansas", slug: "arkansas-judgment-rate", value: 6, value_text: "6.00%", kind: "variable", asof: "2026-09-17", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "Ark. Code Ann. § 16-65-114(a)", srcId: "ar-jud", srcName: "Arkansas Act 995 judgment-interest formula and Federal Reserve H.15 benchmark", publisher: "Arkansas General Assembly and Federal Reserve Board (official)", url: ARKANSAS_ACT_995_URL, confidence: "high", method: "statute-variable-official-benchmark", calculation: ARKANSAS_POSTJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-benchmark", official_statute_url: ARKANSAS_ACT_995_URL, official_code_portal_url: ARKANSAS_CODE_PORTAL_URL, official_benchmark_url: FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL, official_authorities: ARKANSAS_AUTHORITIES },
+    notes: "Arkansas’s general statutory reference became 6.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; Act 995 adds two percentage points. The judgment-entry date selects the benchmark. Contract judgments compare the contract and statutory rates, the constitutional maximum remains controlling, and county warrants are excluded. Reference only; not legal advice." },
   { code: "CT", name: "Connecticut", slug: "connecticut-judgment-rate", value: 10, value_text: "up to 10%", kind: "variable", asof: "1997-05-27", verifiedOn: "2026-07-26", statute: "Conn. Gen. Stat. §§37-3a–37-3c", srcId: "ct-jud", srcName: "Connecticut judgment interest branches (§§37-3a–37-3c)", publisher: "Connecticut General Assembly (official)", url: "https://www.cga.ct.gov/current/pub/chap_673.htm", confidence: "high", method: "statute-branching",
     notes: "Connecticut does not set one automatic percentage for every judgment. Section 37-3a permits up to 10% as damages for qualifying detention of money and caps hospital-service debt at 5%, with awards discretionary. For covered negligence causes arising on or after May 27, 1997, §37-3b requires 10% from the earlier of 20 days after judgment or 90 days after verdict, subject to plaintiff-motion and appeal tolling. Section 37-3c uses a separate Treasury-linked condemnation formula. Verify the applicable branch; not legal advice." },
-  { code: "DE", name: "Delaware", slug: "delaware-judgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", asof: "2026-07-08", statute: "6 Del. C. § 2301", srcId: "de-jud", srcName: "Delaware judgment interest (6 Del. C. § 2301)", publisher: "Delaware — delcode.delaware.gov", url: "https://delcode.delaware.gov/title6/c023/",
-    notes: "Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Legal/post-judgment rate = Federal Reserve discount rate (in practice the Fed's \"primary credit rate,\" which replaced the old adjustment-credit discount rate in Jan 2003) + 5… Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Per the official Delaware Courts guidance, the… Verify the current value at delcode.delaware.gov; not legal advice." },
+  { code: "DE", name: "Delaware", slug: "delaware-judgment-rate", value: 9, value_text: "9.00%", kind: "variable", asof: "2026-09-17", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "6 Del. C. § 2301", srcId: "de-jud", srcName: "Delaware legal-interest statute and Federal Reserve H.15 benchmark", publisher: "Delaware General Assembly, Delaware Courts, and Federal Reserve Board (official)", url: DELAWARE_SECTION_2301_URL, confidence: "high", method: "statute-variable-official-benchmark", calculation: DELAWARE_POSTJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-benchmark", official_statute_url: DELAWARE_SECTION_2301_URL, official_benchmark_url: FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL, official_authorities: DELAWARE_AUTHORITIES },
+    notes: "Delaware’s general legal-rate reference became 9.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; 6 Del. C. §2301 adds five points. A contract judgment uses the lesser of the contract rate and legal rate, and §2301(d) has a separate tort settlement-demand prejudgment branch. Reference only; not legal advice." },
   { code: "DC", name: "District of Columbia", slug: "dc-judgment-rate", value: 5, value_text: "5%", kind: "variable", asof: "2026-07-01", statute: "D.C. Code § 28-3302(c)", srcId: "dc-jud", srcName: "District of Columbia judgment interest (D.C. Code § 28-3302(c))", publisher: "District of Columbia — code.dccouncil.gov", url: "https://code.dccouncil.gov/us/dc/council/code/sections/28-3302",
     notes: "Post-judgment interest under D.C. Code § 28-3302(c), currently 5% (Q3 2026, effective July 1, 2026). Rate = 70% of the rate set by the U.S. Secretary of the Treasury under IRC §6621 (26 U.S.C. §6621) for underpayments of tax, rounded to the nearest full percent — with the current 7% federal underpayment rate, 70% × 7% = 4.9% rounds to 5%. Simple interest. Judgments/decrees against the District of Columbia, its officers, or employees acting within scope of employment bear interest \"not exceeding 4% per… Verify the current value at code.dccouncil.gov; not legal advice." },
-  { code: "HI", name: "Hawaii", slug: "hawaii-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "Haw. Rev. Stat. 478-3. Related: 478-2", srcId: "hi-jud", srcName: "Hawaii judgment interest (Haw. Rev. Stat. 478-3. Related: 478-2)", publisher: "Hawaii — capitol.hawaii.gov", url: "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
-    notes: "Post-judgment interest under Haw. Rev. Stat. 478-3. Related: 478-2 — 10% per year, fixed by statute (simple interest). 478-3 governs POST-judgment interest on any civil judgment at a flat 10%. PREJUDGMENT interest is separate — HRS 636-16 lets the judge designate the… Verify against the statute; not legal advice." },
+  { code: "HI", name: "Hawaii", slug: "hawaii-judgment-rate", value: 10, value_text: "10%", kind: "fixed", asof: "2026-07-09", statute: "Haw. Rev. Stat. §§ 478-2, 478-3", srcId: "hi-jud", srcName: "Hawaii judgment interest (HRS §§478-2 and 478-3)", publisher: "Hawaii State Legislature (official)", url: "https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
+    metadata: { official_authorities: [
+      { label: "HRS §478-3 — interest on judgments", url: "https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm" },
+      { label: "HRS §478-2 — legal rate", url: "https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0002.htm" },
+    ] },
+    notes: "HRS §478-3 supplies a 10% annual postjudgment rate for covered civil judgments, with §478-2 providing the related legal-rate provision. Prejudgment interest is governed separately by HRS §636-16. Reference only; not legal advice." },
   { code: "ID", name: "Idaho", slug: "idaho-judgment-rate", value: 8.875, value_text: "8.875%", kind: "variable", asof: "2026-07-01", verifiedOn: "2026-08-20", statute: "Idaho Code § 28-22-104(2)", srcId: "id-jud", srcName: "Idaho judgment interest official fiscal-year table", publisher: "Idaho State Treasurer (official)", url: IDAHO_LEGAL_RATE_URL, confidence: "high", method: "statute-variable-official-table", calculation: IDAHO_POSTJUDGMENT_CALCULATION,
     metadata: { official_history_url: IDAHO_LEGAL_RATE_URL, official_authorities: [
       { label: "Idaho Code §28-22-104", url: "https://legislature.idaho.gov/statutesrules/idstat/title28/t28ch22/sect28-22-104/" },
@@ -1090,8 +1457,12 @@ const STATES_3 = [
       scope_events: MINNESOTA_SCOPE_EVENTS.map(([effective_date, event]) => ({ effective_date, event })),
     },
     notes: "Minnesota publishes a 4% general rate for 2026 under §549.09, subd. 1(c). Qualifying judgments or awards over $50,000 use a separate 10% branch that is generally fixed at entry until paid, subject to public-party, non-child-support family-court, tax, condemnation, arbitration, and other statutory exceptions. The general branch resets each calendar year. Beginning August 1, 2022, interest does not accrue on past, current, or future child-support judgments; the separate family-court discretion rule does not apply to child-support judgments. This page is a branch-preserving reference, not a payoff calculator. Not legal advice." },
-  { code: "MO", name: "Missouri", slug: "missouri-judgment-rate", value: 9, value_text: "9% / 8.75%", kind: "variable", asof: "2026-07-09", statute: "Mo. Rev. Stat. §408.040", srcId: "mo-jud", srcName: "Missouri judgment interest (Mo. Rev. Stat. §408.040)", publisher: "Missouri — revisor.mo.gov", url: "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-    notes: "Post-judgment interest under Mo. Rev. Stat. §408.040: NON-TORT/contract judgments bear 9% fixed (or the contract rate if higher); TORT judgments bear the intended Federal Funds rate + 5% — currently about 8.75% (variable). Simple interest. Verify at revisor.mo.gov; not legal advice." },
+  { code: "MO", name: "Missouri", slug: "missouri-judgment-rate", value: 9, value_text: "9% non-tort; tort benchmark unresolved", kind: "variable", asof: "2026-07-09", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "Mo. Rev. Stat. §408.040", srcId: "mo-jud", srcName: "Missouri judgment-interest branches (Mo. Rev. Stat. §408.040)", publisher: "Missouri Revisor of Statutes (official)", url: MISSOURI_SECTION_408_040_URL, confidence: "high", method: "statute-branching-fail-closed", calculation: MISSOURI_JUDGMENT_CALCULATION,
+    metadata: { basis: "statute-branching-fail-closed", current_rate_status: "branch_partial_reference_only", current_rate_numeric: null, official_authorities: [
+      { label: "Mo. Rev. Stat. §408.040", url: MISSOURI_SECTION_408_040_URL },
+      { label: "Federal Reserve H.15 release", url: FEDERAL_RESERVE_H15_URL },
+    ] },
+    notes: "Missouri’s non-tort branch is 9%, subject to a qualifying higher contract rate. The tort branch says ‘intended Federal Funds Rate’ plus five points; because the reviewed official federal materials expose multiple plausible measures, StatuteRates does not choose or publish a tort percentage. Reference only; not legal advice." },
   { code: "MT", name: "Montana", slug: "montana-judgment-rate", value: 9.75, value_text: "9.75%", kind: "variable", asof: "2026-01-01", statute: "Mont. Code Ann. § 25-9-205", srcId: "mt-jud", srcName: "Montana judgment interest (Mont. Code Ann. § 25-9-205)", publisher: "Montana — mca.legmt.gov", url: "https://mca.legmt.gov/bills/mca/title_0250/chapter_0090/part_0020/section_0050/0250-0090-0020-0050.html",
     notes: "Post-judgment interest under Mont. Code Ann. § 25-9-205, currently 9.75% (as of January 1, 2026). Rate = (bank prime loan rate published in the Federal Reserve System's H.15 \"Selected Interest Rates\" release, or any superseding publication, on the day judgment is entered)… Simple interest. For a judgment involving a contractual obligation that specifies an interest rate, post-judgment interest is paid at the rate specified in the… Verify the current value at mca.legmt.gov; not legal advice." },
   { code: "NE", name: "Nebraska", slug: "nebraska-judgment-rate", value: 5.970, value_text: "5.970%", kind: "variable", asof: "2026-07-16", statute: "Neb. Rev. Stat. §§ 45-103 and 45-103.01", srcId: "ne-jud", srcName: "Nebraska judgment interest rate and official history (Neb. Rev. Stat. §45-103)", publisher: "Nebraska Judicial Branch (official)", url: NEBRASKA_JUDICIAL_CURRENT_URL,
@@ -1112,16 +1483,9 @@ const STATES_3 = [
       { label: "Torres v. Goodyear — Nevada Supreme Court simple-interest authority", url: NEVADA_TORRES_OPINION_URL },
     ] },
     notes: "Nevada FID publishes a 6.75% prime rate for July 1 through December 31, 2026, producing an 8.75% general NRS 17.130(2) judgment rate. The general rate resets each January 1 and July 1 while unpaid and accrues as simple interest. Interest ordinarily begins at service of the summons and complaint; the future-damages component begins at judgment. A lawful contract, another law, the judgment itself, or qualifying consumer-form debt can require a different path. Reference only; not legal advice." },
-  { code: "NH", name: "New Hampshire", slug: "new-hampshire-judgment-rate", value: 5.7, value_text: "5.7%", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-08-20", statute: "N.H. Rev. Stat. Ann. 336:1, II", srcId: "nh-jud", srcName: "New Hampshire civil interest rates", publisher: "New Hampshire Judicial Branch (official)", url: "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates", confidence: "high", method: "statute-variable-official-table",
-    metadata: { official_authorities: [
-      { label: "New Hampshire Judicial Branch civil interest rates", url: "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates" },
-      { label: "RSA 336:1 — annual simple rate formula", url: "https://gc.nh.gov/rsa/html/XXXI/336/336-1.htm" },
-      { label: "RSA 336:2 — rate fixed at verdict or finding", url: "https://gc.nh.gov/rsa/html/XXXI/336/336-2.htm" },
-      { label: "RSA 527:10 — execution interest", url: "https://gc.nh.gov/rsa/html/LIV/527/527-10.htm" },
-      { label: "U.S. Treasury 182-day bill auction, September 29, 2025", url: "https://www.treasurydirect.gov/instit/annceresult/press/preanre/2025/R_20250929_1.pdf" },
-      { label: "2001 N.H. Laws ch. 160 (HB 140)", url: "https://gc.nh.gov/legislation/2001/HB0140.html" },
-    ] },
-    notes: "New Hampshire publishes 5.7% for 2026. RSA 336:1, II uses the final 26-week Treasury-bill auction before September 30 of the preceding year plus two points, rounded to one decimal place, and expressly calls the result an annual simple rate. RSA 336:2 fixes a particular judgment’s rate at verdict or the finding for pecuniary damages; an existing judgment does not reset each January. Day count and payment allocation remain unmodeled. Not legal advice." },
+  { code: "NH", name: "New Hampshire", slug: "new-hampshire-judgment-rate", value: 5.7, value_text: "5.7% (last recorded; not current-verified)", kind: "variable", asof: "2026-01-01", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-08-20", statute: "N.H. Rev. Stat. Ann. 336:1, II; 336:2", srcId: "nh-jud", srcName: "New Hampshire statutory interest formula and rate-lock rule", publisher: "New Hampshire General Court (official)", url: NEW_HAMPSHIRE_RATE_FORMULA_URL, confidence: "low", method: "historical-last-recorded-official-source-gap", calculation: NEW_HAMPSHIRE_INTEREST_CALCULATION,
+    metadata: { basis: "official-source-gap", current_rate_status: "unverified_last_recorded", current_rate_numeric: null, last_recorded_rate: { value: 5.7, effective_date: "2026-01-01" }, official_schedule_url: NEW_HAMPSHIRE_COURT_SCHEDULE_URL, official_authorities: NEW_HAMPSHIRE_AUTHORITIES },
+    notes: "This preserves the previously recorded 5.7% observation as historical provenance only. RSA 336:1, II provides the annual simple-rate formula, and RSA 336:2 fixes the rate at verdict or the finding for pecuniary damages, but the Judicial Branch’s official 2026 schedule was inaccessible and 5.7% was not independently corroborated. Consumers must treat the current rate as unavailable. Reference only; not legal advice." },
   { code: "NM", name: "New Mexico", slug: "new-mexico-judgment-rate", value: 8.75, value_text: "8.75% / 15%", kind: "fixed", asof: "1993-06-18", verifiedOn: "2026-08-16", statute: "N.M. Stat. Ann. § 56-8-4", srcId: "nm-jud", srcName: "New Mexico judgment interest (N.M. Stat. Ann. § 56-8-4)", publisher: "New Mexico Compilation Commission — NMOneSource (official)", url: "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do",
     metadata: {
       official_statute_url: "https://nmonesource.com/nmos/nmsa/en/item/4418/index.do",
@@ -1198,7 +1562,8 @@ const STATES_3 = [
 for (const st of STATES_3) {
   const sourceTier = classifyStateSource({ publisher: st.publisher, home_url: st.url });
   const verifiedOn = st.verifiedOn || EXP_VERIFIED_ON;
-  STATE_SOURCES.push({ id: st.srcId, name: st.srcName, publisher: st.publisher, home_url: st.url, license: sourceTier === 'third_party_secondary' ? 'Statutory text is a government edict; third-party page terms may apply.' : 'Government edict — not subject to copyright.', robots_status: `curated ${st.kind} value; ${sourceTier === 'official_primary' ? 'official' : 'secondary'} source checked ${verifiedOn}`, retrieved_at: `${verifiedOn}T00:00:00Z` });
+  const registryEvidence = st.registryReviewOn ? `; registry last_reviewed ${st.registryReviewOn} preserved` : '';
+  STATE_SOURCES.push({ id: st.srcId, name: st.srcName, publisher: st.publisher, home_url: st.url, license: sourceTier === 'third_party_secondary' ? 'Statutory text is a government edict; third-party page terms may apply.' : 'Government edict — not subject to copyright.', robots_status: `curated ${st.kind} value; ${sourceTier === 'official_primary' ? 'official' : 'secondary'} source checked ${verifiedOn}${registryEvidence}`, retrieved_at: st.retrievedAt || `${verifiedOn}T00:00:00Z` });
   FIXED.push({ entity: { slug: st.slug, name: `${st.name} Judgment Interest Rate`, entity_type: 'rate_series', jurisdiction: 'US', region: 'US States', metadata: { state: st.code, statute: st.statute, basis: st.kind === 'fixed' ? 'statute-fixed' : 'statute-variable', ...(st.metadata || {}), ...(st.calculation ? { calculation: st.calculation } : {}) } }, value: st.value, value_text: st.value_text, effective_date: st.asof, source_id: st.srcId, source_url: st.url, confidence: st.confidence || (st.kind === 'fixed' ? 'high' : 'medium'), method: st.method || (st.kind === 'fixed' ? 'statute-fixed' : 'statute-variable'), notes: st.notes });
 }
 
@@ -1214,31 +1579,50 @@ const PREJUDG = [
   { code: "AK", name: "Alaska", slug: "alaska-prejudgment-rate", value: 6.75, value_text: "6.75%", kind: "variable", method: "statute-variable-official-table", confidence: "high", asof: "2026-01-01", verifiedOn: "2026-07-26", statute: "AS 09.30.070", srcId: "ak-prejud", srcName: "Alaska pre- and post-judgment interest rate table (ADM-505)", publisher: "Alaska Court System (official)", url: ALASKA_ADM_505_URL, calculation: ALASKA_PREJUDGMENT_CALCULATION,
     metadata: { official_history_url: ALASKA_ADM_505_URL, official_statute_url: ALASKA_STATUTE_URL },
     notes: "Alaska Court System form ADM-505 publishes 6.75% for both general pre- and post-judgment interest when judgment is entered in 2026. Prejudgment interest generally begins when the claimant could first sue, but a controlling contract, another statute, the claim, and the older 1980–1997 transition can change the result. Verify the correct rate and accrual branch; not legal advice." },
-  { code: "AZ", name: "Arizona", slug: "arizona-prejudgment-rate", value: 7.75, value_text: "7.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-08", statute: "A.R.S. § 44-1201(A), &", srcId: "az-prejud", srcName: "Arizona prejudgment interest (A.R.S. § 44-1201(A), &)", publisher: "Arizona — azleg.gov", url: "https://www.azleg.gov/ars/44/01201.htm",
-    notes: "Prejudgment interest under A.R.S. § 44-1201(A), & — 7.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arizona’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-08; verify at azleg.gov. Not legal advice." },
-  { code: "AR", name: "Arkansas", slug: "arkansas-prejudgment-rate", value: 5.75, value_text: "5.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Ark. Code Ann. § 16-65-114(a)(1)", srcId: "ar-prejud", srcName: "Arkansas Act 995 of 2019 (§ 16-65-114)", publisher: "Arkansas General Assembly (official enacted act)", url: "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
-    notes: "Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice." },
+  { code: "AZ", name: "Arizona", slug: "arizona-prejudgment-rate", value: 8, value_text: "8.00%", kind: "variable", method: "statute-variable-official-benchmark", confidence: "high", asof: "2026-09-21", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "A.R.S. § 44-1201", srcId: "az-prejud", srcName: "Arizona prejudgment-interest statute and Federal Reserve H.15 benchmark", publisher: "Arizona State Legislature and Federal Reserve Board (official)", url: ARIZONA_SECTION_44_1201_URL, calculation: ARIZONA_PREJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-benchmark", official_statute_url: ARIZONA_SECTION_44_1201_URL, official_benchmark_url: FEDERAL_RESERVE_H15_PRIME_SERIES_URL, official_authorities: ARIZONA_AUTHORITIES },
+    notes: "Arizona’s H.15-linked general statutory reference became 8.00% on September 21, 2026 after the September 17 prime observation was published September 18. Prejudgment entitlement, the applicable obligation or written-agreement branch, medical debt, exclusions, and the accrual date remain claim-specific. Reference only; not legal advice." },
+  { code: "AR", name: "Arkansas", slug: "arkansas-prejudgment-rate", value: 6, value_text: "6.00%", kind: "variable", method: "statute-variable-official-benchmark", confidence: "high", asof: "2026-09-17", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "Ark. Code Ann. § 16-65-114(a)", srcId: "ar-prejud", srcName: "Arkansas Act 995 prejudgment-rate reference and Federal Reserve H.15 benchmark", publisher: "Arkansas General Assembly and Federal Reserve Board (official)", url: ARKANSAS_ACT_995_URL, calculation: ARKANSAS_PREJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-benchmark", official_statute_url: ARKANSAS_ACT_995_URL, official_code_portal_url: ARKANSAS_CODE_PORTAL_URL, official_benchmark_url: FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL, official_authorities: ARKANSAS_AUTHORITIES },
+    notes: "Arkansas’s statutory reference became 6.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; Act 995 adds two points. Prejudgment entitlement, claim classification, accrual, and the constitutional cap remain matter-specific. Reference only; not legal advice." },
   { code: "CA", name: "California", slug: "california-prejudgment-rate", value: 7, value_text: "7% / 10%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "Cal. Const. art. XV §1 (7% tort/general); Cal. Civ. Code §3289(b) (10% contract)", srcId: "ca-prejud", srcName: "California prejudgment interest (Cal. Civ. Code sec. 3287)", publisher: "California — leginfo.legislature.ca.gov", url: "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=3289.&lawCode=CIV",
     notes: "California has a DUAL prejudgment rate, both simple: 7% for tort and other non-contract claims (including personal injury) — the constitutional default legal rate (Cal. Const. art. XV §1; discretionary tort interest under Civ. Code §3288 also runs at this 7%); and 10% for breach of a contract that stipulates no rate (Civ. Code §3289(b)). Entitlement to interest on liquidated/certain damages is Civ. Code §3287. Verified against the statutes 2026-07-11. Not legal advice." },
-  { code: "CO", name: "Colorado", slug: "colorado-prejudgment-rate", value: 8, value_text: "8% / 9%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "C.R.S. §5-12-102 (8% general); §13-21-101 (9% personal injury)", srcId: "co-prejud", srcName: "Colorado Revised Statutes, Titles 5 and 13", publisher: "Colorado General Assembly — Office of Legislative Legal Services (official)", url: "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download",
+  { code: "CO", name: "Colorado", slug: "colorado-prejudgment-rate", value: 8, value_text: "8% / 9%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "C.R.S. §5-12-102 (8% general); §13-21-101 (9% personal injury)", srcId: "co-prejud", srcName: "Colorado Revised Statutes, Titles 5 and 13", publisher: "Colorado General Assembly — Office of Legislative Legal Services (official)", url: "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/colorado-revised-statutes",
+    metadata: { official_authorities: [
+      { label: "Colorado Revised Statutes current official landing", url: "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/colorado-revised-statutes" },
+      { label: "Colorado Revised Statutes title downloads", url: "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download" },
+    ] },
     notes: "Colorado has TWO prejudgment rates, both compounded annually: 8% for general/contract claims and money or property wrongfully withheld (C.R.S. §5-12-102(1)(b)), and 9% for personal-injury actions (C.R.S. §13-21-101, from the date suit was filed, for actions filed on/after July 1, 1979). §5-12-102 opens \"Except as provided in section 13-21-101,\" carving personal-injury cases out to the 9% rate. Verified against the statute text 2026-07-09. This is PREjudgment interest, separate from Colorado’s post-judgment rate. Not legal advice." },
   { code: "CT", name: "Connecticut", slug: "connecticut-prejudgment-rate", value: 10, value_text: "up to 10%", kind: "discretionary-with-cap", method: "statute-discretionary-cap", confidence: "high", asof: "2026-07-09", verifiedOn: "2026-07-26", statute: "Conn. Gen. Stat. §37-3a", srcId: "ct-prejud", srcName: "Connecticut prejudgment interest (§37-3a)", publisher: "Connecticut General Assembly (official)", url: "https://www.cga.ct.gov/current/pub/chap_673.htm",
     notes: "Connecticut General Statutes §37-3a permits a court to award prejudgment interest of up to 10% per year as damages for detention of money after it becomes payable; the percentage and award are discretionary rather than an automatic 10%. For debt arising from hospital services, both prejudgment and postjudgment interest are capped at 5% and remain discretionary. Verify entitlement and the court-selected rate; not legal advice." },
-  { code: "DE", name: "Delaware", slug: "delaware-prejudgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "6 Del. C. § 2301(a)", srcId: "de-prejud", srcName: "Delaware prejudgment interest (6 Del. C. § 2301(a))", publisher: "Delaware — delcode.delaware.gov", url: "https://delcode.delaware.gov/title6/c023/",
-    notes: "Prejudgment interest under 6 Del. C. § 2301(a) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Delaware’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at delcode.delaware.gov. Not legal advice." },
+  { code: "DE", name: "Delaware", slug: "delaware-prejudgment-rate", value: 9, value_text: "9.00%", kind: "variable", method: "statute-variable-official-benchmark", confidence: "high", asof: "2026-09-17", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "6 Del. C. § 2301(a), (d)", srcId: "de-prejud", srcName: "Delaware prejudgment-interest statute and Federal Reserve H.15 benchmark", publisher: "Delaware General Assembly, Delaware Courts, and Federal Reserve Board (official)", url: DELAWARE_SECTION_2301_URL, calculation: DELAWARE_PREJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-variable-official-benchmark", official_statute_url: DELAWARE_SECTION_2301_URL, official_benchmark_url: FEDERAL_RESERVE_H15_PRIMARY_CREDIT_SERIES_URL, official_authorities: DELAWARE_AUTHORITIES },
+    notes: "Delaware’s general legal-rate reference became 9.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; §2301 adds five points. Prejudgment entitlement and the separate §2301(d) tort settlement-demand conditions remain claim-specific. Reference only; not legal advice." },
   { code: "FL", name: "Florida", slug: "florida-prejudgment-rate", value: 8.06, value_text: "8.06%", kind: "variable", method: "statute-variable-official-table", confidence: "high", asof: "2026-07-01", verifiedOn: "2026-07-26", statute: "Fla. Stat. § 55.03", srcId: "fl-prejud", srcName: "Florida prejudgment-interest rate schedule (Fla. Stat. § 55.03)", publisher: "Florida Department of Financial Services, Chief Financial Officer (official)", url: FLORIDA_CFO_RATES_URL,
     metadata: { official_statute_url: FLORIDA_STATUTE_55_03_URL, official_history_start: FLORIDA_OFFICIAL_HISTORY_START },
     notes: "Florida’s CFO schedule supplies the rate used for qualifying prejudgment interest periods under Fla. Stat. §55.03. Entitlement, the date of loss, claim characterization, offsets, and the correct accrual periods remain case-specific; this reference series does not decide them. Verify the governing law and record. Not legal advice." },
   { code: "GA", name: "Georgia", slug: "georgia-prejudgment-rate", value: 7, value_text: "7% / 9.75%", kind: "fixed", method: "composite_ga_7_4_2_7_4_15_and_51_12_14", confidence: "high", asof: "2025-12-11", verifiedOn: "2026-07-19", statute: "O.C.G.A. §§7-4-2, 7-4-15, and 51-12-14", srcId: "ga-prejud", srcName: "Georgia prejudgment-interest rules and Federal Reserve prime benchmark", publisher: "Georgia General Assembly-authorized Code portal (LexisNexis); Federal Reserve prime benchmark via FRED", url: GEORGIA_CODE_PORTAL_URL, calculation: GEORGIA_PREJUDGMENT_CALCULATION,
     metadata: { official_statute_url: GEORGIA_CODE_PORTAL_URL, official_benchmark_url: GEORGIA_PRIME_SERIES_URL },
     notes: "Georgia has two prejudgment paths. A qualifying liquidated demand uses the 7% legal rate under O.C.G.A. §§7-4-2 and 7-4-15 from the legally relevant due or demand date. Qualifying unliquidated tort damages under §51-12-14 instead use the Federal Reserve prime rate on the 30th day after the last written notice plus three points; the current benchmark produces 9.75%. Both paths are treated as simple interest, but notice, entitlement, and the correct branch are case-specific. Not legal advice." },
-  { code: "HI", name: "Hawaii", slug: "hawaii-prejudgment-rate", value: 10, value_text: "10%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "HRS 636-16", srcId: "hi-prejud", srcName: "Hawaii prejudgment interest (HRS 636-16)", publisher: "Hawaii — data.capitol.hawaii.gov", url: "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
+  { code: "HI", name: "Hawaii", slug: "hawaii-prejudgment-rate", value: 10, value_text: "10%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "HRS 636-16", srcId: "hi-prejud", srcName: "Hawaii prejudgment interest (HRS §636-16)", publisher: "Hawaii State Legislature (official)", url: "https://data.capitol.hawaii.gov/hrscurrent/Vol13_Ch0601-0676/HRS0636/HRS_0636-0016.htm",
+    metadata: { official_authorities: [
+      { label: "HRS §636-16 — prejudgment interest", url: "https://data.capitol.hawaii.gov/hrscurrent/Vol13_Ch0601-0676/HRS0636/HRS_0636-0016.htm" },
+      { label: "HRS §478-2 — legal rate", url: "https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0002.htm" },
+    ] },
     notes: "Prejudgment interest under HRS 636-16 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Hawaii’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
   { code: "ID", name: "Idaho", slug: "idaho-prejudgment-rate", value: 12, value_text: "12%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "Idaho Code §28-22-104(1) (12% general); §12-301 / §28-22-104(2) (tort)", srcId: "id-prejud", srcName: "Idaho prejudgment interest (Idaho Code 28-22-104(1))", publisher: "Idaho — legislature.idaho.gov", url: "https://legislature.idaho.gov/statutesrules/idstat/title28/t28ch22/sect28-22-104/",
     notes: "Idaho general/contract prejudgment interest is 12% simple (Idaho Code §28-22-104(1)). SEPARATELY, in tort actions for personal injury, property damage, or wrongful death where the claimant serves an offer of settlement, prejudgment interest accrues at the §28-22-104(2) variable rate (currently 8.875%) under §12-301 — not the 12% general rate. Verified 2026-07-11. Not legal advice." },
-  { code: "IL", name: "Illinois", slug: "illinois-prejudgment-rate", value: 6, value_text: "6% / 5%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "735 ILCS 5/2-1303(c)", srcId: "il-prejud", srcName: "Illinois prejudgment interest (735 ILCS 5/2-1303(c))", publisher: "Illinois — ilga.gov", url: "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+  { code: "IL", name: "Illinois", slug: "illinois-prejudgment-rate", value: 6, value_text: "6% / 5%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "815 ILCS 205/2; 735 ILCS 5/2-1303(c)", srcId: "il-prejud", srcName: "Illinois prejudgment-interest statutes", publisher: "Illinois General Assembly (official)", url: "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2",
+    metadata: { official_authorities: [
+      { label: "815 ILCS 205/2 — legal-rate provision", url: "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2" },
+      { label: "735 ILCS 5/2-1303 — personal-injury and wrongful-death branch", url: "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=073500050K2-1303" },
+    ] },
     notes: "Prejudgment interest under 735 ILCS 5/2-1303(c) — 6% / 5% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Illinois’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
-  { code: "IN", name: "Indiana", slug: "indiana-prejudgment-rate", value: 8, value_text: "8%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "IC 24-4.6-1-103 (8% contract/account); IC 34-51-4-9 (tort, 6–10% discretionary)", srcId: "in-prejud", srcName: "Indiana prejudgment interest (Contract/liquidated: IC 24-4.6-1-103)", publisher: "Indiana — iga.in.gov", url: "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
+  { code: "IN", name: "Indiana", slug: "indiana-prejudgment-rate", value: 8, value_text: "8%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "IC 24-4.6-1-103 (8% listed obligations); IC 34-51-4 (tort)", srcId: "in-prejud", srcName: "Indiana prejudgment-interest statutes", publisher: "Indiana General Assembly (official)", url: "https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103",
+    metadata: { official_authorities: [
+      { label: "IC 24-4.6-1-103 — listed obligations", url: "https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103" },
+      { label: "IC 34-51-4 — tort prejudgment-interest chapter", url: "https://iga.in.gov/laws/2026/ic/titles/34#34-51-4" },
+    ] },
     notes: "Indiana prejudgment interest is 8% for contract, written-instrument, and account claims (IC 24-4.6-1-103). SEPARATELY, tort/personal-injury prejudgment interest is set at the court's discretion within a 6%–10% per-year band (simple) under IC 34-51-4-9 — the 8% figure does not apply to tort claims. Verified 2026-07-11. Not legal advice." },
   { code: "KS", name: "Kansas", slug: "kansas-prejudgment-rate", value: 10, value_text: "10% / 5.75%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-01", statute: "K.S.A. 16-201 (10% general); 16-201(b)/16-204(e)(1) (tort filed ≥7/1/2023)", srcId: "ks-prejud", srcName: "Kansas prejudgment interest (K.S.A. 16-201)", publisher: "Kansas — ksrevisor.gov", url: "https://ksrevisor.gov/statutes/chapters/ch16/016_002_0001.html",
     notes: "Kansas general/contract prejudgment interest is 10% fixed (K.S.A. 16-201(a)). For civil TORT actions filed on or after July 1, 2023, prejudgment interest is instead two percentage points below the K.S.A. 16-204(e)(1) judgment rate — currently 5.75% (7.75% − 2 for July 1, 2026–June 30, 2027), variable, recomputed each July 1 (K.S.A. 16-201(b)). Verified 2026-07-18. Not legal advice." },
@@ -1272,16 +1656,26 @@ const PREJUDG = [
   { code: "MS", name: "Mississippi", slug: "mississippi-prejudgment-rate", value: null, value_text: "contract rate / court-set", kind: "case-specific", method: "court-or-contract-rate", confidence: "high", asof: "1989-07-01", verifiedOn: "2026-07-19", statute: "Miss. Code Ann. §§75-17-7 and 75-17-1", srcId: "ms-prejud", srcName: "Mississippi judgment and prejudgment interest rules (Miss. Code Ann. §§75-17-7 and 75-17-1)", publisher: "Mississippi Legislature-authorized Code portal (LexisNexis)", url: "https://www.lexisnexis.com/hottopics/mscode/", calculation: MISSISSIPPI_PREJUDGMENT_CALCULATION,
     metadata: { official_code_portal_url: "https://www.lexisnexis.com/hottopics/mscode/", appellate_crosscheck_url: "https://law.justia.com/cases/mississippi/court-of-appeals/2025/2024-ca-00023-coa.html" },
     notes: "Mississippi does not set one statewide prejudgment percentage. Under §75-17-7, a judgment founded on a sale or contract bears the rate supplied by the contract evidencing the debt. For all other judgments, the judge selects a fair annual rate and a fair start date, never before the complaint was filed; prejudgment interest can be included in that category. Section 75-17-1's 8% legal contract rate may inform some matters, but current appellate authority confirms that 8% is not mandatory and that the court can select another rate and method. Verify the claim and order; not legal advice." },
-  { code: "MO", name: "Missouri", slug: "missouri-prejudgment-rate", value: 9, value_text: "9% non-tort; tort rule varies", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "Mo. Rev. Stat. §§ 408.020, 408.040.3–.4", srcId: "mo-prejud", srcName: "Missouri prejudgment interest (Mo. Rev. Stat. § 408.040)", publisher: "Missouri — revisor.mo.gov", url: "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
-    notes: "Liquidated or contract claims may bear 9% under § 408.020. For qualifying tort claims, § 408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points. Section 408.040.4 separately says the judgment for prejudgment interest bears Federal Funds plus 3 points after entry. Because those are distinct stages, this reference record does not flatten the tort rule into one headline percentage. Not legal advice." },
+  { code: "MO", name: "Missouri", slug: "missouri-prejudgment-rate", value: 9, value_text: "9% liquidated/contract; tort benchmark unresolved", kind: "variable", method: "statute-branching-fail-closed", confidence: "high", asof: "2026-07-09", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "Mo. Rev. Stat. §§ 408.020, 408.040.3–.4", srcId: "mo-prejud", srcName: "Missouri prejudgment-interest branches", publisher: "Missouri Revisor of Statutes (official)", url: MISSOURI_SECTION_408_040_URL, calculation: MISSOURI_PREJUDGMENT_CALCULATION,
+    metadata: { basis: "statute-branching-fail-closed", current_rate_status: "branch_partial_reference_only", current_rate_numeric: null, official_authorities: [
+      { label: "Mo. Rev. Stat. §408.040", url: MISSOURI_SECTION_408_040_URL },
+      { label: "Federal Reserve H.15 release", url: FEDERAL_RESERVE_H15_URL },
+    ] },
+    notes: "Qualifying liquidated or contract claims can use the 9% §408.020 reference. The tort path has separate entitlement and post-entry rules and uses the statute’s ambiguous ‘intended Federal Funds Rate’ benchmark. StatuteRates therefore withholds a tort percentage instead of choosing among federal target-range or effective-rate measures. Reference only; not legal advice." },
   { code: "MT", name: "Montana", slug: "montana-prejudgment-rate", value: 10, value_text: "10% / 9.75%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "MCA 31-1-106 (10% legal, via 27-1-211); 27-1-210 (tort, prime+3%)", srcId: "mt-prejud", srcName: "Montana prejudgment interest (MCA 27-1-211)", publisher: "Montana — mca.legmt.gov", url: "https://mca.legmt.gov/bills/mca/title_0270/chapter_0010/part_0020/section_0110/0270-0010-0020-0110.html",
     notes: "Montana prejudgment interest is 10% simple for liquidated/contract-type claims — the legal rate (MCA §31-1-106), applied via the right-to-interest statute §27-1-211. TORT prejudgment interest is instead prime + 3% — currently 9.75% (variable, reset each Jan 1) under §27-1-210. Verified 2026-07-11. Not legal advice." },
   { code: "NE", name: "Nebraska", slug: "nebraska-prejudgment-rate", value: 12, value_text: "12% / 5.970%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-16", verifiedOn: "2026-07-19", statute: "Neb. Rev. Stat. §§45-103.02–45-104", srcId: "ne-prejud", srcName: "Nebraska prejudgment interest statutes (§§45-103.02–45-104)", publisher: "Nebraska Legislature (official)", url: "https://nebraskalegislature.gov/laws/laws-index/chap45-full.html", calculation: NEBRASKA_PREJUDGMENT_CALCULATION,
     notes: "Nebraska uses distinct prejudgment paths. Section 45-103.02(2) uses the 12% §45-104 rate on the unpaid balance of qualifying liquidated claims from the cause-of-action date. Section 45-103.02(1) uses the variable §45-103 judgment rate—currently 5.970%—for an unliquidated claim only when the plaintiff satisfies every written-offer, certified-mail, filing, timing, nonacceptance, and judgment-exceeds-offer condition. Section 45-103.04 excludes Chapter 42 actions and specified government-related claims. Verify entitlement and applicability; not legal advice." },
-  { code: "NV", name: "Nevada", slug: "nevada-prejudgment-rate", value: 8.75, value_text: "8.75%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "NRS 99.040", srcId: "nv-prejud", srcName: "Nevada prejudgment interest (NRS 99.040)", publisher: "Nevada — leg.state.nv.us", url: "https://www.leg.state.nv.us/NRS/NRS-099.html",
-    notes: "Prejudgment interest under NRS 99.040 — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Nevada’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at leg.state.nv.us. Not legal advice." },
-  { code: "NH", name: "New Hampshire", slug: "new-hampshire-prejudgment-rate", value: 5.7, value_text: "5.7%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-01-01", statute: "RSA 336:1, II", srcId: "nh-prejud", srcName: "New Hampshire prejudgment interest (RSA 336:1, II)", publisher: "New Hampshire — courts.nh.gov", url: "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
-    notes: "Prejudgment interest under RSA 336:1, II — 5.7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Hampshire’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at courts.nh.gov. Not legal advice." },
+  { code: "NV", name: "Nevada", slug: "nevada-prejudgment-rate", value: 8.75, value_text: "8.75% (last recorded; not current-verified)", kind: "variable", method: "historical-last-recorded-official-source-gap", confidence: "low", asof: "2026-07-09", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "NRS 99.040", srcId: "nv-prejud", srcName: "Nevada prejudgment-interest statute and official benchmark notices", publisher: "Nevada Legislature and Financial Institutions Division (official)", url: NEVADA_NRS_99_URL, calculation: NEVADA_PREJUDGMENT_CALCULATION,
+    metadata: { basis: "official-source-gap", current_rate_status: "unverified_last_recorded", current_rate_numeric: null, last_recorded_rate: { value: 8.75, effective_date: "2026-07-09" }, official_statute_url: NEVADA_NRS_99_URL, official_benchmark_history_url: NEVADA_FID_HISTORY_URL, official_authorities: [
+      { label: "NRS 99.040", url: NEVADA_NRS_99_URL },
+      { label: "Nevada FID prime-interest-rate history", url: NEVADA_FID_HISTORY_URL },
+      { label: "Nevada FID July 1, 2026 prime-rate notice", url: NEVADA_FID_2026_JULY_NOTICE_URL },
+    ] },
+    notes: "This preserves the previously recorded 8.75% observation as historical provenance only. The official July 1, 2026 FID benchmark supports an 8.75% NRS 99.040 statutory reference, but entitlement, the covered transaction category and date, written-contract branch, book/store-account timing, and exclusions prevent one generic current prejudgment percentage. Consumers must treat the current value as unavailable unless those branches are resolved. The verified 79-row postjudgment history remains unchanged. Reference only; not legal advice." },
+  { code: "NH", name: "New Hampshire", slug: "new-hampshire-prejudgment-rate", value: 5.7, value_text: "5.7% (last recorded; not current-verified)", kind: "variable", method: "historical-last-recorded-official-source-gap", confidence: "low", asof: "2026-01-01", verifiedOn: "2026-09-27", retrievedAt: SEPTEMBER_LEGAL_SOURCE_CHECK_AT, registryReviewOn: "2026-07-09", statute: "RSA 336:1, II; 336:2", srcId: "nh-prejud", srcName: "New Hampshire statutory interest formula and rate-lock rule", publisher: "New Hampshire General Court (official)", url: NEW_HAMPSHIRE_RATE_FORMULA_URL, calculation: NEW_HAMPSHIRE_INTEREST_CALCULATION,
+    metadata: { basis: "official-source-gap", current_rate_status: "unverified_last_recorded", current_rate_numeric: null, last_recorded_rate: { value: 5.7, effective_date: "2026-01-01" }, official_schedule_url: NEW_HAMPSHIRE_COURT_SCHEDULE_URL, official_authorities: NEW_HAMPSHIRE_AUTHORITIES },
+    notes: "This preserves the previously recorded 5.7% observation as historical provenance only. RSA 336:1, II provides the annual simple-rate formula, and RSA 336:2 fixes the rate at verdict or the finding for pecuniary damages, but the Judicial Branch’s official 2026 schedule was inaccessible and 5.7% was not independently corroborated. Consumers must treat the current rate as unavailable. Reference only; not legal advice." },
   { code: "NJ", name: "New Jersey", slug: "new-jersey-prejudgment-rate", value: 4.5, value_text: "4.5% / 6.5%", kind: "same-as-postjudgment", method: "court-rule-annual-official-history", confidence: "high", asof: "2026-01-01", verifiedOn: "2026-08-21", statute: "N.J. Ct. R. 4:42-11(b)", srcId: "nj-prejud", srcName: "New Jersey official pre- and postjudgment interest schedule", publisher: "New Jersey Courts (official)", url: NEW_JERSEY_HISTORY_URL, calculation: NEW_JERSEY_PREJUDGMENT_CALCULATION,
     metadata: { basis: 'court-rule-annual-official-history', official_history_url: NEW_JERSEY_HISTORY_URL, official_rule_url: NEW_JERSEY_RULE_URL, official_authorities: NEW_JERSEY_AUTHORITIES },
     notes: "For 2026 tort actions under Rule 4:42-11(b), the relevant simple-interest schedule is 4.5% for a judgment not exceeding the Special Civil Part monetary limit at entry and 6.5% for a judgment exceeding it. The current limit is $20,000. These are whole-judgment categories, not marginal brackets. Contract and equitable prejudgment interest follow separate judicial rules, and accrual exceptions can apply. Reference only; not legal advice." },
@@ -1289,7 +1683,10 @@ const PREJUDG = [
     notes: "New Mexico prejudgment interest splits by claim type: for unliquidated claims (e.g. personal injury) a court may award UP TO 10% in its discretion (NMSA 1978 §56-8-4(B)); for liquidated/contract 'money due by contract' claims, 15% applies as of right (§56-8-3). Verified 2026-07-11. Not legal advice." },
   { code: "NY", name: "New York", slug: "new-york-prejudgment-rate", value: 9, value_text: "9%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "N.Y. C.P.L.R. 5004", srcId: "ny-prejud", srcName: "New York prejudgment interest (N.Y. C.P.L.R. 5004)", publisher: "New York — nysenate.gov", url: "https://www.nysenate.gov/legislation/laws/CVP/5004",
     notes: "Prejudgment interest under N.Y. C.P.L.R. 5004 — 9% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New York’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
-  { code: "NC", name: "North Carolina", slug: "north-carolina-prejudgment-rate", value: 8, value_text: "8%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "N.C. Gen. Stat. 24-5", srcId: "nc-prejud", srcName: "North Carolina prejudgment interest (N.C. Gen. Stat. 24-5)", publisher: "North Carolina — ncleg.net", url: "https://www.ncleg.net/EnactedLegislation/Statutes/PDF/BySection/Chapter_24/GS_24-5.pdf",
+  { code: "NC", name: "North Carolina", slug: "north-carolina-prejudgment-rate", value: 8, value_text: "8%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "N.C. Gen. Stat. §24-5", srcId: "nc-prejud", srcName: "North Carolina prejudgment interest (N.C.G.S. §24-5)", publisher: "North Carolina General Assembly (official)", url: "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html",
+    metadata: { official_authorities: [
+      { label: "N.C.G.S. §24-5", url: "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html" },
+    ] },
     notes: "Prejudgment interest under N.C. Gen. Stat. 24-5 — 8% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from North Carolina’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
   { code: "ND", name: "North Dakota", slug: "north-dakota-prejudgment-rate", value: 6, value_text: "6%", kind: "fixed", method: "statute-fixed", confidence: "high", asof: "2026-07-09", statute: "N.D.C.C. § 32-03-04", srcId: "nd-prejud", srcName: "North Dakota prejudgment interest (N.D.C.C. § 32-03-04)", publisher: "North Dakota — ndlegis.gov", url: "https://ndlegis.gov/cencode/t32c03.pdf",
     notes: "Prejudgment interest under N.D.C.C. § 32-03-04 — 6% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from North Dakota’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
@@ -1307,7 +1704,11 @@ const PREJUDG = [
     notes: "Prejudgment interest under S.C. Code Ann. § 34-31-20(A) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from South Carolina’s post-judgment rate; availability is limited by claim type (see the page). Verify against the statute text. Not legal advice." },
   { code: "SD", name: "South Dakota", slug: "south-dakota-prejudgment-rate", value: 10, value_text: "10%", kind: "variable", method: "statute-variable", confidence: "medium", asof: "2026-07-09", statute: "SDCL 21-1-13.1", srcId: "sd-prejud", srcName: "South Dakota prejudgment interest (SDCL 21-1-13.1)", publisher: "South Dakota — sdlegislature.gov", url: "https://sdlegislature.gov/Statutes/21-1-13.1",
     notes: "Prejudgment interest under SDCL 21-1-13.1 — 10% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from South Dakota’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at sdlegislature.gov. Not legal advice." },
-  { code: "TN", name: "Tennessee", slug: "tennessee-prejudgment-rate", value: 10, value_text: "up to 10%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "medium", asof: "2026-07-09", statute: "Tenn. Code Ann. § 47-14-123", srcId: "tn-prejud", srcName: "Tennessee prejudgment interest (§ 47-14-123, discussed by Tennessee Court of Appeals)", publisher: "Tennessee Courts (official judicial source)", url: "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+  { code: "TN", name: "Tennessee", slug: "tennessee-prejudgment-rate", value: 10, value_text: "up to 10%", kind: "discretionary-with-default", method: "statute-fixed", confidence: "medium", asof: "2026-07-09", statute: "Tenn. Code Ann. § 47-14-123", srcId: "tn-prejud", srcName: "Tennessee prejudgment interest (§47-14-123, discussed in Parrish)", publisher: "Tennessee Courts (official judicial source)", url: "https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong",
+    metadata: { official_authorities: [
+      { label: "Parrish v. Strong — Tennessee Court of Appeals case page", url: "https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong" },
+      { label: "Parrish v. Strong — official opinion PDF", url: "https://www.tncourts.gov/sites/default/files/OpinionsPDFVersion/parrish.larry_.opn_.pdf" },
+    ] },
     notes: "Tenn. Code Ann. § 47-14-123 permits a judge or jury to award prejudgment interest as an element of damages at a rate not exceeding 10% per year. The award and rate are discretionary; 10% is a ceiling, not an automatic default. Confirm the current statute and controlling case law. Not legal advice." },
   { code: "TX", name: "Texas", slug: "texas-prejudgment-rate", value: 6.75, value_text: "6.75%", kind: "same-as-postjudgment", method: "statute-variable", confidence: "high", asof: "2026-07-01", verifiedOn: "2026-07-19", statute: "Tex. Fin. Code §§304.101–304.107", srcId: "tx-prejud", srcName: "Texas prejudgment interest (Finance Code Chapter 304 + OCCC rate)", publisher: "Texas Legislature and Office of Consumer Credit Commissioner (official)", url: "https://statutes.capitol.texas.gov/Docs/FI/pdf/FI.304.pdf", calculation: TEXAS_PREJUDGMENT_CALCULATION,
     notes: "For a judgment rendered in July 2026, Texas Finance Code §§304.101–304.104 use the 6.75% OCCC postjudgment rate for qualifying wrongful-death, personal-injury, and property-damage prejudgment interest. It is simple interest from the statutory start date through the day before judgment. Settlement offers can reduce accrual, future damages are excluded, condemnation and common-law claims follow separate branches. Verify applicability; not legal advice." },
@@ -1331,7 +1732,8 @@ const PREJUDG = [
 for (const st of PREJUDG) {
   const sourceTier = classifyStateSource({ publisher: st.publisher, home_url: st.url });
   const verifiedOn = st.verifiedOn || '2026-07-09';
-  STATE_SOURCES.push({ id: st.srcId, name: st.srcName, publisher: st.publisher, home_url: st.url, license: sourceTier === 'third_party_secondary' ? 'Statutory text is a government edict; third-party page terms may apply.' : 'Government edict — not subject to copyright.', robots_status: `curated ${st.kind} prejudgment value; ${sourceTier === 'official_primary' ? 'official' : 'secondary'} source checked ${verifiedOn}`, retrieved_at: `${verifiedOn}T00:00:00Z` });
+  const registryEvidence = st.registryReviewOn ? `; registry last_reviewed ${st.registryReviewOn} preserved` : '';
+  STATE_SOURCES.push({ id: st.srcId, name: st.srcName, publisher: st.publisher, home_url: st.url, license: sourceTier === 'third_party_secondary' ? 'Statutory text is a government edict; third-party page terms may apply.' : 'Government edict — not subject to copyright.', robots_status: `curated ${st.kind} prejudgment value; ${sourceTier === 'official_primary' ? 'official' : 'secondary'} source checked ${verifiedOn}${registryEvidence}`, retrieved_at: st.retrievedAt || `${verifiedOn}T00:00:00Z` });
   FIXED.push({ entity: { slug: st.slug, name: `${st.name} Prejudgment Interest Rate`, entity_type: 'rate_series', jurisdiction: 'US', region: 'US States — Prejudgment', metadata: { state: st.code, statute: st.statute, basis: st.method, metric: 'prejudgment', kind: st.kind, ...(st.metadata || {}), ...(st.calculation ? { calculation: st.calculation } : {}) } }, value: st.value, value_text: st.value_text, effective_date: st.asof, source_id: st.srcId, source_url: st.url, confidence: st.confidence, method: st.method, notes: st.notes });
 }
 
@@ -1481,6 +1883,22 @@ export function buildStateFixed({
       method: f.method || 'statute-fixed',
       notes: removeTruncatedFragments(f.notes),
     };
+
+    const curatedHistory = CURATED_APPEND_ONLY_HISTORIES.get(f.entity.slug);
+    if (curatedHistory) {
+      return curatedHistory.map((point) => ({
+        ...baseObservation,
+        value_numeric: point.value,
+        value_text: point.value_text,
+        effective_date: point.effective_date,
+        source_id: point.source_id || baseObservation.source_id,
+        source_url: point.source_url || baseObservation.source_url,
+        retrieved_at: point.retrieved_at,
+        confidence: point.confidence || baseObservation.confidence,
+        method: point.method || baseObservation.method,
+        notes: removeTruncatedFragments(point.notes || baseObservation.notes),
+      }));
+    }
 
     if (f.entity.slug === 'minnesota-judgment-rate') {
       return buildMinnesotaOfficialHistory().map((point) => {

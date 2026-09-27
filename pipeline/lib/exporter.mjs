@@ -7,14 +7,18 @@
 //
 // Output (all under data/exports/):
 //   meta.json          — dataset-level metadata + freshness (generated_at, counts, sources)
-//   entities.json      — every entity with its latest value per metric
-//   latest.json        — flat list of latest observations (one per entity+metric)
+//   entities.json      — every entity with safe current values + latest-published provenance
+//   latest.json        — flat list of machine-usable current observations
 //   entity/<slug>.json — full per-entity record incl. history, for detail pages + API
 
 import { mkdirSync, writeFileSync, rmSync, existsSync, readdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { openDb } from './db.mjs';
+import {
+  machineCurrentGuard,
+  machineCurrentStatusFields,
+} from '../../shared/machine-current-safety.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const EXPORT_DIR = join(__dirname, '..', '..', 'data', 'exports');
@@ -69,7 +73,6 @@ export function exportAll({ datasetMeta, dbPath, exportDir = EXPORT_DIR, generat
       const latest = latestStmt.get(e.id, metric);
       if (latest) {
         latestByMetric[metric] = shapeObs(latest);
-        latestFlat.push({ entity: e.slug, entity_name: e.name, ...shapeObs(latest) });
       }
       historyByMetric[metric] = historyStmt.all(e.id, metric).map(shapeObs);
     }
@@ -86,6 +89,11 @@ export function exportAll({ datasetMeta, dbPath, exportDir = EXPORT_DIR, generat
       history: historyByMetric,
     };
     entityRecords.push(record);
+    if (!machineCurrentGuard(record)) {
+      for (const observation of Object.values(latestByMetric)) {
+        latestFlat.push({ entity: e.slug, entity_name: e.name, ...observation });
+      }
+    }
     write(join(exportDir, 'entity', `${e.slug}.json`), { generated_at: generatedAt, ...record });
   }
 
@@ -110,14 +118,20 @@ export function exportAll({ datasetMeta, dbPath, exportDir = EXPORT_DIR, generat
   write(join(exportDir, 'entities.json'), {
     generated_at: generatedAt,
     count: entityRecords.length,
-    entities: entityRecords.map((r) => ({
-      slug: r.slug,
-      name: r.name,
-      entity_type: r.entity_type,
-      jurisdiction: r.jurisdiction,
-      region: r.region,
-      latest: r.latest,
-    })),
+    entities: entityRecords.map((r) => {
+      const guard = machineCurrentGuard(r);
+      return {
+        slug: r.slug,
+        name: r.name,
+        entity_type: r.entity_type,
+        jurisdiction: r.jurisdiction,
+        region: r.region,
+        latest: guard ? {} : r.latest,
+        current: guard ? {} : r.latest,
+        latest_published: r.latest,
+        ...(guard ? machineCurrentStatusFields(r) : {}),
+      };
+    }),
   });
   write(join(exportDir, 'latest.json'), {
     generated_at: generatedAt,

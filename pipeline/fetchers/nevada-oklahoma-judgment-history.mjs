@@ -10,9 +10,9 @@ export const NEVADA_HISTORY_VERIFIED_AT = '2026-08-22T00:00:00Z';
 export const OKLAHOMA_HISTORY_VERIFIED_AT = '2026-08-22T00:00:00Z';
 
 export const NEVADA_FID_HISTORY_URL =
-  'https://fid.nv.gov/Resources/Fees_and_Prime_Interest_Rate/';
+  'https://www.fid.nv.gov/resources/fees-and-prime-interest-rate/';
 export const NEVADA_FID_2026_JULY_NOTICE_URL =
-  'https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201%2C%202026.pdf';
+  'https://www.fid.nv.gov/siteassets/resources/Prime_Interest_Rate_July_1__2026.pdf';
 export const NEVADA_NRS_17_URL = 'https://www.leg.state.nv.us/nrs/nrs-017.html';
 export const NEVADA_1987_ACT_URL =
   'https://www.leg.state.nv.us/Statutes/64th/Stats198704.html#Stats1987page940';

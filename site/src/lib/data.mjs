@@ -9,8 +9,13 @@ import {
   stateCalculatorReleaseForEntity as sharedStateCalculatorReleaseForEntity,
 } from './state-calculators.mjs';
 import { currentObservationForMetric } from '../../../shared/current-values.mjs';
+import {
+  isMachineCurrentUsable,
+  machineCurrentGuard,
+} from '../../../shared/machine-current-safety.mjs';
 
 export { STATE_CALCULATOR_RELEASES } from './state-calculators.mjs';
+export { isMachineCurrentUsable, machineCurrentGuard };
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // Astro 7 bundles this module into dist/.prerender before executing getStaticPaths(), so
@@ -75,24 +80,6 @@ export function stateHubs() {
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
-// Prejudgment states whose GENERAL / liquidated-claim rate the calculator can honestly compute: a
-// FIXED statutory rate with a deterministic method — simple interest, or (Colorado) compounded
-// annually. Several members (GA, KS, MT, NE, UT) are dual-rate — they also carry a separate, usually
-// VARIABLE tort/personal-injury rate; the calculator computes only their fixed general/liquidated rate
-// and the page says so explicitly (see prejudgment-interest.astro). Excludes states whose sole/headline
-// rate is variable (incl. Michigan — variable + we hold only the current value), discretionary states,
-// and Illinois (dual 6%/5% with a 5-yr cap + from-filing accrual that a flat calc can't honor). Slug
-// base is '<key>-prejudgment-rate'. Single source of truth for the calculator series AND the
-// "Calculate interest" cross-links on the rate pages.
-export const PREJUDGMENT_CALC_SAFE = [
-  'alabama', 'colorado', 'dc', 'georgia', 'idaho', 'kansas', 'massachusetts', 'montana', 'nebraska',
-  'new-york', 'north-carolina', 'north-dakota', 'oregon', 'pennsylvania', 'rhode-island',
-  'south-carolina', 'utah', 'washington', 'wisconsin', 'wyoming',
-];
-
-// Of the safe set, these compound annually (everything else is simple interest).
-export const PREJUDGMENT_CALC_COMPOUND = ['colorado'];
-
 // Grouping for the homepage / browse. Keeps the site organized as it grows.
 export const GROUPS = [
   {
@@ -143,11 +130,34 @@ export function latestOf(entity) {
 // "Latest published" and "current" are not always the same thing. Agencies can publish a future
 // quarter before it takes effect. Pages that say "current" must select the newest observation whose
 // effective date is on or before the build's data date; history/export code can still use latestOf().
-export function currentOf(
+// Select the recorded observation that would otherwise be current by effective date. This is an
+// explicit historical/provenance escape hatch for pages that need to explain a refusal state. Most
+// callers should use currentOf(), which fails closed for records whose current value is unsafe.
+export function recordedCurrentOf(
   entity,
   asOfDate = String(entity?.generated_at || getMeta().generated_at || '').slice(0, 10),
 ) {
   return currentObservationForMetric(entity, 'annual_rate', asOfDate);
+}
+
+export function currentOf(
+  entity,
+  asOfDate = String(entity?.generated_at || getMeta().generated_at || '').slice(0, 10),
+) {
+  if (!isMachineCurrentUsable(entity)) return null;
+  return recordedCurrentOf(entity, asOfDate);
+}
+
+export function currentValueText(entity, asOfDate) {
+  const observation = recordedCurrentOf(entity, asOfDate);
+  const guard = machineCurrentGuard(entity);
+  if (!guard) return observation?.value_text || null;
+  if (guard.status === 'unverified_last_recorded') {
+    return observation?.value_text
+      ? `Current unavailable — last recorded ${observation.value_text}`
+      : 'Current unavailable — official value unverified';
+  }
+  return 'Current withheld — legal branch selection required';
 }
 
 // Two-key release gate for state calculators. Phase 2 must replace the prototype's hardcoded

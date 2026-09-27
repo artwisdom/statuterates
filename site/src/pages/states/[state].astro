@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AdSlot from '../../components/AdSlot.astro';
 import CiteThis from '../../components/CiteThis.astro';
-import { getMeta, currentOf, latestOf, prettyDate, stateHubs, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
+import { currentValueText, getMeta, latestOf, machineCurrentGuard, prettyDate, recordedCurrentOf, stateHubs, stateCalculatorReleaseForEntity } from '../../lib/data.mjs';
 import { contentModifiedFor, copyFor } from '../../lib/content.mjs';
 
 export function getStaticPaths() {
@@ -19,9 +19,13 @@ const nextHub = hubIndex >= 0 && hubIndex < allStateHubs.length - 1
   ? allStateHubs[hubIndex + 1]
   : null;
 
-const preLatest = currentOf(pre);
-const postLatest = post ? currentOf(post) : null;
-const postCalculator = post ? stateCalculatorReleaseForEntity(post) : null;
+const preLatest = recordedCurrentOf(pre);
+const postLatest = post ? recordedCurrentOf(post) : null;
+const preGuard = machineCurrentGuard(pre);
+const postGuard = post ? machineCurrentGuard(post) : null;
+const preRateText = currentValueText(pre);
+const postRateText = post ? currentValueText(post) : null;
+const postCalculator = post && !postGuard ? stateCalculatorReleaseForEntity(post) : null;
 const preCopy = copyFor(pre.slug, {
   observation: preLatest,
   historyPoints: pre.history?.annual_rate?.length,
@@ -30,7 +34,7 @@ const postCopy = post ? copyFor(post.slug, {
   observation: postLatest,
   historyPoints: post.history?.annual_rate?.length,
 }) : null;
-const preCaseSpecific = preLatest?.method === 'court-or-contract-rate';
+const preCaseSpecific = !preGuard && preLatest?.method === 'court-or-contract-rate';
 const theName = base === 'dc' ? 'the District of Columbia' : name;
 const statuteLabel = (value) => (value || '')
   .replace(/\bSec\.\s*/g, '§ ')
@@ -38,8 +42,12 @@ const statuteLabel = (value) => (value || '')
   .trim();
 const postStatute = post ? statuteLabel(post.metadata?.statute) : null;
 const preStatute = statuteLabel(pre.metadata?.statute);
-const postEffective = postLatest?.effective_date ? prettyDate(postLatest.effective_date) : null;
-const preEffective = prettyDate(preLatest?.effective_date);
+const postEffective = postLatest?.effective_date
+  ? `${postGuard ? 'Recorded reference ' : ''}${prettyDate(postLatest.effective_date)}`
+  : null;
+const preEffective = preLatest?.effective_date
+  ? `${preGuard ? 'Recorded reference ' : ''}${prettyDate(preLatest.effective_date)}`
+  : null;
 const hubYear = [postLatest, preLatest]
   .map((value) => String(value?.retrieved_at || value?.effective_date || '').slice(0, 4))
   .filter(Boolean)
@@ -50,6 +58,8 @@ const hubYear = [postLatest, preLatest]
 const postMethod = postLatest?.method || '';
 const postBasis = !post
   ? 'No fixed statutory rate'
+  : postGuard
+    ? postGuard.label
   : post.metadata?.basis === 'statute-branching' || postMethod === 'statute-branching'
     ? 'Statutory branches'
     : postMethod.startsWith('statute-fixed')
@@ -64,7 +74,12 @@ const standardTitle = `${name} Judgment Interest Rates ${hubYear}`;
 const title = base === 'oklahoma'
   ? `Oklahoma Judgment Interest Rates ${hubYear} | 12 O.S. § 727.1`
   : standardTitle;
-const description = `${hubYear} ${name} judgment interest: ${post ? `${postLatest?.value_text} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preLatest?.value_text} prejudgment`}. Statutes, dates, scope, and official sources.`;
+const descriptionOverrides = {
+  missouri: `${hubYear} Missouri judgment interest: verified 9% non-tort branch, unresolved tort benchmark, claim-specific prejudgment rules, and official sources.`,
+  'new-hampshire': `${hubYear} New Hampshire judgment interest: current post- and prejudgment percentages withheld pending official schedule verification. Formula, scope, and sources.`,
+};
+const description = descriptionOverrides[base]
+  || `${hubYear} ${name} judgment interest: ${post ? `${postRateText} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preRateText} prejudgment`}. Statutes, dates, scope, and official sources.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Real modification date = the latest data or hand-recorded substantial editorial change (never
 // the build date).
@@ -78,11 +93,15 @@ const hubModified = [
 const faq = [
   post && {
     q: `What is the post-judgment interest rate in ${name}?`,
-    a: `As of ${prettyDate(postLatest?.effective_date)}, the ${name} post-judgment interest rate is ${postLatest?.value_text} per year. ${postCopy.tagline}`,
+    a: postGuard
+      ? `${name} has no published generic current post-judgment percentage in StatuteRates: ${postRateText}. ${postGuard.reason}`
+      : `As of ${prettyDate(postLatest?.effective_date)}, the ${name} post-judgment interest rate is ${postLatest?.value_text} per year. ${postCopy.tagline}`,
   },
   {
     q: `What is the prejudgment interest rate in ${name}?`,
-    a: preCaseSpecific
+    a: preGuard
+      ? `${name} has no published generic current prejudgment percentage in StatuteRates: ${preRateText}. ${preGuard.reason}`
+      : preCaseSpecific
       ? `${name} has no uniform statewide prejudgment percentage. The governing contract or the judge supplies the rate. ${preCopy.appliesShort || preCopy.tagline}`
       : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}). ${preCopy.appliesShort || preCopy.tagline}`,
   },
@@ -128,10 +147,14 @@ const jsonLd = [
   <div class="eyebrow">Statutory interest rates · {name}</div>
   <h1>{hubYear} {name} judgment &amp; prejudgment interest rates</h1>
   <p class="quick-answer"><strong>Current {hubYear} snapshot:</strong> {post
-    ? <>{name} post-judgment interest is <strong>{postLatest?.value_text}</strong> per year</>
+    ? postGuard
+      ? <>{name} post-judgment current value is <strong>withheld</strong> ({postRateText})</>
+      : <>{name} post-judgment interest is <strong>{postLatest?.value_text}</strong> per year</>
     : <>{name} has no uniform statewide post-judgment percentage</>}; {preCaseSpecific
     ? <>prejudgment interest depends on the governing contract or the court</>
-    : <>the recorded prejudgment reference is <strong>{preLatest?.value_text}</strong> per year</>}.
+    : preGuard
+      ? <>the current prejudgment value is <strong>withheld</strong> ({preRateText})</>
+      : <>the recorded prejudgment reference is <strong>{preLatest?.value_text}</strong> per year</>}.
   </p>
   <p class="lead">Everything {theName} charges in interest on a money judgment or an overdue debt, in one
     place — the rate <em>after</em> judgment and the rate <em>before</em> it, each
@@ -144,7 +167,7 @@ const jsonLd = [
       <tbody>
         <tr>
           <td><a href={post ? `/rates/${post.slug}/` : '/methodology/'}>Post-judgment interest</a></td>
-          <td class="num">{post ? postLatest?.value_text : '—'}</td>
+          <td class="num">{post ? postRateText : '—'}</td>
           <td>{postEffective || 'Case-specific'}</td>
           <td class="source-note">{post
             ? <a href={postLatest?.source_url} rel="noopener" target="_blank">{postStatute || 'Official source'}</a>
@@ -153,7 +176,7 @@ const jsonLd = [
         </tr>
         <tr>
           <td><a href={`/rates/${pre.slug}/`}>Prejudgment interest</a></td>
-          <td class="num">{preLatest?.value_text}</td>
+          <td class="num">{preRateText}</td>
           <td>{preEffective}</td>
           <td class="source-note"><a href={preLatest?.source_url} rel="noopener" target="_blank">{preStatute || 'Official source'}</a></td>
           <td class="source-note">{preCopy.kindLabel}</td>
@@ -167,7 +190,9 @@ const jsonLd = [
   <h2>Post-judgment interest{post ? '' : ' — case by case'}</h2>
   {post ? (
     <>
-      <p><strong>{name}'s post-judgment interest rate is {postLatest?.value_text} per year.</strong> {postCopy.body}</p>
+      <p><strong>{postGuard
+        ? `${name}'s generic current post-judgment percentage is withheld: ${postRateText}.`
+        : `${name}'s post-judgment interest rate is ${postLatest?.value_text} per year.`}</strong> {postCopy.body}</p>
       <p class="xlink"><a href={`/rates/${post.slug}/`}>→ Full {name} post-judgment page</a> — {postStatute}, effective-date history, scope, and official source.</p>
       {postCalculator && (
         <p class="xlink"><a href={postCalculator.path}>→ Calculate {name} post-judgment interest</a> — audited statutory scope, annual reset schedule, and printable result.</p>
@@ -180,7 +205,9 @@ const jsonLd = [
   )}
 
   <h2>Prejudgment interest</h2>
-  <p><strong>{preCaseSpecific
+  <p><strong>{preGuard
+    ? `${name}'s generic current prejudgment percentage is withheld: ${preRateText}.`
+    : preCaseSpecific
     ? `${name} has no uniform statewide prejudgment percentage (${preCopy.kindLabel?.toLowerCase()}).`
     : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}).`}</strong> {preCopy.body}</p>
   <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — {preStatute}, when it applies, accrual, compounding, and carve-outs.</p>

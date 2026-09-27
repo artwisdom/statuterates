@@ -7,12 +7,91 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { withCurrentValues } from '../../../shared/current-values.mjs';
 import { releasedHistoricalValue } from '../../../shared/historical-rate-releases.mjs';
+import {
+  BRANCH_PARTIAL_STATUS,
+  UNVERIFIED_LAST_RECORDED_LABEL,
+  UNVERIFIED_LAST_RECORDED_STATUS,
+  withMachineCurrentGuard,
+} from '../../../shared/machine-current-safety.mjs';
+
+export {
+  BRANCH_PARTIAL_STATUS,
+  UNVERIFIED_LAST_RECORDED_LABEL,
+  UNVERIFIED_LAST_RECORDED_STATUS,
+} from '../../../shared/machine-current-safety.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Resolve the exports dir: env override, else the repo's data/exports.
 export const EXPORTS_DIR =
   process.env.DATA_MOAT_EXPORTS || resolve(__dirname, '..', '..', '..', 'data', 'exports');
+
+function lastRecordedValueText(observation) {
+  const raw = String(observation?.value_text ?? observation?.value ?? '').trim();
+  const value = raw
+    .replace(/^LAST RECORDED:\s*/i, '')
+    .replace(/\s*—\s*current official rate unverified\s*$/i, '')
+    .replace(/\s*\(last recorded;\s*(?:not current-verified|current official rate unverified)\)\s*$/i, '')
+    .trim();
+  return `LAST RECORDED: ${value} — current official rate unverified`;
+}
+
+function labelLastRecordedObservation(observation) {
+  if (!observation) return observation;
+  const notes = String(observation.notes || '').trim();
+  return {
+    ...observation,
+    value_text: lastRecordedValueText(observation),
+    notes: /current official rate unverified/i.test(notes)
+      ? notes
+      : `${UNVERIFIED_LAST_RECORDED_LABEL}.${notes ? ` ${notes}` : ''}`,
+  };
+}
+
+// MCP callers receive the historical number and provenance, but every projection of that last row
+// carries an explicit fail-closed status. This never promotes the number to a verified current rate.
+export function withRateVerificationStatus(record) {
+  if (record?.metadata?.current_rate_status !== UNVERIFIED_LAST_RECORDED_STATUS) {
+    return withMachineCurrentGuard(record);
+  }
+  const lastRecordedDate = String(
+    record.metadata?.last_recorded_rate?.effective_date
+      || Object.values(record.current || {})[0]?.effective_date
+      || '',
+  );
+  const labelMap = (values) => Object.fromEntries(Object.entries(values || {}).map(([metric, observation]) => [
+    metric,
+    !lastRecordedDate || observation?.effective_date === lastRecordedDate
+      ? labelLastRecordedObservation(observation)
+      : observation,
+  ]));
+  const history = Object.fromEntries(Object.entries(record.history || {}).map(([metric, observations]) => [
+    metric,
+    observations.map((observation) => (
+      !lastRecordedDate || observation?.effective_date === lastRecordedDate
+        ? labelLastRecordedObservation(observation)
+        : observation
+    )),
+  ]));
+  const labeled = {
+    ...record,
+    latest: labelMap(record.latest),
+    current: labelMap(record.current),
+    latest_published: labelMap(record.latest_published),
+    current_rate_status: UNVERIFIED_LAST_RECORDED_STATUS,
+    current_rate_label: UNVERIFIED_LAST_RECORDED_LABEL,
+    current_official_rate_verified: false,
+    metadata: {
+      ...record.metadata,
+      current_rate_status: UNVERIFIED_LAST_RECORDED_STATUS,
+      current_rate_numeric: null,
+      current_official_rate_verified: false,
+      current_rate_label: UNVERIFIED_LAST_RECORDED_LABEL,
+    },
+    history,
+  };
+  return withMachineCurrentGuard(labeled);
+}
 
 function readJson(rel) {
   const p = join(EXPORTS_DIR, rel);
@@ -38,7 +117,9 @@ export function getEntity(slug) {
   // unexpected input before it reaches the filesystem.
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''))) return null;
   const rec = readJson(join('entity', `${slug}.json`));
-  return rec ? withCurrentValues(rec, String(meta().generated_at || '').slice(0, 10)) : null;
+  return rec
+    ? withRateVerificationStatus(withCurrentValues(rec, String(meta().generated_at || '').slice(0, 10)))
+    : null;
 }
 
 function searchResult(entity) {
@@ -50,6 +131,15 @@ function searchResult(entity) {
     current: record.current,
     latest_published: record.latest_published,
     current_as_of: record.current_as_of,
+    ...(record.current_rate_status ? {
+      current_rate_status: record.current_rate_status,
+      current_rate_label: record.current_rate_label,
+      machine_current_usable: record.machine_current_usable,
+      current_value_unavailable_reason: record.current_value_unavailable_reason,
+      ...(record.current_official_rate_verified === false
+        ? { current_official_rate_verified: false }
+        : {}),
+    } : {}),
   };
 }
 

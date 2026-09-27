@@ -9,17 +9,26 @@ import {
   APPROVED_HISTORICAL_RATE_SLUGS,
   historicalRateSeriesForEntity,
 } from '../shared/historical-rate-releases.mjs';
+import {
+  csvObservationUsage,
+  machineCurrentGuard,
+  machineCurrentStatusFields,
+} from '../shared/machine-current-safety.mjs';
 
 export const CSV_HEADER = Object.freeze([
   'series',
   'metric',
   'effective_date',
   'value_percent',
+  'value_text',
   'unit',
   'confidence',
   'method',
   'source_url',
   'retrieved_at',
+  'record_usage',
+  'current_use_allowed',
+  'current_rate_status',
 ]);
 
 export const RESPONSE_TARGETS = Object.freeze({
@@ -276,16 +285,21 @@ function expectedCsvRows(record) {
   const rows = [CSV_HEADER];
   for (const [metric, observations] of Object.entries(record.history || {})) {
     for (const observation of observations) {
+      const usage = csvObservationUsage(record, metric, observation);
       rows.push([
         record.slug,
         metric,
         observation.effective_date,
         displayValue(observation.value),
+        displayValue(observation.value_text),
         observation.unit,
         observation.confidence,
         displayValue(observation.method),
         observation.source_url,
         observation.retrieved_at,
+        usage.record_usage,
+        displayValue(usage.current_use_allowed),
+        usage.current_rate_status,
       ]);
     }
   }
@@ -574,15 +588,38 @@ export function validateGeneratedApi({ apiDir, openapiPath, expectations = DEFAU
       errors.push(`entity/${file}: latest must remain the exact current-value compatibility alias`);
     }
 
+    const currentGuard = machineCurrentGuard(record);
     const metricKeys = Object.keys(record.history || {});
     for (const [label, value] of Object.entries({
       metrics: record.metrics || [],
-      current: Object.keys(record.current || {}),
-      latest: Object.keys(record.latest || {}),
       latest_published: Object.keys(record.latest_published || {}),
     })) {
       if (!sameStringSet(metricKeys, value)) {
         errors.push(`entity/${file}: ${label} keys differ from history metrics`);
+      }
+    }
+    const currentKeys = Object.keys(record.current || {});
+    const latestKeys = Object.keys(record.latest || {});
+    if (currentGuard) {
+      if (currentKeys.length || latestKeys.length) {
+        errors.push(`entity/${file}: fail-closed current and latest maps must be empty`);
+      }
+      const expectedStatus = machineCurrentStatusFields(record);
+      for (const [field, expected] of Object.entries(expectedStatus)) {
+        if (record[field] !== expected) {
+          errors.push(`entity/${file}: ${field} does not match its fail-closed classification`);
+        }
+      }
+      if (record.metadata?.current_rate_numeric !== null
+          || record.metadata?.machine_current_usable !== false) {
+        errors.push(`entity/${file}: fail-closed metadata must set current_rate_numeric null and machine_current_usable false`);
+      }
+    } else {
+      if (!sameStringSet(metricKeys, currentKeys)) {
+        errors.push(`entity/${file}: current keys differ from history metrics`);
+      }
+      if (!sameStringSet(metricKeys, latestKeys)) {
+        errors.push(`entity/${file}: latest keys differ from history metrics`);
       }
     }
 
@@ -611,7 +648,7 @@ export function validateGeneratedApi({ apiDir, openapiPath, expectations = DEFAU
         (observation) => observation.effective_date <= index.current_as_of,
       );
       const expectedPublished = newestObservation(observations);
-      if (!deepEqual(record.current?.[metric], expectedCurrent)) {
+      if (!currentGuard && !deepEqual(record.current?.[metric], expectedCurrent)) {
         errors.push(`entity/${file}: current.${metric} does not match the newest in-force history observation`);
       }
       if (!deepEqual(record.latest_published?.[metric], expectedPublished)) {
@@ -633,6 +670,12 @@ export function validateGeneratedApi({ apiDir, openapiPath, expectations = DEFAU
         current: record.current,
         latest_published: record.latest_published,
         current_as_of: record.current_as_of,
+        ...(record.machine_current_usable === false ? {
+          current_rate_status: record.current_rate_status,
+          current_rate_label: record.current_rate_label,
+          machine_current_usable: false,
+          current_value_unavailable_reason: record.current_value_unavailable_reason,
+        } : {}),
       };
       if (!deepEqual(summary, expectedSummary)) {
         errors.push(`entities.json: summary for ${record.slug} differs from its entity endpoint`);

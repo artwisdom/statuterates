@@ -10,6 +10,35 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { APPROVED_HISTORICAL_RATE_SLUGS } from '../../../shared/historical-rate-releases.mjs';
 
+const GUARDED_BRANCH_SLUGS = [
+  'arizona-judgment-rate',
+  'arizona-prejudgment-rate',
+  'colorado-judgment-rate',
+  'colorado-prejudgment-rate',
+  'new-york-consumer-debt-judgment-rate',
+  'north-carolina-judgment-rate',
+  'north-carolina-prejudgment-rate',
+  'pennsylvania-judgment-rate',
+  'pennsylvania-prejudgment-rate',
+  'rhode-island-judgment-rate',
+  'rhode-island-prejudgment-rate',
+  'washington-judgment-rate',
+  'washington-prejudgment-rate',
+  'wyoming-judgment-rate',
+  'wyoming-prejudgment-rate',
+];
+
+const UNVERIFIED_LAST_RECORDED_SLUGS = [
+  'nevada-prejudgment-rate',
+  'new-hampshire-judgment-rate',
+  'new-hampshire-prejudgment-rate',
+];
+
+const BRANCH_PARTIAL_COMPARE_SLUGS = [
+  'missouri-judgment-rate',
+  'missouri-prejudgment-rate',
+];
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const serverPath = resolve(__dirname, '..', 'src', 'server.mjs');
 
@@ -33,6 +62,9 @@ async function main() {
   const calculatorTool = tools.find((tool) => tool.name === 'calculate_interest');
   const calculatorSlugs = calculatorTool.inputSchema.properties.slug.enum;
   assert.ok(calculatorSlugs.includes('florida-judgment-rate'), 'audited Florida calculator is exposed');
+  for (const guardedSlug of GUARDED_BRANCH_SLUGS) {
+    assert.ok(!calculatorSlugs.includes(guardedSlug), `${guardedSlug} remains unavailable as a calculator`);
+  }
   for (const historicalSlug of APPROVED_HISTORICAL_RATE_SLUGS) {
     if (historicalSlug === 'florida-judgment-rate') continue;
     assert.ok(!calculatorSlugs.includes(historicalSlug), `historical reference ${historicalSlug} stays unavailable as a calculator`);
@@ -60,7 +92,8 @@ async function main() {
   //    then assert that searching for it returns the entity it came from.
   const browse = parse(await client.callTool({ name: 'search_entities', arguments: { query: '', limit: 50 } }));
   assert.ok(browse.results.length >= 1, 'browse returns entities');
-  const seed = browse.results[0];
+  const seed = browse.results.find((result) => Object.keys(result.current || {}).length > 0);
+  assert.ok(seed, 'browse exposes at least one machine-usable current entity');
   assert.deepEqual(seed.latest, seed.current, 'search result latest alias remains current-safe');
   const token = (seed.slug.split('-').find((w) => w.length >= 3) || seed.slug).toLowerCase();
   const search = parse(await client.callTool({ name: 'search_entities', arguments: { query: token, limit: 10 } }));
@@ -118,16 +151,78 @@ async function main() {
   assert.ok((entity.history?.annual_rate?.length || 0) >= 1, 'entity exposes history');
   console.log(`get_entity OK: ${entity.name} has ${Object.keys(entity.latest).length} metric(s), ${entity.history.annual_rate.length} history point(s)`);
 
+  // 4a) inaccessible official-current sources retain history but expose no current MCP value.
+  for (const guardedSlug of UNVERIFIED_LAST_RECORDED_SLUGS) {
+    const guardedEntity = parse(await client.callTool({
+      name: 'get_entity',
+      arguments: { slug: guardedSlug },
+    }));
+    assert.equal(guardedEntity.current_rate_status, 'unverified_last_recorded');
+    assert.equal(guardedEntity.current_official_rate_verified, false);
+    assert.equal(guardedEntity.machine_current_usable, false);
+    assert.equal(guardedEntity.metadata.current_rate_numeric, null);
+    assert.deepEqual(guardedEntity.current, {});
+    assert.deepEqual(guardedEntity.latest, {});
+    const historicalObservation = guardedEntity.history.annual_rate.find(
+      (observation) => observation.effective_date === guardedEntity.metadata.last_recorded_rate.effective_date,
+    );
+    assert.match(historicalObservation.value_text, /^LAST RECORDED: .+ — current official rate unverified$/);
+    assert.match(historicalObservation.notes, /current official rate unverified/i);
+    const guardedLatest = await client.callTool({
+      name: 'get_latest_value',
+      arguments: { slug: guardedSlug, metric: 'annual_rate' },
+    });
+    assert.equal(guardedLatest.isError, true);
+    assert.match(guardedLatest.content[0].text, /current value withheld/i);
+    assert.equal(
+      historicalObservation.value,
+      guardedEntity.metadata.last_recorded_rate.value,
+      `${guardedSlug} preserves its historical numeric observation`,
+    );
+  }
+
+  // 4b) branch-partial records are searchable, but search never projects them as current.
+  for (const guardedSlug of BRANCH_PARTIAL_COMPARE_SLUGS) {
+    const guardedSearch = parse(await client.callTool({
+      name: 'search_entities',
+      arguments: { query: guardedSlug, limit: 5 },
+    }));
+    const guardedResult = guardedSearch.results.find((result) => result.slug === guardedSlug);
+    assert.ok(guardedResult, `${guardedSlug} remains discoverable`);
+    assert.deepEqual(guardedResult.current, {});
+    assert.deepEqual(guardedResult.latest, {});
+    assert.equal(guardedResult.current_rate_status, 'branch_partial_reference_only');
+    assert.equal(guardedResult.machine_current_usable, false);
+  }
+
   // 5) compare_values ranks a metric across entities (needs >=2 slugs — use the broad browse set)
   if (browse.results.length >= 2) {
-    const slugs = browse.results.slice(0, Math.min(4, browse.results.length)).map((r) => r.slug);
+    const slugs = browse.results
+      .filter((result) => Object.keys(result.current || {}).length > 0)
+      .slice(0, 4)
+      .map((r) => r.slug);
+    assert.ok(slugs.length >= 2, 'browse has at least two comparable current values');
     const cmp = parse(await client.callTool({ name: 'compare_values', arguments: { slugs, metric: primaryMetric } }));
-    assert.ok(Array.isArray(cmp.comparison) && cmp.comparison.length === slugs.length, 'comparison covers all slugs');
+    assert.ok(Array.isArray(cmp.comparison) && cmp.comparison.length === slugs.length, 'comparison ranks all safe slugs');
+    assert.equal(cmp.ranked_count, slugs.length);
+    assert.equal(cmp.excluded_count, 0);
     // sorted high-to-low
     const vals = cmp.comparison.map((r) => r.value ?? -Infinity);
     for (let i = 1; i < vals.length; i++) assert.ok(vals[i - 1] >= vals[i], 'comparison sorted descending');
     console.log(`compare_values OK: ${cmp.comparison.map((r) => `${r.slug}=${r.value}`).join(', ')}`);
   }
+
+  const guardedComparison = parse(await client.callTool({
+    name: 'compare_values',
+    arguments: {
+      slugs: ['us-federal-post-judgment', ...BRANCH_PARTIAL_COMPARE_SLUGS, 'new-hampshire-judgment-rate'],
+      metric: 'annual_rate',
+    },
+  }));
+  assert.deepEqual(guardedComparison.comparison.map((row) => row.slug), ['us-federal-post-judgment']);
+  assert.equal(guardedComparison.ranked_count, 1);
+  assert.equal(guardedComparison.excluded_count, 3);
+  assert.ok(guardedComparison.excluded.every((row) => row.value === undefined));
 
   // 6) calculate_interest applies a statute end-to-end (federal §1961 on a recent judgment)
   const pjEntity = parse(await client.callTool({ name: 'get_entity', arguments: { slug: 'us-federal-post-judgment' } }));

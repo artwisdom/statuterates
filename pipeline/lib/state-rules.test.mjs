@@ -89,7 +89,11 @@ test('only the audited Florida scope is calculator-ready and observations use ac
       observation.entitySlug,
     );
     assert.deepEqual(validateStateCalculationMetadata(entity.metadata).errors, [], observation.entitySlug);
-    assert.equal(observation.retrieved_at, source.retrieved_at, observation.entitySlug);
+    assert.match(observation.retrieved_at, /^\d{4}-\d{2}-\d{2}T/, observation.entitySlug);
+    assert.ok(
+      Date.parse(observation.retrieved_at) <= Date.parse(source.retrieved_at),
+      `${observation.entitySlug}: observation receipt must not postdate source receipt`,
+    );
     assert.equal(observation.notes.includes('…'), false, observation.entitySlug);
   }
 });
@@ -113,6 +117,200 @@ test('New York separates the 1981 general rate from the 2022 consumer-debt trans
     assert.equal(entity.metadata.calculation.renderer_supported, false);
     assert.ok(entity.metadata.official_authorities.length >= 6);
   }
+});
+
+test('September legal repair preserves append-only histories, exact benchmark contracts, and fail-closed branches', () => {
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const sourceById = new Map(STATE_SOURCES.map((source) => [source.id, source]));
+  const observationsFor = (slug) => observations.filter((observation) => observation.entitySlug === slug);
+  const history = (slug) => observations
+    .filter((observation) => observation.entitySlug === slug)
+    .map((observation) => [
+      observation.effective_date,
+      observation.value_numeric,
+      observation.value_text,
+      observation.retrieved_at,
+    ]);
+
+  const originalObservation = (slug) => observationsFor(slug)[0];
+  assert.deepEqual(originalObservation('arkansas-judgment-rate'), {
+    entitySlug: 'arkansas-judgment-rate', metric: 'annual_rate', value_numeric: 5.75,
+    value_text: '5.75%', unit: 'percent_per_annum', effective_date: '2026-07-08',
+    source_id: 'ar-jud', source_url: 'https://www.federalreserve.gov/releases/h15/',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Post-judgment interest under Ark. Code Ann. § 16-65-114(a), currently 5.75% (as of July 8, 2026). Judgment interest rate = Federal Reserve primary credit rate (discount window primary credit rate) in effect on the date the judgment is entered + 2%. Simple interest. Verify the current value at federalreserve.gov; not legal advice.',
+  });
+  assert.deepEqual(originalObservation('arkansas-prejudgment-rate'), {
+    entitySlug: 'arkansas-prejudgment-rate', metric: 'annual_rate', value_numeric: 5.75,
+    value_text: '5.75%', unit: 'percent_per_annum', effective_date: '2026-07-09',
+    source_id: 'ar-prejud', source_url: 'https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice.',
+  });
+  assert.deepEqual(originalObservation('arizona-judgment-rate'), {
+    entitySlug: 'arizona-judgment-rate', metric: 'annual_rate', value_numeric: 7.75,
+    value_text: '7.75%', unit: 'percent_per_annum', effective_date: '2026-07-08',
+    source_id: 'az-ars', source_url: 'https://www.azleg.gov/ars/44/01201.htm',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Post-judgment interest under A.R.S. §44-1201(B): the lesser of 10% per annum or the Federal Reserve prime rate (Fed H.15) + 1 percentage point — currently 7.75% (prime ~6.75% + 1). Simple interest. A written agreement may set a different rate. Verify against the current prime rate; not legal advice.',
+  });
+  assert.deepEqual(originalObservation('arizona-prejudgment-rate'), {
+    entitySlug: 'arizona-prejudgment-rate', metric: 'annual_rate', value_numeric: 7.75,
+    value_text: '7.75%', unit: 'percent_per_annum', effective_date: '2026-07-08',
+    source_id: 'az-prejud', source_url: 'https://www.azleg.gov/ars/44/01201.htm',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Prejudgment interest under A.R.S. § 44-1201(A), & — 7.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Arizona’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-08; verify at azleg.gov. Not legal advice.',
+  });
+  assert.deepEqual(originalObservation('delaware-judgment-rate'), {
+    entitySlug: 'delaware-judgment-rate', metric: 'annual_rate', value_numeric: 8.75,
+    value_text: '8.75%', unit: 'percent_per_annum', effective_date: '2026-07-08',
+    source_id: 'de-jud', source_url: 'https://delcode.delaware.gov/title6/c023/',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Post-judgment interest under 6 Del. C. § 2301, currently 8.75% (as of July 8, 2026). Simple interest. Both pre-judgment and post-judgment interest use the same legal rate (5% over the discount rate). Verify the current value at delcode.delaware.gov; not legal advice.',
+  });
+  assert.deepEqual(originalObservation('delaware-prejudgment-rate'), {
+    entitySlug: 'delaware-prejudgment-rate', metric: 'annual_rate', value_numeric: 8.75,
+    value_text: '8.75%', unit: 'percent_per_annum', effective_date: '2026-07-09',
+    source_id: 'de-prejud', source_url: 'https://delcode.delaware.gov/title6/c023/',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Prejudgment interest under 6 Del. C. § 2301(a) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Delaware’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at delcode.delaware.gov. Not legal advice.',
+  });
+  assert.deepEqual(originalObservation('missouri-judgment-rate'), {
+    entitySlug: 'missouri-judgment-rate', metric: 'annual_rate', value_numeric: 9,
+    value_text: '9% / 8.75%', unit: 'percent_per_annum', effective_date: '2026-07-09',
+    source_id: 'mo-jud', source_url: 'https://revisor.mo.gov/main/OneSection.aspx?section=408.040',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Post-judgment interest under Mo. Rev. Stat. §408.040: NON-TORT/contract judgments bear 9% fixed (or the contract rate if higher); TORT judgments bear the intended Federal Funds rate + 5% — currently about 8.75% (variable). Simple interest. Verify at revisor.mo.gov; not legal advice.',
+  });
+  assert.deepEqual(originalObservation('missouri-prejudgment-rate'), {
+    entitySlug: 'missouri-prejudgment-rate', metric: 'annual_rate', value_numeric: 9,
+    value_text: '9% non-tort; tort rule varies', unit: 'percent_per_annum', effective_date: '2026-07-09',
+    source_id: 'mo-prejud', source_url: 'https://revisor.mo.gov/main/OneSection.aspx?section=408.040',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Liquidated or contract claims may bear 9% under § 408.020. For qualifying tort claims, § 408.040.3 awards prejudgment interest within the subsection that sets the tort judgment rate at the intended Federal Funds Rate plus 5 points. Section 408.040.4 separately says the judgment for prejudgment interest bears Federal Funds plus 3 points after entry. Because those are distinct stages, this reference record does not flatten the tort rule into one headline percentage. Not legal advice.',
+  });
+
+  assert.deepEqual(history('arkansas-judgment-rate'), [
+    ['2026-07-08', 5.75, '5.75%', '2026-07-09T00:00:00Z'],
+    ['2026-09-17', 6, '6.00%', '2026-09-27T16:07:10Z'],
+  ]);
+  assert.deepEqual(history('arkansas-prejudgment-rate'), [
+    ['2026-07-09', 5.75, '5.75%', '2026-07-09T00:00:00Z'],
+    ['2026-09-17', 6, '6.00%', '2026-09-27T16:07:10Z'],
+  ]);
+  for (const slug of ['arizona-judgment-rate', 'arizona-prejudgment-rate']) {
+    assert.deepEqual(history(slug).map((row) => row.slice(0, 3)), [
+      ['2026-07-08', 7.75, '7.75%'],
+      ['2026-09-21', 8, '8.00%'],
+    ]);
+  }
+  assert.deepEqual(history('delaware-judgment-rate').map((row) => row.slice(0, 3)), [
+    ['2026-07-08', 8.75, '8.75%'],
+    ['2026-09-17', 9, '9.00%'],
+  ]);
+  assert.deepEqual(history('delaware-prejudgment-rate').map((row) => row.slice(0, 3)), [
+    ['2026-07-09', 8.75, '8.75%'],
+    ['2026-09-17', 9, '9.00%'],
+  ]);
+
+  assert.deepEqual(history('alabama-judgment-rate').map((row) => row.slice(0, 3)), [
+    ['2011-09-01', 7.5, '7.5%'],
+  ]);
+  assert.equal(sourceById.get('al-jud').home_url, 'https://alison.legislature.state.al.us/summaries-2011-general-acts');
+
+  const primaryCreditPath = 'RIFSRP_F02_N.D';
+  const bankPrimePath = 'RIFSPBLP_N.D';
+  for (const slug of ['arkansas-judgment-rate', 'arkansas-prejudgment-rate', 'delaware-judgment-rate', 'delaware-prejudgment-rate']) {
+    const metadata = entityBySlug.get(slug).metadata;
+    assert.match(metadata.official_benchmark_url, new RegExp(primaryCreditPath));
+    assert.doesNotMatch(metadata.official_benchmark_url, new RegExp(bankPrimePath));
+  }
+  for (const slug of ['arizona-judgment-rate', 'arizona-prejudgment-rate']) {
+    assert.match(entityBySlug.get(slug).metadata.official_benchmark_url, new RegExp(bankPrimePath));
+  }
+  const arizonaBranchKeys = [
+    'general',
+    'obligation_written_agreement_and_medical_debt',
+    'condemnation',
+    'barred_prejudgment_categories',
+    'awarded_prejudgment',
+  ];
+  assert.deepEqual(
+    Object.keys(entityBySlug.get('arizona-judgment-rate').metadata.calculation.branches),
+    arizonaBranchKeys,
+  );
+  assert.deepEqual(
+    Object.keys(entityBySlug.get('arizona-prejudgment-rate').metadata.calculation.branches),
+    [...arizonaBranchKeys, 'entitlement'],
+  );
+
+  const missouri = entityBySlug.get('missouri-judgment-rate');
+  assert.equal(missouri.metadata.current_rate_status, 'branch_partial_reference_only');
+  assert.equal(missouri.metadata.current_rate_numeric, null);
+  assert.equal(missouri.metadata.calculation.current_value_status, 'non_tort_verified_tort_benchmark_unresolved');
+  assert.equal(history(missouri.slug).at(-1)[2], '9% / 8.75%');
+  assert.match(missouri.metadata.calculation.branches.tort, /numeric value withheld/);
+  const missouriPrejudgment = entityBySlug.get('missouri-prejudgment-rate');
+  assert.equal(missouriPrejudgment.metadata.current_rate_status, 'branch_partial_reference_only');
+  assert.equal(missouriPrejudgment.metadata.current_rate_numeric, null);
+
+  for (const slug of [
+    'nevada-prejudgment-rate',
+    'new-hampshire-judgment-rate',
+    'new-hampshire-prejudgment-rate',
+  ]) {
+    const entity = entityBySlug.get(slug);
+    assert.equal(entity.metadata.current_rate_status, 'unverified_last_recorded');
+    assert.equal(entity.metadata.current_rate_numeric, null);
+    assert.equal(entity.metadata.calculation.current_value_status, 'unavailable_fail_closed');
+  }
+  assert.deepEqual(originalObservation('nevada-prejudgment-rate'), {
+    entitySlug: 'nevada-prejudgment-rate', metric: 'annual_rate', value_numeric: 8.75,
+    value_text: '8.75%', unit: 'percent_per_annum', effective_date: '2026-07-09',
+    source_id: 'nv-prejud', source_url: 'https://www.leg.state.nv.us/NRS/NRS-099.html',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Prejudgment interest under NRS 99.040 — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Nevada’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at leg.state.nv.us. Not legal advice.',
+  });
+  assert.deepEqual(originalObservation('new-hampshire-judgment-rate'), {
+    entitySlug: 'new-hampshire-judgment-rate', metric: 'annual_rate', value_numeric: 5.7,
+    value_text: '5.7%', unit: 'percent_per_annum', effective_date: '2026-01-01',
+    source_id: 'nh-jud', source_url: 'https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates',
+    retrieved_at: '2026-08-20T00:00:00Z', confidence: 'high', method: 'statute-variable-official-table',
+    notes: 'New Hampshire publishes 5.7% for 2026. RSA 336:1, II uses the final 26-week Treasury-bill auction before September 30 of the preceding year plus two points, rounded to one decimal place, and expressly calls the result an annual simple rate. RSA 336:2 fixes a particular judgment’s rate at verdict or the finding for pecuniary damages; an existing judgment does not reset each January. Day count and payment allocation remain unmodeled. Not legal advice.',
+  });
+  assert.deepEqual(originalObservation('new-hampshire-prejudgment-rate'), {
+    entitySlug: 'new-hampshire-prejudgment-rate', metric: 'annual_rate', value_numeric: 5.7,
+    value_text: '5.7%', unit: 'percent_per_annum', effective_date: '2026-01-01',
+    source_id: 'nh-prejud', source_url: 'https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates',
+    retrieved_at: '2026-07-09T00:00:00Z', confidence: 'medium', method: 'statute-variable',
+    notes: 'Prejudgment interest under RSA 336:1, II — 5.7% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from New Hampshire’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-01-01; verify at courts.nh.gov. Not legal advice.',
+  });
+
+  const registryDates = new Map([
+    ['al-jud', '2026-07-09'], ['ar-jud', '2026-07-09'], ['ar-prejud', '2026-07-09'],
+    ['az-ars', '2026-07-09'], ['az-prejud', '2026-07-09'], ['de-jud', '2026-07-09'],
+    ['de-prejud', '2026-07-09'], ['mo-jud', '2026-07-09'], ['mo-prejud', '2026-07-09'],
+    ['nv-prejud', '2026-07-09'], ['nh-jud', '2026-08-20'], ['nh-prejud', '2026-07-09'],
+  ]);
+  for (const [sourceId, registeredDate] of registryDates) {
+    const source = sourceById.get(sourceId);
+    assert.match(source.robots_status, new RegExp(`registry last_reviewed ${registeredDate} preserved`));
+    assert.ok(Date.parse(source.retrieved_at) >= Date.parse(`${registeredDate}T00:00:00Z`));
+  }
+});
+
+test('repaired state source contracts use stable current official routes', () => {
+  const sourceById = new Map(STATE_SOURCES.map((source) => [source.id, source]));
+  assert.equal(sourceById.get('co-prejud').home_url, 'https://content.leg.colorado.gov/agencies/office-legislative-legal-services/colorado-revised-statutes');
+  assert.equal(sourceById.get('hi-jud').home_url, 'https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm');
+  assert.equal(sourceById.get('hi-prejud').home_url, 'https://data.capitol.hawaii.gov/hrscurrent/Vol13_Ch0601-0676/HRS0636/HRS_0636-0016.htm');
+  assert.equal(sourceById.get('il-prejud').home_url, 'https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2');
+  assert.equal(sourceById.get('in-prejud').home_url, 'https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103');
+  assert.equal(sourceById.get('tn-prejud').home_url, 'https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong');
+  assert.equal(sourceById.get('nc-prejud').home_url, 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html');
+  assert.equal(sourceById.get('nh-jud').home_url, 'https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm');
+  assert.equal(sourceById.get('nh-prejud').home_url, 'https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm');
 });
 
 test('California uses the 1983 default-rate transition and keeps simultaneous branches in metadata', () => {

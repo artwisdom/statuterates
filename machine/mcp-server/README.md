@@ -9,17 +9,18 @@ static API.
 | Tool | Purpose |
 |---|---|
 | `dataset_info` | Dataset title, description, available metrics, freshness, and cited sources. Call first. |
-| `search_entities` | Fuzzy-find rate series; returns current and latest-published values separately. |
+| `search_entities` | Fuzzy-find rate series; guarded records return an empty current map and refusal status. |
 | `get_entity` | Full record: current, latest published, and all recorded observations with provenance. |
-| `get_latest_value` | Value currently in force as of the snapshot; preannounced future periods are excluded. |
+| `get_latest_value` | Machine-usable value currently in force; future, unverified, and explicitly branch-partial records fail closed. |
 | `get_historical_value` | One released historical observation for a date, with date meaning, branch scope, boundaries, gaps, and provenance. |
-| `compare_values` | Compare one current metric across several series, sorted high→low. |
+| `compare_values` | Rank safe current values high→low; guarded inputs are returned separately in `excluded` without a numeric value. |
 | `calculate_interest` | Audited federal, IRS, UK, EU, and Florida calculations using the shared site engine. |
 
 Every value returned carries `value`, `unit`, `effective_date`, `source_url`, `retrieved_at`,
 `confidence`. `confidence: "medium"` values are **derived** (the `notes` field states the formula).
-For compatibility, `latest` is an alias of `current`; `latest_published` can contain a later,
-officially announced period. State calculations fail closed against the website's shared release
+For compatibility, `latest` is an alias of `current`; both are empty when an explicit
+`current_rate_status` withholds the value. `latest_published` and `history` retain labeled
+provenance, but are not current-value substitutes. State calculations fail closed against the website's shared release
 registry. Historical lookup has a separate shared allowlist and refuses dates outside verified
 coverage or inside a documented gap. Florida is currently the only approved state-specific
 calculation method.

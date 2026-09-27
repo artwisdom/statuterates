@@ -18,6 +18,7 @@ import {
   validateFederalDateSemantics,
   validateGeneratedApi,
 } from './api-contract.mjs';
+import { csvObservationUsage } from '../shared/machine-current-safety.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OPENAPI = resolve(__dirname, 'openapi.yaml');
@@ -124,16 +125,21 @@ function csvFor(entity) {
   const rows = [CSV_HEADER];
   for (const [metric, observations] of Object.entries(entity.history)) {
     for (const item of observations) {
+      const usage = csvObservationUsage(entity, metric, item);
       rows.push([
         entity.slug,
         metric,
         item.effective_date,
         item.value,
+        item.value_text,
         item.unit,
         item.confidence,
         item.method,
         item.source_url,
         item.retrieved_at,
+        usage.record_usage,
+        usage.current_use_allowed,
+        usage.current_rate_status,
       ]);
     }
   }
@@ -530,7 +536,7 @@ test('historical lookup legal meaning and coverage must exactly match its review
 test('every CSV row must exactly match its JSON history projection', () => {
   expectFailure(({ apiDir }) => {
     const path = join(apiDir, 'entity', 'history-rate.csv');
-    writeFileSync(path, readFileSync(path, 'utf8').replace(',5,percent_per_annum,', ',55,percent_per_annum,'));
+    writeFileSync(path, readFileSync(path, 'utf8').replace(',5,5%,percent_per_annum,', ',55,5%,percent_per_annum,'));
   }, /history-rate\.csv: row 2 does not exactly match/);
 });
 
