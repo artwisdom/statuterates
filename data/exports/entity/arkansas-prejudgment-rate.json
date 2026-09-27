@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "arkansas-prejudgment-rate",
   "name": "Arkansas Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,14 +8,46 @@
   "locale": null,
   "metadata": {
     "state": "AR",
-    "statute": "Ark. Code Ann. § 16-65-114(a)(1)",
-    "basis": "statute-variable",
+    "statute": "Ark. Code Ann. § 16-65-114(a)",
+    "basis": "statute-variable-official-benchmark",
     "metric": "prejudgment",
     "kind": "variable",
+    "official_statute_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
+    "official_code_portal_url": "https://www.arkleg.state.ar.us/ArkansasLaw",
+    "official_benchmark_url": "https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSRP_F02_N.D&rel=H15",
+    "official_authorities": [
+      {
+        "label": "Arkansas Act 995 of 2019 — amended §16-65-114",
+        "url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf"
+      },
+      {
+        "label": "Arkansas Code official portal",
+        "url": "https://www.arkleg.state.ar.us/ArkansasLaw"
+      },
+      {
+        "label": "Federal Reserve H.15 release",
+        "url": "https://www.federalreserve.gov/releases/h15/"
+      },
+      {
+        "label": "Federal Reserve H.15 primary-credit series",
+        "url": "https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSRP_F02_N.D&rel=H15"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The Act 995 benchmark formula is verified, but prejudgment entitlement is fact-specific and the accrual trigger, claim classification, constitutional cap, day count, and payments are not calculator-complete.",
+      "rate_behavior": "entitlement_and_entry_date_specific",
+      "rate_schedule": "federal_reserve_primary_credit_rate_on_judgment_date_plus_2",
+      "current_value_status": "verified_general_formula",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "rate_reference": "When prejudgment interest is legally available, Act 995 supplies the primary-credit-plus-two statutory reference rate",
+        "entitlement": "Availability and the legally relevant accrual date depend on the claim and controlling Arkansas law",
+        "constitutional_cap": "The Arkansas Constitution maximum remains controlling"
+      }
     }
   },
   "metrics": [
@@ -24,20 +56,33 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 5.75,
-      "value_text": "5.75%",
+      "value": 6,
+      "value_text": "6.00%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "2026-09-17",
       "source_id": "ar-prejud",
       "source_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Arkansas Act 995 of 2019 amended § 16-65-114 to use the Federal Reserve primary-credit rate plus 2 percentage points, subject to the constitutional maximum. The displayed 5.75% is a current formula value, not a permanent fixed rate. Confirm the current codified statute and benchmark before use. Not legal advice."
+      "retrieved_at": "2026-09-27T16:07:10Z",
+      "confidence": "high",
+      "method": "statute-variable-official-benchmark",
+      "notes": "Arkansas’s statutory reference became 6.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; Act 995 adds two points. Prejudgment entitlement, claim classification, accrual, and the constitutional cap remain matter-specific. Reference only; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6,
+        "value_text": "6.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-09-17",
+        "source_id": "ar-prejud",
+        "source_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
+        "retrieved_at": "2026-09-27T16:07:10Z",
+        "confidence": "high",
+        "method": "statute-variable-official-benchmark",
+        "notes": "Arkansas’s statutory reference became 6.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; Act 995 adds two points. Prejudgment entitlement, claim classification, accrual, and the constitutional cap remain matter-specific. Reference only; not legal advice."
+      },
       {
         "metric": "annual_rate",
         "value": 5.75,

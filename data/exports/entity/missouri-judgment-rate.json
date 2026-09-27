@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "missouri-judgment-rate",
   "name": "Missouri Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,11 +9,32 @@
   "metadata": {
     "state": "MO",
     "statute": "Mo. Rev. Stat. §408.040",
-    "basis": "statute-variable",
+    "basis": "statute-branching-fail-closed",
+    "current_rate_status": "branch_partial_reference_only",
+    "current_rate_numeric": null,
+    "official_authorities": [
+      {
+        "label": "Mo. Rev. Stat. §408.040",
+        "url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040"
+      },
+      {
+        "label": "Federal Reserve H.15 release",
+        "url": "https://www.federalreserve.gov/releases/h15/"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The 9% non-tort branch is verified. The tort branch uses the statute's “intended Federal Funds Rate,” which cannot safely be flattened to the target range or effective rate without authoritative clarification.",
+      "rate_behavior": "claim_branch_specific",
+      "current_value_status": "non_tort_verified_tort_benchmark_unresolved",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "non_tort": "9%, or a higher lawful contract rate where the statute applies",
+        "tort": "Federal Funds benchmark plus five points; numeric value withheld because the statutory benchmark identity is ambiguous"
+      }
     }
   },
   "metrics": [

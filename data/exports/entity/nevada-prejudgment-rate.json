@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "nevada-prejudgment-rate",
   "name": "Nevada Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,13 +9,44 @@
   "metadata": {
     "state": "NV",
     "statute": "NRS 99.040",
-    "basis": "statute-variable",
+    "basis": "official-source-gap",
     "metric": "prejudgment",
     "kind": "variable",
+    "current_rate_status": "unverified_last_recorded",
+    "current_rate_numeric": null,
+    "last_recorded_rate": {
+      "value": 8.75,
+      "effective_date": "2026-07-09"
+    },
+    "official_statute_url": "https://www.leg.state.nv.us/NRS/NRS-099.html",
+    "official_benchmark_history_url": "https://www.fid.nv.gov/resources/fees-and-prime-interest-rate/",
+    "official_authorities": [
+      {
+        "label": "NRS 99.040",
+        "url": "https://www.leg.state.nv.us/NRS/NRS-099.html"
+      },
+      {
+        "label": "Nevada FID prime-interest-rate history",
+        "url": "https://www.fid.nv.gov/resources/fees-and-prime-interest-rate/"
+      },
+      {
+        "label": "Nevada FID July 1, 2026 prime-rate notice",
+        "url": "https://www.fid.nv.gov/siteassets/resources/Prime_Interest_Rate_July_1__2026.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The official July 1, 2026 benchmark and the 8.75% NRS 99.040 statutory reference are verified. A generic current prejudgment number is still withheld because entitlement, the covered transaction category and date, the written-contract branch, book/store-account timing, and statutory exclusions cannot safely be flattened into one value.",
+      "rate_behavior": "transaction_and_claim_branch_specific_fail_closed",
+      "current_value_status": "unavailable_fail_closed",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "prejudgment": "NRS 99.040 uses the prime rate for the January 1 or July 1 immediately preceding the transaction plus two points, but only for covered claims and subject to contract and statutory exceptions",
+        "postjudgment_separate": "The verified 8.75% NRS 17.130 postjudgment history is separate and remains unchanged"
+      }
     }
   },
   "metrics": [

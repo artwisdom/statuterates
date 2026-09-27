@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "illinois-prejudgment-rate",
   "name": "Illinois Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,20 @@
   "locale": null,
   "metadata": {
     "state": "IL",
-    "statute": "735 ILCS 5/2-1303(c)",
+    "statute": "815 ILCS 205/2; 735 ILCS 5/2-1303(c)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "fixed",
+    "official_authorities": [
+      {
+        "label": "815 ILCS 205/2 — legal-rate provision",
+        "url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2"
+      },
+      {
+        "label": "735 ILCS 5/2-1303 — personal-injury and wrongful-death branch",
+        "url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=073500050K2-1303"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -29,7 +39,7 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "il-prejud",
-      "source_url": "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+      "source_url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2",
       "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
@@ -45,7 +55,7 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "il-prejud",
-        "source_url": "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+        "source_url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2",
         "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",

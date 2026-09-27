@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "arizona-judgment-rate",
   "name": "Arizona Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,12 +8,45 @@
   "locale": null,
   "metadata": {
     "state": "AZ",
-    "statute": "A.R.S. §44-1201(B)",
-    "basis": "statute-variable",
+    "statute": "A.R.S. §44-1201(B)–(D)",
+    "basis": "statute-variable-official-benchmark",
+    "official_statute_url": "https://www.azleg.gov/ars/44/01201.htm",
+    "official_benchmark_url": "https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSPBLP_N.D&rel=H15",
+    "official_authorities": [
+      {
+        "label": "A.R.S. §44-1201",
+        "url": "https://www.azleg.gov/ars/44/01201.htm"
+      },
+      {
+        "label": "Federal Reserve H.15 release",
+        "url": "https://www.federalreserve.gov/releases/h15/"
+      },
+      {
+        "label": "Federal Reserve H.15 bank-prime series",
+        "url": "https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSPBLP_N.D&rel=H15"
+      },
+      {
+        "label": "Federal Reserve H.15 publication feed",
+        "url": "https://www.federalreserve.gov/feeds/h15.html"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The general formula and September 21, 2026 publication boundary are verified, but written-agreement, qualifying medical-debt, condemnation, payment, day-count, and special-judgment branches are not calculator-complete.",
+      "rate_behavior": "fixed_at_entry",
+      "rate_schedule": "lesser_of_10_or_h15_prime_plus_1_effective_first_business_day_after_publication",
+      "current_value_status": "verified_general_branch",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "general": "A.R.S. §44-1201(B): lesser of 10% or Federal Reserve H.15 prime plus one point, fixed at entry",
+        "obligation_written_agreement_and_medical_debt": "A.R.S. §44-1201(A) governs qualifying obligations and written agreements and supplies the medical-debt cap",
+        "condemnation": "A.R.S. §44-1201(C) provides the condemnation branch",
+        "barred_prejudgment_categories": "A.R.S. §44-1201(D) bars prejudgment interest for listed unliquidated, future, punitive, and exemplary damages",
+        "awarded_prejudgment": "A.R.S. §44-1201(F) directs an awarded prejudgment rate to subsection A or B"
+      }
     }
   },
   "metrics": [
@@ -22,20 +55,33 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 7.75,
-      "value_text": "7.75%",
+      "value": 8,
+      "value_text": "8.00%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-08",
+      "effective_date": "2026-09-21",
       "source_id": "az-ars",
       "source_url": "https://www.azleg.gov/ars/44/01201.htm",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Post-judgment interest under A.R.S. §44-1201(B): the lesser of 10% per annum or the Federal Reserve prime rate (Fed H.15) + 1 percentage point — currently 7.75% (prime ~6.75% + 1). Simple interest. A written agreement may set a different rate. Verify against the current prime rate; not legal advice."
+      "retrieved_at": "2026-09-27T16:07:10Z",
+      "confidence": "high",
+      "method": "statute-variable-official-benchmark",
+      "notes": "Arizona’s general A.R.S. §44-1201(B) judgment-rate reference became 8.00% on September 21, 2026: the lesser of 10% or the 7.00% H.15 bank-prime observation plus one point. The September 17 prime observation was published September 18, and the statute makes a change operative on the first business day after publication. Written agreements, qualifying medical debt, condemnation, and other special paths can differ. Reference only; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 8,
+        "value_text": "8.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-09-21",
+        "source_id": "az-ars",
+        "source_url": "https://www.azleg.gov/ars/44/01201.htm",
+        "retrieved_at": "2026-09-27T16:07:10Z",
+        "confidence": "high",
+        "method": "statute-variable-official-benchmark",
+        "notes": "Arizona’s general A.R.S. §44-1201(B) judgment-rate reference became 8.00% on September 21, 2026: the lesser of 10% or the 7.00% H.15 bank-prime observation plus one point. The September 17 prime observation was published September 18, and the statute makes a change operative on the first business day after publication. Written agreements, qualifying medical debt, condemnation, and other special paths can differ. Reference only; not legal advice."
+      },
       {
         "metric": "annual_rate",
         "value": 7.75,

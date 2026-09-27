@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "delaware-prejudgment-rate",
   "name": "Delaware Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,14 +8,45 @@
   "locale": null,
   "metadata": {
     "state": "DE",
-    "statute": "6 Del. C. § 2301(a)",
-    "basis": "statute-variable",
+    "statute": "6 Del. C. § 2301(a), (d)",
+    "basis": "statute-variable-official-benchmark",
     "metric": "prejudgment",
     "kind": "variable",
+    "official_statute_url": "https://delcode.delaware.gov/title6/c023/",
+    "official_benchmark_url": "https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSRP_F02_N.D&rel=H15",
+    "official_authorities": [
+      {
+        "label": "6 Del. C. §2301",
+        "url": "https://delcode.delaware.gov/title6/c023/"
+      },
+      {
+        "label": "Delaware Courts interest-rate guidance",
+        "url": "https://courts.delaware.gov/forms/download.aspx?id=27048"
+      },
+      {
+        "label": "Federal Reserve H.15 release",
+        "url": "https://www.federalreserve.gov/releases/h15/"
+      },
+      {
+        "label": "Federal Reserve H.15 primary-credit series",
+        "url": "https://www.federalreserve.gov/datadownload/Preview.aspx?pi=400&preview=H15%2FH15%2FRIFSRP_F02_N.D&rel=H15"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The legal-rate formula is verified, but entitlement, the §2301(d) tort settlement-demand conditions, accrual dates, contract interactions, day count, and payments remain fact-specific.",
+      "rate_behavior": "entitlement_and_claim_branch_specific",
+      "rate_schedule": "federal_reserve_primary_credit_rate_plus_5",
+      "current_value_status": "verified_general_legal_rate",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "general_legal_rate": "6 Del. C. §2301(a): Federal Reserve discount or primary-credit rate plus five points",
+        "contract_postjudgment": "A contract judgment uses the lesser of the contract rate and the legal rate",
+        "tort_settlement_demand": "Section 2301(d) supplies a separate prejudgment-interest path for qualifying tort settlement demands"
+      }
     }
   },
   "metrics": [
@@ -24,20 +55,33 @@
   "latest": {
     "annual_rate": {
       "metric": "annual_rate",
-      "value": 8.75,
-      "value_text": "8.75%",
+      "value": 9,
+      "value_text": "9.00%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "2026-09-17",
       "source_id": "de-prejud",
       "source_url": "https://delcode.delaware.gov/title6/c023/",
-      "retrieved_at": "2026-07-09T00:00:00Z",
-      "confidence": "medium",
-      "method": "statute-variable",
-      "notes": "Prejudgment interest under 6 Del. C. § 2301(a) — 8.75% (simple interest). This is PREjudgment interest (accruing before entry of judgment) and is separate from Delaware’s post-judgment rate; availability is limited by claim type (see the page). Current formula value as of 2026-07-09; verify at delcode.delaware.gov. Not legal advice."
+      "retrieved_at": "2026-09-27T16:07:10Z",
+      "confidence": "high",
+      "method": "statute-variable-official-benchmark",
+      "notes": "Delaware’s general legal-rate reference became 9.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; §2301 adds five points. Prejudgment entitlement and the separate §2301(d) tort settlement-demand conditions remain claim-specific. Reference only; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 9,
+        "value_text": "9.00%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-09-17",
+        "source_id": "de-prejud",
+        "source_url": "https://delcode.delaware.gov/title6/c023/",
+        "retrieved_at": "2026-09-27T16:07:10Z",
+        "confidence": "high",
+        "method": "statute-variable-official-benchmark",
+        "notes": "Delaware’s general legal-rate reference became 9.00% on September 17, 2026 when the Federal Reserve primary-credit rate became 4.00%; §2301 adds five points. Prejudgment entitlement and the separate §2301(d) tort settlement-demand conditions remain claim-specific. Reference only; not legal advice."
+      },
       {
         "metric": "annual_rate",
         "value": 8.75,

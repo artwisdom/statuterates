@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "indiana-prejudgment-rate",
   "name": "Indiana Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,10 +8,20 @@
   "locale": null,
   "metadata": {
     "state": "IN",
-    "statute": "IC 24-4.6-1-103 (8% contract/account); IC 34-51-4-9 (tort, 6–10% discretionary)",
+    "statute": "IC 24-4.6-1-103 (8% listed obligations); IC 34-51-4 (tort)",
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "discretionary-with-default",
+    "official_authorities": [
+      {
+        "label": "IC 24-4.6-1-103 — listed obligations",
+        "url": "https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103"
+      },
+      {
+        "label": "IC 34-51-4 — tort prejudgment-interest chapter",
+        "url": "https://iga.in.gov/laws/2026/ic/titles/34#34-51-4"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
@@ -29,7 +39,7 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "in-prejud",
-      "source_url": "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
+      "source_url": "https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103",
       "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "high",
       "method": "statute-fixed",
@@ -45,7 +55,7 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "in-prejud",
-        "source_url": "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
+        "source_url": "https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103",
         "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "high",
         "method": "statute-fixed",

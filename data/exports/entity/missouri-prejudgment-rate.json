@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "missouri-prejudgment-rate",
   "name": "Missouri Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,13 +9,35 @@
   "metadata": {
     "state": "MO",
     "statute": "Mo. Rev. Stat. §§ 408.020, 408.040.3–.4",
-    "basis": "statute-variable",
+    "basis": "statute-branching-fail-closed",
     "metric": "prejudgment",
     "kind": "variable",
+    "current_rate_status": "branch_partial_reference_only",
+    "current_rate_numeric": null,
+    "official_authorities": [
+      {
+        "label": "Mo. Rev. Stat. §408.040",
+        "url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040"
+      },
+      {
+        "label": "Federal Reserve H.15 release",
+        "url": "https://www.federalreserve.gov/releases/h15/"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The 9% liquidated or contract reference branch is verified, but tort entitlement, settlement-demand conditions, and the statute's ambiguous “intended Federal Funds Rate” benchmark prevent a safe numeric tort value.",
+      "rate_behavior": "claim_branch_specific",
+      "current_value_status": "non_tort_verified_tort_benchmark_unresolved",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "liquidated_or_contract": "Section 408.020 can supply 9% for qualifying liquidated or contract claims",
+        "tort_prejudgment": "Section 408.040 conditions entitlement and references the unresolved intended Federal Funds benchmark; numeric value withheld",
+        "tort_post_entry": "A separate Federal Funds plus three points path can govern the prejudgment-interest component after entry"
+      }
     }
   },
   "metrics": [

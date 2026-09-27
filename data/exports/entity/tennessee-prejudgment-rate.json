@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "tennessee-prejudgment-rate",
   "name": "Tennessee Prejudgment Interest Rate",
   "entity_type": "rate_series",
@@ -12,6 +12,16 @@
     "basis": "statute-fixed",
     "metric": "prejudgment",
     "kind": "discretionary-with-default",
+    "official_authorities": [
+      {
+        "label": "Parrish v. Strong — Tennessee Court of Appeals case page",
+        "url": "https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong"
+      },
+      {
+        "label": "Parrish v. Strong — official opinion PDF",
+        "url": "https://www.tncourts.gov/sites/default/files/OpinionsPDFVersion/parrish.larry_.opn_.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_secondary",
@@ -29,7 +39,7 @@
       "unit": "percent_per_annum",
       "effective_date": "2026-07-09",
       "source_id": "tn-prejud",
-      "source_url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+      "source_url": "https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong",
       "retrieved_at": "2026-07-09T00:00:00Z",
       "confidence": "medium",
       "method": "statute-fixed",
@@ -45,7 +55,7 @@
         "unit": "percent_per_annum",
         "effective_date": "2026-07-09",
         "source_id": "tn-prejud",
-        "source_url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+        "source_url": "https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong",
         "retrieved_at": "2026-07-09T00:00:00Z",
         "confidence": "medium",
         "method": "statute-fixed",

@@ -7,9 +7,9 @@
   "license": "StatuteRates compilation; underlying source rights vary. Government edicts are not subject to copyright, while statistical publications and third-party pages may have their own terms. See each source record.",
   "sample_query": "irs",
   "disclaimer": "Reference data, not legal, tax, or financial advice. Derived values (e.g. the post-judgment rate) show their formula; verify against the controlling statute/court before relying on them.",
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "entity_count": 114,
-  "observation_count": 5557,
+  "observation_count": 5563,
   "metrics": [
     "annual_rate"
   ],
@@ -34,12 +34,12 @@
     },
     {
       "id": "al-jud",
-      "name": "Alabama judgment interest (Ala. Code § 8-8-10(a))",
-      "publisher": "Alabama — alison.legislature.state.al.us",
-      "home_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
+      "name": "Alabama judgment interest and 2011 rate transition",
+      "publisher": "Alabama Legislature (official)",
+      "home_url": "https://alison.legislature.state.al.us/summaries-2011-general-acts",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated fixed value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated fixed value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "al-prejud",
@@ -52,39 +52,39 @@
     },
     {
       "id": "ar-jud",
-      "name": "Arkansas judgment interest (Ark. Code Ann. § 16-65-114(a))",
-      "publisher": "Arkansas — federalreserve.gov",
-      "home_url": "https://www.federalreserve.gov/releases/h15/",
+      "name": "Arkansas Act 995 judgment-interest formula and Federal Reserve H.15 benchmark",
+      "publisher": "Arkansas General Assembly and Federal Reserve Board (official)",
+      "home_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "ar-prejud",
-      "name": "Arkansas Act 995 of 2019 (§ 16-65-114)",
-      "publisher": "Arkansas General Assembly (official enacted act)",
+      "name": "Arkansas Act 995 prejudgment-rate reference and Federal Reserve H.15 benchmark",
+      "publisher": "Arkansas General Assembly and Federal Reserve Board (official)",
       "home_url": "https://www.arkleg.state.ar.us/Home/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2FACT995.pdf",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable prejudgment value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "az-ars",
-      "name": "Arizona judgment interest (A.R.S. §44-1201)",
-      "publisher": "Arizona State Legislature (official)",
+      "name": "Arizona judgment-interest statute and Federal Reserve H.15 benchmark",
+      "publisher": "Arizona State Legislature and Federal Reserve Board (official)",
       "home_url": "https://www.azleg.gov/ars/44/01201.htm",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "az-prejud",
-      "name": "Arizona prejudgment interest (A.R.S. § 44-1201(A), &)",
-      "publisher": "Arizona — azleg.gov",
+      "name": "Arizona prejudgment-interest statute and Federal Reserve H.15 benchmark",
+      "publisher": "Arizona State Legislature and Federal Reserve Board (official)",
       "home_url": "https://www.azleg.gov/ars/44/01201.htm",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable prejudgment value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "boe-bank-rate",
@@ -117,7 +117,7 @@
       "id": "co-prejud",
       "name": "Colorado Revised Statutes, Titles 5 and 13",
       "publisher": "Colorado General Assembly — Office of Legislative Legal Services (official)",
-      "home_url": "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/2025-crs-titles-download",
+      "home_url": "https://content.leg.colorado.gov/agencies/office-legislative-legal-services/colorado-revised-statutes",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed prejudgment value; official source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -169,21 +169,21 @@
     },
     {
       "id": "de-jud",
-      "name": "Delaware judgment interest (6 Del. C. § 2301)",
-      "publisher": "Delaware — delcode.delaware.gov",
+      "name": "Delaware legal-interest statute and Federal Reserve H.15 benchmark",
+      "publisher": "Delaware General Assembly, Delaware Courts, and Federal Reserve Board (official)",
       "home_url": "https://delcode.delaware.gov/title6/c023/",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "de-prejud",
-      "name": "Delaware prejudgment interest (6 Del. C. § 2301(a))",
-      "publisher": "Delaware — delcode.delaware.gov",
+      "name": "Delaware prejudgment-interest statute and Federal Reserve H.15 benchmark",
+      "publisher": "Delaware General Assembly, Delaware Courts, and Federal Reserve Board (official)",
       "home_url": "https://delcode.delaware.gov/title6/c023/",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable prejudgment value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "ecb-mro",
@@ -241,18 +241,18 @@
     },
     {
       "id": "hi-jud",
-      "name": "Hawaii judgment interest (Haw. Rev. Stat. 478-3. Related: 478-2)",
-      "publisher": "Hawaii — capitol.hawaii.gov",
-      "home_url": "https://www.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
+      "name": "Hawaii judgment interest (HRS §§478-2 and 478-3)",
+      "publisher": "Hawaii State Legislature (official)",
+      "home_url": "https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed value; official source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
     },
     {
       "id": "hi-prejud",
-      "name": "Hawaii prejudgment interest (HRS 636-16)",
-      "publisher": "Hawaii — data.capitol.hawaii.gov",
-      "home_url": "https://data.capitol.hawaii.gov/sessions/session2017/HRS-Chapter-PDF's/HRS_0478.pdf",
+      "name": "Hawaii prejudgment interest (HRS §636-16)",
+      "publisher": "Hawaii State Legislature (official)",
+      "home_url": "https://data.capitol.hawaii.gov/hrscurrent/Vol13_Ch0601-0676/HRS0636/HRS_0636-0016.htm",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated discretionary-with-default prejudgment value; official source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -295,9 +295,9 @@
     },
     {
       "id": "il-prejud",
-      "name": "Illinois prejudgment interest (735 ILCS 5/2-1303(c))",
-      "publisher": "Illinois — ilga.gov",
-      "home_url": "https://ilga.gov/documents/legislation/ilcs/documents/081502050K2.htm",
+      "name": "Illinois prejudgment-interest statutes",
+      "publisher": "Illinois General Assembly (official)",
+      "home_url": "https://www.ilga.gov/legislation/ilcs/fulltext?DocName=081502050K2",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed prejudgment value; official source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -313,9 +313,9 @@
     },
     {
       "id": "in-prejud",
-      "name": "Indiana prejudgment interest (Contract/liquidated: IC 24-4.6-1-103)",
-      "publisher": "Indiana — iga.in.gov",
-      "home_url": "https://iga.in.gov/laws/2024/ic/titles/24#24-4.6-1-103",
+      "name": "Indiana prejudgment-interest statutes",
+      "publisher": "Indiana General Assembly (official)",
+      "home_url": "https://iga.in.gov/laws/2026/ic/titles/24#24-4.6-1-103",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated discretionary-with-default prejudgment value; official source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -502,21 +502,21 @@
     },
     {
       "id": "mo-jud",
-      "name": "Missouri judgment interest (Mo. Rev. Stat. §408.040)",
-      "publisher": "Missouri — revisor.mo.gov",
+      "name": "Missouri judgment-interest branches (Mo. Rev. Stat. §408.040)",
+      "publisher": "Missouri Revisor of Statutes (official)",
       "home_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "mo-prejud",
-      "name": "Missouri prejudgment interest (Mo. Rev. Stat. § 408.040)",
-      "publisher": "Missouri — revisor.mo.gov",
+      "name": "Missouri prejudgment-interest branches",
+      "publisher": "Missouri Revisor of Statutes (official)",
       "home_url": "https://revisor.mo.gov/main/OneSection.aspx?section=408.040",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable prejudgment value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "ms-prejud",
@@ -556,9 +556,9 @@
     },
     {
       "id": "nc-prejud",
-      "name": "North Carolina prejudgment interest (N.C. Gen. Stat. 24-5)",
-      "publisher": "North Carolina — ncleg.net",
-      "home_url": "https://www.ncleg.net/EnactedLegislation/Statutes/PDF/BySection/Chapter_24/GS_24-5.pdf",
+      "name": "North Carolina prejudgment interest (N.C.G.S. §24-5)",
+      "publisher": "North Carolina General Assembly (official)",
+      "home_url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated fixed prejudgment value; secondary source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"
@@ -601,21 +601,21 @@
     },
     {
       "id": "nh-jud",
-      "name": "New Hampshire civil interest rates",
-      "publisher": "New Hampshire Judicial Branch (official)",
-      "home_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
+      "name": "New Hampshire statutory interest formula and rate-lock rule",
+      "publisher": "New Hampshire General Court (official)",
+      "home_url": "https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable value; official source checked 2026-08-20",
-      "retrieved_at": "2026-08-20T00:00:00Z"
+      "robots_status": "curated variable value; official source checked 2026-09-27; registry last_reviewed 2026-08-20 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "nh-prejud",
-      "name": "New Hampshire prejudgment interest (RSA 336:1, II)",
-      "publisher": "New Hampshire — courts.nh.gov",
-      "home_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
+      "name": "New Hampshire statutory interest formula and rate-lock rule",
+      "publisher": "New Hampshire General Court (official)",
+      "home_url": "https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable prejudgment value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "nj-courts",
@@ -657,19 +657,19 @@
       "id": "nv-jud",
       "name": "Nevada FID prime-rate and NRS 17.130 judgment-rate history",
       "publisher": "Nevada Financial Institutions Division (official)",
-      "home_url": "https://fid.nv.gov/uploadedFiles/fidnvgov/content/Resources/Prime%20Interest%20Rate%20July%201%2C%202026.pdf",
+      "home_url": "https://www.fid.nv.gov/siteassets/resources/Prime_Interest_Rate_July_1__2026.pdf",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated variable value; official source checked 2026-08-22",
       "retrieved_at": "2026-08-22T00:00:00Z"
     },
     {
       "id": "nv-prejud",
-      "name": "Nevada prejudgment interest (NRS 99.040)",
-      "publisher": "Nevada — leg.state.nv.us",
+      "name": "Nevada prejudgment-interest statute and official benchmark notices",
+      "publisher": "Nevada Legislature and Financial Institutions Division (official)",
       "home_url": "https://www.leg.state.nv.us/NRS/NRS-099.html",
       "license": "Government edict — not subject to copyright.",
-      "robots_status": "curated variable prejudgment value; official source checked 2026-07-09",
-      "retrieved_at": "2026-07-09T00:00:00Z"
+      "robots_status": "curated variable prejudgment value; official source checked 2026-09-27; registry last_reviewed 2026-07-09 preserved",
+      "retrieved_at": "2026-09-27T16:07:10Z"
     },
     {
       "id": "ny-courts-hsbc",
@@ -835,9 +835,9 @@
     },
     {
       "id": "tn-prejud",
-      "name": "Tennessee prejudgment interest (§ 47-14-123, discussed by Tennessee Court of Appeals)",
+      "name": "Tennessee prejudgment interest (§47-14-123, discussed in Parrish)",
       "publisher": "Tennessee Courts (official judicial source)",
-      "home_url": "https://www.tncourts.gov/sites/default/files/OPINIONS/TCA/PDF/014/willselectric.pdf",
+      "home_url": "https://www.tncourts.gov/courts/court-appeals/opinions/2018/12/28/larry-e-parrish-p-c-v-nancy-j-strong",
       "license": "Government edict — not subject to copyright.",
       "robots_status": "curated discretionary-with-default prejudgment value; secondary source checked 2026-07-09",
       "retrieved_at": "2026-07-09T00:00:00Z"

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "alabama-judgment-rate",
   "name": "Alabama Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -9,11 +9,34 @@
   "metadata": {
     "state": "AL",
     "statute": "Ala. Code § 8-8-10(a)",
-    "basis": "statute-fixed",
+    "basis": "statute-branching-official-history",
+    "official_authorities": [
+      {
+        "label": "Ala. Code §8-8-10",
+        "url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10"
+      },
+      {
+        "label": "2011 Alabama Acts summary — Act 2011-521",
+        "url": "https://alison.legislature.state.al.us/summaries-2011-general-acts"
+      },
+      {
+        "label": "SB207 engrossed text",
+        "url": "https://alison.legislature.state.al.us/files/pdf/SearchableInstruments/2011RS/PrintFiles/SB207-Eng.pdf"
+      }
+    ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The September 1, 2011 general-rate transition is verified, but the contract-action branch, accrual, compounding, day count, payments, and special judgments are not calculator-complete.",
+      "rate_behavior": "branch_specific_fixed_at_entry",
+      "current_value_status": "verified_general_branch",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "general": "Ala. Code §8-8-10(a): 7.5% for covered judgments entered on or after September 1, 2011",
+        "contract_action": "A judgment based on a contract action uses the rate stated in the contract"
+      }
     }
   },
   "metrics": [
@@ -25,13 +48,13 @@
       "value": 7.5,
       "value_text": "7.5%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-07-09",
+      "effective_date": "2011-09-01",
       "source_id": "al-jud",
-      "source_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
-      "retrieved_at": "2026-07-09T00:00:00Z",
+      "source_url": "https://alison.legislature.state.al.us/summaries-2011-general-acts",
+      "retrieved_at": "2026-09-27T16:07:10Z",
       "confidence": "high",
-      "method": "statute-fixed",
-      "notes": "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+      "method": "statute-branching-official-history",
+      "notes": "Act 2011-521 changed Alabama’s general non-contract judgment rate to 7.5% for judgments entered on or after September 1, 2011. A judgment based on a contract action uses the rate stated in the contract. Accrual, compounding, day count, payments, and special-judgment branches remain calculator-withheld. Reference only; not legal advice."
     }
   },
   "history": {
@@ -41,13 +64,13 @@
         "value": 7.5,
         "value_text": "7.5%",
         "unit": "percent_per_annum",
-        "effective_date": "2026-07-09",
+        "effective_date": "2011-09-01",
         "source_id": "al-jud",
-        "source_url": "https://alison.legislature.state.al.us/code-of-alabama?section=8-8-10",
-        "retrieved_at": "2026-07-09T00:00:00Z",
+        "source_url": "https://alison.legislature.state.al.us/summaries-2011-general-acts",
+        "retrieved_at": "2026-09-27T16:07:10Z",
         "confidence": "high",
-        "method": "statute-fixed",
-        "notes": "Post-judgment interest under Ala. Code § 8-8-10(a) — 7.5% per year, fixed by statute (simple interest). Verify against the statute; not legal advice."
+        "method": "statute-branching-official-history",
+        "notes": "Act 2011-521 changed Alabama’s general non-contract judgment rate to 7.5% for judgments entered on or after September 1, 2011. A judgment based on a contract action uses the rate stated in the contract. Accrual, compounding, day count, payments, and special-judgment branches remain calculator-withheld. Reference only; not legal advice."
       }
     ]
   }

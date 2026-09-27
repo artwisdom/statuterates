@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-23T16:18:59.194Z",
+  "generated_at": "2026-09-27T16:58:34.173Z",
   "slug": "new-hampshire-judgment-rate",
   "name": "New Hampshire Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -8,38 +8,57 @@
   "locale": null,
   "metadata": {
     "state": "NH",
-    "statute": "N.H. Rev. Stat. Ann. 336:1, II",
-    "basis": "statute-variable",
+    "statute": "N.H. Rev. Stat. Ann. 336:1, II; 336:2",
+    "basis": "official-source-gap",
+    "current_rate_status": "unverified_last_recorded",
+    "current_rate_numeric": null,
+    "last_recorded_rate": {
+      "value": 5.7,
+      "effective_date": "2026-01-01"
+    },
+    "official_schedule_url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates",
     "official_authorities": [
       {
-        "label": "New Hampshire Judicial Branch civil interest rates",
-        "url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates"
-      },
-      {
-        "label": "RSA 336:1 — annual simple rate formula",
-        "url": "https://gc.nh.gov/rsa/html/XXXI/336/336-1.htm"
+        "label": "RSA 336:1 — annual simple-rate formula",
+        "url": "https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm"
       },
       {
         "label": "RSA 336:2 — rate fixed at verdict or finding",
-        "url": "https://gc.nh.gov/rsa/html/XXXI/336/336-2.htm"
+        "url": "https://www.gc.nh.gov/rsa/html/XXXI/336/336-2.htm"
       },
       {
         "label": "RSA 527:10 — execution interest",
-        "url": "https://gc.nh.gov/rsa/html/LIV/527/527-10.htm"
+        "url": "https://www.gc.nh.gov/rsa/html/LIV/527/527-10.htm"
       },
       {
-        "label": "U.S. Treasury 182-day bill auction, September 29, 2025",
+        "label": "New Hampshire Judicial Branch civil-interest schedule (inaccessible during review)",
+        "url": "https://www.courts.nh.gov/our-courts/superior-court/civil/civil-interest-rates"
+      },
+      {
+        "label": "U.S. Treasury 182-day bill auction, September 29, 2025 (formula-input candidate; not independent rate corroboration)",
         "url": "https://www.treasurydirect.gov/instit/annceresult/press/preanre/2025/R_20250929_1.pdf"
       },
       {
         "label": "2001 N.H. Laws ch. 160 (HB 140)",
-        "url": "https://gc.nh.gov/legislation/2001/HB0140.html"
+        "url": "https://www.gc.nh.gov/legislation/2001/HB0140.html"
       }
     ],
     "calculation": {
       "status": "reference_only",
       "source_tier": "official_primary",
-      "reason": "Historical rates and all statutory calculation branches have not yet been fully modeled."
+      "reason": "The statutory annual formula and rate-lock rule are accessible, but the official 2026 Judicial Branch schedule is inaccessible and the prior 5.7% value could not be independently corroborated. The numeric value is withheld.",
+      "rate_behavior": "annual_formula_fixed_at_verdict_or_finding",
+      "rate_schedule": "final_26_week_treasury_bill_auction_before_september_30_plus_2_rounded_to_tenth",
+      "current_value_status": "unavailable_fail_closed",
+      "branches_complete": false,
+      "renderer_supported": false,
+      "rule_verified_at": "2026-09-27T16:07:10Z",
+      "branches": {
+        "annual_formula": "RSA 336:1, II supplies the annual simple-rate formula",
+        "rate_lock": "RSA 336:2 fixes the rate at verdict or the finding for pecuniary damages",
+        "execution_interest": "RSA 527:10 governs interest on executions",
+        "official_schedule": "Judicial Branch annual schedule was inaccessible during review; no numeric value is inferred"
+      }
     }
   },
   "metrics": [
