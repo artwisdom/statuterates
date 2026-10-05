@@ -77,6 +77,10 @@ test('refresh validates newly generated exports before the bot can commit them',
   assert.match(commitJob, /path:\s*\$\{\{ runner\.temp \}\}\/validated-exports/);
   assert.doesNotMatch(commitJob, /^\s*path:\s*validated-exports\s*$/m);
   assert.match(commitJob, /Verify the data-only artifact boundary/);
+  assert.match(commitJob, /EXPECTED_LATEST_COUNT/);
+  assert.match(commitJob, /\(\$entity\.current \/\/ \{\}\)\[\]/);
+  assert.match(commitJob, /cmp -s "\$EXPECTED_LATEST" "\$ACTUAL_LATEST"/);
+  assert.doesNotMatch(commitJob, /"\$LATEST_COUNT" != "\$META_COUNT"/);
   assert.doesNotMatch(commitJob, /npm ci|node run\.mjs all|working-directory:\s*pipeline/);
 });
 

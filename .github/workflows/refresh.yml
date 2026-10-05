@@ -149,13 +149,33 @@ jobs:
           ENTITY_FILES=$(find "$VALIDATED_EXPORTS/entity" -maxdepth 1 -type f -name '*.json' | wc -l | tr -d ' ')
           INDEX_COUNT=$(jq -er '.count' "$VALIDATED_EXPORTS/entities.json")
           INDEX_LENGTH=$(jq -er '.entities | length' "$VALIDATED_EXPORTS/entities.json")
-          LATEST_COUNT=$(jq -er '.count' "$VALIDATED_EXPORTS/latest.json")
+          LATEST_COUNT=$(jq -er '.count | select(type == "number" and . >= 0)' "$VALIDATED_EXPORTS/latest.json")
           LATEST_LENGTH=$(jq -er '.observations | length' "$VALIDATED_EXPORTS/latest.json")
 
+          # `latest.json` is intentionally a subset of the entity catalog. A legally ambiguous
+          # record remains available for historical provenance, but its machine-facing `current`
+          # map is empty and it must not appear in `latest.json`. Rebuild that exact flattened
+          # projection from entities.json instead of incorrectly requiring one current value per
+          # entity.
+          EXPECTED_LATEST=$(mktemp)
+          ACTUAL_LATEST=$(mktemp)
+          jq -S '[.entities[] as $entity | ($entity.current // {})[] |
+            {entity: $entity.slug, entity_name: $entity.name} + .] |
+            sort_by(.entity_name, .entity, .metric)' \
+            "$VALIDATED_EXPORTS/entities.json" > "$EXPECTED_LATEST"
+          jq -S '.observations | sort_by(.entity_name, .entity, .metric)' \
+            "$VALIDATED_EXPORTS/latest.json" > "$ACTUAL_LATEST"
+          EXPECTED_LATEST_COUNT=$(jq -er 'length' "$EXPECTED_LATEST")
+
           if [ "$ENTITY_FILES" != "$META_COUNT" ] || [ "$INDEX_COUNT" != "$META_COUNT" ] \
-             || [ "$INDEX_LENGTH" != "$META_COUNT" ] || [ "$LATEST_COUNT" != "$META_COUNT" ] \
-             || [ "$LATEST_LENGTH" != "$META_COUNT" ]; then
+             || [ "$INDEX_LENGTH" != "$META_COUNT" ]; then
             echo "Artifact entity counts disagree with meta.json ($META_COUNT)." >&2
+            exit 1
+          fi
+          if [ "$LATEST_COUNT" != "$LATEST_LENGTH" ] \
+             || [ "$LATEST_COUNT" != "$EXPECTED_LATEST_COUNT" ] \
+             || ! cmp -s "$EXPECTED_LATEST" "$ACTUAL_LATEST"; then
+            echo "Artifact latest.json is not the exact machine-usable current-value projection." >&2
             exit 1
           fi
           if [ "$META_OBSERVATIONS" -lt "$META_COUNT" ]; then
