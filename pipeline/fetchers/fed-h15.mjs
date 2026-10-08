@@ -109,6 +109,45 @@ export function normalizeFederalStatuteText(html) {
     .trim();
 }
 
+/**
+ * The House sometimes returns its site-wide maintenance document with HTTP 200. Treat only that
+ * narrowly identified response as a temporary outage; every other non-statutory 200 response must
+ * continue into the phrase-contract failure path.
+ */
+export function isOfficialHouseMaintenanceResponse(html) {
+  const source = String(html ?? '');
+  const title = source.match(/<title\b[^>]*>([\s\S]*?)<\/title\s*>/i)?.[1] ?? '';
+  if (normalizeFederalStatuteText(title) !== 'under maintenance') return false;
+
+  const heading = source.match(/<h1\b[^>]*>([\s\S]*?)<\/h1\s*>/i)?.[1] ?? '';
+  if (normalizeFederalStatuteText(heading) !== 'site is currently under maintenance') return false;
+
+  const houseCanonical = (source.match(/<link\b[^>]*>/gi) ?? []).some((tag) => (
+    /\brel\s*=\s*["']canonical["']/i.test(tag) &&
+    /\bhref\s*=\s*["']https:\/\/www\.house\.gov\/["']/i.test(tag)
+  ));
+  if (!houseCanonical) return false;
+
+  const text = normalizeFederalStatuteText(source);
+  if (!text.includes('the site you requested is currently unavailable')) return false;
+
+  // Any mention of the section number means statutory material was mixed into the response. Even
+  // wholly rewritten language that no longer contains a reviewed phrase must take the ordinary
+  // contract-failure path rather than being hidden behind the maintenance fallback.
+  if (/\b1961\b/.test(text)) return false;
+
+  // Never let a maintenance shell suppress review of a response that also contains statutory or
+  // calculation text. A hybrid page must take the ordinary phrase-contract failure path.
+  const statuteAnchors = [
+    '1961 interest',
+    'such interest shall be calculated',
+    'weekly average 1 year constant maturity treasury yield',
+    'interest shall be computed daily',
+    'compounded annually',
+  ];
+  return !statuteAnchors.some((anchor) => text.includes(anchor));
+}
+
 function findOrderedAnchors(text, anchors, start = 0) {
   let cursor = start;
   let first = -1;
@@ -432,11 +471,23 @@ export async function fetchH15({ log = () => {}, get = politeGet, today } = {}) 
   if (statuteResponse) {
     const statuteErrors = validateFederalStatuteContract(statuteResponse.body);
     if (statuteErrors.length) {
-      throw new Error(
-        `28 U.S.C. §1961 official phrase contract failed: ${statuteErrors.join('; ')}`
-      );
+      if (isOfficialHouseMaintenanceResponse(statuteResponse.body)) {
+        statuteStatus = 'reviewed-contract-retained-temporary-outage';
+        log(
+          `WARNING: 28 U.S.C. §1961 official page returned its recognized maintenance ` +
+          `response; retaining the phrase contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`
+        );
+        // No statutory text was retrieved, so do not attach the maintenance-page timestamp to the
+        // legal contract receipt.
+        statuteResponse = null;
+      } else {
+        throw new Error(
+          `28 U.S.C. §1961 official phrase contract failed: ${statuteErrors.join('; ')}`
+        );
+      }
+    } else {
+      log('28 U.S.C. §1961: official rate-selection, daily-computation, and annual-compounding clauses verified');
     }
-    log('28 U.S.C. §1961: official rate-selection, daily-computation, and annual-compounding clauses verified');
   }
 
   const retrieved_at = [dailyResponse.retrieved_at, weeklyResponse.retrieved_at]

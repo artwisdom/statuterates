@@ -8,6 +8,7 @@ import {
   WGS1YR_CSV_URL,
   buildCrosscheckedPublishedWeeks,
   fetchH15,
+  isOfficialHouseMaintenanceResponse,
   normalizeFederalStatuteText,
   parseFredCsv,
   validateFederalStatuteContract,
@@ -30,6 +31,20 @@ const OFFICIAL_1961_HTML = `
         (b) Interest shall be computed daily to the date of payment except as provided
         elsewhere, and shall be compounded annually.
       </p>
+    </body>
+  </html>
+`;
+
+const OFFICIAL_HOUSE_MAINTENANCE_HTML = `
+  <!doctype html>
+  <html>
+    <head>
+      <title>Under Maintenance</title>
+      <link rel="canonical" href="https://www.house.gov/">
+    </head>
+    <body>
+      <h1>Site is currently under maintenance</h1>
+      <p>The site you requested is currently unavailable. Please try again later.</p>
     </body>
   </html>
 `;
@@ -111,6 +126,40 @@ test('official statute phrase contract fails closed when any critical legal clau
     const errors = validateFederalStatuteContract(OFFICIAL_1961_HTML.replace(before, after));
     assert.ok(errors.some((error) => expectedError.test(error)), `${before} mutation was accepted`);
   }
+});
+
+test('only the exact official House maintenance response is recognized as a temporary outage', () => {
+  assert.equal(isOfficialHouseMaintenanceResponse(OFFICIAL_HOUSE_MAINTENANCE_HTML), true);
+  assert.equal(
+    isOfficialHouseMaintenanceResponse(
+      OFFICIAL_HOUSE_MAINTENANCE_HTML.replace('currently unavailable', 'available')
+    ),
+    false
+  );
+  assert.equal(
+    isOfficialHouseMaintenanceResponse(
+      OFFICIAL_1961_HTML.replace('<body>', '<body><p>Site is currently under maintenance.</p>')
+    ),
+    false
+  );
+  assert.equal(
+    isOfficialHouseMaintenanceResponse(
+      OFFICIAL_HOUSE_MAINTENANCE_HTML.replace(
+        '</body>',
+        `${OFFICIAL_1961_HTML.replace('compounded annually', 'compounded monthly')}</body>`
+      )
+    ),
+    false
+  );
+  assert.equal(
+    isOfficialHouseMaintenanceResponse(
+      OFFICIAL_HOUSE_MAINTENANCE_HTML.replace(
+        '</body>',
+        '<article>Section 1961 now uses an entirely different monthly benchmark and simple interest.</article></body>'
+      )
+    ),
+    false
+  );
 });
 
 test('strict FRED parser accepts only the expected series shape and preserves holiday rows', () => {
@@ -307,6 +356,42 @@ test('temporary official statute outage logs and retains the reviewed phrase con
   assert.ok(logs.some((message) =>
     message.includes(`retaining the phrase contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`)
   ));
+});
+
+test('official HTTP-200 maintenance response retains the reviewed phrase contract', async () => {
+  const fixture = syntheticFullHistory();
+  const responses = successfulResponses(fixture, OFFICIAL_HOUSE_MAINTENANCE_HTML);
+  const logs = [];
+  const result = await fetchH15({
+    today: fixture.today,
+    log: (message) => logs.push(message),
+    get: async (url) => responses.get(url),
+  });
+
+  assert.equal(result.statuteContract.status, 'reviewed-contract-retained-temporary-outage');
+  assert.equal(result.statuteContract.retrieved_at, null);
+  assert.match(result.source.robots_status, /temporarily unavailable/);
+  assert.ok(logs.some((message) =>
+    message.includes('official page returned its recognized maintenance response') &&
+    message.includes(`contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`)
+  ));
+});
+
+test('a maintenance shell cannot suppress a changed statutory contract', async () => {
+  const fixture = syntheticFullHistory();
+  const hybridBody = OFFICIAL_HOUSE_MAINTENANCE_HTML.replace(
+    '</body>',
+    `${OFFICIAL_1961_HTML.replace('compounded annually', 'compounded monthly')}</body>`
+  );
+  const responses = successfulResponses(fixture, hybridBody);
+
+  await assert.rejects(
+    fetchH15({
+      today: fixture.today,
+      get: async (url) => responses.get(url),
+    }),
+    /official phrase contract failed: annual-compounding clause changed or missing/
+  );
 });
 
 test('permanent official statute fetch errors abort rather than using the reviewed fallback', async () => {
