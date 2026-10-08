@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-27T16:58:34.173Z",
+  "generated_at": "2026-10-08T15:37:23.403Z",
   "slug": "texas-judgment-rate",
   "name": "Texas Judgment Interest Rate",
   "entity_type": "rate_series",
@@ -56,17 +56,30 @@
       "value": 6.75,
       "value_text": "6.75%",
       "unit": "percent_per_annum",
-      "effective_date": "2026-09-01",
+      "effective_date": "2026-10-01",
       "source_id": "tx-occc",
-      "source_url": "https://occc.texas.gov/publications/interest-rates/",
-      "retrieved_at": "2026-09-03T01:15:42.025Z",
+      "source_url": "https://occc.texas.gov/wp-content/uploads/2026/09/09-16-2026.pdf",
+      "retrieved_at": "2026-10-08T15:37:09.378Z",
       "confidence": "high",
-      "method": "statute-variable-official-page",
-      "notes": "Texas OCCC published 6.75% for money judgments rendered during September 2026. Under Texas Finance Code §§304.003, 304.005, and 304.006, the general noncontract rate is fixed at judgment, accrues from rendition through satisfaction (subject to the appeal-extension exception), and compounds annually. Contract, tax, and child-support branches can differ. Verify applicability; not legal advice."
+      "method": "statute-variable-official-pdf",
+      "notes": "Texas OCCC published 6.75% for money judgments rendered during October 2026. Under Texas Finance Code §§304.003, 304.005, and 304.006, the general noncontract rate is fixed at judgment, accrues from rendition through satisfaction (subject to the appeal-extension exception), and compounds annually. Contract, tax, and child-support branches can differ. Verify applicability; not legal advice."
     }
   },
   "history": {
     "annual_rate": [
+      {
+        "metric": "annual_rate",
+        "value": 6.75,
+        "value_text": "6.75%",
+        "unit": "percent_per_annum",
+        "effective_date": "2026-10-01",
+        "source_id": "tx-occc",
+        "source_url": "https://occc.texas.gov/wp-content/uploads/2026/09/09-16-2026.pdf",
+        "retrieved_at": "2026-10-08T15:37:09.378Z",
+        "confidence": "high",
+        "method": "statute-variable-official-pdf",
+        "notes": "Texas OCCC published 6.75% for money judgments rendered during October 2026. Under Texas Finance Code §§304.003, 304.005, and 304.006, the general noncontract rate is fixed at judgment, accrues from rendition through satisfaction (subject to the appeal-extension exception), and compounds annually. Contract, tax, and child-support branches can differ. Verify applicability; not legal advice."
+      },
       {
         "metric": "annual_rate",
         "value": 6.75,
