@@ -302,6 +302,9 @@ test('September legal repair preserves append-only histories, exact benchmark co
 
 test('repaired state source contracts use stable current official routes', () => {
   const sourceById = new Map(STATE_SOURCES.map((source) => [source.id, source]));
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const observationBySlug = new Map(observations.map((observation) => [observation.entitySlug, observation]));
   assert.equal(sourceById.get('co-prejud').home_url, 'https://content.leg.colorado.gov/agencies/office-legislative-legal-services/colorado-revised-statutes');
   assert.equal(sourceById.get('hi-jud').home_url, 'https://data.capitol.hawaii.gov/hrscurrent/Vol11_Ch0476-0490/HRS0478/HRS_0478-0003.htm');
   assert.equal(sourceById.get('hi-prejud').home_url, 'https://data.capitol.hawaii.gov/hrscurrent/Vol13_Ch0601-0676/HRS0636/HRS_0636-0016.htm');
@@ -311,6 +314,119 @@ test('repaired state source contracts use stable current official routes', () =>
   assert.equal(sourceById.get('nc-prejud').home_url, 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html');
   assert.equal(sourceById.get('nh-jud').home_url, 'https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm');
   assert.equal(sourceById.get('nh-prejud').home_url, 'https://www.gc.nh.gov/rsa/html/XXXI/336/336-1.htm');
+
+  assert.deepEqual(entityBySlug.get('pennsylvania-judgment-rate').metadata.official_authorities, [
+    { label: '42 Pa.C.S. §8101 — judgment interest at the lawful rate', url: 'https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/42/00.081.001.000..HTM' },
+    { label: '41 P.S. §202 — legal rate is 6%', url: 'https://www.legis.state.pa.us/WU01/LI/LI/US/HTM/1974/0/0006..HTM' },
+  ]);
+  assert.deepEqual(entityBySlug.get('north-carolina-judgment-rate').metadata.official_authorities, [
+    { label: 'N.C.G.S. §24-5 — judgment-interest branches', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html' },
+    { label: 'N.C.G.S. §24-1 — legal rate is 8%', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-1.html' },
+  ]);
+  assert.deepEqual(entityBySlug.get('north-carolina-prejudgment-rate').metadata.official_authorities, [
+    { label: 'N.C.G.S. §24-5 — prejudgment-interest branches', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html' },
+    { label: 'N.C.G.S. §24-1 — legal rate is 8%', url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-1.html' },
+  ]);
+  assert.deepEqual(entityBySlug.get('north-dakota-prejudgment-rate').metadata.official_authorities, [
+    { label: 'N.D.C.C. §32-03-04 — interest on damages', url: 'https://ndlegis.gov/cencode/t32c03.pdf' },
+    { label: 'N.D.C.C. §47-14-05 — legal rate is 6%', url: 'https://ndlegis.gov/cencode/t47c14.pdf' },
+  ]);
+
+  assert.deepEqual(
+    ['pennsylvania-judgment-rate', 'north-carolina-judgment-rate', 'north-carolina-prejudgment-rate', 'north-dakota-prejudgment-rate']
+      .map((slug) => {
+        const observation = observationBySlug.get(slug);
+        return [slug, observation.value_numeric, observation.effective_date, observation.source_id];
+      }),
+    [
+      ['pennsylvania-judgment-rate', 6, '2026-07-09', 'pa-statutes'],
+      ['north-carolina-judgment-rate', 8, '2016-12-01', 'nc-ncleg'],
+      ['north-carolina-prejudgment-rate', 8, '2026-07-09', 'nc-prejud'],
+      ['north-dakota-prejudgment-rate', 6, '2026-07-09', 'nd-prejud'],
+    ],
+  );
+  assert.equal(sourceById.get('pa-statutes').home_url, 'https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/42/00.081.001.000..HTM');
+  assert.equal(sourceById.get('nc-ncleg').home_url, 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_24/GS_24-5.html');
+  assert.equal(sourceById.get('nd-prejud').home_url, 'https://ndlegis.gov/cencode/t32c03.pdf');
+});
+
+test('October source repair preserves rates while correcting Massachusetts, Colorado, Montana, and Utah provenance', () => {
+  const { entities, observations } = buildStateFixed();
+  const entityBySlug = new Map(entities.map((entity) => [entity.slug, entity]));
+  const observationBySlug = new Map(observations.map((observation) => [observation.entitySlug, observation]));
+  const invariant = (slug) => {
+    const observation = observationBySlug.get(slug);
+    return [
+      observation.value_numeric,
+      observation.value_text,
+      observation.effective_date,
+      observation.source_id,
+    ];
+  };
+
+  assert.deepEqual(invariant('massachusetts-judgment-rate'), [12, '12%', '2026-07-08', 'ma-legislature']);
+  assert.deepEqual(invariant('massachusetts-prejudgment-rate'), [12, '12%', '2026-07-09', 'ma-prejud']);
+  assert.deepEqual(invariant('colorado-prejudgment-rate'), [8, '8% / 9%', '2026-07-09', 'co-prejud']);
+  assert.deepEqual(invariant('montana-prejudgment-rate'), [10, '10% / 9.75%', '2026-07-09', 'mt-prejud']);
+  assert.deepEqual(invariant('utah-prejudgment-rate'), [10, '10% / 8.75%', '2026-07-09', 'ut-prejud']);
+
+  const massachusettsPost = entityBySlug.get('massachusetts-judgment-rate');
+  const massachusettsPre = entityBySlug.get('massachusetts-prejudgment-rate');
+  assert.equal(massachusettsPost.metadata.basis, 'statute-branching');
+  assert.equal(observationBySlug.get('massachusetts-judgment-rate').method, 'statute-branching');
+  assert.equal(observationBySlug.get('massachusetts-judgment-rate').source_url, 'https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter235/Section8');
+  assert.equal(massachusettsPost.metadata.official_authorities.length, 6);
+  assert.equal(massachusettsPre.metadata.kind, 'claim-dependent');
+  assert.equal(massachusettsPre.metadata.official_authorities.length, 4);
+  assert.doesNotMatch(observationBySlug.get('massachusetts-judgment-rate').notes, /Applied as simple interest/i);
+  assert.doesNotMatch(observationBySlug.get('massachusetts-prejudgment-rate').notes, /12% \(simple interest\)/i);
+
+  for (const slug of [
+    'massachusetts-judgment-rate',
+    'massachusetts-prejudgment-rate',
+    'colorado-prejudgment-rate',
+    'montana-prejudgment-rate',
+    'utah-prejudgment-rate',
+  ]) {
+    const entity = entityBySlug.get(slug);
+    assert.equal(entity.metadata.effective_date_is_reference, true, slug);
+    assert.equal(entity.metadata.effective_date_label, 'Recorded reference date', slug);
+  }
+
+  const colorado = entityBySlug.get('colorado-prejudgment-rate');
+  assert.equal(colorado.metadata.kind, 'claim-dependent');
+  assert.equal(observationBySlug.get('colorado-prejudgment-rate').method, 'statute-branching');
+  const coloradoAuthorities = colorado.metadata.official_authorities.map((authority) => authority.url);
+  assert.ok(coloradoAuthorities.includes('https://olls.info/crs/crs2026-title-05.htm'));
+  assert.ok(coloradoAuthorities.includes('https://olls.info/crs/crs2026-title-13.htm'));
+  assert.ok(coloradoAuthorities.includes('https://www.leg.colorado.gov/laws/session-laws/SB23-093/152/download'));
+  assert.ok(coloradoAuthorities.includes('https://www.leg.colorado.gov/laws/session-laws/HB26-1426/334/download'));
+  assert.equal(coloradoAuthorities.some((url) => url.includes('/2025-crs-titles-download')), false);
+  assert.match(observationBySlug.get('colorado-prejudgment-rate').notes, /simple interest runs from accrual through filing.*annual compounding begins at filing/i);
+  assert.match(observationBySlug.get('colorado-prejudgment-rate').notes, /excludes debt charged to a credit card/i);
+
+  for (const slug of ['montana-prejudgment-rate', 'utah-prejudgment-rate']) {
+    const entity = entityBySlug.get(slug);
+    const observation = observationBySlug.get(slug);
+    assert.equal(entity.metadata.kind, 'variable', slug);
+    assert.equal(entity.metadata.basis, 'statute-branching', slug);
+    assert.equal(observation.method, 'statute-branching', slug);
+  }
+  const montana = entityBySlug.get('montana-prejudgment-rate');
+  const montanaAuthorities = montana.metadata.official_authorities.map((authority) => authority.url);
+  assert.ok(montanaAuthorities.some((url) => url.includes('0250-0090-0020-0050')));
+  assert.ok(montanaAuthorities.some((url) => url.includes('0270-0010-0020-0120')));
+  assert.ok(montanaAuthorities.some((url) => url.includes('DocId=01-233op')));
+  assert.ok(montanaAuthorities.some((url) => url.includes('DocId=320755')));
+  assert.match(observationBySlug.get('montana-prejudgment-rate').notes, /Section 31-1-106 supplies 10% only/i);
+  assert.doesNotMatch(observationBySlug.get('montana-prejudgment-rate').notes, /10%.*via.*27-1-211/i);
+  assert.doesNotMatch(observationBySlug.get('montana-prejudgment-rate').notes, /27-1-210.*may not be compounded/i);
+
+  const utah = entityBySlug.get('utah-prejudgment-rate');
+  assert.ok(utah.metadata.official_authorities.some((authority) => authority.url.includes('Lavender%20v.%20FCOI')));
+  assert.match(observationBySlug.get('utah-prejudgment-rate').notes, /10% branch.*covered contracts/i);
+  assert.doesNotMatch(observationBySlug.get('utah-prejudgment-rate').notes, /10% general/i);
+  assert.match(observationBySlug.get('utah-prejudgment-rate').notes, /that branch expressly uses simple interest/i);
 });
 
 test('California uses the 1983 default-rate transition and keeps simultaneous branches in metadata', () => {
