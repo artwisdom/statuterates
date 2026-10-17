@@ -5,6 +5,8 @@
 // mandatory: a network failure, truncated history, changed CSV shape, missing week, or disagreement
 // aborts the pipeline before SQLite is changed or exports are written.
 
+import { createHash } from 'node:crypto';
+
 import { politeGet, nowIso } from '../lib/http.mjs';
 import { buildWeeklyAverages } from '../lib/normalize.mjs';
 
@@ -18,6 +20,10 @@ export const WGS1YR_SERIES_URL = 'https://fred.stlouisfed.org/series/WGS1YR';
 export const US_CODE_1961_URL =
   'https://uscode.house.gov/view.xhtml?edition=prelim&num=0&req=granuleid%3AUSC-prelim-title28-section1961';
 export const FEDERAL_STATUTE_CONTRACT_REVIEWED_AT = '2026-07-26';
+export const HOUSE_MAINTENANCE_FINGERPRINT =
+  '487dffc4a7f76de5393c9be91e487b6342e10bfbb33df6724c4d0a9c218a12ef';
+export const HOUSE_TEMPORARY_FORMAT_NOT_FOUND_FINGERPRINT =
+  'a25a498ebe435f39c0cf770b4334a7e55dd22de17b9709014479b6fb55d31c50';
 
 const FIRST_DAILY_DATE = '2000-01-03';
 const FIRST_WEEKLY_DATE = '2000-01-07';
@@ -114,7 +120,7 @@ export function normalizeFederalStatuteText(html) {
  * narrowly identified response as a temporary outage; every other non-statutory 200 response must
  * continue into the phrase-contract failure path.
  */
-export function isOfficialHouseMaintenanceResponse(html) {
+function hasOfficialHouseMaintenanceShell(html) {
   const source = String(html ?? '');
   const title = source.match(/<title\b[^>]*>([\s\S]*?)<\/title\s*>/i)?.[1] ?? '';
   if (normalizeFederalStatuteText(title) !== 'under maintenance') return false;
@@ -131,21 +137,75 @@ export function isOfficialHouseMaintenanceResponse(html) {
   const text = normalizeFederalStatuteText(source);
   if (!text.includes('the site you requested is currently unavailable')) return false;
 
-  // Any mention of the section number means statutory material was mixed into the response. Even
-  // wholly rewritten language that no longer contains a reviewed phrase must take the ordinary
-  // contract-failure path rather than being hidden behind the maintenance fallback.
-  if (/\b1961\b/.test(text)) return false;
+  return true;
+}
 
-  // Never let a maintenance shell suppress review of a response that also contains statutory or
-  // calculation text. A hybrid page must take the ordinary phrase-contract failure path.
+export function isOfficialHouseMaintenanceResponse(html) {
+  if (!hasOfficialHouseMaintenanceShell(html)) return false;
+  const text = normalizeFederalStatuteText(html);
+  // Fingerprint the entire normalized body. Anchor matching alone could let newly worded legal
+  // content hide inside the maintenance shell; any added, removed, or changed text must fail closed.
+  return createHash('sha256').update(text, 'utf8').digest('hex') === HOUSE_MAINTENANCE_FINGERPRINT;
+}
+
+function hasOfficialHouseTemporaryFormatNotFoundShell(html) {
+  const source = String(html ?? '');
+  const title = source.match(/<title\b[^>]*>([\s\S]*?)<\/title\s*>/i)?.[1] ?? '';
+  if (normalizeFederalStatuteText(title) !== 'page not found us code') return false;
+
+  const heading = source.match(/<h1\b[^>]*>([\s\S]*?)<\/h1\s*>/i)?.[1] ?? '';
+  if (normalizeFederalStatuteText(heading) !== 'page not found') return false;
+
+  const text = normalizeFederalStatuteText(source);
+  return (
+    text.includes('the uscode house gov website is currently operating in a temporary format') &&
+    text.includes('some website features and functionality are temporarily unavailable') &&
+    text.includes('the page you requested could not be found') &&
+    text.includes('it may have been moved renamed or removed or the link you followed may be out of date') &&
+    /<a\b[^>]*href\s*=\s*["']\/browse\.html["']/i.test(source) &&
+    /<a\b[^>]*href\s*=\s*["']\/cite\.html["']/i.test(source) &&
+    /<img\b[^>]*alt\s*=\s*["']OLRC home["']/i.test(source)
+  );
+}
+
+/**
+ * The temporary House format currently returns an HTTP-200 Page Not Found shell for the canonical
+ * section URL. Retain the previously reviewed contract only for the exact reviewed shell: all
+ * normalized page text is fingerprinted after redacting solely the Public Law currency number and
+ * date. Any navigation, notice, legal-text, or hybrid-content change therefore fails closed.
+ */
+export function isOfficialHouseTemporaryFormatNotFoundResponse(html) {
+  if (!hasOfficialHouseTemporaryFormatNotFoundShell(html)) return false;
+  const normalized = normalizeFederalStatuteText(html);
+
+  if (/\b1961\b/.test(normalized)) return false;
   const statuteAnchors = [
-    '1961 interest',
     'such interest shall be calculated',
     'weekly average 1 year constant maturity treasury yield',
     'interest shall be computed daily',
     'compounded annually',
   ];
-  return !statuteAnchors.some((anchor) => text.includes(anchor));
+  if (statuteAnchors.some((anchor) => normalized.includes(anchor))) return false;
+
+  const fingerprintInput = normalized.replace(
+    /the united states code online is current through public law \d+(?: \d+)* [a-z]+ \d{1,2} \d{4}/,
+    'the united states code online is current through public law currency marker',
+  );
+  return createHash('sha256').update(fingerprintInput, 'utf8').digest('hex') ===
+    HOUSE_TEMPORARY_FORMAT_NOT_FOUND_FINGERPRINT;
+}
+
+export function classifyOfficialHouseTemporaryResponse(html) {
+  const hasMaintenanceShell = hasOfficialHouseMaintenanceShell(html);
+  const hasTemporaryNotFoundShell = hasOfficialHouseTemporaryFormatNotFoundShell(html);
+  if (!hasMaintenanceShell && !hasTemporaryNotFoundShell) return 'ordinary-response';
+  if (
+    (hasMaintenanceShell && isOfficialHouseMaintenanceResponse(html)) ||
+    (hasTemporaryNotFoundShell && isOfficialHouseTemporaryFormatNotFoundResponse(html))
+  ) {
+    return 'recognized-temporary-outage';
+  }
+  return 'unrecognized-or-hybrid-outage-shell';
 }
 
 function findOrderedAnchors(text, anchors, start = 0) {
@@ -469,23 +529,27 @@ export async function fetchH15({ log = () => {}, get = politeGet, today } = {}) 
     );
   }
   if (statuteResponse) {
-    const statuteErrors = validateFederalStatuteContract(statuteResponse.body);
-    if (statuteErrors.length) {
-      if (isOfficialHouseMaintenanceResponse(statuteResponse.body)) {
-        statuteStatus = 'reviewed-contract-retained-temporary-outage';
-        log(
-          `WARNING: 28 U.S.C. §1961 official page returned its recognized maintenance ` +
-          `response; retaining the phrase contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`
-        );
-        // No statutory text was retrieved, so do not attach the maintenance-page timestamp to the
-        // legal contract receipt.
-        statuteResponse = null;
-      } else {
+    const temporaryResponse = classifyOfficialHouseTemporaryResponse(statuteResponse.body);
+    if (temporaryResponse === 'recognized-temporary-outage') {
+      statuteStatus = 'reviewed-contract-retained-temporary-outage';
+      log(
+        `WARNING: 28 U.S.C. §1961 official page returned a recognized temporary-outage ` +
+        `response; retaining the phrase contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`
+      );
+      // No statutory text was retrieved, so do not attach the outage-page timestamp to the legal
+      // contract receipt.
+      statuteResponse = null;
+    } else if (temporaryResponse === 'unrecognized-or-hybrid-outage-shell') {
+      throw new Error(
+        '28 U.S.C. §1961 official temporary-outage response changed or contains legal content'
+      );
+    } else {
+      const statuteErrors = validateFederalStatuteContract(statuteResponse.body);
+      if (statuteErrors.length) {
         throw new Error(
           `28 U.S.C. §1961 official phrase contract failed: ${statuteErrors.join('; ')}`
         );
       }
-    } else {
       log('28 U.S.C. §1961: official rate-selection, daily-computation, and annual-compounding clauses verified');
     }
   }

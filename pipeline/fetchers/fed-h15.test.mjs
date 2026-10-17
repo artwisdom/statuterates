@@ -7,8 +7,10 @@ import {
   US_CODE_1961_URL,
   WGS1YR_CSV_URL,
   buildCrosscheckedPublishedWeeks,
+  classifyOfficialHouseTemporaryResponse,
   fetchH15,
   isOfficialHouseMaintenanceResponse,
+  isOfficialHouseTemporaryFormatNotFoundResponse,
   normalizeFederalStatuteText,
   parseFredCsv,
   validateFederalStatuteContract,
@@ -45,6 +47,41 @@ const OFFICIAL_HOUSE_MAINTENANCE_HTML = `
     <body>
       <h1>Site is currently under maintenance</h1>
       <p>The site you requested is currently unavailable. Please try again later.</p>
+    </body>
+  </html>
+`;
+
+const OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML = `
+  <!doctype html>
+  <html>
+    <head><title>Page Not Found - US Code</title></head>
+    <body>
+      <a href="/browse.html"><img alt="OLRC home"></a>
+      <a href="/browse.html">Home</a>
+      <div id="notice-banner">
+        Notice: The uscode.house.gov website is currently operating in a temporary format.
+        While the United States Code remains available from its authoritative source, some website
+        features and functionality are temporarily unavailable. The United States Code Online is
+        current through Public Law 119-120 (October 7, 2026).
+      </div>
+      <nav>
+        Search &amp; Browse Currency and Updating Classification Tables Popular Name Tool Other OLRC
+        Tables and Tools <a href="/cite.html">Cite Checker</a> Table III - Statutes at Large Other
+        Tables Understanding the Code About the Code and Website About Classification Detailed
+        Guide to the Code FAQ and Glossary Positive Law Codification Editorial Reclassification
+        Downloads Other Legislative Resources CONGRESS.GOV govinfo HOLC Statutory Compilations
+      </nav>
+      <h1>Page Not Found</h1>
+      <p>The page you requested could not be found. It may have been moved, renamed, or removed, or
+        the link you followed may be out of date.</p>
+      <p>You can:</p>
+      <ul>
+        <li>Go to the <a href="/browse.html">Search &amp; Browse</a> page to find a title or section.</li>
+        <li>Use the <a href="/cite.html">Cite Checker</a> if you have a specific citation
+          (e.g. "1 U.S.C. 204").</li>
+        <li>Visit the <a href="/about_code.html">About the United States Code</a> page.</li>
+      </ul>
+      <footer>About the Office Privacy Policy</footer>
     </body>
   </html>
 `;
@@ -159,6 +196,93 @@ test('only the exact official House maintenance response is recognized as a temp
       )
     ),
     false
+  );
+  assert.equal(
+    isOfficialHouseMaintenanceResponse(
+      OFFICIAL_HOUSE_MAINTENANCE_HTML.replace(
+        '</body>',
+        '<article>The controlling federal judgment-interest benchmark changed to a monthly market rate and now uses simple interest.</article></body>'
+      )
+    ),
+    false
+  );
+});
+
+test('only the fingerprinted official temporary-format Page Not Found response is recognized', () => {
+  assert.equal(
+    isOfficialHouseTemporaryFormatNotFoundResponse(OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML),
+    true,
+  );
+  assert.equal(
+    isOfficialHouseTemporaryFormatNotFoundResponse(
+      OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+        'Public Law 119-120 (October 7, 2026)',
+        'Public Law 120-4 (January 8, 2027)',
+      ),
+    ),
+    true,
+  );
+  assert.equal(
+    isOfficialHouseTemporaryFormatNotFoundResponse(
+      OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML
+        .replace('<nav>', '<nav>\n<div>')
+        .replace('</nav>', '</div>\n</nav>'),
+    ),
+    true,
+  );
+
+  const changedCases = [
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '<title>Page Not Found - US Code</title>',
+      '<title>Not Found</title>',
+    ),
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '<h1>Page Not Found</h1>',
+      '<h1>Unavailable</h1>',
+    ),
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      'features and functionality are temporarily unavailable',
+      'features are unavailable',
+    ),
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '</body>',
+      '<p>Additional unreviewed text.</p></body>',
+    ),
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '</body>',
+      `${OFFICIAL_1961_HTML}</body>`,
+    ),
+  ];
+  for (const [index, body] of changedCases.entries()) {
+    assert.equal(isOfficialHouseTemporaryFormatNotFoundResponse(body), false, `changed case ${index}`);
+  }
+  assert.equal(
+    isOfficialHouseTemporaryFormatNotFoundResponse(
+      '<html><head><title>Page Not Found - US Code</title></head><body><h1>Page Not Found</h1></body></html>',
+    ),
+    false,
+  );
+});
+
+test('temporary response classifier rejects hybrids before the statutory phrase contract', () => {
+  assert.equal(
+    classifyOfficialHouseTemporaryResponse(OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML),
+    'recognized-temporary-outage',
+  );
+  assert.equal(
+    classifyOfficialHouseTemporaryResponse(
+      OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace('</body>', `${OFFICIAL_1961_HTML}</body>`),
+    ),
+    'unrecognized-or-hybrid-outage-shell',
+  );
+  assert.equal(
+    classifyOfficialHouseTemporaryResponse(
+      OFFICIAL_1961_HTML.replace(
+        '<body>',
+        '<body><p>The uscode.house.gov website is currently operating in a temporary format.</p>',
+      ),
+    ),
+    'ordinary-response',
   );
 });
 
@@ -372,7 +496,26 @@ test('official HTTP-200 maintenance response retains the reviewed phrase contrac
   assert.equal(result.statuteContract.retrieved_at, null);
   assert.match(result.source.robots_status, /temporarily unavailable/);
   assert.ok(logs.some((message) =>
-    message.includes('official page returned its recognized maintenance response') &&
+    message.includes('official page returned a recognized temporary-outage response') &&
+    message.includes(`contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`)
+  ));
+});
+
+test('official HTTP-200 temporary-format Page Not Found response retains the reviewed contract', async () => {
+  const fixture = syntheticFullHistory();
+  const responses = successfulResponses(fixture, OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML);
+  const logs = [];
+  const result = await fetchH15({
+    today: fixture.today,
+    log: (message) => logs.push(message),
+    get: async (url) => responses.get(url),
+  });
+
+  assert.equal(result.statuteContract.status, 'reviewed-contract-retained-temporary-outage');
+  assert.equal(result.statuteContract.retrieved_at, null);
+  assert.match(result.source.robots_status, /temporarily unavailable/);
+  assert.ok(logs.some((message) =>
+    message.includes('official page returned a recognized temporary-outage response') &&
     message.includes(`contract reviewed ${FEDERAL_STATUTE_CONTRACT_REVIEWED_AT}`)
   ));
 });
@@ -390,8 +533,37 @@ test('a maintenance shell cannot suppress a changed statutory contract', async (
       today: fixture.today,
       get: async (url) => responses.get(url),
     }),
-    /official phrase contract failed: annual-compounding clause changed or missing/
+    /official temporary-outage response changed or contains legal content/
   );
+});
+
+test('a temporary-format Page Not Found shell cannot suppress any added legal content', async () => {
+  const fixture = syntheticFullHistory();
+  const cases = [
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '</body>',
+      `${OFFICIAL_1961_HTML}</body>`,
+    ),
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '</body>',
+      '<article>Section 1961 now uses a monthly benchmark and simple interest.</article></body>',
+    ),
+    OFFICIAL_HOUSE_TEMPORARY_FORMAT_NOT_FOUND_HTML.replace(
+      '</body>',
+      '<article>A revised legal rule now uses a different benchmark.</article></body>',
+    ),
+  ];
+
+  for (const body of cases) {
+    const responses = successfulResponses(fixture, body);
+    await assert.rejects(
+      fetchH15({
+        today: fixture.today,
+        get: async (url) => responses.get(url),
+      }),
+      /official temporary-outage response changed or contains legal content/,
+    );
+  }
 });
 
 test('permanent official statute fetch errors abort rather than using the reviewed fallback', async () => {
