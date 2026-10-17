@@ -34,11 +34,17 @@ const KINDS = [
   { key: 'fixed', label: 'Fixed by statute', note: 'a set statutory rate' },
   { key: 'variable', label: 'Formula rate', note: 'indexed to a benchmark; resets periodically' },
   { key: 'same-as-postjudgment', label: 'Same as post-judgment', note: 'same rate as after judgment' },
+  { key: 'claim-dependent', label: 'Claim-dependent', note: 'different statutory branches apply by claim type' },
   { key: 'discretionary-with-default', label: 'Discretionary', note: 'a court may award it; this is the rate it applies' },
   { key: 'discretionary-with-cap', label: 'Discretionary cap', note: 'a court may award up to the displayed ceiling' },
   { key: 'case-specific', label: 'Case-specific', note: 'the contract or court supplies the percentage' },
 ];
 const counts = Object.fromEntries(KINDS.map((k) => [k.key, rows.filter((r) => r.kind === k.key).length]));
+const classifiedKinds = new Set(KINDS.map((kind) => kind.key));
+const unclassifiedKinds = [...new Set(rows.map((row) => row.kind).filter((kind) => !classifiedKinds.has(kind)))];
+if (unclassifiedKinds.length) {
+  throw new Error(`Prejudgment legend is missing categories: ${unclassifiedKinds.join(', ')}`);
+}
 
 const title = `${rateYear} Prejudgment Interest Rates by State (50-State Table)`;
 const description = `${rateYear} prejudgment interest rates for all 50 states and D.C., with cited statutes, claim restrictions, accrual notes, and links to each full reference.`;

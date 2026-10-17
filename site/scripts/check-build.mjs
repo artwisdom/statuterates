@@ -71,6 +71,13 @@ const researchedStateAuthorityRoutes = new Set([
   '/rates/virginia-judgment-rate/',
   '/rates/west-virginia-judgment-rate/',
 ]);
+const branchSafeRateRoutes = new Set([
+  '/rates/massachusetts-judgment-rate/',
+  '/rates/massachusetts-prejudgment-rate/',
+  '/rates/colorado-prejudgment-rate/',
+  '/rates/montana-prejudgment-rate/',
+  '/rates/utah-prejudgment-rate/',
+]);
 const unmonetizableRateRoutes = new Set(getAllEntities()
   .filter((entity) => {
     const isStateRate = String(entity.region || '').startsWith('US States')
@@ -282,6 +289,23 @@ for (const file of htmlFiles) {
         || !html.includes('Statutory branches')
         || html.includes('>Fixed by statute<'))) {
     errors.push(`${file}: Indiana must display its 8% value as a statutory branch, not a universal fixed rate`);
+  }
+  if (branchSafeRateRoutes.has(route)) {
+    const title = decodeHtmlText(titles[0]?.[1] || '');
+    const description = decodeHtmlText(descriptions[0]?.[1] || '');
+    if (!title.includes('Interest Branches')) {
+      errors.push(`${file}: branch-sensitive rate title must say Interest Branches`);
+    }
+    if (!description.includes('headline statutory branch')
+        || !description.includes('not a universal statewide rate')) {
+      errors.push(`${file}: branch-sensitive search description implies a universal statewide rate`);
+    }
+    if (!/<h1\b[^>]*>[^<]+ interest branches<\/h1>/i.test(html)) {
+      errors.push(`${file}: branch-sensitive H1 must describe interest branches`);
+    }
+    if (!html.includes('Recorded headline branch only; another statutory or claim-specific branch may control.')) {
+      errors.push(`${file}: branch-sensitive structured data lacks its scope qualifier`);
+    }
   }
   if (route === '/rates/california-judgment-rate/'
       && (!html.includes('January 1, 1983')

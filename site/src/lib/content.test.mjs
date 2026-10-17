@@ -223,7 +223,7 @@ test('ambiguous Missouri Nevada prejudgment and New Hampshire values remain fail
 test('September legal review copy preserves every confirmed branch correction', () => {
   const cases = [
     ['washington-prejudgment-rate', /medical debt is capped at 9%/],
-    ['colorado-prejudgment-rate', /medical-debt claim can instead be capped at 3%/],
+    ['colorado-prejudgment-rate', /maximum rate of 3%/],
     ['illinois-prejudgment-rate', /separate authorities.*6%.*5%/s],
     ['indiana-prejudgment-rate', /court-selected simple rate from 6% to 10%/],
     ['pennsylvania-prejudgment-rate', /official 2026 Rule 238 rate is 7\.75%/],
@@ -262,6 +262,55 @@ test('softened legal-rate pages do not claim a universal simple-interest rule', 
   }
 });
 
+test('October correctness copy keeps rates while fixing Massachusetts, Colorado, Montana, and Utah scope', () => {
+  const massachusettsPost = copyFor('massachusetts-judgment-rate');
+  const massachusettsPre = copyFor('massachusetts-prejudgment-rate');
+  const colorado = copyFor('colorado-prejudgment-rate');
+  const montana = copyFor('montana-prejudgment-rate', {
+    observation: { value: 10, value_text: '10% / 9.75%', effective_date: '2026-07-09' },
+  });
+  const utah = copyFor('utah-prejudgment-rate', {
+    observation: { value: 10, value_text: '10% / 8.75%', effective_date: '2026-07-09' },
+  });
+
+  for (const copy of [massachusettsPost, massachusettsPre, colorado, montana, utah]) {
+    assert.equal(copy.rateDisplay, 'statutory-branch');
+    assert.equal(copy.effectiveDateIsReference, true);
+    assert.equal(copy.effectiveDateLabel, 'Recorded reference date');
+  }
+
+  assert.match(massachusettsPost.body, /c\.235 §8.*same rate.*prejudgment interest/s);
+  assert.match(massachusettsPost.body, /not a universal postjudgment rate/);
+  assert.match(massachusettsPost.postDetails.compounding, /do not support a blanket statement/);
+  assert.equal(massachusettsPre.kind, 'claim-dependent');
+  assert.match(massachusettsPre.body, /Commonwealth awards.*§6I/s);
+  assert.doesNotMatch(text({ massachusettsPost, massachusettsPre }), /as simple interest|compound":"Simple/i);
+
+  assert.equal(colorado.kind, 'claim-dependent');
+  assert.match(colorado.body, /maximum rate of 3%/);
+  assert.match(colorado.body, /entered after May 4, 2023/);
+  assert.match(colorado.body, /excludes debt charged to a credit card/);
+  assert.match(colorado.body, /not automatically the same statutory category/);
+  assert.match(colorado.applies, /December 31, 2026.*remains pending/);
+  assert.match(colorado.accrual, /simple interest applies through filing.*annual compounding begins at filing/);
+  assert.match(colorado.compound, /does not itself establish a compounding method/);
+  assert.doesNotMatch(text(colorado), /medical-debt matters use their own statutory timing/i);
+
+  assert.equal(montana.kind, 'variable');
+  assert.match(montana.body, /§31-1-106 applies only.*enumerated due-money/s);
+  assert.match(montana.body, /§27-1-211.*§25-9-205.*9\.75%/s);
+  assert.match(montana.applies, /(?:§|Section )27-1-212.*calculator-withheld/s);
+  assert.match(montana.compound, /§27-1-210 does not say that/);
+  assert.doesNotMatch(text(montana), /10% simple for liquidated|§27-1-210 tort interest.*expressly state.*not be compounded/s);
+
+  assert.equal(utah.kind, 'variable');
+  assert.match(utah.body, /10% for covered contracts/);
+  assert.match(utah.body, /not a general percentage for every claim/);
+  assert.match(utah.applies, /noncontract claims.*different authority/s);
+  assert.match(utah.compound, /(?:§|Section )78B-5-824 expressly requires simple interest.*does not support extending/s);
+  assert.doesNotMatch(text(utah), /10% general|Utah prejudgment interest generally is computed as simple/i);
+});
+
 test('every page changed by the September legal copy repair advances lastmod once', () => {
   const slugs = [
     'alabama-prejudgment-rate',
@@ -270,7 +319,6 @@ test('every page changed by the September legal copy repair advances lastmod onc
     'arkansas-judgment-rate',
     'arkansas-prejudgment-rate',
     'california-prejudgment-rate',
-    'colorado-prejudgment-rate',
     'delaware-judgment-rate',
     'delaware-prejudgment-rate',
     'idaho-prejudgment-rate',
@@ -302,6 +350,18 @@ test('every page changed by the September legal copy repair advances lastmod onc
   ];
 
   for (const slug of slugs) assert.equal(contentModifiedFor(slug), '2026-09-27', slug);
+});
+
+test('October correctness pages advance editorial lastmod without changing other page dates', () => {
+  for (const slug of [
+    'colorado-prejudgment-rate',
+    'massachusetts-judgment-rate',
+    'massachusetts-prejudgment-rate',
+    'montana-prejudgment-rate',
+    'utah-prejudgment-rate',
+  ]) {
+    assert.equal(contentModifiedFor(slug), '2026-10-15', slug);
+  }
 });
 
 test('prejudgment rule details never expose imported sentence fragments', () => {

@@ -46,7 +46,9 @@ const copy = copyFor(slug, { observation: latest, historyPoints: totalPoints });
 const isDerived = latest?.confidence !== 'high';
 const isStatuteFixed = (latest?.method || '').startsWith('statute-fixed');
 const isStatuteBranching = entity.metadata?.basis === 'statute-branching'
-  || latest?.method === 'statute-branching';
+  || latest?.method === 'statute-branching'
+  || copy.rateDisplay === 'statutory-branch';
+const isBranchSafeSeo = copy.rateDisplay === 'statutory-branch';
 const isStatutory = (latest?.method || '').startsWith('statute'); // fixed OR agency-set variable
 const isProvisional = (latest?.method || '').includes('provisional');
 const isCaseSpecific = latest?.method === 'court-or-contract-rate';
@@ -108,8 +110,11 @@ const statuteLabel = (entity.metadata?.statute || '')
   .replace(/\bSec\.\s*/g, '§ ')
   .replace(/\s+/g, ' ')
   .trim();
-const effectiveDateLabel = entity.metadata?.effective_date_label || 'Effective date';
-const effectiveDateIsReference = entity.metadata?.effective_date_is_reference === true;
+const effectiveDateLabel = copy.effectiveDateLabel
+  || entity.metadata?.effective_date_label
+  || 'Effective date';
+const effectiveDateIsReference = copy.effectiveDateIsReference === true
+  || entity.metadata?.effective_date_is_reference === true;
 const seoStatuteLabel = {
   'iowa-judgment-rate': 'Iowa Code §668.13',
   'maryland-judgment-rate': 'Md. Code Cts. & Jud. Proc. §11-107',
@@ -140,11 +145,17 @@ const statuteTitle = {
   'kentucky-judgment-rate': `KRS 360.040: Kentucky Judgment Interest Rate ${rateYear}`,
   'washington-judgment-rate': `RCW 4.56.110: Washington Judgment Interest Rates ${rateYear}`,
 }[slug];
-const stateRateKind = pj ? (isCaseSpecific ? 'Prejudgment Interest Rules' : 'Prejudgment Interest Rate') : 'Post-Judgment Interest Rate';
+const stateRateKind = isBranchSafeSeo
+  ? (pj ? 'Prejudgment Interest Branches' : 'Post-Judgment Interest Branches')
+  : pj
+    ? (isCaseSpecific ? 'Prejudgment Interest Rules' : 'Prejudgment Interest Rate')
+    : 'Post-Judgment Interest Rate';
 const stateTitleWithValue = isUnverifiedLastRecorded
   ? `${stateName} ${pj ? 'Prejudgment' : 'Judgment'} Rate: Last Recorded, Current Unverified`
   : isBranchPartial
   ? `${stateName} ${pj ? 'Prejudgment' : 'Judgment'} Rate: Current Value Withheld`
+  : isBranchSafeSeo
+  ? `${stateName} ${stateRateKind} ${rateYear}`
   : `${stateName} ${stateRateKind} ${rateYear}${isCaseSpecific ? '' : `: ${latest?.value_text}`}`;
 const stateTitleWithoutValue = `${stateName} ${stateRateKind} ${rateYear}`;
 const targetedTitle = statuteTitle
@@ -158,10 +169,13 @@ const title = targetedTitle.length <= 65
     : entity.name;
 const statePreDescriptionDetailed = `${rateYear} ${stateName} prejudgment interest ${isCaseSpecific ? 'rule' : `rate: ${latest?.value_text}`}. See when it applies, accrual, compounding, ${seoStatuteLabel}, exceptions, and the official source.`;
 const statePreDescriptionCompact = `${rateYear} ${stateName} prejudgment interest ${isCaseSpecific ? 'rule' : `rate: ${latest?.value_text}`}. See applicability, accrual, compounding, exceptions, and the cited official source.`;
+const stateBranchDescription = `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest branches: ${latest?.value_text} is a headline statutory branch, not a universal statewide rate. See scope and official sources.`;
 const description = isUnverifiedLastRecorded
   ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest: last recorded ${recordedValueText}; current official rate unverified. See the formula, history, and source warning.`
   : isBranchPartial
   ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest: current percentage withheld pending legal branch selection. See the recorded branch reference, scope, and official sources.`
+  : isStateRate && isBranchSafeSeo
+  ? stateBranchDescription
   : isStateRate
   ? (copy.seoDescription || (pj
     ? (statePreDescriptionDetailed.length <= 160 ? statePreDescriptionDetailed : statePreDescriptionCompact)
@@ -236,13 +250,15 @@ const normalizeHeroLabel = (value) => String(value || '')
   .trim()
   .toLocaleLowerCase('en-US');
 const pageHeading = isStateRate
-  ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest ${isCaseSpecific ? 'rules' : 'rate'}`
+  ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest ${isBranchSafeSeo ? 'branches' : isCaseSpecific ? 'rules' : 'rate'}`
   : entity.name;
 const factsHeading = isStateRate
   ? isUnverifiedLastRecorded
     ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest — last recorded status`
     : isBranchPartial
     ? `${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest — branch selection required`
+    : isBranchSafeSeo
+    ? `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest branches at a glance`
     : `${rateYear} ${stateName} ${pj ? 'prejudgment' : 'post-judgment'} interest at a glance`
   : isEuBenchmark
   ? `${entity.name} input at a glance`
@@ -287,7 +303,9 @@ const jsonLd = [
     '@type': 'Dataset',
     '@id': `${canonical}#dataset`,
     identifier: canonical,
-    name: entity.name,
+    name: isStateRate && isBranchSafeSeo
+      ? `${stateName} ${pj ? 'Prejudgment' : 'Post-Judgment'} Interest Branches`
+      : entity.name,
     description: bodyText.replace(/\s+/g, ' ').trim(),
     url: canonical,
     isAccessibleForFree: true,
@@ -297,13 +315,21 @@ const jsonLd = [
     dateModified: pageModified,
     variableMeasured: {
       '@type': 'PropertyValue',
-      name: entity.name,
-      unitText: isCaseSpecific ? 'case-specific legal rule' : 'percent per annum',
+      name: isStateRate && isBranchSafeSeo
+        ? `${stateName} recorded headline ${pj ? 'prejudgment' : 'post-judgment'} statutory branch`
+        : entity.name,
+      unitText: isCaseSpecific
+        ? 'case-specific legal rule'
+        : isBranchSafeSeo
+          ? 'percent per annum for a recorded statutory branch'
+          : 'percent per annum',
       value: isCurrentWithheld ? rateValueText : isCaseSpecific ? latest?.value_text : latest?.value,
       ...(isCurrentWithheld ? {
         description: isUnverifiedLastRecorded
           ? `${unverifiedLastRecordedLabel}; historical observation only.`
           : `${currentGuard.label}; recorded branch reference only.`,
+      } : isBranchSafeSeo ? {
+        description: 'Recorded headline branch only; another statutory or claim-specific branch may control.',
       } : {}),
     },
     distribution: {

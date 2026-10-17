@@ -35,6 +35,14 @@ const postCopy = post ? copyFor(post.slug, {
   historyPoints: post.history?.annual_rate?.length,
 }) : null;
 const preCaseSpecific = !preGuard && preLatest?.method === 'court-or-contract-rate';
+const postBranching = Boolean(post) && (
+  post.metadata?.basis === 'statute-branching'
+  || postLatest?.method === 'statute-branching'
+  || postCopy?.rateDisplay === 'statutory-branch'
+);
+const preBranching = pre.metadata?.basis === 'statute-branching'
+  || preLatest?.method === 'statute-branching'
+  || preCopy.rateDisplay === 'statutory-branch';
 const theName = base === 'dc' ? 'the District of Columbia' : name;
 const statuteLabel = (value) => (value || '')
   .replace(/\bSec\.\s*/g, '§ ')
@@ -42,12 +50,20 @@ const statuteLabel = (value) => (value || '')
   .trim();
 const postStatute = post ? statuteLabel(post.metadata?.statute) : null;
 const preStatute = statuteLabel(pre.metadata?.statute);
-const postEffective = postLatest?.effective_date
-  ? `${postGuard ? 'Recorded reference ' : ''}${prettyDate(postLatest.effective_date)}`
-  : null;
-const preEffective = preLatest?.effective_date
-  ? `${preGuard ? 'Recorded reference ' : ''}${prettyDate(preLatest.effective_date)}`
-  : null;
+const presentedDate = (entity, observation, copy, guard) => {
+  if (!observation?.effective_date) return null;
+  const date = prettyDate(observation.effective_date);
+  if (guard) return `Recorded reference: ${date}`;
+  const isReference = copy?.effectiveDateIsReference === true
+    || entity?.metadata?.effective_date_is_reference === true;
+  if (!isReference) return date;
+  const label = copy?.effectiveDateLabel
+    || entity?.metadata?.effective_date_label
+    || 'Recorded reference date';
+  return `${label}: ${date}`;
+};
+const postEffective = post ? presentedDate(post, postLatest, postCopy, postGuard) : null;
+const preEffective = presentedDate(pre, preLatest, preCopy, preGuard);
 const hubYear = [postLatest, preLatest]
   .map((value) => String(value?.retrieved_at || value?.effective_date || '').slice(0, 4))
   .filter(Boolean)
@@ -60,7 +76,7 @@ const postBasis = !post
   ? 'No fixed statutory rate'
   : postGuard
     ? postGuard.label
-  : post.metadata?.basis === 'statute-branching' || postMethod === 'statute-branching'
+  : postBranching
     ? 'Statutory branches'
     : postMethod.startsWith('statute-fixed')
       ? 'Fixed by statute'
@@ -78,8 +94,18 @@ const descriptionOverrides = {
   missouri: `${hubYear} Missouri judgment interest: verified 9% non-tort branch, unresolved tort benchmark, claim-specific prejudgment rules, and official sources.`,
   'new-hampshire': `${hubYear} New Hampshire judgment interest: current post- and prejudgment percentages withheld pending official schedule verification. Formula, scope, and sources.`,
 };
+const postDescription = !post
+  ? 'case-specific post-judgment'
+  : postBranching
+    ? `${postRateText} headline post-judgment branch`
+    : `${postRateText} post-judgment`;
+const preDescription = preCaseSpecific
+  ? 'a contract-rate or court-set prejudgment rule'
+  : preBranching
+    ? `${preRateText} headline prejudgment branch`
+    : `${preRateText} prejudgment`;
 const description = descriptionOverrides[base]
-  || `${hubYear} ${name} judgment interest: ${post ? `${postRateText} post-judgment` : 'case-specific post-judgment'} and ${preCaseSpecific ? 'a contract-rate or court-set prejudgment rule' : `${preRateText} prejudgment`}. Statutes, dates, scope, and official sources.`;
+  || `${hubYear} ${name} judgment interest: ${postDescription} and ${preDescription}. Statutes, dates, scope, and official sources.`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 // Real modification date = the latest data or hand-recorded substantial editorial change (never
 // the build date).
@@ -95,6 +121,8 @@ const faq = [
     q: `What is the post-judgment interest rate in ${name}?`,
     a: postGuard
       ? `${name} has no published generic current post-judgment percentage in StatuteRates: ${postRateText}. ${postGuard.reason}`
+      : postBranching
+      ? `${name} uses multiple post-judgment branches. The recorded headline branch is ${postLatest?.value_text} per year, but another branch may control. ${postCopy.tagline}`
       : `As of ${prettyDate(postLatest?.effective_date)}, the ${name} post-judgment interest rate is ${postLatest?.value_text} per year. ${postCopy.tagline}`,
   },
   {
@@ -103,6 +131,8 @@ const faq = [
       ? `${name} has no published generic current prejudgment percentage in StatuteRates: ${preRateText}. ${preGuard.reason}`
       : preCaseSpecific
       ? `${name} has no uniform statewide prejudgment percentage. The governing contract or the judge supplies the rate. ${preCopy.appliesShort || preCopy.tagline}`
+      : preBranching
+      ? `${name} uses multiple prejudgment branches. The recorded headline branch is ${preLatest?.value_text} per year, but claim-specific authority controls. ${preCopy.appliesShort || preCopy.tagline}`
       : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}). ${preCopy.appliesShort || preCopy.tagline}`,
   },
   {
@@ -149,6 +179,8 @@ const jsonLd = [
   <p class="quick-answer"><strong>Current {hubYear} snapshot:</strong> {post
     ? postGuard
       ? <>{name} post-judgment current value is <strong>withheld</strong> ({postRateText})</>
+      : postBranching
+        ? <>{name}’s recorded headline post-judgment branch is <strong>{postLatest?.value_text}</strong> per year</>
       : <>{name} post-judgment interest is <strong>{postLatest?.value_text}</strong> per year</>
     : <>{name} has no uniform statewide post-judgment percentage</>}; {preCaseSpecific
     ? <>prejudgment interest depends on the governing contract or the court</>
@@ -163,7 +195,7 @@ const jsonLd = [
 
   <div class="scroll-x">
     <table class="glance">
-      <thead><tr><th scope="col">Metric</th><th scope="col">Rate or rule</th><th scope="col">Effective</th><th scope="col">Authority</th><th scope="col">Basis</th></tr></thead>
+      <thead><tr><th scope="col">Metric</th><th scope="col">Rate or rule</th><th scope="col">Effective / reference date</th><th scope="col">Authority</th><th scope="col">Basis</th></tr></thead>
       <tbody>
         <tr>
           <td><a href={post ? `/rates/${post.slug}/` : '/methodology/'}>Post-judgment interest</a></td>
@@ -192,6 +224,8 @@ const jsonLd = [
     <>
       <p><strong>{postGuard
         ? `${name}'s generic current post-judgment percentage is withheld: ${postRateText}.`
+        : postBranching
+          ? `${name}'s recorded headline post-judgment branch is ${postLatest?.value_text} per year; another branch may control.`
         : `${name}'s post-judgment interest rate is ${postLatest?.value_text} per year.`}</strong> {postCopy.body}</p>
       <p class="xlink"><a href={`/rates/${post.slug}/`}>→ Full {name} post-judgment page</a> — {postStatute}, effective-date history, scope, and official source.</p>
       {postCalculator && (
@@ -209,6 +243,8 @@ const jsonLd = [
     ? `${name}'s generic current prejudgment percentage is withheld: ${preRateText}.`
     : preCaseSpecific
     ? `${name} has no uniform statewide prejudgment percentage (${preCopy.kindLabel?.toLowerCase()}).`
+    : preBranching
+    ? `${name}'s recorded headline prejudgment branch is ${preLatest?.value_text} per year; another claim-specific branch may control.`
     : `${name}'s prejudgment interest rate is ${preLatest?.value_text} per year (${preCopy.kindLabel?.toLowerCase()}).`}</strong> {preCopy.body}</p>
   <p class="xlink"><a href={`/rates/${pre.slug}/`}>→ Full {name} prejudgment page</a> — {preStatute}, when it applies, accrual, compounding, and carve-outs.</p>
   <AdSlot id="state-bottom" enabled={false} />
@@ -223,7 +259,7 @@ const jsonLd = [
     ))}
   </div>
 
-  <CiteThis title={`${name} Judgment & Prejudgment Interest Rates`} url={canonical} note="Each rate includes a cited source and recorded effective date; confirm the controlling authority before use." />
+  <CiteThis title={`${name} Judgment & Prejudgment Interest Rates`} url={canonical} note="Each rate includes a cited source and an effective or recorded-reference date; confirm the controlling authority before use." />
 
   <p class="source-note" style="margin-top:22px">Compare every state on the
     <a href="/states/">state interest-rate index</a> and the
